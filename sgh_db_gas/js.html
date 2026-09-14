@@ -1,0 +1,2085 @@
+<script>
+/* ==========================================================================
+   LÓGICA DEL CLIENTE SGH_DB_GAS (FASE 2 REFACTOR: MISMATCH JSON CORREGIDO)
+   ========================================================================== */
+
+let GLOBALS = {
+  access: null,
+  catalogos: {
+    personal: { docente: {}, administrativo: {}, obrero: {} },
+    turnos: [],
+    nivel_modalidad: { niveles: [], modalidades: [] },
+    planes_estudio: {},
+    estatus: {}
+  },
+  stats: null,
+  municipios: null, // Lazy loaded
+  configuracion: { municipios_activos: [] }
+};
+
+// ==========================================================================
+// 1. BOOTSTRAP E INICIALIZACIÓN
+// ==========================================================================
+document.addEventListener("DOMContentLoaded", () => {
+  if (google.charts) {
+    google.charts.load('current', {'packages':['corechart', 'bar']});
+    google.charts.setOnLoadCallback(() => loadData());
+  } else {
+    loadData();
+  }
+});
+
+function loadData(forceRefresh = false) {
+  setLoading(true);
+  google.script.run
+    .withSuccessHandler((res) => {
+      setLoading(false);
+      if (!res.exito) {
+        showToast(res.error, "danger");
+        return;
+      }
+      
+      GLOBALS.access = res.access;
+      if(res.catalogos) {
+        if(res.catalogos.personal) GLOBALS.catalogos.personal = res.catalogos.personal;
+        if(res.catalogos.turnos) GLOBALS.catalogos.turnos = res.catalogos.turnos;
+        if(res.catalogos.nivel_modalidad) GLOBALS.catalogos.nivel_modalidad = res.catalogos.nivel_modalidad;
+        if(res.catalogos.planes_estudio) GLOBALS.catalogos.planes_estudio = res.catalogos.planes_estudio;
+        if(res.catalogos.estatus) GLOBALS.catalogos.estatus = res.catalogos.estatus;
+      }
+      if(res.configuracion) GLOBALS.configuracion = res.configuracion;
+      GLOBALS.stats = res.stats;
+      
+      if (res.access && res.access.email === "NO_DETECTADO") {
+        showFallbackLoginModal();
+        return;
+      }
+      
+      var rbacOk = applyRBAC();
+      // Solo actualizamos el dashboard y catálogos si el usuario tiene permisos.
+      // Si no los tiene, applyRBAC() ya mostró la pantalla de Acceso Restringido.
+      if (rbacOk) {
+        updateDashboard();
+        renderAllCatalogos();
+      }
+      
+      if(forceRefresh && rbacOk) showToast("Datos actualizados desde el origen", "success");
+    })
+    .withFailureHandler((err) => {
+      setLoading(false);
+      showToast("Error de conexión al servidor: " + err, "danger");
+    })
+    .getBootstrapData(getDevUser(), forceRefresh);
+}
+
+function getDevUser() {
+  const local = localStorage.getItem("sgh_fallback_email");
+  if (local) return local;
+  if (typeof DEV_USER !== 'undefined' && DEV_USER) return DEV_USER;
+  return '';
+}
+
+function showFallbackLoginModal() {
+  let mod = document.getElementById("fallback-login-modal");
+  if (!mod) {
+    mod = document.createElement("div");
+    mod.id = "fallback-login-modal";
+    mod.style.position = "fixed";
+    mod.style.top = "0"; mod.style.left = "0"; mod.style.width = "100%"; mod.style.height = "100%";
+    mod.style.backgroundColor = "rgba(15, 23, 42, 0.85)";
+    mod.style.zIndex = "9999999"; // Siete 9s para ganarle al boot-screen (seis 9s)
+    mod.style.display = "flex";
+    mod.style.alignItems = "center";
+    mod.style.justifyContent = "center";
+    mod.style.backdropFilter = "blur(10px)";
+    
+    mod.innerHTML = `
+      <div style="background: var(--bg-card); padding: 40px; border-radius: var(--radius-lg); width: 420px; max-width: 90%; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1);">
+        <i class="fa-solid fa-user-shield" style="font-size: 48px; color: var(--primary); margin-bottom: 24px;"></i>
+        <h3 style="margin-bottom: 12px; font-weight: 700;">Verificación de Identidad</h3>
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 28px; line-height: 1.5;">Debido a políticas de privacidad de tu navegador, la sesión maestra está oculta. Confirma tu correo corporativo o de propietario para ingresar.</p>
+        <input type="email" id="fallback-email-input" class="form-group" style="width: 100%; text-align: center; margin-bottom: 20px; font-size: 16px; font-weight: 600;" placeholder="tucorreo@gmail.com" required>
+        <button class="btn btn-primary" style="width: 100%; font-size: 16px; padding: 12px;" onclick="saveFallbackEmail()">Conectar al Sistema</button>
+      </div>
+    `;
+    document.body.appendChild(mod);
+  }
+  
+  // Ocultamos explícitamente la pantalla de carga para que no estorbe visualmente ni bloquee clics
+  var bootScreen = document.getElementById("boot-screen");
+  if (bootScreen) bootScreen.style.display = "none";
+  
+  mod.style.display = "flex";
+}
+
+function saveFallbackEmail() {
+  const val = document.getElementById("fallback-email-input").value.trim().toLowerCase();
+  if (!val || !val.includes("@")) {
+    showToast("Por favor, ingresa un correo válido", "warning");
+    return;
+  }
+  localStorage.setItem("sgh_fallback_email", val);
+  document.getElementById("fallback-login-modal").style.display = "none";
+  loadData();
+}
+
+function renderAllCatalogos() {
+  renderPersonalTab();
+  renderTurnos();
+  renderNivelesModalidades();
+  renderPlanes();
+  renderEstatus();
+}
+
+// ==========================================================================
+// UTILIDADES DOM Y ESTADO
+// ==========================================================================
+function setLoading(active) {
+  const el = document.getElementById("loading");
+  if (active) el.classList.add("active");
+  else el.classList.remove("active");
+}
+
+function showToast(msg, type = "success") {
+  const container = document.getElementById("toast-container");
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `<i class="fa-solid ${type==='danger'?'fa-triangle-exclamation':'fa-circle-check'}"></i> <span>${msg}</span>`;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 4000);
+}
+
+function openModal(id) {
+  document.getElementById(id).classList.add('active');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('active');
+}
+
+function persistCatalogos(moduloNombre) {
+  setLoading(true);
+  google.script.run
+    .withSuccessHandler((res) => {
+      setLoading(false);
+      if (res.exito) {
+        showToast("Catálogos guardados exitosamente.", "success");
+      } else {
+        showToast(res.error, "danger");
+      }
+    })
+    .withFailureHandler((err) => {
+      setLoading(false);
+      showToast("Error de red al guardar: " + err, "danger");
+    })
+    .saveCatalogos(GLOBALS.catalogos, moduloNombre, getDevUser());
+}
+
+// =============================================================================
+// NAVEGACIÓN Y TABS
+// =============================================================================
+
+function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (!sidebar) return;
+  
+  const isMobile = window.innerWidth <= 768;
+  
+  if (isMobile) {
+    // En móvil: usa slide-in con overlay
+    sidebar.classList.toggle('open');
+    if (overlay) overlay.classList.toggle('open');
+  } else {
+    // En escritorio: colapsa/expande sin overlay
+    sidebar.classList.toggle('collapsed');
+  }
+}
+
+function switchTab(tabId, event) {
+  if (event) event.preventDefault();
+  
+  // Cerrar la sidebar al seleccionar una pestaña
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (sidebar) {
+    if (sidebar.classList.contains('open')) {
+      sidebar.classList.remove('open');
+      if (overlay) overlay.classList.remove('open');
+    } else {
+      sidebar.classList.add('collapsed');
+    }
+  }
+
+  if (tabId !== 'dashboard' && GLOBALS.access) {
+    let hasAccess = false;
+    if (GLOBALS.access.isAdmin) {
+      hasAccess = true;
+    } else {
+      if (tabId === 'personal') {
+        hasAccess = GLOBALS.access.permissions.some(p => p.startsWith('personal_'));
+      } else if (tabId === 'planteles') {
+        hasAccess = GLOBALS.access.permissions.some(p => p.startsWith('planteles_'));
+      } else {
+        hasAccess = GLOBALS.access.permissions.includes(tabId);
+      }
+    }
+    
+    if (!hasAccess) {
+      showToast("No tienes permisos para este módulo.", "warning");
+      return;
+    }
+  }
+
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+  
+  document.getElementById(`tab-${tabId}`).classList.add('active');
+  const targetLink = document.querySelector(`[data-module="${tabId}"]`);
+  if(targetLink) targetLink.classList.add('active');
+
+  if (tabId === 'planteles' && !GLOBALS.municipios) {
+    lazyLoadMunicipios();
+  }
+  
+  if (tabId === 'despliegue') {
+    renderDespliegue();
+  }
+  
+  if (tabId === 'historico' && !GLOBALS._historicoLoaded) {
+    loadHistorico();
+  }
+}
+
+function switchSubTab(parent, subId, event) {
+  const tab = document.getElementById(`tab-${parent}`);
+  tab.querySelectorAll('.sub-tab-btn').forEach(btn => btn.classList.remove('active'));
+  tab.querySelectorAll('.subtab-content').forEach(el => el.classList.remove('active'));
+  
+  if (event) event.currentTarget.classList.add('active');
+  document.getElementById(`subtab-${parent}-${subId}`).classList.add('active');
+}
+
+function updatePersonalActionBtn(type) {
+  const btnDoc = document.getElementById('btn-add-docente');
+  const btnAdm = document.getElementById('btn-add-admin');
+  const btnObr = document.getElementById('btn-add-obrero');
+  
+  if (btnDoc) btnDoc.style.display = (type === 'docente') ? 'inline-block' : 'none';
+  if (btnAdm) btnAdm.style.display = (type === 'admin') ? 'inline-block' : 'none';
+  if (btnObr) btnObr.style.display = (type === 'obrero') ? 'inline-block' : 'none';
+}
+
+function applyRBAC() {
+  const access = GLOBALS.access;
+
+  // Antes de escribir, verificar que los elementos del sidebar existen
+  // (pueden no existir si ya se hizo un replace del DOM en llamadas anteriores)
+  const elEmail = document.getElementById("user-email");
+  const elRole  = document.getElementById("user-role");
+  if (elEmail) elEmail.innerText = access.email;
+  if (elRole)  elRole.innerText  = access.isAdmin ? "Administrador" : "Operador";
+  
+  if (!access.isAdmin && access.permissions.length === 0) {
+    document.getElementById("boot-screen").style.display = "none";
+    document.getElementById("app-wrapper").style.display = "none";
+    
+    // Renderizar Access Denied Limpio y Hermético
+    document.body.innerHTML = `
+      <div style="display:flex; height:100vh; align-items:center; justify-content:center; background:#0f172a;">
+         <div style="text-align: center; max-width: 400px; padding: 40px; background: #1e293b; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08);">
+           <i class="fa-solid fa-lock" style="font-size: 64px; color: #ef4444; margin-bottom: 24px;"></i>
+           <h2 style="font-weight: 700; margin-bottom: 16px; color: #f8fafc;">Acceso Restringido</h2>
+           <p style="color: #94a3b8; line-height: 1.6;">Tu usuario <strong style="color:#f8fafc">${access.email}</strong> no tiene privilegios para acceder al gestor. Contacta al administrador del sistema.</p>
+         </div>
+      </div>
+    `;
+    return false; // Indicamos que el RBAC bloqueó el acceso
+  }
+  
+  // Acceso Concedido: Quitar Boot Screen y mostrar la App
+  document.getElementById("boot-screen").style.display = "none";
+  document.getElementById("app-wrapper").style.display = "flex";
+  
+  document.querySelectorAll('.nav-link').forEach(link => {
+    const mod = link.dataset.module;
+    let hasAccess = access.isAdmin || mod === 'dashboard';
+    
+    if (access.isDashboardOnly) {
+      hasAccess = (mod === 'dashboard');
+    } else if (!hasAccess) {
+      if (mod === 'personal') {
+        hasAccess = access.permissions.some(p => p.startsWith('personal_'));
+      } else if (mod === 'planteles') {
+        hasAccess = access.permissions.some(p => p.startsWith('planteles_'));
+      } else {
+        hasAccess = access.permissions.includes(mod);
+      }
+    }
+    
+    if (!hasAccess) {
+      link.style.display = 'none'; // Ocultar por completo si no tiene acceso
+    } else {
+      link.style.display = 'flex';
+      link.style.opacity = '1';
+      link.style.pointerEvents = 'auto';
+    }
+  });
+
+  // Filtrar selector de dependencias en Personal
+  const selDep = document.getElementById("sel-admin-dependencia");
+  if (selDep) {
+    let firstAllowed = null;
+    Array.from(selDep.options).forEach(opt => {
+      const depName = opt.value.toLowerCase();
+      if (!access.isAdmin && !access.permissions.includes(`personal_${depName}`)) {
+        opt.style.display = "none";
+        opt.disabled = true;
+      } else {
+        opt.style.display = "";
+        opt.disabled = false;
+        if (!firstAllowed) firstAllowed = opt.value;
+      }
+    });
+    
+    if (selDep.selectedIndex >= 0 && selDep.options[selDep.selectedIndex].disabled && firstAllowed) {
+      selDep.value = firstAllowed;
+    }
+  }
+
+  // Mostrar las pestañas de Despliegue e Histórico solo para ADMINS
+  const navDespliegue = document.getElementById("nav-despliegue");
+  if (navDespliegue) navDespliegue.style.display = access.isAdmin ? 'flex' : 'none';
+  const navHistorico = document.getElementById("nav-historico");
+  if (navHistorico) navHistorico.style.display = access.isAdmin ? 'flex' : 'none';
+
+  // Si no es admin y NO es solo dashboard, ocultar el dashboard porque es solo para operadores específicos
+  if (!access.isAdmin && !access.isDashboardOnly && access.permissions.length > 0) {
+    const dashboardLink = document.querySelector('[data-module="dashboard"]');
+    if(dashboardLink) dashboardLink.style.display = 'none';
+    
+    // Auto-navegar al primer módulo permitido para evitar pantalla vacía
+    let firstMod = access.permissions[0];
+    if (firstMod && firstMod.startsWith('personal_')) firstMod = 'personal';
+    if (firstMod && firstMod.startsWith('planteles_')) firstMod = 'planteles';
+    if (firstMod) switchTab(firstMod);
+  } else if (access.isDashboardOnly) {
+    switchTab('dashboard'); // Auto-navegar al dashboard
+  }
+  
+  return true; // Acceso concedido — loadData puede continuar con updateDashboard()
+}
+
+function updateDashboard() {
+  if(!GLOBALS.stats) return;
+  if (!document.getElementById("stat-planteles")) return;
+  
+  if (google.visualization && google.visualization.DataTable) {
+    window._lastStats = GLOBALS.stats;
+    renderDashboardCharts();
+  } else {
+    // Si la librería no cargó aún, guardamos y esperamos (el callback de google la llamará)
+    window._lastStats = GLOBALS.stats;
+  }
+}
+
+function renderDashboardCharts() {
+  if (!window._lastStats) return;
+  var stats = window._lastStats;
+  
+  var selectFilter = document.getElementById("dashboard-filtro-dependencia");
+  var depFilter = selectFilter ? selectFilter.value : "ALL";
+  
+  // Data base
+  var currentPlantelesStats = stats.hojaPlanteles;
+  var currentPersonalStats = stats.hojaPersonal;
+  
+  // Aplicar filtro si existe
+  if (depFilter !== "ALL") {
+    if (stats.hojaPlanteles && stats.hojaPlanteles.byDependenciaStats && stats.hojaPlanteles.byDependenciaStats[depFilter]) {
+      currentPlantelesStats = stats.hojaPlanteles.byDependenciaStats[depFilter];
+    } else {
+      currentPlantelesStats = { total: 0, byMunicipio: {}, byDenominacion: {} };
+    }
+    
+    if (stats.hojaPersonal && stats.hojaPersonal.byDependenciaStats && stats.hojaPersonal.byDependenciaStats[depFilter]) {
+      currentPersonalStats = stats.hojaPersonal.byDependenciaStats[depFilter];
+    } else {
+      currentPersonalStats = { total: 0, tipoPersonal: {}, genero: {}, municipio: {}, nivelModalidad: {}, estatus: {}, dependencia: {}, jubilacion: null };
+    }
+  }
+
+  // --- ACTUALIZAR KPIs SUPERIORES ---
+  if (currentPlantelesStats) {
+    document.getElementById("stat-planteles").innerText = (currentPlantelesStats.total || 0).toLocaleString();
+  } else {
+    document.getElementById("stat-planteles").innerText = stats.planteles.total.toLocaleString();
+  }
+  
+  if (currentPersonalStats && stats.hojaPersonal) {
+    document.getElementById("stat-total-personal").innerText = (currentPersonalStats.total || 0).toLocaleString();
+    
+    const tipoObj = currentPersonalStats.tipoPersonal || {};
+    let cDocentes = 0, cAdmin = 0, cObreros = 0;
+    for (const key in tipoObj) {
+      const k = key.toUpperCase();
+      if (k.includes("DOCENTE")) cDocentes += tipoObj[key];
+      else if (k.includes("ADMINISTRATIVO")) cAdmin += tipoObj[key];
+      else if (k.includes("OBRERO")) cObreros += tipoObj[key];
+    }
+    document.getElementById("stat-docentes").innerText = cDocentes.toLocaleString();
+    document.getElementById("stat-admin").innerText = cAdmin.toLocaleString();
+    document.getElementById("stat-obreros").innerText = cObreros.toLocaleString();
+  } else {
+    document.getElementById("stat-docentes").innerText = stats.personal.cargosDocentes.toLocaleString();
+    document.getElementById("stat-admin").innerText = stats.personal.cargosAdministrativos.toLocaleString();
+    document.getElementById("stat-obreros").innerText = stats.personal.cargosObreros.toLocaleString();
+  }
+
+  // --- RENDERIZAR GRÁFICAS ---
+  const depKeys = ["NACIONAL", "ESTADAL", "MUNICIPAL", "AUTONOMA", "SUBVENCIONADA", "PRIVADA"];
+  
+  // Dependencia de Planteles
+  var dDep = currentPlantelesStats ? (depFilter !== "ALL" ? null : currentPlantelesStats.byDependencia) : stats.planteles.byDependencia;
+  if (dDep) {
+    depKeys.forEach(function(k) { if (dDep[k] === undefined) dDep[k] = 0; });
+    drawDependenciaChart(dDep);
+  } else if (depFilter !== "ALL") {
+    var singleDep = {};
+    singleDep[depFilter] = currentPlantelesStats.total || 0;
+    drawDependenciaChart(singleDep);
+  }
+
+  // Planteles por Municipio
+  var pMun = currentPlantelesStats ? currentPlantelesStats.byMunicipio : {};
+  var tMun = (depFilter !== "ALL" && stats.planteles.byDependenciaStats && stats.planteles.byDependenciaStats[depFilter]) 
+             ? stats.planteles.byDependenciaStats[depFilter].byMunicipio 
+             : stats.planteles.byMunicipio;
+  
+  drawMunicipiosChart(tMun, pMun);
+  
+  // Gráficas de Personal
+  if (currentPersonalStats && (currentPersonalStats.total > 0 || depFilter !== "ALL")) {
+    drawAnalyticChart(currentPersonalStats.municipio, "chart-personal-municipio", true); 
+    drawAnalyticChart(currentPersonalStats.tipoPersonal, "chart-personal-tipo");
+    drawAnalyticChart(currentPersonalStats.genero, "chart-personal-genero");
+    drawAnalyticChart(currentPersonalStats.nivelModalidad, "chart-personal-nivel");
+    
+    if (depFilter === "ALL") {
+      var pdDep = currentPersonalStats.dependencia || {};
+      depKeys.forEach(function(k) { if (pdDep[k] === undefined) pdDep[k] = 0; });
+      drawAnalyticChart(pdDep, "chart-personal-dependencia", true);
+    } else {
+      var singlePDep = {};
+      singlePDep[depFilter] = currentPersonalStats.total || 0;
+      drawAnalyticChart(singlePDep, "chart-personal-dependencia", true);
+    }
+
+    drawAnalyticChart(currentPersonalStats.estatus, "chart-personal-estatus", false, true); 
+    
+    // Jubilación
+    if (currentPersonalStats.jubilacion) {
+      var dJub = {
+        'Con derecho': currentPersonalStats.jubilacion.elegibles || 0,
+        'Sin derecho aún': currentPersonalStats.jubilacion.noElegibles || 0
+      };
+      drawAnalyticChart(dJub, "chart-jubilacion-total", false, true);
+      drawJubilacionMunicipioChart(currentPersonalStats.jubilacion.byMunicipio);
+    }
+  }
+
+  // Refrescar automáticamente las gráficas detalladas (Drill-down) si el usuario ya hizo clic en algún municipio
+  if (window._filtroMunicipio) {
+    drawPlantelDrillDown(window._filtroMunicipio);
+    drawJubilacionPlantelDrillDown(window._filtroMunicipio);
+  }
+}
+
+window.addEventListener('resize', function() {
+  if (window._resizeTimer) clearTimeout(window._resizeTimer);
+  window._resizeTimer = setTimeout(function() {
+    if (document.getElementById('tab-dashboard') && document.getElementById('tab-dashboard').classList.contains('active')) {
+      renderDashboardCharts();
+    }
+  }, 300);
+});
+
+function drawAnalyticChart(dataObj, elementId, isBar = false, isDoughnut = false) {
+  if (!dataObj) return;
+  
+  var data = new google.visualization.DataTable();
+  data.addColumn('string', 'Categoría');
+  data.addColumn('number', 'Cantidad');
+  
+  // Para barras, agregamos una columna de rol 'annotation' y 'style'
+  if (isBar) {
+    data.addColumn({type: 'string', role: 'annotation'});
+    data.addColumn({type: 'string', role: 'style'});
+  }
+  
+  var rows = [];
+  var maxVal = 0;
+  
+  var colorMap = {
+    'NACIONAL': '#3b82f6',  // Azul
+    'ESTADAL': '#eab308',   // Amarillo
+    'MUNICIPAL': '#10b981'  // Verde
+  };
+
+  for (var key in dataObj) {
+    if (key !== "SIN ESPECIFICAR" && key !== "ND" && key !== "") {
+      if (dataObj[key] > maxVal) maxVal = dataObj[key];
+      if (isBar) {
+        var customColor = colorMap[key.toUpperCase()] ? colorMap[key.toUpperCase()] : null;
+        rows.push([key, dataObj[key], String(dataObj[key]), customColor]);
+      } else {
+        rows.push([key, dataObj[key]]);
+      }
+    }
+  }
+  
+  // Ordenar de mayor a menor
+  rows.sort(function(a, b) { return b[1] - a[1]; });
+  
+  data.addRows(rows);
+  
+  var options = {
+    backgroundColor: 'transparent',
+    legend: { textStyle: { color: '#94a3b8' }, position: isBar ? 'none' : 'right' },
+    chartArea: { width: '85%', height: '80%' },
+    pieHole: isDoughnut ? 0.4 : 0,
+    pieSliceText: 'value', // Muestra número entero en lugar de porcentaje en las donas/pie
+    pieSliceTextStyle: { fontSize: 14 }, // <-- TAMAÑO DE FUENTE EN CÍRCULOS
+    colors: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#64748b'],
+    hAxis: { textStyle: { color: '#94a3b8' }, gridlines: { color: '#334155' } },
+    vAxis: { 
+      textStyle: { color: '#94a3b8' },
+      viewWindow: isBar ? { 
+        min: 0,
+        max: Math.ceil(maxVal * 1.15)
+      } : undefined
+    },
+    annotations: { highContrast: true, textStyle: { bold: true, fontSize: 16 } } // <-- TAMAÑO DE FUENTE EN BARRAS
+  };
+  
+  var el = document.getElementById(elementId);
+  if (!el) return;
+  
+  if (isBar) {
+    options.chartArea = { width: '90%', height: '70%' };
+    var chart = new google.visualization.ColumnChart(el);
+    chart.draw(data, options);
+  } else {
+    var chart = new google.visualization.PieChart(el);
+    chart.draw(data, options);
+  }
+}
+
+function drawDependenciaChart(d){ drawAnalyticChart(d, 'chart-dependencia-div', true); } 
+function drawPersonalChart(p){
+   var d = {'Docentes': p.cargosDocentes, 'Administrativo': p.cargosAdministrativos, 'Obreros': p.cargosObreros};
+   drawAnalyticChart(d, 'chart-personal-div', false, true);
+} 
+
+function drawMunicipiosChart(totales, registrados) {
+  var el = document.getElementById('chart-municipios-div');
+  if (!el || !totales) return;
+  
+  var data = new google.visualization.DataTable();
+  data.addColumn('string', 'Municipio');
+  data.addColumn('number', 'Registrados');
+  data.addColumn({type: 'string', role: 'annotation'});
+  data.addColumn('number', 'Faltantes');
+  data.addColumn({type: 'string', role: 'annotation'});
+
+  var rows = [];
+  var maxVal = 0;
+
+  for (var key in totales) {
+    if (key !== "SIN ESPECIFICAR" && key !== "ND" && key !== "") {
+      var total = totales[key] || 0;
+      var reg = registrados[key] || 0;
+      var falt = total - reg;
+      if (falt < 0) falt = 0;
+      if (total > maxVal) maxVal = total;
+      rows.push([key, reg, reg > 0 ? String(reg) : "", falt, falt > 0 ? String(falt) : ""]);
+    }
+  }
+
+  rows.sort(function(a, b) { return (b[1] + b[3]) - (a[1] + a[3]); });
+  data.addRows(rows);
+
+  var options = {
+    isStacked: true,
+    backgroundColor: 'transparent',
+    legend: { textStyle: { color: '#94a3b8' }, position: 'top' },
+    chartArea: { width: '90%', height: '70%' },
+    colors: ['#3b82f6', '#ef4444'],
+    hAxis: { 
+      textStyle: { color: '#94a3b8' }, 
+      gridlines: { color: '#334155' },
+      slantedText: true,
+      slantedTextAngle: 45
+    },
+    vAxis: { 
+      textStyle: { color: '#94a3b8' },
+      viewWindow: { min: 0, max: Math.ceil(maxVal * 1.15) }
+    },
+    annotations: { highContrast: true, textStyle: { bold: true, fontSize: 12 } }
+  };
+
+  window._munChart = new google.visualization.ColumnChart(el);
+  window._munChart.draw(data, options);
+
+  // ── EVENTO CLIC: filtrar por municipio ──────────────────────────────────
+  google.visualization.events.addListener(window._munChart, 'select', function() {
+    var sel = window._munChart.getSelection();
+    if (!sel || sel.length === 0) return;
+    var rowIdx = sel[0].row;
+    if (rowIdx === null || rowIdx === undefined) return;
+    var municipio = data.getValue(rowIdx, 0);
+    applyMunicipioFilter(municipio);
+  });
+}
+
+// ── APLICAR FILTRO DE MUNICIPIO ──────────────────────────────────────────
+function applyMunicipioFilter(municipio) {
+  window._filtroMunicipio = municipio;
+
+  // Mostrar chip de filtro activo
+  var chip = document.getElementById('filtro-municipio-chip');
+  var label = document.getElementById('filtro-municipio-label');
+  if (chip && label) {
+    label.textContent = '📍 ' + municipio;
+    chip.style.display = 'flex';
+  }
+
+  // Dibujar gráfica drill-down de personal por plantel
+  drawPlantelDrillDown(municipio);
+  // Dibujar gráfica drill-down de jubilables por plantel
+  drawJubilacionPlantelDrillDown(municipio);
+}
+
+// ── LIMPIAR FILTRO ────────────────────────────────────────────────────────
+function clearMunicipioFilter() {
+  window._filtroMunicipio = null;
+
+  var chip = document.getElementById('filtro-municipio-chip');
+  if (chip) chip.style.display = 'none';
+
+  var container = document.getElementById('chart-plantel-container');
+  if (container) container.style.display = 'none';
+  
+  var containerJub = document.getElementById('chart-jubilacion-plantel-container');
+  if (containerJub) containerJub.style.display = 'none';
+}
+
+// ── GRÁFICA DRILL-DOWN: Personal por Plantel en un Municipio ─────────────
+function drawPlantelDrillDown(municipio) {
+  var stats = window._lastStats;
+  if (!stats || !stats.hojaPersonal || !stats.hojaPersonal.byPlantel) {
+    // Si no hay datos de personal cargados, mostrar aviso
+    var container = document.getElementById('chart-plantel-container');
+    if (container) {
+      container.style.display = '';
+      var title = document.getElementById('chart-plantel-title');
+      if (title) title.textContent = 'Personal por Plantel — ' + municipio + ' (sin datos de personal registrados)';
+    }
+    return;
+  }
+
+  var byPlantel = stats.hojaPersonal.byPlantel || {};
+  var prefix = municipio.toUpperCase() + '||';
+  var depFilter = document.getElementById("dashboard-filtro-dependencia").value;
+  var rows = [];
+
+  // 1. Obtener todos los códigos DEA de este municipio desde la BD
+  // 1. Obtener todos los códigos DEA de este municipio desde la BD
+  var allPlantelCodes = [];
+  var codesMap = (stats.planteles && stats.planteles.byMunicipioDetalle) ? stats.planteles.byMunicipioDetalle[municipio.toUpperCase()] : null;
+  if (codesMap) {
+    var codes = Object.keys(codesMap);
+    for (var i = 0; i < codes.length; i++) {
+      if (allPlantelCodes.indexOf(codes[i]) === -1) allPlantelCodes.push(codes[i]);
+    }
+  }
+
+  // 2. Agregar cualquier plantel que esté en la nómina pero falte en la BD
+  for (var key in byPlantel) {
+    if (key.indexOf(prefix) === 0) {
+      var c = key.substring(prefix.length);
+      if (allPlantelCodes.indexOf(c) === -1) allPlantelCodes.push(c);
+    }
+  }
+
+  // Filtrar los planteles según la dependencia seleccionada (si la hay)
+  var finalCodes = [];
+  for (var i = 0; i < allPlantelCodes.length; i++) {
+    var c = allPlantelCodes[i];
+    var mKey = prefix + c;
+    
+    if (depFilter !== "ALL") {
+      var depDB = _getDependenciaPlantel(c);
+      var depCounts = (stats.hojaPersonal && stats.hojaPersonal.byPlantelDep) ? stats.hojaPersonal.byPlantelDep[mKey] : null;
+      var hasPersonnel = depCounts && (depCounts[depFilter] > 0);
+      
+      // Mostrar solo si el plantel es de esta dependencia en la BD, o si tiene personal de esta dependencia
+      if (depDB !== depFilter && !hasPersonnel) continue;
+    }
+    finalCodes.push(c);
+  }
+
+  // 3. Crear las filas
+  var maxTotal = 0;
+  for (var i = 0; i < finalCodes.length; i++) {
+    var c = finalCodes[i];
+    var mKey = prefix + c;
+    var depCounts = (stats.hojaPersonal && stats.hojaPersonal.byPlantelDep) ? stats.hojaPersonal.byPlantelDep[mKey] : null;
+    
+    var totalCount = 0;
+    if (depFilter !== "ALL") {
+       totalCount = depCounts ? (depCounts[depFilter] || 0) : 0;
+    } else {
+       totalCount = byPlantel[mKey] || 0;
+    }
+    
+    if (totalCount > maxTotal) maxTotal = totalCount;
+  }
+  // Umbral visual: Si el pedacito de barra es menor al 4% del ancho máximo de la gráfica, ocultar su número para evitar superposición
+  var minSize = maxTotal * 0.04;
+
+  for (var i = 0; i < finalCodes.length; i++) {
+    var codigoDEA = finalCodes[i];
+    var mKey = prefix + codigoDEA;
+    
+    var depCounts = (stats.hojaPersonal && stats.hojaPersonal.byPlantelDep) ? stats.hojaPersonal.byPlantelDep[mKey] : null;
+    var totalCount = (depFilter !== "ALL") ? (depCounts ? (depCounts[depFilter] || 0) : 0) : (byPlantel[mKey] || 0);
+
+    var cNac = 0, cEst = 0, cMun = 0, cOtras = 0;
+    
+    if (depCounts) {
+      if (depFilter === "ALL" || depFilter === "NACIONAL") cNac = depCounts["NACIONAL"] || 0;
+      if (depFilter === "ALL" || depFilter === "ESTADAL") cEst = depCounts["ESTADAL"] || 0;
+      if (depFilter === "ALL" || depFilter === "MUNICIPAL") cMun = depCounts["MUNICIPAL"] || 0;
+      
+      if (depFilter === "ALL") {
+        for (var dKey in depCounts) {
+          if (dKey !== "NACIONAL" && dKey !== "ESTADAL" && dKey !== "MUNICIPAL") {
+            cOtras += depCounts[dKey];
+          }
+        }
+      } else if (depFilter !== "NACIONAL" && depFilter !== "ESTADAL" && depFilter !== "MUNICIPAL") {
+         cOtras = depCounts[depFilter] || 0;
+      }
+    } else {
+      if (depFilter === "ALL") cOtras = totalCount;
+    }
+    
+    var nombrePlantel = (codesMap && codesMap[codigoDEA]) ? codesMap[codigoDEA] : _getNombrePlantel(codigoDEA);
+    var label = nombrePlantel ? nombrePlantel : codigoDEA;
+    
+    rows.push([
+      label, 
+      cNac, cNac >= minSize && cNac > 0 ? String(cNac) : "", 
+      cEst, cEst >= minSize && cEst > 0 ? String(cEst) : "", 
+      cMun, cMun >= minSize && cMun > 0 ? String(cMun) : "", 
+      cOtras, cOtras >= minSize && cOtras > 0 ? String(cOtras) : "",
+      totalCount // para ordenar
+    ]);
+  }
+
+  if (rows.length === 0) {
+    var container = document.getElementById('chart-plantel-container');
+    if (container) {
+      container.style.display = '';
+      var title = document.getElementById('chart-plantel-title');
+      if (title) title.textContent = 'Personal por Plantel — ' + municipio + ' (sin personal registrado en este municipio)';
+      var chartEl = document.getElementById('chart-plantel-div');
+      if (chartEl) chartEl.innerHTML = '<p style="color:#94a3b8; padding:20px;">No hay personal registrado para este municipio.</p>';
+    }
+    return;
+  }
+
+  // Ordenar de mayor a menor por el total
+  rows.sort(function(a, b) { return b[9] - a[9]; });
+  
+  // Limpiar la columna extra usada para ordenar
+  var finalRows = rows.map(function(r) { return r.slice(0, 9); });
+
+  var data = new google.visualization.DataTable();
+  data.addColumn('string', 'Plantel');
+  data.addColumn('number', 'Nacional');
+  data.addColumn({type: 'string', role: 'annotation'});
+  data.addColumn('number', 'Estadal');
+  data.addColumn({type: 'string', role: 'annotation'});
+  data.addColumn('number', 'Municipal');
+  data.addColumn({type: 'string', role: 'annotation'});
+  data.addColumn('number', 'Otras');
+  data.addColumn({type: 'string', role: 'annotation'});
+  data.addRows(finalRows);
+
+  // Altura dinámica: mínimo 400px, 35px por barra
+  var chartHeight = Math.max(400, rows.length * 35);
+  var chartEl = document.getElementById('chart-plantel-div');
+  if (chartEl) chartEl.style.height = chartHeight + 'px';
+
+  var options = {
+    isStacked: true,
+    backgroundColor: 'transparent',
+    legend: { textStyle: { color: '#94a3b8' }, position: 'top' },
+    colors: ['#3b82f6', '#eab308', '#10b981', '#94a3b8'], // Azul, Amarillo, Verde, Gris
+    chartArea: { top: 30, bottom: 40, width: '55%', height: '85%' },
+    hAxis: { textStyle: { color: '#94a3b8' }, gridlines: { color: '#334155' } },
+    vAxis: { textStyle: { color: '#94a3b8', fontSize: 11 } },
+    annotations: { highContrast: true, textStyle: { bold: true, fontSize: 11 } },
+    bar: { groupWidth: '70%' }
+  };
+
+  var container = document.getElementById('chart-plantel-container');
+  var title = document.getElementById('chart-plantel-title');
+  var el = document.getElementById('chart-plantel-div');
+
+  if (title) title.textContent = 'Personal por Plantel — Municipio ' + municipio + ' (' + rows.length + ' planteles)';
+  if (container) container.style.display = '';
+
+  var chart = new google.visualization.BarChart(el);
+  chart.draw(data, options);
+}
+
+// ── GRÁFICA JUBILACIÓN POR MUNICIPIO ─────────────────────────────────────
+function drawJubilacionMunicipioChart(byMunicipio) {
+  var el = document.getElementById('chart-jubilacion-municipio');
+  if (!el || !byMunicipio) return;
+  
+  var data = new google.visualization.DataTable();
+  data.addColumn('string', 'Municipio');
+  data.addColumn('number', 'Elegibles');
+  data.addColumn({type: 'string', role: 'annotation'});
+
+  var rows = [];
+  var maxVal = 0;
+  for (var key in byMunicipio) {
+    if (key !== "SIN ESPECIFICAR" && key !== "ND" && key !== "") {
+      var count = byMunicipio[key];
+      if (count > maxVal) maxVal = count;
+      rows.push([key, count, String(count)]);
+    }
+  }
+
+  rows.sort(function(a, b) { return b[1] - a[1]; });
+  data.addRows(rows);
+
+  var options = {
+    backgroundColor: 'transparent',
+    legend: { position: 'none' },
+    chartArea: { width: '90%', height: '70%' },
+    colors: ['#f59e0b'], // Color ambar para jubilables
+    hAxis: { 
+      textStyle: { color: '#94a3b8' }, 
+      gridlines: { color: '#334155' },
+      slantedText: true,
+      slantedTextAngle: 45
+    },
+    vAxis: { 
+      textStyle: { color: '#94a3b8' },
+      viewWindow: { min: 0, max: Math.ceil(maxVal * 1.15) }
+    },
+    annotations: { highContrast: true, textStyle: { bold: true, fontSize: 12 } }
+  };
+
+  var chart = new google.visualization.ColumnChart(el);
+  chart.draw(data, options);
+}
+
+// ── GRÁFICA DRILL-DOWN: Jubilación por Plantel en un Municipio ───────────
+function drawJubilacionPlantelDrillDown(municipio) {
+  var stats = window._lastStats;
+  if (!stats || !stats.hojaPersonal || !stats.hojaPersonal.jubilacion || !stats.hojaPersonal.jubilacion.byPlantel) return;
+
+  var depFilter = document.getElementById("dashboard-filtro-dependencia").value;
+  var byPlantel;
+
+  if (depFilter !== "ALL") {
+    var depStats = stats.hojaPersonal.byDependenciaStats ? stats.hojaPersonal.byDependenciaStats[depFilter] : null;
+    byPlantel = (depStats && depStats.jubilacion) ? depStats.jubilacion.byPlantel : {};
+  } else {
+    byPlantel = stats.hojaPersonal.jubilacion.byPlantel;
+  }
+
+  var prefix = municipio.toUpperCase() + '||';
+  var rows = [];
+
+  var codesMap = (stats.planteles && stats.planteles.byMunicipioDetalle) ? stats.planteles.byMunicipioDetalle[municipio.toUpperCase()] : null;
+
+  for (var key in byPlantel) {
+    if (key.indexOf(prefix) === 0) {
+      var codigoDEA = key.substring(prefix.length);
+      var nombrePlantel = (codesMap && codesMap[codigoDEA]) ? codesMap[codigoDEA] : _getNombrePlantel(codigoDEA);
+      var label = nombrePlantel ? nombrePlantel : codigoDEA;
+      rows.push([label, byPlantel[key], String(byPlantel[key])]);
+    }
+  }
+
+  var container = document.getElementById('chart-jubilacion-plantel-container');
+  if (rows.length === 0) {
+    if (container) container.style.display = 'none'; // Ocultar si no hay jubilables en este municipio
+    return;
+  }
+
+  rows.sort(function(a, b) { return b[1] - a[1]; });
+
+  var data = new google.visualization.DataTable();
+  data.addColumn('string', 'Plantel');
+  data.addColumn('number', 'Elegibles');
+  data.addColumn({type: 'string', role: 'annotation'});
+  data.addRows(rows);
+
+  var chartHeight = Math.max(300, rows.length * 35);
+  var chartEl = document.getElementById('chart-jubilacion-plantel-div');
+  if (chartEl) chartEl.style.height = chartHeight + 'px';
+
+  var options = {
+    backgroundColor: 'transparent',
+    legend: { position: 'none' },
+    chartArea: { top: 10, bottom: 40, width: '55%', height: '100%' },
+    colors: ['#f59e0b'],
+    hAxis: { textStyle: { color: '#94a3b8' }, gridlines: { color: '#334155' } },
+    vAxis: { textStyle: { color: '#94a3b8', fontSize: 11 } },
+    annotations: { highContrast: true, textStyle: { bold: true, fontSize: 12 } },
+    bar: { groupWidth: '70%' }
+  };
+
+  var title = document.getElementById('chart-jubilacion-plantel-title');
+  if (title) title.textContent = 'Próximos a Jubilarse (Mar 2027) — Municipio ' + municipio;
+  if (container) container.style.display = '';
+
+  var chart = new google.visualization.BarChart(chartEl);
+  chart.draw(data, options);
+}
+
+// ── HELPER: buscar nombre del plantel en la BD local ─────────────────────
+function _getNombrePlantel(codigoDEA) {
+  try {
+    var munis = GLOBALS.municipios || {};
+    for (var m in munis) {
+      var pars = munis[m].parroquias || {};
+      for (var p in pars) {
+        var planteles = pars[p].planteles || {};
+        if (planteles[codigoDEA]) return planteles[codigoDEA].nombre_plantel || null;
+      }
+    }
+  } catch(e) {}
+  return null;
+}
+
+function _getDependenciaPlantel(codigoDEA) {
+  try {
+    var munis = GLOBALS.municipios || {};
+    for (var m in munis) {
+      var pars = munis[m].parroquias || {};
+      for (var p in pars) {
+        var planteles = pars[p].planteles || {};
+        if (planteles[codigoDEA] && planteles[codigoDEA].dependencia) {
+          return String(planteles[codigoDEA].dependencia).toUpperCase().trim();
+        }
+      }
+    }
+  } catch(e) {}
+  return "SIN ESPECIFICAR";
+}
+
+
+// ==========================================================================
+// 3. MÓDULO PERSONAL (Docente, Admin, Obrero)
+// ==========================================================================
+function renderPersonalTab() {
+  const searchEl = document.getElementById("search-personal");
+  const filterText = searchEl ? searchEl.value.toLowerCase() : "";
+  renderDocentesAdmin(filterText);
+  renderObreros(filterText);
+}
+
+function renderDocentesAdmin(filterText = "") {
+  const dep = document.getElementById("sel-admin-dependencia").value;
+  const personal = GLOBALS.catalogos.personal && GLOBALS.catalogos.personal[dep] ? GLOBALS.catalogos.personal[dep] : {};
+  
+  const drawTable = (dataObj, tbodyId, type) => {
+    let html = "";
+    for(const [codigo, cargo] of Object.entries(dataObj || {})) {
+      if (filterText && !codigo.toLowerCase().includes(filterText) && !cargo.toLowerCase().includes(filterText)) continue;
+      html += `<tr>
+        <td>${codigo}</td>
+        <td>${cargo}</td>
+        <td>
+          <button class="btn-icon" onclick="openModalCargo('${type}', '${codigo}')" title="Editar"><i class="fa-solid fa-pen"></i></button>
+          <button class="btn-icon" style="color:var(--danger)" onclick="deleteCargo('${type}', '${codigo}')" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+        </td>
+      </tr>`;
+    }
+    document.getElementById(tbodyId).innerHTML = html || `<tr><td colspan="3" class="empty-table-msg">Sin registros</td></tr>`;
+  };
+  
+  drawTable(personal.docente, "tbody-docentes", "docente");
+  drawTable(personal.administrativo, "tbody-administrativo", "administrativo");
+}
+
+function openModalCargo(type, codigo = null) {
+  document.getElementById("input-cargo-type").value = type;
+  document.getElementById("input-cargo-original-code").value = codigo || "";
+  document.getElementById("modal-cargo-title").innerText = codigo ? `Editar Cargo ${type.toUpperCase()}` : `Añadir Cargo ${type.toUpperCase()}`;
+  
+  const dep = document.getElementById("sel-admin-dependencia").value;
+  const personal = GLOBALS.catalogos.personal[dep] || {};
+  if(codigo && personal[type] && personal[type][codigo]) {
+    document.getElementById("input-cargo-codigo").value = codigo;
+    document.getElementById("input-cargo-denominacion").value = personal[type][codigo];
+  } else {
+    document.getElementById("form-cargo").reset();
+  }
+  openModal("modal-cargo");
+}
+
+function submitModalCargo() {
+  const type = document.getElementById("input-cargo-type").value;
+  const originalCode = document.getElementById("input-cargo-original-code").value;
+  const newCode = document.getElementById("input-cargo-codigo").value.trim().toUpperCase();
+  const denom = document.getElementById("input-cargo-denominacion").value.trim().toUpperCase();
+  
+  if(!newCode || !denom) {
+    showToast("Completa los campos obligatorios", "warning"); return;
+  }
+  
+  const dep = document.getElementById("sel-admin-dependencia").value;
+  if (!GLOBALS.access.isAdmin && !GLOBALS.access.permissions.includes(`personal_${dep.toLowerCase()}`)) {
+    showToast("Permiso denegado para esta dependencia.", "danger"); return;
+  }
+  
+  if(!GLOBALS.catalogos.personal[dep]) GLOBALS.catalogos.personal[dep] = {};
+  if(!GLOBALS.catalogos.personal[dep][type]) GLOBALS.catalogos.personal[dep][type] = {};
+  
+  if(originalCode && originalCode !== newCode) {
+    delete GLOBALS.catalogos.personal[dep][type][originalCode];
+  }
+  GLOBALS.catalogos.personal[dep][type][newCode] = denom;
+  
+  renderDocentesAdmin();
+  persistCatalogos("personal");
+  closeModal("modal-cargo");
+}
+
+function deleteCargo(type, codigo) {
+  const dep = document.getElementById("sel-admin-dependencia").value;
+  if (!GLOBALS.access.isAdmin && !GLOBALS.access.permissions.includes(`personal_${dep.toLowerCase()}`)) {
+    showToast("Permiso denegado para esta dependencia.", "danger"); return;
+  }
+  if(!confirm(`¿Eliminar el cargo ${codigo}?`)) return;
+  delete GLOBALS.catalogos.personal[dep][type][codigo];
+  renderDocentesAdmin();
+  persistCatalogos("personal");
+}
+
+// -- OBREROS (CORRECCIÓN STRUCT KEY-BASED) --
+const OBRERO_ORDER = [
+  "OBRERO GENERAL I (NO CALIFICADO) GRADO 1",
+  "OBRERO GENERAL II (NO CALIFICADO) GRADO 2",
+  "OBRERO GENERAL III (NO CALIFICADO) GRADO 3",
+  "OBRERO GENERAL IV (NO CALIFICADO) GRADO 4",
+  "OBRERO CERTIFICADO I (CALIFICADO) GRADO 5",
+  "OBRERO CERTIFICADO II (CALIFICADO) GRADO 6",
+  "OBRERO CERTIFICADO III (CALIFICADO) GRADO 7",
+  "OBRERO CERTIFICADO IV (CALIFICADO) GRADO 8",
+  "OBRERO SUPERVISOR I GRADO 9",
+  "OBRERO SUPERVISOR II GRADO 10",
+  "OBRERO VIGILANTE I GRADO 5",
+  "OBRERO VIGILANTE II GRADO 6",
+  "OBRERO VIGILANTE III GRADO 7",
+  "OBRERO SUPERVISOR DE AREA DE SEGURIDAD GRADO 9",
+  "OBRERO SUPERVISOR GENERAL DE SEGURIDAD GRADO 10"
+];
+
+function renderObreros(filterText = "") {
+  const dep = document.getElementById("sel-admin-dependencia").value;
+  const obrerosObj = GLOBALS.catalogos.personal && GLOBALS.catalogos.personal[dep] ? GLOBALS.catalogos.personal[dep].obrero || {} : {};
+  let html = "";
+  
+  const obrerosArr = Object.entries(obrerosObj).sort((a, b) => {
+    const idxA = OBRERO_ORDER.indexOf(a[1].rango);
+    const idxB = OBRERO_ORDER.indexOf(b[1].rango);
+    if (idxA === -1 && idxB === -1) return a[1].rango.localeCompare(b[1].rango);
+    if (idxA === -1) return 1;
+    if (idxB === -1) return -1;
+    return idxA - idxB;
+  });
+  
+  for(const [codigo, item] of obrerosArr) {
+    const r = item.rango || "";
+    const matchCargo = item.cargos ? item.cargos.some(c => c.toLowerCase().includes(filterText)) : false;
+    if (filterText && !r.toLowerCase().includes(filterText) && !codigo.toLowerCase().includes(filterText) && !matchCargo) continue;
+    
+    let cargosHtml = (item.cargos || []).map(c => `<div style="font-size:13px; color:var(--text-muted); border-bottom:1px solid rgba(0,0,0,0.05); padding:4px 0;"><i class="fa-solid fa-angle-right" style="margin-right:6px; color:var(--primary);"></i> ${c}</div>`).join('');
+    
+    html += `
+      <div class="item-card">
+        <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+          <span class="user-role-badge">${r}</span>
+          <span style="font-size:12px; font-weight:700; color:var(--text-muted);">Cód: ${codigo}</span>
+        </div>
+        <div style="flex:1; margin-bottom:12px; max-height:120px; overflow-y:auto;">
+          ${cargosHtml}
+        </div>
+        <div class="item-card-actions">
+           <button class="btn-icon" onclick="openModalObrero('${codigo}')"><i class="fa-solid fa-pen"></i></button>
+           <button class="btn-icon" style="color:var(--danger)" onclick="deleteObrero('${codigo}')"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      </div>
+    `;
+  }
+  
+  document.getElementById("cards-obreros-container").innerHTML = html || `<div class="empty-table-msg" style="grid-column:1/-1;">Sin grupos obreros</div>`;
+}
+
+function onSearchPersonal() {
+  renderPersonalTab();
+}
+
+function openModalObrero(codigoStr = null) {
+  document.getElementById("form-obrero").reset();
+  document.getElementById("obrero-cargos-list").innerHTML = "";
+  
+  // Como usábamos un index oculto, ahora guardamos el código original
+  document.getElementById("input-obrero-index").value = codigoStr || "NEW";
+  
+  const dep = document.getElementById("sel-admin-dependencia").value;
+  const obreroCat = GLOBALS.catalogos.personal[dep] && GLOBALS.catalogos.personal[dep].obrero ? GLOBALS.catalogos.personal[dep].obrero : {};
+  
+  if (codigoStr && codigoStr !== "NEW" && obreroCat[codigoStr]) {
+    document.getElementById("modal-obrero-title").innerText = "Editar Grupo Obrero";
+    const item = obreroCat[codigoStr];
+    document.getElementById("input-obrero-rango").value = item.rango || "";
+    document.getElementById("input-obrero-codigo").value = codigoStr;
+    (item.cargos || []).forEach(c => addObreroCargoRow(c));
+  } else {
+    document.getElementById("modal-obrero-title").innerText = "Añadir Grupo Obrero";
+    addObreroCargoRow(""); 
+  }
+  openModal("modal-obrero");
+}
+
+function addObreroCargoRow(val) {
+  const div = document.createElement("div");
+  div.style.display = "flex";
+  div.style.gap = "8px";
+  div.innerHTML = `
+    <input type="text" class="input-obrero-cargo-item form-group" style="margin:0; flex:1;" value="${val}" placeholder="Ej. AYUDANTE" required>
+    <button type="button" class="btn-icon" style="color:var(--danger);" onclick="this.parentElement.remove()"><i class="fa-solid fa-xmark"></i></button>
+  `;
+  document.getElementById("obrero-cargos-list").appendChild(div);
+}
+
+function submitModalObrero() {
+  const origCode = document.getElementById("input-obrero-index").value;
+  const rango = document.getElementById("input-obrero-rango").value.trim().toUpperCase();
+  const codigo_cargo = document.getElementById("input-obrero-codigo").value.trim().toUpperCase();
+  
+  const cargos = [];
+  document.querySelectorAll('.input-obrero-cargo-item').forEach(inp => {
+    if(inp.value.trim()) cargos.push(inp.value.trim().toUpperCase());
+  });
+  
+  if(!rango || !codigo_cargo || cargos.length === 0) {
+    showToast("Debes proveer rango, código y al menos un cargo", "warning");
+    return;
+  }
+  
+  const dep = document.getElementById("sel-admin-dependencia").value;
+  if (!GLOBALS.access.isAdmin && !GLOBALS.access.permissions.includes(`personal_${dep.toLowerCase()}`)) {
+    showToast("Permiso denegado para esta dependencia.", "danger"); return;
+  }
+
+  if(!GLOBALS.catalogos.personal[dep]) GLOBALS.catalogos.personal[dep] = {};
+  if(!GLOBALS.catalogos.personal[dep].obrero) GLOBALS.catalogos.personal[dep].obrero = {};
+  
+  if(origCode !== "NEW" && origCode !== codigo_cargo) {
+    delete GLOBALS.catalogos.personal[dep].obrero[origCode];
+  }
+  
+  GLOBALS.catalogos.personal[dep].obrero[codigo_cargo] = { rango, cargos };
+  
+  renderObreros();
+  persistCatalogos("personal");
+  closeModal("modal-obrero");
+}
+
+function deleteObrero(codigoStr) {
+  const dep = document.getElementById("sel-admin-dependencia").value;
+  if (!GLOBALS.access.isAdmin && !GLOBALS.access.permissions.includes(`personal_${dep.toLowerCase()}`)) {
+    showToast("Permiso denegado para esta dependencia.", "danger"); return;
+  }
+  if(!confirm(`¿Eliminar grupo obrero ${codigoStr}?`)) return;
+  if (GLOBALS.catalogos.personal[dep] && GLOBALS.catalogos.personal[dep].obrero) {
+    delete GLOBALS.catalogos.personal[dep].obrero[codigoStr];
+  }
+  renderObreros();
+  persistCatalogos("personal");
+}
+
+// ==========================================================================
+// 4. MÓDULO TURNOS (ES UN ARRAY)
+// ==========================================================================
+function renderTurnos() {
+  const list = GLOBALS.catalogos.turnos || [];
+  let html = "";
+  list.forEach((t, index) => {
+    html += `<tr>
+      <td>${t}</td>
+      <td style="width:100px;">
+        <button class="btn-icon" style="color:var(--danger)" onclick="deleteTurno(${index})"><i class="fa-solid fa-trash"></i></button>
+      </td>
+    </tr>`;
+  });
+  document.getElementById("tbody-turnos").innerHTML = html || `<tr><td colspan="2" class="empty-table-msg">Sin turnos</td></tr>`;
+}
+
+function saveTurno() {
+  const inp = document.getElementById("input-new-turno");
+  const val = inp.value.trim().toUpperCase();
+  if(!val) return;
+  
+  if(!GLOBALS.catalogos.turnos) GLOBALS.catalogos.turnos = [];
+  if(GLOBALS.catalogos.turnos.includes(val)) {
+    showToast("El turno ya existe", "warning"); return;
+  }
+  GLOBALS.catalogos.turnos.push(val);
+  inp.value = "";
+  renderTurnos();
+  persistCatalogos("turnos");
+}
+
+function deleteTurno(index) {
+  if(!confirm("¿Eliminar turno?")) return;
+  GLOBALS.catalogos.turnos.splice(index, 1);
+  renderTurnos();
+  persistCatalogos("turnos");
+}
+
+// ==========================================================================
+// 5. MÓDULO NIVEL / MODALIDAD
+// ==========================================================================
+function renderNivelesModalidades() {
+  const cat = GLOBALS.catalogos.nivel_modalidad || {niveles:[], modalidades:[]};
+  const drawList = (arr, tbodyId, type) => {
+    let html = "";
+    (arr || []).forEach((item, index) => {
+      html += `<tr>
+        <td>${item}</td>
+        <td style="width:80px;"><button class="btn-icon" style="color:var(--danger)" onclick="deleteNivelModalidad('${type}', ${index})"><i class="fa-solid fa-trash"></i></button></td>
+      </tr>`;
+    });
+    document.getElementById(tbodyId).innerHTML = html || `<tr><td colspan="2" class="empty-table-msg">Vacío</td></tr>`;
+  };
+  drawList(cat.niveles, "tbody-niveles", "niveles");
+  drawList(cat.modalidades, "tbody-modalidades", "modalidades");
+}
+
+function saveNivelModalidad(tipoSingular) {
+  const isNivel = (tipoSingular === 'nivel');
+  const arrKey = isNivel ? 'niveles' : 'modalidades';
+  const inpId = isNivel ? 'input-new-nivel' : 'input-new-modalidad';
+  
+  const inp = document.getElementById(inpId);
+  const val = inp.value.trim().toUpperCase();
+  if(!val) return;
+  
+  if(!GLOBALS.catalogos.nivel_modalidad) GLOBALS.catalogos.nivel_modalidad = {niveles:[], modalidades:[]};
+  if(!GLOBALS.catalogos.nivel_modalidad[arrKey]) GLOBALS.catalogos.nivel_modalidad[arrKey] = [];
+  
+  if(GLOBALS.catalogos.nivel_modalidad[arrKey].includes(val)){
+    showToast("Ya existe", "warning"); return;
+  }
+  
+  GLOBALS.catalogos.nivel_modalidad[arrKey].push(val);
+  inp.value = "";
+  renderNivelesModalidades();
+  persistCatalogos("nivel_modalidad");
+}
+
+function deleteNivelModalidad(typeKey, index) {
+  if(!confirm("¿Eliminar registro?")) return;
+  GLOBALS.catalogos.nivel_modalidad[typeKey].splice(index, 1);
+  renderNivelesModalidades();
+  persistCatalogos("nivel_modalidad");
+}
+
+// ==========================================================================
+// 6. MÓDULO PLANES DE ESTUDIO (OBJETO INDEXADO)
+// ==========================================================================
+function renderPlanes(filterText = "") {
+  // planes_estudio es objeto: { "46070": { codigo: 46070, especialidad: "...", mencion: "...", grados: [...] }, ... }
+  const planes = GLOBALS.catalogos.planes_estudio || {};
+  let html = "";
+  
+  for(const [codigo, p] of Object.entries(planes)) {
+    const cod = p.codigo || codigo || "";
+    const esp = p.especialidad || p.nombre || "SIN ESPECIALIDAD"; // fallback
+    const men = p.mencion || "";
+    if(filterText && !cod.toString().toLowerCase().includes(filterText) && !esp.toLowerCase().includes(filterText)) continue;
+    
+    html += `
+      <div class="item-card">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <h4 style="margin:0;">${esp}</h4>
+        </div>
+        <p style="margin:0; font-size:12px; font-weight:700; color:var(--text-muted);">Cód: ${cod}</p>
+        <p style="font-size:12px; color:var(--text-muted); margin-top:8px;">Mención: ${men || 'N/A'}</p>
+        <div class="item-card-actions" style="margin-top:auto;">
+           <button class="btn-icon" onclick="openModalPlan('${codigo}')"><i class="fa-solid fa-pen"></i></button>
+           <button class="btn-icon" style="color:var(--danger)" onclick="deletePlan('${codigo}')"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      </div>
+    `;
+  }
+  
+  document.getElementById("cards-planes-container").innerHTML = html || `<div class="empty-table-msg" style="grid-column:1/-1;">No hay planes de estudio registrados.</div>`;
+}
+
+function onSearchPlanes() {
+  const text = document.getElementById("search-plan").value.toLowerCase();
+  renderPlanes(text);
+}
+
+function openModalPlan(codigoStr = null) {
+  document.getElementById("form-plan").reset();
+  document.getElementById("plan-years-container").innerHTML = "";
+  document.getElementById("input-plan-index").value = codigoStr || "NEW";
+  
+  if (codigoStr && codigoStr !== "NEW" && GLOBALS.catalogos.planes_estudio[codigoStr]) {
+    document.getElementById("modal-plan-title").innerText = "Editar Plan de Estudio";
+    const p = GLOBALS.catalogos.planes_estudio[codigoStr];
+    document.getElementById("input-plan-codigo").value = p.codigo || codigoStr;
+    document.getElementById("input-plan-nombre").value = p.especialidad || p.nombre || "";
+    document.getElementById("input-plan-mencion").value = p.mencion || "";
+    
+    const grados = p.grados || []; 
+    grados.forEach(g => {
+      // Si la BD guardaba grados con asignaturas:
+      addPlanYearBlock(g.label || g.anio, g.asignaturas || [""]);
+    });
+  } else {
+    document.getElementById("modal-plan-title").innerText = "Añadir Plan de Estudio";
+    addPlanYearBlock("1ER AÑO", [""]);
+  }
+  openModal("modal-plan");
+}
+
+function addPlanYearBlock(yearName = "", subjs = [""]) {
+  const container = document.getElementById("plan-years-container");
+  const blockId = 'year-block-' + Date.now() + Math.random().toString(36).substr(2,5);
+  
+  const div = document.createElement("div");
+  div.className = "plan-year-block";
+  div.id = blockId;
+  div.style.background = "rgba(0,0,0,0.02)";
+  div.style.padding = "16px";
+  div.style.borderRadius = "var(--radius-md)";
+  div.style.border = "1px solid rgba(0,0,0,0.05)";
+  
+  let subjsHtml = "";
+  if(subjs.length === 0) subjs = [{nombre: "", horas: ""}];
+  subjs.forEach(s => {
+    const nom = typeof s === 'string' ? s : (s.nombre || '');
+    const h = s.horas || '';
+    subjsHtml += `
+      <div style="display:flex; gap:8px; margin-top:8px;" class="subject-row">
+        <input type="text" class="input-plan-subj-name form-group" style="margin:0; flex:2;" value="${nom}" placeholder="Asignatura (Ej: MATEMÁTICA)">
+        <input type="number" class="input-plan-subj-hours form-group" style="margin:0; flex:1; text-align:center;" value="${h}" placeholder="Horas">
+        <button type="button" class="btn-icon" style="color:var(--danger);" onclick="this.parentElement.remove()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+    `;
+  });
+  
+  div.innerHTML = `
+    <div style="display:flex; gap:16px; align-items:center; margin-bottom:12px;">
+      <input type="text" class="input-plan-yearname form-group" style="margin:0; flex:1; font-weight:700;" value="${yearName}" placeholder="Nombre del Año/Semestre (Ej: 1ER AÑO)" required>
+      <button type="button" class="btn btn-secondary btn-icon" onclick="document.getElementById('${blockId}').remove()" title="Eliminar bloque"><i class="fa-solid fa-trash"></i></button>
+    </div>
+    <div class="plan-subjects-list" style="margin-left:24px; border-left:2px solid var(--primary); padding-left:16px;">
+      <label style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; color:var(--text-muted);">
+        Asignaturas (Opcional)
+        <button type="button" class="btn-icon" style="color:var(--primary)" onclick="addSubjectToBlock('${blockId}')"><i class="fa-solid fa-plus"></i> Añadir Asignatura</button>
+      </label>
+      <div class="subjects-wrapper">${subjsHtml}</div>
+    </div>
+  `;
+  container.appendChild(div);
+}
+
+function addSubjectToBlock(blockId) {
+  const wrapper = document.querySelector(`#${blockId} .subjects-wrapper`);
+  const div = document.createElement("div");
+  div.className = "subject-row";
+  div.style.display = "flex";
+  div.style.gap = "8px";
+  div.style.marginTop = "8px";
+  div.innerHTML = `
+    <input type="text" class="input-plan-subj-name form-group" style="margin:0; flex:2;" placeholder="Asignatura">
+    <input type="number" class="input-plan-subj-hours form-group" style="margin:0; flex:1; text-align:center;" placeholder="Horas">
+    <button type="button" class="btn-icon" style="color:var(--danger);" onclick="this.parentElement.remove()"><i class="fa-solid fa-xmark"></i></button>
+  `;
+  wrapper.appendChild(div);
+}
+
+function submitModalPlan() {
+  const origCode = document.getElementById("input-plan-index").value;
+  const codigo = document.getElementById("input-plan-codigo").value.trim().toUpperCase();
+  const especialidad = document.getElementById("input-plan-nombre").value.trim().toUpperCase();
+  const mencion = document.getElementById("input-plan-mencion").value.trim().toUpperCase();
+  
+  if(!codigo || !especialidad) {
+    showToast("Código y especialidad son requeridos", "warning"); return;
+  }
+  
+  const grados = [];
+  const blocks = document.querySelectorAll('.plan-year-block');
+  
+  let blockError = false;
+  blocks.forEach((blk, idx) => {
+    const label = blk.querySelector('.input-plan-yearname').value.trim().toUpperCase();
+    if(!label) { blockError = true; return; }
+    
+    const asignaturas = [];
+    blk.querySelectorAll('.subject-row').forEach(row => {
+      const nombre = row.querySelector('.input-plan-subj-name').value.trim().toUpperCase();
+      const horas = parseInt(row.querySelector('.input-plan-subj-hours').value) || null;
+      if(nombre) asignaturas.push({ nombre, horas });
+    });
+    grados.push({ anio: idx+1, label, asignaturas });
+  });
+  
+  if(blockError) {
+    showToast("Todos los bloques de año deben tener nombre", "warning"); return;
+  }
+  
+  const obj = { codigo: parseInt(codigo)||codigo, especialidad, mencion, numAnios: grados.length, asignaturas: [], grados };
+  
+  if(!GLOBALS.catalogos.planes_estudio) GLOBALS.catalogos.planes_estudio = {};
+  
+  if(origCode !== "NEW" && origCode !== codigo) {
+    delete GLOBALS.catalogos.planes_estudio[origCode];
+  }
+  
+  GLOBALS.catalogos.planes_estudio[codigo] = obj;
+  
+  renderPlanes();
+  persistCatalogos("planes_estudio");
+  closeModal("modal-plan");
+}
+
+function deletePlan(codigoStr) {
+  if(!confirm(`¿Eliminar plan de estudio ${codigoStr}?`)) return;
+  delete GLOBALS.catalogos.planes_estudio[codigoStr];
+  renderPlanes();
+  persistCatalogos("planes_estudio");
+}
+
+// ==========================================================================
+// 7. MÓDULO ESTATUS LABORAL (OBJETO CLAVE-VALOR)
+// ==========================================================================
+function renderEstatus(filterText = "") {
+  const estatusObj = GLOBALS.catalogos.estatus || {};
+  let html = "";
+  
+  // ORDENAMIENTO ALFABETICO POR CLAVE (A-Z)
+  const estatusArr = Object.entries(estatusObj).sort((a, b) => a[0].localeCompare(b[0]));
+  
+  for(const [codigo, desc] of estatusArr) {
+    if(filterText && !codigo.toLowerCase().includes(filterText) && !desc.toLowerCase().includes(filterText)) continue;
+    
+    html += `<tr>
+      <td><span class="user-role-badge">${codigo}</span></td>
+      <td style="color:var(--text-muted); font-size:13px;">${desc}</td>
+      <td style="width:100px;">
+        <button class="btn-icon" onclick="openModalEstatus('${codigo}')"><i class="fa-solid fa-pen"></i></button>
+        <button class="btn-icon" style="color:var(--danger)" onclick="deleteEstatus('${codigo}')"><i class="fa-solid fa-trash"></i></button>
+      </td>
+    </tr>`;
+  }
+  
+  document.getElementById("tbody-estatus").innerHTML = html || `<tr><td colspan="3" class="empty-table-msg">Sin registros</td></tr>`;
+}
+
+function onSearchEstatus() {
+  const text = document.getElementById("search-estatus").value.toLowerCase();
+  renderEstatus(text);
+}
+
+function openModalEstatus(codigoStr = null) {
+  document.getElementById("form-estatus").reset();
+  document.getElementById("input-estatus-index").value = codigoStr || "NEW";
+  
+  if(codigoStr && codigoStr !== "NEW" && GLOBALS.catalogos.estatus[codigoStr]) {
+    document.getElementById("modal-estatus-title").innerText = "Editar Estatus";
+    document.getElementById("input-estatus-codigo").value = codigoStr;
+    // Ocultar denominacion ya que el Key es la Denominación en el BD JSON. Usaremos Concepto como la descripcion.
+    document.getElementById("input-estatus-denominacion").parentElement.style.display = "none";
+    document.getElementById("input-estatus-concepto").value = GLOBALS.catalogos.estatus[codigoStr];
+  } else {
+    document.getElementById("modal-estatus-title").innerText = "Añadir Estatus";
+    document.getElementById("input-estatus-denominacion").parentElement.style.display = "none";
+  }
+  openModal("modal-estatus");
+}
+
+function submitModalEstatus() {
+  const origCode = document.getElementById("input-estatus-index").value;
+  // Usaremos el input del "código" como llave maestra
+  const codigo = document.getElementById("input-estatus-codigo").value.trim().toUpperCase();
+  const concepto = document.getElementById("input-estatus-concepto").value.trim().toUpperCase();
+  
+  if(!codigo || !concepto) {
+    showToast("Ambos campos son requeridos", "warning"); return;
+  }
+  
+  if(!GLOBALS.catalogos.estatus) GLOBALS.catalogos.estatus = {};
+  
+  if(origCode !== "NEW" && origCode !== codigo) {
+    delete GLOBALS.catalogos.estatus[origCode];
+  }
+  
+  GLOBALS.catalogos.estatus[codigo] = concepto;
+  
+  renderEstatus();
+  persistCatalogos("estatus");
+  closeModal("modal-estatus");
+}
+
+function deleteEstatus(codigoStr) {
+  if(!confirm(`¿Eliminar estatus ${codigoStr}?`)) return;
+  delete GLOBALS.catalogos.estatus[codigoStr];
+  renderEstatus();
+  persistCatalogos("estatus");
+}
+
+// ==========================================================================
+// 8. MÓDULO PLANTELES (LAZY LOAD & CRUD INDIVIDUAL)
+// ==========================================================================
+function lazyLoadMunicipios() {
+  setLoading(true);
+  google.script.run
+    .withSuccessHandler(res => {
+      setLoading(false);
+      if(res.exito) {
+        GLOBALS.municipios = res.municipios;
+        populatePlantelSelects();
+        renderFiltrosPlanteles();
+        renderPlantelesTable();
+      } else {
+        showToast(res.error, "danger");
+      }
+    })
+    .withFailureHandler((err) => {
+      setLoading(false);
+      showToast("Error al cargar municipios: " + err, "danger");
+    })
+    .getMunicipios(getDevUser());
+}
+
+function populatePlantelSelects() {
+  const cat = GLOBALS.catalogos.nivel_modalidad || {niveles:[], modalidades:[]};
+  
+  const nivSel = document.getElementById("input-plantel-nivel");
+  if(nivSel) nivSel.innerHTML = '<option value="">Seleccione...</option>' + cat.niveles.map(n => `<option value="${n}">${n}</option>`).join('');
+  
+  const modSel = document.getElementById("input-plantel-modalidad");
+  if(modSel) modSel.innerHTML = '<option value="">Seleccione...</option>' + cat.modalidades.map(m => `<option value="${m}">${m}</option>`).join('');
+  
+  const turSel = document.getElementById("input-plantel-turno");
+  if(turSel) turSel.innerHTML = '<option value="">Seleccione...</option>' + (GLOBALS.catalogos.turnos||[]).map(t => `<option value="${t}">${t}</option>`).join('');
+}
+
+function renderFiltrosPlanteles() {
+  const sel = document.getElementById("filter-municipio");
+  sel.innerHTML = '<option value="">Todos los municipios</option>';
+  const access = GLOBALS.access || { isAdmin: false, permissions: [] };
+  const normalizeMun = (m) => "planteles_" + m.normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '');
+  
+  let firstAllowed = null;
+  const sortedMuns = Object.keys(GLOBALS.municipios).sort((a, b) => a.localeCompare(b));
+  
+  for(const mun of sortedMuns) {
+    const munKey = normalizeMun(mun);
+    if (!access.isAdmin && !access.permissions.includes(munKey)) continue;
+    sel.innerHTML += `<option value="${mun}">${mun}</option>`;
+    if (!firstAllowed) firstAllowed = mun;
+  }
+  
+  if (!access.isAdmin) {
+    if (sel.options.length > 0 && sel.options[0].value === "") sel.remove(0);
+    if (sel.options.length > 0) sel.value = sel.options[0].value;
+  }
+}
+
+function applyPlantelesFilter() {
+  renderPlantelesTable();
+}
+
+function onSearchPlantel() {
+  renderPlantelesTable();
+}
+
+function renderPlantelesTable() {
+  if(!GLOBALS.municipios) return;
+  const muns = GLOBALS.municipios;
+  const search = document.getElementById("search-plantel").value.toLowerCase();
+  const filterMun = document.getElementById("filter-municipio").value;
+  const access = GLOBALS.access || { isAdmin: false, permissions: [] };
+  // Normalización robusta: quita tildes, espacios, guiones y cualquier carácter no alfanumérico
+  const normalizeMun = (m) => "planteles_" + m.normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")  // quita diacríticos (tildes, diéresis)
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '');       // solo letras y dígitos
+  
+  // Diagnóstico: imprime en consola el mapeo nombre-DB → clave generada → permisos del usuario
+  if (!access.isAdmin) {
+    console.log("[SGH-RBAC] Permisos del usuario:", access.permissions);
+    console.log("[SGH-RBAC] Municipios en DB y sus claves generadas:");
+    for(const n in muns) console.log("  ", n, "→", normalizeMun(n));
+  }
+  
+  let html = "";
+  
+  for(const nomMun in muns) {
+    const munKey = normalizeMun(nomMun);
+    if (!access.isAdmin && !access.permissions.includes(munKey)) continue;
+    
+    if(filterMun && nomMun !== filterMun) continue;
+    const parrs = muns[nomMun].parroquias || {};
+    
+    for(const nomPar in parrs) {
+      const plnts = parrs[nomPar].planteles || {};
+      
+      for(const cod in plnts) {
+        const p = plnts[cod];
+        const denom = (p.nombre_plantel || "").toLowerCase(); // FIX: usar nombre_plantel
+        
+        if (search && !cod.toLowerCase().includes(search) && !denom.includes(search)) continue;
+        
+        html += `<tr>
+          <td><span class="user-role-badge" style="background:var(--bg-sidebar);">${cod}</span></td>
+          <td><strong>${p.nombre_plantel || "SIN NOMBRE"}</strong></td>
+          <td>${nomMun}</td>
+          <td style="color:var(--text-muted);">${nomPar}</td>
+          <td>
+            <button class="btn btn-secondary btn-icon" onclick="openModalPlantel('${nomMun}', '${nomPar}', '${cod}')" title="Editar"><i class="fa-solid fa-pen"></i></button>
+          </td>
+        </tr>`;
+      }
+    }
+  }
+  
+  document.getElementById("tbody-planteles").innerHTML = html || `<tr><td colspan="5" class="empty-table-msg">No se encontraron planteles</td></tr>`;
+}
+
+
+function updateParroquiasSelect(munId, selectedPar = '') {
+  const selectParroquia = document.getElementById('input-plantel-parroquia');
+  selectParroquia.innerHTML = '<option value="">Seleccione Parroquia...</option>';
+  if (!munId || !GLOBALS.municipios[munId]) return;
+  const parroquias = GLOBALS.municipios[munId].parroquias || {};
+  Object.keys(parroquias).sort().forEach(par => {
+    const opt = document.createElement('option');
+    opt.value = par;
+    opt.text = par;
+    if (par === selectedPar) opt.selected = true;
+    selectParroquia.appendChild(opt);
+  });
+}
+
+function openModalPlantelNuevo() {
+  document.getElementById('form-plantel').reset();
+  document.getElementById('input-plantel-original-id').value = '';
+  document.getElementById('input-plantel-id').readOnly = false;
+  
+  const selectMun = document.getElementById('input-plantel-municipio');
+  selectMun.disabled = false;
+  selectMun.innerHTML = '<option value="">Seleccione Municipio...</option>';
+  Object.keys(GLOBALS.municipios).sort().forEach(mun => {
+    const opt = document.createElement('option');
+    opt.value = mun;
+    opt.text = mun;
+    selectMun.appendChild(opt);
+  });
+  
+  const selectParroquia = document.getElementById('input-plantel-parroquia');
+  selectParroquia.disabled = false;
+  selectParroquia.innerHTML = '<option value="">Seleccione Parroquia...</option>';
+  
+  document.getElementById('modal-plantel-title').innerText = 'Nuevo Plantel';
+  document.getElementById('modal-plantel-subtitle').innerText = 'Complete los datos';
+  
+  const container = document.getElementById('plantel-planes-container');
+  let chkBoxHtml = '<div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:12px; max-height:220px; overflow-y:auto; padding:12px; background:var(--bg-surface); border:1px solid rgba(0,0,0,0.06); border-radius:var(--radius-md);">';
+  const allPlanes = GLOBALS.catalogos.planes_estudio || {};
+  for(const [planCod, planData] of Object.entries(allPlanes)) {
+    chkBoxHtml += `<label style="display:flex; align-items:center; gap:10px; font-size:13px; cursor:pointer; padding:8px 10px; border-radius:6px; border:1px solid transparent; transition:all 0.2s;" onmouseover="this.style.background='rgba(0,0,0,0.02)'; this.style.borderColor='rgba(0,0,0,0.05';" onmouseout="this.style.background='transparent'; this.style.borderColor='transparent';">
+      <input type="checkbox" class="chk-plan-item" style="width:16px; height:16px; accent-color:var(--primary); margin:0;" value="${planCod}"> 
+      <div style="display:flex; flex-direction:column; gap:2px; line-height:1.2;">
+        <span style="font-weight:700; color:var(--text-main);">${planCod}</span>
+        <span style="color:var(--text-muted); font-size:11px;">${planData.especialidad || planData.nombre || ''}</span>
+      </div>
+    </label>`;
+  }
+  chkBoxHtml += '</div>';
+  container.innerHTML = chkBoxHtml;
+  openModal('modal-plantel');
+}
+
+function openModalPlantel(mun, par, cod) {
+  const p = GLOBALS.municipios[mun].parroquias[par].planteles[cod];
+  if(!p) return;
+  
+  document.getElementById("input-plantel-original-id").value = cod;
+  document.getElementById("input-plantel-id").value = cod;
+  document.getElementById("input-plantel-id").readOnly = true;
+  
+  const selectMun = document.getElementById("input-plantel-municipio");
+  selectMun.innerHTML = '<option value="">Seleccione Municipio...</option>';
+  Object.keys(GLOBALS.municipios).sort().forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m;
+    opt.text = m;
+    selectMun.appendChild(opt);
+  });
+  selectMun.value = mun;
+  selectMun.disabled = true; // Bloqueado en modo edición
+
+  const selectPar = document.getElementById("input-plantel-parroquia");
+  selectPar.innerHTML = '<option value="">Seleccione Parroquia...</option>';
+  Object.keys(GLOBALS.municipios[mun].parroquias || {}).sort().forEach(pName => {
+    const opt = document.createElement('option');
+    opt.value = pName;
+    opt.text = pName;
+    selectPar.appendChild(opt);
+  });
+  selectPar.value = par;
+  selectPar.disabled = true; // Bloqueado en modo edición
+  
+  document.getElementById("modal-plantel-title").innerText = p.nombre_plantel || "PLANTEL SIN NOMBRE";
+  document.getElementById("modal-plantel-subtitle").innerText = `${cod} - ${mun} (${par})`;
+  
+  document.getElementById("input-plantel-nombre").value = p.nombre_plantel || "";
+  document.getElementById("input-plantel-eponimo").value = p.nuevo_eponimo || "";
+  document.getElementById("input-plantel-den-abr").value = p.den_abr || "";
+  document.getElementById("input-plantel-denominacion").value = p.denominacion || "";
+  
+  document.getElementById("input-plantel-dependencia").value = p.dependencia || "";
+  document.getElementById("input-plantel-cod-dep").value = p.codigo_dependencia || "";
+  document.getElementById("input-plantel-cod-dep2").value = p.codigo_dependencia_2 || "";
+  document.getElementById("input-plantel-cod-est").value = p.codigo_estadistico || "";
+  
+  document.getElementById("input-plantel-ubicacion").value = p.ubicacion || "";
+  document.getElementById("input-plantel-nivel").value = p.nivel || "";
+  document.getElementById("input-plantel-modalidad").value = p.modalidad || "";
+  document.getElementById("input-plantel-turno").value = p.turno || "";
+  document.getElementById("input-plantel-metros").value = p.metros2 || "";
+  document.getElementById("input-plantel-obs").value = p.observaciones || "";
+  
+  // RENDERIZADO DINÁMICO DE CHECKBOXES PARA PLANES DE ESTUDIO
+  const container = document.getElementById("plantel-planes-container");
+  
+  let chkBoxHtml = `<div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:12px; max-height:220px; overflow-y:auto; padding:12px; background:var(--bg-surface); border:1px solid rgba(0,0,0,0.06); border-radius:var(--radius-md);">`;
+  
+  const allPlanes = GLOBALS.catalogos.planes_estudio || {};
+  const myPlanes = p.planes_estudio || {}; // Objeto {"21000": {...}}
+  
+  for(const [planCod, planData] of Object.entries(allPlanes)) {
+    const checked = myPlanes.hasOwnProperty(planCod) ? "checked" : "";
+    chkBoxHtml += `<label style="display:flex; align-items:center; gap:10px; font-size:13px; cursor:pointer; padding:8px 10px; border-radius:6px; border:1px solid transparent; transition:all 0.2s;" onmouseover="this.style.background='rgba(0,0,0,0.02)'; this.style.borderColor='rgba(0,0,0,0.05)';" onmouseout="this.style.background='transparent'; this.style.borderColor='transparent';">
+      <input type="checkbox" class="chk-plan-item" style="width:16px; height:16px; accent-color:var(--primary); margin:0;" value="${planCod}" ${checked}> 
+      <div style="display:flex; flex-direction:column; gap:2px; line-height:1.2;">
+        <span style="font-weight:700; color:var(--text-main);">${planCod}</span>
+        <span style="color:var(--text-muted); font-size:11px;">${planData.especialidad || planData.nombre || ''}</span>
+      </div>
+    </label>`;
+  }
+  chkBoxHtml += `</div>`;
+  container.innerHTML = chkBoxHtml;
+  
+  openModal("modal-plantel");
+}
+
+function submitModalPlantel() {
+  const cod = document.getElementById("input-plantel-id").value;
+  const mun = document.getElementById("input-plantel-municipio").value;
+  const par = document.getElementById("input-plantel-parroquia").value;
+  
+  const normalizeMun = (m) => "planteles_" + m.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]/g, '');
+  const munKey = normalizeMun(mun);
+  if (!GLOBALS.access.isAdmin && !GLOBALS.access.permissions.includes(munKey)) {
+    showToast("Permiso denegado para editar en este municipio.", "danger");
+    return;
+  }
+  
+  // Reconstruir objeto de planes de estudio del plantel
+  const planesSelected = {};
+  document.querySelectorAll('.chk-plan-item:checked').forEach(chk => {
+    // Si queremos copiar la info original, podemos, o mandar objeto vacío/básico como estaba en DB
+    const globalData = GLOBALS.catalogos.planes_estudio[chk.value] || {};
+    planesSelected[chk.value] = {
+      especialidad: globalData.especialidad || null,
+      mencion: globalData.mencion || null
+    };
+  });
+  
+  const originalCod = document.getElementById("input-plantel-original-id").value.trim().toUpperCase() || undefined;
+  
+  const payload = {
+    codigo_original: originalCod,
+    nombre_plantel: document.getElementById("input-plantel-nombre").value.trim().toUpperCase(),
+    nuevo_eponimo: document.getElementById("input-plantel-eponimo").value.trim().toUpperCase(),
+    den_abr: document.getElementById("input-plantel-den-abr").value.trim().toUpperCase(),
+    denominacion: document.getElementById("input-plantel-denominacion").value.trim().toUpperCase(),
+    dependencia: document.getElementById("input-plantel-dependencia").value.trim().toUpperCase(),
+    codigo_dependencia: document.getElementById("input-plantel-cod-dep").value.trim().toUpperCase(),
+    codigo_dependencia_2: document.getElementById("input-plantel-cod-dep2").value.trim().toUpperCase(),
+    codigo_estadistico: document.getElementById("input-plantel-cod-est").value.trim().toUpperCase(),
+    ubicacion: document.getElementById("input-plantel-ubicacion").value.trim().toUpperCase(),
+    nivel: document.getElementById("input-plantel-nivel").value.trim().toUpperCase(),
+    modalidad: document.getElementById("input-plantel-modalidad").value.trim().toUpperCase(),
+    turno: document.getElementById("input-plantel-turno").value.trim().toUpperCase(),
+    metros2: document.getElementById("input-plantel-metros").value.trim().toUpperCase(),
+    observaciones: document.getElementById("input-plantel-obs").value.trim().toUpperCase(),
+    planes_estudio: planesSelected
+  };
+  
+  setLoading(true);
+  google.script.run
+    .withSuccessHandler((res) => {
+      setLoading(false);
+      if (res.exito) {
+        showToast("Plantel actualizado exitosamente", "success");
+                  // Mutar caché local
+          if (!GLOBALS.municipios[mun].parroquias[par].planteles) GLOBALS.municipios[mun].parroquias[par].planteles = {};
+          if (originalCod && originalCod !== cod) {
+              delete GLOBALS.municipios[mun].parroquias[par].planteles[originalCod];
+          }
+          if (!GLOBALS.municipios[mun].parroquias[par].planteles[cod]) {
+              GLOBALS.municipios[mun].parroquias[par].planteles[cod] = {};
+          }
+          Object.assign(GLOBALS.municipios[mun].parroquias[par].planteles[cod], payload);
+          renderPlantelesTable();
+        closeModal("modal-plantel");
+      } else {
+        showToast(res.error, "danger");
+      }
+    })
+    .withFailureHandler((err) => {
+      setLoading(false);
+      showToast("Error de red: " + err, "danger");
+    })
+    .savePlantel(mun, par, cod, payload, getDevUser());
+}
+
+// ==========================================================================
+// MÓDULO DE DESPLIEGUE
+// ==========================================================================
+
+// Lista maestra de los 23 municipios de Mérida
+const MUNICIPIOS_MERIDA = [
+  "ALBERTO ADRIANI", "ANDRES BELLO", "ANTONIO PINTO SALINA",
+  "ARICAGUA", "ARZOBISPO CHACON", "CAMPO ELIAS",
+  "CARACCIOLO PARRA", "CARDENAL QUINTERO", "GUARAQUE",
+  "JULIO CESAR", "JUSTO BRICEÑO", "LIBERTADOR",
+  "MIRANDA", "OBISPO RAMOS DE LORA", "PADRE NOGUERA",
+  "PUEBLO LLANO", "RANGEL", "RIVAS DAVILA",
+  "SANTOS MARQUINA", "SUCRE", "TOVAR",
+  "TULIO FEBRES", "ZEA"
+];
+
+function renderDespliegue() {
+  const grid = document.getElementById("despliegue-grid");
+  if (!grid) return;
+  const activos = GLOBALS.configuracion.municipios_activos || [];
+  
+  grid.innerHTML = MUNICIPIOS_MERIDA.map(mun => {
+    const isActive = activos.includes(mun);
+    const id = `toggle-${mun.replace(/\s/g, '_')}`;
+    return `
+      <div style="background:var(--bg-card); border-radius:var(--radius-md); padding:16px 20px; display:flex; align-items:center; justify-content:space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border:1px solid ${isActive ? 'rgba(16,185,129,0.3)' : 'rgba(255,255,255,0.06)'}; transition: border 0.3s;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <i class="fa-solid fa-location-dot" style="color:${isActive ? 'var(--success, #10B981)' : 'var(--text-muted)'}; transition:color 0.3s;"></i>
+          <span style="font-size:0.9rem; font-weight:600;">${mun}</span>
+        </div>
+        <label style="position:relative; display:inline-block; width:46px; height:24px; cursor:pointer;">
+          <input type="checkbox" id="${id}" data-municipio="${mun}" ${isActive ? 'checked' : ''} style="opacity:0;width:0;height:0;" onchange="onToggleMunicipio(this)">
+          <span style="
+            position:absolute; top:0; left:0; right:0; bottom:0;
+            background: ${isActive ? 'var(--primary)' : 'rgba(100,116,139,0.4)'};
+            border-radius:24px; transition:background 0.3s;
+          "></span>
+          <span style="
+            position:absolute; top:3px; left:${isActive ? '25px' : '3px'};
+            width:18px; height:18px; background:#fff;
+            border-radius:50%; transition:left 0.3s;
+          "></span>
+        </label>
+      </div>`;
+  }).join('');
+}
+
+function onToggleMunicipio(checkbox) {
+  // Re-renderizar para actualizar estilos en tiempo real
+  const mun = checkbox.dataset.municipio;
+  const activos = GLOBALS.configuracion.municipios_activos || [];
+  if (checkbox.checked) {
+    if (!activos.includes(mun)) activos.push(mun);
+  } else {
+    const idx = activos.indexOf(mun);
+    if (idx > -1) activos.splice(idx, 1);
+  }
+  GLOBALS.configuracion.municipios_activos = activos;
+  renderDespliegue();
+}
+
+function saveDespliegue() {
+  setLoading(true);
+  google.script.run
+    .withSuccessHandler((res) => {
+      setLoading(false);
+      if (res.exito) {
+        showToast("Configuración de despliegue guardada exitosamente.", "success");
+      } else {
+        showToast(res.error, "danger");
+      }
+    })
+    .withFailureHandler((err) => {
+      setLoading(false);
+      showToast("Error al guardar configuración: " + err, "danger");
+    })
+    .saveConfiguracion(GLOBALS.configuracion, getDevUser());
+}
+
+// =============================================================================
+// MÓDULO — HISTÓRICO DE AUDITORÍA
+// =============================================================================
+
+/**
+ * Llama al backend para cargar los registros del Histórico.
+ * Solo disponible para Admins.
+ */
+function loadHistorico() {
+  setLoading(true);
+  google.script.run
+    .withSuccessHandler((res) => {
+      setLoading(false);
+      if (!res.exito) {
+        showToast("Error al cargar Histórico: " + res.error, "danger");
+        return;
+      }
+      GLOBALS._historicoRegistros = res.registros || [];
+      GLOBALS._historicoLoaded   = true;
+      renderHistoricoSummary(res.registros, res.total);
+      renderHistoricoTable();
+    })
+    .withFailureHandler((err) => {
+      setLoading(false);
+      showToast("Error de red al cargar Histórico: " + err, "danger");
+    })
+    .getHistorico(getDevUser(), 300);
+}
+
+/**
+ * Genera las tarjetas de resumen (totales por tipo de acción).
+ */
+function renderHistoricoSummary(registros, total) {
+  const conteo = {};
+  registros.forEach(r => {
+    conteo[r.accion] = (conteo[r.accion] || 0) + 1;
+  });
+
+  const colores = {
+    "LOGIN_OK":              "#22c55e",
+    "LOGIN_FAIL":            "#ef4444",
+    "CAMBIAR_CLAVE":         "#f59e0b",
+    "MODIFICAR_PLANTEL":     "#3b82f6",
+    "MODIFICAR_CATALOGO":    "#8b5cf6",
+    "MODIFICAR_CONFIGURACION":"#06b6d4"
+  };
+
+  const summary = document.getElementById("hist-summary");
+  if (!summary) return;
+
+  let html = "";
+  for (const accion in conteo) {
+    const color = colores[accion] || "#64748b";
+    html += `<div style="background:var(--bg-card); border:1px solid rgba(255,255,255,0.08); border-left:4px solid ${color}; border-radius:10px; padding:12px 18px; min-width:160px;">
+      <div style="font-size:1.4rem; font-weight:700; color:${color};">${conteo[accion]}</div>
+      <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">${accion}</div>
+    </div>`;
+  }
+
+  summary.innerHTML = html || "";
+  const footer = document.getElementById("hist-footer");
+  if (footer) footer.innerText = `Mostrando ${registros.length} de ${total || registros.length} registros totales (los más recientes primero)`;
+}
+
+/**
+ * Aplica los filtros de búsqueda y acción, y renderiza la tabla.
+ */
+function renderHistoricoTable() {
+  const registros = GLOBALS._historicoRegistros || [];
+  const search    = (document.getElementById("hist-search") || {}).value || "";
+  const filtroAcc = (document.getElementById("hist-filter-accion") || {}).value || "";
+  const tbody     = document.getElementById("tbody-historico");
+  if (!tbody) return;
+
+  const searchLow = search.toLowerCase();
+
+  const coloresBadge = {
+    "LOGIN_OK":              { bg:"#16a34a22", txt:"#22c55e" },
+    "LOGIN_FAIL":            { bg:"#dc262622", txt:"#ef4444" },
+    "CAMBIAR_CLAVE":         { bg:"#d9770622", txt:"#f59e0b" },
+    "MODIFICAR_PLANTEL":     { bg:"#2563eb22", txt:"#60a5fa" },
+    "MODIFICAR_CATALOGO":    { bg:"#7c3aed22", txt:"#a78bfa" },
+    "MODIFICAR_CONFIGURACION":{ bg:"#0891b222", txt:"#22d3ee" }
+  };
+
+  let html = "";
+  let visible = 0;
+
+  registros.forEach(r => {
+    if (filtroAcc && r.accion !== filtroAcc) return;
+    if (searchLow && !r.usuario.toLowerCase().includes(searchLow)
+                  && !r.accion.toLowerCase().includes(searchLow)
+                  && !r.identificador.toLowerCase().includes(searchLow)) return;
+
+    visible++;
+    // Formatear fecha legible
+    let fechaDisplay = r.timestamp;
+    try {
+      const d = new Date(r.timestamp);
+      fechaDisplay = d.toLocaleDateString("es-VE") + " " + d.toLocaleTimeString("es-VE", {hour:"2-digit", minute:"2-digit"});
+    } catch(e) {}
+
+    const badge = coloresBadge[r.accion] || { bg:"#ffffff11", txt:"#94a3b8" };
+    const estadoOk = r.estado && r.estado.toUpperCase().includes("COMPLET");
+
+    html += `<tr>
+      <td><span style="font-size:0.85rem; color:var(--text-muted);">${fechaDisplay}</span></td>
+      <td><strong>${r.usuario}</strong></td>
+      <td>
+        <span style="background:${badge.bg}; color:${badge.txt}; padding:3px 9px; border-radius:20px; font-size:0.75rem; font-weight:700; white-space:nowrap;">${r.accion}</span>
+      </td>
+      <td style="color:var(--text-muted); font-size:0.85rem;">${r.identificador}</td>
+      <td>
+        <span style="color:${estadoOk ? '#22c55e' : '#f59e0b'}; font-weight:700;">${r.estado}</span>
+      </td>
+    </tr>`;
+  });
+
+  tbody.innerHTML = html || `<tr><td colspan="5" class="empty-table-msg">No hay registros que coincidan con el filtro.</td></tr>`;
+}
+
+</script>

@@ -1,0 +1,12 @@
+{
+  "aplicacion": {
+    "nombre": "Sistema de Gestión Humana",
+    "version": "1.0.0"
+  },
+  "hojas_calculo": {
+    "directorio_maestro_id": "1cZJGc9uILEQXrPy8Jf_lZDTf56e4gowJFo21WFepufc"
+  },
+  "bases_datos_locales": {
+    "bd_sgh_id": "14Tm4TFyGKDCbGAFTop50qabmSopWdr_g"
+  }
+}

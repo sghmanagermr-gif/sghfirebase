@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGH Dashboard | Mérida</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Estilos Propios -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon"><i class="fa-solid fa-users-gear"></i></div>
+                <h2>SGH <span class="text-primary">Mérida</span></h2>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+                <a href="#" class="nav-item"><i class="fa-solid fa-chalkboard-user"></i> Personal</a>
+                <a href="#" class="nav-item"><i class="fa-solid fa-school"></i> Planteles</a>
+                <a href="#" class="nav-item"><i class="fa-solid fa-file-invoice"></i> Reportes</a>
+                <a href="#" class="nav-item"><i class="fa-solid fa-gear"></i> Configuración</a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="avatar">AD</div>
+                    <div class="user-details">
+                        <span class="user-name">Administrador</span>
+                        <span class="user-role">SGH System</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <div class="header-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Buscar por cédula o código plantel...">
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn"><i class="fa-regular fa-bell"></i></button>
+                    <button class="btn-primary"><i class="fa-solid fa-plus"></i> Nuevo Registro</button>
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <div class="page-title">
+                    <h1>Resumen General</h1>
+                    <p>Métricas en tiempo real desde Firebase Firestore</p>
+                </div>
+
+                <!-- Metrics Grid -->
+                <div class="metrics-grid">
+                    
+                    <!-- Card 1: Planteles -->
+                    <div class="metric-card card-blue">
+                        <div class="metric-icon"><i class="fa-solid fa-school-flag"></i></div>
+                        <div class="metric-info">
+                            <h3 class="metric-title">Total Planteles</h3>
+                            <div class="metric-value" id="val-planteles">
+                                <i class="fa-solid fa-circle-notch fa-spin"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Total Personal -->
+                    <div class="metric-card card-purple">
+                        <div class="metric-icon"><i class="fa-solid fa-users"></i></div>
+                        <div class="metric-info">
+                            <h3 class="metric-title">Total Personal</h3>
+                            <div class="metric-value" id="val-total-personal">
+                                <i class="fa-solid fa-circle-notch fa-spin"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Docentes -->
+                    <div class="metric-card card-green">
+                        <div class="metric-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+                        <div class="metric-info">
+                            <h3 class="metric-title">Personal Docente</h3>
+                            <div class="metric-value" id="val-docentes">
+                                <i class="fa-solid fa-circle-notch fa-spin"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Administrativo -->
+                    <div class="metric-card card-orange">
+                        <div class="metric-icon"><i class="fa-solid fa-briefcase"></i></div>
+                        <div class="metric-info">
+                            <h3 class="metric-title">Administrativos</h3>
+                            <div class="metric-value" id="val-admin">
+                                <i class="fa-solid fa-circle-notch fa-spin"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 5: Obrero -->
+                    <div class="metric-card card-red">
+                        <div class="metric-icon"><i class="fa-solid fa-helmet-safety"></i></div>
+                        <div class="metric-info">
+                            <h3 class="metric-title">Personal Obrero</h3>
+                            <div class="metric-value" id="val-obrero">
+                                <i class="fa-solid fa-circle-notch fa-spin"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, query, where, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDSdDRB10kbtor5ROR50AsCxVmk0fOpqFo",
+            authDomain: "sgh-merida.firebaseapp.com",
+            projectId: "sgh-merida",
+            storageBucket: "sgh-merida.firebasestorage.app",
+            messagingSenderId: "873672016601",
+            appId: "1:873672016601:web:3024d5b94ee3926c8e34c8"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function cargarDashboard() {
+            try {
+                // 1. Total de Planteles
+                const snapPlanteles = await getCountFromServer(collection(db, "planteles"));
+                animarValor('val-planteles', snapPlanteles.data().count);
+
+                // 2. Total de Personal
+                const snapPersonal = await getCountFromServer(collection(db, "cargos_personal"));
+                animarValor('val-total-personal', snapPersonal.data().count);
+
+                // 3. Personal Docente
+                const snapDocente = await getCountFromServer(query(collection(db, "cargos_personal"), where("TIPO PERSONAL", "==", "DOCENTE")));
+                animarValor('val-docentes', snapDocente.data().count);
+
+                // 4. Personal Administrativo
+                const snapAdmin = await getCountFromServer(query(collection(db, "cargos_personal"), where("TIPO PERSONAL", "==", "ADMINISTRATIVO")));
+                animarValor('val-admin', snapAdmin.data().count);
+
+                // 5. Personal Obrero
+                const snapObrero = await getCountFromServer(query(collection(db, "cargos_personal"), where("TIPO PERSONAL", "==", "OBRERO")));
+                animarValor('val-obrero', snapObrero.data().count);
+
+            } catch (error) {
+                console.error("Error cargando el Dashboard:", error);
+                alert("Hubo un error conectando a Firebase. Revisa la consola.");
+            }
+        }
+
+        function animarValor(elementId, valorFinal) {
+            const obj = document.getElementById(elementId);
+            let startTimestamp = null;
+            const duration = 1000;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const easeOut = 1 - Math.pow(1 - progress, 4);
+                let valorActual = Math.floor(easeOut * valorFinal);
+                obj.textContent = valorActual.toLocaleString('es-VE');
+                if (progress < 1) window.requestAnimationFrame(step);
+                else obj.textContent = valorFinal.toLocaleString('es-VE');
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        document.addEventListener('DOMContentLoaded', cargarDashboard);
+    </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+# Plan de Migración a Firebase (SGH-MR)
+
+¡Excelente decisión! Crear una copia de seguridad en la carpeta `C:\Proyectos\sgh-mr - firebase` es exactamente lo que debe hacer un buen arquitecto de software antes de una migración grande. Trabajar tranquilos sin miedo a dañar lo que ya funciona es la regla número uno.
+
+A continuación te presento los **5 pasos fundamentales** para lograr esta migración. He usado palabras muy sencillas. Léelo y, si estás de acuerdo, dímelo y arrancaremos de inmediato con el **Paso 1**.
+
+## PASO 1: Crear "La Casa" en Internet (Consola de Firebase)
+Antes de mover los muebles, necesitamos tener la casa. 
+En este paso, tú entrarás a la página web de Firebase usando tu cuenta de Google (la misma de `sistemagestionhumanamr@gmail.com`) y crearemos un "Proyecto Nuevo". Activaremos las tres herramientas gratuitas que necesitamos:
+1. **Firestore:** Donde vivirá el texto (los profesores, los nombres).
+2. **Storage:** Donde guardaremos los "paquetes" (listas gigantes comprimidas).
+3. **Authentication:** El "Vigilante" que revisará los correos y contraseñas.
+Al final de este paso, Firebase nos dará unas "Llaves Maestras" (un texto con códigos) que conectarán nuestro código con la nube.
+
+## PASO 2: La Mudanza de Datos (Llenar Firebase por primera vez)
+Actualmente tienes más de 22.000 trabajadores en tu Google Sheets. No vamos a pasarlos a mano. 
+Crearemos un pequeño código mágico temporal dentro de Google Apps Script. Le daremos a un botón y ese código leerá tu archivo actual y enviará automáticamente los 22.000 registros, los planteles y el resumen a Firebase en cuestión de minutos. ¡La nueva base de datos quedará lista y poblada!
+
+## PASO 3: Enseñar al Frontend a hablar el nuevo idioma
+Tu sistema visual actual (`sgh_gas/index.html`) está acostumbrado a pedirle los datos a Google Apps Script usando un comando llamado `google.script.run`. 
+En este paso, cambiaremos esa costumbre. Le inyectaremos los "poderes de Firebase" a tu página web. En lugar de hablar con Apps Script, la página le hablará directo a Firebase para guardar y leer información. Aquí es donde sentiremos el salto de velocidad al "Tiempo Real".
+
+## PASO 4: El Vigilante y las Puertas (Reglas de Seguridad)
+Una vez que el sistema funciona rápido, le pondremos los candados. Le diremos a Firebase las reglas estrictas de las que hablamos antes:
+- *"Si el correo no pertenece a un Director, no le dejes ver la pestaña de Personal"*.
+- *"Si el usuario modifica un registro, asegúrate de que el plantel le pertenezca"*.
+Esto garantiza que, aunque la aplicación vuele, sea a prueba de balas.
+
+## PASO 5: Desconectar el motor viejo y encender el nuevo
+Finalmente, desconectaremos todo el tráfico pesado que iba hacia Google Sheets. Tu viejo `sgh_db_gas` quedará solo como una herramienta de "Exportación" o "Respaldo" de emergencia para los administradores, pero los 1.000 directores ya estarán corriendo 100% sobre Firebase.
+
+---
+
+> [!IMPORTANT]  
+> **Revisión del Usuario:** 
+> ¿Qué te parece este panorama general? Cuando estés listo, presiona **Proceed (Proceder)** o simplemente respóndeme en el chat para que te dé las instrucciones exactas y fáciles de hacer del **PASO 1**.

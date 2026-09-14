@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title><?= appNombre ?> v<?= appVersion ?></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+  <?!= include('estilos'); ?>
+  <script>
+    // Variables de entorno inyectadas desde el backend
+    const DEV_USER = "<?= typeof devUser !== 'undefined' ? devUser : '' ?>";
+  </script>
+</head>
+<body>
+  <!-- BOOT SCREEN -->
+  <div id="boot-screen" style="position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg-main); z-index:999999; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+    <i class="fa-solid fa-shield-halved" style="font-size: 48px; color: var(--primary); margin-bottom: 20px;"></i>
+    <h2 style="color:var(--text-main); font-weight:700;">SGH Admin</h2>
+    <p style="color:var(--text-muted); margin-top: 8px;">Autenticando credenciales...</p>
+    <div class="spinner" style="margin-top: 24px; width: 30px; height: 30px; border-width: 3px;"></div>
+  </div>
+
+  <div class="app-container" id="app-wrapper" style="display: none;">
+    <!-- SIDEBAR OVERLAY FOR MOBILE -->
+    <div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar collapsed">
+      <div class="sidebar-header">
+        <div class="logo-icon"><i class="fa-solid fa-database"></i></div>
+        <span>SGH Admin</span>
+      </div>
+      <nav class="nav-menu">
+        <a href="#" class="nav-link active" onclick="switchTab('dashboard', event)" data-module="dashboard">
+          <i class="fa-solid fa-chart-line"></i> <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-link" onclick="switchTab('planteles', event)" data-module="planteles">
+          <i class="fa-solid fa-school"></i> <span>Planteles</span>
+        </a>
+        <a href="#" class="nav-link" onclick="switchTab('personal', event)" data-module="personal">
+          <i class="fa-solid fa-users"></i> <span>Personal</span>
+        </a>
+        <a href="#" class="nav-link" onclick="switchTab('turnos', event)" data-module="turnos">
+          <i class="fa-solid fa-clock"></i> <span>Turnos</span>
+        </a>
+        <a href="#" class="nav-link" onclick="switchTab('nivel-modalidad', event)" data-module="nivel-modalidad">
+          <i class="fa-solid fa-graduation-cap"></i> <span>Nivel / Mod.</span>
+        </a>
+        <a href="#" class="nav-link" onclick="switchTab('planes', event)" data-module="planes">
+          <i class="fa-solid fa-book-open"></i> <span>Planes de Estudio</span>
+        </a>
+        <a href="#" class="nav-link" onclick="switchTab('estatus', event)" data-module="estatus">
+          <i class="fa-solid fa-clipboard-list"></i> <span>Estatus Laboral</span>
+        </a>
+        <!-- Solo visible para ADMINS -->
+        <a href="#" class="nav-link admin-only-link" id="nav-despliegue" onclick="switchTab('despliegue', event)" data-module="despliegue" style="display:none;">
+          <i class="fa-solid fa-rocket"></i> <span>Despliegue</span>
+        </a>
+        <a href="#" class="nav-link admin-only-link" id="nav-historico" onclick="switchTab('historico', event)" data-module="historico" style="display:none;">
+          <i class="fa-solid fa-clock-rotate-left"></i> <span>Histórico</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn-refresh" onclick="loadData(true)">
+          <i class="fa-solid fa-rotate"></i> <span>Recargar Datos</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      
+      <!-- TOPBAR -->
+      <header class="topbar">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <button id="btn-menu-mobile" class="btn-menu-mobile" onclick="toggleSidebar()">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <h1 id="page-title">Dashboard Académico</h1>
+        </div>
+        <div class="user-profile">
+          <span class="user-role-badge" id="user-role">Cargando...</span>
+          <span class="user-email" id="user-email">...</span>
+        </div>
+      </header>
+
+      <!-- LOADING OVERLAY -->
+      <div id="loading" class="loading-overlay active">
+        <div class="spinner"></div>
+        <p style="font-weight:600; color:var(--text-main)">Procesando datos...</p>
+      </div>
+
+      <!-- ACCESS DENIED GLOBALLY -->
+      <div id="access-denied-global" style="display: none; padding: 40px;">
+        <div class="access-denied">
+          <i class="fa-solid fa-lock"></i>
+          <h2>Acceso Restringido</h2>
+          <p>Tu usuario no tiene privilegios para acceder al gestor. Contacta al administrador del sistema.</p>
+        </div>
+      </div>
+
+      <!-- ======== DASHBOARD ======== -->
+      <div id="tab-dashboard" class="tab-content active">
+        <div class="stats-grid">
+          <div class="stat-card card-planteles">
+            <div class="stat-info">
+              <h3>Planteles</h3>
+              <p id="stat-planteles">—</p>
+            </div>
+            <div class="stat-icon"><i class="fa-solid fa-school"></i></div>
+          </div>
+          <div class="stat-card" style="border-left-color: var(--primary);">
+            <div class="stat-info">
+              <h3>Total Personal</h3>
+              <p id="stat-total-personal" style="color: var(--primary);">—</p>
+            </div>
+            <div class="stat-icon"><i class="fa-solid fa-users-viewfinder"></i></div>
+          </div>
+          <div class="stat-card card-docentes">
+            <div class="stat-info">
+              <h3>Cargos Docentes</h3>
+              <p id="stat-docentes">—</p>
+            </div>
+            <div class="stat-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+          </div>
+          <div class="stat-card card-administrativo">
+            <div class="stat-info">
+              <h3>Roles Administrativos</h3>
+              <p id="stat-admin">—</p>
+            </div>
+            <div class="stat-icon"><i class="fa-solid fa-user-tie"></i></div>
+          </div>
+          <div class="stat-card card-obreros">
+            <div class="stat-info">
+              <h3>Cargos Obreros</h3>
+              <p id="stat-obreros">—</p>
+            </div>
+            <div class="stat-icon"><i class="fa-solid fa-helmet-safety"></i></div>
+          </div>
+        </div>
+        <div style="position: sticky; top: -15px; z-index: 50; display:flex; justify-content: flex-end; margin-bottom: 15px; margin-top: 15px; background: white; padding: 12px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+          <label for="dashboard-filtro-dependencia" style="margin-right: 10px; font-weight: bold; align-self: center; margin-bottom: 0;">Filtrar Análisis por Dependencia:</label>
+          <select id="dashboard-filtro-dependencia" class="form-group" style="width: auto; margin: 0; padding: 6px 12px;" onchange="renderDashboardCharts()">
+            <option value="ALL">Todas las Dependencias</option>
+            <option value="NACIONAL">Nacional</option>
+            <option value="ESTADAL">Estadal</option>
+            <option value="MUNICIPAL">Municipal</option>
+            <option value="AUTONOMA">Autónoma</option>
+            <option value="SUBVENCIONADA">Subvencionada</option>
+            <option value="PRIVADA">Privada</option>
+          </select>
+        </div>
+        
+        <div class="charts-grid">
+          <!-- Gráficos de Hoja Personal -->
+          <div class="chart-container chart-wide">
+            <h3>Personal por Municipio</h3>
+            <div class="canvas-wrapper" id="chart-personal-municipio"></div>
+          </div>
+          <div class="chart-container">
+            <h3>Personal por Tipo</h3>
+            <div class="canvas-wrapper" id="chart-personal-tipo"></div>
+          </div>
+          <div class="chart-container">
+            <h3>Próximos a Jubilarse <span style="font-size:12px; font-weight:normal; color:var(--text-muted);">(Mar 2027)</span></h3>
+            <div class="canvas-wrapper" id="chart-jubilacion-total"></div>
+          </div>
+          <div class="chart-container">
+            <h3>Personal por Género</h3>
+            <div class="canvas-wrapper" id="chart-personal-genero"></div>
+          </div>
+          <div class="chart-container">
+            <h3>Personal por Nivel/Modalidad</h3>
+            <div class="canvas-wrapper" id="chart-personal-nivel"></div>
+          </div>
+          <div class="chart-container">
+            <h3>Personal por Dependencia</h3>
+            <div class="canvas-wrapper" id="chart-personal-dependencia"></div>
+          </div>
+          <div class="chart-container">
+            <h3>Situación del Trabajador (Estatus)</h3>
+            <div class="canvas-wrapper" id="chart-personal-estatus"></div>
+          </div>
+          <div class="chart-container chart-wide">
+            <h3>Próximos a Jubilarse por Municipio</h3>
+            <div class="canvas-wrapper" id="chart-jubilacion-municipio"></div>
+          </div>
+
+          <!-- Gráficos Originales -->
+          <div class="chart-container">
+            <h3>Planteles por Dependencia</h3>
+            <div class="canvas-wrapper" id="chart-dependencia-div"></div>
+          </div>
+          <div class="chart-container chart-wide">
+            <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:4px;">
+              <h3 style="margin:0;">Planteles por Municipio</h3>
+              <div id="filtro-municipio-chip" style="display:none; align-items:center; gap:8px; background:var(--primary); color:#fff; border-radius:20px; padding:4px 14px; font-size:13px; font-weight:600; cursor:pointer;" onclick="clearMunicipioFilter()">
+                <span id="filtro-municipio-label">—</span>
+                <span style="font-size:16px; line-height:1;">✕</span>
+              </div>
+            </div>
+            <div class="canvas-wrapper" id="chart-municipios-div"></div>
+          </div>
+          <!-- Gráfica drill-down: Personal por Plantel (aparece al seleccionar un municipio) -->
+          <div id="chart-plantel-container" class="chart-container chart-wide" style="display:none;">
+            <h3 id="chart-plantel-title">Personal por Plantel</h3>
+            <div class="canvas-wrapper" id="chart-plantel-div" style="height:500px;"></div>
+          </div>
+          <!-- Gráfica drill-down: Jubilables por Plantel -->
+          <div id="chart-jubilacion-plantel-container" class="chart-container chart-wide" style="display:none; margin-top:20px;">
+            <h3 id="chart-jubilacion-plantel-title">Próximos a Jubilarse por Plantel</h3>
+            <div class="canvas-wrapper" id="chart-jubilacion-plantel-div" style="height:400px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======== PLANTELES ======== -->
+      <div id="tab-planteles" class="tab-content">
+        <div id="planteles-auth-wrapper">
+          <div class="action-bar">
+            <div class="search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="search-plantel" placeholder="Buscar plantel por nombre o código..." oninput="onSearchPlantel()">
+            </div>
+            <select id="filter-municipio" class="form-group" style="width: auto; margin:0;" onchange="applyPlantelesFilter()">
+              <option value="">Todos los municipios</option>
+            </select>
+            <button class="btn btn-primary" onclick="openModalPlantelNuevo()" style="margin-left:auto;"><i class="fa-solid fa-plus"></i> Añadir Plantel</button>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Nombre</th>
+                  <th>Municipio</th>
+                  <th>Parroquia</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-planteles">
+                <tr><td colspan="5" class="empty-table-msg">Ingresa un criterio para buscar planteles</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======== DESPLIEGUE ======== -->
+      <div id="tab-despliegue" class="tab-content">
+        <div class="action-bar" style="margin-bottom: 28px; justify-content: flex-start; gap: 16px;">
+          <i class="fa-solid fa-rocket" style="font-size:28px; color:var(--primary);"></i>
+          <div>
+            <h2 style="margin:0; font-weight:700; font-size:1.2rem;">Control de Despliegue por Municipio</h2>
+            <p style="margin:4px 0 0; color:var(--text-muted); font-size:0.85rem;">Activa o desactiva el acceso al sistema <strong>sgh_gas</strong> para cada municipio. Los directores de plantel en municipios <em>Inactivos</em> no podrán iniciar sesión.</p>
+          </div>
+        </div>
+        <div id="despliegue-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:16px;">
+          <!-- Cards generadas por JS -->
+        </div>
+        <div style="margin-top:28px; text-align:right;">
+          <button class="btn btn-primary" onclick="saveDespliegue()" style="padding:12px 32px; font-size:1rem;">
+            <i class="fa-solid fa-floppy-disk"></i> Guardar Configuración
+          </button>
+        </div>
+      </div>
+
+      <!-- ======== HISTÓRICO DE AUDITORÍA ======== -->
+      <div id="tab-historico" class="tab-content">
+        <div class="action-bar" style="margin-bottom: 20px; gap: 16px; flex-wrap: wrap;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <i class="fa-solid fa-clock-rotate-left" style="font-size:28px; color:var(--primary);"></i>
+            <div>
+              <h2 style="margin:0; font-weight:700; font-size:1.2rem;">Histórico de Auditoría</h2>
+              <p style="margin:4px 0 0; color:var(--text-muted); font-size:0.85rem;">Registro de todas las acciones realizadas en el sistema por todos los usuarios.</p>
+            </div>
+          </div>
+          <div style="display:flex; gap:10px; margin-left:auto; align-items:center; flex-wrap:wrap;">
+            <input type="text" id="hist-search" placeholder="Buscar usuario o acción..." class="form-group" style="margin:0; min-width:220px; padding: 8px 12px;" oninput="renderHistoricoTable()">
+            <select id="hist-filter-accion" class="form-group" style="margin:0; padding: 8px 12px;" onchange="renderHistoricoTable()">
+              <option value="">Todas las acciones</option>
+              <option value="LOGIN_OK">LOGIN_OK</option>
+              <option value="LOGIN_FAIL">LOGIN_FAIL</option>
+              <option value="CAMBIAR_CLAVE">CAMBIAR_CLAVE</option>
+              <option value="MODIFICAR_PLANTEL">MODIFICAR_PLANTEL</option>
+              <option value="MODIFICAR_CATALOGO">MODIFICAR_CATALOGO</option>
+              <option value="MODIFICAR_CONFIGURACION">MODIFICAR_CONFIGURACION</option>
+            </select>
+            <button class="btn btn-secondary" onclick="loadHistorico()" style="padding: 8px 18px;">
+              <i class="fa-solid fa-rotate"></i> Recargar
+            </button>
+          </div>
+        </div>
+
+        <div id="hist-summary" style="display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap;"></div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Fecha / Hora</th>
+                <th>Usuario</th>
+                <th>Acción</th>
+                <th>Identificador / Detalle</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-historico">
+              <tr><td colspan="5" class="empty-table-msg">Haz clic en "Recargar" para cargar el histórico.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p id="hist-footer" style="margin-top:12px; color:var(--text-muted); font-size:0.8rem; text-align:right;"></p>
+      </div>
+
+      <!-- ======== PERSONAL ======== -->
+      <div id="tab-personal" class="tab-content">
+        <div id="personal-auth-wrapper">
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <label for="sel-admin-dependencia" style="font-weight:600; margin:0; color:var(--text-main);">Dependencia:</label>
+                <select id="sel-admin-dependencia" class="form-group" style="width: auto; margin:0; padding:6px 12px;" onchange="renderPersonalTab()">
+                  <option value="NACIONAL" selected>NACIONAL</option>
+                  <option value="ESTADAL">ESTADAL</option>
+                  <option value="MUNICIPAL">MUNICIPAL</option>
+                  <option value="AUTONOMO">AUTONOMO</option>
+                  <option value="SUBVENCIONADO">SUBVENCIONADO</option>
+                  <option value="PRIVADO">PRIVADO</option>
+                </select>
+              </div>
+              <div class="sub-tabs" style="margin: 0;">
+                <button class="sub-tab-btn active" onclick="switchSubTab('personal','docente',event); updatePersonalActionBtn('docente')">Docentes</button>
+                <button class="sub-tab-btn" onclick="switchSubTab('personal','administrativo',event); updatePersonalActionBtn('admin')">Administrativos</button>
+                <button class="sub-tab-btn" onclick="switchSubTab('personal','obrero',event); updatePersonalActionBtn('obrero')">Obreros</button>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 12px; margin: 0;">
+              <div class="search-box" id="search-box-personal">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="search-personal" placeholder="Buscar cargo o código..." oninput="onSearchPersonal()">
+              </div>
+              <div class="action-bar" style="margin: 0;">
+                <button id="btn-add-docente" class="btn btn-primary" onclick="openModalCargo('docente')"><i class="fa-solid fa-plus"></i> Añadir Docente</button>
+                <button id="btn-add-admin" class="btn btn-primary" style="display:none;" onclick="openModalCargo('administrativo')"><i class="fa-solid fa-plus"></i> Añadir Admin</button>
+                <button id="btn-add-obrero" class="btn btn-primary" style="display:none;" onclick="openModalObrero()"><i class="fa-solid fa-plus"></i> Añadir Obrero</button>
+              </div>
+            </div>
+          </div>
+          
+          <div id="subtab-personal-docente" class="subtab-content active">
+             <div class="table-wrapper">
+                <table>
+                  <thead><tr><th>Código Cargo</th><th>Cargo</th><th>Acciones</th></tr></thead>
+                  <tbody id="tbody-docentes"></tbody>
+                </table>
+             </div>
+          </div>
+
+          <div id="subtab-personal-administrativo" class="subtab-content">
+             <div class="table-wrapper">
+                <table>
+                  <thead><tr><th>Código Cargo</th><th>Cargo</th><th>Acciones</th></tr></thead>
+                  <tbody id="tbody-administrativo"></tbody>
+                </table>
+             </div>
+          </div>
+
+          <div id="subtab-personal-obrero" class="subtab-content">
+             <!-- Contenedor general del subtab obrero -->
+             <div class="cards-grid" id="cards-obreros-container">
+               <!-- Los obreros se renderizarán como cards complejas -->
+             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======== TURNOS ======== -->
+      <div id="tab-turnos" class="tab-content">
+        <div class="action-bar">
+           <form id="form-turno" style="display:flex; gap:12px; align-items:center; width: 100%;" onsubmit="event.preventDefault(); saveTurno();">
+             <div class="form-group" style="margin:0; flex:1;">
+               <input type="text" id="input-new-turno" placeholder="Escribe el nombre del nuevo turno (ej. MAÑANA)" required>
+             </div>
+             <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Añadir Turno</button>
+           </form>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Turno</th><th>Acciones</th></tr></thead>
+            <tbody id="tbody-turnos"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ======== NIVEL / MODALIDAD ======== -->
+      <div id="tab-nivel-modalidad" class="tab-content">
+        <div class="columns-grid-2">
+          
+          <!-- Columna Niveles -->
+          <div class="card-column">
+            <h3 style="margin-bottom: 16px; font-family:var(--font-headings);">Gestión de Niveles</h3>
+            <div class="action-bar">
+              <form style="display:flex; gap:12px; width: 100%;" onsubmit="event.preventDefault(); saveNivelModalidad('nivel');">
+                <input type="text" id="input-new-nivel" placeholder="Nuevo nivel..." class="form-group" style="margin:0; flex:1; padding:12px; border:1px solid #ccc; border-radius:var(--radius-md);" required>
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i></button>
+              </form>
+            </div>
+            <div class="table-wrapper">
+              <table>
+                <thead><tr><th>Nivel</th><th>Acción</th></tr></thead>
+                <tbody id="tbody-niveles"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Columna Modalidades -->
+          <div class="card-column">
+            <h3 style="margin-bottom: 16px; font-family:var(--font-headings);">Gestión de Modalidades</h3>
+            <div class="action-bar">
+              <form style="display:flex; gap:12px; width: 100%;" onsubmit="event.preventDefault(); saveNivelModalidad('modalidad');">
+                <input type="text" id="input-new-modalidad" placeholder="Nueva modalidad..." class="form-group" style="margin:0; flex:1; padding:12px; border:1px solid #ccc; border-radius:var(--radius-md);" required>
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i></button>
+              </form>
+            </div>
+            <div class="table-wrapper">
+              <table>
+                <thead><tr><th>Modalidad</th><th>Acción</th></tr></thead>
+                <tbody id="tbody-modalidades"></tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ======== PLANES DE ESTUDIO ======== -->
+      <div id="tab-planes" class="tab-content">
+        <div class="action-bar">
+           <div class="search-box">
+             <i class="fa-solid fa-magnifying-glass"></i>
+             <input type="text" id="search-plan" placeholder="Buscar planes de estudio..." oninput="onSearchPlanes()">
+           </div>
+           <button class="btn btn-primary" onclick="openModalPlan()"><i class="fa-solid fa-plus"></i> Añadir Plan</button>
+        </div>
+        <div class="cards-grid" id="cards-planes-container"></div>
+      </div>
+
+      <!-- ======== ESTATUS LABORAL ======== -->
+      <div id="tab-estatus" class="tab-content">
+        <div class="action-bar">
+           <div class="search-box">
+             <i class="fa-solid fa-magnifying-glass"></i>
+             <input type="text" id="search-estatus" placeholder="Buscar estatus..." oninput="onSearchEstatus()">
+           </div>
+           <button class="btn btn-primary" onclick="openModalEstatus()"><i class="fa-solid fa-plus"></i> Añadir Estatus</button>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Código</th><th>Denominación</th><th>Acciones</th></tr></thead>
+            <tbody id="tbody-estatus"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- =========================================================================
+       MODALES ESTRUCTURALES (Ocultos por defecto)
+       ========================================================================= -->
+
+  <!-- MODAL: PLANTEL (XL) -->
+  <div id="modal-plantel" class="modal-overlay">
+    <div class="modal-card modal-xl">
+      <div class="modal-header">
+        <div>
+          <h3 id="modal-plantel-title">Detalle del Plantel</h3>
+          <small id="modal-plantel-subtitle" style="color:var(--text-muted); font-weight:600;">Código / DEA</small>
+        </div>
+        <button class="btn-close-modal" onclick="closeModal('modal-plantel')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="form-plantel">
+          <input type="hidden" id="input-plantel-original-id">
+          
+          <div class="columns-grid-2">
+            <div class="form-group">
+              <label>Código DEA (ID)</label>
+              <input type="text" id="input-plantel-id" required>
+            </div>
+            <div class="form-group">
+              <label>Municipio</label>
+              <select id="input-plantel-municipio" onchange="updateParroquiasSelect(this.value)" required>
+                <option value="">Seleccione Municipio...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Parroquia</label>
+              <select id="input-plantel-parroquia" required>
+                <option value="">Seleccione Parroquia...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Nombre del Plantel</label>
+              <input type="text" id="input-plantel-nombre" required>
+            </div>
+            <div class="form-group">
+              <label>Nuevo Epónimo</label>
+              <input type="text" id="input-plantel-eponimo">
+            </div>
+            <div class="form-group">
+              <label>Denominación Abreviada</label>
+              <input type="text" id="input-plantel-den-abr">
+            </div>
+            <div class="form-group">
+              <label>Denominación</label>
+              <input type="text" id="input-plantel-denominacion">
+            </div>
+            <div class="form-group">
+              <label>Dependencia</label>
+              <select id="input-plantel-dependencia" required>
+                <option value="">Seleccione...</option>
+                <option value="NACIONAL">NACIONAL</option>
+                <option value="ESTADAL">ESTADAL</option>
+                <option value="MUNICIPAL">MUNICIPAL</option>
+                <option value="SUBVENCIONADO">SUBVENCIONADO</option>
+                <option value="PRIVADO">PRIVADO</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Código de Dependencia</label>
+              <input type="text" id="input-plantel-cod-dep">
+            </div>
+            <div class="form-group">
+              <label>Código de Dependencia 2</label>
+              <input type="text" id="input-plantel-cod-dep2">
+            </div>
+            <div class="form-group">
+              <label>Código Estadístico</label>
+              <input type="text" id="input-plantel-cod-est">
+            </div>
+            <div class="form-group">
+              <label>Ubicación Geográfica</label>
+              <select id="input-plantel-ubicacion" required>
+                <option value="">Seleccione...</option>
+                <option value="URBANO">URBANO</option>
+                <option value="RURAL">RURAL</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Nivel</label>
+              <select id="input-plantel-nivel">
+                <option value="">Seleccione...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Modalidad</label>
+              <select id="input-plantel-modalidad">
+                <option value="">Seleccione...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Turno</label>
+              <select id="input-plantel-turno">
+                <option value="">Seleccione...</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="columns-grid-2">
+            <div class="form-group">
+              <label>Metros Cuadrados Aprox.</label>
+              <input type="number" id="input-plantel-metros">
+            </div>
+            <div class="form-group">
+              <label>Observaciones</label>
+              <textarea id="input-plantel-obs" rows="2"></textarea>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 10px;">
+            <label style="font-weight: 600; font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; display: block;">Planes de Estudio (Múltiples)</label>
+            <div id="plantel-planes-container">
+              <!-- Se inyecta dinámicamente -->
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modal-plantel')">Cancelar</button>
+        <button class="btn btn-primary" onclick="submitModalPlantel()">Guardar Cambios</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CARGO SIMPLE (Docente / Administrativo) -->
+  <div id="modal-cargo" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-cargo-title">Añadir Cargo</h3>
+        <button class="btn-close-modal" onclick="closeModal('modal-cargo')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="form-cargo">
+          <input type="hidden" id="input-cargo-type">
+          <input type="hidden" id="input-cargo-original-code">
+          
+          <div class="form-group">
+            <label>Código del Cargo</label>
+            <input type="text" id="input-cargo-codigo" required>
+          </div>
+          <div class="form-group">
+            <label>Denominación del Cargo</label>
+            <input type="text" id="input-cargo-denominacion" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modal-cargo')">Cancelar</button>
+        <button class="btn btn-primary" onclick="submitModalCargo()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: GRUPO OBRERO -->
+  <div id="modal-obrero" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-obrero-title">Gestión de Grupo Obrero</h3>
+        <button class="btn-close-modal" onclick="closeModal('modal-obrero')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="form-obrero">
+          <input type="hidden" id="input-obrero-index" value="-1">
+          
+          <div class="columns-grid-2">
+            <div class="form-group">
+              <label>Rango o Grado</label>
+              <input type="text" id="input-obrero-rango" placeholder="Ej: GRADO I" required>
+            </div>
+            <div class="form-group">
+              <label>Código Base</label>
+              <input type="text" id="input-obrero-codigo" required>
+            </div>
+          </div>
+          
+          <div class="form-group" style="margin-top: 10px;">
+            <label style="display:flex; justify-content:space-between; align-items:center;">
+              <span>Cargos Específicos Adscritos</span>
+              <button type="button" class="btn btn-secondary btn-icon" onclick="addObreroCargoRow('')"><i class="fa-solid fa-plus"></i></button>
+            </label>
+            <div id="obrero-cargos-list" style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
+              <!-- Se inyectan dinámicamente -->
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modal-obrero')">Cancelar</button>
+        <button class="btn btn-primary" onclick="submitModalObrero()">Guardar Grupo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: PLAN DE ESTUDIO (XL Anidado) -->
+  <div id="modal-plan" class="modal-overlay">
+    <div class="modal-card modal-xl">
+      <div class="modal-header">
+        <h3 id="modal-plan-title">Gestión de Plan de Estudio</h3>
+        <button class="btn-close-modal" onclick="closeModal('modal-plan')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="form-plan">
+          <input type="hidden" id="input-plan-index" value="-1">
+          
+          <div class="columns-grid-2">
+            <div class="form-group">
+              <label>Código del Plan</label>
+              <input type="text" id="input-plan-codigo" required>
+            </div>
+            <div class="form-group">
+              <label>Nombre del Plan</label>
+              <input type="text" id="input-plan-nombre" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Menciones (Separadas por coma)</label>
+            <input type="text" id="input-plan-mencion" placeholder="Ej: CIENCIAS, HUMANIDADES">
+          </div>
+          
+          <hr style="border:0; border-top:1px solid rgba(0,0,0,0.1); margin: 24px 0;">
+          
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <h4 style="font-family:var(--font-headings);">Estructura Académica (Años y Asignaturas)</h4>
+            <button type="button" class="btn btn-secondary" onclick="addPlanYearBlock()"><i class="fa-solid fa-layer-group"></i> Añadir Año/Semestre</button>
+          </div>
+          
+          <div id="plan-years-container" style="display:flex; flex-direction:column; gap:20px;">
+            <!-- Contenedor dinámico de años -->
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modal-plan')">Cancelar</button>
+        <button class="btn btn-primary" onclick="submitModalPlan()">Guardar Plan de Estudio</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ESTATUS LABORAL -->
+  <div id="modal-estatus" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-estatus-title">Situación Laboral</h3>
+        <button class="btn-close-modal" onclick="closeModal('modal-estatus')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="form-estatus">
+          <input type="hidden" id="input-estatus-index" value="-1">
+          <div class="form-group">
+            <label>Código / Siglas</label>
+            <input type="text" id="input-estatus-codigo" required>
+          </div>
+          <div class="form-group">
+            <label>Denominación</label>
+            <input type="text" id="input-estatus-denominacion" required>
+          </div>
+          <div class="form-group">
+            <label>Concepto u Observación</label>
+            <textarea id="input-estatus-concepto" rows="3"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modal-estatus')">Cancelar</button>
+        <button class="btn btn-primary" onclick="submitModalEstatus()">Guardar Estatus</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container" class="toast-container"></div>
+  
+  <?!= include('js'); ?>
+</body>
+</html>

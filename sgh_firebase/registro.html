@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGH - Registro</title>
+    <!-- Mismos estilos del dashboard para mantener consistencia -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .auth-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            backdrop-filter: blur(4px);
+            width: 100%;
+            max-width: 500px;
+        }
+        .auth-container h2 {
+            margin-top: 0;
+            color: #1e3c72;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+        }
+        .btn-auth {
+            width: 100%;
+            padding: 12px;
+            background: #2a5298;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        .btn-auth:hover {
+            background: #1e3c72;
+            transform: translateY(-2px);
+        }
+        .alert-msg {
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+            text-align: center;
+            font-weight: bold;
+        }
+        .alert-success { background: #d4edda; color: #155724; }
+        .alert-error { background: #f8d7da; color: #721c24; }
+        .links {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        .links a { color: #2a5298; text-decoration: none; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="auth-container">
+        <h2>Registro en el SGH</h2>
+        <form id="register-form">
+            
+            <div class="form-group">
+                <label>Tipo de Usuario</label>
+                <select id="tipo-rol" required>
+                    <option value="plant">Director de Plantel</option>
+                    <option value="munic">Coordinador Municipal</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Correo Electrónico</label>
+                <input type="email" id="email" required placeholder="tu-correo@ejemplo.com">
+            </div>
+
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" id="password" required placeholder="Mínimo 6 caracteres" minlength="6">
+            </div>
+
+            <div class="form-group">
+                <label>Municipio</label>
+                <select id="municipio" required>
+                    <option value="">Selecciona un Municipio...</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="grupo-plantel">
+                <label>Plantel Asignado</label>
+                <select id="plantel" required>
+                    <option value="">Primero selecciona un municipio...</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-auth" id="btn-submit">Solicitar Acceso</button>
+            <div id="alert-box" class="alert-msg"></div>
+
+        </form>
+
+        <div class="links">
+            <a href="login.html">¿Ya tienes cuenta? Inicia Sesión</a>
+        </div>
+    </div>
+
+    <!-- EL SCRIPT DE FIREBASE IRÁ AQUÍ, EL USUARIO DEBE PEGAR SUS CLAVES -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDSdDRB10kbtor5ROR50AsCxVmk0fOpqFo",
+            authDomain: "sgh-merida.firebaseapp.com",
+            projectId: "sgh-merida",
+            storageBucket: "sgh-merida.firebasestorage.app",
+            messagingSenderId: "873672016601",
+            appId: "1:873672016601:web:3024d5b94ee3926c8e34c8"
+        };
+
+        let app, auth, db;
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+        } catch(e) {
+            console.log("Falta configuración de Firebase");
+        }
+
+        const municipiosMDO = [
+            "ALBERTO ADRIANI", "ANDRES BELLO", "ANTONIO PINTO SALINA", "ARICAGUA", "ARZOBISPO CHACON", 
+            "CAMPO ELIAS", "CARACCIOLO PARRA", "CARDENAL QUINTERO", "GUARAQUE", "JULIO CESAR", 
+            "JUSTO BRICEÑO", "LIBERTADOR", "MIRANDA", "OBISPO RAMOS DE LORA", "PADRE NOGUERA", 
+            "PUEBLO LLANO", "RANGEL", "RIVAS DAVILA", "SANTOS MARQUINA", "SUCRE", "TOVAR", 
+            "TULIO FEBRES", "ZEA"
+        ];
+
+        const selectMuni = document.getElementById('municipio');
+        const selectPlantel = document.getElementById('plantel');
+        const grupoPlantel = document.getElementById('grupo-plantel');
+        const selectRol = document.getElementById('tipo-rol');
+
+        // Cargar municipios
+        municipiosMDO.forEach(m => {
+            let opt = document.createElement('option');
+            opt.value = m;
+            opt.textContent = m;
+            selectMuni.appendChild(opt);
+        });
+
+        // Ocultar plantel si es coordinador municipal
+        selectRol.addEventListener('change', (e) => {
+            if(e.target.value === 'munic') {
+                grupoPlantel.classList.add('hidden');
+                selectPlantel.removeAttribute('required');
+            } else {
+                grupoPlantel.classList.remove('hidden');
+                selectPlantel.setAttribute('required', 'true');
+            }
+        });
+
+        // Buscar planteles cuando elige municipio
+        selectMuni.addEventListener('change', async (e) => {
+            const muni = e.target.value;
+            selectPlantel.innerHTML = '<option value="">Cargando planteles...</option>';
+            
+            if(!muni || !db) return;
+
+            try {
+                const q = query(collection(db, "planteles"), where("MUNICIPIO", "==", muni));
+                const querySnapshot = await getDocs(q);
+                
+                selectPlantel.innerHTML = '<option value="">Seleccione su Plantel</option>';
+                let plantelesArr = [];
+                querySnapshot.forEach((doc) => {
+                    let p = doc.data();
+                    plantelesArr.push({
+                        codigo: p['CODIGO DEL PLANTEL'],
+                        nombre: p['NOMBRE NOMINAL DEL PLANTEL'] || p['DENOMINACIÓN']
+                    });
+                });
+                
+                // Ordenar alfabéticamente
+                plantelesArr.sort((a,b) => a.nombre.localeCompare(b.nombre));
+
+                plantelesArr.forEach(p => {
+                    let opt = document.createElement('option');
+                    opt.value = p.codigo;
+                    opt.textContent = `${p.codigo} - ${p.nombre}`;
+                    selectPlantel.appendChild(opt);
+                });
+
+            } catch(err) {
+                console.error(err);
+                selectPlantel.innerHTML = '<option value="">Error cargando planteles</option>';
+            }
+        });
+
+        function showAlert(msg, isSuccess) {
+            const box = document.getElementById('alert-box');
+            box.textContent = msg;
+            box.style.display = 'block';
+            box.className = 'alert-msg ' + (isSuccess ? 'alert-success' : 'alert-error');
+        }
+
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if(!auth || !db) {
+                showAlert('Error: Faltan las credenciales de Firebase en el código.', false);
+                return;
+            }
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const rol = selectRol.value;
+            const municipio = selectMuni.value;
+            const codigo_plantel = rol === 'plant' ? selectPlantel.value : null;
+
+            const btn = document.getElementById('btn-submit');
+            btn.disabled = true;
+            btn.textContent = 'Procesando...';
+
+            try {
+                // 1. Crear cuenta en Firebase Auth
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // 2. Guardar perfil en Firestore con estado "pendiente"
+                await setDoc(doc(db, "usuarios", user.uid), {
+                    email: email,
+                    rol: rol,
+                    municipio: municipio,
+                    codigo_plantel: codigo_plantel,
+                    estado: "pendiente",
+                    fecha_registro: new Date().toISOString()
+                });
+
+                showAlert('¡Registro exitoso! Su cuenta está en revisión. Será redirigido al Login.', true);
+                setTimeout(() => window.location.href = 'login.html', 4000);
+
+            } catch (error) {
+                console.error(error);
+                let msg = 'Error en el registro.';
+                if(error.code === 'auth/email-already-in-use') msg = 'Este correo ya está registrado.';
+                showAlert(msg, false);
+                btn.disabled = false;
+                btn.textContent = 'Solicitar Acceso';
+            }
+        });
+    </script>
+</body>
+</html>

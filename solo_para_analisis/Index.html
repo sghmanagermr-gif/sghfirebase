@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>BD RAC - Dashboard & CRUD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <?!= include('Styles'); ?>
+  </head>
+  <body>
+    <div class="app-container">
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div class="logo">
+            <i class="fa-solid fa-database logo-icon"></i>
+            <span>BD RAC</span>
+          </div>
+        </div>
+        <nav class="nav-menu">
+          <a href="#" id="nav-dashboard" class="nav-link active" onclick="switchTab('dashboard')">
+            <i class="fa-solid fa-chart-line"></i> <span>Dashboard</span>
+          </a>
+          <a href="#" id="nav-planteles" class="nav-link" onclick="switchTab('planteles')">
+            <i class="fa-solid fa-school"></i> <span>Planteles</span>
+          </a>
+          <a href="#" id="nav-personal" class="nav-link" onclick="switchTab('personal')">
+            <i class="fa-solid fa-users"></i> <span>Personal</span>
+          </a>
+          <a href="#" id="nav-turnos" class="nav-link" onclick="switchTab('turnos')">
+            <i class="fa-solid fa-clock"></i> <span>Turnos</span>
+          </a>
+          <a href="#" id="nav-nivel-modalidad" class="nav-link" onclick="switchTab('nivel-modalidad')">
+            <i class="fa-solid fa-graduation-cap"></i> <span>Nivel / Mod.</span>
+          </a>
+          <a href="#" id="nav-planes" class="nav-link" onclick="switchTab('planes')">
+            <i class="fa-solid fa-book-open"></i> <span>Planes de Estudio</span>
+          </a>
+          <a href="#" id="nav-estatus" class="nav-link" onclick="switchTab('estatus')">
+            <i class="fa-solid fa-clipboard-list"></i> <span>Estatus Laboral</span>
+          </a>
+        </nav>
+        <div class="sidebar-footer">
+          <button class="btn-refresh" onclick="loadData(true)">
+            <i class="fa-solid fa-rotate"></i> <span>Recargar Datos</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <header class="topbar">
+          <h1 id="page-title">Dashboard</h1>
+          <div class="status-indicator">
+            <span class="dot connected"></span>
+            <span class="status-text">Conectado a Google Drive</span>
+          </div>
+        </header>
+
+        <!-- Loading Overlay -->
+        <div id="loading" class="loading-overlay">
+          <div class="spinner"></div>
+          <p>Cargando base de datos...</p>
+        </div>
+
+        <!-- ======== DASHBOARD ======== -->
+        <div id="tab-dashboard" class="tab-content active">
+          
+          <!-- Access Denied Message (Hidden by default) -->
+          <div id="access-denied-msg" style="display: none; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 40px; text-align: center; margin-bottom: 30px;">
+            <i class="fa-solid fa-lock" style="font-size: 48px; color: var(--danger); margin-bottom: 16px;"></i>
+            <h2 style="font-family: 'Outfit', sans-serif; font-size: 24px; color: var(--text-active); margin-bottom: 8px;">Acceso Restringido</h2>
+            <p id="debug-email-display" style="color: #fca5a5; font-size: 16px; font-weight: 600; margin-bottom: 12px;"></p>
+            <p style="color: var(--text-muted); font-size: 14px; max-width: 500px; margin: 0 auto;">
+              No tienes permisos asignados para visualizar ni modificar los módulos de esta base de datos.
+              Por favor, contacta al administrador del sistema.
+            </p>
+          </div>
+          
+          <div id="dashboard-content" class="stats-grid">
+            <div class="stat-card card-planteles">
+              <div class="stat-info">
+                <h3>Planteles</h3>
+                <p id="stat-count-planteles">—</p>
+              </div>
+              <div class="stat-icon"><i class="fa-solid fa-school"></i></div>
+            </div>
+            <div class="stat-card card-docentes">
+              <div class="stat-info">
+                <h3>Docentes</h3>
+                <p id="stat-count-docentes">0</p>
+              </div>
+              <div class="stat-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+            </div>
+            <div class="stat-card card-administrativo">
+              <div class="stat-info">
+                <h3>Administrativos</h3>
+                <p id="stat-count-admin">0</p>
+              </div>
+              <div class="stat-icon"><i class="fa-solid fa-user-tie"></i></div>
+            </div>
+            <div class="stat-card card-obreros">
+              <div class="stat-info">
+                <h3>Obreros</h3>
+                <p id="stat-count-obreros">0</p>
+              </div>
+              <div class="stat-icon"><i class="fa-solid fa-helmet-safety"></i></div>
+            </div>
+            <div class="stat-card card-planes">
+              <div class="stat-info">
+                <h3>Planes de Estudio</h3>
+                <p id="stat-count-planes">0</p>
+              </div>
+              <div class="stat-icon"><i class="fa-solid fa-book"></i></div>
+            </div>
+          </div>
+          <div id="dashboard-charts" class="charts-grid">
+            <div class="chart-container">
+              <h3>Planteles por Dependencia</h3>
+              <div class="canvas-wrapper"><canvas id="chart-dependencia"></canvas></div>
+            </div>
+            <div class="chart-container">
+              <h3>Distribución de Personal</h3>
+              <div class="canvas-wrapper"><canvas id="chart-personal-dist"></canvas></div>
+            </div>
+            <div class="chart-container chart-wide">
+              <h3>Planteles por Municipio</h3>
+              <div class="canvas-wrapper"><canvas id="chart-municipios"></canvas></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ======== PLANTELES ======== -->
+        <div id="tab-planteles" class="tab-content">
+          <div class="planteles-filters">
+            <div class="search-box flex-1">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="search-plantel" placeholder="Buscar por nombre, código, municipio..." oninput="onSearchPlantel()">
+            </div>
+            <select id="filter-municipio" class="filter-select" onchange="applyPlantelesFilter()">
+              <option value="">Todos los municipios</option>
+            </select>
+            <select id="filter-parroquia" class="filter-select" onchange="applyPlantelesFilter()">
+              <option value="">Todas las parroquias</option>
+            </select>
+            <select id="filter-dependencia" class="filter-select" onchange="applyPlantelesFilter()">
+              <option value="">Todas las dependencias</option>
+              <option value="NACIONAL">Nacional</option>
+              <option value="ESTADAL">Estadal</option>
+              <option value="MUNICIPAL">Municipal</option>
+              <option value="PRIVADA">Privada</option>
+              <option value="SUBVENCIONADA">Subvencionada</option>
+            </select>
+          </div>
+          <div id="planteles-status-bar" class="status-bar">
+            <span id="planteles-count-label">Haz clic en buscar o escribe para cargar planteles.</span>
+            <div id="planteles-pagination" class="pagination-controls"></div>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Nombre del Plantel</th>
+                  <th>Municipio</th>
+                  <th>Parroquia</th>
+                  <th>Denominación</th>
+                  <th>Dependencia</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="table-body-planteles">
+                <tr id="planteles-empty-row">
+                  <td colspan="7" class="empty-table-msg">
+                    <i class="fa-solid fa-school" style="font-size:2rem;opacity:0.2;display:block;margin-bottom:8px;"></i>
+                    Usa el buscador o selecciona un municipio para ver los planteles.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======== PERSONAL ======== -->
+        <div id="tab-personal" class="tab-content">
+          <div class="sub-tabs">
+            <button class="sub-tab-btn active" onclick="switchSubTab('personal','docente',event)">Docentes</button>
+            <button class="sub-tab-btn" onclick="switchSubTab('personal','administrativo',event)">Administrativos</button>
+            <button class="sub-tab-btn" onclick="switchSubTab('personal','obrero',event)">Obreros</button>
+          </div>
+          <div id="subtab-personal-docente" class="subtab-content active">
+            <div class="action-bar">
+              <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="search-docente" placeholder="Buscar docentes por cargo o código..." oninput="filterPersonal('docente')">
+              </div>
+              <button class="btn btn-primary" onclick="openAddCargoModal('docente')">
+                <i class="fa-solid fa-plus"></i> Nuevo Cargo Docente
+              </button>
+            </div>
+            <div class="table-wrapper">
+              <table>
+                <thead><tr><th>Cargo</th><th>Código del Cargo</th><th>Acciones</th></tr></thead>
+                <tbody id="table-body-docentes"></tbody>
+              </table>
+            </div>
+          </div>
+          <div id="subtab-personal-administrativo" class="subtab-content">
+            <div class="action-bar">
+              <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="search-administrativo" placeholder="Buscar administrativos..." oninput="filterPersonal('administrativo')">
+              </div>
+              <button class="btn btn-primary" onclick="openAddCargoModal('administrativo')">
+                <i class="fa-solid fa-plus"></i> Nuevo Cargo Admin.
+              </button>
+            </div>
+            <div class="table-wrapper">
+              <table>
+                <thead><tr><th>Cargo</th><th>Código del Cargo</th><th>Acciones</th></tr></thead>
+                <tbody id="table-body-administrativos"></tbody>
+              </table>
+            </div>
+          </div>
+          <div id="subtab-personal-obrero" class="subtab-content">
+            <div class="action-bar">
+              <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="search-obrero" placeholder="Buscar obreros por rango o cargo..." oninput="filterObreros()">
+              </div>
+              <button class="btn btn-primary" onclick="openAddObreroModal()">
+                <i class="fa-solid fa-plus"></i> Nuevo Grupo Obrero
+              </button>
+            </div>
+            <div class="obreros-grid" id="obreros-cards-container"></div>
+          </div>
+        </div>
+
+        <!-- ======== TURNOS ======== -->
+        <div id="tab-turnos" class="tab-content">
+          <div class="settings-grid">
+            <div class="settings-form-card">
+              <h3>Agregar Nuevo Turno</h3>
+              <form id="form-turno" onsubmit="addTurno(event)">
+                <div class="form-group">
+                  <label for="input-turno">Nombre del Turno</label>
+                  <input type="text" id="input-turno" placeholder="Ej. FIN DE SEMANA, VESPERTINO..." required autocomplete="off">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Agregar Turno</button>
+              </form>
+            </div>
+            <div class="settings-list-card">
+              <h3>Turnos Registrados</h3>
+              <ul class="settings-list" id="list-turnos"></ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ======== NIVEL / MODALIDAD ======== -->
+        <div id="tab-nivel-modalidad" class="tab-content">
+          <div class="columns-grid-2">
+            <div class="double-card">
+              <div class="settings-form-card">
+                <h3>Agregar Nuevo Nivel</h3>
+                <form id="form-nivel" onsubmit="addNivel(event)">
+                  <div class="form-group">
+                    <label for="input-nivel">Nombre del Nivel</label>
+                    <input type="text" id="input-nivel" placeholder="Ej. MATERNAL, UNIVERSITARIO..." required autocomplete="off">
+                  </div>
+                  <button type="submit" class="btn btn-primary btn-block">Agregar Nivel</button>
+                </form>
+              </div>
+              <div class="settings-list-card mt-20">
+                <h3>Niveles Registrados</h3>
+                <ul class="settings-list" id="list-niveles"></ul>
+              </div>
+            </div>
+            <div class="double-card">
+              <div class="settings-form-card">
+                <h3>Agregar Nueva Modalidad</h3>
+                <form id="form-modalidad" onsubmit="addModalidad(event)">
+                  <div class="form-group">
+                    <label for="input-modalidad">Nombre de la Modalidad</label>
+                    <input type="text" id="input-modalidad" placeholder="Ej. ONLINE, INTERNADO..." required autocomplete="off">
+                  </div>
+                  <button type="submit" class="btn btn-primary btn-block">Agregar Modalidad</button>
+                </form>
+              </div>
+              <div class="settings-list-card mt-20">
+                <h3>Modalidades Registradas</h3>
+                <ul class="settings-list" id="list-modalidades"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ======== PLANES DE ESTUDIO ======== -->
+        <div id="tab-planes" class="tab-content">
+          <div class="action-bar">
+            <div class="search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="search-plan" placeholder="Buscar planes por código, mención o especialidad..." oninput="filterPlanes()">
+            </div>
+            <button class="btn btn-primary" onclick="openAddPlanModal()">
+              <i class="fa-solid fa-plus"></i> Nuevo Plan de Estudio
+            </button>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr><th>Código</th><th>Especialidad</th><th>Mención</th><th>Asignaturas</th><th>Acciones</th></tr>
+              </thead>
+              <tbody id="table-body-planes"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ======== ESTATUS LABORAL ======== -->
+        <div id="tab-estatus" class="tab-content">
+          <div class="action-bar">
+            <div class="search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="search-estatus" placeholder="Buscar por situación laboral o descripción..." oninput="filterEstatus()">
+            </div>
+            <button class="btn btn-primary" onclick="openAddEstatusModal()">
+              <i class="fa-solid fa-plus"></i> Nueva Situación Laboral
+            </button>
+          </div>
+          <div class="estatus-cards-grid" id="estatus-cards-container"></div>
+        </div>
+
+      </main>
+    </div>
+
+    <!-- ============================================================ -->
+    <!--  MODALS                                                       -->
+    <!-- ============================================================ -->
+
+    <!-- Modal: Detalle/Edición de Plantel -->
+    <div id="modal-plantel" class="modal-overlay">
+      <div class="modal-card modal-xl">
+        <div class="modal-header">
+          <div>
+            <h3 id="modal-plantel-title">Detalle del Plantel</h3>
+            <small id="modal-plantel-subtitle" class="text-muted"></small>
+          </div>
+          <button class="btn-close-modal" onclick="closeModal('modal-plantel')">&times;</button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="plantel-edit-municipio">
+          <input type="hidden" id="plantel-edit-parroquia">
+          <input type="hidden" id="plantel-edit-codigo">
+
+          <!-- Read-only info -->
+          <div class="plantel-readonly-grid">
+            <div class="readonly-field"><label>Código</label><span id="pf-codigo"></span></div>
+            <div class="readonly-field"><label>Código Estadístico</label><span id="pf-cod-estadistico"></span></div>
+            <div class="readonly-field"><label>Denominación</label><span id="pf-denominacion"></span></div>
+            <div class="readonly-field"><label>Dependencia</label><span id="pf-dependencia"></span></div>
+            <div class="readonly-field"><label>Municipio</label><span id="pf-municipio"></span></div>
+            <div class="readonly-field"><label>Parroquia</label><span id="pf-parroquia"></span></div>
+          </div>
+
+          <hr class="modal-divider">
+          <p class="modal-section-label"><i class="fa-solid fa-pen-to-square"></i> Campos editables</p>
+
+          <!-- Editable fields -->
+          <div class="columns-grid-2">
+            <div>
+              <div class="form-group">
+                <label for="pf-ubicacion">Ubicación</label>
+                <input type="text" id="pf-ubicacion" placeholder="Ej. URBANO, RURAL, PERIURBANO">
+              </div>
+              <div class="form-group">
+                <label for="pf-nivel">Nivel</label>
+                <input type="text" id="pf-nivel" placeholder="Ej. PRIMARIA, MEDIA GENERAL">
+              </div>
+              <div class="form-group">
+                <label for="pf-modalidad">Modalidad</label>
+                <input type="text" id="pf-modalidad" placeholder="Ej. PRESENCIAL, DISTANCIA">
+              </div>
+              <div class="form-group">
+                <label for="pf-turno">Turno</label>
+                <input type="text" id="pf-turno" placeholder="Ej. MATUTINO, VESPERTINO">
+              </div>
+              <div class="form-group">
+                <label for="pf-metros2">Metros² del Plantel</label>
+                <input type="number" id="pf-metros2" placeholder="Ej. 1200">
+              </div>
+              <div class="form-group">
+                <label for="pf-observaciones">Observaciones</label>
+                <textarea id="pf-observaciones" rows="3" placeholder="Notas adicionales sobre el plantel..."></textarea>
+              </div>
+            </div>
+
+            <!-- Planes de estudio linked -->
+            <div>
+              <div class="form-group">
+                <label>Planes de Estudio Vinculados</label>
+                <div id="plantel-planes-linked" class="linked-planes-list"></div>
+              </div>
+              <div class="form-group">
+                <label for="plantel-planes-selector">Agregar Plan de Estudio</label>
+                <select id="plantel-planes-selector" class="filter-select" style="width:100%;margin-bottom:8px;">
+                  <option value="">— Seleccionar plan —</option>
+                </select>
+                <div class="form-group" id="plantel-plan-especialidad-row" style="display:none">
+                  <label for="plantel-plan-especialidad">Especialidad (para este plan)</label>
+                  <input type="text" id="plantel-plan-especialidad" placeholder="Ej. Agropecuaria">
+                </div>
+                <div class="form-group" id="plantel-plan-mencion-row" style="display:none">
+                  <label for="plantel-plan-mencion">Mención (para este plan)</label>
+                  <input type="text" id="plantel-plan-mencion" placeholder="Ej. Ciencias Agrícolas y Pecuarias">
+                </div>
+                <button type="button" class="btn-add-item-list" onclick="linkPlanToPlantel()">
+                  <i class="fa-solid fa-plus"></i> Vincular Plan
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-plantel')">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="savePlantelChanges()">
+            <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Docente / Administrativo Cargo -->
+    <div id="modal-cargo" class="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 id="modal-cargo-title">Agregar Cargo</h3>
+          <button class="btn-close-modal" onclick="closeModal('modal-cargo')">&times;</button>
+        </div>
+        <form id="form-cargo" onsubmit="saveCargo(event)">
+          <input type="hidden" id="cargo-mode">
+          <input type="hidden" id="cargo-index">
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="input-cargo-name">Cargo</label>
+              <input type="text" id="input-cargo-name" required placeholder="Ej. DOC. I / AULA">
+            </div>
+            <div class="form-group">
+              <label for="input-cargo-code">Código del Cargo</label>
+              <input type="text" id="input-cargo-code" placeholder="Ej. 1111DH">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('modal-cargo')">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: Obrero Group -->
+    <div id="modal-obrero" class="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 id="modal-obrero-title">Agregar Grupo Obrero</h3>
+          <button class="btn-close-modal" onclick="closeModal('modal-obrero')">&times;</button>
+        </div>
+        <form id="form-obrero" onsubmit="saveObrero(event)">
+          <input type="hidden" id="obrero-index">
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="input-obrero-rango">Rango Obrero (Grupo/Grado)</label>
+              <input type="text" id="input-obrero-rango" required placeholder="Ej. OBRERO GENERAL I (NO CALIFICADO) GRADO 1">
+            </div>
+            <div class="form-group">
+              <label for="input-obrero-codigo">Código del Cargo (General del Grupo)</label>
+              <input type="text" id="input-obrero-codigo" placeholder="Ej. 8031N">
+            </div>
+            <div class="form-group">
+              <label>Cargos en este Rango</label>
+              <div id="obrero-cargos-list" class="list-editor"></div>
+              <button type="button" class="btn-add-item-list" onclick="addObreroCargoRow('')">
+                <i class="fa-solid fa-plus"></i> Agregar Cargo Relacionado
+              </button>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('modal-obrero')">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: Plan de Estudio -->
+    <div id="modal-plan" class="modal-overlay">
+      <div class="modal-card modal-xl">
+        <div class="modal-header">
+          <h3 id="modal-plan-title">Agregar Plan de Estudio</h3>
+          <button class="btn-close-modal" onclick="closeModal('modal-plan')">&times;</button>
+        </div>
+        <form id="form-plan" onsubmit="savePlan(event)">
+          <input type="hidden" id="plan-index">
+          <div class="modal-body">
+            <!-- Fila 1: datos base del plan -->
+            <div class="columns-grid-3" style="margin-bottom:16px;">
+              <div class="form-group" style="margin-bottom:0;">
+                <label for="input-plan-codigo">Código de Plan de Estudio</label>
+                <input type="number" id="input-plan-codigo" required placeholder="Ej. 41048">
+              </div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label for="input-plan-especialidad">Especialidad</label>
+                <input type="text" id="input-plan-especialidad" required placeholder="Ej. AGROPECUARIA">
+              </div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label for="input-plan-mencion">Mención</label>
+                <input type="text" id="input-plan-mencion" required placeholder="Ej. ECOTURISMO">
+              </div>
+            </div>
+            <!-- Número de años: controla la cantidad de bloques -->
+            <div class="form-group">
+              <label for="input-plan-numanios">Número de Años Escolares del Plan</label>
+              <select id="input-plan-numanios" onchange="renderPlanGrados()" style="max-width:200px;">
+                <option value="5">5 Años</option>
+                <option value="6">6 Años</option>
+                <option value="4">4 Años</option>
+                <option value="3">3 Años</option>
+              </select>
+            </div>
+            <!-- Bloques de años con asignaturas y horas -->
+            <div id="plan-grados-container">
+              <!-- generado dinámicamente por renderPlanGrados() -->
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('modal-plan')">Cancelar</button>
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Guardar Cambios</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: Estatus Laboral -->
+    <div id="modal-estatus" class="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 id="modal-estatus-title">Agregar Situación Laboral</h3>
+          <button class="btn-close-modal" onclick="closeModal('modal-estatus')">&times;</button>
+        </div>
+        <form id="form-estatus" onsubmit="saveEstatus(event)">
+          <input type="hidden" id="estatus-index">
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="input-estatus-situacion">Situación Laboral</label>
+              <input type="text" id="input-estatus-situacion" required placeholder="Ej. COMISION DE SERVICIO">
+            </div>
+            <div class="form-group">
+              <label for="input-estatus-descripcion">Descripción Legal</label>
+              <textarea id="input-estatus-descripcion" rows="5" required placeholder="Descripción oficial de la situación laboral..."></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('modal-estatus')">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <?!= include('JS'); ?>
+  </body>
+</html>

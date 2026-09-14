@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGH - Iniciar Sesión</title>
+    <!-- Mismos estilos del dashboard para mantener consistencia -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        }
+        .auth-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+        .auth-container h2 {
+            margin-top: 0;
+            color: #1e3c72;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .auth-container p.subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+        }
+        .btn-auth {
+            width: 100%;
+            padding: 14px;
+            background: #2a5298;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-auth:hover {
+            background: #1e3c72;
+            transform: translateY(-2px);
+        }
+        .alert-msg {
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .alert-warning { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        .links {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 14px;
+        }
+        .links a { color: #2a5298; text-decoration: none; font-weight: 600; }
+        .links a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <div class="auth-container">
+        <h2>SGH Mérida</h2>
+        <p class="subtitle">Sistema de Gestión Humana</p>
+        
+        <form id="login-form">
+            <div class="form-group">
+                <label>Correo Electrónico</label>
+                <input type="email" id="email" required placeholder="Ingresa tu correo">
+            </div>
+
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" id="password" required placeholder="Ingresa tu contraseña">
+            </div>
+
+            <button type="submit" class="btn-auth" id="btn-submit">Entrar al Sistema</button>
+            <div id="alert-box" class="alert-msg"></div>
+        </form>
+
+        <div class="links">
+            ¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a>
+        </div>
+    </div>
+
+    <!-- EL SCRIPT DE FIREBASE IRÁ AQUÍ, EL USUARIO DEBE PEGAR SUS CLAVES -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDSdDRB10kbtor5ROR50AsCxVmk0fOpqFo",
+            authDomain: "sgh-merida.firebaseapp.com",
+            projectId: "sgh-merida",
+            storageBucket: "sgh-merida.firebasestorage.app",
+            messagingSenderId: "873672016601",
+            appId: "1:873672016601:web:3024d5b94ee3926c8e34c8"
+        };
+
+        let app, auth, db;
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+        } catch(e) {
+            console.log("Falta configuración de Firebase");
+        }
+
+        function showAlert(msg, type) {
+            const box = document.getElementById('alert-box');
+            box.innerHTML = msg;
+            box.style.display = 'block';
+            box.className = 'alert-msg alert-' + type;
+        }
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if(!auth || !db) {
+                showAlert('Error: Faltan las credenciales de Firebase en el código.', 'error');
+                return;
+            }
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('btn-submit');
+            
+            btn.disabled = true;
+            btn.textContent = 'Autenticando...';
+            document.getElementById('alert-box').style.display = 'none';
+
+            try {
+                // 1. Iniciar sesión en Firebase Auth
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // 2. Buscar su perfil en la base de datos (Colección usuarios)
+                const docRef = doc(db, "usuarios", user.uid);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const userData = docSnap.data();
+
+                    // 3. Verificar si está pendiente de aprobación
+                    if (userData.estado === "pendiente") {
+                        await signOut(auth); // Cerrar sesión porque no está aprobado
+                        showAlert(`Tu cuenta aún está en revisión por el Coordinador del Municipio <b>${userData.municipio}</b>.<br><br>Vuelve a intentar más tarde.`, 'warning');
+                        btn.disabled = false;
+                        btn.textContent = 'Entrar al Sistema';
+                        return;
+                    }
+
+                    // 4. Si está aprobado o es admin, redirigir según el rol
+                    if (userData.rol === "admin") {
+                        window.location.href = 'index.html'; // Dashboard General
+                    } else if (userData.rol === "munic") {
+                        window.location.href = 'munic_dashboard.html'; // Dashboard de su Municipio
+                    } else if (userData.rol === "plant") {
+                        window.location.href = 'plantel_dashboard.html'; // Dashboard de su Plantel
+                    } else {
+                        showAlert('Error: Tu cuenta no tiene un rol válido asignado.', 'error');
+                        await signOut(auth);
+                    }
+                } else {
+                    // El usuario existe en Auth pero no en la BD (Raro, pero posible si es súper admin creado manual)
+                    // Asumiremos que si no está en la BD, se queda en index y lo maneja auth.js
+                    window.location.href = 'index.html';
+                }
+
+            } catch (error) {
+                console.error(error);
+                let msg = 'Error al iniciar sesión.';
+                if(error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                    msg = 'Correo o contraseña incorrectos.';
+                }
+                showAlert(msg, 'error');
+                btn.disabled = false;
+                btn.textContent = 'Entrar al Sistema';
+            }
+        });
+    </script>
+</body>
+</html>

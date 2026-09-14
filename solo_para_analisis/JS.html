@@ -1,0 +1,1207 @@
+<script>
+  let db = null;
+  let userAccess = null;
+  let chartPersonalDist = null;
+  let chartDependencia = null;
+  let chartMunicipios = null;
+  
+  let plantelesList = [];
+  let currentPlantelPage = 1;
+  const PLANTELES_PER_PAGE = 50;
+
+  window.addEventListener('DOMContentLoaded', () => {
+    loadData();
+  });
+
+  function showLoading(show) {
+    const loader = document.getElementById('loading');
+    if (loader) {
+      if (show) loader.classList.add('active');
+      else loader.classList.remove('active');
+    }
+  }
+
+  function showToast(message, type = 'success') {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+    const toast = document.createElement('div');
+    toast.className = 'toast ' + type;
+    
+    let icon = 'fa-circle-check';
+    if (type === 'danger') icon = 'fa-triangle-exclamation';
+    if (type === 'warning') icon = 'fa-circle-exclamation';
+    if (type === 'info') icon = 'fa-circle-info';
+    
+    toast.innerHTML = '<i class="fa-solid ' + icon + '"></i><span>' + message + '</span>';
+    container.appendChild(toast);
+    
+    setTimeout(() => {
+      toast.style.animation = 'slideIn 0.3s ease reverse forwards';
+      setTimeout(() => toast.remove(), 300);
+    }, 3500);
+  }
+
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+    
+    document.getElementById('tab-' + tabId).classList.add('active');
+    
+    const navLinks = document.querySelectorAll('.nav-link');
+    for (let link of navLinks) {
+      if (link.getAttribute('onclick').includes(tabId)) {
+        link.classList.add('active');
+        break;
+      }
+    }
+    
+    const titles = {
+      'dashboard': 'Dashboard Académico',
+      'planteles': 'Buscador de Planteles',
+      'personal': 'Gestión de Personal (RAC)',
+      'turnos': 'Turnos Operativos',
+      'nivel-modalidad': 'Niveles y Modalidades',
+      'planes': 'Planes de Estudio y Asignaturas',
+      'estatus': 'Estatus Laboral del Personal'
+    };
+    document.getElementById('page-title').innerText = titles[tabId] || 'Dashboard';
+    
+    if (tabId === 'planteles' && plantelesList.length === 0) {
+      google.script.run.withSuccessHandler(stats => {
+        populatePlantelesFilters(stats);
+      }).getPlantelesStats();
+    }
+  }
+
+  function switchSubTab(parent, subtabId, event) {
+    const container = document.getElementById('tab-' + parent);
+    container.querySelectorAll('.sub-tab-btn').forEach(btn => btn.classList.remove('active'));
+    container.querySelectorAll('.subtab-content').forEach(el => el.classList.remove('active'));
+    
+    if (event && event.currentTarget) {
+      event.currentTarget.classList.add('active');
+    }
+    document.getElementById('subtab-' + parent + '-' + subtabId).classList.add('active');
+  }
+
+  function loadData(forceReload = false) {
+    showLoading(true);
+    google.script.run
+      .withSuccessHandler(access => {
+        userAccess = access;
+        applyPermissionsUI();
+        
+        if (!userAccess.isAdmin && userAccess.permissions.length === 0) {
+          showLoading(false);
+          showToast('Acceso restringido', 'warning');
+          return;
+        }
+
+        // Si tiene permisos, cargar la base de datos
+        google.script.run
+          .withSuccessHandler(data => {
+            db = data;
+            refreshStats();
+            refreshCharts();
+            renderDocentesTable();
+            renderAdministrativosTable();
+            renderObrerosGrid();
+            renderTurnosList();
+            renderNivelesList();
+            renderModalidadesList();
+            renderPlanesTable();
+            renderEstatusCards();
+            populatePlanesSelector();
+            
+            loadPlantelesStats();
+            
+            showLoading(false);
+            if (forceReload) showToast('Datos base sincronizados', 'info');
+          })
+          .withFailureHandler(err => {
+            showLoading(false);
+            showToast(err.message || err, 'danger');
+            console.error("Error getCatalogos:", err);
+          })
+          .getCatalogos();
+
+      })
+      .withFailureHandler(err => {
+        showLoading(false);
+        showToast("Error verificando permisos: " + (err.message || err), 'danger');
+        console.error("Error getUserAccess:", err);
+      })
+      .getUserAccess();
+  }
+
+  function applyPermissionsUI() {
+    const debugSpan = document.getElementById('debug-email-display');
+    if (debugSpan) {
+      debugSpan.innerText = "Correo detectado por Google: " + (userAccess.email || "NINGUNO");
+    }
+
+    if (userAccess.isAdmin) return;
+    
+    const modulos = ['planteles', 'personal', 'turnos', 'nivel-modalidad', 'planes', 'estatus'];
+    
+    modulos.forEach(mod => {
+      const navBtn = document.getElementById('nav-' + mod);
+      if (navBtn) {
+        if (userAccess.permissions.includes(mod)) {
+          navBtn.style.display = 'flex';
+        } else {
+          navBtn.style.display = 'none';
+        }
+      }
+    });
+
+    if (userAccess.permissions.length === 0) {
+      document.getElementById('dashboard-content').style.display = 'none';
+      document.getElementById('dashboard-charts').style.display = 'none';
+      document.getElementById('access-denied-msg').style.display = 'block';
+    } else {
+      document.getElementById('dashboard-content').style.display = 'grid';
+      document.getElementById('dashboard-charts').style.display = 'grid';
+      document.getElementById('access-denied-msg').style.display = 'none';
+    }
+  }
+
+  function persistDatabase(successMsg = "Cambios guardados con éxito") {
+    showLoading(true);
+    google.script.run
+      .withSuccessHandler(res => {
+        showLoading(false);
+        showToast(successMsg, 'success');
+        refreshStats();
+        refreshCharts();
+        renderDocentesTable();
+        renderAdministrativosTable();
+        renderObrerosGrid();
+        renderTurnosList();
+        renderNivelesList();
+        renderModalidadesList();
+        renderPlanesTable();
+        renderEstatusCards();
+        populatePlanesSelector();
+      })
+      .withFailureHandler(err => {
+        showLoading(false);
+        showToast("Error al guardar: " + err.message, 'danger');
+      })
+      .saveCatalogos(db);
+  }
+
+  function loadPlantelesStats() {
+    google.script.run.withSuccessHandler(stats => {
+      document.getElementById('stat-count-planteles').innerText = stats.total;
+      renderPlantelesCharts(stats);
+      populatePlantelesFilters(stats);
+    }).getPlantelesStats();
+  }
+
+  function refreshStats() {
+    if (!db) return;
+    const docenteCount = db.personal.docente ? db.personal.docente.length : 0;
+    const adminCount = db.personal.administrativo ? db.personal.administrativo.length : 0;
+    let obreroCount = 0;
+    if (db.personal.obrero) {
+      db.personal.obrero.forEach(g => obreroCount += (g.cargos ? g.cargos.length : 0));
+    }
+    const planesCount = db.planes_estudio ? db.planes_estudio.length : 0;
+    
+    document.getElementById('stat-count-docentes').innerText = docenteCount;
+    document.getElementById('stat-count-admin').innerText = adminCount;
+    document.getElementById('stat-count-obreros').innerText = obreroCount;
+    document.getElementById('stat-count-planes').innerText = planesCount;
+  }
+
+  function refreshCharts() {
+    if (!db) return;
+    const docCount = db.personal.docente.length;
+    const admCount = db.personal.administrativo.length;
+    let obrCount = 0;
+    db.personal.obrero.forEach(g => obrCount += g.cargos.length);
+    
+    const ctx1 = document.getElementById('chart-personal-dist').getContext('2d');
+    if (chartPersonalDist) chartPersonalDist.destroy();
+    
+    chartPersonalDist = new Chart(ctx1, {
+      type: 'doughnut',
+      data: {
+        labels: ['Docentes', 'Administrativos', 'Obreros'],
+        datasets: [{
+          data: [docCount, admCount, obrCount],
+          backgroundColor: ['#6366f1', '#06b6d4', '#f59e0b'],
+          borderColor: '#101626',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } }
+      }
+    });
+  }
+
+  function renderPlantelesCharts(stats) {
+    const depCtx = document.getElementById('chart-dependencia').getContext('2d');
+    if (chartDependencia) chartDependencia.destroy();
+    
+    const depLabels = Object.keys(stats.byDependencia);
+    const depData = Object.values(stats.byDependencia);
+    const depColors = depLabels.map(l => {
+      if(l==='NACIONAL') return '#3b82f6';
+      if(l==='ESTADAL') return '#f97316';
+      if(l==='MUNICIPAL') return '#10b981';
+      if(l==='PRIVADA') return '#8b5cf6';
+      return '#64748b';
+    });
+
+    chartDependencia = new Chart(depCtx, {
+      type: 'pie',
+      data: {
+        labels: depLabels,
+        datasets: [{
+          data: depData, backgroundColor: depColors, borderColor: '#101626', borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } }
+      }
+    });
+
+    const munCtx = document.getElementById('chart-municipios').getContext('2d');
+    if (chartMunicipios) chartMunicipios.destroy();
+
+    const munSorted = Object.entries(stats.byMunicipio).sort((a,b) => b[1] - a[1]);
+    const munLabels = munSorted.map(x => x[0]);
+    const munData = munSorted.map(x => x[1]);
+
+    chartMunicipios = new Chart(munCtx, {
+      type: 'bar',
+      data: {
+        labels: munLabels,
+        datasets: [{
+          label: 'Planteles',
+          data: munData,
+          backgroundColor: 'rgba(99, 102, 241, 0.6)',
+          borderColor: '#6366f1',
+          borderWidth: 1,
+          borderRadius: 4
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          x: { ticks: { color: '#94a3b8', font: {size: 10}, maxRotation: 45, minRotation: 45 } },
+          y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } }
+        },
+        plugins: { legend: { display: false } }
+      }
+    });
+  }
+
+  function populatePlantelesFilters(stats) {
+    const selMun = document.getElementById('filter-municipio');
+    if (selMun.options.length > 1) return;
+    
+    Object.keys(stats.byMunicipio).sort().forEach(mun => {
+      const opt = document.createElement('option');
+      opt.value = mun;
+      opt.text = mun;
+      selMun.add(opt);
+    });
+  }
+
+  let searchTimeout = null;
+  function onSearchPlantel() {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      applyPlantelesFilter();
+    }, 500);
+  }
+
+  function applyPlantelesFilter() {
+    const q = document.getElementById('search-plantel').value.trim();
+    const mun = document.getElementById('filter-municipio').value;
+    const par = document.getElementById('filter-parroquia').value;
+    const dep = document.getElementById('filter-dependencia').value;
+
+    if (q.length < 3 && !mun && !dep) {
+      plantelesList = [];
+      renderPlantelesTable();
+      document.getElementById('planteles-count-label').innerText = 'Por favor, usa el buscador (mín 3 letras) o selecciona filtros para ver resultados.';
+      return;
+    }
+
+    showLoading(true);
+    google.script.run
+      .withSuccessHandler(results => {
+        plantelesList = results.filter(p => {
+          if (mun && p.municipio !== mun) return false;
+          if (par && p.parroquia !== par) return false;
+          if (dep && p.dependencia !== dep) return false;
+          return true;
+        });
+        
+        currentPlantelPage = 1;
+        renderPlantelesTable();
+        showLoading(false);
+      })
+      .withFailureHandler(err => {
+        showLoading(false);
+        showToast('Error al buscar planteles: ' + err.message, 'danger');
+      })
+      .searchPlanteles(q);
+  }
+
+  function renderPlantelesTable() {
+    const tbody = document.getElementById('table-body-planteles');
+    tbody.innerHTML = '';
+    
+    document.getElementById('planteles-count-label').innerText = 'Se encontraron ' + plantelesList.length + ' planteles.';
+    
+    if (plantelesList.length === 0) {
+      tbody.innerHTML = '<tr id="planteles-empty-row"><td colspan="7" class="empty-table-msg">No se encontraron resultados.</td></tr>';
+      document.getElementById('planteles-pagination').innerHTML = '';
+      return;
+    }
+
+    const totalPages = Math.ceil(plantelesList.length / PLANTELES_PER_PAGE);
+    const startIndex = (currentPlantelPage - 1) * PLANTELES_PER_PAGE;
+    const pageItems = plantelesList.slice(startIndex, startIndex + PLANTELES_PER_PAGE);
+
+    pageItems.forEach((p, idx) => {
+      const globalIdx = startIndex + idx;
+      
+      let badgeClass = '';
+      let depText = p.dependencia || 'SIN DATOS';
+      if(depText === 'NACIONAL') badgeClass = 'badge-nacional';
+      else if(depText === 'ESTADAL') badgeClass = 'badge-estadal';
+      else if(depText === 'MUNICIPAL') badgeClass = 'badge-municipal';
+      else if(depText === 'PRIVADA') badgeClass = 'badge-privada';
+      else badgeClass = 'badge-default';
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><code class="code-badge">${p.codigo}</code></td>
+        <td><strong>${p.nombre_plantel || p.nuevo_eponimo}</strong></td>
+        <td>${p.municipio}</td>
+        <td>${p.parroquia}</td>
+        <td>${p.denominacion}</td>
+        <td><span class="badge ${badgeClass}">${depText}</span></td>
+        <td>
+          <div class="actions-cell">
+            <button class="btn-icon btn-icon-edit" onclick="openPlantelDetailModal(${globalIdx})"><i class="fa-solid fa-eye"></i></button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    renderPagination(totalPages);
+  }
+
+  function renderPagination(totalPages) {
+    const pag = document.getElementById('planteles-pagination');
+    pag.innerHTML = '';
+    if (totalPages <= 1) return;
+
+    const btnPrev = document.createElement('button');
+    btnPrev.innerText = 'Anterior';
+    btnPrev.disabled = currentPlantelPage === 1;
+    btnPrev.onclick = () => { currentPlantelPage--; renderPlantelesTable(); };
+    pag.appendChild(btnPrev);
+
+    const span = document.createElement('span');
+    span.innerText = `Página ${currentPlantelPage} de ${totalPages}`;
+    pag.appendChild(span);
+
+    const btnNext = document.createElement('button');
+    btnNext.innerText = 'Siguiente';
+    btnNext.disabled = currentPlantelPage === totalPages;
+    btnNext.onclick = () => { currentPlantelPage++; renderPlantelesTable(); };
+    pag.appendChild(btnNext);
+  }
+
+  let currentPlantelGlobalIdx = -1;
+
+  function openPlantelDetailModal(globalIdx) {
+    const p = plantelesList[globalIdx];
+    currentPlantelGlobalIdx = globalIdx;
+
+    document.getElementById('modal-plantel-title').innerText = p.nombre_plantel || p.nuevo_eponimo || 'Plantel sin nombre';
+    document.getElementById('modal-plantel-subtitle').innerText = `${p.denominacion} - ${p.dependencia}`;
+
+    document.getElementById('plantel-edit-municipio').value = p.municipio;
+    document.getElementById('plantel-edit-parroquia').value = p.parroquia;
+    document.getElementById('plantel-edit-codigo').value = p.codigo;
+
+    document.getElementById('pf-codigo').innerText = p.codigo;
+    document.getElementById('pf-cod-estadistico').innerText = p.codigo_estadistico || 'N/A';
+    document.getElementById('pf-denominacion').innerText = p.denominacion || 'N/A';
+    document.getElementById('pf-dependencia').innerText = p.dependencia || 'N/A';
+    document.getElementById('pf-municipio').innerText = p.municipio || 'N/A';
+    document.getElementById('pf-parroquia').innerText = p.parroquia || 'N/A';
+
+    document.getElementById('pf-ubicacion').value = p.ubicacion || '';
+    document.getElementById('pf-nivel').value = p.nivel || '';
+    document.getElementById('pf-modalidad').value = p.modalidad || '';
+    document.getElementById('pf-turno').value = p.turno || '';
+    document.getElementById('pf-metros2').value = p.metros2 || '';
+    document.getElementById('pf-observaciones').value = p.observaciones || '';
+
+    renderLinkedPlanes();
+    openModal('modal-plantel');
+  }
+
+  function populatePlanesSelector() {
+    const sel = document.getElementById('plantel-planes-selector');
+    sel.innerHTML = '<option value="">— Seleccionar plan —</option>';
+    if (!db || !db.planes_estudio) return;
+    
+    db.planes_estudio.forEach(plan => {
+      const opt = document.createElement('option');
+      opt.value = plan.codigo;
+      opt.text = `${plan.codigo} - ${plan.especialidad} (${plan.mencion})`;
+      sel.add(opt);
+    });
+
+    sel.onchange = function() {
+      const code = this.value;
+      const espRow = document.getElementById('plantel-plan-especialidad-row');
+      const menRow = document.getElementById('plantel-plan-mencion-row');
+      const espInput = document.getElementById('plantel-plan-especialidad');
+      const menInput = document.getElementById('plantel-plan-mencion');
+
+      if (code) {
+        const planObj = db.planes_estudio.find(p => p.codigo == code);
+        espRow.style.display = 'block';
+        menRow.style.display = 'block';
+        espInput.value = planObj ? planObj.especialidad : '';
+        menInput.value = planObj ? planObj.mencion : '';
+      } else {
+        espRow.style.display = 'none';
+        menRow.style.display = 'none';
+      }
+    };
+  }
+
+  function renderLinkedPlanes() {
+    const container = document.getElementById('plantel-planes-linked');
+    container.innerHTML = '';
+    
+    if (currentPlantelGlobalIdx < 0) return;
+    const p = plantelesList[currentPlantelGlobalIdx];
+    const planes = p.planes_estudio || {};
+
+    const keys = Object.keys(planes);
+    if (keys.length === 0) {
+      container.innerHTML = '<div class="text-muted" style="padding:10px 0;">No hay planes vinculados.</div>';
+      return;
+    }
+
+    keys.forEach(k => {
+      const item = planes[k];
+      const div = document.createElement('div');
+      div.className = 'linked-plan-item';
+      div.innerHTML = `
+        <div>
+          <code class="code-badge">${k}</code> 
+          <span style="font-size:12px;margin-left:6px;">${item.especialidad || 'Sin Esp.'} - ${item.mencion || 'Sin Men.'}</span>
+        </div>
+        <button type="button" class="btn-remove-row" onclick="unlinkPlan('${k}')">
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  function linkPlanToPlantel() {
+    if (currentPlantelGlobalIdx < 0) return;
+    const p = plantelesList[currentPlantelGlobalIdx];
+    
+    const sel = document.getElementById('plantel-planes-selector');
+    const codigo = sel.value;
+    if (!codigo) {
+      showToast('Selecciona un plan de estudio', 'warning');
+      return;
+    }
+
+    const esp = document.getElementById('plantel-plan-especialidad').value.trim();
+    const men = document.getElementById('plantel-plan-mencion').value.trim();
+
+    if (!p.planes_estudio) p.planes_estudio = {};
+    p.planes_estudio[codigo] = {
+      especialidad: esp || null,
+      mencion: men || null
+    };
+
+    sel.value = '';
+    sel.dispatchEvent(new Event('change'));
+    renderLinkedPlanes();
+  }
+
+  function unlinkPlan(codigo) {
+    if (currentPlantelGlobalIdx < 0) return;
+    const p = plantelesList[currentPlantelGlobalIdx];
+    if (p.planes_estudio && p.planes_estudio[codigo]) {
+      delete p.planes_estudio[codigo];
+      renderLinkedPlanes();
+    }
+  }
+
+  function savePlantelChanges() {
+    if (currentPlantelGlobalIdx < 0) return;
+    const p = plantelesList[currentPlantelGlobalIdx];
+
+    const updatedData = {
+      ubicacion: document.getElementById('pf-ubicacion').value.trim() || null,
+      nivel: document.getElementById('pf-nivel').value.trim() || null,
+      modalidad: document.getElementById('pf-modalidad').value.trim() || null,
+      turno: document.getElementById('pf-turno').value.trim() || null,
+      metros2: document.getElementById('pf-metros2').value.trim() || null,
+      observaciones: document.getElementById('pf-observaciones').value.trim() || null,
+      planes_estudio: p.planes_estudio || {}
+    };
+
+    Object.assign(p, updatedData);
+
+    showLoading(true);
+    google.script.run
+      .withSuccessHandler(res => {
+        showLoading(false);
+        showToast('Plantel actualizado con éxito', 'success');
+        closeModal('modal-plantel');
+      })
+      .withFailureHandler(err => {
+        showLoading(false);
+        showToast('Error al guardar plantel: ' + err.message, 'danger');
+      })
+      .savePlantel(p.municipio, p.parroquia, p.codigo, updatedData);
+  }
+
+  function renderDocentesTable(filterText = "") {
+    const list = db.personal.docente || [];
+    const tbody = document.getElementById('table-body-docentes');
+    tbody.innerHTML = '';
+    
+    list.forEach((item, index) => {
+      if (filterText && !item.cargo.toLowerCase().includes(filterText) && !item.codigo_cargo.toLowerCase().includes(filterText)) {
+        return;
+      }
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>${item.cargo}</strong></td>
+        <td><code class="code-badge">${item.codigo_cargo}</code></td>
+        <td>
+          <div class="actions-cell">
+            <button class="btn-icon btn-icon-edit" onclick="openEditCargoModal('docente', ${index})"><i class="fa-solid fa-pen"></i></button>
+            <button class="btn-icon btn-icon-delete" onclick="deleteCargo('docente', ${index})"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderAdministrativosTable(filterText = "") {
+    const list = db.personal.administrativo || [];
+    const tbody = document.getElementById('table-body-administrativos');
+    tbody.innerHTML = '';
+    
+    list.forEach((item, index) => {
+      if (filterText && !item.cargo.toLowerCase().includes(filterText) && !String(item.codigo_cargo).toLowerCase().includes(filterText)) {
+        return;
+      }
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>${item.cargo}</strong></td>
+        <td><code class="code-badge">${item.codigo_cargo}</code></td>
+        <td>
+          <div class="actions-cell">
+            <button class="btn-icon btn-icon-edit" onclick="openEditCargoModal('administrativo', ${index})"><i class="fa-solid fa-pen"></i></button>
+            <button class="btn-icon btn-icon-delete" onclick="deleteCargo('administrativo', ${index})"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function filterPersonal(type) {
+    const text = document.getElementById('search-' + type).value.toLowerCase();
+    if (type === 'docente') renderDocentesTable(text);
+    else renderAdministrativosTable(text);
+  }
+
+  function openAddCargoModal(type) {
+    document.getElementById('modal-cargo-title').innerText = type === 'docente' ? 'Agregar Cargo Docente' : 'Agregar Cargo Administrativo';
+    document.getElementById('cargo-mode').value = type;
+    document.getElementById('cargo-index').value = "-1";
+    document.getElementById('input-cargo-name').value = "";
+    document.getElementById('input-cargo-code').value = "";
+    openModal('modal-cargo');
+  }
+
+  function openEditCargoModal(type, index) {
+    const item = db.personal[type][index];
+    document.getElementById('modal-cargo-title').innerText = type === 'docente' ? 'Editar Cargo Docente' : 'Editar Cargo Administrativo';
+    document.getElementById('cargo-mode').value = type;
+    document.getElementById('cargo-index').value = index;
+    document.getElementById('input-cargo-name').value = item.cargo;
+    document.getElementById('input-cargo-code').value = item.codigo_cargo;
+    openModal('modal-cargo');
+  }
+
+  function saveCargo(event) {
+    event.preventDefault();
+    const type = document.getElementById('cargo-mode').value;
+    const index = parseInt(document.getElementById('cargo-index').value);
+    const cargo = document.getElementById('input-cargo-name').value.trim();
+    const codigo_cargo = document.getElementById('input-cargo-code').value.trim();
+    
+    if(!db.personal[type]) db.personal[type] = [];
+
+    if (index === -1) {
+      db.personal[type].push({ cargo, codigo_cargo });
+      persistDatabase(`Cargo ${cargo} agregado con éxito`);
+    } else {
+      db.personal[type][index] = { cargo, codigo_cargo };
+      persistDatabase(`Cargo ${cargo} actualizado con éxito`);
+    }
+    closeModal('modal-cargo');
+  }
+
+  function deleteCargo(type, index) {
+    const cargo = db.personal[type][index].cargo;
+    if (confirm(`¿Estás seguro de eliminar el cargo "${cargo}"?`)) {
+      db.personal[type].splice(index, 1);
+      persistDatabase(`Cargo "${cargo}" eliminado`);
+    }
+  }
+
+  function renderObrerosGrid(filterText = "") {
+    const list = db.personal.obrero || [];
+    const container = document.getElementById('obreros-cards-container');
+    container.innerHTML = '';
+    
+    list.forEach((item, index) => {
+      const matchesRango = item.rango.toLowerCase().includes(filterText);
+      const matchesCargos = (item.cargos||[]).some(c => c.toLowerCase().includes(filterText));
+      if (filterText && !matchesRango && !matchesCargos) return;
+      
+      const match = item.rango.match(/GRADO\s+(\d+)/i);
+      const gradeText = match ? `Grado ${match[1]}` : 'General';
+      
+      const card = document.createElement('div');
+      card.className = 'obrero-card';
+      
+      const cargosHtml = (item.cargos||[]).map(cargo => `
+        <div class="obrero-cargo-item"><i class="fa-solid fa-angle-right"></i> ${cargo}</div>
+      `).join('');
+      
+      card.innerHTML = `
+        <div>
+          <div class="obrero-card-header">
+            <h3>${item.rango}</h3>
+            <span class="obrero-card-badge">${gradeText}</span>
+          </div>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <span class="text-muted" style="font-size: 11px;">CÓDIGO GENERAL:</span>
+            <code class="code-badge" style="margin-left: 6px;">${item.codigo_cargo || 'N/D'}</code>
+          </div>
+          <div class="obrero-cargos-container">${cargosHtml}</div>
+        </div>
+        <div class="obrero-card-footer">
+          <button class="btn-icon btn-icon-edit" onclick="openEditObreroModal(${index})"><i class="fa-solid fa-pen"></i></button>
+          <button class="btn-icon btn-icon-delete" onclick="deleteObrero(${index})"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  function filterObreros() {
+    const text = document.getElementById('search-obrero').value.toLowerCase();
+    renderObrerosGrid(text);
+  }
+
+  function openAddObreroModal() {
+    document.getElementById('modal-obrero-title').innerText = 'Agregar Grupo Obrero';
+    document.getElementById('obrero-index').value = "-1";
+    document.getElementById('input-obrero-rango').value = "";
+    document.getElementById('input-obrero-codigo').value = "";
+    document.getElementById('obrero-cargos-list').innerHTML = "";
+    addObreroCargoRow(""); 
+    openModal('modal-obrero');
+  }
+
+  function openEditObreroModal(index) {
+    const item = db.personal.obrero[index];
+    document.getElementById('modal-obrero-title').innerText = 'Editar Grupo Obrero';
+    document.getElementById('obrero-index').value = index;
+    document.getElementById('input-obrero-rango').value = item.rango;
+    document.getElementById('input-obrero-codigo').value = item.codigo_cargo;
+    
+    const list = document.getElementById('obrero-cargos-list');
+    list.innerHTML = "";
+    
+    if (item.cargos && item.cargos.length > 0) {
+      item.cargos.forEach(cargo => addObreroCargoRow(cargo));
+    } else {
+      addObreroCargoRow("");
+    }
+    openModal('modal-obrero');
+  }
+
+  function addObreroCargoRow(val) {
+    const container = document.getElementById('obrero-cargos-list');
+    const row = document.createElement('div');
+    row.className = 'list-editor-row';
+    row.innerHTML = `
+      <input type="text" class="input-obrero-cargo-item" value="${val}" required placeholder="Ej. AYUDANTE DE SERVICIOS">
+      <button type="button" class="btn-remove-row" onclick="removeRow(this)"><i class="fa-solid fa-trash-can"></i></button>
+    `;
+    container.appendChild(row);
+  }
+
+  function removeRow(btn) {
+    btn.parentElement.remove();
+  }
+
+  function saveObrero(event) {
+    event.preventDefault();
+    const index = parseInt(document.getElementById('obrero-index').value);
+    const rango = document.getElementById('input-obrero-rango').value.trim();
+    const codigo_cargo = document.getElementById('input-obrero-codigo').value.trim();
+    
+    const cargoInputs = document.querySelectorAll('.input-obrero-cargo-item');
+    const cargos = [];
+    cargoInputs.forEach(input => {
+      const val = input.value.trim();
+      if (val) cargos.push(val);
+    });
+
+    const obreroGroup = { rango, codigo_cargo, cargos };
+
+    if(!db.personal.obrero) db.personal.obrero = [];
+
+    if (index === -1) {
+      db.personal.obrero.push(obreroGroup);
+      persistDatabase(`Grupo obrero ${rango} agregado`);
+    } else {
+      db.personal.obrero[index] = obreroGroup;
+      persistDatabase(`Grupo obrero ${rango} actualizado`);
+    }
+    closeModal('modal-obrero');
+  }
+
+  function deleteObrero(index) {
+    const rango = db.personal.obrero[index].rango;
+    if (confirm(`¿Estás seguro de eliminar el rango obrero "${rango}"?`)) {
+      db.personal.obrero.splice(index, 1);
+      persistDatabase(`Rango obrero "${rango}" eliminado`);
+    }
+  }
+
+  function renderTurnosList() {
+    const list = db.turnos || [];
+    const ul = document.getElementById('list-turnos');
+    ul.innerHTML = '';
+    
+    list.forEach((turno, index) => {
+      const li = document.createElement('li');
+      li.className = 'settings-list-item';
+      li.innerHTML = `
+        <strong>${turno}</strong>
+        <button class="btn-icon btn-icon-delete" onclick="deleteTurno(${index})"><i class="fa-solid fa-trash"></i></button>
+      `;
+      ul.appendChild(li);
+    });
+  }
+
+  function addTurno(event) {
+    event.preventDefault();
+    const input = document.getElementById('input-turno');
+    const val = input.value.trim().toUpperCase();
+    
+    if(!db.turnos) db.turnos = [];
+    if (db.turnos.includes(val)) {
+      showToast('El turno ya existe', 'warning');
+      return;
+    }
+    
+    db.turnos.push(val);
+    input.value = "";
+    persistDatabase(`Turno ${val} agregado`);
+  }
+
+  function deleteTurno(index) {
+    const val = db.turnos[index];
+    if (confirm(`¿Estás seguro de eliminar el turno "${val}"?`)) {
+      db.turnos.splice(index, 1);
+      persistDatabase(`Turno "${val}" eliminado`);
+    }
+  }
+
+  function renderNivelesList() {
+    const list = db.nivel_modalidad.niveles || [];
+    const ul = document.getElementById('list-niveles');
+    ul.innerHTML = '';
+    
+    list.forEach((nivel, index) => {
+      const li = document.createElement('li');
+      li.className = 'settings-list-item';
+      li.innerHTML = `
+        <strong>${nivel}</strong>
+        <button class="btn-icon btn-icon-delete" onclick="deleteNivel(${index})"><i class="fa-solid fa-trash"></i></button>
+      `;
+      ul.appendChild(li);
+    });
+  }
+
+  function addNivel(event) {
+    event.preventDefault();
+    const input = document.getElementById('input-nivel');
+    const val = input.value.trim().toUpperCase();
+    
+    if(!db.nivel_modalidad.niveles) db.nivel_modalidad.niveles = [];
+    if (db.nivel_modalidad.niveles.includes(val)) {
+      showToast('El nivel ya existe', 'warning');
+      return;
+    }
+    
+    db.nivel_modalidad.niveles.push(val);
+    input.value = "";
+    persistDatabase(`Nivel ${val} agregado`);
+  }
+
+  function deleteNivel(index) {
+    const val = db.nivel_modalidad.niveles[index];
+    if (confirm(`¿Estás seguro de eliminar el nivel "${val}"?`)) {
+      db.nivel_modalidad.niveles.splice(index, 1);
+      persistDatabase(`Nivel "${val}" eliminado`);
+    }
+  }
+
+  function renderModalidadesList() {
+    const list = db.nivel_modalidad.modalidades || [];
+    const ul = document.getElementById('list-modalidades');
+    ul.innerHTML = '';
+    
+    list.forEach((modalidad, index) => {
+      const li = document.createElement('li');
+      li.className = 'settings-list-item';
+      li.innerHTML = `
+        <strong>${modalidad}</strong>
+        <button class="btn-icon btn-icon-delete" onclick="deleteModalidad(${index})"><i class="fa-solid fa-trash"></i></button>
+      `;
+      ul.appendChild(li);
+    });
+  }
+
+  function addModalidad(event) {
+    event.preventDefault();
+    const input = document.getElementById('input-modalidad');
+    const val = input.value.trim().toUpperCase();
+    
+    if(!db.nivel_modalidad.modalidades) db.nivel_modalidad.modalidades = [];
+    if (db.nivel_modalidad.modalidades.includes(val)) {
+      showToast('La modalidad ya existe', 'warning');
+      return;
+    }
+    
+    db.nivel_modalidad.modalidades.push(val);
+    input.value = "";
+    persistDatabase(`Modalidad ${val} agregada`);
+  }
+
+  function deleteModalidad(index) {
+    const val = db.nivel_modalidad.modalidades[index];
+    if (confirm(`¿Estás seguro de eliminar la modalidad "${val}"?`)) {
+      db.nivel_modalidad.modalidades.splice(index, 1);
+      persistDatabase(`Modalidad "${val}" eliminada`);
+    }
+  }
+
+  function renderPlanesTable(filterText = "") {
+    const list = db.planes_estudio || [];
+    const tbody = document.getElementById('table-body-planes');
+    tbody.innerHTML = '';
+    
+    list.forEach((plan, index) => {
+      const matchesCode = String(plan.codigo).includes(filterText);
+      const matchesEsp = (plan.especialidad || '').toLowerCase().includes(filterText);
+      const matchesMen = (plan.mencion || '').toLowerCase().includes(filterText);
+      
+      if (filterText && !matchesCode && !matchesEsp && !matchesMen) return;
+      
+      // Contar asignaturas totales sumando todos los grados
+      const grados = plan.grados || [];
+      const totalAsigs = grados.reduce((sum, g) => sum + (g.asignaturas || []).length, 0);
+      const numAnios = plan.numAnios || grados.length || '?';
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>${plan.codigo}</strong></td>
+        <td>${plan.especialidad}</td>
+        <td>${plan.mencion}</td>
+        <td><span class="badge" style="background-color: rgba(16, 185, 129, 0.1); color: var(--success); padding: 2px 8px; border-radius: 20px; font-size: 11px;">${numAnios} años / ${totalAsigs} asig.</span></td>
+        <td>
+          <div class="actions-cell">
+            <button class="btn-icon btn-icon-edit" onclick="openEditPlanModal(${index})"><i class="fa-solid fa-pen"></i></button>
+            <button class="btn-icon btn-icon-delete" onclick="deletePlan(${index})"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function filterPlanes() {
+    const text = document.getElementById('search-plan').value.toLowerCase();
+    renderPlanesTable(text);
+  }
+
+  /**
+   * Dibuja (o redibuja) los bloques de año dentro del modal de plan.
+   * Preserva los datos ya ingresados si el usuario cambia numAnios a un valor mayor.
+   * @param {Array} gradosExistentes - Array de grados del plan existente (modo edición).
+   */
+  function renderPlanGrados(gradosExistentes) {
+    const numAnios = parseInt(document.getElementById('input-plan-numanios').value) || 5;
+    const container = document.getElementById('plan-grados-container');
+    container.innerHTML = '';
+
+    const LABELS = ['1ER AÑO','2DO AÑO','3ER AÑO','4TO AÑO','5TO AÑO','6TO AÑO'];
+
+    for (let i = 0; i < numAnios; i++) {  
+      const anioNum = i + 1;
+      const label = LABELS[i] || (anioNum + 'TO AÑO');
+      const asigExistentes = (gradosExistentes && gradosExistentes[i]) ? (gradosExistentes[i].asignaturas || []) : [];
+
+      const block = document.createElement('div');
+      block.className = 'plan-grado-block';
+      block.dataset.anio = anioNum;
+      block.innerHTML = `
+        <div class="plan-grado-header">
+          <span class="plan-grado-label"><i class="fa-solid fa-calendar-days"></i> ${label}</span>
+          <button type="button" class="btn-add-item-list" onclick="addAsigToAnio(${anioNum})">
+            <i class="fa-solid fa-plus"></i> Agregar Asignatura
+          </button>
+        </div>
+        <div class="plan-grado-asigs" id="asigs-anio-${anioNum}">
+          <!-- filas de asignaturas -->
+        </div>
+      `;
+      container.appendChild(block);
+
+      // Precargar asignaturas existentes
+      asigExistentes.forEach(a => {
+        addAsigToAnio(anioNum, a.nombre || '', a.horas || 0);
+      });
+
+      // Si no hay asignaturas, poner una fila vacía para guiar al usuario
+      if (asigExistentes.length === 0) {
+        addAsigToAnio(anioNum);
+      }
+    }
+  }
+
+  /**
+   * Agrega una fila de asignatura (nombre + horas) al bloque del año indicado.
+   */
+  function addAsigToAnio(anioNum, nombre = '', horas = '') {
+    const container = document.getElementById('asigs-anio-' + anioNum);
+    if (!container) return;
+    const row = document.createElement('div');
+    row.className = 'list-editor-row plan-asig-row';
+    row.innerHTML = `
+      <input type="text" class="input-asig-nombre" value="${nombre}" placeholder="Nombre de la asignatura" style="flex:2;">
+      <input type="number" class="input-asig-horas" value="${horas}" placeholder="Horas" min="0" max="40" style="flex:0.6;min-width:70px;">
+      <button type="button" class="btn-remove-row" onclick="removeRow(this)"><i class="fa-solid fa-trash-can"></i></button>
+    `;
+    container.appendChild(row);
+  }
+
+  function openAddPlanModal() {
+    document.getElementById('modal-plan-title').innerText = 'Nuevo Plan de Estudio';
+    document.getElementById('plan-index').value = "-1";
+    document.getElementById('input-plan-codigo').value = "";
+    document.getElementById('input-plan-codigo').disabled = false;
+    document.getElementById('input-plan-especialidad').value = "";
+    document.getElementById('input-plan-mencion').value = "";
+    document.getElementById('input-plan-numanios').value = "5";
+    renderPlanGrados();
+    openModal('modal-plan');
+  }
+
+  function openEditPlanModal(index) {
+    const plan = db.planes_estudio[index];
+    document.getElementById('modal-plan-title').innerText = 'Editar Plan de Estudio';
+    document.getElementById('plan-index').value = index;
+    document.getElementById('input-plan-codigo').value = plan.codigo;
+    document.getElementById('input-plan-codigo').disabled = true;
+    document.getElementById('input-plan-especialidad').value = plan.especialidad;
+    document.getElementById('input-plan-mencion').value = plan.mencion;
+    
+    const numAnios = plan.numAnios || (plan.grados && plan.grados.length) || 5;
+    document.getElementById('input-plan-numanios').value = String(numAnios);
+
+    // Renderiza los grados precargando las asignaturas existentes
+    renderPlanGrados(plan.grados || []);
+    openModal('modal-plan');
+  }
+
+  function savePlan(event) {
+    event.preventDefault();
+    const index = parseInt(document.getElementById('plan-index').value);
+    const codigo = parseInt(document.getElementById('input-plan-codigo').value);
+    const especialidad = document.getElementById('input-plan-especialidad').value.trim().toUpperCase();
+    const mencion = document.getElementById('input-plan-mencion').value.trim().toUpperCase();
+    const numAnios = parseInt(document.getElementById('input-plan-numanios').value) || 5;
+
+    const LABELS = ['1ER AÑO','2DO AÑO','3ER AÑO','4TO AÑO','5TO AÑO','6TO AÑO'];
+    const todasAsignaturas = new Set(); // lista plana sin repetidos
+    const grados = [];
+
+    for (let i = 0; i < numAnios; i++) {
+      const anioNum = i + 1;
+      const label = LABELS[i] || (anioNum + 'TO AÑO');
+      const container = document.getElementById('asigs-anio-' + anioNum);
+      const asignaturas = [];
+
+      if (container) {
+        const rows = container.querySelectorAll('.plan-asig-row');
+        rows.forEach(row => {
+          const nombre = row.querySelector('.input-asig-nombre').value.trim().toUpperCase();
+          const horas = parseInt(row.querySelector('.input-asig-horas').value) || 0;
+          if (nombre) {
+            asignaturas.push({ nombre, horas });
+            todasAsignaturas.add(nombre);
+          }
+        });
+      }
+
+      grados.push({ anio: anioNum, label, asignaturas });
+    }
+
+    const planData = {
+      codigo,
+      especialidad,
+      mencion,
+      numAnios,
+      asignaturas: Array.from(todasAsignaturas), // lista plana para compatibilidad
+      grados                                       // estructura completa requerida por sgh_gas
+    };
+
+    if (!db.planes_estudio) db.planes_estudio = [];
+
+    if (index === -1) {
+      const duplicate = db.planes_estudio.some(p => p.codigo === codigo);
+      if (duplicate) {
+        showToast(`El código de plan ${codigo} ya existe`, 'warning');
+        return;
+      }
+      db.planes_estudio.push(planData);
+      persistDatabase(`Plan de estudio ${codigo} registrado`);
+    } else {
+      db.planes_estudio[index] = planData;
+      persistDatabase(`Plan de estudio ${codigo} actualizado`);
+    }
+    closeModal('modal-plan');
+  }
+
+  function deletePlan(index) {
+    const plan = db.planes_estudio[index];
+    if (confirm(`¿Eliminar el plan de estudio ${plan.codigo}?`)) {
+      db.planes_estudio.splice(index, 1);
+      persistDatabase(`Plan de estudio ${plan.codigo} eliminado`);
+    }
+  }
+
+  function renderEstatusCards(filterText = '') {
+    const list = db.estatus || [];
+    const container = document.getElementById('estatus-cards-container');
+    container.innerHTML = '';
+
+    list.forEach((item, index) => {
+      const matchesSit = item.situacion_laboral.toLowerCase().includes(filterText);
+      const matchesDesc = item.descripcion.toLowerCase().includes(filterText);
+      if (filterText && !matchesSit && !matchesDesc) return;
+
+      const card = document.createElement('div');
+      card.className = 'estatus-card';
+      card.innerHTML = `
+        <div class="estatus-card-header">
+          <span class="estatus-card-title">${item.situacion_laboral}</span>
+          <div class="actions-cell">
+            <button class="btn-icon btn-icon-edit" onclick="openEditEstatusModal(${index})"><i class="fa-solid fa-pen"></i></button>
+            <button class="btn-icon btn-icon-delete" onclick="deleteEstatus(${index})"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </div>
+        <p class="estatus-card-desc">${item.descripcion}</p>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  function filterEstatus() {
+    const text = document.getElementById('search-estatus').value.toLowerCase();
+    renderEstatusCards(text);
+  }
+
+  function openAddEstatusModal() {
+    document.getElementById('modal-estatus-title').innerText = 'Agregar Situación Laboral';
+    document.getElementById('estatus-index').value = '-1';
+    document.getElementById('input-estatus-situacion').value = '';
+    document.getElementById('input-estatus-descripcion').value = '';
+    openModal('modal-estatus');
+  }
+
+  function openEditEstatusModal(index) {
+    const item = db.estatus[index];
+    document.getElementById('modal-estatus-title').innerText = 'Editar Situación Laboral';
+    document.getElementById('estatus-index').value = index;
+    document.getElementById('input-estatus-situacion').value = item.situacion_laboral;
+    document.getElementById('input-estatus-descripcion').value = item.descripcion;
+    openModal('modal-estatus');
+  }
+
+  function saveEstatus(event) {
+    event.preventDefault();
+    const index = parseInt(document.getElementById('estatus-index').value);
+    const situacion_laboral = document.getElementById('input-estatus-situacion').value.trim().toUpperCase();
+    const descripcion = document.getElementById('input-estatus-descripcion').value.trim();
+
+    if(!db.estatus) db.estatus = [];
+
+    if (index === -1) {
+      const duplicate = db.estatus.some(e => e.situacion_laboral === situacion_laboral);
+      if (duplicate) {
+        showToast(`La situación "${situacion_laboral}" ya existe`, 'warning');
+        return;
+      }
+      db.estatus.push({ situacion_laboral, descripcion });
+      persistDatabase(`Situación "${situacion_laboral}" agregada`);
+    } else {
+      db.estatus[index] = { situacion_laboral, descripcion };
+      persistDatabase(`Situación "${situacion_laboral}" actualizada`);
+    }
+    closeModal('modal-estatus');
+  }
+
+  function deleteEstatus(index) {
+    const item = db.estatus[index];
+    if (confirm(`¿Eliminar la situación laboral "${item.situacion_laboral}"?`)) {
+      db.estatus.splice(index, 1);
+      persistDatabase(`Situación "${item.situacion_laboral}" eliminada`);
+    }
+  }
+
+  function openModal(modalId) { document.getElementById(modalId).classList.add('active'); }
+  function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); }
+</script>

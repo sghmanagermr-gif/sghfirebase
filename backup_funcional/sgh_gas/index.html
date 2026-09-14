@@ -1,0 +1,3688 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Sistema de Gestión Humana — Plataforma institucional de administración de personal." />
+  <title>
+    <?= appNombre ?> · v
+    <?= appVersion ?>
+  </title>
+
+  <!-- Google Fonts: Roboto (tipografía institucional MPPE) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+
+  <?!= HtmlService.createHtmlOutputFromFile('estilos').getContent(); ?>
+</head>
+
+<body>
+
+  <!-- ===================================================================
+       SPINNER GLOBAL DE BLOQUEO (Oculto por defecto)
+       =================================================================== -->
+  <div id="global-spinner-overlay" aria-hidden="true">
+    <div class="global-spinner-icon"></div>
+    <div class="spinner-text">Guardando información...</div>
+  </div>
+
+  <!-- ===================================================================
+       OVERLAY DE CARGA INICIAL (se oculta cuando el DOM está listo)
+       =================================================================== -->
+  <div id="overlay-carga" role="status" aria-label="Cargando aplicación">
+    <div class="carga-logo"></div>
+    <p class="carga-texto">Iniciando
+      <?= appNombre ?>.
+    </p>
+  </div>
+
+  <!-- MODAL DECLARACIÓN JURADA -->
+  <div id="modal-declaracion" class="modal-overlay" aria-hidden="true" style="background: rgba(0, 0, 0, 0.75);">
+    <div class="modal-container" role="dialog" aria-labelledby="modal-dj-titulo" style="background: white; max-width: 700px; width: 90%; max-height: 90vh; overflow-y: auto;">
+      <div class="modal-header" style="background: var(--color-primary); color: white; padding: 20px;">
+        <h3 id="modal-dj-titulo" style="margin: 0; font-size: 1.25rem; font-weight: 700; line-height: 1.4; text-align: center;">DECLARACIÓN JURADA DE VERACIDAD, CONTROL FISCAL Y SOLVENCIA INTEGRAL DEL PLANTEL</h3>
+      </div>
+      <div class="modal-body" style="padding: 24px; font-size: 0.95rem; line-height: 1.6; color: #333; text-align: justify;">
+        <p style="margin-bottom: 16px;">
+          La información suministrada por el director mediante la Matriz de Organización Escolar (MOE) y el Registro de Actualización de Cargos (RAC) en este sistema digital posee carácter de declaración jurada. Al pulsar "ACEPTO", la máxima autoridad escolar valida la carga del talento humano y, de forma complementaria, certifica la solvencia del Inventario de Bienes Públicos como soporte material que garantiza la viabilidad de dicha organización, sometiéndose a la legislación vigente:
+        </p>
+        
+        <p style="margin-bottom: 12px;"><strong>Del control del personal (RAC y cuadratura):</strong> Con base en la Ley Orgánica de la Contraloría General de la República (Arts. 91 y 92), avalar "horas fantasma" en jornadas de 53 o 40 horas, o encubrir abandonos de cargo, genera responsabilidad administrativa, civil y reparos financieros institucionales inmediatos.</p>
+        
+        <p style="margin-bottom: 12px;"><strong>De la complementariedad de los bienes públicos:</strong> Como soporte físico de la planificación pedagógica, el inventario actualizado (conforme a las normas de la SUDEBIP) es obligatorio para la validez del RAC. Su omisión, ocultamiento o desvío tipifica los delitos de peculado doloso y malversación, de acuerdo con el artículo 58 de la Ley Contra la Corrupción.</p>
+        
+        <p style="margin-bottom: 12px;"><strong>De la validez digital e infogobierno:</strong> Conforme a los artículos 18, 80 y 81 de la Ley de Infogobierno y la Ley de Mensajes de Datos y Firmas Electrónicas, la aceptación electrónica equivale a una firma autógrafa. Suministrar información falsa acarrea multas automatizadas, destitución e inhabilitación.</p>
+        
+        <p style="margin-bottom: 16px;"><strong>De la optimización, celeridad y buena fe:</strong> Conforme a la Ley Orgánica para la Celeridad y Optimización de Trámites Administrativos (Gaceta Oficial N° 7.018 Extraordinario, 2026), el trámite automatizado se rige por la presunción de buena fe y el derecho a la subsanación. No obstante, el artículo 11 penaliza la dilación injustificada y el fraude en el intercambio de información. La falsedad intencional destruye la buena fe, paraliza los movimientos de nómina y activa de oficio la remisión penal ante el Ministerio Público.</p>
+        
+        <div style="background: #fff3cd; color: #856404; padding: 12px; border-left: 4px solid #ffeeba; border-radius: 4px; font-weight: 600;">
+          El director certifica la existencia real de la fuerza laboral y del patrimonio material de la institución. Las llamadas "costumbres administrativas" no lo eximen de responsabilidad.
+        </div>
+      </div>
+      <div class="modal-footer" style="padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
+        <button id="btn-aceptar-declaracion" class="btn btn-primario" style="width: 100%; max-width: 300px; padding: 12px; font-size: 1.1rem; font-weight: bold;">ACEPTO Y CERTIFICO</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL CAMBIO DE CLAVE -->
+  <div id="modal-cambio-clave" class="modal-overlay" aria-hidden="true">
+    <div class="modal-container" role="dialog" aria-labelledby="modal-cc-titulo">
+      <div class="modal-header">
+        <h3 id="modal-cc-titulo">Cambiar Contraseña</h3>
+        <button id="btn-cerrar-modal-cc" class="btn-cerrar-modal" aria-label="Cerrar">&times;</button>
+      </div>
+      <form id="form-cambio-clave">
+        <div class="modal-body" style="display:flex; flex-direction:column; gap:1rem;">
+          <div class="form-campo">
+            <label for="inp-cc-actual" class="form-label">Contraseña Actual <span class="requerido">*</span></label>
+            <input type="password" id="inp-cc-actual" class="form-input" required>
+          </div>
+          <div class="form-campo">
+            <label for="inp-cc-nueva" class="form-label">Nueva Contraseña <span class="requerido">*</span></label>
+            <input type="password" id="inp-cc-nueva" class="form-input" required>
+          </div>
+          <div class="form-campo">
+            <label for="inp-cc-confirmar" class="form-label">Confirmar Nueva Contraseña <span
+                class="requerido">*</span></label>
+            <input type="password" id="inp-cc-confirmar" class="form-input" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="btn-cancelar-cc" class="btn-secundario">Cancelar</button>
+          <button type="submit" id="btn-guardar-cc" class="btn-primario">
+            <span id="btn-guardar-cc-texto">Guardar Cambios</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL CUADRATURA DE MATRÍCULA/HORAS -->
+  <div id="modal-cuadratura" class="modal-overlay" aria-hidden="true" style="z-index:12000;">
+    <div class="modal-container" role="dialog" aria-labelledby="modal-cuad-titulo"
+      style="max-width:700px; max-height:85vh; overflow-y:auto;">
+      <div class="modal-header">
+        <h3 id="modal-cuad-titulo">📊 Cuadratura de Matrícula / Horas</h3>
+        <button id="btn-cerrar-modal-cuad" class="btn-cerrar-modal" aria-label="Cerrar">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="cuad-descripcion" style="color:#6b7280; font-size:0.9rem; margin-bottom:1rem;"></p>
+        <div id="cuad-contenido"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="btn-cancelar-cuad" class="btn-secundario">Cancelar</button>
+        <button type="button" id="btn-confirmar-cuad" class="btn-primario">✔ Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL CONFIRMAR ELIMINAR -->
+  <div id="modal-confirmar-eliminar" class="modal-overlay" aria-hidden="true" style="z-index:13000;">
+    <div class="modal-container" role="alertdialog" aria-labelledby="modal-eliminar-titulo" style="max-width: 450px;">
+      <div class="modal-header">
+        <h3 id="modal-eliminar-titulo" style="color: #dc2626; display: flex; align-items: center; gap: 0.5rem;">
+          <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          Confirmar Eliminación
+        </h3>
+        <button id="btn-cerrar-modal-eliminar" class="btn-cerrar-modal" aria-label="Cerrar">&times;</button>
+      </div>
+      <div class="modal-body" style="text-align: center; padding: 1.5rem 1.5rem 0.5rem 1.5rem;">
+        <p style="font-size: 1.05rem; color: #374151; font-weight: 500;">¿Está seguro de que desea eliminar este registro?</p>
+        <p id="modal-eliminar-texto" style="font-size: 0.95rem; color: #4b5563; margin-top: 0.75rem; background: #f3f4f6; padding: 0.75rem; border-radius: 0.375rem; font-family: monospace; letter-spacing: 1px;"></p>
+        <p style="font-size: 0.85rem; color: #dc2626; margin-top: 1rem; font-weight: 500;">Esta acción removerá al empleado de la nómina activa y lo trasladará al histórico.</p>
+      </div>
+      <div class="modal-footer" style="justify-content: center; gap: 1rem; border-top: none; padding-bottom: 1.5rem;">
+        <button type="button" id="btn-cancelar-eliminar" class="btn-secundario">Cancelar</button>
+        <button type="button" id="btn-confirmar-eliminar" class="btn-primario" style="background: linear-gradient(135deg, #ef4444, #dc2626); border-color: #dc2626; box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3);">Eliminar Registro</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================
+       VISTA 1: LOGIN
+       Regla de Oro 1: Solo captura credenciales y dispara la llamada.
+       No realiza ningún procesamiento de autenticación.
+       =================================================================== -->
+  <section id="vista-login" aria-label="Pantalla de inicio de sesión">
+
+    <div class="login-fondo" aria-hidden="true">
+      <div class="login-grid"></div>
+      <div class="orbe orbe-1"></div>
+      <div class="orbe orbe-2"></div>
+      <div class="orbe orbe-3"></div>
+    </div>
+
+    <div class="login-card" role="main">
+
+      <!-- Marca -->
+      <div class="login-logo">
+        <div class="login-logo-icono" aria-hidden="true"></div>
+        <div class="login-logo-texto">
+          <div class="login-logo-nombre">
+            <?= appNombre ?>
+          </div>
+          <div class="login-logo-version">Versión
+            <?= appVersion ?>
+          </div>
+        </div>
+      </div>
+
+      <h1 class="login-titulo">Bienvenido</h1>
+      <p class="login-subtitulo">Ingrese sus credenciales institucionales para continuar.</p>
+
+      <!-- Formulario de login -->
+      <form id="form-login" novalidate autocomplete="off">
+
+        <!-- Campo: Usuario/Cédula -->
+        <div class="campo-grupo">
+          <label for="login-usuario" class="campo-label">Código plantel</label>
+          <div class="campo-wrapper">
+            <span class="campo-icono" aria-hidden="true">👤</span>
+            <input id="login-usuario" name="usuario" type="text" class="campo-input" placeholder="Ej. OD12345678"
+              autocomplete="username" required aria-required="true" aria-describedby="login-mensaje" />
+          </div>
+        </div>
+
+        <!-- Campo: Contraseña -->
+        <div class="campo-grupo">
+          <label for="login-clave" class="campo-label">Contraseña</label>
+          <div class="campo-wrapper">
+            <span class="campo-icono" aria-hidden="true">🔑</span>
+            <input id="login-clave" name="clave" type="password" class="campo-input" placeholder="••••••••"
+              autocomplete="current-password" required aria-required="true" aria-describedby="login-mensaje" />
+            <button type="button" id="btn-toggle-pwd" class="btn-toggle-pwd" aria-label="Mostrar u ocultar contraseña"
+              title="Mostrar/Ocultar contraseña"></button>
+          </div>
+        </div>
+
+        <!-- Botón de ingreso -->
+        <button type="submit" id="btn-login" class="btn-primario">
+          <span id="btn-login-texto">Ingresar al Sistema</span>
+        </button>
+
+      </form><!-- /#form-login -->
+
+      <!-- rea de mensajes de estado -->
+      <div id="login-mensaje" role="alert" aria-live="polite"></div>
+
+    </div><!-- /.login-card -->
+
+  </section><!-- /#vista-login -->
+
+  <!-- ===================================================================
+       VISTA 1.5: PASO 1 — INFORMACIÓN DEL PLANTEL Y MATRÍCULA
+       =================================================================== -->
+  <section id="vista-matricula" class="oculto" aria-label="Información del Plantel y Matrícula">
+    <div class="app-header">
+      <div class="header-marca">
+        <div class="header-marca-icono" aria-hidden="true"></div>
+        <div>
+          <div class="header-marca-nombre">Paso 1: Información del Plantel</div>
+          <div class="header-marca-plantel">Verifique y complete la matrícula institucional</div>
+        </div>
+      </div>
+      <div class="header-perfil">
+        <button id="btn-ir-personal" class="btn-secundario"
+          style="padding:0.35rem 0.75rem; font-size:0.875rem; margin-right: 0.5rem;" title="Ir a Registro de Personal">
+          👥 <span class="txt-btn">Ir a Personal</span>
+        </button>
+        <button id="btn-cambiar-clave-matricula" class="btn-secundario"
+          style="padding:0.35rem 0.75rem; font-size:0.875rem; margin-right: 0.5rem;" title="Cambiar Contraseña">
+          🔑 <span class="txt-btn">Cambiar Clave</span>
+        </button>
+        <button id="btn-cerrar-sesion-matricula" class="btn-cerrar-sesion" title="Cerrar sesión">
+          🚪 <span class="txt-btn">Salir</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="app-contenido" style="max-width: 900px; margin: 0 auto; width: 100%;">
+
+      <!-- Bloque de Información Fija (Read-only) -->
+      <div class="plantel-resumen">
+        <div class="resumen-item">
+          <span class="resumen-label">Estado</span>
+          <span class="resumen-valor" id="lbl-estado">--</span>
+        </div>
+        <div class="resumen-item">
+          <span class="resumen-label">Municipio</span>
+          <span class="resumen-valor" id="lbl-municipio">--</span>
+        </div>
+        <div class="resumen-item">
+          <span class="resumen-label">Código DEA</span>
+          <span class="resumen-valor" id="lbl-dea">--</span>
+        </div>
+        <div class="resumen-item" style="grid-column: 1 / -1;">
+          <span class="resumen-label">Nombre del Plantel</span>
+          <span class="resumen-valor" id="lbl-nombre-plantel">--</span>
+        </div>
+      </div>
+
+      <form id="form-matricula" novalidate autocomplete="off">
+
+        <!-- MATRICULA INICIAL -->
+        <div id="bloque-inicial" class="matricula-seccion oculto">
+          <div class="matricula-header">
+            <span style="font-size: 1.5rem">👶</span>
+            <h3>Educación Inicial</h3>
+          </div>
+          
+          <h4 style="margin-top: 1rem; margin-bottom: 0.5rem; color: #4b5563; font-size: 1.05rem;">Maternal</h4>
+          <div class="matricula-grid">
+            <div class="matricula-item">
+              <label>Maternal Fem</label>
+              <input type="number" id="matFem" min="0">
+            </div>
+            <div class="matricula-item">
+              <label>Maternal Mas</label>
+              <input type="number" id="matMas" min="0">
+            </div>
+            <div class="matricula-item">
+              <label>Maternal Sec</label>
+              <input type="number" id="secMat" min="0">
+            </div>
+          </div>
+
+          <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: #4b5563; font-size: 1.05rem;">Preescolar</h4>
+          <div class="matricula-grid">
+            <div class="matricula-item">
+              <label>Preescolar Fem</label>
+              <input type="number" id="preFem" min="0">
+            </div>
+            <div class="matricula-item">
+              <label>Preescolar Mas</label>
+              <input type="number" id="preMas" min="0">
+            </div>
+            <div class="matricula-item">
+              <label>Preescolar Sec</label>
+              <input type="number" id="secPre" min="0">
+            </div>
+          </div>
+
+          <!-- Totales auto-calculados -->
+          <div class="matricula-grid" style="margin-top: 1.5rem; border-top: 1px dashed #e5e7eb; padding-top: 1rem;">
+            <div class="matricula-item">
+              <label style="color:var(--color-primary); font-weight: bold;">Total Inicial</label>
+              <input type="number" id="iniTot" readonly>
+            </div>
+          </div>
+        </div>
+
+        <!-- MATRICULA PRIMARIA -->
+        <div id="bloque-primaria" class="matricula-seccion oculto">
+          <div class="matricula-header">
+            <span style="font-size: 1.5rem">🎒</span>
+            <h3>Educación Primaria</h3>
+          </div>
+          <div class="matricula-grid">
+            <div class="matricula-item">
+              <label>Femenino</label>
+              <input type="number" id="priFem" min="0">
+            </div>
+            <div class="matricula-item">
+              <label>Masculino</label>
+              <input type="number" id="priMas" min="0">
+            </div>
+            <div class="matricula-item">
+              <label>Secciones</label>
+              <input type="number" id="secPri" min="0">
+            </div>
+            <div class="matricula-item">
+              <label style="color:var(--color-primary)">Total Primaria</label>
+              <input type="number" id="priTot" readonly>
+            </div>
+          </div>
+        </div>
+
+        <!-- MATRICULA MEDIA GENERAL -->
+        <div id="bloque-mediageneral" class="matricula-seccion oculto">
+          <div class="matricula-header">
+            <span style="font-size: 1.5rem">📚</span>
+            <h3>Media General</h3>
+          </div>
+          <div class="matricula-grid">
+            <div class="matricula-item">
+              <label>Femenino</label>
+              <input type="number" id="mgFem" min="0">
+            </div>
+            <div class="matricula-item">
+              <label>Masculino</label>
+              <input type="number" id="mgMas" min="0">
+            </div>
+            <div class="matricula-item">
+              <label style="color:var(--color-primary)">Total Media Gen.</label>
+              <input type="number" id="mgTot" readonly>
+            </div>
+          </div>
+        </div>
+
+        <!-- MATRICULA MEDIA TECNICA -->
+        <div id="bloque-mediatecnica" class="matricula-seccion oculto">
+          <div class="matricula-header">
+            <span style="font-size: 1.5rem">⚙️</span>
+            <h3>Media Técnica</h3>
+          </div>
+          <div class="matricula-grid">
+            <div class="matricula-item">
+              <label>Femenino</label>
+              <input type="number" id="mtFem" min="0">
+            </div>
+            <div class="matricula-item">
+              <label>Masculino</label>
+              <input type="number" id="mtMas" min="0">
+            </div>
+            <div class="matricula-item">
+              <label style="color:var(--color-primary)">Total Media Téc.</label>
+              <input type="number" id="mtTot" readonly>
+            </div>
+          </div>
+        </div>
+
+        <!-- DETALLE SECCIONES POR AÑO (DINÁMICO) -->
+        <div id="cont-secciones-detalle" class="matricula-seccion oculto">
+          <div id="cont-secciones-dinamicas"></div>
+          <div id="cont-secciones-totales" class="matricula-grid" style="margin-top: 1.5rem; border-top: 1px dashed #e5e7eb; padding-top: 1rem;">
+            <div class="matricula-item" id="item-sec-mg">
+              <label style="color:var(--color-primary); font-weight: bold;">Total Secc. Media Gen.</label>
+              <input type="number" id="secMg" min="0" readonly style="background:#f0f0f0;" title="Se calcula automáticamente del detalle por año">
+            </div>
+            <div class="matricula-item" id="item-sec-mt">
+              <label style="color:var(--color-primary); font-weight: bold;">Total Secc. Media Téc.</label>
+              <input type="number" id="secMt" min="0" readonly style="background:#f0f0f0;" title="Se calcula automáticamente del detalle por año">
+            </div>
+          </div>
+        </div>
+
+        <!-- VACANTES -->
+        <div id="cont-vacantes-resumen" style="display:none; margin-bottom:1rem; background:#fef3c7; border:1px solid #f59e0b; border-radius:10px; padding:0.85rem 1.1rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <span style="font-size:0.85rem; font-weight:700; color:#92400e;">⚠️ SECCIONES VACANTES REGISTRADAS</span>
+              <p id="vacantes-resumen-texto" style="margin:0.25rem 0 0; font-size:0.8rem; color:#78350f;"></p>
+            </div>
+            <button type="button" onclick="window.onAbrirVacantes()" class="btn-secundario" style="padding:0.3rem 0.7rem; font-size:0.8rem; white-space:nowrap; margin-left:1rem;">✏️ Editar</button>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; margin-top: 1.5rem; flex-wrap:wrap;">
+          <button type="button" id="btn-abrir-vacantes" onclick="window.onAbrirVacantes()"
+            class="btn-secundario" style="flex:1; min-width:200px; padding:0.85rem; font-size:0.95rem;">
+            ⚠️ Registrar Vacantes
+          </button>
+          <button type="submit" id="btn-guardar-matricula" class="btn-primario"
+            style="flex:2; min-width:200px; padding: 1rem; font-size: 1.1rem;">
+            <span id="btn-guardar-matricula-texto">Guardar Datos y Continuar</span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </section>
+
+  <!-- MODAL VACANTES -->
+  <div id="modal-vacantes" role="dialog" aria-modal="true" aria-hidden="true"
+    style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:3000; align-items:center; justify-content:center; padding:1rem;">
+    <div style="background:#fff; border-radius:16px; max-width:700px; width:100%; max-height:90vh; overflow-y:auto; box-shadow:0 25px 60px rgba(0,0,0,0.3);">
+      <div style="background:linear-gradient(135deg,#b45309,#d97706); padding:1.25rem 1.5rem; border-radius:16px 16px 0 0; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <h3 style="margin:0; color:#fff; font-size:1.1rem; font-weight:700;">⚠️ Secciones Vacantes</h3>
+          <p style="margin:0.25rem 0 0; color:rgba(255,255,255,0.85); font-size:0.82rem;">Ingrese la matrícula de las secciones sin docente asignado</p>
+        </div>
+        <button id="btn-cerrar-modal-vacantes" type="button"
+          style="background:rgba(255,255,255,0.2); border:none; color:#fff; font-size:1.4rem; cursor:pointer; border-radius:8px; width:36px; height:36px; display:flex; align-items:center; justify-content:center;">✕</button>
+      </div>
+      <div style="padding:1.5rem;">
+        <div id="vacantes-contenido"></div>
+        <div style="display:flex; justify-content:flex-end; gap:0.75rem; margin-top:1.5rem; border-top:1px solid #e5e7eb; padding-top:1rem;">
+          <button id="btn-cancelar-vacantes" type="button" class="btn-secundario">Cancelar</button>
+          <button id="btn-confirmar-vacantes" type="button" class="btn-primario" style="background:linear-gradient(135deg,#b45309,#d97706); border-color:#b45309;">Confirmar Vacantes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================
+       VISTA 2: PRINCIPAL — FORMULARIO DE CAPTURA DE DATOS
+       Se muestra tras autenticación exitosa.
+       Regla de Oro 1: Solo renderiza y captura. Sin lógica institucional.
+       =================================================================== -->
+  <div id="vista-principal" class="oculto" aria-label="Panel principal">
+
+    <!-- Header de la aplicación -->
+    <header class="app-header">
+      <div class="header-marca">
+        <div class="header-marca-icono" aria-hidden="true"></div>
+        <div>
+          <div class="header-marca-nombre">
+            <?= appNombre ?>
+          </div>
+          <div id="header-plantel" class="header-marca-plantel">Cargando plantel…</div>
+        </div>
+      </div>
+
+      <div class="header-perfil">
+        <div class="perfil-info" aria-live="polite">
+          <div id="perfil-nombre" class="perfil-nombre">—</div>
+          <div id="perfil-rol" class="perfil-rol">—</div>
+        </div>
+        <div id="perfil-avatar" class="perfil-avatar" aria-hidden="true">?</div>
+        <button id="btn-ir-plantel" class="btn-secundario"
+          style="padding:0.35rem 0.75rem; font-size:0.875rem; margin-right: 0.5rem;"
+          title="Volver a Información del Plantel">
+          🏫 <span class="txt-btn">Ir a Plantel</span>
+        </button>
+        <button id="btn-cambiar-clave" class="btn-secundario"
+          style="padding:0.35rem 0.75rem; font-size:0.875rem; margin-right: 0.5rem;" title="Cambiar Contraseña">
+          🔑 <span class="txt-btn">Cambiar Clave</span>
+        </button>
+        <button id="btn-cerrar-sesion" class="btn-cerrar-sesion" title="Cerrar sesión">
+          🚪 <span class="txt-btn">Salir</span>
+        </button>
+      </div>
+    </header><!-- /.app-header -->
+
+    <!-- Contenido principal -->
+    <main class="app-contenido">
+
+      <!-- ===============================================================
+           GESTIÓN DE PERSONAL (TABLA Y BUSCADOR)
+           =============================================================== -->
+      <div class="form-seccion" id="seccion-tabla-personal" style="margin-bottom: 2rem;">
+        <div class="seccion-encabezado"
+          style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <div class="seccion-icono" aria-hidden="true">👥</div>
+            <h3 class="seccion-titulo">Personal Registrado</h3>
+            <span class="seccion-subtitulo">Listado de empleados en el plantel actual</span>
+          </div>
+          <div>
+            <input type="text" id="inp-buscar-personal" class="form-input"
+              placeholder="🔍 Buscar cédula, nombre o tipo..." oninput="window.filtrarTablaPersonal()"
+              style="width: 250px;">
+          </div>
+        </div>
+        <div class="seccion-cuerpo" style="padding:0;">
+          <div style="overflow-x:auto;">
+            <table class="tabla-moderna" id="tabla-empleados" style="width:100%; border-collapse:collapse;">
+              <thead>
+                <tr style="background:#f9fafb; border-bottom:2px solid #e5e7eb;">
+                  <th style="padding:1rem; text-align:left; color:#4b5563;">Cédula</th>
+                  <th style="padding:1rem; text-align:left; color:#4b5563;">Nombre</th>
+                  <th style="padding:1rem; text-align:left; color:#4b5563;">Tipo Personal</th>
+                  <th style="padding:1rem; text-align:right; color:#4b5563;">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-empleados">
+                <tr>
+                  <td colspan="4" style="text-align:center; padding: 2rem; color:#6b7280;">Cargando empleados...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Encabezado del formulario -->
+      <div class="form-encabezado">
+        <h2 class="form-titulo" id="titulo-captura">Registro de Nuevo Personal</h2>
+        <p class="form-subtitulo">Complete todos los campos requeridos. Los catálogos se cargan automáticamente.</p>
+      </div>
+
+      <!-- Banner de estado de catálogos -->
+      <div id="banner-catalogos" role="status" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+        <span id="banner-catalogos-texto">Cargando catálogos del sistema…</span>
+      </div>
+
+      <!-- ===============================================================
+           FORMULARIO PRINCIPAL DE CAPTURA
+           =============================================================== -->
+      <form id="form-captura" novalidate>
+
+        <!-- CAMPO OCULTO PARA MODO EDICIÓN -->
+        <input type="hidden" id="inp-id-edicion" name="idEdicion" value="">
+
+
+        <!-- SECCIÓN 1: Datos Personales -->
+        <div class="form-seccion">
+          <div class="seccion-encabezado">
+            <div class="seccion-icono" aria-hidden="true">👤</div>
+            <h3 class="seccion-titulo">Datos Personales</h3>
+            <span class="seccion-subtitulo">Información de identificación, contacto y perfil profesional</span>
+          </div>
+          <div class="seccion-cuerpo">
+            <div class="form-grid">
+
+              <!-- B: CEDULA, C: NACIONALIDAD -->
+              <div class="form-campo">
+                <label for="inp-cedula" class="form-label">Cédula de Identidad <span class="requerido">*</span></label>
+                <div style="display:flex; gap:0.5rem">
+                  <select id="sel-nacionalidad" name="nacionalidad" class="form-select" style="width:80px;" required>
+                    <option value="V">V</option>
+                    <option value="E">E</option>
+                  </select>
+                  <input id="inp-cedula" name="cedula" type="text" class="form-input" placeholder="12345678"
+                    maxlength="10" required />
+                </div>
+              </div>
+
+              <!-- D: NOMBRE Y APELLIDO -->
+              <div class="form-campo">
+                <label for="inp-nombre-apellido" class="form-label">Nombre y Apellido <span
+                    class="requerido">*</span></label>
+                <input id="inp-nombre-apellido" name="nombreApellido" type="text" class="form-input"
+                  placeholder="Nombre completo" required />
+              </div>
+
+              <!-- E: LUGAR DE NACIMIENTO -->
+              <div class="form-campo">
+                <label for="inp-lugar-nacimiento" class="form-label">Lugar de Nacimiento</label>
+                <input id="inp-lugar-nacimiento" name="lugarNacimiento" type="text" class="form-input"
+                  placeholder="Ciudad, Estado..." />
+              </div>
+
+              <!-- F: FECHA DE NACIMIENTO, G: EDAD -->
+              <div class="form-campo">
+                <label for="inp-fecha-nacimiento" class="form-label">Fecha de Nacimiento <span
+                    class="requerido">*</span></label>
+                <div style="display:flex; gap:0.5rem">
+                  <input id="inp-fecha-nacimiento" name="fechaNacimiento" type="date" class="form-input" required
+                    style="flex:1" onchange="calcularEdad()" />
+                  <input id="inp-edad" name="edad" type="number" class="form-input" placeholder="Edad" readonly
+                    style="width:80px; background:#f0f0f0;" />
+                </div>
+              </div>
+
+              <!-- H: GENERO -->
+              <div class="form-campo">
+                <label for="sel-genero" class="form-label">Género <span class="requerido">*</span></label>
+                <select id="sel-genero" name="genero" class="form-select" required>
+                  <option value="">— Seleccione —</option>
+                  <option value="FEMENINO">Femenino</option>
+                  <option value="MASCULINO">Masculino</option>
+                </select>
+              </div>
+
+              <!-- I: TELEFONO HABITACION, J: TELEFONO CELULAR, K: TELEFONO OFICINA -->
+              <div class="form-campo">
+                <label for="inp-tel-habitacion" class="form-label">Teléfono Habitación</label>
+                <input id="inp-tel-habitacion" name="telHabitacion" type="tel" class="form-input"
+                  placeholder="02xx-xxxxxxx" />
+              </div>
+              <div class="form-campo">
+                <label for="inp-tel-celular" class="form-label">Teléfono Celular <span
+                    class="requerido">*</span></label>
+                <input id="inp-tel-celular" name="telCelular" type="tel" class="form-input" placeholder="04xx-xxxxxxx"
+                  required />
+              </div>
+              <div class="form-campo">
+                <label for="inp-tel-oficina" class="form-label">Teléfono Oficina</label>
+                <input id="inp-tel-oficina" name="telOficina" type="tel" class="form-input"
+                  placeholder="02xx-xxxxxxx" />
+              </div>
+
+              <!-- L: CORREO ELECTRONICO -->
+              <div class="form-campo">
+                <label for="inp-correo" class="form-label">Correo Electrónico <span class="requerido">*</span></label>
+                <input id="inp-correo" name="correo" type="email" class="form-input" placeholder="usuario@correo.com"
+                  style="text-transform:lowercase;" required />
+              </div>
+
+              <!-- M: ESTADO CIVIL -->
+              <div class="form-campo">
+                <label for="sel-estado-civil" class="form-label">Estado Civil</label>
+                <div class="select-wrapper">
+                  <div id="skeleton-estado-civil" class="select-skeleton" aria-hidden="true"></div>
+                  <select id="sel-estado-civil" name="estadoCivil" class="form-select oculto" disabled>
+                    <option value="">— Cargando… —</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- N: DIRECCION -->
+              <div class="form-campo form-grid-completo">
+                <label for="inp-direccion" class="form-label">Dirección <span class="requerido">*</span></label>
+                <textarea id="inp-direccion" name="direccion" class="form-textarea" placeholder="Dirección completa..."
+                  rows="2" required></textarea>
+              </div>
+
+              <!-- O: NIVEL DE INSTRUCCIÓN -->
+              <div class="form-campo">
+                <label for="sel-instruccion" class="form-label">Nivel de Instrucción</label>
+                <div class="select-wrapper">
+                  <div id="skeleton-instruccion" class="select-skeleton" aria-hidden="true"></div>
+                  <select id="sel-instruccion" name="instruccion" class="form-select oculto" disabled>
+                    <option value="">— Cargando… —</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- P: PROFESIÓN -->
+              <div class="form-campo">
+                <label for="inp-profesion" class="form-label">Profesión</label>
+                <input id="inp-profesion" name="profesion" type="text" class="form-input"
+                  placeholder="Ej. Ingeniero, Bachiller..." />
+              </div>
+
+            </div><!-- /.form-grid -->
+          </div><!-- /.seccion-cuerpo -->
+        </div><!-- /.form-seccion (Datos Personales) -->
+
+        <!-- SECCIÓN 2: Ubicación (Solo Lectura) -->
+        <div class="form-seccion">
+          <div class="seccion-encabezado">
+            <div class="seccion-icono" aria-hidden="true">📍</div>
+            <h3 class="seccion-titulo">Ubicación</h3>
+            <span class="seccion-subtitulo">Datos geográficos y del plantel (Auto-cargados)</span>
+          </div>
+          <div class="seccion-cuerpo">
+            <div class="form-grid">
+
+              <!-- Q: ESTADO -->
+              <div class="form-campo">
+                <label class="form-label">Estado</label>
+                <input id="inp-estado" name="estado" type="text" class="form-input" readonly
+                  style="background:#f0f0f0;" />
+              </div>
+
+              <!-- R: MUNICIPIO -->
+              <div class="form-campo">
+                <label class="form-label">Municipio</label>
+                <input id="inp-municipio" name="municipio" type="text" class="form-input" readonly
+                  style="background:#f0f0f0;" />
+              </div>
+
+              <!-- S: PARROQUIA -->
+              <div class="form-campo">
+                <label class="form-label">Parroquia</label>
+                <input id="inp-parroquia" name="parroquia" type="text" class="form-input" readonly
+                  style="background:#f0f0f0;" />
+              </div>
+
+              <!-- T: UBICACIÓN FÍSICA (nombre_plantel) -->
+              <div class="form-campo">
+                <label class="form-label">Ubicación Física (Nombre Plantel)</label>
+                <input id="inp-ubicacion-fisica" name="ubicacionFisica" type="text" class="form-input" readonly
+                  style="background:#f0f0f0;" />
+              </div>
+
+              <!-- Z: CÓDIGO DEL PLANTEL (codigo estadal del plantel - clave del JSON) -->
+              <div class="form-campo">
+                <label class="form-label">Código del Plantel</label>
+                <input id="inp-codigo-plantel" name="codigoPlantel" type="text" class="form-input" readonly
+                  style="background:#f0f0f0;" />
+              </div>
+
+              <!-- W: CÓDIGO DEPENDENCIA 1 -->
+              <div class="form-campo">
+                <label class="form-label">Código Dependencia 1</label>
+                <input id="inp-cod-dependencia-1" name="codDependencia1" type="text" class="form-input" readonly
+                  style="background:#f0f0f0;" />
+              </div>
+
+              <!-- X: CÓDIGO DEPENDENCIA 2 -->
+              <div class="form-campo">
+                <label class="form-label">Código Dependencia 2</label>
+                <input id="inp-cod-dependencia-2" name="codDependencia2" type="text" class="form-input" readonly
+                  style="background:#f0f0f0;" />
+              </div>
+
+              <!-- Y: CÓDIGO ESTADÍSTICO -->
+              <div class="form-campo">
+                <label class="form-label">Código Estadístico</label>
+                <input id="inp-cod-estadistico" name="codEstadistico" type="text" class="form-input" readonly
+                  style="background:#f0f0f0;" />
+              </div>
+
+              <!-- AD: DEPENDENCIA -->
+              <div class="form-campo">
+                <label class="form-label">Dependencia</label>
+                <input id="inp-dependencia-plantel" name="dependenciaPlantel" type="text" class="form-input" readonly
+                  style="background:#f0f0f0;" />
+              </div>
+
+              <!-- AA: UBICACIÓN GEOGRÁFICA (ubicacion en JSON) -->
+              <div class="form-campo">
+                <label class="form-label">Ubicación Geográfica</label>
+                <input id="inp-ubicacion-geografica" name="ubicacionGeografica" type="text" class="form-input" readonly
+                  style="background:#f0f0f0;" />
+              </div>
+
+              <!-- NIVEL -->
+              <div class="form-campo">
+                <label class="form-label">Nivel</label>
+                <input id="inp-nivel-plantel" name="nivelPlantel" type="text" class="form-input" readonly
+                  style="background:#f0f0f0;" />
+              </div>
+
+              <!-- MODALIDAD -->
+              <div class="form-campo">
+                <label class="form-label">Modalidad</label>
+                <input id="inp-modalidad-plantel" name="modalidadPlantel" type="text" class="form-input" readonly
+                  style="background:#f0f0f0;" />
+              </div>
+
+              <!-- TURNOS DEL PLANTEL (turno en JSON) -->
+              <div class="form-campo">
+                <label class="form-label">Turnos del Plantel</label>
+                <input id="inp-turnos-plantel" name="turnosPlantel" type="text" class="form-input" readonly
+                  style="background:#f0f0f0;" />
+              </div>
+
+            </div><!-- /.form-grid -->
+          </div><!-- /.seccion-cuerpo -->
+        </div><!-- /.form-seccion (Ubicación) -->
+
+        <!-- SECCIÓN 3: Datos Laborales -->
+        <div class="form-seccion">
+          <div class="seccion-encabezado">
+            <div class="seccion-icono" aria-hidden="true">💼</div>
+            <h3 class="seccion-titulo">Datos Laborales</h3>
+            <span class="seccion-subtitulo">Información de cargo, funciones y antigüedad</span>
+          </div>
+          <div class="seccion-cuerpo">
+            <div class="form-grid">
+
+              <!-- AC: UBICACIÓN ADMINISTRATIVA -->
+              <div class="form-campo">
+                <label for="inp-ubicacion-administrativa" class="form-label">Ubicación Administrativa</label>
+                <input id="inp-ubicacion-administrativa" name="ubicacionAdministrativa" type="text" placeholder="Código dependencia del recibo de pago" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                  class="form-input" />
+              </div>
+
+              <!-- AD: DEPENDENCIA -->
+              <div class="form-campo">
+                <label for="sel-dependencia" class="form-label">Dependencia</label>
+                <div class="select-wrapper">
+                  <div id="skeleton-dependencia" class="select-skeleton" aria-hidden="true"></div>
+                  <select id="sel-dependencia" name="dependencia" class="form-select oculto" onchange="onTipoPersonalChange()" disabled>
+                    <option value="">— Cargando… —</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- AF: TIPO PERSONAL -->
+              <div class="form-campo">
+                <label for="sel-tipo-personal" class="form-label">Tipo de Personal <span
+                    class="requerido">*</span></label>
+                <select id="sel-tipo-personal" name="tipoPersonal" class="form-select" onchange="onTipoPersonalChange()"
+                  required>
+                  <option value="">— Seleccione —</option>
+                  <option value="docente">DOCENTE</option>
+                  <option value="administrativo">ADMINISTRATIVO</option>
+                  <option value="obrero">OBRERO</option>
+                </select>
+              </div>
+
+              <!-- AG: SUB CATEGORIA 1 TP (visible solo si OBRERO) -->
+              <div class="form-campo" id="cont-subcategoria" style="display:none;">
+                <label for="sel-subcategoria" class="form-label">Sub Categoría (Rango) <span
+                    class="requerido">*</span></label>
+                <select id="sel-subcategoria" name="subCategoria" class="form-select" onchange="onSubCategoriaChange()">
+                  <option value="">— Seleccione Rango —</option>
+                </select>
+              </div>
+
+              <!-- AH: CARGO -->
+              <div class="form-campo">
+                <label for="sel-cargo" class="form-label">Cargo <span class="requerido">*</span></label>
+                <select id="sel-cargo" name="cargo" class="form-select" onchange="onCargoChange()" required disabled>
+                  <option value="">— Seleccione Tipo Personal —</option>
+                </select>
+              </div>
+
+              <!-- AI: CODIGO RAC -->
+              <div class="form-campo">
+                <label for="sel-codigo-rac" class="form-label">Código RAC <span class="requerido">*</span></label>
+                <select id="sel-codigo-rac" name="codigoRac" class="form-select" required disabled>
+                  <option value="">— Autocompletado —</option>
+                </select>
+              </div>
+
+              <!-- AJ: TITULAR -->
+              <div class="form-campo">
+                <label class="form-label">Titularidad <span class="requerido">*</span></label>
+                <div style="display:flex; gap:1rem; align-items:center; height:42px;">
+                  <label><input type="radio" name="titular" value="SI" required> SÍ (TITULAR)</label>
+                  <label><input type="radio" name="titular" value="NO" required> NO (INTERINO)</label>
+                </div>
+              </div>
+
+              <!-- AK: HORAS ACADEMICAS, AL: HORAS ADMINISTRATIVAS -->
+              <div class="form-campo">
+                <label for="inp-horas-academicas" class="form-label">Horas Académicas</label>
+                <input id="inp-horas-academicas" name="horasAcademicas" type="number" class="form-input" min="0" />
+              </div>
+              <div class="form-campo">
+                <label for="inp-horas-administrativas" class="form-label">Horas Administrativas</label>
+                <input id="inp-horas-administrativas" name="horasAdministrativas" type="number" class="form-input" min="0" />
+              </div>
+
+              <!-- AM: FECHA DE INGRESO, AN: ANTIGUEDAD -->
+              <div class="form-campo">
+                <label for="inp-fecha-ingreso" class="form-label">Fecha de Ingreso <span
+                    class="requerido">*</span></label>
+                <div style="display:flex; gap:0.5rem">
+                  <input id="inp-fecha-ingreso" name="fechaIngreso" type="date" class="form-input" required
+                    style="flex:1" onchange="calcularAntiguedad()" />
+                  <input id="inp-antiguedad" name="antiguedad" type="text" class="form-input" placeholder="Años"
+                    readonly style="width:80px; background:#f0f0f0;" />
+                </div>
+              </div>
+
+              <!-- AO: TURNOS QUE ATIENDE -->
+              <div class="form-campo">
+                <label for="sel-turnos-atiende" class="form-label">Turno que Atiende</label>
+                <div class="select-wrapper">
+                  <div id="skeleton-turnos-atiende" class="select-skeleton" aria-hidden="true"></div>
+                  <select id="sel-turnos-atiende" name="turnosAtiende" class="form-select oculto" disabled>
+                    <option value="">— Cargando… —</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- AP: ATIENDE MATRICULA -->
+              <div class="form-campo">
+                <label for="sel-atiende-matricula" class="form-label">Atiende Matrícula</label>
+                <div class="select-wrapper">
+                  <select id="sel-atiende-matricula" name="atiendeMatricula" class="form-select"
+                    onchange="onAtiendeMatriculaChange()">
+                    <option value="">— Seleccione —</option>
+                    <option value="SI">SI</option>
+                    <option value="NO">NO</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- AQ: NIVEL O MODALIDAD (visible solo si atiende matrícula = SI) -->
+              <div class="form-campo" id="cont-nivel-modalidad" style="display:none;">
+                <label for="sel-nivel-modalidad" class="form-label">Nivel o Modalidad</label>
+                <div class="select-wrapper">
+                  <div id="skeleton-nivel-modalidad" class="select-skeleton" aria-hidden="true"></div>
+                  <select id="sel-nivel-modalidad" name="nivelModalidad" class="form-select oculto"
+                    onchange="onNivelModalidadChange(true)">
+                    <option value="">— Seleccione —</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- AR: ESPECIALIDAD QUE IMPARTE (visible solo si atiende matrícula = SI) -->
+              <div class="form-campo" id="cont-especialidad-imparte" style="display:none;">
+                <label for="inp-especialidad-imparte" class="form-label">Especialidad que Imparte el Docente</label>
+                <input id="inp-especialidad-imparte" name="especialidadImparte" type="text" class="form-input"
+                  placeholder="Ej. MATEMÁTICAS" />
+              </div>
+
+              <!-- AS: BOTÓN CUADRATURA (visible si atiende matrícula = SI y seleccionó nivel) -->
+              <div class="form-campo" id="cont-btn-cuadratura" style="display:none; grid-column:1/-1;">
+                <button type="button" id="btn-abrir-cuadratura" class="btn-primario" onclick="onAbrirCuadratura()"
+                  style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.6rem 1.4rem; font-size:0.95rem;">
+                  📊 Cuadratura
+                </button>
+              </div>
+
+              <!-- Resumen de cuadratura confirmada -->
+              <div id="cont-cuadratura-resumen" class="form-campo" style="display:none; grid-column: 1/-1;">
+                <label class="form-label">📊 Cuadratura Confirmada</label>
+                <div id="cuadratura-resumen-texto"
+                  style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:8px; padding:0.75rem; font-size:0.85rem; color:#0369a1;">
+                </div>
+              </div>
+
+            </div><!-- /.form-grid -->
+          </div><!-- /.seccion-cuerpo -->
+        </div><!-- /.form-seccion (Datos Laborales) -->
+
+        <!-- ============================================================
+             SECCIÓN: SITUACIÓN LABORAL Y DATOS SOCIOECONÓMICOS (BV-CK)
+             ============================================================ -->
+        <div class="form-seccion">
+          <div class="seccion-titulo">🏠 Situación Laboral y Datos Sociales</div>
+          <div class="seccion-cuerpo">
+            <div class="form-grid">
+
+              <!-- BV: SITUACION DEL TRABAJADOR -->
+              <div class="form-campo">
+                <label for="sel-situacion-laboral" class="form-label">Situación del Trabajador</label>
+                <div class="select-wrapper">
+                  <div id="skeleton-situacion-laboral" class="select-skeleton" aria-hidden="true"></div>
+                  <select id="sel-situacion-laboral" name="situacionLaboral" class="form-select oculto"
+                    onchange="onSituacionLaboralChange()">
+                    <option value="">— Cargando… —</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- BW: OBSERVACION (readonly) -->
+              <div class="form-campo">
+                <label for="inp-observacion-estatus" class="form-label">Observación del Estatus</label>
+                <textarea id="inp-observacion-estatus" name="observacionEstatus" class="form-input" rows="2" readonly
+                  style="background:#f3f4f6; font-size:0.8rem; resize:none;"></textarea>
+              </div>
+
+              <!-- BX: TALLA DE CAMISA -->
+              <div class="form-campo">
+                <label for="sel-talla-camisa" class="form-label">Talla de Camisa</label>
+                <div class="select-wrapper">
+                  <select id="sel-talla-camisa" name="tallaCamisa" class="form-select">
+                    <option value="">— Seleccione —</option>
+                    <option>SS</option>
+                    <option>S</option>
+                    <option>M</option>
+                    <option>L</option>
+                    <option>XL</option>
+                    <option>XXL</option>
+                    <option>6</option>
+                    <option>8</option>
+                    <option>10</option>
+                    <option>12</option>
+                    <option>14</option>
+                    <option>16</option>
+                    <option>18</option>
+                    <option>20</option>
+                    <option>22</option>
+                    <option>24</option>
+                    <option>26</option>
+                    <option>28</option>
+                    <option>30</option>
+                    <option>32</option>
+                    <option>34</option>
+                    <option>36</option>
+                    <option>38</option>
+                    <option>40</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- BY: TALLA DE PANTALON -->
+              <div class="form-campo">
+                <label for="sel-talla-pantalon" class="form-label">Talla de Pantalón</label>
+                <div class="select-wrapper">
+                  <select id="sel-talla-pantalon" name="tallaPantalon" class="form-select">
+                    <option value="">— Seleccione —</option>
+                    <option>SS</option>
+                    <option>S</option>
+                    <option>M</option>
+                    <option>L</option>
+                    <option>XL</option>
+                    <option>XXL</option>
+                    <option>10</option>
+                    <option>12</option>
+                    <option>14</option>
+                    <option>16</option>
+                    <option>18</option>
+                    <option>20</option>
+                    <option>22</option>
+                    <option>24</option>
+                    <option>26</option>
+                    <option>28</option>
+                    <option>30</option>
+                    <option>32</option>
+                    <option>34</option>
+                    <option>36</option>
+                    <option>38</option>
+                    <option>40</option>
+                    <option>42</option>
+                    <option>44</option>
+                    <option>46</option>
+                    <option>48</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- BZ: TALLA DE ZAPATO -->
+              <div class="form-campo">
+                <label for="sel-talla-zapato" class="form-label">Talla de Zapato</label>
+                <div class="select-wrapper">
+                  <select id="sel-talla-zapato" name="tallaZapato" class="form-select">
+                    <option value="">— Seleccione —</option>
+                    <option>26</option>
+                    <option>27</option>
+                    <option>28</option>
+                    <option>29</option>
+                    <option>30</option>
+                    <option>31</option>
+                    <option>32</option>
+                    <option>33</option>
+                    <option>34</option>
+                    <option>35</option>
+                    <option>36</option>
+                    <option>37</option>
+                    <option>38</option>
+                    <option>39</option>
+                    <option>40</option>
+                    <option>41</option>
+                    <option>42</option>
+                    <option>43</option>
+                    <option>44</option>
+                    <option>45</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- CA: ACTIVIDAD DEPORTIVA -->
+              <div class="form-campo">
+                <label for="inp-actividad-deportiva" class="form-label">Actividad Deportiva</label>
+                <input id="inp-actividad-deportiva" name="actividadDeportiva" type="text" class="form-input"
+                  placeholder="Ej. FÚTBOL" />
+              </div>
+
+              <!-- CB: ACTIVIDAD CULTURAL -->
+              <div class="form-campo">
+                <label for="inp-actividad-cultural" class="form-label">Actividad Cultural</label>
+                <input id="inp-actividad-cultural" name="actividadCultural" type="text" class="form-input"
+                  placeholder="Ej. TEATRO" />
+              </div>
+
+              <!-- CC: TIPO DE VIVIENDA -->
+              <div class="form-campo">
+                <label for="sel-tipo-vivienda" class="form-label">Tipo de Vivienda</label>
+                <div class="select-wrapper">
+                  <div id="skeleton-tipo-vivienda" class="select-skeleton" aria-hidden="true"></div>
+                  <select id="sel-tipo-vivienda" name="tipoVivienda" class="form-select oculto">
+                    <option value="">— Cargando… —</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- CD: CONDICION DE VIVIENDA -->
+              <div class="form-campo">
+                <label for="sel-condicion-vivienda" class="form-label">Condición de Vivienda</label>
+                <div class="select-wrapper">
+                  <div id="skeleton-condicion-vivienda" class="select-skeleton" aria-hidden="true"></div>
+                  <select id="sel-condicion-vivienda" name="condicionVivienda" class="form-select oculto">
+                    <option value="">— Cargando… —</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- CE: TIPO DE MATERIAL -->
+              <div class="form-campo">
+                <label for="inp-tipo-material" class="form-label">Tipo de Material (Vivienda)</label>
+                <input id="inp-tipo-material" name="tipoMaterial" type="text" class="form-input"
+                  placeholder="Ej. BLOQUE Y CEMENTO" />
+              </div>
+
+              <!-- CF: TIPO DE ENFERMEDAD -->
+              <div class="form-campo">
+                <label for="inp-tipo-enfermedad" class="form-label">Tipo de Enfermedad</label>
+                <input id="inp-tipo-enfermedad" name="tipoEnfermedad" type="text" class="form-input"
+                  placeholder="Ej. HIPERTENSIÓN" />
+              </div>
+
+              <!-- CG: MEDICAMENTO -->
+              <div class="form-campo">
+                <label for="inp-medicamento" class="form-label">Medicamento</label>
+                <input id="inp-medicamento" name="medicamento" type="text" class="form-input"
+                  placeholder="Ej. ENALAPRIL" />
+              </div>
+
+              <!-- CH: POSEE DISCAPACIDAD -->
+              <div class="form-campo">
+                <label for="sel-discapacidad" class="form-label">Posee Discapacidad</label>
+                <div class="select-wrapper">
+                  <select id="sel-discapacidad" name="discapacidad" class="form-select">
+                    <option value="">— Seleccione —</option>
+                    <option value="SI">SI</option>
+                    <option value="NO">NO</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- CI: UBCH -->
+              <div class="form-campo">
+                <label for="inp-ubch" class="form-label">UBCH</label>
+                <input id="inp-ubch" name="ubch" type="text" class="form-input" />
+              </div>
+
+              <!-- CJ: CIRCUITO COMUNAL -->
+              <div class="form-campo">
+                <label for="inp-circuito-comunal" class="form-label">Circuito Comunal</label>
+                <input id="inp-circuito-comunal" name="circuitoComunal" type="text" class="form-input" />
+              </div>
+
+              <!-- CK: CENTRO DE VOTACION -->
+              <div class="form-campo">
+                <label for="inp-centro-votacion" class="form-label">Centro de Votación</label>
+                <input id="inp-centro-votacion" name="centroVotacion" type="text" class="form-input" />
+              </div>
+
+            </div><!-- /.form-grid -->
+          </div><!-- /.seccion-cuerpo -->
+        </div><!-- /.form-seccion (Social) -->
+
+
+        <!-- Barra de acciones -->
+        <div class="form-acciones">
+          <button type="button" id="btn-cancelar-edicion" class="btn-secundario oculto">❌ Cancelar Edición</button>
+          <button type="button" id="btn-limpiar" class="btn-secundario">🗑 Limpiar formulario</button>
+          <button type="submit" id="btn-guardar" class="btn-enviar">
+            <span id="btn-guardar-texto">💾 Guardar Registro</span>
+          </button>
+        </div>
+
+      </form><!-- /#form-captura -->
+
+    </main><!-- /.app-contenido -->
+
+  </div><!-- /#vista-principal -->
+
+
+  <!-- ===================================================================
+       CONTENEDOR DE TOASTS
+       =================================================================== -->
+  <div id="toast-contenedor" role="region" aria-label="Notificaciones" aria-live="polite"></div>
+
+
+  <!-- ===================================================================
+       JAVASCRIPT DEL CLIENTE
+       Regla de Oro 1: Captura eventos, valida campos, renderiza UI.
+       NO contiene lógica institucional, cálculos ni IDs de Sheets.
+       Regla de Oro 7 (recepción): solo espera primitivos desde el servidor.
+       =================================================================== -->
+  <script>
+    'use strict';
+
+    // -------------------------------------------------------------------
+    // ESTADO DE SESIÓN — objeto en memoria (nunca en localStorage en GAS)
+    // -------------------------------------------------------------------
+    var SESION = {
+      activa: false,
+      cedula: '',
+      nombre: '',
+      rol: '',
+      plantel: '',
+      correo: '',
+      idHojaPlantel: ''   // Resuelto por el servidor; solo se usa para envíos futuros
+    };
+
+    // -------------------------------------------------------------------
+    // MAPA DE CATLOGOS — claves del JSON → IDs de selects en el DOM
+    // Si el bd_sgh.json añade nuevas claves, solo se extiende este mapa.
+    // -------------------------------------------------------------------
+    var MAPA_CATALOGOS = {
+      civil: { selectId: 'sel-estado-civil', skeletonId: 'skeleton-estado-civil' },
+      instruccion: { selectId: 'sel-instruccion', skeletonId: 'skeleton-instruccion' },
+      dependencia: { selectId: 'sel-dependencia', skeletonId: 'skeleton-dependencia' },
+      turnos: { selectId: 'sel-turnos-atiende', skeletonId: 'skeleton-turnos-atiende' }
+    };
+    // Catálogos con transformación especial (no arrays simples)
+    // Se manejan manualmente en _onCatalogosRecibidos
+
+    // Almacén en memoria de todos los catálogos cargados para menús en cascada
+    var CATALOGOS_CACHE = {};
+
+    // -------------------------------------------------------------------
+    // UTILIDADES DE UI
+    // -------------------------------------------------------------------
+
+    /** Muestra un toast de notificación temporal. */
+    function mostrarToast(mensaje, tipo) {
+      tipo = tipo || 'info';
+      var iconos = { exito: '✅', error: '', info: 'ℹ', aviso: '⚠' };
+      var contenedor = document.getElementById('toast-contenedor');
+      var toast = document.createElement('div');
+      toast.className = 'toast ' + tipo;
+      toast.innerHTML = '<span>' + (iconos[tipo] || 'ℹ') + '</span><span>' + _escaparHtml(mensaje) + '</span>';
+      contenedor.appendChild(toast);
+      // Forzar reflow antes de aplicar clase para animar entrada
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { toast.classList.add('visible'); });
+      });
+      setTimeout(function () {
+        toast.classList.remove('visible');
+        setTimeout(function () { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 350);
+      }, 4500);
+    }
+
+    /** Escapa caracteres HTML para prevenir XSS en contenido dinámico. */
+    function _escaparHtml(texto) {
+      return String(texto)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    /** Muestra u oculta la vista de carga inicial. */
+    function ocultarOverlayCarga() {
+      var overlay = document.getElementById('overlay-carga');
+      overlay.classList.add('oculto');
+    }
+
+    /** Marca un campo del formulario como inválido o válido. */
+    function marcarCampo(campoId, invalido) {
+      var el = document.getElementById(campoId);
+      if (!el) return;
+      if (invalido) { el.classList.add('invalido'); }
+      else { el.classList.remove('invalido'); }
+    }
+
+    /** Muestra el spinner global de bloqueo. */
+    function showGlobalSpinner() {
+      var spinner = document.getElementById('global-spinner-overlay');
+      if (spinner) {
+        spinner.classList.add('activo');
+        spinner.setAttribute('aria-hidden', 'false');
+      }
+    }
+
+    /** Oculta el spinner global de bloqueo. */
+    function hideGlobalSpinner() {
+      var spinner = document.getElementById('global-spinner-overlay');
+      if (spinner) {
+        spinner.classList.remove('activo');
+        spinner.setAttribute('aria-hidden', 'true');
+      }
+    }
+
+    // -------------------------------------------------------------------
+    // NAVEGACIÓN ENTRE VISTAS
+    // -------------------------------------------------------------------
+
+    /** Transiciona de la vista login a la vista principal. */
+    function mostrarVistaPrincipal() {
+      var login = document.getElementById('vista-login');
+      var principal = document.getElementById('vista-principal');
+
+      login.classList.add('saliendo');
+      principal.classList.remove('oculto');
+
+      // Activar animación de entrada tras un frame
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          principal.classList.add('entrando');
+        });
+      });
+
+      // Remover la vista de login del DOM tras la transición
+      setTimeout(function () {
+        login.style.display = 'none';
+      }, 500);
+    }
+
+    /** Restablece el estado y regresa a la pantalla de login. */
+    function cerrarSesion() {
+      SESION = { activa: false, cedula: '', nombre: '', rol: '', plantel: '', correo: '', idHojaPlantel: '' };
+      
+      document.getElementById('vista-principal').classList.add('oculto');
+      document.getElementById('vista-matricula').classList.add('oculto');
+      document.getElementById('app-footer').style.display = 'none';
+      
+      var login = document.getElementById('vista-login');
+      login.classList.remove('oculto');
+      login.classList.remove('saliendo');
+      login.style.display = 'flex';
+      
+      var formLogin = document.getElementById('form-login');
+      if(formLogin) formLogin.reset();
+      
+      _setMensajeLogin('');
+    }
+
+    // -------------------------------------------------------------------
+    // MÓDULO DE LOGIN
+    // Regla de Oro 1: Solo captura credenciales y delega al servidor.
+    // -------------------------------------------------------------------
+
+    /** Establece el estado visual del botón de login y bloquea los inputs. */
+    function _setEstadoBotonLogin(cargando) {
+      var btn = document.getElementById('btn-login');
+      var txtSpan = document.getElementById('btn-login-texto');
+      var inpUsuario = document.getElementById('login-usuario');
+      var inpClave = document.getElementById('login-clave');
+      
+      btn.disabled = cargando;
+      if (inpUsuario) inpUsuario.disabled = cargando;
+      if (inpClave) inpClave.disabled = cargando;
+
+      if (cargando) {
+        btn.innerHTML = '<div class="spinner"></div><span>Verificando…</span>';
+      } else {
+        btn.innerHTML = '<span id="btn-login-texto">Ingresar al Sistema</span>';
+      }
+    }
+
+    /** Muestra un mensaje de estado en el área del login. */
+    function _setMensajeLogin(texto, tipo) {
+      var el = document.getElementById('login-mensaje');
+      if (!texto) { el.textContent = ''; el.className = ''; return; }
+      el.textContent = texto;
+      el.className = tipo || '';
+    }
+
+    /**
+     * Manejador del submit del formulario de login.
+     * Valida campos mínimos en el cliente, luego llama al servidor.
+     */
+    function _manejarSubmitLogin(evento) {
+      evento.preventDefault();
+      _setMensajeLogin('');
+
+      var usuario = document.getElementById('login-usuario').value.trim();
+      var clave = document.getElementById('login-clave').value.trim();
+
+      // Validación inicial en el cliente (Regla de Oro 1)
+      if (!usuario || !clave) {
+        _setMensajeLogin('Por favor, complete todos los campos.', 'error');
+        return;
+      }
+
+      _setEstadoBotonLogin(true);
+      _setMensajeLogin('Verificando credenciales…', 'cargando');
+
+      // Llamada asíncrona al servidor — transporta solo primitivos (Regla de Oro 7)
+      google.script.run
+        .withSuccessHandler(_onLoginExitoso)
+        .withFailureHandler(_onLoginFallido)
+        .validarAccesoUsuario({ usuario: usuario, clave: clave });
+    }
+
+    /**
+     * Callback de éxito de validarAccesoUsuario().
+     * @param {{ exito: boolean, acceso: boolean, cedula, nombre, rol, plantel, correo, idHojaPlantel, estadoPlantel, municipioPlantel, parroquiaPlantel, datosPlantel, error }} resultado
+     */
+    function _onLoginExitoso(resultado) {
+      _setEstadoBotonLogin(false);
+
+      if (resultado && resultado.requireCambioClave) {
+        _setMensajeLogin(resultado.mensaje || 'Por seguridad, debes configurar una nueva contraseña.', 'error');
+        // Guardamos las variables necesarias en la sesión
+        SESION.cedula = resultado.cedula;
+        SESION.idHojaPlantel = resultado.idHojaPlantel;
+        
+        // Preparamos el modal de cambio de clave
+        document.getElementById('inp-cc-actual').value = document.getElementById('login-clave').value;
+        document.getElementById('inp-cc-actual').readOnly = true;
+        document.getElementById('inp-cc-nueva').value = '';
+        document.getElementById('inp-cc-confirmar').value = '';
+        
+        // Ocultar botones de cancelar para forzar el cambio
+        document.getElementById('btn-cancelar-cc').style.display = 'none';
+        document.getElementById('btn-cerrar-modal-cc').style.display = 'none';
+        
+        // Marcar flag global y mostrar modal manualmente (mostrarModalCC está en otro scope)
+        window._forzandoClave = true;
+        var modalCC = document.getElementById('modal-cambio-clave');
+        if (modalCC) {
+          modalCC.classList.add('activo');
+          modalCC.setAttribute('aria-hidden', 'false');
+        }
+        return;
+      }
+
+      if (!resultado || !resultado.exito || !resultado.acceso) {
+        _setMensajeLogin(resultado.error || 'Credenciales inválidas. Intente nuevamente.', 'error');
+        return;
+      }
+
+      // Almacenar perfil y datos del plantel en el estado de sesión
+      SESION.activa = true;
+      SESION.cedula = resultado.cedula;
+      SESION.nombre = resultado.nombre;
+      SESION.rol = resultado.rol;
+      SESION.plantel = resultado.plantel;
+      SESION.correo = resultado.correo;
+      SESION.idHojaPlantel = resultado.idHojaPlantel;
+      SESION.estadoPlantel = resultado.estadoPlantel;
+      SESION.municipioPlantel = resultado.municipioPlantel;
+      SESION.parroquiaPlantel = resultado.parroquiaPlantel;
+      SESION.datosPlantel = resultado.datosPlantel;
+
+      _setMensajeLogin('✔ Acceso concedido. Cargando…', 'exito');
+
+      // Poblar el header con el perfil del usuario
+      _poblarPerfil();
+
+      // Preparar vista de matrícula (Paso 1)
+      var dp = SESION.datosPlantel || {};
+      document.getElementById('lbl-estado').textContent = SESION.estadoPlantel || '--';
+      document.getElementById('lbl-municipio').textContent = SESION.municipioPlantel || '--';
+      document.getElementById('lbl-dea').textContent = SESION.cedula || '--';
+      document.getElementById('lbl-nombre-plantel').textContent = dp.nombre_plantel || '--';
+
+      // Pre-llenar ubicación de solo lectura en la pestaña Personal
+      document.getElementById('inp-estado').value = SESION.estadoPlantel || '';
+      document.getElementById('inp-municipio').value = SESION.municipioPlantel || '';
+      document.getElementById('inp-parroquia').value = SESION.parroquiaPlantel || '';
+      document.getElementById('inp-ubicacion-fisica').value = dp.nombre_plantel || '';
+      document.getElementById('inp-turnos-plantel').value = dp.turno || '';
+      document.getElementById('inp-codigo-plantel').value = SESION.cedula || '';
+      document.getElementById('inp-cod-dependencia-1').value = dp.codigo_dependencia || '';
+      document.getElementById('inp-cod-dependencia-2').value = dp.codigo_dependencia_2 || '';
+      document.getElementById('inp-cod-estadistico').value = dp.codigo_estadistico || '';
+      document.getElementById('inp-dependencia-plantel').value = dp.dependencia || '';
+      document.getElementById('inp-ubicacion-geografica').value = dp.ubicacion || '';
+      document.getElementById('inp-nivel-plantel').value = dp.nivel || '';
+      document.getElementById('inp-modalidad-plantel').value = dp.modalidad || '';
+
+      // Lógica dinámica de visibilidad de niveles basados en planes_estudio
+      var planes = dp.planes_estudio || {};
+      var mostrarInicial = "20000" in planes;
+      var mostrarPrimaria = "21000" in planes;
+      var mostrarMediaGen = false;
+      var mostrarMediaTec = false;
+
+      Object.keys(planes).forEach(function (cod) {
+        if (cod.startsWith("3")) mostrarMediaGen = true;
+        if (cod.startsWith("4")) mostrarMediaTec = true;
+      });
+
+      var formMatricula = document.getElementById('form-matricula');
+      var btnGuardarMatricula = document.getElementById('btn-guardar-matricula');
+
+      if (mostrarInicial) document.getElementById('bloque-inicial').classList.remove('oculto');
+      if (mostrarPrimaria) document.getElementById('bloque-primaria').classList.remove('oculto');
+      if (mostrarMediaGen) document.getElementById('bloque-mediageneral').classList.remove('oculto');
+      if (mostrarMediaTec) document.getElementById('bloque-mediatecnica').classList.remove('oculto');
+
+      // Transición a la vista Paso 1
+      setTimeout(function () {
+        // Precargar matrícula si existe
+        if (resultado.matriculaPrevia) {
+          var mp = resultado.matriculaPrevia;
+          document.getElementById('matFem').value = mp.matFem || 0;
+          document.getElementById('matMas').value = mp.matMas || 0;
+          document.getElementById('secMat').value = mp.secMat || 0;
+          document.getElementById('preFem').value = mp.preFem || 0;
+          document.getElementById('preMas').value = mp.preMas || 0;
+          document.getElementById('secPre').value = mp.secPre || 0;
+
+          document.getElementById('priFem').value = mp.priFem || 0;
+          document.getElementById('priMas').value = mp.priMas || 0;
+          document.getElementById('secPri').value = mp.secPri || 0;
+
+          document.getElementById('mgFem').value = mp.mgFem || 0;
+          document.getElementById('mgMas').value = mp.mgMas || 0;
+          document.getElementById('secMg').value = mp.secMg || 0;
+
+          document.getElementById('mtFem').value = mp.mtFem || 0;
+          document.getElementById('mtMas').value = mp.mtMas || 0;
+          document.getElementById('secMt').value = mp.secMt || 0;
+
+          // Disparar evento input para forzar el cálculo de totales automáticos
+          document.getElementById('matFem').dispatchEvent(new Event('input', { bubbles: true }));
+          // Persistir también en SESION para que la cuadratura pueda leer las secciones
+          SESION.matricula = mp;
+        }
+
+        // Restaurar vacantes previas si las hay
+        if (resultado.vacantesPrevia) {
+          try {
+            var vPrev = resultado.vacantesPrevia;
+            if (typeof vPrev === 'string') vPrev = JSON.parse(vPrev);
+            if (typeof vPrev === 'string') vPrev = JSON.parse(vPrev); // Prevenir doble stringificación
+            window._VACANTES_TEMP = (vPrev && typeof vPrev === 'object') ? vPrev : {};
+            console.log('[SGH] vacantesPrevia cargadas:', JSON.stringify(window._VACANTES_TEMP));
+            // Llamar al actualizador del resumen de forma segura (puede no estar listo aún)
+            if (typeof window._actualizarResumenVacantes === 'function') {
+              window._actualizarResumenVacantes();
+            }
+          } catch(e) { 
+            console.warn('[SGH] Error parseando vacantes previas:', e);
+            window._VACANTES_TEMP = {}; 
+          }
+        } else {
+          window._VACANTES_TEMP = {};
+        }
+
+        // --- Renderizar dinámicamente detalle de secciones por año ---
+        _renderizarDetalleSecciones(SESION.datosPlantel.planes_estudio || {}, mp || {});
+
+        // En vez de transicionar directamente, mostrar el Modal de Declaración Jurada
+        var modalDJ = document.getElementById('modal-declaracion');
+        if (modalDJ) {
+          modalDJ.classList.add('activo');
+          modalDJ.setAttribute('aria-hidden', 'false');
+        } else {
+          window._ejecutarTransicionLogin();
+        }
+      }, 600);
+    }
+
+    // Función que se ejecuta tras aceptar la declaración jurada
+    window._ejecutarTransicionLogin = function() {
+      document.getElementById('vista-login').classList.add('saliendo');
+      setTimeout(function () {
+        document.getElementById('vista-login').classList.add('oculto');
+        document.getElementById('vista-matricula').classList.remove('oculto');
+        document.getElementById('app-footer').style.display = 'block';
+      }, 280);
+    };
+
+    /** Callback de fallo de red o excepción en servidor. */
+    function _onLoginFallido(error) {
+      _setEstadoBotonLogin(false);
+      _setMensajeLogin('Error de comunicación con el servidor. Intente de nuevo.', 'error');
+      console.error('[SGH] Fallo en validarAccesoUsuario:', error);
+    }
+
+    // -------------------------------------------------------------------
+    // MÓDULO DE PERFIL DE USUARIO
+    // -------------------------------------------------------------------
+
+    function _renderizarDetalleSecciones(planes, matriculaPrevia) {
+      var cont = document.getElementById('cont-secciones-detalle');
+      var contDinamico = document.getElementById('cont-secciones-dinamicas');
+      contDinamico.innerHTML = '';
+      
+      var planesArr = Object.keys(planes).sort();
+      var mediaPlanes = planesArr.filter(function(p) { return p !== '20000' && p !== '21000'; });
+      
+      if (mediaPlanes.length === 0) {
+        cont.style.display = 'none';
+        cont.classList.add('oculto');
+        return;
+      }
+      
+      cont.classList.remove('oculto');
+      
+      var html = '<div class="matricula-header" style="margin-bottom:1rem;"><span style="font-size: 1.5rem">📚</span><h3>Detalle de Secciones por Año</h3></div>';
+      
+      var seccionesGuardadas = matriculaPrevia.seccionesPorAnio || {};
+      
+      mediaPlanes.forEach(function(plan) {
+        var isMt = plan.startsWith('4');
+        var anios = isMt ? 6 : 5;
+        var info = planes[plan];
+        var titulo = 'Plan ' + plan;
+        if (info && info.mencion) titulo += ' (' + info.mencion + ')';
+        
+        html += '<div style="margin-bottom: 1.5rem; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem; background: #f9fafb;">';
+        html += '<h4 style="margin: 0 0 1rem; color: #1e40af; font-size: 0.95rem;">' + titulo + '</h4>';
+        html += '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 1rem;">';
+        
+        for (var i = 1; i <= anios; i++) {
+          var planSec = seccionesGuardadas[plan] || {};
+          var val = parseInt(planSec[i] !== undefined ? planSec[i] : (planSec[String(i)] !== undefined ? planSec[String(i)] : 0)) || 0;
+          html += '<div style="display: flex; flex-direction: column; gap: 0.3rem;">';
+          html += '<label style="font-size: 0.8rem; font-weight: 600; color: #374151;">' + i + 'º Año</label>';
+          html += '<input type="number" class="sec-anio-input form-input" data-plan="' + plan + '" data-anio="' + i + '" min="0" value="' + (val || '') + '" style="padding: 0.4rem; text-align: center;">';
+          html += '</div>';
+        }
+        
+        html += '</div></div>';
+      });
+      
+      contDinamico.innerHTML = html;
+      cont.style.display = 'block';
+
+      // Mostrar u ocultar los inputs de los totales según corresponda
+      var tieneMg = mediaPlanes.some(function(p) { return p.startsWith('3'); });
+      var tieneMt = mediaPlanes.some(function(p) { return p.startsWith('4'); });
+      document.getElementById('item-sec-mg').style.display = tieneMg ? 'flex' : 'none';
+      document.getElementById('item-sec-mt').style.display = tieneMt ? 'flex' : 'none';
+    }
+
+    /** Inyecta los datos del perfil en el header de la app. */
+    function _poblarPerfil() {
+      document.getElementById('perfil-nombre').textContent = SESION.nombre || '—';
+      document.getElementById('perfil-rol').textContent = SESION.rol || '—';
+      document.getElementById('header-plantel').textContent = SESION.plantel || '—';
+
+      // Avatar: iniciales del nombre
+      var iniciales = SESION.nombre
+        .split(' ')
+        .slice(0, 2)
+        .map(function (p) { return p.charAt(0).toUpperCase(); })
+        .join('');
+      document.getElementById('perfil-avatar').textContent = iniciales || '?';
+    }
+
+    // -------------------------------------------------------------------
+    // MÓDULO DE CATLOGOS
+    // Regla de Oro 1: Solo inyecta opciones en selects. Sin lógica de datos.
+    // -------------------------------------------------------------------
+
+    /** Actualiza el banner de estado de catálogos. */
+    function _setBannerCatalogos(estado, texto) {
+      var banner = document.getElementById('banner-catalogos');
+      var span = document.getElementById('banner-catalogos-texto');
+      banner.className = estado; // 'cargando' | 'listo' | 'error'
+      span.textContent = texto;
+
+      // Reemplazar el spinner por un icono estático cuando ya no está cargando
+      var spinnerExistente = banner.querySelector('.spinner');
+      if (estado !== '' && spinnerExistente) {
+        spinnerExistente.style.display = 'none';
+      } else if (!spinnerExistente && estado === '') {
+        // Restaurar spinner si vuelve a cargar
+        var s = document.createElement('div');
+        s.className = 'spinner';
+        banner.insertBefore(s, span);
+      }
+    }
+
+    /** Solicita los catálogos al servidor de forma asíncrona. */
+    function _cargarCatalogos() {
+      _setBannerCatalogos('', 'Cargando catálogos del sistema…');
+
+      google.script.run
+        .withSuccessHandler(_onCatalogosRecibidos)
+        .withFailureHandler(_onCatalogosError)
+        .obtenerCatalogos();
+    }
+
+    /**
+     * Callback de éxito de obtenerCatalogos().
+     * @param {{ exito: boolean, catalogos: Object, error?: string }} resultado
+     */
+    function _onCatalogosRecibidos(resultado) {
+      if (!resultado || !resultado.exito || !resultado.catalogos) {
+        _onCatalogosError(resultado ? resultado.error : 'Respuesta inválida del servidor');
+        return;
+      }
+
+      var catalogos = resultado.catalogos;
+      CATALOGOS_CACHE = catalogos; // Guardar en caché global para selects anidados
+      var totalPoblados = 0;
+
+      // Iterar el mapa de catálogos simples
+      Object.keys(MAPA_CATALOGOS).forEach(function (clave) {
+        var meta = MAPA_CATALOGOS[clave];
+        var datos = catalogos[clave];
+
+        if (Array.isArray(datos) && datos.length > 0) {
+          _poblarSelect(meta.selectId, meta.skeletonId, datos, meta.campoValor, meta.campoTexto);
+          totalPoblados++;
+        } else {
+          _mostrarSelectVacio(meta.selectId, meta.skeletonId, '— Sin datos disponibles —');
+        }
+      });
+
+      // El estado es string único en bd_sgh.json
+      // Los catálogos de ubicación son de RESIDENCIA del empleado (Sección 1),
+      // no del plantel. En la vó actual de la app, la Sección 2 es solo lectura
+      // con datos del plantel cargados directamente del SESION.
+
+      var msg = totalPoblados + ' catálogo(s) cargado(s) correctamente.';
+      _setBannerCatalogos('listo', '✔ ' + msg);
+      mostrarToast(msg, 'exito');
+
+      // --- Nivel/Modalidad desde nivel_modalidad.modalidades ---
+      if (catalogos.nivel_modalidad && Array.isArray(catalogos.nivel_modalidad.niveles)) {
+        _poblarSelect('sel-nivel-modalidad', 'skeleton-nivel-modalidad', catalogos.nivel_modalidad.niveles);
+      }
+
+      // --- Situación Laboral desde estatus ---
+      if (catalogos.estatus && !Array.isArray(catalogos.estatus)) {
+        // Nueva arquitectura O(1): diccionario { "ACTIVO": "descripción...", ... }
+        var sl = document.getElementById('sel-situacion-laboral');
+        var skSl = document.getElementById('skeleton-situacion-laboral');
+        if (skSl) skSl.style.display = 'none';
+        if (sl) {
+          sl.innerHTML = '<option value="">— Seleccione —</option>';
+          var keys = Object.keys(catalogos.estatus);
+          keys.sort(function(a, b) { return a.localeCompare(b); });
+          keys.forEach(function (situacion) {
+            var o = document.createElement('option');
+            o.value = situacion;
+            o.textContent = situacion;
+            sl.appendChild(o);
+          });
+          sl.classList.remove('oculto');
+          sl.disabled = false;
+        }
+      } else if (Array.isArray(catalogos.estatus)) {
+        // Compatibilidad con estructura legacy (arreglo)
+        var sl = document.getElementById('sel-situacion-laboral');
+        var skSl = document.getElementById('skeleton-situacion-laboral');
+        if (skSl) skSl.style.display = 'none';
+        if (sl) {
+          sl.innerHTML = '<option value="">— Seleccione —</option>';
+          var arr = catalogos.estatus.slice();
+          arr.sort(function(a, b) { return (a.situacion_laboral || "").localeCompare(b.situacion_laboral || ""); });
+          arr.forEach(function (e) {
+            var o = document.createElement('option');
+            o.value = e.situacion_laboral;
+            o.textContent = e.situacion_laboral;
+            sl.appendChild(o);
+          });
+          sl.classList.remove('oculto');
+          sl.disabled = false;
+        }
+      }
+
+      // --- Tipo y Condición de Vivienda desde social ---
+      if (catalogos.social) {
+        if (Array.isArray(catalogos.social.tipo_vivienda)) {
+          _poblarSelect('sel-tipo-vivienda', 'skeleton-tipo-vivienda', catalogos.social.tipo_vivienda);
+        }
+        if (Array.isArray(catalogos.social.condicion_vivienda)) {
+          _poblarSelect('sel-condicion-vivienda', 'skeleton-condicion-vivienda', catalogos.social.condicion_vivienda);
+        }
+      }
+
+      // --- Catálogo global de planes de estudio (para el modal Cuadratura) ---
+      if (catalogos.planes_estudio && !Array.isArray(catalogos.planes_estudio)) {
+        SESION.catalogoPlanesEstudio = catalogos.planes_estudio; // ahora es diccionario O(1)
+      } else if (Array.isArray(catalogos.planes_estudio)) {
+        SESION.catalogoPlanesEstudio = catalogos.planes_estudio; // compatibilidad legacy
+      }
+
+      setTimeout(function () {
+        var banner = document.getElementById('banner-catalogos');
+        if (banner) banner.style.display = 'none';
+      }, 4000);
+    }
+
+    /** Callback de error al cargar catálogos. */
+    function _onCatalogosError(error) {
+      _setBannerCatalogos('error', '⚠ No se pudieron cargar los catálogos: ' + (error || 'error desconocido'));
+      mostrarToast('Error al cargar catálogos. Verifique su conexión.', 'error');
+      console.error('[SGH] Fallo en obtenerCatalogos:', error);
+
+      // Dejar los selects visibles pero vacíos para no bloquear el formulario
+      Object.keys(MAPA_CATALOGOS).forEach(function (clave) {
+        var meta = MAPA_CATALOGOS[clave];
+        _mostrarSelectVacio(meta.selectId, meta.skeletonId, '— Error al cargar —');
+      });
+      _mostrarSelectVacio('sel-estado', 'skeleton-estado', '— Error —');
+    }
+
+    /**
+     * Puebla un select con las opciones de un array de catálogo.
+     * Soporta tanto array de primitivos como array de objetos.
+     */
+    function _poblarSelect(selectId, skeletonId, datos, campoValor, campoTexto) {
+      var skeleton = document.getElementById(skeletonId);
+      var select = document.getElementById(selectId);
+      if (!select) return;
+
+      // Limpiar opciones previas
+      select.innerHTML = '<option value="">— Seleccione —</option>';
+
+      var fragmento = document.createDocumentFragment();
+      datos.forEach(function (item) {
+        var valor, texto;
+        if (item !== null && typeof item === 'object') {
+          valor = item[campoValor];
+          texto = item[campoTexto];
+        } else {
+          valor = item;
+          texto = item;
+        }
+
+        if (valor === undefined || valor === null) return;
+        var opt = document.createElement('option');
+        opt.value = String(valor);
+        opt.textContent = String(texto !== undefined ? texto : valor);
+        fragmento.appendChild(opt);
+      });
+      select.appendChild(fragmento);
+
+      if (skeleton) skeleton.style.display = 'none';
+      select.classList.remove('oculto');
+      select.disabled = false;
+    }
+
+    /** Muestra el select con un mensaje cuando el catálogo está vacío o en error. */
+    function _mostrarSelectVacio(selectId, skeletonId, mensaje) {
+      var skeleton = document.getElementById(skeletonId);
+      var select = document.getElementById(selectId);
+      if (!select) return;
+      select.innerHTML = '<option value="">' + _escaparHtml(mensaje) + '</option>';
+      if (skeleton) skeleton.style.display = 'none';
+      select.classList.remove('oculto');
+      select.disabled = false;
+    }
+
+    // -------------------------------------------------------------------
+    // MÓDULO DE FORMULARIO DE CAPTURA
+    // Regla de Oro 1: Solo valida presencia de campos en el cliente.
+    // La lógica institucional y cálculos son responsabilidad del servidor.
+    // -------------------------------------------------------------------
+
+    /** Definición de los campos requeridos con sus mensajes de error. */
+    var CAMPOS_REQUERIDOS = [
+      { campoId: 'campo-cedula', inputId: 'inp-cedula', msg: 'Ingrese la cédula de identidad.' },
+      { campoId: 'campo-nombres', inputId: 'inp-nombre-apellido', msg: 'El nombre es requerido.' },
+      { campoId: 'campo-fecha-nacimiento', inputId: 'inp-fecha-nacimiento', msg: 'Seleccione la fecha de nacimiento.' },
+      { campoId: 'campo-sexo', inputId: 'sel-genero', msg: 'Seleccione el género.' },
+      { campoId: 'campo-cargo', inputId: 'sel-cargo', msg: 'Seleccione un cargo.' },
+      { campoId: 'campo-fecha-ingreso', inputId: 'inp-fecha-ingreso', msg: 'Seleccione la fecha de ingreso.' },
+      { campoId: 'campo-telefono', inputId: 'inp-tel-celular', msg: 'Ingrese un teléfono celular.' },
+      { campoId: 'campo-correo', inputId: 'inp-correo', msg: 'Ingrese un correo electrónico.' },
+      { campoId: 'campo-direccion', inputId: 'inp-direccion', msg: 'Ingrese la dirección completa.' },
+      { campoId: 'campo-tipo-personal', inputId: 'sel-tipo-personal', msg: 'Seleccione el tipo de personal.' }
+    ];
+
+    /**
+     * Valida todos los campos requeridos del formulario de captura.
+     * @returns {boolean} true si todos son válidos.
+     */
+    function _validarFormularioCaptura() {
+      var valido = true;
+      // Limpiar estados previos
+      CAMPOS_REQUERIDOS.forEach(function (c) { marcarCampo(c.campoId, false); });
+
+      CAMPOS_REQUERIDOS.forEach(function (c) {
+        var el = document.getElementById(c.inputId);
+        if (!el) return;
+        var valor = el.value.trim();
+        if (!valor) {
+          marcarCampo(c.campoId, true);
+          // Actualizar el mensaje de error específico del campo
+          var errEl = document.getElementById('err-' + c.inputId.replace('inp-', '').replace('sel-', ''));
+          if (errEl) errEl.textContent = c.msg;
+          valido = false;
+        }
+      });
+      return valido;
+    }
+
+    /** Recopila los datos del formulario en un objeto plano A-AO. */
+    function _recopilarDatosFormulario() {
+      var tPersonal = document.getElementById('sel-tipo-personal').value;
+      var titularObj = document.querySelector('input[name="titular"]:checked');
+      return {
+        // Metadatos requeridos por servidor
+        idHojaPlantel: SESION.idHojaPlantel,
+        usuarioRegistrador: SESION.cedula,
+        datosPlantel: SESION.datosPlantel,
+
+        // Identificador para edición (Si está vacío, es inserción)
+        idEdicion: document.getElementById('inp-id-edicion').value,
+
+        // B-P: Identificación y Contacto
+        cedula: document.getElementById('inp-cedula').value.trim().toUpperCase(),
+        nacionalidad: document.getElementById('sel-nacionalidad').value.toUpperCase(),
+        nombreApellido: document.getElementById('inp-nombre-apellido').value.trim().toUpperCase(),
+        lugarNacimiento: document.getElementById('inp-lugar-nacimiento').value.trim().toUpperCase(),
+        fechaNacimiento: document.getElementById('inp-fecha-nacimiento').value,
+        genero: document.getElementById('sel-genero').value.toUpperCase(),
+        telHabitacion: document.getElementById('inp-tel-habitacion').value.trim(),
+        telCelular: document.getElementById('inp-tel-celular').value.trim(),
+        telOficina: document.getElementById('inp-tel-oficina').value.trim(),
+        correo: document.getElementById('inp-correo').value.trim().toLowerCase(),
+        estadoCivil: document.getElementById('sel-estado-civil').value.toUpperCase(),
+        direccion: document.getElementById('inp-direccion').value.trim().toUpperCase(),
+        instruccion: document.getElementById('sel-instruccion').value.toUpperCase(),
+        profesion: document.getElementById('inp-profesion').value.trim().toUpperCase(),
+
+        // Q-Y: Ubicación del Plantel (Solo Lectura - viene del SESION)
+        estado: document.getElementById('inp-estado').value.toUpperCase(),
+        municipio: document.getElementById('inp-municipio').value.toUpperCase(),
+        parroquia: document.getElementById('inp-parroquia').value.toUpperCase(),
+        codigoPlantel: document.getElementById('inp-codigo-plantel').value.toUpperCase(),
+
+        // AF-AQ: Datos Laborales
+        ubicacionAdministrativa: document.getElementById('inp-ubicacion-administrativa').value.trim().toUpperCase(),
+        dependenciaLaboral: document.getElementById('sel-dependencia').value.toUpperCase(),
+
+        tipoPersonal: tPersonal.toUpperCase(),
+        subCategoria: tPersonal === 'obrero' ? document.getElementById('sel-subcategoria').value.toUpperCase() : '',
+        cargo: document.getElementById('sel-cargo').value.toUpperCase(),
+        codigoRac: document.getElementById('sel-codigo-rac').value.toUpperCase(),
+        titular: titularObj ? titularObj.value.toUpperCase() : '',
+        horasAcademicas: parseInt(document.getElementById('inp-horas-academicas').value) || 0,
+        horasAdministrativas: parseInt(document.getElementById('inp-horas-administrativas').value) || 0,
+        fechaIngreso: document.getElementById('inp-fecha-ingreso').value,
+        turnosAtiende: document.getElementById('sel-turnos-atiende').value.toUpperCase(),
+
+        // AP-AR: Matrícula del docente
+        atiendeMatricula: document.getElementById('sel-atiende-matricula').value,
+        nivelModalidad: document.getElementById('sel-nivel-modalidad').value.toUpperCase(),
+        especialidadImparte: document.getElementById('inp-especialidad-imparte').value.trim().toUpperCase(),
+
+        // AS-BU: Cuadratura (llenada por el modal)
+        cuadratura: window._CUADRATURA_TEMP || {},
+
+        // BV-CK: Situación laboral y datos sociales
+        situacionLaboral: document.getElementById('sel-situacion-laboral').value.toUpperCase(),
+        observacionEstatus: document.getElementById('inp-observacion-estatus').value.trim().toUpperCase(),
+        tallaCamisa: document.getElementById('sel-talla-camisa').value,
+        tallaPantalon: document.getElementById('sel-talla-pantalon').value,
+        tallaZapato: document.getElementById('sel-talla-zapato').value,
+        actividadDeportiva: document.getElementById('inp-actividad-deportiva').value.trim().toUpperCase(),
+        actividadCultural: document.getElementById('inp-actividad-cultural').value.trim().toUpperCase(),
+        tipoVivienda: document.getElementById('sel-tipo-vivienda').value.toUpperCase(),
+        condicionVivienda: document.getElementById('sel-condicion-vivienda').value.toUpperCase(),
+        tipoMaterial: document.getElementById('inp-tipo-material').value.trim().toUpperCase(),
+        tipoEnfermedad: document.getElementById('inp-tipo-enfermedad').value.trim().toUpperCase(),
+        medicamento: document.getElementById('inp-medicamento').value.trim().toUpperCase(),
+        discapacidad: document.getElementById('sel-discapacidad').value,
+        ubch: document.getElementById('inp-ubch').value.trim().toUpperCase(),
+        circuitoComunal: document.getElementById('inp-circuito-comunal').value.trim().toUpperCase(),
+        centroVotacion: document.getElementById('inp-centro-votacion').value.trim().toUpperCase()
+      };
+    }
+
+    /** Establece el estado visual del botón de guardar. */
+    function _setEstadoBotonGuardar(guardando) {
+      var btn = document.getElementById('btn-guardar');
+      var span = document.getElementById('btn-guardar-texto');
+      btn.disabled = guardando;
+      if (guardando) {
+        btn.innerHTML = '<div class="spinner"></div><span>Guardando…</span>';
+      } else {
+        btn.innerHTML = '<span id="btn-guardar-texto">💾 Guardar Registro</span>';
+      }
+    }
+
+    /**
+     * Callback de éxito de guardarRegistroPersonal().
+     * Recibe solo primitivos desde el servidor (Regla de Oro 7).
+     * @param {{ exito: boolean, idRegistro?: string, mensaje?: string, error?: string }} resultado
+     */
+    function _onGuardarExitoso(resultado, payloadGuardado) {
+      hideGlobalSpinner();
+      _setEstadoBotonGuardar(false);
+
+      if (!resultado || !resultado.exito) {
+        mostrarToast(resultado.error || 'Error al guardar el registro. Intente nuevamente.', 'error');
+        return;
+      }
+
+      // Notificación de éxito con ID de registro generado por el servidor.
+      mostrarToast(
+        '✔ Guardado exitosamente — ID: ' + resultado.idRegistro,
+        'exito'
+      );
+
+      // Limpiar formulario tras guardado exitoso y restaurar estado de inserción.
+      _limpiarFormulario();
+      document.getElementById('inp-id-edicion').value = '';
+      document.getElementById('titulo-captura').textContent = "Registro de Nuevo Personal";
+      document.getElementById('btn-cancelar-edicion').classList.add('oculto');
+      document.getElementById('btn-guardar-texto').textContent = "💾 Guardar Registro";
+
+      // Actualizar la tabla de personal.
+      if (window.cargarTablaPersonal) {
+        window.cargarTablaPersonal();
+      }
+
+      // -- Eliminar vacantes cubiertas por este empleado --
+      _reducirVacantesDelEmpleado(payloadGuardado);
+
+      // Hacer scroll al inicio del formulario o tabla para el siguiente registro.
+      var seccionTabla = document.getElementById('seccion-tabla-personal');
+      if (seccionTabla) seccionTabla.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    /**
+     * Callback de fallo de red o excepción crítica en el servidor.
+     * @param {Error|string} error - Error devuelto por GAS.
+     */
+    function _onGuardarFallido(error) {
+      hideGlobalSpinner();
+      _setEstadoBotonGuardar(false);
+      mostrarToast('Error de comunicación al guardar. Intente de nuevo.', 'error');
+      console.error('[SGH] Fallo en guardarRegistroPersonal:', error);
+    }
+
+    /** Manejador del submit del formulario de captura. */
+    function _manejarSubmitCaptura(evento) {
+      evento.preventDefault();
+
+      if (!_validarFormularioCaptura()) {
+        mostrarToast('Complete todos los campos requeridos.', 'aviso');
+        // Hacer scroll al primer campo inválido
+        var primerInvalido = document.querySelector('.form-campo.invalido');
+        if (primerInvalido) primerInvalido.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      _setEstadoBotonGuardar(true);
+      showGlobalSpinner();
+      var payload = _recopilarDatosFormulario();
+
+      // Llamada asíncrona al motor de guardado del servidor.
+      // El payload transporta solo primitivos (Regla de Oro 7).
+      // El servidor re-valida el acceso internamente — el cliente no controla la ruta.
+      google.script.run
+        .withSuccessHandler(_onGuardarExitoso)
+        .withFailureHandler(_onGuardarFallido)
+        .guardarRegistroPersonal(payload);
+    }
+
+    /** Reduce/elimina vacantes segun el nivel y cuadratura del empleado guardado. */
+    function _reducirVacantesDelEmpleado(p) {
+      if (!p || !p.nivelModalidad) return;
+      var v = window._VACANTES_TEMP || {};
+      var nivel = p.nivelModalidad;
+      var cuad = p.cuadratura || {};
+      var modificado = false;
+
+      if (nivel === 'INICIAL') {
+        ['maternal', 'preescolar'].forEach(function(sub) {
+          if (cuad[sub] && v[sub]) {
+            var datos = typeof cuad[sub] === 'string' ? JSON.parse(cuad[sub]) : cuad[sub];
+            Object.keys(datos).forEach(function(sec) {
+              if (v[sub][sec]) {
+                delete v[sub][sec];
+                modificado = true;
+              }
+            });
+            if (Object.keys(v[sub]).length === 0) delete v[sub];
+          }
+        });
+      } else if (nivel === 'PRIMARIA') {
+        if (cuad['primaria'] && v.primaria) {
+          var datosPri = typeof cuad['primaria'] === 'string' ? JSON.parse(cuad['primaria']) : cuad['primaria'];
+          Object.keys(datosPri).forEach(function(clave) {
+            if (v.primaria[clave]) {
+              delete v.primaria[clave];
+              modificado = true;
+            }
+          });
+          if (Object.keys(v.primaria).length === 0) delete v.primaria;
+        }
+      }
+
+      if (modificado) {
+        window._VACANTES_TEMP = v;
+        if (typeof window._actualizarResumenVacantes === 'function') window._actualizarResumenVacantes();
+        // Persistir cambio en el servidor
+        google.script.run
+          .withSuccessHandler(function() {})
+          .withFailureHandler(function() {})
+          .guardarSoloVacantes({ usuarioRegistrador: SESION.cedula, municipioPlantel: SESION.municipioPlantel, vacantes: v });
+        mostrarToast('Vacante cubierta por el empleado registrado.', 'exito');
+      }
+    }
+
+    /** Limpia todos los campos del formulario de captura. */
+    function _limpiarFormulario() {
+      document.getElementById('form-captura').reset();
+      CAMPOS_REQUERIDOS.forEach(function (c) { marcarCampo(c.campoId, false); });
+      // Resetear cuadratura
+      window._CUADRATURA_TEMP = {};
+      var resCont = document.getElementById('cont-cuadratura-resumen');
+      if (resCont) resCont.style.display = 'none';
+      var contNM = document.getElementById('cont-nivel-modalidad');
+      if (contNM) contNM.style.display = 'none';
+      var contEI = document.getElementById('cont-especialidad-imparte');
+      if (contEI) contEI.style.display = 'none';
+      var contBtnCuad = document.getElementById('cont-btn-cuadratura');
+      if (contBtnCuad) contBtnCuad.style.display = 'none';
+      
+      // Restaurar valores de Seccion 2 (Ubicacion - Solo Lectura)
+      if (typeof SESION !== 'undefined' && SESION.estadoPlantel) {
+        var dp = SESION.datosPlantel || {};
+        document.getElementById('inp-estado').value = SESION.estadoPlantel || '';
+        document.getElementById('inp-municipio').value = SESION.municipioPlantel || '';
+        document.getElementById('inp-parroquia').value = SESION.parroquiaPlantel || '';
+        document.getElementById('inp-ubicacion-fisica').value = dp.nombre_plantel || '';
+        document.getElementById('inp-turnos-plantel').value = dp.turno || '';
+        document.getElementById('inp-codigo-plantel').value = SESION.cedula || '';
+        document.getElementById('inp-cod-dependencia-1').value = dp.codigo_dependencia || '';
+        document.getElementById('inp-cod-dependencia-2').value = dp.codigo_dependencia_2 || '';
+        document.getElementById('inp-cod-estadistico').value = dp.codigo_estadistico || '';
+        document.getElementById('inp-dependencia-plantel').value = dp.dependencia || '';
+        document.getElementById('inp-ubicacion-geografica').value = dp.ubicacion || '';
+        document.getElementById('inp-nivel-plantel').value = dp.nivel || '';
+        document.getElementById('inp-modalidad-plantel').value = dp.modalidad || '';
+      }
+
+      mostrarToast('Formulario limpiado.', 'info');
+    }
+
+    // -------------------------------------------------------------------
+    // INICIALIZACIÓN Y BINDING DE EVENTOS
+    // -------------------------------------------------------------------
+
+    document.addEventListener('DOMContentLoaded', function () {
+      // Ocultar overlay de carga inicial
+      setTimeout(ocultarOverlayCarga, 400);
+
+      // Modal Cambio Clave
+      var modalCC = document.getElementById('modal-cambio-clave');
+      var btnAbrirCC = document.getElementById('btn-cambiar-clave');
+      var btnAbrirCCMatricula = document.getElementById('btn-cambiar-clave-matricula');
+      var btnCerrarCC = document.getElementById('btn-cerrar-modal-cc');
+      var btnCancelarCC = document.getElementById('btn-cancelar-cc');
+      var formCC = document.getElementById('form-cambio-clave');
+
+      function ocultarModalCC() {
+        modalCC.classList.remove('activo');
+        modalCC.setAttribute('aria-hidden', 'true');
+        formCC.reset();
+      }
+
+      function mostrarModalCC() {
+        modalCC.classList.add('activo');
+        modalCC.setAttribute('aria-hidden', 'false');
+      }
+
+      btnAbrirCC.addEventListener('click', mostrarModalCC);
+      if (btnAbrirCCMatricula) btnAbrirCCMatricula.addEventListener('click', mostrarModalCC);
+
+      btnCerrarCC.addEventListener('click', ocultarModalCC);
+      btnCancelarCC.addEventListener('click', ocultarModalCC);
+
+      formCC.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var actual = document.getElementById('inp-cc-actual').value;
+        var nueva = document.getElementById('inp-cc-nueva').value;
+        var confirmacion = document.getElementById('inp-cc-confirmar').value;
+
+        if (nueva !== confirmacion) {
+          mostrarToast('La nueva contraseña y la confirmación no coinciden.', 'error');
+          return;
+        }
+
+        var btnSubmit = document.getElementById('btn-guardar-cc');
+        var btnTexto = document.getElementById('btn-guardar-cc-texto');
+        btnSubmit.disabled = true;
+        btnTexto.innerHTML = '<div class="spinner" style="display:inline-block; margin-right:5px; width:14px; height:14px;"></div> Guardando...';
+
+        google.script.run
+          .withSuccessHandler(function (res) {
+            btnSubmit.disabled = false;
+            btnTexto.textContent = 'Guardar Cambios';
+            if (res.exito) {
+              mostrarToast(res.mensaje, 'exito');
+              if (window._forzandoClave) {
+                // Restaurar botones del modal
+                document.getElementById('btn-cancelar-cc').style.display = 'inline-block';
+                document.getElementById('btn-cerrar-modal-cc').style.display = 'flex';
+                document.getElementById('inp-cc-actual').readOnly = false;
+                window._forzandoClave = false;
+                ocultarModalCC();
+                
+                // Actualizar campo de login y volver a enviar automáticamente
+                document.getElementById('login-clave').value = nueva;
+                var evt = document.createEvent("HTMLEvents");
+                evt.initEvent("submit", false, true);
+                document.getElementById('form-login').dispatchEvent(evt);
+              } else {
+                ocultarModalCC();
+              }
+            } else {
+              mostrarToast(res.error, 'error');
+            }
+          })
+          .withFailureHandler(function (err) {
+            btnSubmit.disabled = false;
+            btnTexto.textContent = 'Guardar Cambios';
+            mostrarToast('Error de conexión con el servidor.', 'error');
+          })
+          .cambiarClaveUsuario(SESION.idHojaPlantel, SESION.cedula, actual, nueva);
+      });
+
+      // Toggle visibilidad de contraseña
+      document.getElementById('btn-toggle-pwd').addEventListener('click', function () {
+        var inp = document.getElementById('login-clave');
+        var esPassword = inp.type === 'password';
+        inp.type = esPassword ? 'text' : 'password';
+        this.textContent = esPassword ? '🙈' : '';
+        this.setAttribute('aria-label', esPassword ? 'Ocultar contraseña' : 'Mostrar contraseña');
+      });
+
+      // Submit del formulario de login
+      document.getElementById('form-login').addEventListener('submit', _manejarSubmitLogin);
+
+      // Botón aceptar declaración jurada
+      document.getElementById('btn-aceptar-declaracion').addEventListener('click', function() {
+        var modal = document.getElementById('modal-declaracion');
+        if (modal) {
+          modal.classList.remove('activo');
+          modal.setAttribute('aria-hidden', 'true');
+        }
+        // Registrar la aceptación en el Histórico de Auditoría (fire-and-forget)
+        if (SESION && SESION.cedula) {
+          google.script.run.registrarAceptacionDeclaracion(SESION.cedula);
+        }
+        if (typeof window._ejecutarTransicionLogin === 'function') {
+          window._ejecutarTransicionLogin();
+        }
+      });
+
+      // Limpiar mensaje de login al escribir
+      ['login-usuario', 'login-clave'].forEach(function (id) {
+        document.getElementById(id).addEventListener('input', function () {
+          _setMensajeLogin('');
+        });
+      });
+
+      // Cerrar sesión
+      document.getElementById('btn-cerrar-sesion').addEventListener('click', function () {
+        if (confirm('¿Está seguro de que desea cerrar la sesión?')) cerrarSesion();
+      });
+      var btnSalirMat = document.getElementById('btn-cerrar-sesion-matricula');
+      if (btnSalirMat) {
+        btnSalirMat.addEventListener('click', function () {
+          if (confirm('¿Está seguro de que desea cerrar la sesión?')) cerrarSesion();
+        });
+      }
+
+      // Navegación entre Plantel y Personal
+      document.getElementById('btn-ir-personal').addEventListener('click', function () {
+        document.getElementById('vista-matricula').classList.add('oculto');
+        mostrarVistaPrincipal();
+        _cargarCatalogos();
+        window.cargarTablaPersonal();
+      });
+
+      document.getElementById('btn-ir-plantel').addEventListener('click', function () {
+        document.getElementById('vista-principal').classList.add('oculto');
+        document.getElementById('vista-matricula').classList.remove('oculto');
+      });
+
+      // Submit del formulario de captura
+      document.getElementById('form-captura').addEventListener('submit', _manejarSubmitCaptura);
+
+      // Limpiar formulario
+      document.getElementById('btn-limpiar').addEventListener('click', function () {
+        if (confirm('¿Desea limpiar todos los datos del formulario?')) _limpiarFormulario();
+      });
+
+      // Limpiar errores de validación al modificar un campo
+      document.getElementById('form-captura').addEventListener('input', function (e) {
+        var campo = e.target.closest('.form-campo');
+        if (campo && campo.classList.contains('invalido')) {
+          campo.classList.remove('invalido');
+        }
+      });
+      document.getElementById('form-captura').addEventListener('change', function (e) {
+        var campo = e.target.closest('.form-campo');
+        if (campo && campo.classList.contains('invalido')) {
+          campo.classList.remove('invalido');
+        }
+      });
+
+      // -------------------------------------------------------------------
+      // MODAL VACANTES
+      // -------------------------------------------------------------------
+      window._VACANTES_TEMP = window._VACANTES_TEMP || {};
+
+      window._actualizarResumenVacantes = function _actualizarResumenVacantes() {
+        var v = window._VACANTES_TEMP || {};
+        var lineas = [];
+        var totalVac = 0;
+
+        function _sumarObj(obj) {
+          var t = 0;
+          if (obj && typeof obj === 'object') Object.keys(obj).forEach(function(k) { t += parseInt(obj[k], 10) || 0; });
+          return t;
+        }
+
+        ['maternal', 'preescolar'].forEach(function(key) {
+          if (v[key]) {
+            var s = _sumarObj(v[key]);
+            if (s > 0) { lineas.push(key.toUpperCase() + ': ' + s + ' alumnos vacantes'); totalVac += s; }
+          }
+        });
+        if (v.primaria && typeof v.primaria === 'object') {
+          var sp = _sumarObj(v.primaria);
+          if (sp > 0) { lineas.push('PRIMARIA: ' + sp + ' alumnos vacantes'); totalVac += sp; }
+        }
+
+        var cont = document.getElementById('cont-vacantes-resumen');
+        var txt  = document.getElementById('vacantes-resumen-texto');
+        if (totalVac > 0) {
+          cont.style.display = '';
+          txt.textContent = lineas.join(' | ');
+        } else {
+          cont.style.display = 'none';
+        }
+      }
+
+      function _abrirModalVacantes() {
+        var mat = document.getElementById('secMat') ? (parseInt(document.getElementById('secMat').value) || 0) : ((SESION.matricula && SESION.matricula.secMat) || 0);
+        var pre = document.getElementById('secPre') ? (parseInt(document.getElementById('secPre').value) || 0) : ((SESION.matricula && SESION.matricula.secPre) || 0);
+        var pri = document.getElementById('secPri') ? (parseInt(document.getElementById('secPri').value) || 0) : ((SESION.matricula && SESION.matricula.secPri) || 0);
+
+        var VAC = window._VACANTES_TEMP || {};
+
+        // ===== DIAGNÓSTICO TEMPORAL =====
+        console.log('[SGH-VAC-DEBUG] _VACANTES_TEMP completo:', JSON.stringify(VAC));
+        console.log('[SGH-VAC-DEBUG] secciones: mat=' + mat + ' pre=' + pre + ' pri=' + pri);
+        console.log('[SGH-VAC-DEBUG] VAC.maternal=', JSON.stringify(VAC['maternal']));
+        console.log('[SGH-VAC-DEBUG] VAC.preescolar=', JSON.stringify(VAC['preescolar']));
+        console.log('[SGH-VAC-DEBUG] VAC.primaria=', JSON.stringify(VAC['primaria']));
+        // ================================
+
+        // Auto-corrección: Si las secciones dicen 0 pero hay vacantes, forzar mostrar al menos 1 sección
+        if (mat === 0 && VAC['maternal'] && Object.keys(VAC['maternal']).length > 0) mat = Object.keys(VAC['maternal']).length;
+        if (pre === 0 && VAC['preescolar'] && Object.keys(VAC['preescolar']).length > 0) pre = Object.keys(VAC['preescolar']).length;
+        if (pri === 0 && VAC['primaria'] && Object.keys(VAC['primaria']).length > 0) pri = 6; // Al menos 1 por grado
+
+        if (mat === 0 && pre === 0 && pri === 0) {
+          mostrarToast('Primero declare las secciones en el formulario de matrícula.', 'advertencia');
+          return;
+        }
+
+        var contenido = document.getElementById('vacantes-contenido');
+        contenido.innerHTML = '';
+
+        function _letraSec(s, n) { return n === 1 ? 'U' : String.fromCharCode(65 + s); }
+        function _distribuirSecciones(numSec, numGrados) {
+          var base = Math.floor(numSec / numGrados), resto = numSec % numGrados, dist = [];
+          for (var g = 0; g < numGrados; g++) dist.push(base + (g < resto ? 1 : 0));
+          return dist;
+        }
+
+        // Recuperar valor exacto sin intentar hacer fallback (evita que se roben valores de otras secciones)
+        function _getGuardado(data, clavePrincipal) {
+          if (!data) return 0;
+          if (data[clavePrincipal]) {
+            var valExacto = parseInt(data[clavePrincipal], 10) || 0;
+            delete data[clavePrincipal]; // ELIMINAR para no repetir
+            return valExacto;
+          }
+          return 0;
+        }
+
+        function _crearBloque(titulo, keyPlan, numSec, dataObj) {
+          // Copia temporal para consumir valores en el fallback sin mutar el original antes de guardar
+          var tempData = dataObj ? JSON.parse(JSON.stringify(dataObj)) : {};
+          var div = document.createElement('div');
+          div.style.cssText = 'margin-bottom:1.2rem; border:1px solid #fde68a; border-radius:8px; padding:1rem; background:#fffbeb;';
+          var h4 = document.createElement('h4');
+          h4.textContent = titulo;
+          h4.style.cssText = 'margin:0 0 0.75rem; font-size:0.95rem; color:#92400e; font-weight:700;';
+          div.appendChild(h4);
+          var grid = document.createElement('div');
+          grid.style.cssText = 'display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:0.5rem;';
+          for (var s = 0; s < numSec; s++) {
+            var letra = _letraSec(s, numSec);
+            var guardado = _getGuardado(tempData, letra);
+            var wrap = document.createElement('div');
+            wrap.style.cssText = 'display:flex; flex-direction:column; gap:0.2rem;';
+            var lbl = document.createElement('label');
+            lbl.textContent = 'SECCIÓN ' + letra;
+            lbl.style.cssText = 'font-size:0.8rem; color:#78350f; font-weight:600;';
+            var inp = document.createElement('input');
+            inp.type = 'number'; inp.min = '0'; inp.value = String(guardado);
+            inp.dataset.plan = keyPlan; inp.dataset.sec = letra;
+            inp.className = 'form-input vac-input';
+            inp.style.cssText = 'padding:0.4rem; font-size:0.9rem; text-align:center; border-color:#f59e0b;';
+            inp.placeholder = 'alumnos';
+            wrap.appendChild(lbl); wrap.appendChild(inp);
+            grid.appendChild(wrap);
+          }
+          div.appendChild(grid);
+          return div;
+        }
+
+        if (mat > 0) contenido.appendChild(_crearBloque('MATERNAL', 'maternal', mat, VAC['maternal']));
+        if (pre > 0) contenido.appendChild(_crearBloque('PREESCOLAR', 'preescolar', pre, VAC['preescolar']));
+
+        if (pri > 0) {
+          var dist = _distribuirSecciones(pri, 6);
+          var ORDINALES = ['1ER','2DO','3ER','4TO','5TO','6TO'];
+          var dataPri = VAC['primaria'] ? JSON.parse(JSON.stringify(VAC['primaria'])) : {};
+          for (var g = 0; g < 6; g++) {
+            if (dist[g] === 0) continue;
+            var divG = document.createElement('div');
+            divG.style.cssText = 'margin-bottom:1rem; border:1px solid #fde68a; border-radius:8px; padding:0.85rem; background:#fffbeb;';
+            var hG = document.createElement('h4');
+            hG.textContent = ORDINALES[g] + ' GRADO';
+            hG.style.cssText = 'margin:0 0 0.6rem; font-size:0.9rem; color:#92400e; font-weight:700;';
+            divG.appendChild(hG);
+            var gridG = document.createElement('div');
+            gridG.style.cssText = 'display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:0.4rem;';
+            for (var s = 0; s < dist[g]; s++) {
+              var letra = _letraSec(s, dist[g]);
+              var clave = String(g + 1) + letra;
+              var guardado = _getGuardado(dataPri, clave);
+              var wrapG = document.createElement('div');
+              wrapG.style.cssText = 'display:flex; flex-direction:column; gap:0.2rem;';
+              var lblG = document.createElement('label');
+              lblG.textContent = ORDINALES[g] + ' GRADO ' + letra;
+              lblG.style.cssText = 'font-size:0.78rem; color:#78350f; font-weight:600;';
+              var inpG = document.createElement('input');
+              inpG.type = 'number'; inpG.min = '0'; inpG.value = String(guardado);
+              inpG.dataset.plan = 'primaria'; inpG.dataset.grado = String(g + 1); inpG.dataset.sec = letra;
+              inpG.className = 'form-input vac-input';
+              inpG.style.cssText = 'padding:0.35rem; font-size:0.88rem; text-align:center; border-color:#f59e0b;';
+              inpG.placeholder = 'alumnos';
+              wrapG.appendChild(lblG); wrapG.appendChild(inpG);
+              gridG.appendChild(wrapG);
+            }
+            divG.appendChild(gridG);
+            contenido.appendChild(divG);
+          }
+        }
+
+        var modal = document.getElementById('modal-vacantes');
+        modal.style.display = 'flex';
+        modal.setAttribute('aria-hidden', 'false');
+      }
+
+      window.onAbrirVacantes = function() { _abrirModalVacantes(); };
+
+      document.getElementById('btn-cerrar-modal-vacantes').addEventListener('click', function() {
+        document.getElementById('modal-vacantes').style.display = 'none';
+        document.getElementById('modal-vacantes').setAttribute('aria-hidden', 'true');
+      });
+      document.getElementById('btn-cancelar-vacantes').addEventListener('click', function() {
+        document.getElementById('modal-vacantes').style.display = 'none';
+        document.getElementById('modal-vacantes').setAttribute('aria-hidden', 'true');
+      });
+
+      document.getElementById('btn-confirmar-vacantes').addEventListener('click', function() {
+        var inputs = document.querySelectorAll('#vacantes-contenido .vac-input');
+        var vacFinal = { maternal: {}, preescolar: {}, primaria: {} };
+
+        inputs.forEach(function(inp) {
+          var val = parseInt(inp.value, 10) || 0;
+          if (val <= 0) return;
+          var plan  = inp.dataset.plan  || '';
+          var sec   = inp.dataset.sec   || '';
+          var grado = inp.dataset.grado || '';
+
+          if (plan === 'maternal' || plan === 'preescolar') {
+            vacFinal[plan][sec] = val;
+          } else if (plan === 'primaria') {
+            vacFinal.primaria[grado + sec] = val;
+          }
+        });
+
+        // Limpiar claves vacías
+        ['maternal', 'preescolar', 'primaria'].forEach(function(k) {
+          if (Object.keys(vacFinal[k]).length === 0) delete vacFinal[k];
+        });
+
+        window._VACANTES_TEMP = vacFinal;
+        _actualizarResumenVacantes();
+
+        document.getElementById('modal-vacantes').style.display = 'none';
+        document.getElementById('modal-vacantes').setAttribute('aria-hidden', 'true');
+        mostrarToast('Vacantes registradas correctamente.', 'exito');
+      });
+
+      // -------------------------------------------------------------------
+      // MODAL CUADRATURA
+      // -------------------------------------------------------------------
+      window._CUADRATURA_TEMP = {}; // almacena resultado del modal
+
+      // Mapa de planes de estudio a columnas del sheet
+      var PLAN_A_COLUMNA = {
+        'MATERNAL': 'maternal', 'PREESCOLAR': 'preescolar', 'PRIMARIA': 'primaria',
+        '31059': 'p31059', '31060': 'p31060',
+        '41048': 'p41048', '41049': 'p41049', '41052': 'p41052', '41056': 'p41056',
+        '42000': 'p42000', '43291': 'p43291', '43292': 'p43292', '43293': 'p43293',
+        '43295': 'p43295', '43298': 'p43298', '44001': 'p44001', '44004': 'p44004',
+        '45041': 'p45041', '45043': 'p45043', '45045': 'p45045', '45049': 'p45049',
+        '46067': 'p46067', '46068': 'p46068', '46069': 'p46069', '46070': 'p46070',
+        '46071': 'p46071', '48069': 'p48069', '49000': 'p49000', '49001': 'p49001'
+      };
+
+      var LETRAS_SECCION = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'];
+
+      function _abrirModalCuadratura(nivel) {
+        var modalCuad = document.getElementById('modal-cuadratura');
+        var contenido = document.getElementById('cuad-contenido');
+        var descripcion = document.getElementById('cuad-descripcion');
+        contenido.innerHTML = '';
+
+        var planesDelPlantel = (SESION.datosPlantel && SESION.datosPlantel.planes_estudio) ? SESION.datosPlantel.planes_estudio : {};
+        var catalogoPlanes  = SESION.catalogoPlanesEstudio || [];
+        var mat = (SESION.matricula && SESION.matricula.secMat) || 0;
+        var pre = (SESION.matricula && SESION.matricula.secPre) || 0;
+
+        var CUAD = window._CUADRATURA_TEMP || {};
+
+        // ─── HELPERS ────────────────────────────────────────────────────────────────
+
+        function _letraSec(s, nTotal) {
+          return nTotal === 1 ? 'U' : String.fromCharCode(65 + s);
+        }
+
+        function _distribuirSecciones(numSec, numGrados) {
+          var base = Math.floor(numSec / numGrados);
+          var resto = numSec % numGrados;
+          var dist = [];
+          for (var g = 0; g < numGrados; g++) {
+            dist.push(base + (g < resto ? 1 : 0));
+          }
+          return dist;
+        }
+
+        function _bloqueInicial(titulo, keyPlan, numSec) {
+          var div = document.createElement('div');
+          div.style.cssText = 'margin-bottom:1.2rem; border:1px solid #e5e7eb; border-radius:8px; padding:1rem;';
+          var h4 = document.createElement('h4');
+          h4.textContent = titulo;
+          h4.style.cssText = 'margin:0 0 0.75rem; font-size:0.98rem; color:#1e40af; font-weight:700;';
+          div.appendChild(h4);
+          var grid = document.createElement('div');
+          grid.style.cssText = 'display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:0.5rem;';
+          
+          var dataInicialObj = CUAD[keyPlan] || {};
+          
+          for (var s = 0; s < numSec; s++) {
+            var letra = _letraSec(s, numSec);
+            var wrap = document.createElement('div');
+            wrap.style.cssText = 'display:flex; flex-direction:column; gap:0.25rem;';
+            var lbl = document.createElement('label');
+            lbl.textContent = 'SECCIÓN ' + letra;
+            lbl.style.cssText = 'font-size:0.82rem; color:#374151; font-weight:600;';
+            
+            var guardado = dataInicialObj[letra] || 0;
+            
+            var inp = document.createElement('input');
+            inp.type = 'number'; inp.min = '0'; 
+            inp.value = String(guardado);
+            inp.dataset.plan = keyPlan; inp.dataset.sec = letra;
+            inp.className = 'form-input cuad-input';
+            inp.style.cssText = 'padding:0.4rem; font-size:0.9rem; text-align:center;';
+            inp.setAttribute('placeholder', 'alumnos');
+            wrap.appendChild(lbl); wrap.appendChild(inp);
+            grid.appendChild(wrap);
+          }
+          div.appendChild(grid);
+          return div;
+        }
+
+        function _bloquesPrimaria(numSec) {
+          var ORDINAL_GRADO = ['1ER','2DO','3ER','4TO','5TO','6TO'];
+          var numGrados = 6;
+          var dist = _distribuirSecciones(numSec, numGrados);
+          var bloques = [];
+          
+          var dataPri = CUAD['primaria'] || {};
+          
+          for (var g = 0; g < numGrados; g++) {
+            var nSecGrado = dist[g];
+            if (nSecGrado === 0) continue;
+            var divGrado = document.createElement('div');
+            divGrado.style.cssText = 'margin-bottom:1rem; border:1px solid #e5e7eb; border-radius:8px; padding:0.85rem;';
+            var h4 = document.createElement('h4');
+            h4.textContent = ORDINAL_GRADO[g] + ' GRADO';
+            h4.style.cssText = 'margin:0 0 0.6rem; font-size:0.92rem; color:#1e40af; font-weight:700;';
+            divGrado.appendChild(h4);
+            var grid = document.createElement('div');
+            grid.style.cssText = 'display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:0.4rem;';
+            for (var s = 0; s < nSecGrado; s++) {
+              var letra = _letraSec(s, nSecGrado);
+              var wrap = document.createElement('div');
+              wrap.style.cssText = 'display:flex; flex-direction:column; gap:0.2rem;';
+              var lbl = document.createElement('label');
+              lbl.textContent = ORDINAL_GRADO[g] + ' GRADO ' + letra;
+              lbl.style.cssText = 'font-size:0.78rem; color:#374151; font-weight:600;';
+              
+              var gradoNum = String(g + 1);
+              var guardado = dataPri[gradoNum + letra] || 0;
+              
+              var inp = document.createElement('input');
+              inp.type = 'number'; inp.min = '0'; inp.value = String(guardado);
+              inp.dataset.plan = 'primaria';
+              inp.dataset.grado = gradoNum;
+              inp.dataset.sec = letra;
+              inp.className = 'form-input cuad-input';
+              inp.style.cssText = 'padding:0.35rem; font-size:0.88rem; text-align:center;';
+              inp.setAttribute('placeholder', 'alumnos');
+              wrap.appendChild(lbl); wrap.appendChild(inp);
+              grid.appendChild(wrap);
+            }
+            divGrado.appendChild(grid);
+            bloques.push(divGrado);
+          }
+          return bloques;
+        }
+
+        function _bloquesMedia(codigoPlan) {
+          var planCatalogo = null;
+          if (catalogoPlanes && !Array.isArray(catalogoPlanes)) {
+            // Nueva arquitectura O(1): acceso directo por código
+            planCatalogo = catalogoPlanes[String(codigoPlan)] || null;
+          } else if (Array.isArray(catalogoPlanes)) {
+            // Compatibilidad legacy
+            for (var i = 0; i < catalogoPlanes.length; i++) {
+              if (String(catalogoPlanes[i].codigo) === String(codigoPlan)) {
+                planCatalogo = catalogoPlanes[i];
+                break;
+              }
+            }
+          }
+
+          var numAnios = (planCatalogo && planCatalogo.numAnios) ? planCatalogo.numAnios : (String(codigoPlan).charAt(0) === '4' ? 6 : 5);
+          var grados   = (planCatalogo && planCatalogo.grados)   ? planCatalogo.grados   : [];
+          var ORDINAL  = ['1ER','2DO','3ER','4TO','5TO','6TO'];
+
+          var dataPlan = CUAD['p' + codigoPlan] || {};
+
+          var secPlan = document.createElement('div');
+          secPlan.style.cssText = 'margin-bottom:1.8rem;';
+          var hPlan = document.createElement('div');
+          hPlan.style.cssText = 'background:#1e40af; color:#fff; border-radius:8px 8px 0 0; padding:0.65rem 1rem; font-size:0.95rem; font-weight:700; letter-spacing:0.02em;';
+          var labelPlan = 'PLAN ' + codigoPlan;
+          if (planCatalogo) {
+            if (planCatalogo.especialidad) labelPlan += ' — ' + planCatalogo.especialidad;
+            if (planCatalogo.mencion)      labelPlan += ' / ' + planCatalogo.mencion;
+          }
+          hPlan.textContent = labelPlan;
+          secPlan.appendChild(hPlan);
+
+          for (var a = 0; a < numAnios; a++) {
+            var anioNum = a + 1;
+            var gradoData = null;
+            for (var j = 0; j < grados.length; j++) {
+              if (grados[j].anio === anioNum) { gradoData = grados[j]; break; }
+            }
+            var asignaturas = (gradoData && gradoData.asignaturas && gradoData.asignaturas.length > 0) ? gradoData.asignaturas : [];
+            var labelAnio   = (gradoData && gradoData.label) ? gradoData.label : (ORDINAL[a] + ' AÑO');
+
+            var divAnio = document.createElement('div');
+            divAnio.style.cssText = 'border:1px solid #e5e7eb; border-top:none; padding:0.75rem 1rem;';
+
+            var hAnio = document.createElement('h5');
+            hAnio.textContent = labelAnio;
+            hAnio.style.cssText = 'margin:0 0 0.6rem; font-size:0.88rem; color:#1e40af; font-weight:700; text-transform:uppercase; border-bottom:1px solid #e5e7eb; padding-bottom:0.4rem;';
+            divAnio.appendChild(hAnio);
+
+            if (asignaturas.length === 0) {
+              var aviso = document.createElement('p');
+              aviso.style.cssText = 'font-size:0.8rem; color:#6b7280; font-style:italic; margin:0;';
+              aviso.textContent = 'Sin asignaturas registradas. Complételas desde la app de Planes de Estudio.';
+              divAnio.appendChild(aviso);
+            } else {
+              var grid = document.createElement('div');
+              grid.style.cssText = 'display:grid; grid-template-columns:repeat(auto-fill,minmax(165px,1fr)); gap:0.4rem;';
+              asignaturas.forEach(function(asig) {
+                var wrap = document.createElement('div');
+                wrap.style.cssText = 'display:flex; flex-direction:column; gap:0.2rem;';
+                var lbl = document.createElement('label');
+                lbl.textContent = asig.nombre;
+                lbl.title = asig.nombre;
+                lbl.style.cssText = 'font-size:0.75rem; color:#374151; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;';
+                
+                var guardado = dataPlan[String(anioNum) + '_' + asig.nombre] || 0;
+
+                var inp = document.createElement('input');
+                inp.type = 'number'; inp.min = '0'; inp.value = String(guardado);
+                inp.dataset.plan    = codigoPlan;
+                inp.dataset.anio    = String(anioNum);
+                inp.dataset.materia = asig.nombre;
+                inp.className = 'form-input cuad-input';
+                inp.style.cssText = 'padding:0.35rem; font-size:0.88rem; text-align:center;';
+                inp.setAttribute('placeholder', 'horas');
+                wrap.appendChild(lbl); wrap.appendChild(inp);
+                grid.appendChild(wrap);
+              });
+              divAnio.appendChild(grid);
+            }
+            secPlan.appendChild(divAnio);
+          }
+
+          var divPlanificacion = document.createElement('div');
+          divPlanificacion.style.cssText = 'border:1px solid #e5e7eb; border-top:none; padding:0.75rem 1rem; border-radius:0 0 8px 8px; background-color: #f9fafb;';
+          var wrapPlan = document.createElement('div');
+          wrapPlan.style.cssText = 'display:flex; flex-direction:column; gap:0.2rem; align-items: flex-start;';
+          var lblPlan = document.createElement('label');
+          lblPlan.textContent = 'Horas de Planificación y Formación';
+          lblPlan.title = 'Se aplicarán solo si la Carga Horaria es >= 40';
+          lblPlan.style.cssText = 'font-size:0.85rem; color:#1e40af; font-weight:700; display:block;';
+          
+          var guardadoPlan = dataPlan['0_PLANIFICACION'] || 0;
+          var inpPlan = document.createElement('input');
+          inpPlan.type = 'number';
+          inpPlan.min = '0';
+          inpPlan.value = String(guardadoPlan);
+          inpPlan.dataset.plan = codigoPlan;
+          inpPlan.dataset.anio = '0';
+          inpPlan.dataset.materia = 'PLANIFICACION';
+          inpPlan.className = 'form-input cuad-input';
+          inpPlan.style.cssText = 'padding:0.35rem; font-size:0.88rem; text-align:center; max-width: 150px;';
+          inpPlan.setAttribute('placeholder', 'horas');
+
+          wrapPlan.appendChild(lblPlan);
+          wrapPlan.appendChild(inpPlan);
+          divPlanificacion.appendChild(wrapPlan);
+          secPlan.appendChild(divPlanificacion);
+
+          return secPlan;
+        }
+
+        // ─── RENDER SEGÚN NIVEL ────────────────────────────────────────────────────
+        var nivelUp = nivel.toUpperCase();
+
+        if (nivelUp === 'INICIAL') {
+          descripcion.textContent = 'Ingrese la cantidad de alumnos por sección para Maternal y Preescolar.';
+          if (mat > 0) contenido.appendChild(_bloqueInicial('MATERNAL (' + mat + (mat === 1 ? ' sección)' : ' secciones)'), 'maternal', mat));
+          if (pre > 0) contenido.appendChild(_bloqueInicial('PREESCOLAR (' + pre + (pre === 1 ? ' sección)' : ' secciones)'), 'preescolar', pre));
+          if (mat === 0 && pre === 0) {
+            descripcion.textContent = 'No se declararon secciones de Inicial en el Paso 1.';
+          }
+
+        } else if (nivelUp === 'PRIMARIA') {
+          var priSec = (SESION.matricula && SESION.matricula.secPri) || 0;
+          if (priSec > 0) {
+            descripcion.textContent = 'Ingrese la cantidad de alumnos por grado y sección.';
+            _bloquesPrimaria(priSec).forEach(function(b) { contenido.appendChild(b); });
+          } else {
+            descripcion.textContent = 'No se declararon secciones de Primaria en el Paso 1.';
+          }
+
+        } else if (nivelUp === 'MEDIA GENERAL') {
+          var planesMedia = Object.keys(planesDelPlantel).filter(function(p) { return p === '31059' || p === '31060'; });
+          if (planesMedia.length === 0) {
+            descripcion.textContent = 'El plantel no tiene planes de Media General (31059/31060).';
+          } else {
+            descripcion.textContent = 'Ingrese las horas académicas por materia y año.';
+            planesMedia.forEach(function(p) { contenido.appendChild(_bloquesMedia(p)); });
+          }
+
+        } else if (nivelUp === 'MEDIA TECNICA') {
+          var planesMt = Object.keys(planesDelPlantel).filter(function(p) { return p.charAt(0) === '4'; });
+          if (planesMt.length === 0) {
+            descripcion.textContent = 'El plantel no tiene planes de Media Técnica.';
+          } else {
+            descripcion.textContent = 'Ingrese las horas académicas por materia y año.';
+            planesMt.forEach(function(p) { contenido.appendChild(_bloquesMedia(p)); });
+          }
+
+        } else if (nivelUp === 'MEDIA GENERAL - TECNICA') {
+          var planesAll = Object.keys(planesDelPlantel).filter(function(p) {
+            return p === '31059' || p === '31060' || p.charAt(0) === '4';
+          });
+          if (planesAll.length === 0) {
+            descripcion.textContent = 'El plantel no tiene planes de Media.';
+          } else {
+            descripcion.textContent = 'Ingrese las horas académicas por materia, año y plan.';
+            planesAll.forEach(function(p) { contenido.appendChild(_bloquesMedia(p)); });
+          }
+        }
+
+        var divObs = document.createElement('div');
+        divObs.style.cssText = 'margin-top:1.5rem;';
+        var lblObs = document.createElement('label');
+        lblObs.textContent = 'Observación';
+        lblObs.style.cssText = 'font-size:0.9rem; color:#374151; font-weight:600; display:block; margin-bottom:0.5rem;';
+        var txtObs = document.createElement('textarea');
+        txtObs.id = 'inp-cuad-observacion';
+        txtObs.className = 'form-input';
+        txtObs.style.cssText = 'width:100%; min-height:80px; resize:vertical;';
+        var guardadoObs = CUAD['observacion'] || '';
+        txtObs.value = guardadoObs;
+        divObs.appendChild(lblObs);
+        divObs.appendChild(txtObs);
+        contenido.appendChild(divObs);
+
+        modalCuad.classList.add('activo');
+        modalCuad.setAttribute('aria-hidden', 'false');
+      }
+
+      document.getElementById('btn-cerrar-modal-cuad').addEventListener('click', function () {
+        document.getElementById('modal-cuadratura').classList.remove('activo');
+        document.getElementById('modal-cuadratura').setAttribute('aria-hidden', 'true');
+      });
+      document.getElementById('btn-cancelar-cuad').addEventListener('click', function () {
+        document.getElementById('modal-cuadratura').classList.remove('activo');
+        document.getElementById('modal-cuadratura').setAttribute('aria-hidden', 'true');
+        document.getElementById('sel-nivel-modalidad').value = '';
+        window._CUADRATURA_TEMP = {};
+        document.getElementById('cont-cuadratura-resumen').style.display = 'none';
+        document.getElementById('cont-btn-cuadratura').style.display = 'none';
+      });
+
+      document.getElementById('btn-confirmar-cuad').addEventListener('click', function () {
+        var inputs = document.querySelectorAll('#cuad-contenido .cuad-input');
+        var nivel = document.getElementById('sel-nivel-modalidad').value.toUpperCase();
+        var esInicial  = (nivel === 'INICIAL');
+        var esPrimaria = (nivel === 'PRIMARIA');
+        var esMedia    = !esInicial && !esPrimaria;
+
+        // Estructuras intermedias
+        var dataInicial  = {};   // { maternal: { 'U': 15 }, preescolar: { 'A': 10, 'B': 10 } }
+        var dataPrimaria = {};   // { '1U': N, '1A': N, '1B': N, ... } — grado+sección: alumnos
+        var dataMedia    = {};   // { '31059': {'1_CASTELLANO': 4, ...}, ... }
+
+        inputs.forEach(function(inp) {
+          var plan    = inp.dataset.plan    || '';
+          var val     = parseInt(inp.value) || 0;
+
+          if (esInicial) {
+            // data-plan = 'maternal' | 'preescolar', data-sec = letra
+            var sec = inp.dataset.sec || '';
+            if (!dataInicial[plan]) dataInicial[plan] = {};
+            dataInicial[plan][sec] = val;
+
+          } else if (esPrimaria) {
+            // data-plan = 'primaria', data-grado = 1-6, data-sec = U/A/B...
+            var grado = inp.dataset.grado || '';
+            var sec   = inp.dataset.sec   || '';
+            var clave = grado + sec;              // ej. '1U', '2A'
+            dataPrimaria[clave] = val;
+
+          } else {
+            // Media: data-plan = '31059'|'41048'|..., data-anio = 1-6, data-materia = nombre
+            var anio    = inp.dataset.anio    || '';
+            var materia = inp.dataset.materia || '';
+            var key     = anio + '_' + materia;  // ej. '1_CASTELLANO'
+            if (!dataMedia[plan]) dataMedia[plan] = {};
+            dataMedia[plan][key] = val;
+          }
+        });
+
+        // ── Construir cuadFinal para SESION (llave = clave de columna) ─────────────
+        var cuadFinal = {};
+        
+        var obsStr = "";
+        var obsInput = document.getElementById('inp-cuad-observacion');
+        if (obsInput) {
+          obsStr = obsInput.value.trim();
+        }
+
+        if (esInicial) {
+          if (dataInicial.maternal !== undefined) {
+            dataInicial.maternal['observacion'] = obsStr;
+            cuadFinal['maternal'] = JSON.stringify(dataInicial.maternal);
+          }
+          if (dataInicial.preescolar !== undefined) {
+            dataInicial.preescolar['observacion'] = obsStr;
+            cuadFinal['preescolar'] = JSON.stringify(dataInicial.preescolar);
+          }
+        } else if (esPrimaria) {
+          dataPrimaria['observacion'] = obsStr;
+          cuadFinal['primaria'] = JSON.stringify(dataPrimaria);   // objeto con grado+sección, convertido a string
+        } else {
+          // Cada plan se guarda como JSON string en su columna correspondiente
+          Object.keys(dataMedia).forEach(function(plan) {
+            dataMedia[plan]['observacion'] = obsStr;
+            var colKey = PLAN_A_COLUMNA['p' + plan] || ('p' + plan);
+            cuadFinal[colKey] = JSON.stringify(dataMedia[plan]);
+          });
+        }
+        
+        // Mantener también en la raíz para el backend
+        cuadFinal['observacion'] = obsStr;
+
+        window._CUADRATURA_TEMP = cuadFinal;
+
+        // ── Resumen legible ────────────────────────────────────────────────────────
+        var lineas = [];
+        if (esInicial) {
+          if (dataInicial.maternal !== undefined) {
+            var sumMat = Object.values(dataInicial.maternal).reduce(function(a,b){ return a+b; }, 0);
+            lineas.push('Maternal: ' + sumMat + ' alumnos');
+          }
+          if (dataInicial.preescolar !== undefined) {
+            var sumPre = Object.values(dataInicial.preescolar).reduce(function(a,b){ return a+b; }, 0);
+            lineas.push('Preescolar: ' + sumPre + ' alumnos');
+          }
+        } else if (esPrimaria) {
+          var total = Object.values(dataPrimaria).reduce(function(a,b){ return a+b; }, 0);
+          lineas.push('Primaria: ' + total + ' alumnos en ' + Object.keys(dataPrimaria).length + ' sección(es)');
+        } else {
+          Object.keys(dataMedia).forEach(function(plan) {
+            var totalH = Object.values(dataMedia[plan]).reduce(function(a,b){ return a+b; }, 0);
+            lineas.push('Plan ' + plan + ': ' + totalH + ' horas declaradas');
+          });
+        }
+        document.getElementById('cuadratura-resumen-texto').textContent = lineas.join(' | ') || 'Cuadratura registrada.';
+        document.getElementById('cont-cuadratura-resumen').style.display = 'block';
+
+        document.getElementById('modal-cuadratura').classList.remove('activo');
+        document.getElementById('modal-cuadratura').setAttribute('aria-hidden', 'true');
+      });
+
+      // Visibilidad de campos dependientes de Atiende Matrícula
+      window.onAtiendeMatriculaChange = function () {
+        var val = document.getElementById('sel-atiende-matricula').value;
+        var mostrar = (val === 'SI');
+        document.getElementById('cont-nivel-modalidad').style.display = mostrar ? '' : 'none';
+        document.getElementById('cont-especialidad-imparte').style.display = mostrar ? '' : 'none';
+        if (!mostrar) {
+          document.getElementById('sel-nivel-modalidad').value = '';
+          window._CUADRATURA_TEMP = {};
+          document.getElementById('cont-cuadratura-resumen').style.display = 'none';
+          document.getElementById('cont-btn-cuadratura').style.display = 'none';
+        }
+      };
+
+      // Cuando cambia el nivel/modalidad: muestra el botón Cuadratura (no abre modal automáticamente)
+      window.onNivelModalidadChange = function (limpiarCuad) {
+        var nivel = document.getElementById('sel-nivel-modalidad').value;
+        var btnCuad = document.getElementById('cont-btn-cuadratura');
+        // Solo limpiar la cuadratura si se solicita explícitamente (cambio manual por el usuario)
+        // En modo edición, el caller restaura CUADRATURA_ACTUAL inmediatamente después
+        if (limpiarCuad === true) {
+          window._CUADRATURA_TEMP = {};
+          document.getElementById('cont-cuadratura-resumen').style.display = 'none';
+        }
+        if (!nivel) {
+          if (btnCuad) btnCuad.style.display = 'none';
+          return;
+        }
+        if (btnCuad) btnCuad.style.display = '';
+      };
+
+      // Abre el modal de cuadratura con el nivel actualmente seleccionado
+      window.onAbrirCuadratura = function () {
+        var nivel = document.getElementById('sel-nivel-modalidad').value;
+        if (!nivel) {
+          mostrarToast('Seleccione primero el Nivel o Modalidad.', 'advertencia');
+          return;
+        }
+        _abrirModalCuadratura(nivel);
+      };
+
+      // Auto-rellenar observación según situación laboral
+      window.onSituacionLaboralChange = function () {
+        var sl = document.getElementById('sel-situacion-laboral').value;
+        var obs = '';
+        if (CATALOGOS_CACHE.estatus) {
+          if (!Array.isArray(CATALOGOS_CACHE.estatus)) {
+            // Nueva arquitectura O(1): acceso directo por clave
+            obs = CATALOGOS_CACHE.estatus[sl] || '';
+          } else {
+            // Compatibilidad legacy
+            var found = CATALOGOS_CACHE.estatus.find(function (e) { return e.situacion_laboral === sl; });
+            if (found) obs = found.descripcion || '';
+          }
+        }
+        document.getElementById('inp-observacion-estatus').value = obs;
+      };
+
+      // -------------------------------------------------------------------
+      // CÁLCULOS DINÁMICOS Y MENÚS EN CASCADA
+      // -------------------------------------------------------------------
+
+      window.calcularEdad = function () {
+        var fnStr = document.getElementById('inp-fecha-nacimiento').value;
+        if (!fnStr) { document.getElementById('inp-edad').value = ''; return; }
+        var fn = new Date(fnStr);
+        var hoy = new Date();
+        var edad = hoy.getFullYear() - fn.getFullYear();
+        if (hoy.getMonth() < fn.getMonth() || (hoy.getMonth() === fn.getMonth() && hoy.getDate() < fn.getDate())) {
+          edad--;
+        }
+        document.getElementById('inp-edad').value = edad >= 0 ? edad : 0;
+      };
+
+      window.calcularAntiguedad = function () {
+        var fiStr = document.getElementById('inp-fecha-ingreso').value;
+        if (!fiStr) { document.getElementById('inp-antiguedad').value = ''; return; }
+        var fi = new Date(fiStr);
+        var hoy = new Date();
+        var ant = hoy.getFullYear() - fi.getFullYear();
+        if (hoy.getMonth() < fi.getMonth() || (hoy.getMonth() === fi.getMonth() && hoy.getDate() < fi.getDate())) {
+          ant--;
+        }
+        document.getElementById('inp-antiguedad').value = ant >= 0 ? ant : 0;
+      };
+
+      window.onTipoPersonalChange = function () {
+        var tipo = document.getElementById('sel-tipo-personal').value; // docente, administrativo, obrero
+        var selSub = document.getElementById('sel-subcategoria');
+        var contSub = document.getElementById('cont-subcategoria');
+        var selCargo = document.getElementById('sel-cargo');
+        var selCodigoRac = document.getElementById('sel-codigo-rac');
+
+        selSub.innerHTML = '<option value="">— Seleccione Rango —</option>';
+        selCargo.innerHTML = '<option value="">— Seleccione —</option>';
+        selCargo.disabled = true;
+        selCodigoRac.innerHTML = '<option value="">— Seleccione —</option>';
+        selCodigoRac.disabled = true;
+
+        var depLaboral = document.getElementById('sel-dependencia').value;
+        if (depLaboral) depLaboral = depLaboral.toUpperCase();
+
+        var validos = ['docente', 'administrativo', 'obrero'];
+        var catPersonal = CATALOGOS_CACHE.personal && depLaboral ? CATALOGOS_CACHE.personal[depLaboral] : null;
+
+        if (!tipo || validos.indexOf(tipo) === -1 || !catPersonal || !catPersonal[tipo]) {
+          contSub.style.display = 'none';
+          return;
+        }
+
+        var lista = catPersonal[tipo];
+
+        if (tipo === 'obrero') {
+          contSub.style.display = 'block';
+          // Poblamos rangos — ahora obrero es diccionario { "8031N": {rango, cargos}, ... }
+          var rangos = Array.isArray(lista)
+            ? lista.map(function (o) { return o.rango; }).filter(Boolean)
+            : Object.values(lista).map(function (o) { return o.rango; }).filter(Boolean);
+          rangos = rangos.filter(function(item, pos) { return rangos.indexOf(item) === pos; });
+          rangos.sort(function(a, b) { return a.localeCompare(b); });
+          _poblarSelect('sel-subcategoria', null, rangos);
+        } else {
+          contSub.style.display = 'none';
+          // Docente o Administrativo: diccionario { "1111DH": "DOC. I / AULA", ... }
+          var cargos = Array.isArray(lista)
+            ? lista.map(function (o) { return o.cargo; }).filter(Boolean)
+            : Object.values(lista).filter(Boolean);
+          // Remover duplicados
+          cargos = cargos.filter(function (item, pos) { return cargos.indexOf(item) === pos; });
+          cargos.sort(function(a, b) { return a.localeCompare(b); });
+          _poblarSelect('sel-cargo', null, cargos);
+        }
+      };
+
+      window.onSubCategoriaChange = function () {
+        var rango = document.getElementById('sel-subcategoria').value;
+        var selCargo = document.getElementById('sel-cargo');
+        var selCodigoRac = document.getElementById('sel-codigo-rac');
+
+        selCargo.innerHTML = '<option value="">— Seleccione —</option>';
+        selCargo.disabled = true;
+        selCodigoRac.innerHTML = '<option value="">— Seleccione —</option>';
+        selCodigoRac.disabled = true;
+
+        var depLaboral = document.getElementById('sel-dependencia').value;
+        if (depLaboral) depLaboral = depLaboral.toUpperCase();
+
+        var catPersonal = CATALOGOS_CACHE.personal && depLaboral ? CATALOGOS_CACHE.personal[depLaboral] : null;
+
+        if (!rango || !catPersonal || !catPersonal.obrero) return;
+
+        var obreroData = catPersonal.obrero;
+        var cargosObrero = [];
+        if (Array.isArray(obreroData)) {
+          // Compatibilidad legacy
+          var objRango = obreroData.find(function (o) { return o.rango === rango; });
+          if (objRango && objRango.cargos) cargosObrero = objRango.cargos;
+        } else {
+          // Nueva arquitectura O(1): buscar por valor de rango en los valores del diccionario
+          var codsObrero = Object.keys(obreroData);
+          for (var oi = 0; oi < codsObrero.length; oi++) {
+            if (obreroData[codsObrero[oi]].rango === rango) {
+              cargosObrero = obreroData[codsObrero[oi]].cargos || [];
+              break;
+            }
+          }
+        }
+        if (cargosObrero.length > 0) {
+          cargosObrero.sort(function(a, b) { return a.localeCompare(b); });
+          _poblarSelect('sel-cargo', null, cargosObrero);
+        }
+      };
+
+      window.onCargoChange = function () {
+        var selTipoPersonal = document.getElementById('sel-tipo-personal');
+        var selCargo = document.getElementById('sel-cargo');
+        var selCodigoRac = document.getElementById('sel-codigo-rac');
+
+        var tipo = selTipoPersonal.value;
+        var cargoSeleccionado = selCargo.value;
+
+        selCodigoRac.innerHTML = '<option value="">— Seleccione RAC —</option>';
+        selCodigoRac.disabled = true;
+
+        if (!tipo || !cargoSeleccionado) return;
+
+        var depLaboral = document.getElementById('sel-dependencia').value;
+        if (depLaboral) depLaboral = depLaboral.toUpperCase();
+        var catPersonal = CATALOGOS_CACHE.personal && depLaboral ? CATALOGOS_CACHE.personal[depLaboral] : null;
+        if (!catPersonal) return;
+
+        var r = catPersonal;
+
+        var codigosPosibles = [];
+
+        if (tipo === 'docente') {
+          // En docente: múltiples entradas con mismo cargo pueden tener distintos codigo_cargo
+          var docenteData = r.docente;
+          if (Array.isArray(docenteData)) {
+            // Compatibilidad legacy
+            for (var i = 0; i < docenteData.length; i++) {
+              if (docenteData[i].cargo === cargoSeleccionado && docenteData[i].codigo_cargo) {
+                codigosPosibles.push(docenteData[i].codigo_cargo);
+              }
+            }
+          } else {
+            // Nueva arquitectura O(1): iterar entradas del diccionario
+            Object.keys(docenteData).forEach(function(cod) {
+              if (docenteData[cod] === cargoSeleccionado) {
+                codigosPosibles.push(cod);
+              }
+            });
+          }
+        } else if (tipo === 'administrativo') {
+          // En administrativo: una entrada por cargo
+          var adminData = r.administrativo;
+          if (Array.isArray(adminData)) {
+            // Compatibilidad legacy
+            for (var j = 0; j < adminData.length; j++) {
+              if (adminData[j].cargo === cargoSeleccionado && adminData[j].codigo_cargo) {
+                codigosPosibles.push(adminData[j].codigo_cargo);
+                break;
+              }
+            }
+          } else {
+            // Nueva arquitectura O(1)
+            Object.keys(adminData).forEach(function(cod) {
+              if (adminData[cod] === cargoSeleccionado) {
+                codigosPosibles.push(cod);
+              }
+            });
+          }
+        } else if (tipo === 'obrero') {
+          // En obrero: el codigo_cargo es la clave del diccionario del rango
+          var selSub = document.getElementById('sel-subcategoria');
+          var rangoSeleccionado = selSub.value;
+          if (rangoSeleccionado) {
+            var obreroData = r.obrero;
+            if (Array.isArray(obreroData)) {
+              // Compatibilidad legacy
+              var objRango = obreroData.find(function (o) { return o.rango === rangoSeleccionado; });
+              if (objRango && objRango.codigo_cargo) codigosPosibles.push(objRango.codigo_cargo);
+            } else {
+              // Nueva arquitectura O(1): la clave ya ES el codigo_cargo
+              Object.keys(obreroData).forEach(function(cod) {
+                if (obreroData[cod].rango === rangoSeleccionado) {
+                  codigosPosibles.push(cod);
+                }
+              });
+            }
+          }
+        }
+
+        // Eliminar duplicados y valores vacíos
+        codigosPosibles = codigosPosibles.filter(function (item, pos) {
+          return codigosPosibles.indexOf(item) === pos && item;
+        });
+
+        if (codigosPosibles.length > 0) {
+          for (var m = 0; m < codigosPosibles.length; m++) {
+            var opt = document.createElement('option');
+            opt.value = codigosPosibles[m];
+            opt.textContent = codigosPosibles[m];
+            selCodigoRac.appendChild(opt);
+          }
+          selCodigoRac.disabled = false;
+          // Si hay una sola opción la preseleccionamos automáticamente
+          if (codigosPosibles.length === 1) {
+            selCodigoRac.value = codigosPosibles[0];
+          }
+        } else {
+          selCodigoRac.innerHTML = '<option value="">— No disponible —</option>';
+        }
+      };
+
+      // -------------------------------------------------------------------
+      // LÓGICA PASO 1 (MATRÍCULA)
+      // -------------------------------------------------------------------
+
+      // Función para calcular totales en tiempo real
+      function _calcularTotalesMatricula() {
+        var getVal = function (id) { return parseInt(document.getElementById(id).value) || 0; };
+
+        // Calcular Secciones de Media dinámicamente a partir del detalle por año
+        var tSecMg = 0, tSecMt = 0;
+        var secInputs = document.querySelectorAll('.sec-anio-input');
+        for (var i = 0; i < secInputs.length; i++) {
+          var plan = secInputs[i].getAttribute('data-plan');
+          var val = parseInt(secInputs[i].value) || 0;
+          if (plan) {
+            if (plan.startsWith('3')) tSecMg += val;
+            else if (plan.startsWith('4')) tSecMt += val;
+          }
+        }
+        var elSecMg = document.getElementById('secMg');
+        if (elSecMg) elSecMg.value = tSecMg;
+        
+        var elSecMt = document.getElementById('secMt');
+        if (elSecMt) elSecMt.value = tSecMt;
+
+        // Inicial
+        var mf = getVal('matFem'), mm = getVal('matMas');
+        var pf = getVal('preFem'), pm = getVal('preMas');
+        var iniTot = mf + mm + pf + pm;
+        document.getElementById('iniTot').value = iniTot;
+
+        // Primaria
+        var prif = getVal('priFem'), prim = getVal('priMas');
+        var priTot = prif + prim;
+        document.getElementById('priTot').value = priTot;
+
+        // Media General
+        var mgf = getVal('mgFem'), mgm = getVal('mgMas');
+        var mgTot = mgf + mgm;
+        document.getElementById('mgTot').value = mgTot;
+
+        // Media Técnica
+        var mtf = getVal('mtFem'), mtm = getVal('mtMas');
+        var mtTot = mtf + mtm;
+        document.getElementById('mtTot').value = mtTot;
+
+        // Gran Total (sumando solo lo visible, aunque lo invisible estará en 0)
+        var granTotal = iniTot + priTot + mgTot + mtTot;
+        var elGranTotal = document.getElementById('lbl-gran-total');
+        if (elGranTotal) elGranTotal.textContent = granTotal;
+      }
+
+      // Escuchar cambios en cualquier input de matrícula
+      document.getElementById('form-matricula').addEventListener('input', function (e) {
+        if (e.target.tagName.toLowerCase() === 'input' && e.target.type === 'number') {
+          _calcularTotalesMatricula();
+        }
+      });
+
+      // Manejar el submit de matrícula
+      document.getElementById('form-matricula').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        var getVal = function (id) { return parseInt(document.getElementById(id).value) || 0; };
+        var btn = document.getElementById('btn-guardar-matricula');
+        var btnTexto = document.getElementById('btn-guardar-matricula-texto');
+
+        btn.disabled = true;
+        btnTexto.textContent = "Guardando...";
+
+        showGlobalSpinner();
+
+        var payloadMatricula = {
+          usuarioRegistrador: SESION.cedula,
+          idHojaPlantel: SESION.idHojaPlantel,
+          municipioPlantel: SESION.municipioPlantel,
+          datosPlantel: SESION.datosPlantel,
+          matricula: {
+            matFem: getVal('matFem'), matMas: getVal('matMas'), matTot: getVal('matFem') + getVal('matMas'),
+            preFem: getVal('preFem'), preMas: getVal('preMas'), preTot: getVal('preFem') + getVal('preMas'),
+            iniFem: getVal('matFem') + getVal('preFem'), iniMas: getVal('matMas') + getVal('preMas'), iniTot: getVal('iniTot'),
+            priFem: getVal('priFem'), priMas: getVal('priMas'), priTot: getVal('priTot'),
+            mgFem: getVal('mgFem'), mgMas: getVal('mgMas'), mgTot: getVal('mgTot'),
+            mtFem: getVal('mtFem'), mtMas: getVal('mtMas'), mtTot: getVal('mtTot'),
+            aduFem: 0, aduMas: 0, aduTot: 0,
+            espFem: 0, espMas: 0, espTot: 0,
+            granTot: getVal('iniTot') + getVal('priTot') + getVal('mgTot') + getVal('mtTot'),
+            secMat: getVal('secMat'),
+            secPre: getVal('secPre'),
+            secPri: getVal('secPri'),
+            secMg: getVal('secMg'),
+            secMt: getVal('secMt'),
+            secAdu: 0,
+            secEsp: 0,
+            seccionesPorAnio: {}
+          },
+          vacantes: window._VACANTES_TEMP || {}
+        };
+
+        var secInputs = document.querySelectorAll('.sec-anio-input');
+        secInputs.forEach(function(inp) {
+          var plan = inp.dataset.plan;
+          var anio = inp.dataset.anio;
+          var val = parseInt(inp.value) || 0;
+          if (!payloadMatricula.matricula.seccionesPorAnio[plan]) {
+            payloadMatricula.matricula.seccionesPorAnio[plan] = {};
+          }
+          payloadMatricula.matricula.seccionesPorAnio[plan][anio] = val;
+        });
+
+        google.script.run
+          .withSuccessHandler(function (res) {
+            hideGlobalSpinner();
+            btn.disabled = false;
+            btnTexto.textContent = "Guardar Datos y Continuar";
+            if (res.exito) {
+              mostrarToast('Datos institucionales guardados correctamente.', 'exito');
+              // Persistir la matrícula en SESION para que la cuadratura pueda leer las secciones
+              SESION.matricula = payloadMatricula.matricula;
+              // Transición a la vista principal
+              document.getElementById('vista-matricula').classList.add('oculto');
+              mostrarVistaPrincipal();
+              _cargarCatalogos();
+              window.cargarTablaPersonal();
+            } else {
+              mostrarToast(res.error || 'Error al guardar.', 'error');
+            }
+          })
+          .withFailureHandler(function (err) {
+            hideGlobalSpinner();
+            btn.disabled = false;
+            btnTexto.textContent = "Guardar Datos y Continuar";
+            console.error('[SGH-CRITICAL] google.script.run.guardarDatosPlantel FAILED:', err);
+            mostrarToast('Error de conexión: ' + (err.message || err), 'error');
+          })
+          .guardarDatosPlantel(payloadMatricula);
+      });
+
+      // -------------------------------------------------------------------
+      // LÓGICA DE TABLA DE EMPLEADOS
+      // -------------------------------------------------------------------
+
+      window.EMPLEADOS_CACHE = []; // Almacena el listado
+
+      window.cargarTablaPersonal = function () {
+        var tbody = document.getElementById('tbody-empleados');
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 2rem; color:#6b7280;"><div class="spinner" style="display:inline-block; margin-right:10px;"></div>Cargando empleados...</td></tr>';
+
+        google.script.run
+          .withSuccessHandler(function (res) {
+            if (res.exito) {
+              window.EMPLEADOS_CACHE = res.empleados;
+              window._renderizarTablaPersonal(res.empleados);
+            } else {
+              tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 2rem; color:red;">Error al cargar empleados: ' + res.error + '</td></tr>';
+            }
+          })
+          .withFailureHandler(function (err) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 2rem; color:red;">Error de conexión.</td></tr>';
+          })
+          .obtenerListadoPersonal(SESION.idHojaPlantel);
+      };
+
+      window._renderizarTablaPersonal = function (lista) {
+        var tbody = document.getElementById('tbody-empleados');
+        tbody.innerHTML = '';
+
+        if (!lista || lista.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 2rem; color:#6b7280;">No hay empleados registrados.</td></tr>';
+          return;
+        }
+
+        lista.forEach(function (emp) {
+          var tr = document.createElement('tr');
+          tr.style.borderBottom = "1px solid #e5e7eb";
+
+          tr.innerHTML =
+            '<td style="padding:1rem;">' + _escaparHtml(emp.cedula || '') + '</td>' +
+            '<td style="padding:1rem;">' + _escaparHtml(emp.nombreApellido || '') + '</td>' +
+            '<td style="padding:1rem;">' + _escaparHtml(emp.tipoPersonal || '') + '</td>' +
+            '<td style="padding:1rem; text-align:right;">' +
+            '<button type="button" class="btn-secundario" style="padding:0.25rem 0.5rem; font-size:0.875rem; margin-right:0.5rem;" onclick="window.editarPersonal(\'' + emp.cedula + '\')">✏️ Editar</button>' +
+            '<button type="button" class="btn-secundario" style="padding:0.25rem 0.5rem; font-size:0.875rem; color:red; border-color:red;" onclick="window.eliminarPersonal(\'' + emp.cedula + '\')">🗑 Eliminar</button>' +
+            '</td>';
+          tbody.appendChild(tr);
+        });
+      };
+
+      window.filtrarTablaPersonal = function () {
+        var query = document.getElementById('inp-buscar-personal').value.toLowerCase();
+        if (!query) {
+          window._renderizarTablaPersonal(window.EMPLEADOS_CACHE);
+          return;
+        }
+        var filtrados = window.EMPLEADOS_CACHE.filter(function (emp) {
+          var cid = (emp.cedula || '').toLowerCase();
+          var nom = (emp.nombreApellido || '').toLowerCase();
+          var tip = (emp.tipoPersonal || '').toLowerCase();
+          return cid.includes(query) || nom.includes(query) || tip.includes(query);
+        });
+        window._renderizarTablaPersonal(filtrados);
+      };
+
+      window.editarPersonal = function (cedula) {
+        var emp = window.EMPLEADOS_CACHE.find(function (e) { return String(e.cedula) === String(cedula); });
+        if (!emp) return;
+
+        // Cambiar título y preparar form
+        document.getElementById('titulo-captura').textContent = "Editar Registro: " + emp.nombreApellido;
+        document.getElementById('inp-id-edicion').value = emp.cedula;
+        document.getElementById('btn-cancelar-edicion').classList.remove('oculto');
+        document.getElementById('btn-guardar-texto').textContent = "💾 Actualizar Registro";
+
+        // Scroll suave al formulario
+        document.getElementById('form-captura').scrollIntoView({ behavior: 'smooth' });
+
+        // Llenar datos (B-S)
+        document.getElementById('sel-nacionalidad').value = emp.nacionalidad || 'V';
+        document.getElementById('inp-cedula').value = emp.cedula || '';
+        document.getElementById('inp-nombre-apellido').value = emp.nombreApellido || '';
+        document.getElementById('inp-lugar-nacimiento').value = emp.lugarNacimiento || '';
+        document.getElementById('inp-fecha-nacimiento').value = emp.fechaNacimiento ? emp.fechaNacimiento.split('T')[0] : '';
+        document.getElementById('sel-genero').value = emp.genero || '';
+        document.getElementById('inp-tel-habitacion').value = emp.telHabitacion || '';
+        document.getElementById('inp-tel-celular').value = emp.telCelular || '';
+        document.getElementById('inp-tel-oficina').value = emp.telOficina || '';
+        document.getElementById('inp-correo').value = emp.correo || '';
+        document.getElementById('sel-estado-civil').value = emp.estadoCivil || '';
+        document.getElementById('inp-direccion').value = emp.direccion || '';
+        document.getElementById('sel-instruccion').value = emp.instruccion || '';
+        document.getElementById('inp-profesion').value = emp.profesion || '';
+
+        // Ubicación del plantel (Sección 2 - solo lectura, pero se rellena explícitamente con datos del empleado)
+        document.getElementById('inp-estado').value = emp.estado || SESION.estadoPlantel || '';
+        document.getElementById('inp-municipio').value = emp.municipio || SESION.municipioPlantel || '';
+        document.getElementById('inp-parroquia').value = emp.parroquia || SESION.parroquiaPlantel || '';
+        document.getElementById('inp-ubicacion-fisica').value = emp.ubicacionFisica || (SESION.datosPlantel && SESION.datosPlantel.nombre_plantel) || '';
+        document.getElementById('inp-codigo-plantel').value = emp.codigoPlantel || SESION.cedula || '';
+        document.getElementById('inp-cod-dependencia-1').value = emp.codDependencia1 || (SESION.datosPlantel && SESION.datosPlantel.codigo_dependencia) || '';
+        document.getElementById('inp-cod-dependencia-2').value = emp.codDependencia2 || (SESION.datosPlantel && SESION.datosPlantel.codigo_dependencia_2) || '';
+        document.getElementById('inp-cod-estadistico').value = emp.codEstadistico || (SESION.datosPlantel && SESION.datosPlantel.codigo_estadistico) || '';
+        document.getElementById('inp-dependencia-plantel').value = emp.dependenciaPlantel || (SESION.datosPlantel && SESION.datosPlantel.dependencia) || '';
+        document.getElementById('inp-ubicacion-geografica').value = emp.ubicacionGeografica || (SESION.datosPlantel && SESION.datosPlantel.ubicacion) || '';
+        document.getElementById('inp-nivel-plantel').value = emp.nivel || (SESION.datosPlantel && SESION.datosPlantel.nivel) || '';
+        document.getElementById('inp-modalidad-plantel').value = emp.modalidad || (SESION.datosPlantel && SESION.datosPlantel.modalidad) || '';
+        document.getElementById('inp-turnos-plantel').value = emp.turnosPlantel || (SESION.datosPlantel && SESION.datosPlantel.turno) || '';
+
+        // Ubicación Adtiva y Dependencia Laboral
+        document.getElementById('inp-ubicacion-administrativa').value = emp.ubicacionAdministrativa || '';
+        document.getElementById('sel-dependencia').value = emp.dependenciaLaboral || '';
+
+        // Laborales
+        document.getElementById('sel-tipo-personal').value = (emp.tipoPersonal || '').toLowerCase();
+        window.onTipoPersonalChange(); // Para que despliegue el de cargo/rango
+
+        if ((emp.tipoPersonal || '').toLowerCase() === 'obrero' && emp.subCategoria) {
+          document.getElementById('sel-subcategoria').value = emp.subCategoria;
+          window.onSubCategoriaChange();
+        }
+
+        setTimeout(function () {
+          document.getElementById('sel-cargo').value = emp.cargo || '';
+          window.onCargoChange();
+          setTimeout(function () {
+            document.getElementById('sel-codigo-rac').value = emp.codigoRac || '';
+          }, 100);
+        }, 100);
+
+        if (emp.titular === 'SI' || emp.titular === 'SÍ') {
+          var rbSi = document.querySelector('input[name="titular"][value="SI"]');
+          if (rbSi) rbSi.checked = true;
+        } else if (emp.titular === 'NO') {
+          var rbNo = document.querySelector('input[name="titular"][value="NO"]');
+          if (rbNo) rbNo.checked = true;
+        }
+
+        document.getElementById('inp-horas-academicas').value = parseInt(emp.horasAcademicas, 10) || 0;
+        document.getElementById('inp-horas-administrativas').value = parseInt(emp.horasAdministrativas, 10) || 0;
+        document.getElementById('inp-fecha-ingreso').value = emp.fechaIngreso ? emp.fechaIngreso.split('T')[0] : '';
+        document.getElementById('sel-turnos-atiende').value = emp.turnosAtiende || '';
+
+        // Cuadratura
+        window.CUADRATURA_ACTUAL = emp.cuadratura ? JSON.parse(JSON.stringify(emp.cuadratura)) : {};
+        var obsRecuperada = "";
+        
+        // Intentar parsear a objetos (Media y Primaria se guardan como strings)
+        Object.keys(window.CUADRATURA_ACTUAL).forEach(function(k) {
+          if ((k.startsWith('p') || k === 'primaria' || k === 'maternal' || k === 'preescolar') && typeof window.CUADRATURA_ACTUAL[k] === 'string') {
+             if (window.CUADRATURA_ACTUAL[k].startsWith('{')) {
+               try {
+                 var parsedObj = JSON.parse(window.CUADRATURA_ACTUAL[k]);
+                 if (parsedObj.observacion) {
+                   obsRecuperada = parsedObj.observacion;
+                 }
+                 window.CUADRATURA_ACTUAL[k] = parsedObj;
+               } catch(e) { }
+             }
+          }
+        });
+        
+        if (obsRecuperada) {
+          window.CUADRATURA_ACTUAL['observacion'] = obsRecuperada;
+        }
+
+        // Campos nuevos: Atiende Matrícula, Nivel y Especialidad
+        document.getElementById('sel-atiende-matricula').value = emp.atiendeMatricula || 'NO';
+        window.onAtiendeMatriculaChange(); // Refresca visibilidad del bloque
+        
+        setTimeout(function() {
+          document.getElementById('sel-nivel-modalidad').value = emp.nivelModalidad || '';
+          window.onNivelModalidadChange(); // Refresca especialidad o modal
+          
+          // Restaurar la cuadratura al temporal para que el modal y el guardado lo tengan disponible
+          window._CUADRATURA_TEMP = JSON.parse(JSON.stringify(window.CUADRATURA_ACTUAL));
+
+          setTimeout(function() {
+            document.getElementById('sel-especialidad').value = emp.especialidadImparte || '';
+          }, 100);
+        }, 100);
+
+        // Situación Laboral y Datos Sociales
+        document.getElementById('sel-situacion-laboral').value = emp.situacionLaboral || '';
+        window.onSituacionLaboralChange();
+        
+        document.getElementById('sel-talla-camisa').value = emp.tallaCamisa || '';
+        document.getElementById('sel-talla-pantalon').value = emp.tallaPantalon || '';
+        document.getElementById('sel-talla-zapato').value = emp.tallaZapato || '';
+        document.getElementById('inp-actividad-deportiva').value = emp.actividadDeportiva || '';
+        document.getElementById('inp-actividad-cultural').value = emp.actividadCultural || '';
+        document.getElementById('sel-tipo-vivienda').value = emp.tipoVivienda || '';
+        document.getElementById('sel-condicion-vivienda').value = emp.condicionVivienda || '';
+        document.getElementById('inp-tipo-material').value = emp.tipoMaterial || '';
+        document.getElementById('inp-tipo-enfermedad').value = emp.tipoEnfermedad || '';
+        document.getElementById('inp-medicamento').value = emp.medicamento || '';
+        document.getElementById('sel-discapacidad').value = emp.discapacidad || '';
+        document.getElementById('inp-ubch').value = emp.ubch || '';
+        document.getElementById('inp-circuito-comunal').value = emp.circuitoComunal || '';
+        document.getElementById('inp-centro-votacion').value = emp.centroVotacion || '';
+
+        window.calcularEdad();
+        window.calcularAntiguedad();
+      };
+
+      document.getElementById('btn-cancelar-edicion').addEventListener('click', function () {
+        document.getElementById('inp-id-edicion').value = '';
+        document.getElementById('titulo-captura').textContent = "Registro de Nuevo Personal";
+        document.getElementById('btn-cancelar-edicion').classList.add('oculto');
+        document.getElementById('btn-guardar-texto').textContent = "💾 Guardar Registro";
+        _limpiarFormulario();
+      });
+
+      var modalEliminar = document.getElementById('modal-confirmar-eliminar');
+      var cedulaParaEliminar = null;
+
+      document.getElementById('btn-cerrar-modal-eliminar').addEventListener('click', function() {
+        modalEliminar.classList.remove('activo');
+        modalEliminar.setAttribute('aria-hidden', 'true');
+      });
+      
+      document.getElementById('btn-cancelar-eliminar').addEventListener('click', function() {
+        modalEliminar.classList.remove('activo');
+        modalEliminar.setAttribute('aria-hidden', 'true');
+      });
+
+      document.getElementById('btn-confirmar-eliminar').addEventListener('click', function() {
+        if (!cedulaParaEliminar) return;
+        modalEliminar.classList.remove('activo');
+        modalEliminar.setAttribute('aria-hidden', 'true');
+        
+        var payload = {
+          idHojaPlantel: SESION.idHojaPlantel,
+          usuarioRegistrador: SESION.cedula,
+          cedulaEmpleado: cedulaParaEliminar
+        };
+
+        var tbody = document.getElementById('tbody-empleados');
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 2rem; color:#6b7280;"><div class="spinner" style="display:inline-block; margin-right:10px;"></div>Eliminando...</td></tr>';
+
+        google.script.run
+          .withSuccessHandler(function (res) {
+            if (res.exito) {
+              mostrarToast('Empleado eliminado y movido al histórico.', 'exito');
+              window.cargarTablaPersonal();
+            } else {
+              mostrarToast(res.error, 'error');
+              window.cargarTablaPersonal();
+            }
+          })
+          .withFailureHandler(function (err) {
+            mostrarToast('Error de red al eliminar.', 'error');
+            window.cargarTablaPersonal();
+          })
+          .eliminarRegistroPersonal(payload);
+          
+        cedulaParaEliminar = null;
+      });
+
+      window.eliminarPersonal = function (cedula) {
+        cedulaParaEliminar = cedula;
+        document.getElementById('modal-eliminar-texto').textContent = "C.I. " + cedula;
+        modalEliminar.classList.add('activo');
+        modalEliminar.setAttribute('aria-hidden', 'false');
+      };
+
+      // -------------------------------------------------------------------
+      // DESCARGA EXCEL DE FOOTER
+      // -------------------------------------------------------------------
+      function manejarDescargaExcel(tipo, btnId, btnTextoOriginal, datosPlantel) {
+        var btn = document.getElementById(btnId);
+        if (!btn || btn.disabled) return;
+        
+        btn.disabled = true;
+        var txtSpan = btn.querySelector('.btn-footer-texto');
+        if (txtSpan) {
+          txtSpan.innerHTML = '<div class="spinner" style="display:inline-block; margin-right:5px; width:14px; height:14px; border-width:2px;"></div> Preparando...';
+        }
+        
+        google.script.run
+          .withSuccessHandler(function(res) {
+            btn.disabled = false;
+            if (txtSpan) txtSpan.textContent = btnTextoOriginal;
+            
+            if (res.exito && res.tempId) {
+              mostrarToast('Descarga lista. Iniciando...', 'exito');
+              
+              var urlDescarga = 'https://docs.google.com/spreadsheets/d/' + res.tempId + '/export?format=xlsx';
+              
+              var a = document.createElement('a');
+              a.href = urlDescarga;
+              a.download = res.nombreArchivo || 'Descarga.xlsx';
+              a.style.display = 'none';
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              
+              // Solicitar limpieza del archivo temporal 15 segundos después para asegurar que la descarga inició
+              setTimeout(function() {
+                google.script.run
+                  .withSuccessHandler(function(){})
+                  .withFailureHandler(function(){})
+                  .eliminarExcelDescarga(res.tempId);
+              }, 15000);
+            } else {
+              mostrarToast(res.error || 'No se pudo preparar la descarga.', 'error');
+            }
+          })
+          .withFailureHandler(function(err) {
+            btn.disabled = false;
+            if (txtSpan) txtSpan.textContent = btnTextoOriginal;
+            mostrarToast('Error de conexión al preparar descarga.', 'error');
+          })
+          .prepararExcelDescarga(SESION.idHojaPlantel, tipo, datosPlantel);
+      }
+
+      document.getElementById('btn-footer-hoja-personal').addEventListener('click', function() {
+        if (!SESION || !SESION.activa || !SESION.idHojaPlantel) {
+          mostrarToast('No hay una sesión de plantel activa.', 'aviso');
+          return;
+        }
+        manejarDescargaExcel('PERSONAL', 'btn-footer-hoja-personal', 'Hoja Personal', SESION.datosPlantel);
+      });
+
+      document.getElementById('btn-footer-cuadratura').addEventListener('click', function() {
+        if (!SESION || !SESION.activa || !SESION.idHojaPlantel) {
+          mostrarToast('No hay una sesión de plantel activa.', 'aviso');
+          return;
+        }
+        manejarDescargaExcel('CUADRATURA', 'btn-footer-cuadratura', 'Cuadratura', SESION.datosPlantel);
+      });
+
+    });
+
+  </script>
+
+  <!-- ===================================================================
+       FOOTER FIJO — Siempre visible en la parte inferior
+       =================================================================== -->
+  <footer id="app-footer" role="contentinfo" aria-label="Barra de acciones rápidas">
+    <div class="footer-inner">
+      <span class="footer-label">Descargas rápidas:</span>
+      <div class="footer-acciones">
+        <button id="btn-footer-hoja-personal" class="btn-footer btn-footer-primary" title="Descargar Hoja Personal">
+          <span class="btn-footer-icono">📄</span>
+          <span class="btn-footer-texto">Hoja Personal</span>
+        </button>
+        <button id="btn-footer-cuadratura" class="btn-footer btn-footer-secondary" title="Descargar Cuadratura">
+          <span class="btn-footer-icono">📊</span>
+          <span class="btn-footer-texto">Cuadratura</span>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>

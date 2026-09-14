@@ -1,0 +1,280 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary-color: #3b82f6; /* Blue */
+  --primary-hover: #2563eb;
+  --bg-dark: #0f172a;
+  --bg-darker: #020617;
+  --card-bg: rgba(30, 41, 59, 0.7);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --danger: #ef4444;
+  --success: #22c55e;
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-darker);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+    radial-gradient(at 50% 0%, hsla(225,39%,30%,0.2) 0, transparent 50%), 
+    radial-gradient(at 100% 0%, hsla(339,49%,30%,0.2) 0, transparent 50%);
+  background-attachment: fixed;
+}
+
+/* Glassmorphism Classes */
+.glass-panel {
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Typography */
+h1, h2, h3 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+h2 { font-size: 1.75rem; margin-bottom: 1rem; }
+p { color: var(--text-muted); line-height: 1.6; }
+
+/* Inputs and Buttons */
+input, select {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--glass-border);
+  background: rgba(15, 23, 42, 0.6);
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  margin-bottom: 16px;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+button {
+  width: 100%;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  background: var(--primary-color);
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+button:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Layouts */
+#app {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Views Container */
+.view {
+  display: none;
+  flex: 1;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.view.active {
+  display: flex;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Login View */
+#login-view {
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 40px;
+  text-align: center;
+}
+
+.login-card img {
+  width: 80px;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));
+}
+
+.login-card p {
+  margin-bottom: 30px;
+}
+
+/* Dashboard View */
+#dashboard-view {
+  flex-direction: column;
+}
+
+.navbar {
+  padding: 16px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--glass-border);
+  background: rgba(2, 6, 23, 0.8);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.btn-icon {
+  width: auto;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+}
+.btn-icon:hover { background: rgba(255, 255, 255, 0.2); }
+
+.dashboard-content {
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+/* Lock Screen */
+.lock-screen {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.95);
+  backdrop-filter: blur(20px);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.lock-card {
+  max-width: 600px;
+  width: 100%;
+  padding: 40px;
+}
+
+.alert-warning {
+  background: rgba(245, 158, 11, 0.1);
+  border-left: 4px solid #f59e0b;
+  padding: 16px;
+  border-radius: 4px;
+  margin-bottom: 24px;
+  color: #fcd34d;
+}
+
+/* Media Queries para Móviles */
+@media (max-width: 768px) {
+  /* Reducir márgenes y padding en general */
+  .lock-card, .dashboard-content, .login-card {
+    padding: 20px;
+  }
+  
+  #plantel-form {
+    padding: 15px !important;
+  }
+  
+  /* Ajustar grillas de 3 columnas a 1 columna */
+  div[style*="grid-template-columns: 1fr 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+  
+  /* Ajustar cuadrículas dinámicas de Media */
+  div[style*="grid-template-columns: repeat(auto-fill, minmax(110px, 1fr))"] {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)) !important;
+  }
+  
+  /* Ajustar grid de vacantes */
+  div[style*="grid-template-columns:repeat(auto-fill,minmax(160px,1fr))"] {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  
+  /* Ajustar fuentes */
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.3rem; }
+  .navbar { padding: 12px 16px; }
+  .nav-brand { font-size: 1.1rem; }
+  
+  /* Botón e inputs */
+  button { padding: 10px 16px; font-size: 0.95rem; }
+  input, select { padding: 10px 12px; }
+  
+  /* Toggle Vacantes */
+  #toggle-vacantes {
+    width: 100%;
+    margin-top: 10px;
+  }
+  #toggle-vacantes button {
+    flex: 1;
+    text-align: center;
+  }
+  
+  /* El cuadro de la pregunta de vacantes que es flex-row pase a flex-column */
+  div[style*="justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px;"] {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 15px !important;
+  }
+}

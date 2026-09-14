@@ -1,0 +1,10 @@
+{
+  "timeZone": "America/Caracas",
+  "dependencies": {},
+  "exceptionLogging": "CLOUD",
+  "runtimeVersion": "V8",
+  "webapp": {
+    "executeAs": "USER_ACCESSING",
+    "access": "ANYONE"
+  }
+}
