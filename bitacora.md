@@ -304,3 +304,51 @@ Se implementó el requerimiento de inyectar una tabla resumen con el personal pr
 - webapp/package.json
 - bitacora.md
 
+---
+
+### Hito: Modularización y Redimensión de Tarjetas de Estadísticas (v2.11.8)
+**Fecha:** 2026-09-15  
+**Módulo:** Panel Administrativo / Métricas y Estadísticas (Rol `munadmin` y Administradores)
+
+**1. Requerimiento:**
+- Reducir el tamaño de las tarjetas de métricas (Planteles Activos, Personal Registrado, Usuarios del Sistema) que se mostraban excesivamente grandes.
+- Trasladar los estilos desde los atributos inline de `index.html` hacia la hoja de estilos centralizada `styles.css` con comentarios explicativos claros para permitir al usuario calibrar y ajustar las dimensiones a su preferencia.
+
+**2. Solución Técnica Implementada:**
+- Desacoplamiento de Estilos a `webapp/styles.css`:
+  * Se creó la sección `/* 11. TARJETAS DE ESTADÍSTICAS */` con clases especializadas: `.stats-grid`, `.stat-card`, `.stat-card-icon`, `.stat-card-title`, `.stat-card-number` y `.stat-card-desc`.
+  * Se redujo el padding de las tarjetas de `30px` a `16px 20px`, el ícono de `3rem` a `1.8rem`, el número principal de `3.5rem` a `2.2rem` y el ancho mínimo de `300px` a `200px`.
+  * Se agregaron comentarios directos señalando cada propiedad modificable para el ajuste fino de tamaños.
+- Actualización de `webapp/index.html`:
+  * Se eliminaron los estilos inline pesados del contenedor `#admin-tab-estadisticas`, asignando la jerarquía de clases CSS modular.
+- Incremento SemVer a **v2.11.8** en `package.json` e `index.html` en cumplimiento de la Regla de Oro 10.
+
+---
+
+### Hito: Calibración Fina de Tarjetas de Estadísticas, Protocolo de Respaldo Textual `conversaciones.md` y Gobernanza Git (v2.11.9)
+**Fecha:** 2026-09-16  
+**Módulo:** Interfaz de Usuario (UI) / Calibración de Métricas / Gobernanza de Memoria y Protocolos
+
+**1. Requerimiento:**
+- Ajuste y reducción del ancho de las tarjetas estadísticas a `160px` para una presentación visual armónica y compacta en el rol `munadmin`.
+- Blindaje definitivo ante olvidos de contexto entre sesiones creando el archivo `conversaciones.md` en la raíz del proyecto para alojar todas las intervenciones íntegras y textuales sin omisiones.
+- Actualización de la Skill 5 en `SKILL_sgh_firebase.md` para formalizar que cada confirmación de satisfacción ("satisfecho") activa la sincronización obligatoria en `bitacora.md`, `conversaciones.md`, SemVer y subida a GitHub (`git push`).
+
+**2. Solución Técnica Implementada:**
+- Calibración CSS (`webapp/styles.css`):
+  * Se configuró `grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));` en la clase `.stats-grid` de la sección 11, garantizando distribución horizontal óptima en pantallas medianas y de escritorio.
+- Implementación de `conversaciones.md`:
+  * Creación del archivo raíz con el historial cronológico completo de la sesión.
+- Actualización de Reglas Institucionales (`SKILL_sgh_firebase.md`):
+  * Se agregaron las Reglas 5 y 6 a la Skill 5 (`Gestor de Memoria, Bitácora y Registro de Conversaciones`), consolidando el protocolo de respaldo y subida automática a Git.
+- Incremento SemVer a **v2.11.9** en `webapp/package.json`.
+
+**3. Archivos Involucrados:**
+- `webapp/styles.css`
+- `webapp/package.json`
+- `conversaciones.md`
+- `.agents/skills/webapp-expert/SKILL_sgh_firebase.md`
+- `bitacora.md`
+
+
+

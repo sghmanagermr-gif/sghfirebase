@@ -1,3 +1,7 @@
+---
+name: webapp-expert
+description: Especialista de amplio espectro en la arquitectura, auditoría y optimización de Aplicaciones Web sobre Google Apps Script y Firebase. Incluye reglas de Zero-Cost y Bitácora estricta.
+---
 # Skill1: Google Apps Script Web App Architect (Enterprise Edition)
 
 ## Descripción
@@ -363,3 +367,38 @@ service cloud.firestore {
   }
 }
 ```
+
+---
+
+# Skill 5: Gestor de Memoria, Bitácora y Registro de Conversaciones (Instrucción OBLIGATORIA)
+
+## Regla Inquebrantable de Cierre de Tareas y Respaldo Textual
+Para evitar la pérdida de contexto y garantizar el registro histórico tanto de los logros técnicos como de las decisiones y conversaciones del proyecto, el agente debe cumplir estrictamente el siguiente protocolo en **todas** las tareas:
+
+1. **Confirmación Obligatoria:** Cada vez que el agente considere que ha finalizado una tarea o hito importante, DEBE preguntar literalmente al usuario: **"¿Los resultados fueron satisfactorios?"**
+2. **Ciclo de Corrección (Respuesta NO):** Si el usuario responde "NO" (o indica fallas), el agente tiene PROHIBIDO registrar la tarea. Debe enfocarse en corregir el código o proceso hasta obtener una respuesta afirmativa.
+3. **Registro en Bitácora (Respuesta SI / Satisfecho):** Solo cuando el usuario responda "SÍ" (o apruebe explícitamente diciendo "satisfecho" o similar), el agente DEBE OBLIGATORIAMENTE crear o actualizar un archivo físico llamado `bitacora.md` en la raíz del proyecto.
+4. **Formato de la Bitácora:** El archivo `bitacora.md` debe contener un resumen técnico profundo de lo que se logró, los archivos modificados, las lógicas inyectadas y las decisiones arquitectónicas tomadas, para que sirva como "disco duro" externo de la memoria del proyecto.
+5. **Registro Íntegro de Conversaciones (`conversaciones.md`):** Para blindar el proyecto ante cualquier pérdida de historial de los agentes o de la herramienta, el agente está OBLIGADO a mantener en el archivo físico `conversaciones.md` en la raíz del proyecto TODAS las intervenciones (mensajes completos del usuario y respuestas completas del agente, sin omitir ni resumir nada). Cada nueva sesión y cada interacción deben anexarse cronológicamente en este archivo para que el usuario y cualquier agente futuro tengan el hilo histórico textual exacto.
+6. **Respaldo Automático en Git / GitHub:** Al recibir la confirmación de "satisfecho" (o "sí"), y tras actualizar `bitacora.md`, `conversaciones.md` y la versión SemVer, el agente está OBLIGADO a realizar el commit (`git add .` y `git commit -m "..."`) y ejecutar o indicar la subida mediante `git push origin main` a GitHub para asegurar que el avance quede salvaguardado en el repositorio remoto.
+
+---
+
+# Skill 6: Comunicación Simple y No Técnica (Instrucción OBLIGATORIA)
+
+## Regla de Comunicación Empática
+Dado que el usuario administrador del proyecto puede no tener un trasfondo técnico profundo (ej. Administrador mención Turismo), el agente está OBLIGADO a cumplir las siguientes normas de comunicación en todas sus interacciones:
+
+1. **Lenguaje Llano y Directo:** Todas las respuestas deben darse en palabras sencillas, cotidianas y fáciles de entender. Evitar jergas técnicas puras sin explicación (ej. en lugar de decir "transacción atómica O(1)", decir "guardar con seguro para que nadie más lo tome al mismo tiempo").
+2. **Cero Código en las Respuestas (A menos que se pida):** Prohibido enviar bloques largos de código en la ventana del chat. El código se escribe directamente en los archivos, y en el chat solo se debe explicar visual y simplemente qué se hizo.
+3. **Uso de Analogías:** Explicar conceptos técnicos usando analogías de la vida real (ej. "El Portero", "El Candado", "El Archivero").
+4. **Respeto a la Especialidad del Usuario:** Reconocer el rol administrativo del usuario y adaptar las respuestas para que le sirvan en la toma de decisiones, no para darle clases de programación.
+
+---
+
+# Apéndice: Lecciones de Arquitectura y UI (Hard-Learned Lessons)
+
+## Prevención de Errores de Interfaz Críticos
+1. **Trampas de Z-Index en Modales Customizados**: Cuando se superponen modales (ej. un modal de confirmación encima de un formulario), siempre forzar la jerarquía absoluta usando `z-index: 9999 !important` en línea para la alerta. De lo contrario, clases globales como `.modal-overlay` podrían imponer su propio `!important`, dejando la alerta invisible detrás del formulario y "congelando" el sistema al esperar una Promesa que el usuario jamás podrá responder.
+2. **Propagación de Eventos (Event Bubbling)**: Al usar botones de cierre (`X` o `Cancelar`), es obligatorio inyectar `e.preventDefault()` y `e.stopPropagation()` en los Listeners. Esto evita que los clics accidentalmente recarguen formularios o interactúen con capas ocultas.
+3. **Verificación Estricta de Selectores DOM**: Nunca asumir el tipo de etiqueta de un ID (ej. `<input>` vs `<select>`). Usar un prefijo equivocado (`inp-codigo-rac` en lugar de `sel-codigo-rac`) causará que la lógica de habilitar/deshabilitar dependencias falle silenciosamente, costando horas de depuración. Siempre mirar el HTML antes de interactuar desde el JS.

@@ -282,3 +282,59 @@ body {
 .btn-excel-export:active {
   transform: translateY(0);
 }
+
+/* 11. TARJETAS DE ESTADÍSTICAS (Métricas de Administrador / Munadmin)
+   Aquí puedes calibrar los tamaños de las tarjetas y sus textos a tu gusto */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Cambia 200px para el ancho mínimo */
+  gap: 16px;                                                   /* Espaciado entre tarjetas */
+  max-width: 900px;
+}
+
+.stat-card {
+  padding: 16px 20px; /* <--- AJUSTA AQUÍ EL TAMAÑO INTERNO (Relleno de la tarjeta) */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 12px;
+  background: white;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+}
+
+.stat-card-icon {
+  font-size: 1.8rem; /* <--- AJUSTA AQUÍ EL TAMAÑO DEL ÍCONO (Antes era 3rem) */
+  margin-bottom: 6px;
+  line-height: 1;
+}
+
+.stat-card-title {
+  color: var(--text-muted);
+  font-size: 0.8rem; /* <--- AJUSTA AQUÍ EL TAMAÑO DEL TÍTULO (Antes era 1rem) */
+  margin: 0 0 6px;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.stat-card-number {
+  font-size: 2.2rem; /* <--- AJUSTA AQUÍ EL TAMAÑO DEL NÚMERO/CONTADOR (Antes era 3.5rem) */
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.stat-card-desc {
+  font-size: 0.72rem; /* <--- AJUSTA AQUÍ EL TAMAÑO DE LA NOTA AL PIE */
+  color: var(--text-muted);
+  margin: 6px 0 0;
+}
+
