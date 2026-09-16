@@ -350,5 +350,33 @@ Se implementó el requerimiento de inyectar una tabla resumen con el personal pr
 - `.agents/skills/webapp-expert/SKILL_sgh_firebase.md`
 - `bitacora.md`
 
+---
+
+### Hito: Filtro Estricto de Planteles por Municipio y Seguridad Territorial para rol munadmin (v2.11.10)
+**Fecha:** 2026-09-16  
+**Módulo:** Gestor de BD / Planteles / Control de Acceso RBAC y Zero-Cost
+
+**1. Requerimiento:**
+- En el apartado Gestor de BD -> Planteles, el usuario con rol `munadmin` (Coordinador Municipal) únicamente debe visualizar y gestionar los planteles pertenecientes a su municipio asignado, corrigiendo la anomalía donde se cargaban la totalidad de planteles del Estado.
+- Prevenir que el `munadmin` pueda alterar o registrar planteles asignándolos a municipios ajenos a su jurisdicción.
+
+**2. Solución Técnica Implementada:**
+- Consulta Optimizada en Firestore (`webapp/src/admin.js` - `loadPlanteles`):
+  * Detección dinámica de la jerarquía municipal del usuario (`userData.jerarquia.municipio`).
+  * Aplicación de filtro directo `query(collection(db, "planteles"), where("municipio", "==", userMun))`, minimizando las lecturas en Firestore y preservando la cuota diaria del plan Spark.
+- Doble Validación y Adaptabilidad en UI (`renderPlantelesList`):
+  * Filtrado estricto en memoria para tolerancia ante variaciones de formato o tildes.
+  * Personalización contextual del placeholder de búsqueda y mensajes de estado vacío por municipio.
+- Blindaje de Integridad Territorial (`openPlantelModal` y `formPlantel` submit):
+  * El campo Municipio se autocompleta y bloquea en modo solo lectura (`readOnly`) para el `munadmin`, forzando además que la carga útil persista inmutablemente su municipio oficial.
+- Incremento SemVer a **v2.11.10** en `webapp/package.json`.
+
+**3. Archivos Involucrados:**
+- `webapp/src/admin.js`
+- `webapp/package.json`
+- `bitacora.md`
+- `conversaciones.md`
+
+
 
 

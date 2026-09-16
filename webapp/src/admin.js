@@ -11,7 +11,12 @@ export function initAdminDashboard(dbInstance, user) {
 
   if (isInitialized) {
      // Si ya se inicializó el DOM, solo recargamos los datos para el nuevo usuario
+     currentPlanteles = [];
      loadEstadisticas();
+     const activeTab = document.querySelector('.admin-tab.active');
+     if (activeTab && activeTab.id === 'admin-tab-planteles') {
+        loadPlanteles();
+     }
      return;
   }
   isInitialized = true;
@@ -747,14 +752,37 @@ export function initAdminDashboard(dbInstance, user) {
   async function loadPlanteles() {
     if(!tbodyPlanteles) return;
     try {
-      const snap = await getDocs(collection(db, "planteles"));
+      tbodyPlanteles.innerHTML = '<tr><td colspan="5" style="padding: 20px; text-align: center; color: var(--text-muted);">Cargando planteles...</td></tr>';
+
+      const userMun = (userData?.rol === 'munadmin') 
+        ? (userData?.jerarquia?.municipio || userData?.municipio || '').trim().toUpperCase() 
+        : null;
+
+      let q;
+      if (userMun) {
+        // Zero-Cost Optimization (Spark): munadmin solo consulta los planteles de su municipio
+        q = query(collection(db, "planteles"), where("municipio", "==", userMun));
+      } else {
+        q = collection(db, "planteles");
+      }
+
+      const snap = await getDocs(q);
       currentPlanteles = [];
       snap.forEach(doc => {
-        currentPlanteles.push({ id: doc.id, ...doc.data() });
+        const data = doc.data();
+        // Doble validación en cliente
+        if (userMun) {
+          const pMun = (data.municipio || '').trim().toUpperCase();
+          if (pMun !== userMun) return;
+        }
+        currentPlanteles.push({ id: doc.id, ...data });
       });
       renderPlantelesList();
     } catch(err) {
       console.error("Error loading planteles:", err);
+      if(tbodyPlanteles) {
+        tbodyPlanteles.innerHTML = '<tr><td colspan="5" style="padding: 20px; text-align: center; color: var(--danger);">Error cargando planteles.</td></tr>';
+      }
     }
   }
 
@@ -762,10 +790,23 @@ export function initAdminDashboard(dbInstance, user) {
     if(!tbodyPlanteles) return;
     tbodyPlanteles.innerHTML = '';
     
-    const term = inpBuscarPlantel.value.toLowerCase().trim();
+    const userMun = (userData?.rol === 'munadmin') 
+      ? (userData?.jerarquia?.municipio || userData?.municipio || '').trim().toUpperCase() 
+      : null;
+
+    if (inpBuscarPlantel && userMun) {
+      inpBuscarPlantel.placeholder = `Buscar por DEA o nombre en ${userMun}...`;
+    }
+
+    const term = inpBuscarPlantel ? inpBuscarPlantel.value.toLowerCase().trim() : '';
     let filtered = currentPlanteles;
+
+    if (userMun) {
+      filtered = filtered.filter(p => (p.municipio || '').trim().toUpperCase() === userMun);
+    }
+
     if(term) {
-      filtered = currentPlanteles.filter(p => {
+      filtered = filtered.filter(p => {
          const d = p.codigos?.plantel?.toLowerCase() || '';
          const n = (p['nombre-plantel']?.nominal || '').toLowerCase();
          const m = (p.municipio || '').toLowerCase();
@@ -774,7 +815,10 @@ export function initAdminDashboard(dbInstance, user) {
     }
 
     if(filtered.length === 0) {
-      tbodyPlanteles.innerHTML = '<tr><td colspan="5" style="padding: 20px; text-align: center; color: var(--text-muted);">No se encontraron planteles.</td></tr>';
+      const msgVacio = userMun 
+        ? `No se encontraron planteles registrados para el municipio ${userMun}.` 
+        : 'No se encontraron planteles.';
+      tbodyPlanteles.innerHTML = `<tr><td colspan="5" style="padding: 20px; text-align: center; color: var(--text-muted);">${msgVacio}</td></tr>`;
       return;
     }
 
@@ -834,6 +878,11 @@ export function initAdminDashboard(dbInstance, user) {
      document.getElementById('p-uid').value = '';
      document.getElementById('modal-plantel-title').innerText = plantel ? 'Editar Plantel' : 'Nuevo Plantel';
      
+     const userMun = (userData?.rol === 'munadmin') 
+       ? (userData?.jerarquia?.municipio || userData?.municipio || '').trim().toUpperCase() 
+       : null;
+     const inpMun = document.getElementById('p-municipio');
+
      if(plantel) {
        document.getElementById('p-uid').value = plantel.id;
        document.getElementById('p-codigo').value = plantel.codigos?.plantel || '';
@@ -841,12 +890,25 @@ export function initAdminDashboard(dbInstance, user) {
        document.getElementById('p-denominacion').value = plantel.denominacion || '';
        document.getElementById('p-nominal').value = plantel['nombre-plantel']?.nominal || '';
        document.getElementById('p-eponimo').value = plantel['nombre-plantel']?.nuevo_eponimo || plantel['nombre-plantel']?.['nuevo-eponimo'] || '';
-       document.getElementById('p-municipio').value = plantel.municipio || '';
+       if (inpMun) {
+         inpMun.value = plantel.municipio || userMun || '';
+         inpMun.readOnly = !!userMun;
+       }
        document.getElementById('p-parroquia').value = plantel.parroquia || '';
        document.getElementById('p-dependencia').value = plantel.dependencia || 'NACIONAL';
        document.getElementById('p-cod-dependencia').value = plantel.codigos?.dependencia?.[0] || '';
        document.getElementById('p-nivel').value = plantel.nivel || '';
        document.getElementById('p-turno').value = plantel['turno-plantel'] || '';
+     } else {
+       if (inpMun) {
+         if (userMun) {
+           inpMun.value = userMun;
+           inpMun.readOnly = true;
+         } else {
+           inpMun.value = '';
+           inpMun.readOnly = false;
+         }
+       }
      }
      
      modalPlantel.style.display = 'flex';
@@ -872,8 +934,13 @@ export function initAdminDashboard(dbInstance, user) {
        
        const codP = document.getElementById('p-codigo').value.toUpperCase();
        
+       const userMun = (userData?.rol === 'munadmin') 
+         ? (userData?.jerarquia?.municipio || userData?.municipio || '').trim().toUpperCase() 
+         : null;
+       const munFinal = userMun || document.getElementById('p-municipio').value.toUpperCase().trim();
+       
        const newData = {
-          "municipio": document.getElementById('p-municipio').value.toUpperCase(),
+          "municipio": munFinal,
           "parroquia": document.getElementById('p-parroquia').value.toUpperCase(),
           "denominacion": document.getElementById('p-denominacion').value.toUpperCase(),
           "nombre-plantel": {

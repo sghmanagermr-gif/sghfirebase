@@ -178,12 +178,42 @@ Este archivo constituye el registro textual e inmutable de todas las intervencio
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
-> Protocolo de satisfacción ejecutado:  
-> 1. Registro del hito en `bitacora.md` y actualización de `conversaciones.md`.  
-> 2. Incremento de versión SemVer a `v2.11.9`.  
-> 3. Commit y sincronización con GitHub (`git push origin main`).  
-> 4. Inicio inmediato del análisis e implementación del filtro por municipio para el rol `munadmin` en el Gestor de BD -> Planteles.
+> Protocolo de satisfacción ejecutado exitosamente:  
+> 1. **Memoria Técnica:** Se registró el hito v2.11.9 en `bitacora.md`.  
+> 2. **Historial Textual:** Se actualizó `conversaciones.md`.  
+> 3. **SemVer:** Se incrementó la versión a `v2.11.9` en `package.json`.  
+> 4. **Respaldo en GitHub:** Se ejecutó `git add .`, commit y `git push origin main` al repositorio remoto exitosamente.  
+> 
+> **Implementación del Requerimiento (Gestor de BD -> Planteles por Municipio):**  
+> Se modificó `webapp/src/admin.js` para aplicar un filtro estricto de control de acceso (RBAC) y optimización Zero-Cost cuando el usuario tiene rol `munadmin`:  
+> - **Consulta a Firestore Optimizada (`loadPlanteles`):** Si el usuario es `munadmin`, Firestore consulta únicamente los planteles donde `municipio == userMun`, ahorrando lecturas y preservando el plan Spark.  
+> - **Doble Validación en Memoria (`renderPlantelesList`):** Se garantiza que la tabla solo renderice planteles de su municipio, adaptando el buscador y los mensajes vacíos específicamente a su jurisdicción.  
+> - **Seguridad en Creación y Edición (`openPlantelModal` y `formPlantel`):** El campo Municipio se bloquea en modo solo lectura (`readOnly`) con el municipio preasignado al `munadmin`, impidiendo que pueda alterar o registrar planteles fuera de su territorio.
 
 ---
+
+### Intervención 6
+* **Fecha / Hora:** 2026-09-16 ~19:14 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Estoy satisfecho.  
+> ¿Dónde cambio el tamaño y posición de los botones editar y eliminar de la tabla de planteles?
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Protocolo de satisfacción ejecutado:  
+> 1. Registro del hito v2.11.10 en `bitacora.md`.  
+> 2. Registro íntegro en `conversaciones.md`.  
+> 3. Incremento SemVer a `v2.11.10` en `package.json`.  
+> 4. Guardado en Git y subida exitosa a GitHub (`git push origin main`).  
+> 
+> Explicación y desacoplamiento de estilos para los botones de acción en la tabla de planteles:  
+> Originalmente estaban definidos con estilos en línea (inline) dentro de `webapp/src/admin.js`. Se trasladan a `webapp/styles.css` bajo la sección `/* 12. BOTONES DE ACCIÓN EN TABLA DE PLANTELES */` para que el usuario pueda calibrar libremente su tamaño, relleno, alineación y posición en vivo.
+
+---
+
+
 
 
