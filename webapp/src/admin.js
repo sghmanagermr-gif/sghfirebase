@@ -832,9 +832,9 @@ export function initAdminDashboard(dbInstance, user) {
          <td style="padding: 15px 20px; font-weight: 500; color: var(--text-main);">${p['nombre-plantel']?.nominal || 'SIN NOMBRE'}</td>
          <td style="padding: 15px 20px; color: var(--text-muted); font-size: 0.9rem;">${p.municipio || 'N/A'}</td>
          <td style="padding: 15px 20px; color: var(--text-muted); font-size: 0.9rem;">${p.nivel || 'N/A'}</td>
-         <td style="padding: 15px 20px; text-align: right;">
-           <button class="btn-edit-plantel" data-id="${p.id}" style="background: rgba(37,99,235,0.1); border: 1px solid var(--primary-color); color: var(--primary-color); padding: 4px 10px; border-radius: 6px; cursor: pointer; margin-right: 5px; width: auto; box-shadow: none; font-size: 0.8rem; min-height: 0;">✏️ Editar</button>
-           <button class="btn-del-plantel" data-id="${p.id}" style="background: rgba(220,38,38,0.1); border: 1px solid var(--danger); color: var(--danger); padding: 4px 10px; border-radius: 6px; cursor: pointer; width: auto; box-shadow: none; font-size: 0.8rem; min-height: 0;">🗑️ Eliminar</button>
+         <td class="plantel-actions-cell">
+           <button class="btn-plantel-action btn-edit-plantel" data-id="${p.id}">✏️ Editar</button>
+           <button class="btn-plantel-action btn-del-plantel" data-id="${p.id}">🗑️ Eliminar</button>
          </td>
        `;
        tbodyPlanteles.appendChild(tr);
@@ -873,11 +873,102 @@ export function initAdminDashboard(dbInstance, user) {
     inpBuscarPlantel.addEventListener('input', renderPlantelesList);
   }
 
+  function asegurarOpcionEnSelect(selectElem, valor) {
+    if (!selectElem) return;
+    const valUpper = (valor || '').toString().trim().toUpperCase();
+    if (!valUpper) {
+      selectElem.value = '';
+      return;
+    }
+    const existe = Array.from(selectElem.options).some(opt => opt.value.toUpperCase() === valUpper);
+    if (!existe) {
+      const opt = document.createElement('option');
+      opt.value = valUpper;
+      opt.textContent = valUpper;
+      selectElem.appendChild(opt);
+    }
+    selectElem.value = valUpper;
+  }
+
+  function poblarSelectoresPlantel(catData = null) {
+    const DEFAULT_CATALOGOS = {
+      ubicacion: ["URBANO", "RURAL"],
+      turnos: ["MAÑANA", "TARDE", "DOBLE TURNO", "NOCTURNO", "SABATINO"],
+      niveles: [
+        "INICIAL",
+        "INICIAL - PRIMARIA",
+        "INICIAL-PRIMARIA-MEDIA GENERAL",
+        "INICIAL-PRIMARIA-MEDIA TECNICA",
+        "PRIMARIA",
+        "PRIMARIA - MEDIA GENERAL",
+        "PRIMARIA - MEDIA TECNICA",
+        "MEDIA GENERAL",
+        "MEDIA GENERAL - MEDIA TECNICA",
+        "MEDIA TECNICA"
+      ],
+      modalidades: ["ADULTO", "ESPECIAL"]
+    };
+
+    let ubicaciones = DEFAULT_CATALOGOS.ubicacion;
+    let turnos = DEFAULT_CATALOGOS.turnos;
+    let niveles = DEFAULT_CATALOGOS.niveles;
+    let modalidades = DEFAULT_CATALOGOS.modalidades;
+
+    if (catData) {
+      if (Array.isArray(catData.ubicacion) && catData.ubicacion.length > 0) ubicaciones = catData.ubicacion;
+      else if (Array.isArray(catData.listas_desplegables?.ubicacion) && catData.listas_desplegables.ubicacion.length > 0) ubicaciones = catData.listas_desplegables.ubicacion;
+
+      if (Array.isArray(catData.turnos) && catData.turnos.length > 0) turnos = catData.turnos;
+      else if (Array.isArray(catData.listas_desplegables?.turnos) && catData.listas_desplegables.turnos.length > 0) turnos = catData.listas_desplegables.turnos;
+
+      if (Array.isArray(catData.listas_desplegables?.niveles_educativos) && catData.listas_desplegables.niveles_educativos.length > 0) niveles = catData.listas_desplegables.niveles_educativos;
+      else if (Array.isArray(catData.nivel_modalidad?.niveles) && catData.nivel_modalidad.niveles.length > 0) niveles = catData.nivel_modalidad.niveles;
+
+      if (Array.isArray(catData.listas_desplegables?.modalidades) && catData.listas_desplegables.modalidades.length > 0) modalidades = catData.listas_desplegables.modalidades;
+      else if (Array.isArray(catData.nivel_modalidad?.modalidades) && catData.nivel_modalidad.modalidades.length > 0) modalidades = catData.nivel_modalidad.modalidades;
+    }
+
+    const selUbicacion = document.getElementById('p-ubicacion');
+    if (selUbicacion && selUbicacion.options.length <= 1) {
+      selUbicacion.innerHTML = '<option value="">-- SELECCIONE UBICACIÓN --</option>' +
+        ubicaciones.map(u => `<option value="${u}">${u}</option>`).join('');
+    }
+
+    const selNivel = document.getElementById('p-nivel');
+    if (selNivel && selNivel.options.length <= 1) {
+      selNivel.innerHTML = '<option value="">-- SELECCIONE NIVEL --</option>' +
+        niveles.map(n => `<option value="${n}">${n}</option>`).join('');
+    }
+
+    const selModalidad = document.getElementById('p-modalidad');
+    if (selModalidad && selModalidad.options.length <= 1) {
+      selModalidad.innerHTML = '<option value="">-- NINGUNA / REGULAR --</option>' +
+        modalidades.map(m => `<option value="${m}">${m}</option>`).join('');
+    }
+
+    const selTurno = document.getElementById('p-turno');
+    if (selTurno && selTurno.options.length <= 1) {
+      selTurno.innerHTML = '<option value="">-- SELECCIONE TURNO --</option>' +
+        turnos.map(t => `<option value="${t}">${t}</option>`).join('');
+    }
+  }
+
   function openPlantelModal(plantel = null) {
      formPlantel.reset();
      document.getElementById('p-uid').value = '';
      document.getElementById('modal-plantel-title').innerText = plantel ? 'Editar Plantel' : 'Nuevo Plantel';
      
+     // Cargar catálogo maestro si está disponible en localStorage o catalogosGlobal
+     let catData = null;
+     try {
+       const cached = localStorage.getItem('sgh_catalogos');
+       if (cached) catData = JSON.parse(cached);
+     } catch(e) {}
+     if (!catData && typeof catalogosGlobal === 'object' && Object.keys(catalogosGlobal).length > 0) {
+       catData = catalogosGlobal;
+     }
+     poblarSelectoresPlantel(catData);
+
      const userMun = (userData?.rol === 'munadmin') 
        ? (userData?.jerarquia?.municipio || userData?.municipio || '').trim().toUpperCase() 
        : null;
@@ -897,8 +988,30 @@ export function initAdminDashboard(dbInstance, user) {
        document.getElementById('p-parroquia').value = plantel.parroquia || '';
        document.getElementById('p-dependencia').value = plantel.dependencia || 'NACIONAL';
        document.getElementById('p-cod-dependencia').value = plantel.codigos?.dependencia?.[0] || '';
-       document.getElementById('p-nivel').value = plantel.nivel || '';
-       document.getElementById('p-turno').value = plantel['turno-plantel'] || '';
+       
+       // Ubicación Geográfica
+       const ubicVal = plantel['ubicacion-geografica'] || plantel.ubicacion || '';
+       asegurarOpcionEnSelect(document.getElementById('p-ubicacion'), ubicVal);
+
+       // Nivel
+       const nivelVal = plantel.nivel || '';
+       asegurarOpcionEnSelect(document.getElementById('p-nivel'), nivelVal);
+
+       // Modalidad
+       const modVal = plantel.modalidad || '';
+       asegurarOpcionEnSelect(document.getElementById('p-modalidad'), modVal);
+
+       // Turno
+       const turnoVal = plantel['turno-plantel'] || plantel.turno || '';
+       asegurarOpcionEnSelect(document.getElementById('p-turno'), turnoVal);
+
+       // Metros Cuadrados
+       const m2Val = (plantel.metros2 !== undefined && plantel.metros2 !== null) ? plantel.metros2 :
+                     ((plantel['metros-cuadrados'] !== undefined && plantel['metros-cuadrados'] !== null) ? plantel['metros-cuadrados'] : (plantel.metros_cuadrados ?? ''));
+       document.getElementById('p-metros-cuadrados').value = (m2Val !== '' && m2Val !== null && m2Val !== undefined) ? m2Val : '';
+
+       // Observaciones
+       document.getElementById('p-observaciones').value = plantel.observaciones || '';
      } else {
        if (inpMun) {
          if (userMun) {
@@ -909,6 +1022,12 @@ export function initAdminDashboard(dbInstance, user) {
            inpMun.readOnly = false;
          }
        }
+       document.getElementById('p-ubicacion').value = '';
+       document.getElementById('p-nivel').value = '';
+       document.getElementById('p-modalidad').value = '';
+       document.getElementById('p-turno').value = '';
+       document.getElementById('p-metros-cuadrados').value = '';
+       document.getElementById('p-observaciones').value = '';
      }
      
      modalPlantel.style.display = 'flex';
@@ -939,6 +1058,14 @@ export function initAdminDashboard(dbInstance, user) {
          : null;
        const munFinal = userMun || document.getElementById('p-municipio').value.toUpperCase().trim();
        
+       const metros2Raw = document.getElementById('p-metros-cuadrados').value;
+       const metros2Val = metros2Raw !== '' ? (parseFloat(metros2Raw) || 0) : null;
+       const ubicacionVal = document.getElementById('p-ubicacion').value.trim().toUpperCase();
+       const nivelVal = document.getElementById('p-nivel').value.trim().toUpperCase();
+       const modalidadVal = document.getElementById('p-modalidad').value.trim().toUpperCase();
+       const turnoVal = document.getElementById('p-turno').value.trim().toUpperCase();
+       const obsVal = document.getElementById('p-observaciones').value.trim();
+
        const newData = {
           "municipio": munFinal,
           "parroquia": document.getElementById('p-parroquia').value.toUpperCase(),
@@ -953,8 +1080,14 @@ export function initAdminDashboard(dbInstance, user) {
             "dependencia": [ Number(document.getElementById('p-cod-dependencia').value) || 0 ]
           },
           "dependencia": document.getElementById('p-dependencia').value,
-          "nivel": document.getElementById('p-nivel').value.toUpperCase(),
-          "turno-plantel": document.getElementById('p-turno').value.toUpperCase()
+          "ubicacion-geografica": ubicacionVal,
+          "ubicacion": ubicacionVal,
+          "nivel": nivelVal,
+          "modalidad": modalidadVal,
+          "turno-plantel": turnoVal,
+          "turno": turnoVal,
+          "metros2": metros2Val,
+          "observaciones": obsVal
        };
 
        try {

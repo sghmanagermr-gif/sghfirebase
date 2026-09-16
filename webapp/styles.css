@@ -338,3 +338,53 @@ body {
   margin: 6px 0 0;
 }
 
+/* 12. BOTONES DE ACCIÓN EN TABLA DE PLANTELES (Editar / Eliminar)
+   Aquí puedes calibrar su tamaño, posición y alineación */
+.plantel-actions-cell {
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* <--- POSICIÓN: flex-end (derecha), center (centrado), flex-start (izquierda) */
+  gap: 8px;                  /* <--- ESPACIADO ENTRE BOTONES (Separación) */
+}
+
+.btn-plantel-action {
+  padding: 4px 10px;         /* <--- TAMAÑO INTERNO (Relleno: arriba/abajo y a los lados) */
+  border-radius: 6px;        /* Redondeo de las esquinas */
+  cursor: pointer;
+  font-size: 0.8rem;         /* <--- TAMAÑO DEL TEXTO E ÍCONO */
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  box-shadow: none;
+  min-height: 0;
+  transition: all 0.2s ease;
+}
+
+.btn-edit-plantel {
+  background: rgba(37, 99, 235, 0.1);
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+}
+
+.btn-edit-plantel:hover {
+  background: var(--primary-color);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.btn-del-plantel {
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid var(--danger);
+  color: var(--danger);
+}
+
+.btn-del-plantel:hover {
+  background: var(--danger);
+  color: white;
+  transform: translateY(-1px);
+}
+
+

@@ -376,7 +376,40 @@ Se implementó el requerimiento de inyectar una tabla resumen con el personal pr
 - `webapp/package.json`
 - `bitacora.md`
 - `conversaciones.md`
+ 
+---
+ 
+### Hito: Integración de Selectores Maestros Institucionales y Campos Complementarios en Modal de Planteles (v2.11.11)
+**Fecha:** 2026-09-16  
+**Módulo:** Gestor de BD / Planteles / Modal de Edición y Creación / Catálogos Maestros
 
+**1. Requerimiento:**
+- Incorporar al modal de creación y edición de planteles los selectores oficiales alimentados desde los catálogos de `sgh_maestro`:
+  * Ubicación Geográfica (URBANO, RURAL).
+  * Nivel Educativo (los 10 niveles maestros oficiales).
+  * Modalidad (ADULTO, ESPECIAL, Regular/Ninguna).
+  * Turno (convertir el input libre previo a un selector con los 5 turnos oficiales: MAÑANA, TARDE, DOBLE TURNO, NOCTURNO, SABATINO).
+- Incorporar los nuevos campos de captura de datos:
+  * Metros cuadrados (con soporte para valores decimales `step="0.01"`).
+  * Observaciones (área de texto multilínea institucional).
 
+**2. Solución Técnica Implementada:**
+- Estructuración de Interfaz (`webapp/index.html`):
+  * Reorganización en grid de 2 columnas dentro de `#form-plantel`.
+  * Creación de `<select id="p-ubicacion">`, `<select id="p-nivel">`, `<select id="p-modalidad">` y conversión de `#p-turno` en `<select>`.
+  * Adición de `<input type="number" step="0.01" id="p-metros-cuadrados">` y `<textarea id="p-observaciones">`.
+- Lógica de Carga, Hidratación y Persistencia (`webapp/src/admin.js`):
+  * Función `poblarSelectoresPlantel(catData)`: Lee dinámicamente los catálogos desde `sistema/catalogos_maestros`, `sgh_catalogos` en `localStorage` o el respaldo maestro institucional.
+  * Función `asegurarOpcionEnSelect(selectElem, valor)`: Protege la integridad histórica de datos al editar planteles con valores preexistentes.
+  * Extensión del submit listener de `formPlantel` para mapear y persistir `ubicacion-geografica`, `ubicacion`, `nivel`, `modalidad`, `turno-plantel`, `turno`, `metros2` y `observaciones` en la colección `planteles` de Firestore.
+- Incremento SemVer a **v2.11.11** en `webapp/package.json`.
 
+**3. Archivos Involucrados:**
+- `webapp/index.html`
+- `webapp/src/admin.js`
+- `webapp/package.json`
+- `bitacora.md`
+- `conversaciones.md`
+
+---
 

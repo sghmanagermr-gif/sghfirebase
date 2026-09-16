@@ -212,8 +212,40 @@ Este archivo constituye el registro textual e inmutable de todas las intervencio
 > Explicación y desacoplamiento de estilos para los botones de acción en la tabla de planteles:  
 > Originalmente estaban definidos con estilos en línea (inline) dentro de `webapp/src/admin.js`. Se trasladan a `webapp/styles.css` bajo la sección `/* 12. BOTONES DE ACCIÓN EN TABLA DE PLANTELES */` para que el usuario pueda calibrar libremente su tamaño, relleno, alineación y posición en vivo.
 
+### Intervención 7
+* **Fecha / Hora:** 2026-09-16 ~19:32 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Estoy satisfecho.  
+>   
+> al modal de edicion de planteles le falta los siguientes selectores que se cargan del shg_maestro:  
+> Ubicación Geografica  
+> Nivel  
+> Modalidad  
+> Turno (ya está, pero debe ser un selector)  
+> inputs:  
+> Metros cuadrados (con decimales)  
+> Observaciones  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Protocolo ejecutado:  
+> 1. Verificación y lectura obligatoria de `SKILL_sgh_firebase.md`.  
+> 2. Implementación de los selectores institucionales en `#form-plantel` (`webapp/index.html`):  
+>    - Ubicación Geográfica: Selector con opciones URBANO y RURAL alimentado de los catálogos maestros.  
+>    - Nivel: Selector con los 10 niveles educativos maestros institucionales.  
+>    - Modalidad: Selector con las modalidades oficiales (ADULTO, ESPECIAL, Regular/Ninguna).  
+>    - Turno: Conversión de campo de texto a selector con los 5 turnos oficiales (MAÑANA, TARDE, DOBLE TURNO, NOCTURNO, SABATINO).  
+> 3. Implementación de nuevos inputs:  
+>    - Metros cuadrados: Campo numérico con soporte de decimales (`step="0.01"`).  
+>    - Observaciones: Área de texto multilínea para anotaciones institucionales del plantel.  
+> 4. Lógica de precarga, hidratación y persistencia (`webapp/src/admin.js`):  
+>    - Función `poblarSelectoresPlantel()` que consulta catálogos maestros (`sistema/catalogos_maestros`, `sgh_catalogos` en `localStorage` o respaldo institucional oficial).  
+>    - Función `asegurarOpcionEnSelect()` para preservar valores preexistentes sin pérdida de información.  
+>    - Guardado seguro en Firestore en la colección `planteles`.  
+> 5. Incremento de versión SemVer a `v2.11.11` en `webapp/package.json`.  
+> 6. Validación de compilación (`npm run build`) con 0 errores.  
+
 ---
-
-
-
-
