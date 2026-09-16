@@ -840,7 +840,7 @@
   <div id="modal-plantel" class="lock-screen" aria-hidden="true"
     style="display: none; z-index: 10002; align-items: flex-start; padding-top: 5vh; overflow-y: auto;">
     <div class="lock-card glass-panel"
-      style="max-width: 600px; width: 100%; text-align: left; position: relative; max-height: 90vh; overflow-y: auto;">
+      style="max-width: 700px; width: 100%; text-align: left; position: relative; max-height: 90vh; overflow-y: auto;">
       <button type="button" id="btn-cerrar-modal-plantel"
         style="position: absolute; top: 15px; right: 15px; background: transparent; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer;">&times;</button>
       <h2 id="modal-plantel-title" style="margin: 0 0 20px; color: var(--primary-color); font-size: 1.5rem;">Nuevo
@@ -890,10 +890,7 @@
               *</label>
             <select id="p-dependencia" required
               style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; background: white;">
-              <option value="NACIONAL">NACIONAL</option>
-              <option value="ESTADAL">ESTADAL</option>
-              <option value="MUNICIPAL">MUNICIPAL</option>
-              <option value="PRIVADO">PRIVADO</option>
+              <option value="">-- SELECCIONE DEPENDENCIA --</option>
             </select>
           </div>
         </div>
@@ -921,8 +918,6 @@
           </div>
         </div>
 
-
-
         <div style="grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
           <div>
             <label
@@ -930,8 +925,6 @@
             <select id="p-ubicacion" required
               style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; background: white;">
               <option value="">-- SELECCIONE UBICACIÓN --</option>
-              <option value="URBANO">URBANO</option>
-              <option value="RURAL">RURAL</option>
             </select>
           </div>
           <div>
@@ -940,11 +933,6 @@
             <select id="p-turno" required
               style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; background: white;">
               <option value="">-- SELECCIONE TURNO --</option>
-              <option value="MAÑANA">MAÑANA</option>
-              <option value="TARDE">TARDE</option>
-              <option value="DOBLE TURNO">DOBLE TURNO</option>
-              <option value="NOCTURNO">NOCTURNO</option>
-              <option value="SABATINO">SABATINO</option>
             </select>
           </div>
         </div>
@@ -956,16 +944,6 @@
             <select id="p-nivel" required
               style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; background: white;">
               <option value="">-- SELECCIONE NIVEL --</option>
-              <option value="INICIAL">INICIAL</option>
-              <option value="INICIAL - PRIMARIA">INICIAL - PRIMARIA</option>
-              <option value="INICIAL-PRIMARIA-MEDIA GENERAL">INICIAL-PRIMARIA-MEDIA GENERAL</option>
-              <option value="INICIAL-PRIMARIA-MEDIA TECNICA">INICIAL-PRIMARIA-MEDIA TECNICA</option>
-              <option value="PRIMARIA">PRIMARIA</option>
-              <option value="PRIMARIA - MEDIA GENERAL">PRIMARIA - MEDIA GENERAL</option>
-              <option value="PRIMARIA - MEDIA TECNICA">PRIMARIA - MEDIA TECNICA</option>
-              <option value="MEDIA GENERAL">MEDIA GENERAL</option>
-              <option value="MEDIA GENERAL - MEDIA TECNICA">MEDIA GENERAL - MEDIA TECNICA</option>
-              <option value="MEDIA TECNICA">MEDIA TECNICA</option>
             </select>
           </div>
           <div>
@@ -974,8 +952,6 @@
             <select id="p-modalidad"
               style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; background: white;">
               <option value="">-- NINGUNA / REGULAR --</option>
-              <option value="ADULTO">ADULTO</option>
-              <option value="ESPECIAL">ESPECIAL</option>
             </select>
           </div>
         </div>
@@ -995,6 +971,27 @@
           <textarea id="p-observaciones" rows="2" placeholder="Observaciones o notas institucionales del plantel..."
             style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; resize: vertical; font-family: inherit; font-size: 0.85rem;"></textarea>
         </div>
+
+        <!-- SECCIÓN: PLANES DE ESTUDIO QUE IMPARTE EL PLANTEL -->
+        <div style="grid-column: 1 / -1; margin-top: 5px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label
+              style="display: block; font-size: 0.85rem; font-weight: bold; margin: 0; color: var(--text-main);">
+              Planes de Estudio que Imparte el Plantel
+            </label>
+            <span id="p-planes-counter" style="font-size: 0.75rem; color: var(--primary-color); font-weight: bold; background: rgba(37,99,235,0.1); padding: 2px 8px; border-radius: 12px;">
+              0 seleccionados
+            </span>
+          </div>
+          <div id="plantel-planes-container"
+            style="display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; max-height: 200px; overflow-y: auto; padding: 12px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px;">
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; grid-column: 1 / -1;">Cargando planes de estudio...</p>
+          </div>
+          <small style="display: block; margin-top: 5px; color: var(--text-muted); font-size: 0.75rem;">
+            Marque la casilla correspondiente a cada plan de estudio que imparte este plantel para habilitarlo en la estructura institucional.
+          </small>
+        </div>
+
         <div style="grid-column: 1 / -1; display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px;">
           <button type="button" id="btn-cancelar-plantel" class="btn-secondary"
             style="border: 1px solid #ccc; background: white; color: #333; padding: 8px 16px; border-radius: 6px; cursor: pointer; width: auto; box-shadow: none; font-size: 0.9rem; margin: 0; min-height: 0;">Cancelar</button>

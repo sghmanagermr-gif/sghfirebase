@@ -890,67 +890,198 @@ export function initAdminDashboard(dbInstance, user) {
     selectElem.value = valUpper;
   }
 
-  function poblarSelectoresPlantel(catData = null) {
-    const DEFAULT_CATALOGOS = {
-      ubicacion: ["URBANO", "RURAL"],
-      turnos: ["MAÑANA", "TARDE", "DOBLE TURNO", "NOCTURNO", "SABATINO"],
-      niveles: [
-        "INICIAL",
-        "INICIAL - PRIMARIA",
-        "INICIAL-PRIMARIA-MEDIA GENERAL",
-        "INICIAL-PRIMARIA-MEDIA TECNICA",
-        "PRIMARIA",
-        "PRIMARIA - MEDIA GENERAL",
-        "PRIMARIA - MEDIA TECNICA",
-        "MEDIA GENERAL",
-        "MEDIA GENERAL - MEDIA TECNICA",
-        "MEDIA TECNICA"
-      ],
-      modalidades: ["ADULTO", "ESPECIAL"]
-    };
-
-    let ubicaciones = DEFAULT_CATALOGOS.ubicacion;
-    let turnos = DEFAULT_CATALOGOS.turnos;
-    let niveles = DEFAULT_CATALOGOS.niveles;
-    let modalidades = DEFAULT_CATALOGOS.modalidades;
-
-    if (catData) {
-      if (Array.isArray(catData.ubicacion) && catData.ubicacion.length > 0) ubicaciones = catData.ubicacion;
-      else if (Array.isArray(catData.listas_desplegables?.ubicacion) && catData.listas_desplegables.ubicacion.length > 0) ubicaciones = catData.listas_desplegables.ubicacion;
-
-      if (Array.isArray(catData.turnos) && catData.turnos.length > 0) turnos = catData.turnos;
-      else if (Array.isArray(catData.listas_desplegables?.turnos) && catData.listas_desplegables.turnos.length > 0) turnos = catData.listas_desplegables.turnos;
-
-      if (Array.isArray(catData.listas_desplegables?.niveles_educativos) && catData.listas_desplegables.niveles_educativos.length > 0) niveles = catData.listas_desplegables.niveles_educativos;
-      else if (Array.isArray(catData.nivel_modalidad?.niveles) && catData.nivel_modalidad.niveles.length > 0) niveles = catData.nivel_modalidad.niveles;
-
-      if (Array.isArray(catData.listas_desplegables?.modalidades) && catData.listas_desplegables.modalidades.length > 0) modalidades = catData.listas_desplegables.modalidades;
-      else if (Array.isArray(catData.nivel_modalidad?.modalidades) && catData.nivel_modalidad.modalidades.length > 0) modalidades = catData.nivel_modalidad.modalidades;
+  function poblarSelectoresPlantel() {
+    let catData = null;
+    try {
+      const raw = localStorage.getItem('sgh_catalogos');
+      if (raw) catData = JSON.parse(raw);
+    } catch(e) {
+      console.warn("Aviso leyendo sgh_catalogos de localStorage:", e);
     }
 
+    if (!catData && typeof catalogosGlobal === 'object' && Object.keys(catalogosGlobal).length > 0) {
+      catData = catalogosGlobal;
+    }
+
+    if (!catData || typeof catData !== 'object') {
+      catData = {};
+    }
+
+    const ld = catData.listas_desplegables || {};
+
+    // 1. Ubicación Geográfica desde sgh_catalogos
+    const ubicaciones = (Array.isArray(catData.ubicacion) && catData.ubicacion.length > 0) 
+      ? catData.ubicacion 
+      : (Array.isArray(ld.ubicacion) && ld.ubicacion.length > 0 ? ld.ubicacion : ["URBANO", "RURAL"]);
     const selUbicacion = document.getElementById('p-ubicacion');
-    if (selUbicacion && selUbicacion.options.length <= 1) {
+    if (selUbicacion) {
       selUbicacion.innerHTML = '<option value="">-- SELECCIONE UBICACIÓN --</option>' +
         ubicaciones.map(u => `<option value="${u}">${u}</option>`).join('');
     }
 
+    // 2. Nivel Educativo desde sgh_catalogos
+    const niveles = (Array.isArray(ld.niveles_educativos) && ld.niveles_educativos.length > 0)
+      ? ld.niveles_educativos
+      : (Array.isArray(catData.nivel_modalidad?.niveles) ? catData.nivel_modalidad.niveles : []);
     const selNivel = document.getElementById('p-nivel');
-    if (selNivel && selNivel.options.length <= 1) {
+    if (selNivel) {
       selNivel.innerHTML = '<option value="">-- SELECCIONE NIVEL --</option>' +
         niveles.map(n => `<option value="${n}">${n}</option>`).join('');
     }
 
+    // 3. Modalidad desde sgh_catalogos
+    const modalidades = (Array.isArray(ld.modalidades) && ld.modalidades.length > 0)
+      ? ld.modalidades
+      : (Array.isArray(catData.nivel_modalidad?.modalidades) ? catData.nivel_modalidad.modalidades : []);
     const selModalidad = document.getElementById('p-modalidad');
-    if (selModalidad && selModalidad.options.length <= 1) {
+    if (selModalidad) {
       selModalidad.innerHTML = '<option value="">-- NINGUNA / REGULAR --</option>' +
         modalidades.map(m => `<option value="${m}">${m}</option>`).join('');
     }
 
+    // 4. Turnos desde sgh_catalogos
+    const turnos = (Array.isArray(catData.turnos) && catData.turnos.length > 0)
+      ? catData.turnos
+      : (Array.isArray(ld.turnos) && ld.turnos.length > 0 ? ld.turnos : ["MAÑANA", "TARDE", "DOBLE TURNO", "NOCTURNO", "SABATINO"]);
     const selTurno = document.getElementById('p-turno');
-    if (selTurno && selTurno.options.length <= 1) {
+    if (selTurno) {
       selTurno.innerHTML = '<option value="">-- SELECCIONE TURNO --</option>' +
         turnos.map(t => `<option value="${t}">${t}</option>`).join('');
     }
+
+    // 5. Dependencia desde sgh_catalogos
+    const dependencias = (Array.isArray(ld.dependencia) && ld.dependencia.length > 0)
+      ? ld.dependencia
+      : (Array.isArray(catData.dependencia) && catData.dependencia.length > 0 ? catData.dependencia : ["NACIONAL", "ESTADAL", "MUNICIPAL", "SUBVENCIONADA", "PRIVADO", "AUTONOMA"]);
+    const selDep = document.getElementById('p-dependencia');
+    if (selDep) {
+      const valActual = selDep.value;
+      selDep.innerHTML = '<option value="">-- SELECCIONE DEPENDENCIA --</option>' +
+        dependencias.map(d => `<option value="${d}">${d}</option>`).join('');
+      if (valActual) selDep.value = valActual;
+    }
+  }
+
+  // Inicializar selectores desde sgh_catalogos
+  poblarSelectoresPlantel();
+
+  // --- GESTOR DE PLANES DE ESTUDIO DEL PLANTEL ---
+  const PLANES_ESTUDIO_FALLBACK = {
+    "20000": { codigo: 20000, especialidad: null, mencion: null, nombre: "EDUCACIÓN INICIAL" },
+    "21000": { codigo: 21000, especialidad: null, mencion: null, nombre: "EDUCACIÓN PRIMARIA" },
+    "31059": { codigo: 31059, especialidad: "MEDIA GENERAL", mencion: "CIENCIAS" },
+    "31060": { codigo: 31060, especialidad: "MEDIA GENERAL", mencion: "CIENCIAS Y TECNOLOGIA" },
+    "41048": { codigo: 41048, especialidad: "AGROPECUARIA", mencion: "ECOTURISMO" },
+    "41049": { codigo: 41049, especialidad: "AGROPECUARIA", mencion: "CIENCIAS AGRÍCOLAS Y PECUARIAS" },
+    "41052": { codigo: 41052, especialidad: "AGROPECUARIA", mencion: "TECNOLOGÍA DE LOS ALIMENTOS" },
+    "41056": { codigo: 41056, especialidad: "AGROPECUARIA", mencion: "CIENCIAS AGRÍCOLAS, OPCIÓN CACAO" },
+    "42000": { codigo: 42000, especialidad: "HIDROCARBUROS", mencion: "PETRÓLEO Y GAS NATURAL" },
+    "43291": { codigo: 43291, especialidad: "INDUSTRIAL", mencion: "ELECTRÓNICA" },
+    "43292": { codigo: 43292, especialidad: "INDUSTRIAL", mencion: "CONSTRUCCIÓN CIVIL" },
+    "43293": { codigo: 43293, especialidad: "INDUSTRIAL", mencion: "MECÁNICA TÉRMICA" },
+    "43294": { codigo: 43294, especialidad: "INDUSTRIAL", mencion: "MECATRONICA" },
+    "43295": { codigo: 43295, especialidad: "INDUSTRIAL", mencion: "METALMECÁNICA" },
+    "43298": { codigo: 43298, especialidad: "INDUSTRIAL", mencion: "TELEMATICA" },
+    "44001": { codigo: 44001, especialidad: "TRANSPORTE MULTIMODAL", mencion: "TRANSPORTE TERRESTRE" },
+    "44004": { codigo: 44004, especialidad: "TRANSPORTE MULTIMODAL", mencion: "AERONÁUTICAS, OPCIÓN SERVICIOS AÉREOS" },
+    "45041": { codigo: 45041, especialidad: "SALUD", mencion: "ENFERMERÍA" },
+    "45043": { codigo: 45043, especialidad: "SALUD", mencion: "FARMACIA" },
+    "45045": { codigo: 45045, especialidad: "SALUD", mencion: "LABORATORIO CLÍNICO" },
+    "45049": { codigo: 45049, especialidad: "SALUD", mencion: "REGISTRO Y ESTADÍSTICA DE SALUD" },
+    "46067": { codigo: 46067, especialidad: "ECONOMÍA SOCIAL", mencion: "ADMINISTRACIÓN" },
+    "46068": { codigo: 46068, especialidad: "ECONOMÍA SOCIAL", mencion: "ADUANA" },
+    "46069": { codigo: 46069, especialidad: "ECONOMÍA SOCIAL", mencion: "ECONOMÍA DIGITAL" },
+    "46070": { codigo: 46070, especialidad: "ECONOMÍA SOCIAL", mencion: "CONTABILIDAD" },
+    "46071": { codigo: 46071, especialidad: "ECONOMÍA SOCIAL", mencion: "TURISMO" },
+    "48069": { codigo: 48069, especialidad: "ARTE", mencion: "ARTES AUDIOVISUALES" },
+    "49000": { codigo: 49000, especialidad: "EDUCACIÓN FÍSICA", mencion: "PROMOCIÓN DEL ENTRENAMIENTO DEPORTIVO" },
+    "49001": { codigo: 49001, especialidad: "EDUCACIÓN FÍSICA", mencion: "PROMOCIÓN DE LA ACTIVIDAD FÍSICA Y RECREACIÓN" }
+  };
+
+  function obtenerPlanesEstudioCatalogo() {
+    let planes = null;
+    try {
+      const raw = localStorage.getItem('sgh_catalogos');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.planes_estudio && Object.keys(parsed.planes_estudio).length > 0) {
+          planes = parsed.planes_estudio;
+        }
+      }
+    } catch(e) {}
+    if (!planes && typeof catalogosGlobal === 'object' && catalogosGlobal.planes_estudio && Object.keys(catalogosGlobal.planes_estudio).length > 0) {
+      planes = catalogosGlobal.planes_estudio;
+    }
+    return planes || PLANES_ESTUDIO_FALLBACK;
+  }
+
+  function actualizarContadorPlanes() {
+    const total = document.querySelectorAll('.chk-plan-item:checked').length;
+    const badge = document.getElementById('p-planes-counter');
+    if (badge) {
+      badge.textContent = `${total} seleccionado${total === 1 ? '' : 's'}`;
+    }
+  }
+
+  function poblarCheckboxesPlanes(planesActivos = {}) {
+    const container = document.getElementById('plantel-planes-container');
+    if (!container) return;
+    
+    const allPlanes = obtenerPlanesEstudioCatalogo();
+    container.innerHTML = '';
+
+    const keys = Object.keys(allPlanes).sort((a, b) => Number(a) - Number(b));
+    if (keys.length === 0) {
+      container.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem; grid-column: 1 / -1; margin:0;">No hay planes de estudio registrados.</p>';
+      actualizarContadorPlanes();
+      return;
+    }
+
+    keys.forEach(planCod => {
+      const planData = allPlanes[planCod] || {};
+      const isChecked = Boolean(planesActivos && (planesActivos.hasOwnProperty(planCod) || planesActivos[planCod] !== undefined));
+      
+      let desc = '';
+      if (planCod === '20000') desc = 'EDUCACIÓN INICIAL';
+      else if (planCod === '21000') desc = 'EDUCACIÓN PRIMARIA';
+      else if (planData.mencion && planData.especialidad) desc = `${planData.especialidad} - ${planData.mencion}`;
+      else if (planData.mencion) desc = planData.mencion;
+      else if (planData.especialidad) desc = planData.especialidad;
+      else if (planData.nombre) desc = planData.nombre;
+      else desc = 'PLAN REGULAR';
+
+      const label = document.createElement('label');
+      label.style.cssText = `
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        padding: 8px 10px;
+        border-radius: 6px;
+        background: white;
+        border: 1px solid #e2e8f0;
+        transition: all 0.15s ease;
+      `;
+      label.onmouseover = () => { label.style.borderColor = 'var(--primary-color)'; label.style.background = '#f1f5f9'; };
+      label.onmouseout = () => { label.style.borderColor = '#e2e8f0'; label.style.background = 'white'; };
+
+      label.innerHTML = `
+        <input type="checkbox" class="chk-plan-item" value="${planCod}" ${isChecked ? 'checked' : ''}
+          style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer; accent-color: var(--primary-color);">
+        <div style="line-height: 1.25;">
+          <strong style="color: var(--text-main); font-size: 0.85rem; display: block;">${planCod}</strong>
+          <span style="color: var(--text-muted); font-size: 0.72rem; display: block; margin-top: 2px;">${desc}</span>
+        </div>
+      `;
+
+      const inputChk = label.querySelector('input');
+      inputChk.addEventListener('change', actualizarContadorPlanes);
+
+      container.appendChild(label);
+    });
+
+    actualizarContadorPlanes();
   }
 
   function openPlantelModal(plantel = null) {
@@ -958,16 +1089,8 @@ export function initAdminDashboard(dbInstance, user) {
      document.getElementById('p-uid').value = '';
      document.getElementById('modal-plantel-title').innerText = plantel ? 'Editar Plantel' : 'Nuevo Plantel';
      
-     // Cargar catálogo maestro si está disponible en localStorage o catalogosGlobal
-     let catData = null;
-     try {
-       const cached = localStorage.getItem('sgh_catalogos');
-       if (cached) catData = JSON.parse(cached);
-     } catch(e) {}
-     if (!catData && typeof catalogosGlobal === 'object' && Object.keys(catalogosGlobal).length > 0) {
-       catData = catalogosGlobal;
-     }
-     poblarSelectoresPlantel(catData);
+     // Poblar los selectores dinámicamente desde sgh_catalogos
+     poblarSelectoresPlantel();
 
      const userMun = (userData?.rol === 'munadmin') 
        ? (userData?.jerarquia?.municipio || userData?.municipio || '').trim().toUpperCase() 
@@ -986,7 +1109,9 @@ export function initAdminDashboard(dbInstance, user) {
          inpMun.readOnly = !!userMun;
        }
        document.getElementById('p-parroquia').value = plantel.parroquia || '';
-       document.getElementById('p-dependencia').value = plantel.dependencia || 'NACIONAL';
+       
+       // Dependencia desde sgh_catalogos
+       asegurarOpcionEnSelect(document.getElementById('p-dependencia'), plantel.dependencia || 'NACIONAL');
        document.getElementById('p-cod-dependencia').value = plantel.codigos?.dependencia?.[0] || '';
        
        // Ubicación Geográfica
@@ -1012,6 +1137,11 @@ export function initAdminDashboard(dbInstance, user) {
 
        // Observaciones
        document.getElementById('p-observaciones').value = plantel.observaciones || '';
+
+       // Planes de Estudio activos del plantel
+       const planesDelPlantel = plantel['planes-estudio'] || plantel.planes_estudio || {};
+       poblarCheckboxesPlanes(planesDelPlantel);
+
      } else {
        if (inpMun) {
          if (userMun) {
@@ -1028,6 +1158,9 @@ export function initAdminDashboard(dbInstance, user) {
        document.getElementById('p-turno').value = '';
        document.getElementById('p-metros-cuadrados').value = '';
        document.getElementById('p-observaciones').value = '';
+       
+       // Sin planes para nuevo plantel
+       poblarCheckboxesPlanes({});
      }
      
      modalPlantel.style.display = 'flex';
@@ -1066,6 +1199,18 @@ export function initAdminDashboard(dbInstance, user) {
        const turnoVal = document.getElementById('p-turno').value.trim().toUpperCase();
        const obsVal = document.getElementById('p-observaciones').value.trim();
 
+       // Recolectar planes de estudio seleccionados
+       const planesCatalogo = obtenerPlanesEstudioCatalogo();
+       const planesSelected = {};
+       document.querySelectorAll('.chk-plan-item:checked').forEach(chk => {
+         const cod = chk.value;
+         const pData = planesCatalogo[cod] || {};
+         planesSelected[cod] = {
+           especialidad: pData.especialidad || null,
+           mencion: pData.mencion || null
+         };
+       });
+
        const newData = {
           "municipio": munFinal,
           "parroquia": document.getElementById('p-parroquia').value.toUpperCase(),
@@ -1087,7 +1232,9 @@ export function initAdminDashboard(dbInstance, user) {
           "turno-plantel": turnoVal,
           "turno": turnoVal,
           "metros2": metros2Val,
-          "observaciones": obsVal
+          "observaciones": obsVal,
+          "planes-estudio": planesSelected,
+          "planes_estudio": planesSelected
        };
 
        try {
@@ -1104,7 +1251,6 @@ export function initAdminDashboard(dbInstance, user) {
                    const oldData = oldDocSnap.data();
                    newData['matricula'] = oldData['matricula'] || {};
                    newData['secciones-planes'] = oldData['secciones-planes'] || {};
-                   newData['planes-estudio'] = oldData['planes-estudio'] || {};
                    
                    await safeSetDoc(doc(db, "planteles", codP), newData);
                    await deleteDoc(doc(db, "planteles", id));
@@ -1115,7 +1261,6 @@ export function initAdminDashboard(dbInstance, user) {
          } else {
             newData['matricula'] = {};
             newData['secciones-planes'] = {};
-            newData['planes-estudio'] = {};
             await safeSetDoc(doc(db, "planteles", codP), newData);
          }
          

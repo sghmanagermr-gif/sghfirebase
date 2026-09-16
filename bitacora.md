@@ -411,5 +411,31 @@ Se implementó el requerimiento de inyectar una tabla resumen con el personal pr
 - `bitacora.md`
 - `conversaciones.md`
 
----
+### Hito: Selección de Planes de Estudio en Modal de Planteles y Persistencia en Firestore (v2.11.12)
+**Fecha:** 2026-09-16  
+**Módulo:** Gestor de BD / Planteles / Planes de Estudio Institucionales
 
+**1. Requerimiento:**
+- Permitir la asignación interactiva de los planes de estudio autorizados que imparte cada plantel en el modal de creación y edición.
+- Ubicar la sección inmediatamente después del campo "Observaciones", desplegando todos los planes de estudio existentes en el catálogo con su código, mención/especialidad y una casilla de verificación (`checkbox`).
+- Al marcar o desmarcar casillas y guardar el formulario, actualizar la estructura `planes-estudio` del plantel en Firestore tal como lo gestionaba el sistema original.
+
+**2. Solución Técnica Implementada:**
+- Interfaz Gráfica (`webapp/index.html`):
+  * Inserción de `#plantel-planes-container` debajo de "Observaciones" con scroll suave (`max-height: 200px`), cuadrícula adaptable y badge contador reactivo (`#p-planes-counter`).
+  * Expansión del ancho del modal (`max-width: 700px`) para una óptima lectura de los planes.
+  * Desacoplamiento total de opciones fijas en HTML para selectores, ahora poblados 100% en tiempo de ejecución.
+- Lógica de Catálogo y Persistencia (`webapp/src/admin.js`):
+  * Definición de `obtenerPlanesEstudioCatalogo()` y diccionario de respaldo institucional `PLANES_ESTUDIO_FALLBACK` (29 planes oficiales de Inicial, Primaria, Media General y Escuelas Técnicas).
+  * Función `poblarCheckboxesPlanes(planesActivos)`: Genera dinámicamente las tarjetas de planes y marca las que corresponden al plantel en edición.
+  * Extensión del submit listener de `formPlantel`: Recolecta los planes seleccionados `{ especialidad, mencion }` y los persiste en Firestore bajo el campo `planes-estudio`.
+- Incremento SemVer a **v2.11.12** en `webapp/package.json`.
+
+**3. Archivos Involucrados:**
+- `webapp/index.html`
+- `webapp/src/admin.js`
+- `webapp/package.json`
+- `bitacora.md`
+- `conversaciones.md`
+
+---
