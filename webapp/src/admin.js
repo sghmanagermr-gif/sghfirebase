@@ -61,7 +61,22 @@ export function initAdminDashboard(dbInstance, user) {
         } else if (target === 'admin-tab-planes') {
           visible = tienePermiso('planes');
         } else if (target === 'admin-tab-listas') {
-          visible = tienePermiso('listas');
+          const lista = btn.getAttribute('data-lista');
+          let permKey = null;
+          if (lista === 'dependencia') permKey = 'cat_dependencia';
+          else if (lista === 'modalidades') permKey = 'cat_modalidades';
+          else if (lista === 'niveles_educativos') permKey = 'cat_niveles_educativos';
+          else if (lista === 'municipios') permKey = 'cat_municipios';
+          else if (lista === 'situacion_laboral') permKey = 'cat_situacion_laboral';
+          else if (lista === 'instruccion') permKey = 'cat_instruccion';
+          else if (lista === 'tipo_vivienda' || lista === 'condicion_vivienda') permKey = 'cat_vivienda';
+          else if (lista === 'estado_civil') permKey = 'cat_estado_civil';
+
+          if (isZonAdmin && userData?.permisos && permKey && typeof userData.permisos[permKey] !== 'undefined') {
+            visible = userData.permisos[permKey] === true;
+          } else {
+            visible = tienePermiso('listas');
+          }
         }
 
         btn.style.display = visible ? 'block' : 'none';
@@ -127,6 +142,31 @@ export function initAdminDashboard(dbInstance, user) {
         btnPlanes.classList.add('active');
         const tabPlanes = document.getElementById('admin-tab-planes');
         if (tabPlanes) tabPlanes.classList.add('active');
+      }
+    } else {
+      // Buscar el primer botón visible del sidebar que no sea descarga directa
+      const primerBotonVisible = Array.from(document.querySelectorAll('#admin-sidebar .sidebar-btn:not(.accordion-btn)'))
+        .find(b => b.style.display !== 'none' && b.id !== 'btn-sidebar-descargar-nomina-mun');
+      if (primerBotonVisible) {
+        primerBotonVisible.classList.add('active');
+        const tgt = primerBotonVisible.getAttribute('data-target');
+        const tabEl = tgt ? document.getElementById(tgt) : null;
+        if (tabEl) tabEl.classList.add('active');
+        if (tgt === 'admin-tab-listas') {
+          const l = primerBotonVisible.getAttribute('data-lista');
+          const t = primerBotonVisible.getAttribute('data-tipo');
+          if (typeof window.loadListasMaestras === 'function') window.loadListasMaestras(l, t);
+        }
+        if (primerBotonVisible.closest('.accordion-content')) {
+          const accContent = primerBotonVisible.closest('.accordion-content');
+          accContent.style.display = 'flex';
+          const accBtn = document.getElementById('btn-sidebar-bd');
+          if (accBtn) {
+            accBtn.classList.add('open');
+            const arrow = accBtn.querySelector('.arrow');
+            if (arrow) arrow.style.transform = 'rotate(-180deg)';
+          }
+        }
       }
     }
   }
@@ -199,10 +239,24 @@ export function initAdminDashboard(dbInstance, user) {
             showToast("No tiene permisos para acceder a Planes de Estudio.", "warning");
             return;
          }
-         if (targetId === 'admin-tab-listas' && !p.listas) {
-            showToast("No tiene permisos para acceder a Catálogos Maestros.", "warning");
-            return;
-         }
+          if (targetId === 'admin-tab-listas') {
+             const lista = button.getAttribute('data-lista');
+             let permKey = null;
+             if (lista === 'dependencia') permKey = 'cat_dependencia';
+             else if (lista === 'modalidades') permKey = 'cat_modalidades';
+             else if (lista === 'niveles_educativos') permKey = 'cat_niveles_educativos';
+             else if (lista === 'municipios') permKey = 'cat_municipios';
+             else if (lista === 'situacion_laboral') permKey = 'cat_situacion_laboral';
+             else if (lista === 'instruccion') permKey = 'cat_instruccion';
+             else if (lista === 'tipo_vivienda' || lista === 'condicion_vivienda') permKey = 'cat_vivienda';
+             else if (lista === 'estado_civil') permKey = 'cat_estado_civil';
+
+             const permitido = (permKey && typeof p[permKey] !== 'undefined') ? p[permKey] : p.listas;
+             if (!permitido) {
+                showToast(`No tiene permisos para acceder a este catálogo.`, "warning");
+                return;
+             }
+          }
          if (targetId === 'admin-tab-despliegue' && !p.despliegue) {
             showToast("No tiene permisos para acceder a Despliegue.", "warning");
             return;
@@ -443,7 +497,7 @@ export function initAdminDashboard(dbInstance, user) {
           <td style="padding: 15px 20px;">
             <div style="font-weight: 500; color: var(--primary-color);">${u.rol.toUpperCase()}</div>
             <div style="font-size: 0.8rem; color: var(--text-muted);">${ubicacion}</div>
-            ${u.rol === 'zonadmin' ? `<div style="font-size: 0.75rem; color: #16a34a; font-weight: 500; margin-top: 3px;">🔑 ${u.permisos ? Object.values(u.permisos).filter(Boolean).length + ' módulos autorizados' : 'Acceso Estándar'}</div>` : ''}
+            ${u.rol === 'zonadmin' ? `<div style="font-size: 0.75rem; color: #16a34a; font-weight: 500; margin-top: 3px;">🔑 ${u.permisos ? Object.entries(u.permisos).filter(([k, v]) => v === true && k !== 'listas' && k !== 'ultima_modificacion').length + ' competencias autorizadas' : 'Acceso Estándar'}</div>` : ''}
           </td>
           <td style="padding: 15px 20px;">
             <span style="padding: 5px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; 
@@ -570,7 +624,25 @@ export function initAdminDashboard(dbInstance, user) {
     document.getElementById('chk-perm-planteles').checked = permisos ? !!permisos.planteles : true;
     document.getElementById('chk-perm-nomina').checked = permisos ? !!permisos.nomina : true;
     document.getElementById('chk-perm-planes').checked = permisos ? !!permisos.planes : true;
-    document.getElementById('chk-perm-listas').checked = permisos ? !!permisos.listas : true;
+    
+    // Catálogos discriminados (con soporte de herencia si antes tenía 'listas')
+    const defaultListas = permisos ? (typeof permisos.listas !== 'undefined' ? !!permisos.listas : true) : true;
+    const setChk = (id, key) => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.checked = permisos && typeof permisos[key] !== 'undefined' ? !!permisos[key] : defaultListas;
+      }
+    };
+
+    setChk('chk-perm-cat-dependencia', 'cat_dependencia');
+    setChk('chk-perm-cat-modalidades', 'cat_modalidades');
+    setChk('chk-perm-cat-niveles-educativos', 'cat_niveles_educativos');
+    setChk('chk-perm-cat-municipios', 'cat_municipios');
+    setChk('chk-perm-cat-situacion-laboral', 'cat_situacion_laboral');
+    setChk('chk-perm-cat-instruccion', 'cat_instruccion');
+    setChk('chk-perm-cat-vivienda', 'cat_vivienda');
+    setChk('chk-perm-cat-estado-civil', 'cat_estado_civil');
+
     document.getElementById('chk-perm-despliegue').checked = permisos ? !!permisos.despliegue : false;
 
     modalCompetencias.style.display = 'flex';
@@ -581,14 +653,33 @@ export function initAdminDashboard(dbInstance, user) {
       const uid = uidTargetCompetencias ? uidTargetCompetencias.value : null;
       if (!uid) return;
 
+      const chkDep = document.getElementById('chk-perm-cat-dependencia')?.checked || false;
+      const chkMod = document.getElementById('chk-perm-cat-modalidades')?.checked || false;
+      const chkNiv = document.getElementById('chk-perm-cat-niveles-educativos')?.checked || false;
+      const chkMun = document.getElementById('chk-perm-cat-municipios')?.checked || false;
+      const chkSit = document.getElementById('chk-perm-cat-situacion-laboral')?.checked || false;
+      const chkIns = document.getElementById('chk-perm-cat-instruccion')?.checked || false;
+      const chkViv = document.getElementById('chk-perm-cat-vivienda')?.checked || false;
+      const chkCiv = document.getElementById('chk-perm-cat-estado-civil')?.checked || false;
+
+      const algunCatalogo = !!(chkDep || chkMod || chkNiv || chkMun || chkSit || chkIns || chkViv || chkCiv);
+
       const nuevosPermisos = {
-        estadisticas: document.getElementById('chk-perm-estadisticas').checked,
-        validacion: document.getElementById('chk-perm-validacion').checked,
-        planteles: document.getElementById('chk-perm-planteles').checked,
-        nomina: document.getElementById('chk-perm-nomina').checked,
-        planes: document.getElementById('chk-perm-planes').checked,
-        listas: document.getElementById('chk-perm-listas').checked,
-        despliegue: document.getElementById('chk-perm-despliegue').checked,
+        estadisticas: document.getElementById('chk-perm-estadisticas')?.checked || false,
+        validacion: document.getElementById('chk-perm-validacion')?.checked || false,
+        planteles: document.getElementById('chk-perm-planteles')?.checked || false,
+        nomina: document.getElementById('chk-perm-nomina')?.checked || false,
+        planes: document.getElementById('chk-perm-planes')?.checked || false,
+        listas: algunCatalogo,
+        cat_dependencia: chkDep,
+        cat_modalidades: chkMod,
+        cat_niveles_educativos: chkNiv,
+        cat_municipios: chkMun,
+        cat_situacion_laboral: chkSit,
+        cat_instruccion: chkIns,
+        cat_vivienda: chkViv,
+        cat_estado_civil: chkCiv,
+        despliegue: document.getElementById('chk-perm-despliegue')?.checked || false,
         ultima_modificacion: new Date().toISOString()
       };
 

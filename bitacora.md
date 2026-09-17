@@ -577,3 +577,44 @@ Se implementó el requerimiento de inyectar una tabla resumen con el personal pr
 - `conversaciones.md`
 
 ---
+
+### Hito: Discriminación Granular de Catálogos Maestros en Competencias Zonales (v2.11.18)
+**Fecha:** 2026-09-16  
+**Módulo:** Panel Administrativo / Gobernanza de Roles / Llavero de Competencias / Catálogos Maestros Discriminados
+
+**1. Requerimientos:**
+- Desglosar y discriminar individualmente la opción general de "Catálogos y Listas Maestras" en el modal de competencias zonales (`#modal-competencias-zonal`).
+- Permitir la autorización o restricción independiente de cada uno de los catálogos institucionales solicitados:
+  * 🏢 Gestionar Dependencias (`cat_dependencia`)
+  * 🧩 Gestionar Modalidades (`cat_modalidades`)
+  * 📚 Gestionar Niveles Educativos (`cat_niveles_educativos`)
+  * 📍 Gestionar Municipios (`cat_municipios`)
+  * 💼 Gestionar Situación Laboral (`cat_situacion_laboral`)
+  * 📜 Gestionar Nivel de Instrucción (`cat_instruccion`)
+  * 🏠 Gestionar Tipo y Condición de Vivienda (`cat_vivienda`)
+  * 💍 Gestionar Estado Civil (`cat_estado_civil`)
+- Adaptar la visibilidad de los botones del submenú en el acordeón `Gestor de BD` para mostrar única y exclusivamente los catálogos autorizados a cada coordinador zonal.
+- Proteger la navegación del panel ante intentos de acceso a catálogos no asignados.
+- Si el usuario zonal solo tiene permisos para determinados catálogos y no para métricas o planteles, activar automáticamente el primer catálogo autorizado al iniciar sesión.
+
+**2. Solución Técnica Implementada:**
+- Actualización de Interfaz (`webapp/index.html`):
+  * Se sustituyó la casilla única de listas maestras por una tarjeta visual estructurada con 8 casillas de verificación individuales, con títulos institucionales claros y descripciones de competencia.
+  * Compatibilidad total con los botones "Marcar Todos" y "Desmarcar Todos".
+- Lógica de Control y Persistencia (`webapp/src/admin.js`):
+  * `openCompetenciasModal()`: Carga el estado de cada casilla leyendo las claves `cat_*` con fallback retrocompatible hacia `permisos.listas`.
+  * `btnGuardarCompetencias`: Persiste individualmente los booleanos de cada catálogo y mantiene la bandera general `listas: boolean` para interoperabilidad histórica.
+  * `configurarInterfazPorRol()`: Evalúa el atributo `data-lista` de cada botón del sidebar contra la competencia respectiva del usuario zonal. Oculta o muestra cada catálogo con precisión milimétrica.
+  * Fallback de navegación: Si el usuario no tiene acceso a pestañas principales, activa el primer catálogo permitido y abre automáticamente el acordeón Gestor de BD.
+  * Guardia en clics del sidebar: Bloquea intentos de navegación a catálogos sin permiso.
+  * Tabla de Usuarios: Actualizado el contador visual de competencias autorizadas.
+- Incremento SemVer a **v2.11.18** en `webapp/package.json`.
+
+**3. Archivos Involucrados:**
+- `webapp/index.html`
+- `webapp/src/admin.js`
+- `webapp/package.json`
+- `bitacora.md`
+- `conversaciones.md`
+
+---

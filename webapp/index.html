@@ -1148,14 +1148,89 @@
           </div>
         </label>
 
-        <!-- 6. Catálogos Maestros -->
-        <label style="display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #f8fafc;">
-          <input type="checkbox" id="chk-perm-listas" class="chk-permiso" value="listas" style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
-          <div>
-            <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-main);">🏢 Catálogos y Listas Maestras</div>
-            <div style="font-size: 0.8rem; color: var(--text-muted);">Gestionar dependencias, modalidades, niveles, municipios y situación laboral.</div>
+        <!-- 6. SECCIÓN DISCRIMINADA: CATÁLOGOS Y LISTAS MAESTRAS -->
+        <div style="margin-top: 5px; margin-bottom: 5px; padding: 14px; background: #f8fafc; border-radius: 10px; border: 1px solid #cbd5e1;">
+          <div style="font-weight: 700; font-size: 0.92rem; color: var(--text-main); margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 1.1rem;">🗂️</span> Catálogos y Listas Maestras (Acceso Individual)
           </div>
-        </label>
+          <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.3;">
+            Habilite individualmente cada catálogo según la competencia técnica asignada al funcionario:
+          </div>
+          
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <!-- Dependencias -->
+            <label style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
+              <input type="checkbox" id="chk-perm-cat-dependencia" class="chk-permiso" value="cat_dependencia" style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
+              <div>
+                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">🏢 Gestionar Dependencias</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar entes de dependencia (Nacional, Estadal, Municipal, Privada, etc.).</div>
+              </div>
+            </label>
+
+            <!-- Modalidades -->
+            <label style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
+              <input type="checkbox" id="chk-perm-cat-modalidades" class="chk-permiso" value="cat_modalidades" style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
+              <div>
+                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">🧩 Gestionar Modalidades</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar modalidades educativas (Regular, Especial, Adultos, etc.).</div>
+              </div>
+            </label>
+
+            <!-- Niveles Educativos -->
+            <label style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
+              <input type="checkbox" id="chk-perm-cat-niveles-educativos" class="chk-permiso" value="cat_niveles_educativos" style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
+              <div>
+                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">📚 Gestionar Niveles Educativos</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar niveles escolares (Inicial, Primaria, Media General, Técnica).</div>
+              </div>
+            </label>
+
+            <!-- Municipios -->
+            <label style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
+              <input type="checkbox" id="chk-perm-cat-municipios" class="chk-permiso" value="cat_municipios" style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
+              <div>
+                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">📍 Gestionar Municipios</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar catálogo territorial de los municipios del estado Mérida.</div>
+              </div>
+            </label>
+
+            <!-- Situación Laboral -->
+            <label style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
+              <input type="checkbox" id="chk-perm-cat-situacion-laboral" class="chk-permiso" value="cat_situacion_laboral" style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
+              <div>
+                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">💼 Gestionar Situación Laboral</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar condiciones laborales (Docente, Administrativo, Obrero) y códigos de nómina.</div>
+              </div>
+            </label>
+
+            <!-- Nivel de Instrucción -->
+            <label style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
+              <input type="checkbox" id="chk-perm-cat-instruccion" class="chk-permiso" value="cat_instruccion" style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
+              <div>
+                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">📜 Gestionar Nivel de Instrucción</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar títulos, grados académicos y niveles de instrucción del personal.</div>
+              </div>
+            </label>
+
+            <!-- Tipo y Condición de Vivienda -->
+            <label style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
+              <input type="checkbox" id="chk-perm-cat-vivienda" class="chk-permiso" value="cat_vivienda" style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
+              <div>
+                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">🏠 Gestionar Tipo y Condición de Vivienda</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar categorías habitacionales y estatus de vivienda del personal.</div>
+              </div>
+            </label>
+
+            <!-- Estado Civil -->
+            <label style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
+              <input type="checkbox" id="chk-perm-cat-estado-civil" class="chk-permiso" value="cat_estado_civil" style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
+              <div>
+                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">💍 Gestionar Estado Civil</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar estados conyugales para fichas socioeconómicas.</div>
+              </div>
+            </label>
+          </div>
+        </div>
 
         <!-- 7. Despliegue -->
         <label style="display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #f8fafc;">

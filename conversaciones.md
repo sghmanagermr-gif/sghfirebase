@@ -472,6 +472,37 @@ Este archivo constituye el registro textual e inmutable de todas las intervencio
 >    - Se protegen los clics de navegación para bloquear el acceso a pestañas no asignadas.  
 > 5. Selector de Municipio en Descarga de Nómina:  
 >    - Al no tener un municipio fijo predeterminado, cuando un zonal o superadmin descarga la nómina, se despliega un selector con los 23 municipios del estado Mérida (`#modal-seleccionar-municipio-nomina`).  
-> 6. Incremento SemVer a `v2.11.17` y verificación de compilación limpia con Vite (0 errores).
+---
+
+### Intervención 17
+* **Fecha / Hora:** 2026-09-16 ~21:34 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+> Estoy satisfecho  
+> ok, pero necesito que se discrimine las los catalogos *(colocar la opción: Gestionar dependencias, modalidades, niveles, municipios y situación laboral.)* se dan muchas opciones juntas. Así que bien discriminado
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Discriminación granular de los catálogos maestros en el Llavero de Competencias Zonales (v2.11.18):  
+> 1. Lectura prioritaria obligatoria de `SKILL_sgh_firebase.md`.  
+> 2. Desglose y modularización de la opción de Catálogos en `#modal-competencias-zonal`:  
+>    - En lugar de una sola casilla global, se habilitaron casillas individuales para cada catálogo:  
+>      * 🏢 Gestionar Dependencias (`cat_dependencia`)  
+>      * 🧩 Gestionar Modalidades (`cat_modalidades`)  
+>      * 📚 Gestionar Niveles Educativos (`cat_niveles_educativos`)  
+>      * 📍 Gestionar Municipios (`cat_municipios`)  
+>      * 💼 Gestionar Situación Laboral (`cat_situacion_laboral`)  
+>      * 📜 Gestionar Nivel de Instrucción (`cat_instruccion`)  
+>      * 🏠 Gestionar Tipo y Condición de Vivienda (`cat_vivienda`)  
+>      * 💍 Gestionar Estado Civil (`cat_estado_civil`)  
+> 3. Control en tiempo real del menú lateral (Sidebar):  
+>    - La función `configurarInterfazPorRol()` evalúa cada botón de catálogo dentro del acordeón Gestor de BD según el atributo `data-lista` y la competencia individual del funcionario, mostrando únicamente las opciones asignadas.  
+>    - Se implementó protección en el listener de navegación para impedir el acceso a catálogos no autorizados.  
+>    - Si el funcionario zonal solo cuenta con permisos para catálogos específicos, el sistema activa automáticamente el primer catálogo autorizado y despliega el acordeón al ingresar.  
+> 4. Incremento SemVer a `v2.11.18` en `webapp/package.json`.  
+> 5. Verificación de compilación limpia con Vite (0 errores) y sincronización con GitHub.
 
 
