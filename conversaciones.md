@@ -502,7 +502,35 @@ Este archivo constituye el registro textual e inmutable de todas las intervencio
 >    - La función `configurarInterfazPorRol()` evalúa cada botón de catálogo dentro del acordeón Gestor de BD según el atributo `data-lista` y la competencia individual del funcionario, mostrando únicamente las opciones asignadas.  
 >    - Se implementó protección en el listener de navegación para impedir el acceso a catálogos no autorizados.  
 >    - Si el funcionario zonal solo cuenta con permisos para catálogos específicos, el sistema activa automáticamente el primer catálogo autorizado y despliega el acordeón al ingresar.  
-> 4. Incremento SemVer a `v2.11.18` en `webapp/package.json`.  
-> 5. Verificación de compilación limpia con Vite (0 errores) y sincronización con GitHub.
+> 5. Incremento SemVer a `v2.11.18` en `webapp/package.json`.  
+> 6. Verificación de compilación limpia con Vite (0 errores) y sincronización con GitHub.
 
+---
+
+### Intervención 18
+* **Fecha / Hora:** 2026-09-16 ~21:51 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+> Estoy satisfecho.  
+>   
+> Vamos a mejorar algo de los archivos de excel que se descargan en los distintos roles:  
+> 1- Entre las columnas: Profesión / Titulo y Denominación que aparezcan las columnas: Estado, Municipio y Parroquia.  
+> 2- Me gustó el selector de municipios en los usuarios superadmin y zonadmin: ¿Se le puede agregar Todos?  
+> 3- ¿Ese mismo selector de municipios, puede aparecer en el usuario munadmin, pero el selector mostrará el nuevo eponimo?
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Mejoras institucionales aplicadas a las nóminas en Excel y al selector de descarga por rol (v2.11.19):  
+> 1. Lectura prioritaria obligatoria de `SKILL_sgh_firebase.md`.  
+> 2. Nuevas columnas territoriales en las nóminas Excel (`webapp/src/personalWizard.js` & `webapp/src/admin.js`):  
+>    - Se agregaron las columnas **Estado**, **Municipio** y **Parroquia** ubicadas exactamente entre `Profesión / Título` y `Denominación`, totalizando 58 columnas institucionales completas.  
+> 3. Opción de Consolidado Estatal (TODOS) para Súper Admin y Coordinador Zonal:  
+>    - Se integró la opción `⭐ TODOS LOS MUNICIPIOS (CONSOLIDADO ESTATAL)` en el selector de nómina para generar el consolidado de todo el estado Mérida con ordenamiento primario por Municipio y secundario por Código Plantel (DEA).  
+> 4. Selector para Coordinadores Municipales (`munadmin`) por Nuevo Epónimo:  
+>    - Al pulsar la descarga de nómina, el usuario `munadmin` visualiza un selector con los planteles de su municipio ordenados por su **Nuevo Epónimo** y la opción de `⭐ TODOS LOS PLANTELES DEL MUNICIPIO`.  
+> 5. Incremento SemVer a `v2.11.19` en `webapp/package.json`.  
+> 6. Verificación de compilación limpia con Vite (0 errores) y sincronización con GitHub.
 

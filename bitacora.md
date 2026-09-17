@@ -618,3 +618,36 @@ Se implementó el requerimiento de inyectar una tabla resumen con el personal pr
 - `conversaciones.md`
 
 ---
+
+### Hito: Selector Inteligente de Nómina por Nuevo Epónimo / Consolidado Estatal y Columnas Territoriales (v2.11.19)
+**Fecha:** 2026-09-16  
+**Módulo:** Exportación Excel / Reportes Institucionales / multi-rol (superadmin, zonadmin, munadmin, pladmin)
+
+**1. Requerimientos:**
+- Enriquecer la estructura del archivo Excel (.xlsx) de personal inyectando las columnas territoriales **Estado**, **Municipio** y **Parroquia** ubicadas exactamente entre las columnas `Profesión / Título` y `Denominación`.
+- Agregar la opción **TODOS** (Consolidado Estatal) en el selector de municipios para los roles `superadmin` y `zonadmin`, permitiendo descargar la nómina consolidada de los 23 municipios del estado Mérida ordenada por municipio y código DEA.
+- Habilitar el modal selector para el rol `munadmin`, mostrando una lista de opciones ordenadas por el **Nuevo Epónimo** de los planteles de su municipio, más la opción de **TODOS LOS PLANTELES** para descargar la nómina municipal completa.
+
+**2. Solución Técnica Implementada:**
+- Modificación del Mapeo de Columnas (`webapp/src/personalWizard.js` & `webapp/src/admin.js`):
+  * Se insertaron las columnas `'Estado'`, `'Municipio'` y `'Parroquia'` entre `'Profesión / Título'` y `'Denominación'`.
+  * Total de 58 columnas oficiales con ajuste dinámico de celdas y anchos en el libro Excel.
+- Rediseño Dinámico del Modal Selector (`webapp/index.html` & `webapp/src/admin.js`):
+  * Función `abrirModalSeleccionarNomina()`:
+    - Para `munadmin`: contextualiza título y descripción con su municipio y carga en el selector la opción de "TODOS LOS PLANTELES" más cada institución educativa listada por su **Nuevo Epónimo** y código DEA.
+    - Para `zonadmin` y `superadmin`: carga la opción destacada `⭐ TODOS LOS MUNICIPIOS (CONSOLIDADO ESTATAL)` junto a los 23 municipios del estado Mérida.
+  * Motor `ejecutarExportacionNominaExcel()`:
+    - Soporte para consulta consolidada estatal con ordenamiento primario por Municipio, secundario por Código DEA y terciario por Apellidos y Nombres.
+    - Soporte para consulta por plantel específico para coordinadores municipales.
+    - Generación de nombres de archivo acordes (`Nomina_Personal_Consolidado_Estadal_MERIDA_[FECHA].xlsx`, `Nomina_Personal_Municipio_[MUNICIPIO]_[FECHA].xlsx`, `Nomina_Personal_[EPONIMO]_[DEA]_[FECHA].xlsx`).
+- Incremento SemVer a **v2.11.19** en `webapp/package.json`.
+
+**3. Archivos Involucrados:**
+- `webapp/index.html`
+- `webapp/src/admin.js`
+- `webapp/src/personalWizard.js`
+- `webapp/package.json`
+- `bitacora.md`
+- `conversaciones.md`
+
+---

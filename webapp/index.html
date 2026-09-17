@@ -1251,19 +1251,19 @@
     </div>
   </div>
 
-  <!-- MODAL SELECCIONAR MUNICIPIO PARA NÓMINA (ZONALES / SUPERADMIN) -->
+  <!-- MODAL SELECCIONAR ÁMBITO O MUNICIPIO PARA NÓMINA -->
   <div id="modal-seleccionar-municipio-nomina" class="lock-screen" aria-hidden="true" style="display: none; z-index: 10005;">
-    <div class="lock-card glass-panel" style="max-width: 440px; width: 90%; text-align: left; padding: 24px;">
-      <h3 style="margin: 0 0 10px; color: var(--primary-color); font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
-        <span>📥</span> Descargar Nómina Municipal
+    <div class="lock-card glass-panel" style="max-width: 480px; width: 90%; text-align: left; padding: 24px;">
+      <h3 id="modal-nomina-title" style="margin: 0 0 10px; color: var(--primary-color); font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+        <span>📥</span> Descargar Nómina en Excel
       </h3>
-      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px; line-height: 1.4;">
-        Como usuario de nivel Estadal, seleccione el municipio cuya nómina desea exportar en formato Excel (.xlsx):
+      <p id="modal-nomina-desc" style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px; line-height: 1.4;">
+        Seleccione el filtro para generar el archivo Excel (.xlsx):
       </p>
       <div style="margin-bottom: 20px;">
-        <label style="display: block; font-size: 0.8rem; font-weight: bold; margin-bottom: 6px; color: var(--text-main);">Municipio:</label>
+        <label id="modal-nomina-label" style="display: block; font-size: 0.8rem; font-weight: bold; margin-bottom: 6px; color: var(--text-main);">Municipio:</label>
         <select id="sel-municipio-nomina-modal" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; font-size: 0.9rem;">
-          <option value="">-- SELECCIONE MUNICIPIO --</option>
+          <option value="">-- SELECCIONE OPCIÓN --</option>
         </select>
       </div>
       <div style="display: flex; gap: 10px; justify-content: flex-end;">

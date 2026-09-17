@@ -1514,6 +1514,10 @@ export async function exportarNominaExcel() {
     let pNombreNominal = valDOM('inp-nombre-nominal') || infoPlantel['nombre-plantel']?.nominal || valDOM('inp-nombre-plantel') || '';
     let pNuevoEponimo = valDOM('inp-nuevo-eponimo') || infoPlantel['nombre-plantel']?.['nuevo-eponimo'] || infoPlantel['nombre-plantel']?.nuevo_eponimo || '';
 
+    let pEstado = valDOM('inp-estado') || infoPlantel.estado || 'MÉRIDA';
+    let pMunicipio = valDOM('inp-municipio') || infoPlantel.municipio || '';
+    let pParroquia = valDOM('inp-parroquia') || infoPlantel.parroquia || '';
+
     let codDep = infoPlantel.codigos?.dependencia;
     if (Array.isArray(codDep)) codDep = codDep.join(', ');
     let pCodDependencia = valDOM('inp-cod-dependencia') || codDep || '';
@@ -1533,6 +1537,9 @@ export async function exportarNominaExcel() {
                 if (!pDenominacion) pDenominacion = dataP.denominacion || '';
                 if (!pNombreNominal) pNombreNominal = dataP['nombre-plantel']?.nominal || '';
                 if (!pNuevoEponimo) pNuevoEponimo = dataP['nombre-plantel']?.['nuevo-eponimo'] || dataP['nombre-plantel']?.nuevo_eponimo || '';
+                if (!pEstado && dataP.estado) pEstado = dataP.estado;
+                if (!pMunicipio && dataP.municipio) pMunicipio = dataP.municipio;
+                if (!pParroquia && dataP.parroquia) pParroquia = dataP.parroquia;
                 if (!pCodDependencia) {
                     let cDep = dataP.codigos?.dependencia;
                     if (Array.isArray(cDep)) cDep = cDep.join(', ');
@@ -1591,6 +1598,9 @@ export async function exportarNominaExcel() {
             // 3. Formación Académica
             'Nivel de Instrucción': emp['nivel-instruccion'] || emp['instruccion'] || '',
             'Profesión / Título': emp['profesion'] || '',
+            'Estado': pEstado || emp['estado'] || 'MÉRIDA',
+            'Municipio': pMunicipio || emp['municipio'] || '',
+            'Parroquia': pParroquia || emp['parroquia'] || '',
             'Denominación': pDenominacion,
             'Nombre Nominal': pNombreNominal,
             'Nuevo Epónimo': pNuevoEponimo,
