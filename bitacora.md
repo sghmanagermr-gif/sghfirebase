@@ -467,3 +467,33 @@ Se implementó el requerimiento de inyectar una tabla resumen con el personal pr
 - `conversaciones.md`
 
 ---
+
+### Hito: Delimitación de Menú y Métricas Municipales para rol munadmin (v2.11.15)
+**Fecha:** 2026-09-16  
+**Módulo:** Panel Administrativo / Control de Acceso (RBAC) / Métricas Territoriales / UI
+
+**1. Requerimientos:**
+- Delimitar el entorno del Coordinador Municipal (`munadmin`) para mostrar exclusivamente sus módulos de competencia:
+  * Métricas Globales contextualizadas a su municipio ("Métricas Municipales - [MUNICIPIO]").
+  * Validación de Usuarios (Directores `plaadmin` de su municipio).
+  * Gestor de BD conteniendo única y exclusivamente la gestión de `Planteles` de su municipio.
+- Ocultar del menú lateral las opciones fuera de su alcance institucional (Despliegue y los 10 catálogos maestros globales de planes de estudio, dependencias, modalidades, etc.).
+- Personalizar el encabezado con el distintivo de avatar `CM` y el nombre con indicación de su municipio.
+
+**2. Solución Técnica Implementada:**
+- Control y Gobernanza de Interfaz (`webapp/src/admin.js` & `webapp/index.html`):
+  * Se asignaron identificadores clave (`#btn-sidebar-estadisticas`, `#btn-sidebar-validacion`, `#btn-sidebar-planteles`, `#admin-stats-title`, `#admin-stats-desc`, `#admin-user-avatar`).
+  * Función `configurarInterfazPorRol()`: Oculta dinámicamente los botones de catálogos y Despliegue ante rol `munadmin`.
+  * Contextualización automática en tiempo real de títulos: Encabezado personalizado "Métricas Municipales - [MUNICIPIO]" con descripción territorial.
+  * Los contadores de métricas (Planteles, Personal y Usuarios) consultan exclusivamente los registros asociados al municipio asignado.
+  * Se blindó el enrutamiento de pestañas para rechazar cambios hacia módulos no autorizados.
+- Incremento SemVer a **v2.11.15** en `webapp/package.json`.
+
+**3. Archivos Involucrados:**
+- `webapp/index.html`
+- `webapp/src/admin.js`
+- `webapp/package.json`
+- `bitacora.md`
+- `conversaciones.md`
+
+---

@@ -1097,7 +1097,7 @@
       </div>
       <div style="display: flex; align-items: center; gap: 15px;">
         <div style="display: flex; align-items: center; gap: 10px;">
-          <div
+          <div id="admin-user-avatar"
             style="width: 35px; height: 35px; border-radius: 50%; background: var(--primary-color); color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 0.9rem;">
             SA</div>
           <p id="admin-user-name"
@@ -1116,8 +1116,8 @@
         style="position: absolute; left: 0; top: 0; bottom: 0; width: 280px; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-right: 1px solid var(--glass-border); display: flex; flex-direction: column; z-index: 50; transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 5px 0 15px rgba(0,0,0,0.05);">
 
         <nav style="padding: 20px 10px; display: flex; flex-direction: column; gap: 5px; flex-grow: 1;">
-          <button class="sidebar-btn active" data-target="admin-tab-estadisticas">📊 Estadísticas</button>
-          <button class="sidebar-btn" data-target="admin-tab-validacion">👥 Validación de Usuarios</button>
+          <button id="btn-sidebar-estadisticas" class="sidebar-btn active" data-target="admin-tab-estadisticas">📊 Estadísticas</button>
+          <button id="btn-sidebar-validacion" class="sidebar-btn" data-target="admin-tab-validacion">👥 Validación de Usuarios</button>
 
           <!-- ACORDEON: GESTOR DE BD -->
           <button id="btn-sidebar-bd" class="sidebar-btn accordion-btn"
@@ -1130,7 +1130,7 @@
           </button>
           <div class="accordion-content custom-scrollbar"
             style="display: none; flex-direction: column; padding-left: 15px; border-left: 2px solid var(--glass-border); margin-left: 15px; gap: 5px; overflow-y: auto; max-height: 300px; padding-right: 5px;">
-            <button class="sidebar-btn" data-target="admin-tab-planteles" style="font-size: 0.85rem;">🏫
+            <button id="btn-sidebar-planteles" class="sidebar-btn" data-target="admin-tab-planteles" style="font-size: 0.85rem;">🏫
               Planteles</button>
             <button class="sidebar-btn" data-target="admin-tab-planes" style="font-size: 0.85rem;">🎓 Planes de
               Estudio</button>
@@ -1172,8 +1172,8 @@
 
         <!-- TAB: ESTADÍSTICAS -->
         <div id="admin-tab-estadisticas" class="admin-tab active">
-          <h2 style="font-size: 1.8rem; color: var(--primary-color); margin: 0 0 5px;">Métricas Globales</h2>
-          <p style="color: var(--text-muted); margin-bottom: 30px;">Resumen del sistema en tiempo real.</p>
+          <h2 id="admin-stats-title" style="font-size: 1.8rem; color: var(--primary-color); margin: 0 0 5px;">Métricas Globales</h2>
+          <p id="admin-stats-desc" style="color: var(--text-muted); margin-bottom: 30px;">Resumen del sistema en tiempo real.</p>
 
           <div class="stats-grid">
 

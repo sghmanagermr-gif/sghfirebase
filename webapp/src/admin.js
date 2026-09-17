@@ -9,9 +9,65 @@ export function initAdminDashboard(dbInstance, user) {
   db = dbInstance;
   userData = user;
 
+  function configurarInterfazPorRol() {
+    const isMunAdmin = userData?.rol === 'munadmin';
+    const mun = (userData.jerarquia?.municipio || userData.municipio || '').trim().toUpperCase();
+
+    // 1. Botones de nivel superior: Estadísticas (visible para todos) y Despliegue (solo superadmin/admin)
+    const btnEstadisticas = document.getElementById('btn-sidebar-estadisticas') || document.querySelector('.sidebar-btn[data-target="admin-tab-estadisticas"]');
+    const btnDespliegue = document.getElementById('btn-sidebar-despliegue');
+    if (btnEstadisticas) btnEstadisticas.style.display = 'block';
+    if (btnDespliegue) btnDespliegue.style.display = isMunAdmin ? 'none' : 'block';
+
+    // 2. Acordeón Gestor de BD: munadmin solo ve Planteles
+    const accordionBd = document.querySelector('.accordion-content');
+    if (accordionBd) {
+      accordionBd.querySelectorAll('.sidebar-btn').forEach(btn => {
+        const target = btn.getAttribute('data-target');
+        if (target === 'admin-tab-planteles') {
+          btn.style.display = 'block';
+        } else {
+          btn.style.display = isMunAdmin ? 'none' : 'block';
+        }
+      });
+    }
+
+    // 3. Encabezado y Títulos Contextuales
+    const adminNameEl = document.getElementById('admin-user-name');
+    const adminAvatarEl = document.getElementById('admin-user-avatar') || adminNameEl?.previousElementSibling;
+    const statsTitleEl = document.getElementById('admin-stats-title');
+    const statsDescEl = document.getElementById('admin-stats-desc');
+
+    if (adminNameEl) {
+      adminNameEl.style.display = 'block';
+      if (isMunAdmin) {
+        adminNameEl.textContent = userData.nombre ? `${userData.nombre} (${mun})` : `Coordinador (${mun})`;
+        if (adminAvatarEl) adminAvatarEl.textContent = 'CM';
+        if (statsTitleEl) statsTitleEl.textContent = `Métricas Municipales - ${mun}`;
+        if (statsDescEl) statsDescEl.textContent = `Resumen del municipio ${mun} en tiempo real.`;
+      } else {
+        adminNameEl.textContent = userData.nombre || 'Administrador';
+        if (adminAvatarEl) adminAvatarEl.textContent = userData.rol === 'zonadmin' ? 'ZA' : 'SA';
+        if (statsTitleEl) statsTitleEl.textContent = 'Métricas Globales';
+        if (statsDescEl) statsDescEl.textContent = 'Resumen del sistema en tiempo real.';
+      }
+    }
+
+    // 4. Pestaña activa por defecto
+    document.querySelectorAll('.sidebar-btn').forEach(b => {
+      if (!b.classList.contains('accordion-btn')) b.classList.remove('active');
+    });
+    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+
+    if (btnEstadisticas) btnEstadisticas.classList.add('active');
+    const tabEst = document.getElementById('admin-tab-estadisticas');
+    if (tabEst) tabEst.classList.add('active');
+  }
+
   if (isInitialized) {
      // Si ya se inicializó el DOM, solo recargamos los datos para el nuevo usuario
      currentPlanteles = [];
+     configurarInterfazPorRol();
      loadEstadisticas();
      const activeTab = document.querySelector('.admin-tab.active');
      if (activeTab && activeTab.id === 'admin-tab-planteles') {
@@ -43,15 +99,23 @@ export function initAdminDashboard(dbInstance, user) {
       }
 
       // Navegacion normal
+      const targetId = button.getAttribute('data-target');
+      if (userData?.rol === 'munadmin' && 
+          targetId !== 'admin-tab-estadisticas' && 
+          targetId !== 'admin-tab-validacion' && 
+          targetId !== 'admin-tab-planteles') {
+         return;
+      }
+
       document.querySelectorAll('.sidebar-btn').forEach(b => {
          if(!b.classList.contains('accordion-btn')) b.classList.remove('active');
       });
       document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
       
       button.classList.add('active');
-      const targetId = button.getAttribute('data-target');
       if(targetId) {
-         document.getElementById(targetId).classList.add('active');
+         const targetElem = document.getElementById(targetId);
+         if (targetElem) targetElem.classList.add('active');
          if (targetId === 'admin-tab-planteles' && typeof currentPlanteles !== 'undefined' && currentPlanteles.length === 0) { loadPlanteles(); }
          if (targetId === 'admin-tab-planes' && typeof catalogosGlobal !== 'undefined' && (!catalogosGlobal['planes-estudio'] || Object.keys(catalogosGlobal['planes-estudio']).length === 0)) { loadCatalogos(); }
          if (targetId === 'admin-tab-listas') { 
@@ -73,8 +137,8 @@ export function initAdminDashboard(dbInstance, user) {
       let qUsuarios = collection(db, 'usuarios');
       let qPlanteles = query(collection(db, 'usuarios'), where('rol', '==', 'plaadmin'));
 
-      if (userData.rol === 'munadmin') {
-          const mun = userData.jerarquia?.municipio;
+      if (userData?.rol === 'munadmin') {
+          const mun = (userData.jerarquia?.municipio || userData.municipio || '').trim().toUpperCase();
           if (mun) {
               qPersonal = query(qPersonal, where('municipio', '==', mun));
               // Un munadmin solo gestiona plaadmin, así que su contador de usuarios debe reflejar solo esos.
@@ -105,6 +169,7 @@ export function initAdminDashboard(dbInstance, user) {
     }
   }
   
+  configurarInterfazPorRol();
   loadEstadisticas();
 
   // --- LÓGICA DE VALIDACIÓN DE USUARIOS ---

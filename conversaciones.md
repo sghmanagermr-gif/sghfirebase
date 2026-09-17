@@ -339,3 +339,59 @@ Este archivo constituye el registro textual e inmutable de todas las intervencio
 > 4. Posicionamiento superior garantizado al reabrir: Al hacer clic en "Editar" en cualquier otro plantel (o "Nuevo Plantel"), el sistema fuerza el posicionamiento en el tope superior (`scrollTop = 0`) tanto de forma inmediata como en los siguientes ciclos de renderizado del navegador.  
 > 5. Incremento SemVer a `v2.11.13` en `webapp/package.json`.  
 > 6. Compilación de producción exitosa con Vite (0 errores).
+
+---
+
+### Intervención 12
+* **Fecha / Hora:** 2026-09-16 ~20:26 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+> Estoy satisfecho.  
+>   
+> Ahora, esto es lo que debe ver el usuario rol munadmin en su pagina:   
+> - Validacion de Usuarios  
+> - Gestor de BD  
+> -* Planteles  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Configuración de interfaz por rol implementada con éxito:  
+> 1. Lectura prioritaria obligatoria de `SKILL_sgh_firebase.md`.  
+> 2. Adaptación exclusiva para el rol `munadmin`:  
+>    - Se ocultan del menú lateral las opciones no pertinentes (`Estadísticas` y `Despliegue`).  
+>    - En el menú `Gestor de BD`, se ocultan todos los catálogos globales (Planes de estudio, dependencias, modalidades, niveles, municipios, etc.), dejando visible únicamente `Planteles`.  
+>    - Se configura la pestaña `Validación de Usuarios` como la vista inicial por defecto al ingresar al panel.  
+>    - Se bloquea la navegación no autorizada hacia otras pestañas administrativas.  
+>    - Se optimizan las consultas a Firestore para evitar lecturas innecesarias en métricas estadísticas que no corresponden al municipio (Zero-Cost).  
+> 3. Identificación en encabezado: Se personalizan el avatar (`CM`) y el nombre con indicación del municipio asignado.  
+> 4. Incremento SemVer a `v2.11.14` en `webapp/package.json`.  
+> 5. Compilación limpia verificada con Vite (0 errores).
+
+---
+
+### Intervención 13
+* **Fecha / Hora:** 2026-09-16 ~20:34 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+>   
+> Estoy satisfecho, pero también deben ver las métricas  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Integración de Métricas para el rol `munadmin` implementada con éxito:  
+> 1. Lectura prioritaria obligatoria de `SKILL_sgh_firebase.md`.  
+> 2. Habilitación del módulo de Métricas (`Estadísticas`):  
+>    - Se reactiva la opción **📊 Estadísticas** en el menú lateral para el rol `munadmin`.  
+>    - Se adaptan los títulos y subtítulos del módulo en tiempo real a nivel contextual: muestra **"Métricas Municipales - [MUNICIPIO]"** y el resumen exclusivo de su jurisdicción.  
+>    - Los tres indicadores (Planteles Activos, Personal Registrado y Usuarios del Sistema) calculan y reflejan exclusivamente los datos correspondientes al municipio del coordinador.  
+>    - Se mantiene el blindaje en el `Gestor de BD` para mostrar únicamente **Planteles** y se mantiene oculto el módulo de `Despliegue`.  
+> 3. Incremento SemVer a `v2.11.15` en `webapp/package.json`.  
+> 4. Compilación limpia verificada con Vite (0 errores).
+
+
