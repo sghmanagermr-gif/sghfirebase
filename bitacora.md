@@ -536,3 +536,44 @@ Se implementó el requerimiento de inyectar una tabla resumen con el personal pr
 
 ---
 
+### Hito: Sistema de Llavero de Competencias Zonales y Selector Territorial de Nóminas (v2.11.17)
+**Fecha:** 2026-09-16  
+**Módulo:** Panel Administrativo / Gobernanza de Roles / Competencias Zonales / Llavero de Permisos / Exportación Territorial
+
+**1. Requerimientos:**
+- Permitir la asignación granular y personalizada de módulos del panel administrativo para los distintos funcionarios con rol Zonal (`zonadmin`) del CDCE / Zona Educativa Mérida.
+- Cada funcionario zonal posee competencias específicas (ej. supervisión de planteles, validación de usuarios o estadísticas), por lo que el menú lateral debe adaptarse estrictamente a sus competencias asignadas sin exponer módulos no autorizados.
+- Administrar estos permisos de manera sencilla mediante casillas de verificación (checks) tipo "Llavero" desde la vista de Validación de Usuarios.
+- Proveer selección del municipio al descargar nóminas en formato Excel para roles zonales y superadmin que no tienen un municipio predeterminado fijo.
+
+**2. Solución Técnica Implementada:**
+- Sistema de Llavero de Competencias Modulares (`webapp/index.html` & `webapp/src/admin.js`):
+  * Se diseñó el modal `#modal-competencias-zonal` con casillas de verificación para 7 módulos:
+    1. 📊 Métricas y Estadísticas Globales (`estadisticas`)
+    2. 👥 Validación de Usuarios (`validacion`)
+    3. 🏫 Gestor de Planteles (`planteles`)
+    4. 📥 Descarga de Nóminas en Excel (`nomina`)
+    5. 🎓 Planes de Estudio (`planes`)
+    6. 🏢 Catálogos y Listas Maestras (`listas`)
+    7. 🚀 Despliegue Técnico y Mantenimiento (`despliegue`)
+  * Se agregaron botones rápidos de "Marcar Todos" y "Desmarcar Todos".
+  * Se incorporó el botón institucional `🔑 Competencias` en la lista de Validación de Usuarios para filas con rol `zonadmin`, así como una etiqueta visual con el conteo de módulos autorizados.
+  * Persistencia segura en Firestore (`usuarios/{uid}.permisos`) usando `safeUpdateDoc`.
+- Gobernanza Dinámica del Menú Lateral (Sidebar):
+  * `configurarInterfazPorRol()`: Oculta en tiempo real los botones del menú no asignados.
+  * Si el grupo Gestor de BD no tiene sub-módulos permitidos, oculta el acordeón por completo.
+  * Activación inteligente de la primera pestaña permitida (evita pantallas vacías si el usuario no tiene acceso a métricas).
+  * Blindaje ante eventos de clic en el sidebar para impedir la navegación a pestañas no autorizadas.
+  * Auto-actualización de sesión en caliente: si el usuario editado es el de la sesión activa, el sidebar se reconfigura de inmediato sin requerir re-inicio de sesión.
+- Selector Territorial para Descarga de Nómina (`#modal-seleccionar-municipio-nomina`):
+  * Permite a los usuarios zonales y superadministradores seleccionar entre los 23 municipios del estado Mérida antes de generar el archivo Excel con las 55 columnas oficiales ordenado por código DEA.
+- Incremento SemVer a **v2.11.17** en `webapp/package.json` e `index.html`.
+
+**3. Archivos Involucrados:**
+- `webapp/index.html`
+- `webapp/src/admin.js`
+- `webapp/package.json`
+- `bitacora.md`
+- `conversaciones.md`
+
+---

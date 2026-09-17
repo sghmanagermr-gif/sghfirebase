@@ -13,25 +13,64 @@ export function initAdminDashboard(dbInstance, user) {
 
   function configurarInterfazPorRol() {
     const isMunAdmin = userData?.rol === 'munadmin';
+    const isZonAdmin = userData?.rol === 'zonadmin';
+    const isSuperAdmin = userData?.rol === 'superadmin' || userData?.rol === 'admin';
     const mun = (userData.jerarquia?.municipio || userData.municipio || '').trim().toUpperCase();
+    const permisos = (isZonAdmin && userData?.permisos) ? userData.permisos : null;
 
-    // 1. Botones de nivel superior: Estadísticas (visible para todos) y Despliegue (solo superadmin/admin)
+    // Helper de evaluación de permisos modulares (Llavero)
+    const tienePermiso = (modulo, defecto = true) => {
+      if (isSuperAdmin) return true;
+      if (isMunAdmin) {
+        if (modulo === 'estadisticas' || modulo === 'validacion' || modulo === 'planteles' || modulo === 'nomina') return true;
+        return false;
+      }
+      if (isZonAdmin) {
+        if (permisos) {
+          return permisos[modulo] === true;
+        }
+        // Retrocompatibilidad para zonadmin sin permisos configurados aún (todo excepto despliegue)
+        return modulo !== 'despliegue';
+      }
+      return defecto;
+    };
+
+    // 1. Botones de nivel superior: Estadísticas, Validación y Despliegue
     const btnEstadisticas = document.getElementById('btn-sidebar-estadisticas') || document.querySelector('.sidebar-btn[data-target="admin-tab-estadisticas"]');
+    const btnValidacion = document.getElementById('btn-sidebar-validacion') || document.querySelector('.sidebar-btn[data-target="admin-tab-validacion"]');
     const btnDespliegue = document.getElementById('btn-sidebar-despliegue');
-    if (btnEstadisticas) btnEstadisticas.style.display = 'block';
-    if (btnDespliegue) btnDespliegue.style.display = isMunAdmin ? 'none' : 'block';
 
-    // 2. Acordeón Gestor de BD: munadmin solo ve Planteles y Descarga de Nómina Municipal
+    if (btnEstadisticas) btnEstadisticas.style.display = tienePermiso('estadisticas') ? 'block' : 'none';
+    if (btnValidacion) btnValidacion.style.display = tienePermiso('validacion') ? 'block' : 'none';
+    if (btnDespliegue) btnDespliegue.style.display = tienePermiso('despliegue', false) ? 'block' : 'none';
+
+    // 2. Acordeón Gestor de BD y sus opciones
+    const btnAcordeonBd = document.getElementById('btn-sidebar-bd');
     const accordionBd = document.querySelector('.accordion-content');
+    let algunSubItemVisible = false;
+
     if (accordionBd) {
       accordionBd.querySelectorAll('.sidebar-btn').forEach(btn => {
         const target = btn.getAttribute('data-target');
-        if (target === 'admin-tab-planteles' || btn.id === 'btn-sidebar-descargar-nomina-mun') {
-          btn.style.display = 'block';
-        } else {
-          btn.style.display = isMunAdmin ? 'none' : 'block';
+        let visible = false;
+
+        if (target === 'admin-tab-planteles') {
+          visible = tienePermiso('planteles');
+        } else if (btn.id === 'btn-sidebar-descargar-nomina-mun') {
+          visible = tienePermiso('nomina');
+        } else if (target === 'admin-tab-planes') {
+          visible = tienePermiso('planes');
+        } else if (target === 'admin-tab-listas') {
+          visible = tienePermiso('listas');
         }
+
+        btn.style.display = visible ? 'block' : 'none';
+        if (visible) algunSubItemVisible = true;
       });
+    }
+
+    if (btnAcordeonBd) {
+      btnAcordeonBd.style.display = algunSubItemVisible ? 'flex' : 'none';
     }
 
     // 3. Encabezado y Títulos Contextuales
@@ -47,23 +86,49 @@ export function initAdminDashboard(dbInstance, user) {
         if (adminAvatarEl) adminAvatarEl.textContent = 'CM';
         if (statsTitleEl) statsTitleEl.textContent = `Métricas Municipales - ${mun}`;
         if (statsDescEl) statsDescEl.textContent = `Resumen del municipio ${mun} en tiempo real.`;
+      } else if (isZonAdmin) {
+        adminNameEl.textContent = userData.nombre || 'Coordinador Zonal';
+        if (adminAvatarEl) adminAvatarEl.textContent = 'ZA';
+        if (statsTitleEl) statsTitleEl.textContent = 'Métricas Estatales';
+        if (statsDescEl) statsDescEl.textContent = 'Resumen consolidado del estado Mérida.';
       } else {
         adminNameEl.textContent = userData.nombre || 'Administrador';
-        if (adminAvatarEl) adminAvatarEl.textContent = userData.rol === 'zonadmin' ? 'ZA' : 'SA';
+        if (adminAvatarEl) adminAvatarEl.textContent = 'SA';
         if (statsTitleEl) statsTitleEl.textContent = 'Métricas Globales';
         if (statsDescEl) statsDescEl.textContent = 'Resumen del sistema en tiempo real.';
       }
     }
 
-    // 4. Pestaña activa por defecto
+    // 4. Determinar la primera pestaña activa permitida
     document.querySelectorAll('.sidebar-btn').forEach(b => {
       if (!b.classList.contains('accordion-btn')) b.classList.remove('active');
     });
     document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
 
-    if (btnEstadisticas) btnEstadisticas.classList.add('active');
-    const tabEst = document.getElementById('admin-tab-estadisticas');
-    if (tabEst) tabEst.classList.add('active');
+    if (tienePermiso('estadisticas') && btnEstadisticas && btnEstadisticas.style.display !== 'none') {
+      btnEstadisticas.classList.add('active');
+      const tabEst = document.getElementById('admin-tab-estadisticas');
+      if (tabEst) tabEst.classList.add('active');
+    } else if (tienePermiso('validacion') && btnValidacion && btnValidacion.style.display !== 'none') {
+      btnValidacion.classList.add('active');
+      const tabVal = document.getElementById('admin-tab-validacion');
+      if (tabVal) tabVal.classList.add('active');
+    } else if (tienePermiso('planteles')) {
+      const btnPlanteles = document.getElementById('btn-sidebar-planteles');
+      if (btnPlanteles && btnPlanteles.style.display !== 'none') {
+        btnPlanteles.classList.add('active');
+        const tabPlanteles = document.getElementById('admin-tab-planteles');
+        if (tabPlanteles) tabPlanteles.classList.add('active');
+        if (typeof currentPlanteles !== 'undefined' && currentPlanteles.length === 0) loadPlanteles();
+      }
+    } else if (tienePermiso('planes')) {
+      const btnPlanes = document.querySelector('.sidebar-btn[data-target="admin-tab-planes"]');
+      if (btnPlanes && btnPlanes.style.display !== 'none') {
+        btnPlanes.classList.add('active');
+        const tabPlanes = document.getElementById('admin-tab-planes');
+        if (tabPlanes) tabPlanes.classList.add('active');
+      }
+    }
   }
 
   if (isInitialized) {
@@ -109,11 +174,39 @@ export function initAdminDashboard(dbInstance, user) {
 
       // Navegacion normal
       const targetId = button.getAttribute('data-target');
-      if (userData?.rol === 'munadmin' && 
-          targetId !== 'admin-tab-estadisticas' && 
-          targetId !== 'admin-tab-validacion' && 
-          targetId !== 'admin-tab-planteles') {
-         return;
+      if (userData?.rol === 'munadmin') {
+         if (targetId !== 'admin-tab-estadisticas' && 
+             targetId !== 'admin-tab-validacion' && 
+             targetId !== 'admin-tab-planteles') {
+            return;
+         }
+      }
+      if (userData?.rol === 'zonadmin' && userData?.permisos) {
+         const p = userData.permisos;
+         if (targetId === 'admin-tab-estadisticas' && !p.estadisticas) {
+            showToast("No tiene permisos para acceder a Métricas.", "warning");
+            return;
+         }
+         if (targetId === 'admin-tab-validacion' && !p.validacion) {
+            showToast("No tiene permisos para acceder a Validación de Usuarios.", "warning");
+            return;
+         }
+         if (targetId === 'admin-tab-planteles' && !p.planteles) {
+            showToast("No tiene permisos para acceder a Planteles.", "warning");
+            return;
+         }
+         if (targetId === 'admin-tab-planes' && !p.planes) {
+            showToast("No tiene permisos para acceder a Planes de Estudio.", "warning");
+            return;
+         }
+         if (targetId === 'admin-tab-listas' && !p.listas) {
+            showToast("No tiene permisos para acceder a Catálogos Maestros.", "warning");
+            return;
+         }
+         if (targetId === 'admin-tab-despliegue' && !p.despliegue) {
+            showToast("No tiene permisos para acceder a Despliegue.", "warning");
+            return;
+         }
       }
 
       document.querySelectorAll('.sidebar-btn').forEach(b => {
@@ -350,6 +443,7 @@ export function initAdminDashboard(dbInstance, user) {
           <td style="padding: 15px 20px;">
             <div style="font-weight: 500; color: var(--primary-color);">${u.rol.toUpperCase()}</div>
             <div style="font-size: 0.8rem; color: var(--text-muted);">${ubicacion}</div>
+            ${u.rol === 'zonadmin' ? `<div style="font-size: 0.75rem; color: #16a34a; font-weight: 500; margin-top: 3px;">🔑 ${u.permisos ? Object.values(u.permisos).filter(Boolean).length + ' módulos autorizados' : 'Acceso Estándar'}</div>` : ''}
           </td>
           <td style="padding: 15px 20px;">
             <span style="padding: 5px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; 
@@ -358,7 +452,8 @@ export function initAdminDashboard(dbInstance, user) {
               ${u.estado_aprobacion || 'DESCONOCIDO'}
             </span>
           </td>
-          <td style="padding: 15px 20px; text-align: right; display: flex; gap: 8px; justify-content: flex-end;">
+          <td style="padding: 15px 20px; text-align: right; display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
+            ${(u.rol === 'zonadmin' && (userData.rol === 'superadmin' || userData.rol === 'admin')) ? `<button class="btn-competencias" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.82rem; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 600;" title="Configurar módulos y permisos del panel">🔑 Competencias</button>` : ''}
             ${!isAprobado ? `<button class="btn-aprobar" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.85rem; background: var(--success);">Aprobar</button>` : ''}
             <button class="btn-eliminar btn-secondary" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.85rem; border-color: var(--danger); color: var(--danger);">${isAprobado ? 'Eliminar' : 'Rechazar'}</button>
           </td>
@@ -367,6 +462,17 @@ export function initAdminDashboard(dbInstance, user) {
     }).join('');
 
     // Eventos de botones
+    document.querySelectorAll('.btn-competencias').forEach(btn => {
+      btn.onclick = (e) => {
+        e.preventDefault();
+        const uid = btn.getAttribute('data-uid');
+        const userFound = usuariosLocales.find(x => x.uid === uid);
+        if (userFound) {
+          openCompetenciasModal(userFound);
+        }
+      };
+    });
+
     document.querySelectorAll('.btn-aprobar').forEach(btn => {
       btn.onclick = async (e) => {
         const uid = e.target.getAttribute('data-uid');
@@ -403,6 +509,117 @@ export function initAdminDashboard(dbInstance, user) {
           }
         }
       };
+    });
+  }
+
+  // --- CONTROLADOR DEL MODAL DE COMPETENCIAS ZONALES (LLAVERO) ---
+  const modalCompetencias = document.getElementById('modal-competencias-zonal');
+  const btnCerrarCompetencias = document.getElementById('btn-cerrar-competencias');
+  const btnCancelarCompetencias = document.getElementById('btn-cancelar-competencias');
+  const btnGuardarCompetencias = document.getElementById('btn-guardar-competencias');
+  const btnSelectAllCompetencias = document.getElementById('btn-seleccionar-todos-permisos');
+  const btnClearAllCompetencias = document.getElementById('btn-limpiar-todos-permisos');
+  const userInfoCompetencias = document.getElementById('competencias-user-info');
+  const uidTargetCompetencias = document.getElementById('competencias-target-uid');
+
+  function cerrarModalCompetencias() {
+    if (modalCompetencias) {
+      modalCompetencias.style.display = 'none';
+      if (uidTargetCompetencias) uidTargetCompetencias.value = '';
+    }
+  }
+
+  if (btnCerrarCompetencias) btnCerrarCompetencias.addEventListener('click', cerrarModalCompetencias);
+  if (btnCancelarCompetencias) btnCancelarCompetencias.addEventListener('click', cerrarModalCompetencias);
+  if (modalCompetencias) {
+    modalCompetencias.addEventListener('click', (e) => {
+      if (e.target === modalCompetencias) cerrarModalCompetencias();
+    });
+  }
+
+  if (btnSelectAllCompetencias) {
+    btnSelectAllCompetencias.addEventListener('click', () => {
+      document.querySelectorAll('#lista-permisos-zonales .chk-permiso').forEach(chk => {
+        chk.checked = true;
+      });
+    });
+  }
+
+  if (btnClearAllCompetencias) {
+    btnClearAllCompetencias.addEventListener('click', () => {
+      document.querySelectorAll('#lista-permisos-zonales .chk-permiso').forEach(chk => {
+        chk.checked = false;
+      });
+    });
+  }
+
+  function openCompetenciasModal(user) {
+    if (!modalCompetencias || !user) return;
+    if (uidTargetCompetencias) uidTargetCompetencias.value = user.uid;
+
+    if (userInfoCompetencias) {
+      userInfoCompetencias.innerHTML = `Configurando permisos para: <strong style="color: var(--text-main);">${user.nombre || 'Coordinador Zonal'}</strong> (${user.email || user.cedula})`;
+    }
+
+    const permisos = user.permisos || null;
+
+    // Si tiene permisos definidos, marcamos exactamente esos.
+    // Si no tiene permisos previos, marcamos el estándar (todo true excepto despliegue).
+    document.getElementById('chk-perm-estadisticas').checked = permisos ? !!permisos.estadisticas : true;
+    document.getElementById('chk-perm-validacion').checked = permisos ? !!permisos.validacion : true;
+    document.getElementById('chk-perm-planteles').checked = permisos ? !!permisos.planteles : true;
+    document.getElementById('chk-perm-nomina').checked = permisos ? !!permisos.nomina : true;
+    document.getElementById('chk-perm-planes').checked = permisos ? !!permisos.planes : true;
+    document.getElementById('chk-perm-listas').checked = permisos ? !!permisos.listas : true;
+    document.getElementById('chk-perm-despliegue').checked = permisos ? !!permisos.despliegue : false;
+
+    modalCompetencias.style.display = 'flex';
+  }
+
+  if (btnGuardarCompetencias) {
+    btnGuardarCompetencias.addEventListener('click', async () => {
+      const uid = uidTargetCompetencias ? uidTargetCompetencias.value : null;
+      if (!uid) return;
+
+      const nuevosPermisos = {
+        estadisticas: document.getElementById('chk-perm-estadisticas').checked,
+        validacion: document.getElementById('chk-perm-validacion').checked,
+        planteles: document.getElementById('chk-perm-planteles').checked,
+        nomina: document.getElementById('chk-perm-nomina').checked,
+        planes: document.getElementById('chk-perm-planes').checked,
+        listas: document.getElementById('chk-perm-listas').checked,
+        despliegue: document.getElementById('chk-perm-despliegue').checked,
+        ultima_modificacion: new Date().toISOString()
+      };
+
+      btnGuardarCompetencias.disabled = true;
+      btnGuardarCompetencias.textContent = 'Guardando...';
+
+      try {
+        await safeUpdateDoc(doc(db, 'usuarios', uid), { permisos: nuevosPermisos });
+
+        // Si el usuario editado es el mismo de la sesión activa, actualizar en tiempo real
+        if (userData && userData.uid === uid) {
+          userData.permisos = nuevosPermisos;
+          configurarInterfazPorRol();
+        }
+
+        // Actualizar en el cache local para que la tabla muestre el cambio de inmediato
+        const uLocal = usuariosLocales.find(x => x.uid === uid);
+        if (uLocal) {
+          uLocal.permisos = nuevosPermisos;
+        }
+
+        renderUsuariosList();
+        cerrarModalCompetencias();
+        showToast("Competencias del funcionario actualizadas exitosamente.", "success");
+      } catch (err) {
+        console.error("Error guardando competencias:", err);
+        showAlert("Error", "No se pudieron guardar las competencias: " + err.message, "danger");
+      } finally {
+        btnGuardarCompetencias.disabled = false;
+        btnGuardarCompetencias.textContent = 'Guardar Competencias';
+      }
     });
   }
 
@@ -1647,25 +1864,58 @@ export function initAdminDashboard(dbInstance, user) {
   }
 
   // --- EXPORTACIÓN DE NÓMINA MUNICIPAL A EXCEL (.XLSX) ---
-  async function exportarNominaMunicipalExcel() {
+  const modalSelMunNomina = document.getElementById('modal-seleccionar-municipio-nomina');
+  const selMunNomina = document.getElementById('sel-municipio-nomina-modal');
+  const btnCancelarSelMunNomina = document.getElementById('btn-cancelar-sel-mun-nomina');
+  const btnConfirmarSelMunNomina = document.getElementById('btn-confirmar-sel-mun-nomina');
+
+  function cerrarModalSelMunNomina() {
+    if (modalSelMunNomina) modalSelMunNomina.style.display = 'none';
+  }
+
+  if (btnCancelarSelMunNomina) btnCancelarSelMunNomina.addEventListener('click', cerrarModalSelMunNomina);
+  if (modalSelMunNomina) {
+    modalSelMunNomina.addEventListener('click', (e) => {
+      if (e.target === modalSelMunNomina) cerrarModalSelMunNomina();
+    });
+  }
+
+  if (btnConfirmarSelMunNomina) {
+    btnConfirmarSelMunNomina.addEventListener('click', () => {
+      const munElegido = selMunNomina ? selMunNomina.value.trim().toUpperCase() : '';
+      if (!munElegido) {
+        showToast("Por favor, seleccione un municipio para continuar.", "warning");
+        return;
+      }
+      cerrarModalSelMunNomina();
+      exportarNominaMunicipalExcel(munElegido);
+    });
+  }
+
+  async function exportarNominaMunicipalExcel(municipioForzado = null) {
     if (window._isExportingExcelMun) {
       showToast("Generando nómina municipal en Excel, por favor espere...", "info");
       return;
     }
+
+    // 1. Determinar el municipio objetivo
+    let userMun = municipioForzado || (userData?.jerarquia?.municipio || userData?.municipio || '').trim().toUpperCase();
+
+    // Si es un rol zonal o superadmin que no tiene un municipio exclusivo asignado, pedirle que seleccione el municipio
+    if (!userMun) {
+      if (modalSelMunNomina && selMunNomina) {
+        selMunNomina.innerHTML = '<option value="">-- SELECCIONE MUNICIPIO --</option>' +
+          MUNICIPIOS_MERIDA.map(m => `<option value="${m}">${m}</option>`).join('');
+        modalSelMunNomina.style.display = 'flex';
+      } else {
+        showAlert("Aviso", "No se detectó el municipio a exportar.", "warning");
+      }
+      return;
+    }
+
     window._isExportingExcelMun = true;
 
     try {
-      // 1. Determinar el municipio objetivo
-      let userMun = (userData?.jerarquia?.municipio || userData?.municipio || '').trim().toUpperCase();
-      if (!userMun && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
-        userMun = (currentPlanteles[0].municipio || '').trim().toUpperCase();
-      }
-
-      if (!userMun) {
-        showAlert("Aviso", "No se detectó el municipio asignado a su cuenta para exportar la nómina.", "warning");
-        return;
-      }
-
       showToast(`Generando nómina del Municipio ${userMun}...`, "info", 4000);
 
       // 2. Consultar el personal registrado en dicho municipio (Zero-Cost / Indexado)

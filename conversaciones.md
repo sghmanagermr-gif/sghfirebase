@@ -440,4 +440,38 @@ Este archivo constituye el registro textual e inmutable de todas las intervencio
 > 3. Respaldo íntegro de la sesión registrado en `conversaciones.md` y `bitacora.md`.  
 > 4. Sincronización completa con el repositorio remoto GitHub (`origin/main`).
 
+---
+
+### Intervención 16
+* **Fecha / Hora:** 2026-09-16 ~21:18 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+> Como ves en la imagen, he abierto los cuatro roles que existen: superadmin, zonadmin, munadmin y pladmin.  
+>   
+> Todas se ven muy bien, pero tengo un dilema. para los distintos usuarios zonadmin que debo agregar, el panel izquierdo unos y otros no pueden ver ciertos modulos, ya que cada uno tiene una competencia específica. ¿Cómo puedo hacer?  
+> Opción 1, elijo la opción 1
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Implementación del Sistema de Competencias Zonales ("Llavero de Permisos"):  
+> 1. Lectura prioritaria obligatoria de `SKILL_sgh_firebase.md`.  
+> 2. Modal de Gestión de Competencias Zonales (`#modal-competencias-zonal`):  
+>    - Permite al Súper Admin asignar mediante casillas de verificación (checks) los módulos visibles para cada usuario con rol `zonadmin`: Métricas / Estadísticas, Validación de Usuarios, Gestor de Planteles, Descarga de Nóminas, Planes de Estudio, Catálogos Maestros y Despliegue.  
+>    - Incorpora botones rápidos de "Marcar Todos" y "Desmarcar Todos".  
+>    - Al guardar, persiste la estructura `permisos` en el documento del usuario en Firestore y actualiza la vista en tiempo real si el usuario editado es el de la sesión activa.  
+> 3. Integración en la Tabla de Validación de Usuarios:  
+>    - Se incorporó el botón **🔑 Competencias** en las filas de usuarios con rol `zonadmin`.  
+>    - Se muestra el resumen de competencias activas en la columna de rol.  
+> 4. Gobernanza del Menú Lateral (Sidebar):  
+>    - La función `configurarInterfazPorRol()` evalúa las competencias del usuario y oculta dinámicamente los módulos no autorizados.  
+>    - Si el acordeón del Gestor de BD no tiene sub-módulos permitidos, se oculta por completo.  
+>    - Se selecciona automáticamente la primera pestaña permitida como activa inicial (evitando pantallas en blanco si no tiene acceso a métricas).  
+>    - Se protegen los clics de navegación para bloquear el acceso a pestañas no asignadas.  
+> 5. Selector de Municipio en Descarga de Nómina:  
+>    - Al no tener un municipio fijo predeterminado, cuando un zonal o superadmin descarga la nómina, se despliega un selector con los 23 municipios del estado Mérida (`#modal-seleccionar-municipio-nomina`).  
+> 6. Incremento SemVer a `v2.11.17` y verificación de compilación limpia con Vite (0 errores).
+
 

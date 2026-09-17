@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SGH - v2.11.16</title>
+  <title>SGH - v2.11.17</title>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
@@ -186,7 +186,7 @@
     <section id="dashboard-view" class="view">
       <nav class="navbar">
         <div class="nav-brand">
-          <span style="color: var(--primary-color);">SGH</span> v2.11.16
+          <span style="color: var(--primary-color);">SGH</span> v2.11.17
         </div>
         <div class="nav-user">
           <span id="user-display-name" style="font-weight: 500;">Cargando...</span>
@@ -215,7 +215,7 @@
     <!-- HEADER / NAVBAR -->
     <nav class="navbar" style="width: 100%; margin-bottom: 20px;">
       <div class="nav-brand">
-        <span style="color: var(--primary-color);">SGH</span> v2.11.16
+        <span style="color: var(--primary-color);">SGH</span> v2.11.17
       </div>
       <div class="nav-user" style="display: flex; gap: 15px; align-items: center;">
 
@@ -1076,7 +1076,127 @@
     </div>
   </div>
 
-  <!-- VISTA DEL COORDINADOR MUNICIPAL -->
+  <!-- MODAL DE COMPETENCIAS ZONALES (SISTEMA DE LLAVERO) -->
+  <div id="modal-competencias-zonal" class="lock-screen" aria-hidden="true" style="display: none; z-index: 10004;">
+    <div class="lock-card glass-panel" style="max-width: 560px; width: 95%; text-align: left; max-height: 90vh; overflow-y: auto; padding: 24px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; border-bottom: 1px solid var(--glass-border); padding-bottom: 12px;">
+        <div>
+          <h2 style="margin: 0 0 5px; color: var(--primary-color); font-size: 1.25rem; display: flex; align-items: center; gap: 8px;">
+            <span>🔑</span> Competencias del Coordinador Zonal
+          </h2>
+          <p id="competencias-user-info" style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">
+            Configurando permisos para el usuario
+          </p>
+        </div>
+        <button type="button" id="btn-cerrar-competencias" style="background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--text-muted); padding: 0; line-height: 1; width: auto; box-shadow: none;">✖</button>
+      </div>
+
+      <p style="color: var(--text-main); font-size: 0.88rem; margin-bottom: 15px; line-height: 1.4;">
+        Marque las opciones que este funcionario está autorizado a visualizar y operar en su panel izquierdo:
+      </p>
+
+      <!-- Botones de selección rápida -->
+      <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+        <button type="button" id="btn-seleccionar-todos-permisos" class="btn-secondary" style="font-size: 0.78rem; padding: 5px 12px; width: auto; cursor: pointer;">Marcar Todos</button>
+        <button type="button" id="btn-limpiar-todos-permisos" class="btn-secondary" style="font-size: 0.78rem; padding: 5px 12px; width: auto; cursor: pointer;">Desmarcar Todos</button>
+      </div>
+
+      <!-- Lista de permisos con checkboxes -->
+      <div id="lista-permisos-zonales" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 25px;">
+        <!-- 1. Estadísticas -->
+        <label style="display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #f8fafc;">
+          <input type="checkbox" id="chk-perm-estadisticas" class="chk-permiso" value="estadisticas" style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
+          <div>
+            <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-main);">📊 Métricas y Estadísticas Globales</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Visualizar contadores de planteles, funcionarios y usuarios en tiempo real.</div>
+          </div>
+        </label>
+
+        <!-- 2. Validación de Usuarios -->
+        <label style="display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #f8fafc;">
+          <input type="checkbox" id="chk-perm-validacion" class="chk-permiso" value="validacion" style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
+          <div>
+            <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-main);">👥 Validación de Usuarios</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Aprobar o desincorporar cuentas de directores y coordinadores.</div>
+          </div>
+        </label>
+
+        <!-- 3. Planteles -->
+        <label style="display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #f8fafc;">
+          <input type="checkbox" id="chk-perm-planteles" class="chk-permiso" value="planteles" style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
+          <div>
+            <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-main);">🏫 Gestor de Planteles</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Crear, editar, consultar y auditar instituciones educativas y su planta física.</div>
+          </div>
+        </label>
+
+        <!-- 4. Descarga de Nóminas -->
+        <label style="display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #f8fafc;">
+          <input type="checkbox" id="chk-perm-nomina" class="chk-permiso" value="nomina" style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
+          <div>
+            <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-main);">📥 Descarga de Nóminas (.xlsx)</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Exportar nóminas institucionales completas con las 55 columnas oficiales.</div>
+          </div>
+        </label>
+
+        <!-- 5. Planes de Estudio -->
+        <label style="display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #f8fafc;">
+          <input type="checkbox" id="chk-perm-planes" class="chk-permiso" value="planes" style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
+          <div>
+            <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-main);">🎓 Planes de Estudio</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Administrar la malla curricular, códigos, menciones y especialidades.</div>
+          </div>
+        </label>
+
+        <!-- 6. Catálogos Maestros -->
+        <label style="display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #f8fafc;">
+          <input type="checkbox" id="chk-perm-listas" class="chk-permiso" value="listas" style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
+          <div>
+            <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-main);">🏢 Catálogos y Listas Maestras</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Gestionar dependencias, modalidades, niveles, municipios y situación laboral.</div>
+          </div>
+        </label>
+
+        <!-- 7. Despliegue -->
+        <label style="display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #f8fafc;">
+          <input type="checkbox" id="chk-perm-despliegue" class="chk-permiso" value="despliegue" style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
+          <div>
+            <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-main);">🚀 Despliegue Técnico y Mantenimiento</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Apertura y cierre de municipios o excepciones territoriales del sistema.</div>
+          </div>
+        </label>
+      </div>
+
+      <input type="hidden" id="competencias-target-uid" value="">
+
+      <div style="display: flex; gap: 10px; justify-content: flex-end; border-top: 1px solid var(--glass-border); padding-top: 15px;">
+        <button type="button" id="btn-cancelar-competencias" class="btn-secondary" style="width: auto; padding: 8px 18px; cursor: pointer;">Cancelar</button>
+        <button type="button" id="btn-guardar-competencias" style="width: auto; padding: 8px 22px; background: var(--primary-color); font-weight: bold; color: white; border: none; border-radius: 6px; cursor: pointer;">Guardar Competencias</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL SELECCIONAR MUNICIPIO PARA NÓMINA (ZONALES / SUPERADMIN) -->
+  <div id="modal-seleccionar-municipio-nomina" class="lock-screen" aria-hidden="true" style="display: none; z-index: 10005;">
+    <div class="lock-card glass-panel" style="max-width: 440px; width: 90%; text-align: left; padding: 24px;">
+      <h3 style="margin: 0 0 10px; color: var(--primary-color); font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+        <span>📥</span> Descargar Nómina Municipal
+      </h3>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px; line-height: 1.4;">
+        Como usuario de nivel Estadal, seleccione el municipio cuya nómina desea exportar en formato Excel (.xlsx):
+      </p>
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; font-size: 0.8rem; font-weight: bold; margin-bottom: 6px; color: var(--text-main);">Municipio:</label>
+        <select id="sel-municipio-nomina-modal" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; font-size: 0.9rem;">
+          <option value="">-- SELECCIONE MUNICIPIO --</option>
+        </select>
+      </div>
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button type="button" id="btn-cancelar-sel-mun-nomina" class="btn-secondary" style="width: auto; padding: 8px 16px; cursor: pointer;">Cancelar</button>
+        <button type="button" id="btn-confirmar-sel-mun-nomina" style="width: auto; padding: 8px 20px; background: #107c41; color: white; font-weight: bold; border: none; border-radius: 6px; cursor: pointer;">Descargar (.xlsx)</button>
+      </div>
+    </div>
+  </div>
 
 
   <!-- VISTA DEL SÚPER ADMIN -->
