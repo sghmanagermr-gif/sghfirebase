@@ -1,5 +1,5 @@
 import { safeSetDoc, safeUpdateDoc, safeAddDoc } from './dbUtils.js';
-import { doc, getDoc, setDoc, updateDoc, collection, query, where, getCountFromServer, getDocs, onSnapshot, deleteDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, collection, query, where, getCountFromServer, getDocs, onSnapshot, deleteDoc, deleteField } from 'firebase/firestore';
 
 let isInitialized = false;
 let db = null;
@@ -1084,6 +1084,24 @@ export function initAdminDashboard(dbInstance, user) {
     actualizarContadorPlanes();
   }
 
+  function cerrarModalPlantel() {
+     if (modalPlantel) {
+       modalPlantel.style.display = 'none';
+       modalPlantel.scrollTop = 0;
+       if (modalPlantel.scrollTo) modalPlantel.scrollTo(0, 0);
+       const card = modalPlantel.querySelector('.lock-card');
+       if (card) {
+         card.scrollTop = 0;
+         if (card.scrollTo) card.scrollTo(0, 0);
+       }
+       const planesContainer = document.getElementById('plantel-planes-container');
+       if (planesContainer) {
+         planesContainer.scrollTop = 0;
+         if (planesContainer.scrollTo) planesContainer.scrollTo(0, 0);
+       }
+     }
+  }
+
   function openPlantelModal(plantel = null) {
      formPlantel.reset();
      document.getElementById('p-uid').value = '';
@@ -1164,6 +1182,26 @@ export function initAdminDashboard(dbInstance, user) {
      }
      
      modalPlantel.style.display = 'flex';
+     const resetScroll = () => {
+       modalPlantel.scrollTop = 0;
+       if (modalPlantel.scrollTo) modalPlantel.scrollTo(0, 0);
+       const card = modalPlantel.querySelector('.lock-card');
+       if (card) {
+         card.scrollTop = 0;
+         if (card.scrollTo) card.scrollTo(0, 0);
+       }
+       const planesContainer = document.getElementById('plantel-planes-container');
+       if (planesContainer) {
+         planesContainer.scrollTop = 0;
+         if (planesContainer.scrollTo) planesContainer.scrollTo(0, 0);
+       }
+     };
+     resetScroll();
+     requestAnimationFrame(() => {
+       resetScroll();
+       setTimeout(resetScroll, 50);
+       setTimeout(resetScroll, 150);
+     });
   }
 
   if(document.getElementById('btn-nuevo-plantel')) {
@@ -1171,15 +1209,32 @@ export function initAdminDashboard(dbInstance, user) {
   }
   
   if(document.getElementById('btn-cerrar-modal-plantel')) {
-    document.getElementById('btn-cerrar-modal-plantel').addEventListener('click', () => modalPlantel.style.display = 'none');
+    document.getElementById('btn-cerrar-modal-plantel').addEventListener('click', cerrarModalPlantel);
   }
   if(document.getElementById('btn-cancelar-plantel')) {
-    document.getElementById('btn-cancelar-plantel').addEventListener('click', () => modalPlantel.style.display = 'none');
+    document.getElementById('btn-cancelar-plantel').addEventListener('click', cerrarModalPlantel);
+  }
+  if(modalPlantel) {
+    modalPlantel.addEventListener('click', (e) => {
+      if(e.target === modalPlantel) cerrarModalPlantel();
+    });
   }
 
   if(formPlantel) {
     formPlantel.addEventListener('submit', async (e) => {
        e.preventDefault();
+       
+       // Al dar clic en guardar, ubicarse al principio del modal de inmediato
+       if (modalPlantel) {
+         modalPlantel.scrollTop = 0;
+         if (modalPlantel.scrollTo) modalPlantel.scrollTo({ top: 0, behavior: 'smooth' });
+         const card = modalPlantel.querySelector('.lock-card');
+         if (card) {
+           card.scrollTop = 0;
+           if (card.scrollTo) card.scrollTo({ top: 0, behavior: 'smooth' });
+         }
+       }
+
        const id = document.getElementById('p-uid').value;
        const isEdit = !!id;
        const btn = document.getElementById('btn-guardar-plantel');
@@ -1205,10 +1260,17 @@ export function initAdminDashboard(dbInstance, user) {
        document.querySelectorAll('.chk-plan-item:checked').forEach(chk => {
          const cod = chk.value;
          const pData = planesCatalogo[cod] || {};
-         planesSelected[cod] = {
-           especialidad: pData.especialidad || null,
-           mencion: pData.mencion || null
-         };
+         if (cod === '20000' || cod === '21000') {
+           planesSelected[cod] = {
+             especialidad: null,
+             mencion: null
+           };
+         } else {
+           planesSelected[cod] = {
+             especialidad: pData.especialidad !== undefined ? pData.especialidad : null,
+             mencion: pData.mencion !== undefined ? pData.mencion : null
+           };
+         }
        });
 
        const newData = {
@@ -1226,16 +1288,19 @@ export function initAdminDashboard(dbInstance, user) {
           },
           "dependencia": document.getElementById('p-dependencia').value,
           "ubicacion-geografica": ubicacionVal,
-          "ubicacion": ubicacionVal,
           "nivel": nivelVal,
           "modalidad": modalidadVal,
           "turno-plantel": turnoVal,
-          "turno": turnoVal,
           "metros2": metros2Val,
           "observaciones": obsVal,
-          "planes-estudio": planesSelected,
-          "planes_estudio": planesSelected
+          "planes-estudio": planesSelected
        };
+
+       if (isEdit) {
+          newData["planes_estudio"] = deleteField();
+          newData["ubicacion"] = deleteField();
+          newData["turno"] = deleteField();
+       }
 
        try {
          btn.disabled = true;
@@ -1264,7 +1329,7 @@ export function initAdminDashboard(dbInstance, user) {
             await safeSetDoc(doc(db, "planteles", codP), newData);
          }
          
-         modalPlantel.style.display = 'none';
+         cerrarModalPlantel();
          await loadPlanteles(); // reload table
          
        } catch(err) {

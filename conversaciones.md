@@ -298,3 +298,44 @@ Este archivo constituye el registro textual e inmutable de todas las intervencio
 > 6. Validación de compilación exitosa con Vite (0 errores).  
 
 ---
+
+### Intervención 10
+* **Fecha / Hora:** 2026-09-16 ~20:00 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+> Todavía No estoy satisfecho  
+> Acabo de hacer una edición del plantel OD02341419: originalmente ese plantel es solo plan de estudio 20000, lo que hice fue seleccionar el 21000, y como vez en la imagen duplicó la información.
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Corrección realizada:  
+> 1. Lectura inmediata y obligatoria del archivo `SKILL_sgh_firebase.md`.  
+> 2. Diagnóstico de duplicación de campos en Firestore: Se identificó que se estaban guardando simultáneamente las variantes con guion bajo (`planes_estudio`, `ubicacion`, `turno`) junto con las canónicas (`planes-estudio`, `ubicacion-geografica`, `turno-plantel`).  
+> 3. Se removieron todas las claves con guion bajo del objeto de guardado y se configuró `deleteField()` en Firestore para purgar de manera automática e inmediata las claves obsoletas al actualizar cualquier plantel.  
+> 4. En planes 20000 y 21000 se garantiza que especialidad y mención se mantengan en `null` para no duplicar datos descriptivos innecesarios.
+
+---
+
+### Intervención 11
+* **Fecha / Hora:** 2026-09-16 ~20:10 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+> Estoy satisfecho.  
+>   
+> Al dar clic en guardar la edicion del plantel, el modal debe ubicarse al principio del modal, para que la experiencia IU sea agradable. Actualmente al dar clic en Guardar Plantel, los datos se guardan correctamente, pero si vuelve a hacer clic en editar algun otro plantel, el modal aparece abajo
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Ajuste implementado con éxito:  
+> 1. Lectura obligatoria y prioritaria de `SKILL_sgh_firebase.md`.  
+> 2. Desplazamiento automático al inicio al guardar: En el instante en que se hace clic en "Guardar Plantel", el modal realiza una transición suave hacia el principio del formulario para que el usuario aprecie el encabezado y el proceso de guardado cómodamente.  
+> 3. Reseteo integral del scroll al cerrar: Se estandarizó la función `cerrarModalPlantel()` para restablecer a cero el desplazamiento vertical en todas las capas del modal (el fondo, la tarjeta y el contenedor de planes de estudio), llamándola tanto al cancelar como al finalizar el guardado.  
+> 4. Posicionamiento superior garantizado al reabrir: Al hacer clic en "Editar" en cualquier otro plantel (o "Nuevo Plantel"), el sistema fuerza el posicionamiento en el tope superior (`scrollTop = 0`) tanto de forma inmediata como en los siguientes ciclos de renderizado del navegador.  
+> 5. Incremento SemVer a `v2.11.13` en `webapp/package.json`.  
+> 6. Compilación de producción exitosa con Vite (0 errores).

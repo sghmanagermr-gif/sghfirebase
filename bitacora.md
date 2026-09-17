@@ -439,3 +439,31 @@ Se implementó el requerimiento de inyectar una tabla resumen con el personal pr
 - `conversaciones.md`
 
 ---
+
+### Hito: Saneamiento de Claves en Firestore y Control de Scroll en Modal de Planteles (v2.11.13)
+**Fecha:** 2026-09-16  
+**Módulo:** Gestor de BD / Planteles / Modal de Edición / Experiencia de Usuario (UX)
+
+**1. Requerimiento:**
+- Eliminar la duplicidad de información en Firestore al editar planteles (`planes_estudio`, `ubicacion`, `turno`), asegurando el almacenamiento exclusivo en los nombres de campo oficiales con guion medio (`planes-estudio`, `ubicacion-geografica`, `turno-plantel`) y saneando documentos previos mediante `deleteField()`.
+- Al hacer clic en "Guardar Plantel", ubicar de inmediato el modal en el principio (tope superior) para una interacción agradable y despejada.
+- Garantizar que al reabrir la edición de cualquier plantel (o crear uno nuevo), la ventana del modal aparezca siempre al inicio y no en la parte inferior donde se encontraba el botón guardar.
+
+**2. Solución Técnica Implementada:**
+- Saneamiento y Canonicidad en Firestore (`webapp/src/admin.js`):
+  * Se removieron las claves con guion bajo del objeto de persistencia.
+  * Se configuró `deleteField()` para `planes_estudio`, `ubicacion` y `turno` al actualizar registros en modo edición.
+  * Para los planes de Educación Inicial (20000) y Primaria (21000), se preserva la estructura canónica sin mención ni especialidad.
+- Control de Scroll en Modal (`webapp/src/admin.js`):
+  * Desplazamiento suave inmediato hacia el tope superior (`scrollTop = 0` y `scrollTo({ top: 0, behavior: 'smooth' })`) al hacer clic en "Guardar Plantel" en el evento `submit`.
+  * Función estandarizada `cerrarModalPlantel()` que oculta la ventana y restablece a cero el scroll del fondo `#modal-plantel`, la tarjeta `.lock-card` y el listado `#plantel-planes-container`.
+  * En `openPlantelModal()`, reseteo síncrono y multinivel (`requestAnimationFrame` + timeouts) para asegurar que el modal se renderice en el principio superior independientemente de eventos previos.
+- Incremento SemVer a **v2.11.13** en `webapp/package.json`.
+
+**3. Archivos Involucrados:**
+- `webapp/src/admin.js`
+- `webapp/package.json`
+- `bitacora.md`
+- `conversaciones.md`
+
+---
