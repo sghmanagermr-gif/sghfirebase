@@ -420,4 +420,24 @@ Este archivo constituye el registro textual e inmutable de todas las intervencio
 > 4. Incremento SemVer a `v2.11.16` en `webapp/package.json` e `index.html`.  
 > 5. Verificación de compilación limpia con Vite (0 errores).
 
+---
+
+### Intervención 15
+* **Fecha / Hora:** 2026-09-16 ~20:48 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+>   
+> Estoy satisfecho
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Agradecimiento y consolidación de la memoria institucional:  
+> 1. Lectura prioritaria obligatoria de `SKILL_sgh_firebase.md`.  
+> 2. Confirmación de satisfacción recibida: Se consolida el hito de Descarga de Nómina Municipal en Excel ordenada por Código DEA de plantel (v2.11.16).  
+> 3. Respaldo íntegro de la sesión registrado en `conversaciones.md` y `bitacora.md`.  
+> 4. Sincronización completa con el repositorio remoto GitHub (`origin/main`).
+
 
