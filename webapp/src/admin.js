@@ -1,5 +1,7 @@
 import { safeSetDoc, safeUpdateDoc, safeAddDoc } from './dbUtils.js';
 import { doc, getDoc, setDoc, updateDoc, collection, query, where, getCountFromServer, getDocs, onSnapshot, deleteDoc, deleteField } from 'firebase/firestore';
+import * as XLSX from 'xlsx';
+import { showToast, showAlert } from './uiUtils.js';
 
 let isInitialized = false;
 let db = null;
@@ -19,12 +21,12 @@ export function initAdminDashboard(dbInstance, user) {
     if (btnEstadisticas) btnEstadisticas.style.display = 'block';
     if (btnDespliegue) btnDespliegue.style.display = isMunAdmin ? 'none' : 'block';
 
-    // 2. Acordeón Gestor de BD: munadmin solo ve Planteles
+    // 2. Acordeón Gestor de BD: munadmin solo ve Planteles y Descarga de Nómina Municipal
     const accordionBd = document.querySelector('.accordion-content');
     if (accordionBd) {
       accordionBd.querySelectorAll('.sidebar-btn').forEach(btn => {
         const target = btn.getAttribute('data-target');
-        if (target === 'admin-tab-planteles') {
+        if (target === 'admin-tab-planteles' || btn.id === 'btn-sidebar-descargar-nomina-mun') {
           btn.style.display = 'block';
         } else {
           btn.style.display = isMunAdmin ? 'none' : 'block';
@@ -96,6 +98,13 @@ export function initAdminDashboard(dbInstance, user) {
             }
          }
          return; // No navegar ni cerrar el sidebar
+      }
+
+      // Descarga directa de Nómina Municipal en Excel
+      if (button.id === 'btn-sidebar-descargar-nomina-mun') {
+         exportarNominaMunicipalExcel();
+         if(typeof window.closeSidebar === 'function') window.closeSidebar();
+         return;
       }
 
       // Navegacion normal
@@ -799,6 +808,13 @@ export function initAdminDashboard(dbInstance, user) {
   const inpBuscarPlantel = document.getElementById('inp-buscar-plantel');
   const modalPlantel = document.getElementById('modal-plantel');
   const formPlantel = document.getElementById('form-plantel');
+  const btnDescargarNominaMun = document.getElementById('btn-descargar-nomina-mun');
+  if (btnDescargarNominaMun) {
+    btnDescargarNominaMun.addEventListener('click', (e) => {
+      e.preventDefault();
+      exportarNominaMunicipalExcel();
+    });
+  }
   let currentPlanteles = []; // Cache of downloaded planteles
 
   // Subtabs Logic
@@ -1630,7 +1646,221 @@ export function initAdminDashboard(dbInstance, user) {
       });
   }
 
+  // --- EXPORTACIÓN DE NÓMINA MUNICIPAL A EXCEL (.XLSX) ---
+  async function exportarNominaMunicipalExcel() {
+    if (window._isExportingExcelMun) {
+      showToast("Generando nómina municipal en Excel, por favor espere...", "info");
+      return;
+    }
+    window._isExportingExcelMun = true;
 
+    try {
+      // 1. Determinar el municipio objetivo
+      let userMun = (userData?.jerarquia?.municipio || userData?.municipio || '').trim().toUpperCase();
+      if (!userMun && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
+        userMun = (currentPlanteles[0].municipio || '').trim().toUpperCase();
+      }
+
+      if (!userMun) {
+        showAlert("Aviso", "No se detectó el municipio asignado a su cuenta para exportar la nómina.", "warning");
+        return;
+      }
+
+      showToast(`Generando nómina del Municipio ${userMun}...`, "info", 4000);
+
+      // 2. Consultar el personal registrado en dicho municipio (Zero-Cost / Indexado)
+      const qPersonal = query(collection(db, 'cargos_personal'), where('municipio', '==', userMun));
+      const snapPersonal = await getDocs(qPersonal);
+
+      if (snapPersonal.empty) {
+        showAlert("Aviso", `No se encontraron funcionarios registrados en la nómina del municipio ${userMun}.`, "info");
+        return;
+      }
+
+      // 3. Obtener o consolidar los datos maestros de los planteles del municipio
+      const plantelesMap = new Map();
+      if (Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
+        currentPlanteles.forEach(p => {
+          const cod = (p.codigos?.plantel || p.codigoDEA || p.id || '').toString().trim().toUpperCase();
+          if (cod) plantelesMap.set(cod, p);
+        });
+      }
+
+      // Si la memoria local no tiene los planteles cargados, consultarlos de una sola vez
+      if (plantelesMap.size === 0) {
+        try {
+          const snapPlanteles = await getDocs(query(collection(db, "planteles"), where("municipio", "==", userMun)));
+          snapPlanteles.forEach(docSnap => {
+            const pData = docSnap.data();
+            const cod = (pData.codigos?.plantel || pData.codigoDEA || docSnap.id || '').toString().trim().toUpperCase();
+            if (cod) plantelesMap.set(cod, { id: docSnap.id, ...pData });
+          });
+        } catch (errP) {
+          console.warn("Aviso consultando planteles del municipio:", errP);
+        }
+      }
+
+      // 4. Extraer lista de funcionarios y ordenar por Código de Plantel (Código DEA) ascendente
+      const listaPersonal = snapPersonal.docs.map(d => ({ id: d.id, ...d.data() }));
+
+      listaPersonal.sort((a, b) => {
+        const deaA = (a['codigo-plantel'] || a.codigoDEA || '').toString().trim().toUpperCase();
+        const deaB = (b['codigo-plantel'] || b.codigoDEA || '').toString().trim().toUpperCase();
+        const compDEA = deaA.localeCompare(deaB);
+        if (compDEA !== 0) return compDEA;
+
+        // Orden secundario: Apellidos y Nombres o Cédula
+        const nomA = (a['nombre-apellido'] || a['apellidos-nombres'] || a.nombre || '').toString().trim().toUpperCase();
+        const nomB = (b['nombre-apellido'] || b['apellidos-nombres'] || b.nombre || '').toString().trim().toUpperCase();
+        return nomA.localeCompare(nomB);
+      });
+
+      // 5. Mapear exhaustivamente las 55 columnas institucionales oficiales
+      const filasExcel = listaPersonal.map((emp, index) => {
+        const deaEmp = (emp['codigo-plantel'] || emp.codigoDEA || '').toString().trim().toUpperCase();
+        const pInfo = plantelesMap.get(deaEmp) || {};
+
+        // Datos enriquecidos del plantel
+        const pDenominacion = pInfo.denominacion || '';
+        const pNombreNominal = pInfo['nombre-plantel']?.nominal || '';
+        const pNuevoEponimo = pInfo['nombre-plantel']?.['nuevo-eponimo'] || pInfo['nombre-plantel']?.nuevo_eponimo || '';
+
+        let codDep = pInfo.codigos?.dependencia;
+        if (Array.isArray(codDep)) codDep = codDep.join(', ');
+        const pCodDependencia = codDep || '';
+
+        const pCodEstadistico = pInfo.codigos?.estadistico || '';
+        const pDependencia = pInfo.dependencia || emp['dependencia'] || '';
+        const pNivelesMod = pInfo.nivel || '';
+        const pTurnos = pInfo['turno-plantel'] || '';
+        const pUbicacion = pInfo['ubicacion-geografica'] || '';
+
+        // Datos personales del funcionario
+        const cedulaNum = emp['cedula-identidad'] || emp.cedula || '';
+        const nacionalidad = emp['nacionalidad'] || (String(cedulaNum).startsWith('E') ? 'E' : 'V');
+
+        const priNombre = emp['primer-nombre'] || emp.primer_nombre || '';
+        const segNombre = emp['segundo-nombre'] || emp.segundo_nombre || '';
+        const priApellido = emp['primer-apellido'] || emp.primer_apellido || '';
+        const segApellido = emp['segundo-apellido'] || emp.segundo_apellido || '';
+        
+        let nombreCompleto = emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || '';
+        if (!nombreCompleto) {
+          nombreCompleto = `${priApellido} ${segApellido} ${priNombre} ${segNombre}`.trim().replace(/\s+/g, ' ');
+        }
+
+        const horasAcad = Number(emp['horas-academicas']) || 0;
+        const horasAdmin = Number(emp['horas-administrativas']) || 0;
+
+        return {
+          'N°': index + 1,
+          // 1. Identificación y Datos Personales
+          'Nacionalidad': nacionalidad,
+          'Cédula': cedulaNum,
+          'Apellidos y Nombres': nombreCompleto.toUpperCase(),
+          'Género': emp['genero'] || '',
+          'Fecha de Nacimiento': emp['fecha-nacimiento'] || '',
+          'Edad': emp['edad'] || '',
+          'Estado Civil': emp['estado-civil'] || '',
+          'Lugar de Nacimiento': emp['lugar-nacimiento'] || '',
+
+          // 2. Ubicación y Contacto
+          'Teléfono Habitación': emp['tel-habitacion'] || '',
+          'Teléfono Celular': emp['tel-celular'] || '',
+          'Teléfono Oficina': emp['tel-oficina'] || '',
+          'Correo Electrónico': emp['correo'] || '',
+          'Dirección de Habitación': emp['direccion'] || '',
+
+          // 3. Formación Académica
+          'Nivel de Instrucción': emp['nivel-instruccion'] || emp['instruccion'] || '',
+          'Profesión / Título': emp['profesion'] || '',
+          'Denominación': pDenominacion,
+          'Nombre Nominal': pNombreNominal,
+          'Nuevo Epónimo': pNuevoEponimo,
+
+          // 4. Ubicación Administrativa y Cargo
+          'Código Plantel (DEA)': deaEmp,
+          'Cód. Dependencia': pCodDependencia,
+          'Cód. Estadístico': pCodEstadistico,
+          'Dependencia': pDependencia,
+          'Niveles-Modalidades': pNivelesMod,
+          'Turno(s)': pTurnos,
+          'Ubicación Geográfica': pUbicacion,
+          'Ubicación Administrativa': emp['ubicacion-administrativa'] || '',
+          'Tipo de Personal': emp['tipo-personal'] || '',
+          'Subcategoría': emp['subcategoria'] || '',
+          'Cargo': emp['cargo'] || '',
+          'Código RAC': emp['codigo-rac'] || emp['codigo-cargo'] || '',
+          'Condición': emp['titular'] || '',
+          'Fecha de Ingreso': emp['fecha-ingreso'] || '',
+          'Años de Antigüedad': emp['antiguedad'] || '',
+          'Turnos que Atiende': emp['turnos-atiende'] || '',
+
+          // 5. Carga Horaria y Pedagógica
+          'Horas Académicas': horasAcad,
+          'Horas Administrativas': horasAdmin,
+          'Atiende Matrícula': emp['atiende-matricula'] || '',
+          'Nivel / Modalidad': emp['nivel-modalidad'] || '',
+          'Especialidad que Imparte': emp['especialidad-imparte'] || '',
+
+          // 6. Situación Laboral
+          'Situación Laboral': emp['situacion-laboral'] || '',
+          'Observaciones': emp['observaciones'] || '',
+
+          // 7. Dotación y Bienestar Social
+          'Talla Camisa': emp['talla-camisa'] || '',
+          'Talla Pantalón': emp['talla-pantalon'] || '',
+          'Talla Zapato': emp['talla-zapato'] || '',
+          'Actividad Deportiva': emp['actividad-deportiva'] || '',
+          'Actividad Cultural': emp['actividad-cultural'] || '',
+          'Tipo de Vivienda': emp['tipo-vivienda'] || '',
+          'Condición Vivienda': emp['condicion-vivienda'] || '',
+          'Tipo Material Vivienda': emp['tipo-material'] || '',
+          'Tipo de Enfermedad': emp['tipo-enfermedad'] || '',
+          'Medicamento': emp['medicamento'] || '',
+          'Discapacidad': emp['discapacidad'] || '',
+
+          // 8. Organización Comunitaria y Electoral
+          'UBCH': emp['ubch'] || '',
+          'Circuito Comunal': emp['circuito-comunal'] || '',
+          'Centro de Votación': emp['centro-votacion'] || ''
+        };
+      });
+
+      // 6. Crear libro y hoja de cálculo Excel
+      const ws = XLSX.utils.json_to_sheet(filasExcel);
+
+      const colWidths = Object.keys(filasExcel[0] || {}).map(key => {
+        const maxLen = Math.max(
+          key.length,
+          ...filasExcel.map(r => String(r[key] || '').length)
+        );
+        return { wch: Math.min(Math.max(maxLen + 2, 10), 45) };
+      });
+      ws['!cols'] = colWidths;
+
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, `Nómina ${userMun}`.slice(0, 31));
+
+      const fechaHoy = new Date().toISOString().slice(0, 10);
+      const munLimpio = userMun.replace(/[^a-zA-Z0-9_-]/g, '_');
+      const nombreArchivo = `Nomina_Personal_Municipio_${munLimpio}_${fechaHoy}.xlsx`;
+
+      XLSX.writeFile(wb, nombreArchivo);
+      showToast(`Nómina de ${userMun} descargada con éxito (${filasExcel.length} funcionarios en orden de código plantel).`, "success", 4500);
+
+    } catch (err) {
+      console.error("Error exportando nómina municipal a Excel:", err);
+      showAlert("Error", "No se pudo generar el archivo Excel: " + err.message, "danger");
+    } finally {
+      setTimeout(() => {
+        window._isExportingExcelMun = false;
+      }, 1500);
+    }
+  }
+
+  window.exportarNominaMunicipalExcel = exportarNominaMunicipalExcel;
 
 }
+
 

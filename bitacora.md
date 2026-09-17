@@ -497,3 +497,42 @@ Se implementó el requerimiento de inyectar una tabla resumen con el personal pr
 - `conversaciones.md`
 
 ---
+
+### Hito: Descarga de Nómina Municipal en Excel Ordenada por Código de Plantel (v2.11.16)
+**Fecha:** 2026-09-16  
+**Módulo:** Panel Administrativo / Reportes Territoriales / Exportación Excel / Rol munadmin
+
+**1. Requerimientos:**
+- Permitir al Coordinador Municipal (`munadmin`) descargar la nómina consolidada de todo el personal activo adscrito a los planteles de su municipio.
+- La nómina debe estar estrictamente ordenada de forma ascendente por el Código de Plantel (Código DEA).
+- Ubicar la opción de acceso en el menú lateral desplegable bajo la ruta: **Gestor de BD -> Planteles**.
+- Disponer adicionalmente de un botón de descarga en la cabecera de la pestaña de Planteles.
+- Exportar el archivo en formato Excel (`.xlsx`) con las 55 columnas institucionales oficiales completas (datos personales, académicos, laborales, pedagógicos, socioeconómicos y territoriales), enriquecidos con la información de los planteles correspondientes.
+
+**2. Solución Técnica Implementada:**
+- Integración en Interfaz (`webapp/index.html`):
+  * Se añadió `<button id="btn-sidebar-descargar-nomina-mun">` en el acordeón `Gestor de BD`, colocado exactamente debajo de `#btn-sidebar-planteles`.
+  * Se añadió `<button id="btn-descargar-nomina-mun">` en la barra superior de `#admin-tab-planteles` junto a `#btn-nuevo-plantel`.
+  * Se actualizaron las etiquetas de versión a `v2.11.16`.
+- Lógica de Extracción, Enriquecimiento y Generación (`webapp/src/admin.js`):
+  * Importación de `XLSX` (`xlsx`) y `showToast`, `showAlert` desde `uiUtils.js`.
+  * En `configurarInterfazPorRol()`: Se mantuvo visible el nuevo botón del sidebar para el rol `munadmin`.
+  * Función `exportarNominaMunicipalExcel()`:
+    1. Detección del municipio del usuario activo (`userData.jerarquia.municipio` o `userData.municipio`).
+    2. Consulta en Firestore con filtro indexado `where('municipio', '==', userMun)` sobre la colección `cargos_personal` (respetando las cuotas Spark Zero-Cost).
+    3. Consolidación de metadatos de los planteles del municipio (Denominación, Nombre Nominal, Epónimo, Dependencia, Niveles, Turnos, Ubicación).
+    4. Ordenamiento ascendente de los registros por `codigo-plantel` (Código DEA) y secundariamente por nombres.
+    5. Mapeo exhaustivo de las 55 columnas oficiales.
+    6. Generación de libro Excel con ajuste dinámico de anchos de columna y descarga del archivo `Nomina_Personal_Municipio_[MUNICIPIO]_[FECHA].xlsx`.
+  * Control de concurrencia (`window._isExportingExcelMun`) para evitar descargas múltiples accidentales.
+- Incremento SemVer a **v2.11.16** en `webapp/package.json`.
+
+**3. Archivos Involucrados:**
+- `webapp/index.html`
+- `webapp/src/admin.js`
+- `webapp/package.json`
+- `bitacora.md`
+- `conversaciones.md`
+
+---
+

@@ -394,4 +394,30 @@ Este archivo constituye el registro textual e inmutable de todas las intervencio
 > 3. Incremento SemVer a `v2.11.15` en `webapp/package.json`.  
 > 4. Compilación limpia verificada con Vite (0 errores).
 
+---
+
+### Intervención 14
+* **Fecha / Hora:** 2026-09-16 ~20:42 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Ahora, así como el usuario pladmin puede descargar la nomina de su plantel, se necesita que el usuario rol munadmin descargue la nomina de su municipio, y que esté en orden de codigo plantel. ¿Se puede hacer?  
+> Debajo de: Gestor de BD->Planteles"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Módulo de Descarga de Nómina Municipal en Excel implementado exitosamente:  
+> 1. Lectura prioritaria obligatoria de `SKILL_sgh_firebase.md`.  
+> 2. Ubicación en Interfaz:  
+>    - Se insertó el acceso directo **📥 Nómina Municipal** en el menú lateral desplegable, ubicado exactamente debajo de **Gestor de BD -> 🏫 Planteles**.  
+>    - Se integró adicionalmente el botón institucional **📥 Descargar Nómina (.xlsx)** en la barra de herramientas superior de la vista de Planteles, junto al botón de creación.  
+> 3. Extracción, Ordenamiento y Generación de Nómina (.xlsx):  
+>    - Se consulta la colección `cargos_personal` filtrando de forma indexada y eficiente (Costo Cero en Firestore Spark) por el municipio asignado al coordinador (`munadmin`).  
+>    - Se consolida y enriquece cada registro con la información descriptiva del plantel (Denominación, Nombre Nominal, Epónimo, Dependencia, Cód. Dependencia, Cód. Estadístico, Nivel y Turno).  
+>    - Se ordenan ascendentemente todos los funcionarios según el **Código de Plantel (Código DEA)** y secundariamente por Apellidos y Nombres.  
+>    - Se genera y descarga en el dispositivo un archivo con las 55 columnas institucionales oficiales completas bajo el nombre `Nomina_Personal_Municipio_[MUNICIPIO]_[FECHA].xlsx`.  
+> 4. Incremento SemVer a `v2.11.16` en `webapp/package.json` e `index.html`.  
+> 5. Verificación de compilación limpia con Vite (0 errores).
+
 
