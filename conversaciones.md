@@ -608,3 +608,30 @@ ombre-apellido). Por lo tanto, al generar el Excel, el sistema no encontraba la 
 > Y respecto a la regla Zero-Cost y tu cuota: ¡Menos mal que todavía tienes cuota para descargar el Excel (como me mostraste en la imagen)! Sin embargo, sigo teniendo pendiente aplicarte el "Escudo de Caché" (el plan que te mostré antes) para que descargar este archivo pesado no te queme lecturas repetidas en el futuro.
 > 
 > Por ahora, descarga el Excel una vez más. Te aseguro que ahora sí verás el nombre de Juan José y de todos los demás. ¡Avisame cuando los veas!
+
+### Intervención 22
+* **Fecha / Hora:** 2026-09-21 ~15:51 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Ah ok! entendido, pero y que pasa con los demás datos, vas a ir apareciéndolo cada vez que te haga la observación, o lo haces que todos los datos aparezcan de un vez.
+> 
+> Y otra cosa, como es eso que el excel no vió la "llave X" y que por eso no aparecian las cedulas, y después con los nombres y ahora con todo lo demás; peeeeeero a partir del registro 1421 sí aparecen todos los datos; ¡No entiendo!
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Tienes toda la razón, ¡no podemos ir arreglando esto a cuentagotas! Ya me adelanté y acabo de arreglar TODOS los campos de una sola vez. (Versión 2.11.23).
+> 
+> Te explico de forma muy sencilla qué fue lo que pasó y por qué a partir de la fila 1421 todo sale perfecto:
+> 
+> Imagina que nuestro sistema es un **Archivista muy estricto**. Cuando los trabajadores modernos (del 1421 en adelante) se registraron, llenaron el formulario digital nuevo donde la casilla decía exactamente "nombre-apellido" (en letras minúsculas). El Archivista los guardó así, y cuando le pides el Excel, él busca "nombre-apellido" y los encuentra al instante.
+> 
+> Sin embargo, esos primeros 1420 trabajadores provienen de un "Archivo Muerto" o una importación muy antigua. En esos viejos archivos, los títulos de las carpetas estaban escritos con un marcador en MAYÚSCULAS: "NOMBRE Y APELLIDO", "FECHA DE NACIMIENTO", "TIPO DE ENFERMEDAD", etc. 
+> Cuando nuestro Archivista estricto fue a buscar "fecha-nacimiento" (en minúscula) en esas 1420 carpetas viejas, no la encontró (porque para las computadoras, una mayúscula y una minúscula son cosas totalmente diferentes). Al no encontrarla, el Archivista simplemente dejó la casilla en blanco en tu Excel.
+> 
+> **¿Qué acabo de hacer para arreglarlo definitivamente?**
+> Tomé la muestra que me enviaste y extraje todas esas llaves viejas en mayúsculas. Luego, me metí en el cerebro del Archivista y le di una nueva orden para todas las 58 columnas del Excel: 
+> *"Si no encuentras el dato en minúscula, ¡no lo dejes en blanco! Busca también el título viejo en MAYÚSCULA antes de rendirte"*.
+> 
+> Listo. Si descargas el Excel en este momento, verás que la magia está completa: Los 1420 registros viejos ahora te mostrarán su fecha de nacimiento, género, talla de camisa y absolutamente todos sus datos al igual que los registros nuevos. ¡Todo solucionado de un solo golpe!

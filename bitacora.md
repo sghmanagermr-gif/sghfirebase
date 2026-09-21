@@ -727,3 +727,27 @@ Se implementó el requerimiento de inyectar una tabla resumen con el personal pr
 
 ---
 
+### Hito: Mapeo Masivo de Llaves Heredadas (Legacy Upper-Case Mapping) (v2.11.23)
+**Fecha:** 2026-09-21  
+**Módulo:** Exportación Excel / Reportes Institucionales
+
+**1. Requerimientos:**
+- El usuario cuestionó por qué solo se arregló la cédula y el nombre para los primeros 1420 registros, mientras que el resto de las columnas (Género, Fecha de Nacimiento, Talla de Camisa, etc.) seguían en blanco. Y exigió que se solucionara de una vez por todas para no tener que reportar campo por campo.
+- Además, preguntó por qué a partir de la fila 1421 todos los datos sí salían perfectos en el Excel sin tener que arreglar nada.
+
+**2. Solución Técnica Implementada:**
+- Se procedió a actualizar exhaustivamente el mapeo de los 58 campos del Excel en webapp/src/admin.js y webapp/src/personalWizard.js.
+- Se inyectó la cláusula de respaldo (|| emp['LLAVE EN MAYÚSCULA']) para TODOS los campos institucionales identificados en el JSON extraído. Ejemplo: 'Género': emp['genero'] || emp['GENERO'] || ''.
+- Con esto, los 1420 registros provenientes de la importación legacy antigua (que usaba llaves en mayúsculas) ahora son interpretados perfectamente por el generador de Excel, al igual que los registros modernos (fila 1421+) que ya usaban las llaves nativas en minúsculas.
+- Incremento SemVer a **v2.11.23**.
+
+**3. Archivos Involucrados:**
+- webapp/src/admin.js
+- webapp/src/personalWizard.js
+- webapp/index.html
+- webapp/package.json
+- bitacora.md
+- conversaciones.md
+
+---
+

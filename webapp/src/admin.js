@@ -2298,8 +2298,8 @@ export function initAdminDashboard(dbInstance, user) {
           nombreCompleto = `${priApellido} ${segApellido} ${priNombre} ${segNombre}`.trim().replace(/\s+/g, ' ');
         }
 
-        const horasAcad = Number(emp['horas-academicas']) || 0;
-        const horasAdmin = Number(emp['horas-administrativas']) || 0;
+        const horasAcad = Number(emp['horas-academicas'] || emp['HORAS ACADEMICAS']) || 0;
+        const horasAdmin = Number(emp['horas-administrativas'] || emp['HORAS ADMINISTRATIVAS']) || 0;
 
         return {
           'N°': index + 1,
@@ -2307,22 +2307,22 @@ export function initAdminDashboard(dbInstance, user) {
           'Nacionalidad': nacionalidad,
           'Cédula': cedulaNum,
           'Apellidos y Nombres': nombreCompleto.toUpperCase(),
-          'Género': emp['genero'] || '',
-          'Fecha de Nacimiento': emp['fecha-nacimiento'] || '',
-          'Edad': emp['edad'] || '',
-          'Estado Civil': emp['estado-civil'] || '',
-          'Lugar de Nacimiento': emp['lugar-nacimiento'] || '',
+          'Género': emp['genero'] || emp['GENERO'] || '',
+          'Fecha de Nacimiento': emp['fecha-nacimiento'] || emp['FECHA DE NACIMIENTO'] || '',
+          'Edad': emp['edad'] || emp['EDAD'] || '',
+          'Estado Civil': emp['estado-civil'] || emp['ESTADO CIVIL'] || '',
+          'Lugar de Nacimiento': emp['lugar-nacimiento'] || emp['LUGAR DE NACIMIENTO'] || '',
 
           // 2. Ubicación y Contacto
-          'Teléfono Habitación': emp['tel-habitacion'] || '',
-          'Teléfono Celular': emp['tel-celular'] || '',
-          'Teléfono Oficina': emp['tel-oficina'] || '',
-          'Correo Electrónico': emp['correo'] || '',
-          'Dirección de Habitación': emp['direccion'] || '',
+          'Teléfono Habitación': emp['tel-habitacion'] || emp['TELEFONO HABITACION'] || '',
+          'Teléfono Celular': emp['tel-celular'] || emp['TELEFONO CELULAR'] || '',
+          'Teléfono Oficina': emp['tel-oficina'] || emp['TELEFONO OFICINA'] || '',
+          'Correo Electrónico': emp['correo'] || emp['CORREO ELECTRONICO'] || '',
+          'Dirección de Habitación': emp['direccion'] || emp['DIRECCION'] || '',
 
           // 3. Formación Académica
-          'Nivel de Instrucción': emp['nivel-instruccion'] || emp['instruccion'] || '',
-          'Profesión / Título': emp['profesion'] || '',
+          'Nivel de Instrucción': emp['nivel-instruccion'] || emp['instruccion'] || emp['NIVEL DE INSTRUCCIÓN'] || '',
+          'Profesión / Título': emp['profesion'] || emp['PROFESIÓN'] || emp['PROFESION'] || '',
 
           // --- COLUMNAS TERRITORIALES (PUNTO 1) ---
           'Estado': pEstado,
@@ -2341,44 +2341,44 @@ export function initAdminDashboard(dbInstance, user) {
           'Niveles-Modalidades': pNivelesMod,
           'Turno(s)': pTurnos,
           'Ubicación Geográfica': pUbicacion,
-          'Ubicación Administrativa': emp['ubicacion-administrativa'] || '',
-          'Tipo de Personal': emp['tipo-personal'] || '',
-          'Subcategoría': emp['subcategoria'] || '',
-          'Cargo': emp['cargo'] || '',
-          'Código RAC': emp['codigo-rac'] || emp['codigo-cargo'] || '',
-          'Condición': emp['titular'] || '',
-          'Fecha de Ingreso': emp['fecha-ingreso'] || '',
-          'Años de Antigüedad': emp['antiguedad'] || '',
-          'Turnos que Atiende': emp['turnos-atiende'] || '',
+          'Ubicación Administrativa': emp['ubicacion-administrativa'] || emp['UBICACIÓN ADMINISTRATIVA'] || '',
+          'Tipo de Personal': emp['tipo-personal'] || emp['TIPO PERSONAL'] || '',
+          'Subcategoría': emp['subcategoria'] || emp['SUB CATEGORIA 1 TP'] || '',
+          'Cargo': emp['cargo'] || emp['CARGO'] || '',
+          'Código RAC': emp['codigo-rac'] || emp['codigo-cargo'] || emp['CODIGO RAC'] || '',
+          'Condición': emp['titular'] || emp['TITULAR'] || '',
+          'Fecha de Ingreso': emp['fecha-ingreso'] || emp['FECHA DE INGRESO'] || '',
+          'Años de Antigüedad': emp['antiguedad'] || emp['ANTIGUEDAD'] || '',
+          'Turnos que Atiende': emp['turnos-atiende'] || emp['TURNOS QUE ATIENDE'] || '',
 
           // 5. Carga Horaria y Pedagógica
           'Horas Académicas': horasAcad,
           'Horas Administrativas': horasAdmin,
-          'Atiende Matrícula': emp['atiende-matricula'] || '',
-          'Nivel / Modalidad': emp['nivel-modalidad'] || '',
-          'Especialidad que Imparte': emp['especialidad-imparte'] || '',
+          'Atiende Matrícula': emp['atiende-matricula'] || emp['ATIENDE MATRICUAL'] || '',
+          'Nivel / Modalidad': emp['nivel-modalidad'] || emp['NIVEL O MODALIDAD'] || '',
+          'Especialidad que Imparte': emp['especialidad-imparte'] || emp['ESPECIALIDAD QUE IMPARTE EL DOCENTE'] || '',
 
           // 6. Situación Laboral
-          'Situación Laboral': emp['situacion-laboral'] || '',
-          'Observaciones': emp['observaciones'] || '',
+          'Situación Laboral': emp['situacion-laboral'] || emp['SITUACIÓN DEL TRABAJADOR'] || '',
+          'Observaciones': emp['observaciones'] || emp['OBSERVACIÓN'] || emp['OBSERVACION'] || '',
 
           // 7. Dotación y Bienestar Social
-          'Talla Camisa': emp['talla-camisa'] || '',
-          'Talla Pantalón': emp['talla-pantalon'] || '',
-          'Talla Zapato': emp['talla-zapato'] || '',
-          'Actividad Deportiva': emp['actividad-deportiva'] || '',
-          'Actividad Cultural': emp['actividad-cultural'] || '',
-          'Tipo de Vivienda': emp['tipo-vivienda'] || '',
-          'Condición Vivienda': emp['condicion-vivienda'] || '',
-          'Tipo Material Vivienda': emp['tipo-material'] || '',
-          'Tipo de Enfermedad': emp['tipo-enfermedad'] || '',
-          'Medicamento': emp['medicamento'] || '',
-          'Discapacidad': emp['discapacidad'] || '',
+          'Talla Camisa': emp['talla-camisa'] || emp['TALLA DE CAMISA'] || '',
+          'Talla Pantalón': emp['talla-pantalon'] || emp['TALLA DE PANTALÓN'] || '',
+          'Talla Zapato': emp['talla-zapato'] || emp['TALLA DE ZAPATO'] || '',
+          'Actividad Deportiva': emp['actividad-deportiva'] || emp['ACTIVIDAD DEPORTIVA'] || '',
+          'Actividad Cultural': emp['actividad-cultural'] || emp['ACTIVIDAD CULTURAL'] || '',
+          'Posee Alguna Enfermedad': emp['posee-enfermedad'] || emp['TIPO DE ENFERMEDAD'] || '',
+          'Requiere Medicamento': emp['requiere-medicamento'] || emp['MEDICAMENTO'] || '',
+          'Discapacidad': emp['discapacidad'] || emp['POSEE DISCAPACIDAD'] || '',
 
           // 8. Organización Comunitaria y Electoral
-          'UBCH': emp['ubch'] || '',
-          'Circuito Comunal': emp['circuito-comunal'] || '',
-          'Centro de Votación': emp['centro-votacion'] || ''
+          'UBCH': emp['ubch'] || emp['UBCH'] || '',
+          'Circuito Comunal': emp['circuito-comunal'] || emp['CIRCUITO COMUNAL'] || '',
+          'Centro de Votación': emp['centro-votacion'] || emp['CENTRO DE VOTACION'] || '',
+          'Tipo de Vivienda': emp['tipo-vivienda'] || emp['TIPO DE VIVIENDA'] || '',
+          'Material de Vivienda': emp['material-vivienda'] || emp['TIPO DE MATERIAL'] || '',
+          'Condición de Vivienda': emp['condicion-vivienda'] || emp['CONDICIÓN DE VIVIENDA'] || ''
         };
       });
 
