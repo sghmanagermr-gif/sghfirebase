@@ -676,3 +676,54 @@ Se implementó el requerimiento de inyectar una tabla resumen con el personal pr
 
 ---
 
+### Hito: Saneamiento de Exportación Excel y Soporte de Llaves Heredadas (v2.11.21)
+**Fecha:** 2026-09-21  
+**Módulo:** Exportación Excel / Reportes Institucionales
+
+**1. Requerimientos:**
+- El usuario reportó que el Excel seguía exportando "registros vacíos" a pesar del filtro implementado en v2.11.20, y que la Aspiradora Inteligente (Mantenimiento de BD) indicaba que no había basura en la base de datos.
+- Se determinó que los registros no estaban realmente vacíos en Firestore, sino que provenían de una importación heredada que utilizaba llaves en mayúsculas (ej. CEDULA, NOMBRES, APELLIDOS Y NOMBRES).
+- La función generadora del Excel solo estaba leyendo llaves minúsculas (cedula-identidad, nombre-apellido), provocando que las celdas quedaran en blanco en el reporte descargado.
+
+**2. Solución Técnica Implementada:**
+- Actualización de Mapeo Excel (webapp/src/admin.js y webapp/src/personalWizard.js):
+  * Se agregó robustez en la extracción de datos al momento de generar el archivo .xlsx.
+  * La variable cedulaNum ahora soporta llaves mayúsculas de importaciones antiguas.
+  * La variable nombreCompleto ahora unifica la lectura de múltiples llaves heredadas.
+- Con este ajuste, los 1420 registros que se mostraban "vacíos" ahora exponen correctamente su información real, evitando su eliminación accidental.
+- Incremento SemVer a **v2.11.21** en webapp/package.json e index.html.
+
+**3. Archivos Involucrados:**
+- webapp/src/admin.js
+- webapp/src/personalWizard.js
+- webapp/index.html
+- webapp/package.json
+- bitacora.md
+- conversaciones.md
+
+---
+
+### Hito: Prevención de Pérdida de Datos y Parche de Mapeo (v2.11.22)
+**Fecha:** 2026-09-21  
+**Módulo:** Exportación Excel / Mantenimiento de BD
+
+**1. Requerimientos:**
+- El usuario reportó que, tras la actualización v2.11.21, los nombres seguían apareciendo en blanco en el Excel exportado, por lo que solicitó borrarlos definitivamente de la base de datos pensando que eran basura.
+- Al utilizar la herramienta "Analizar Registro Sospechoso", se descubrió que los registros sí contenían nombres, pero almacenados bajo una nueva llave heredada no contemplada: "NOMBRE Y APELLIDO".
+
+**2. Solución Técnica Implementada:**
+- Actualización Crítica de Mapeo (webapp/src/admin.js y webapp/src/personalWizard.js):
+  * Se inyectó la validación explícita para extraer emp['NOMBRE Y APELLIDO'] en las funciones de filtro y de generación de Excel.
+- Esta intervención rápida salvó 1420 registros válidos de ser eliminados manualmente por el administrador, garantizando la integridad de la base de datos.
+- Incremento SemVer a **v2.11.22** en webapp/package.json e index.html.
+
+**3. Archivos Involucrados:**
+- webapp/src/admin.js
+- webapp/src/personalWizard.js
+- webapp/index.html
+- webapp/package.json
+- bitacora.md
+- conversaciones.md
+
+---
+

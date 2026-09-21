@@ -866,7 +866,7 @@ export function initAdminDashboard(dbInstance, user) {
         snap.forEach(docSnap => {
           const emp = docSnap.data();
           const ced = (emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÉDULA'] || '').toString().trim();
-          const nom = (emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || emp['APELLIDOS Y NOMBRES'] || '').toString().trim();
+          const nom = (emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || emp['APELLIDOS Y NOMBRES'] || emp['NOMBRE Y APELLIDO'] || '').toString().trim();
           
           if (!ced && !nom) {
             vacios.push(docSnap.id);
@@ -907,6 +907,45 @@ export function initAdminDashboard(dbInstance, user) {
       } finally {
         btnLimpiarBdVacios.disabled = false;
         btnLimpiarBdVacios.innerHTML = '🧹 Limpiar Registros Vacíos';
+      }
+    };
+  }
+
+  const btnAnalizarMuestra = document.getElementById('btn-analizar-muestra');
+  if (btnAnalizarMuestra) {
+    btnAnalizarMuestra.onclick = async () => {
+      try {
+        btnAnalizarMuestra.disabled = true;
+        btnAnalizarMuestra.innerHTML = '⏳ Buscando muestra...';
+        
+        const snap = await getDocs(collection(db, 'cargos_personal'));
+        let muestra = null;
+        
+        // Buscamos el primero que NO tenga la llave en minúscula (el que generaba el blanco en Excel)
+        for (const docSnap of snap.docs) {
+          const emp = docSnap.data();
+          if (!emp['cedula-identidad'] && !emp.cedula && !emp['nombre-apellido'] && !emp.nombre) {
+            muestra = { id: docSnap.id, ...emp };
+            break;
+          }
+        }
+
+        if (!muestra) {
+          showAlert("Sin Muestras", "No se encontró ningún registro sospechoso. Todos tienen el formato estándar.", "info");
+        } else {
+          const jsonStr = JSON.stringify(muestra, null, 2);
+          await showAlert(
+            "Muestra de Registro Extraído",
+            `<div style="text-align: left; background: #f1f5f9; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 0.8rem; overflow-x: auto; max-height: 400px; overflow-y: auto;"><pre>${jsonStr}</pre></div>`,
+            "info"
+          );
+        }
+      } catch (error) {
+        console.error("Error analizando muestra:", error);
+        showAlert("Error", "Fallo al obtener muestra: " + error.message, "danger");
+      } finally {
+        btnAnalizarMuestra.disabled = false;
+        btnAnalizarMuestra.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg> Analizar Registro Sospechoso`;
       }
     };
   }
@@ -2196,7 +2235,7 @@ export function initAdminDashboard(dbInstance, user) {
         .map(d => ({ id: d.id, ...d.data() }))
         .filter(emp => {
           const ced = (emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÉDULA'] || '').toString().trim();
-          const nom = (emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || emp['APELLIDOS Y NOMBRES'] || '').toString().trim();
+          const nom = (emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || emp['APELLIDOS Y NOMBRES'] || emp['NOMBRE Y APELLIDO'] || '').toString().trim();
           return !!(ced || nom);
         });
 
@@ -2254,7 +2293,7 @@ export function initAdminDashboard(dbInstance, user) {
         const priApellido = emp['primer-apellido'] || emp.primer_apellido || '';
         const segApellido = emp['segundo-apellido'] || emp.segundo_apellido || '';
         
-        let nombreCompleto = emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || emp['APELLIDOS Y NOMBRES'] || '';
+        let nombreCompleto = emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || emp['APELLIDOS Y NOMBRES'] || emp['NOMBRE Y APELLIDO'] || '';
         if (!nombreCompleto) {
           nombreCompleto = `${priApellido} ${segApellido} ${priNombre} ${segNombre}`.trim().replace(/\s+/g, ' ');
         }
