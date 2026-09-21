@@ -534,3 +534,22 @@ Este archivo constituye el registro textual e inmutable de todas las intervencio
 > 5. Incremento SemVer a `v2.11.19` en `webapp/package.json`.  
 > 6. Verificación de compilación limpia con Vite (0 errores) y sincronización con GitHub.
 
+
+### Intervención 19
+* **Fecha / Hora:** 2026-09-21 ~15:06 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Por lo que observo, conversaciones.md no se actualizó con lo último que conversamos. Estabas resolviendo, como eliminar los registros en blanco, que se descargan con el usuario zonadmin todos los municipios. Claro, no tengo tú última respueta a ese requerimiento
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Tienes toda la razón. El código de nuestro sistema se actualizó correctamente a la versión v2.11.20 implementando el filtro anti-registros en blanco, pero la sesión de memoria se cortó antes de que pudiera registrar nuestra conversación y hacer la copia de seguridad. 
+> 
+> **Lo que se implementó (v2.11.20):**
+> 1. Se añadió un filtro estricto al momento de exportar a Excel tanto en el archivo dmin.js (para Súper Administradores, Zonales y Municipales) como en personalWizard.js (para directores).
+> 2. Este filtro detecta si un registro de personal tiene la Cédula vacía Y el Nombre vacío. Si ambos están en blanco, el registro se descarta por completo y no se inyecta en el archivo Excel.
+> 3. Esto purga efectivamente los "registros en blanco" que se colaban al descargar consolidados grandes (como "Todos los municipios").
+> 
+> Ahora mismo acabo de registrar esta intervención en conversaciones.md, actualicé la itacora.md con la versión v2.11.20 y envié estos cambios a GitHub para que queden totalmente a salvo. ¡Problema resuelto y memoria restaurada! ¿Con qué seguimos?

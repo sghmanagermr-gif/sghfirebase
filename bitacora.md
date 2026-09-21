@@ -651,3 +651,28 @@ Se implementó el requerimiento de inyectar una tabla resumen con el personal pr
 - `conversaciones.md`
 
 ---
+### Hito: Saneamiento de Nóminas Excel y Eliminación de Registros en Blanco (v2.11.20)
+**Fecha:** 2026-09-21  
+**Módulo:** Exportación Excel / Reportes Institucionales / multi-rol
+
+**1. Requerimientos:**
+- Evitar que los archivos Excel generados, especialmente en las descargas consolidadas (ej. "Todos los municipios" para zonadmin), incluyan "registros en blanco" o filas sin información vital.
+
+**2. Solución Técnica Implementada:**
+- Filtro Estricto de Datos (webapp/src/admin.js y webapp/src/personalWizard.js):
+  * Se implementó un filtro en la extracción de documentos de cargos_personal que evalúa dinámicamente si el registro carece de Cédula de Identidad Y de Nombres/Apellidos.
+  * Aquellos registros huérfanos o vacíos (evaluados mediante !!(ced || nom)) son descartados en memoria antes de la iteración de mapeo, garantizando que el Excel final solo contenga funcionarios reales.
+- Gobernanza de Repositorio:
+  * Se sincronizó correctamente esta actualización (v2.11.20) con el repositorio remoto tras una desconexión temporal de la sesión anterior.
+- Incremento SemVer a **v2.11.20** en webapp/package.json e index.html.
+
+**3. Archivos Involucrados:**
+- webapp/src/admin.js
+- webapp/src/personalWizard.js
+- webapp/index.html
+- webapp/package.json
+- itacora.md
+- conversaciones.md
+
+---
+

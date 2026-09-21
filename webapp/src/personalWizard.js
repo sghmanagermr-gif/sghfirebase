@@ -1556,8 +1556,14 @@ export async function exportarNominaExcel() {
         }
     }
 
-    // Mapeo exhaustivo de la totalidad de campos institucionales
-    const filasExcel = window._personalPlantelData.map((emp, index) => {
+    // Mapeo exhaustivo de la totalidad de campos institucionales (descartando vacíos / huérfanos)
+    const filasExcel = (window._personalPlantelData || [])
+        .filter(emp => {
+            const ced = (emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÉDULA'] || '').toString().trim();
+            const nom = (emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || '').toString().trim();
+            return !!(ced || nom);
+        })
+        .map((emp, index) => {
         const cedulaNum = emp['cedula-identidad'] || emp.cedula || '';
         const nacionalidad = emp['nacionalidad'] || (String(cedulaNum).startsWith('E') ? 'E' : 'V');
         const cedulaCompleta = emp['cedula_completa'] || (cedulaNum ? `${nacionalidad}-${cedulaNum}` : '');

@@ -2129,13 +2129,24 @@ export function initAdminDashboard(dbInstance, user) {
         console.warn("Aviso consultando planteles para enriquecer Excel:", errP);
       }
 
-      // 3. Extraer funcionarios y ordenar
-      const listaPersonal = snapPersonal.docs.map(d => ({ id: d.id, ...d.data() }));
+      // 3. Extraer funcionarios, descartar registros vacíos / huérfanos y ordenar
+      const listaPersonal = snapPersonal.docs
+        .map(d => ({ id: d.id, ...d.data() }))
+        .filter(emp => {
+          const ced = (emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÉDULA'] || '').toString().trim();
+          const nom = (emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || '').toString().trim();
+          return !!(ced || nom);
+        });
 
       listaPersonal.sort((a, b) => {
         if (isTodosMunicipios) {
-          const munA = (a.municipio || '').toString().trim().toUpperCase();
-          const munB = (b.municipio || '').toString().trim().toUpperCase();
+          const deaA = (a['codigo-plantel'] || a.codigoDEA || '').toString().trim().toUpperCase();
+          const deaB = (b['codigo-plantel'] || b.codigoDEA || '').toString().trim().toUpperCase();
+          const pInfoA = plantelesMap.get(deaA) || {};
+          const pInfoB = plantelesMap.get(deaB) || {};
+
+          const munA = (a.municipio || pInfoA.municipio || '').toString().trim().toUpperCase();
+          const munB = (b.municipio || pInfoB.municipio || '').toString().trim().toUpperCase();
           const compMun = munA.localeCompare(munB);
           if (compMun !== 0) return compMun;
         }
