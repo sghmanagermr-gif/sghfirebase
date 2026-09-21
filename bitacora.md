@@ -751,3 +751,29 @@ Se implementó el requerimiento de inyectar una tabla resumen con el personal pr
 
 ---
 
+### Hito: Implementación del Escudo de Memoria (Zero-Cost Shield) (v2.11.24)
+**Fecha:** 2026-09-21  
+**Módulo:** Exportación Excel, Aspiradora Inteligente y Análisis de Datos (Optimización de Firebase)
+
+**1. Requerimientos:**
+- El usuario reportó que las métricas principales (Planteles Activos, Personal Registrado, Usuarios) estaban en cero, y que las ediciones de los catálogos "parecían no guardarse" (Modo Fantasma), pero al mismo tiempo seguía pudiendo descargar la nómina masiva en Excel infinitamente.
+- Se identificó que esto es el comportamiento nativo de Firebase al agotar la cuota (429 Quota Exceeded): El Web SDK sirve la nómina masiva desde el IndexedDB local de forma transparente, pero bloquea las consultas getCountFromServer y rechaza las mutaciones (updateDoc), dejando el sistema parcialmente funcional pero desconectado del backend.
+- Riesgo crítico reportado por el usuario: Los Zonadmins podrían generar cambios pensando que se guardaron, perdiendo información, o descargar el consolidado repetidas veces quemando la cuota diaria en minutos.
+
+**2. Solución Técnica Implementada:**
+- Se implementó el patrón de **Escudo de Memoria (Bóveda de Caché)** en dmin.js.
+- Se creó la variable global window._cacheExportPersonal para almacenar la matriz de datos de Firestore mapeada en memoria RAM por sesión.
+- Las funciones ejecutarExportacionNominaExcel, tnLimpiarBdVacios (Aspiradora) y tnAnalizarMuestra fueron refactorizadas para interceptar la llamada y buscar los datos en window._cacheExportPersonal['TODOS'] (o por municipio) antes de ejecutar getDocs.
+- Si los datos existen en la memoria (porque ya se descargaron una vez en la sesión), las descargas subsecuentes consumen **0 lecturas de cuota**.
+- Se implementó lógica dinámica: si la Aspiradora elimina registros, la caché se invalida (delete window._cacheExportPersonal['TODOS']) para forzar una nueva lectura limpia.
+- Incremento SemVer a **v2.11.24**.
+
+**3. Archivos Involucrados:**
+- webapp/src/admin.js
+- webapp/index.html
+- webapp/package.json
+- bitacora.md
+- conversaciones.md
+
+---
+

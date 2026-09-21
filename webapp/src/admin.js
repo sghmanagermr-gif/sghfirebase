@@ -859,17 +859,27 @@ export function initAdminDashboard(dbInstance, user) {
         btnLimpiarBdVacios.disabled = true;
         btnLimpiarBdVacios.innerHTML = '⏳ Escaneando base de datos...';
         
-        // 1. Escanear todos los registros
-        const snap = await getDocs(collection(db, 'cargos_personal'));
+        // 1. Escanear todos los registros (con Escudo de Memoria)
+        window._cacheExportPersonal = window._cacheExportPersonal || {};
+        let personalData = null;
+
+        if (window._cacheExportPersonal['TODOS']) {
+          console.log("[Zero-Cost Shield] Aspiradora usando caché local.");
+          personalData = window._cacheExportPersonal['TODOS'];
+        } else {
+          const snap = await getDocs(collection(db, 'cargos_personal'));
+          personalData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+          window._cacheExportPersonal['TODOS'] = personalData;
+        }
+        
         const vacios = [];
         
-        snap.forEach(docSnap => {
-          const emp = docSnap.data();
+        personalData.forEach(emp => {
           const ced = (emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÉDULA'] || '').toString().trim();
           const nom = (emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || emp['APELLIDOS Y NOMBRES'] || emp['NOMBRE Y APELLIDO'] || '').toString().trim();
           
           if (!ced && !nom) {
-            vacios.push(docSnap.id);
+            vacios.push(emp.id);
           }
         });
 
@@ -899,6 +909,10 @@ export function initAdminDashboard(dbInstance, user) {
           await deleteDoc(doc(db, 'cargos_personal', id));
         }
 
+        if (window._cacheExportPersonal) {
+          delete window._cacheExportPersonal['TODOS'];
+        }
+
         showToast(`¡Limpieza completada! Se eliminaron ${vacios.length} registro(s) vacío(s) exitosamente.`, "success", 5000);
         
       } catch (error) {
@@ -918,14 +932,24 @@ export function initAdminDashboard(dbInstance, user) {
         btnAnalizarMuestra.disabled = true;
         btnAnalizarMuestra.innerHTML = '⏳ Buscando muestra...';
         
-        const snap = await getDocs(collection(db, 'cargos_personal'));
+        // Escudo de Memoria
+        window._cacheExportPersonal = window._cacheExportPersonal || {};
+        let personalData = null;
+
+        if (window._cacheExportPersonal['TODOS']) {
+          personalData = window._cacheExportPersonal['TODOS'];
+        } else {
+          const snap = await getDocs(collection(db, 'cargos_personal'));
+          personalData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+          window._cacheExportPersonal['TODOS'] = personalData;
+        }
+
         let muestra = null;
         
         // Buscamos el primero que NO tenga la llave en minúscula (el que generaba el blanco en Excel)
-        for (const docSnap of snap.docs) {
-          const emp = docSnap.data();
+        for (const emp of personalData) {
           if (!emp['cedula-identidad'] && !emp.cedula && !emp['nombre-apellido'] && !emp.nombre) {
-            muestra = { id: docSnap.id, ...emp };
+            muestra = emp;
             break;
           }
         }
@@ -2186,19 +2210,32 @@ export function initAdminDashboard(dbInstance, user) {
         showToast(`Generando nómina del Municipio ${municipio}...`, "info", 4000);
       }
 
-      // 1. Consultar cargos_personal en Firestore
-      let snapPersonal;
-      if (plantelCod) {
-        snapPersonal = await getDocs(query(collection(db, 'cargos_personal'), where('codigo-plantel', '==', plantelCod)));
-      } else if (isTodosMunicipios) {
-        snapPersonal = await getDocs(collection(db, 'cargos_personal'));
-      } else {
-        snapPersonal = await getDocs(query(collection(db, 'cargos_personal'), where('municipio', '==', municipio)));
-      }
+      // 1. Consultar cargos_personal en Firestore (con Escudo de Memoria)
+      window._cacheExportPersonal = window._cacheExportPersonal || {};
+      const cacheKey = isTodosMunicipios ? 'TODOS' : (plantelCod ? `PLANTEL_${plantelCod}` : `MUN_${municipio}`);
+      let listaPersonalCache = null;
 
-      if (snapPersonal.empty) {
-        showAlert("Aviso", "No se encontraron funcionarios registrados con los criterios seleccionados.", "info");
-        return;
+      if (window._cacheExportPersonal[cacheKey]) {
+        console.log(`[Zero-Cost Shield] Cargando ${cacheKey} desde caché de memoria.`);
+        listaPersonalCache = window._cacheExportPersonal[cacheKey];
+      } else {
+        let snapPersonal;
+        if (plantelCod) {
+          snapPersonal = await getDocs(query(collection(db, 'cargos_personal'), where('codigo-plantel', '==', plantelCod)));
+        } else if (isTodosMunicipios) {
+          snapPersonal = await getDocs(collection(db, 'cargos_personal'));
+        } else {
+          snapPersonal = await getDocs(query(collection(db, 'cargos_personal'), where('municipio', '==', municipio)));
+        }
+
+        if (snapPersonal.empty) {
+          showAlert("Aviso", "No se encontraron funcionarios registrados con los criterios seleccionados.", "info");
+          window._isExportingExcelMun = false;
+          return;
+        }
+        
+        listaPersonalCache = snapPersonal.docs.map(d => ({ id: d.id, ...d.data() }));
+        window._cacheExportPersonal[cacheKey] = listaPersonalCache;
       }
 
       // 2. Obtener o consolidar datos maestros de los planteles correspondientes
@@ -2231,8 +2268,7 @@ export function initAdminDashboard(dbInstance, user) {
       }
 
       // 3. Extraer funcionarios, descartar registros vacíos / huérfanos y ordenar
-      const listaPersonal = snapPersonal.docs
-        .map(d => ({ id: d.id, ...d.data() }))
+      const listaPersonal = listaPersonalCache
         .filter(emp => {
           const ced = (emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÉDULA'] || '').toString().trim();
           const nom = (emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || emp['APELLIDOS Y NOMBRES'] || emp['NOMBRE Y APELLIDO'] || '').toString().trim();
