@@ -671,3 +671,17 @@ ombre-apellido). Por lo tanto, al generar el Excel, el sistema no encontraba la 
 > ¡Excelente! Ha sido una jornada de desarrollo muy productiva. Descubrimos por qué el Excel dejaba campos en blanco, arreglamos el mapeo para las llaves viejas y nuevas, descubrimos el límite de cuota de Firebase y terminamos implementando un Escudo de Caché a nivel de RAM que protegerá a tu aplicación de por vida contra descargas masivas.
 > 
 > Que pases una feliz tarde. Mañana cuando la cuota se reinicie, el sistema volará sin restricciones. ¡Estaré por aquí cuando me necesites!
+
+### Intervención 25
+* **Fecha / Hora:** 2026-09-21 ~16:30 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> El usuario zonadmin, no debería verse asimismo. El usuario munadmin no tiene problema con esto
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Excelente detalle de seguridad. Efectivamente, el munadmin no se ve a sí mismo porque tiene un filtro que lo obliga a ver solo a los plaadmin. El zonadmin, al poder ver a todos, se terminaba viendo a sí mismo en la lista, lo que podía causar que se eliminara su propio acceso por error.
+> 
+> He añadido una regla universal al código (if (u.uid === userData.uid) return;) que oculta la cuenta del usuario actual de su propia vista en la tabla de Validación de Usuarios. Ya está implementado en la **v2.11.25**.

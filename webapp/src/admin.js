@@ -348,6 +348,9 @@ export function initAdminDashboard(dbInstance, user) {
         const u = doc.data();
         u.uid = doc.id;
         
+        // Ocultar al propio usuario de su lista para evitar auto-eliminación
+        if (u.uid === userData.uid) return;
+        
         // --- RBAC FILTER ---
         if (userData.rol === 'munadmin') {
             // munadmin solo ve directores (plaadmin) de su municipio

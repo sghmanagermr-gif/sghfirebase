@@ -777,3 +777,24 @@ Se implementó el requerimiento de inyectar una tabla resumen con el personal pr
 
 ---
 
+### Ajuste Menor: Filtro de Auto-Exclusión en Validación de Usuarios (v2.11.25)
+**Fecha:** 2026-09-21  
+**Módulo:** Validación de Usuarios (admin.js)
+
+**1. Requerimientos:**
+- El usuario reportó que el rol zonadmin podía verse a sí mismo en la lista de Validación de Usuarios, lo que permitía auto-eliminarse accidentalmente. Mencionó que munadmin no tenía este problema debido al filtro de jurisdicción (que solo muestra roles plaadmin).
+
+**2. Solución Técnica Implementada:**
+- Se inyectó una condición universal en la función loadUsuariosList de dmin.js: if (u.uid === userData.uid) return;.
+- Esto garantiza que ningún administrador, sin importar su nivel jerárquico, se vea a sí mismo en el panel de validación de usuarios.
+- Incremento SemVer a **v2.11.25**.
+
+**3. Archivos Involucrados:**
+- webapp/src/admin.js
+- webapp/index.html
+- webapp/package.json
+- bitacora.md
+- conversaciones.md
+
+---
+
