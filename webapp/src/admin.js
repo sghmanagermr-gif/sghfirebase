@@ -851,6 +851,68 @@ export function initAdminDashboard(dbInstance, user) {
     }
   };
 
+  // --- ASPIRADORA INTELIGENTE (LIMPIEZA DE BD) ---
+  const btnLimpiarBdVacios = document.getElementById('btn-limpiar-bd-vacios');
+  if (btnLimpiarBdVacios) {
+    btnLimpiarBdVacios.onclick = async () => {
+      try {
+        btnLimpiarBdVacios.disabled = true;
+        btnLimpiarBdVacios.innerHTML = '⏳ Escaneando base de datos...';
+        
+        // 1. Escanear todos los registros
+        const snap = await getDocs(collection(db, 'cargos_personal'));
+        const vacios = [];
+        
+        snap.forEach(docSnap => {
+          const emp = docSnap.data();
+          const ced = (emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÉDULA'] || '').toString().trim();
+          const nom = (emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || emp['APELLIDOS Y NOMBRES'] || '').toString().trim();
+          
+          if (!ced && !nom) {
+            vacios.push(docSnap.id);
+          }
+        });
+
+        if (vacios.length === 0) {
+          showToast("¡Excelente! La base de datos está limpia. No se encontraron registros vacíos.", "success");
+          btnLimpiarBdVacios.disabled = false;
+          btnLimpiarBdVacios.innerHTML = '🧹 Limpiar Registros Vacíos';
+          return;
+        }
+
+        // 2. Pedir confirmación segura
+        const confirmado = await showConfirm(
+          "Limpieza de Base de Datos",
+          `La aspiradora detectó ${vacios.length} registro(s) completamente en blanco o huérfano(s). ¿Deseas eliminarlos definitivamente? Esto NO afectará a tus trabajadores válidos.`,
+          "warning"
+        );
+
+        if (!confirmado) {
+          btnLimpiarBdVacios.disabled = false;
+          btnLimpiarBdVacios.innerHTML = '🧹 Limpiar Registros Vacíos';
+          return;
+        }
+
+        // 3. Proceder a borrar
+        btnLimpiarBdVacios.innerHTML = '⏳ Eliminando...';
+        for (const id of vacios) {
+          await deleteDoc(doc(db, 'cargos_personal', id));
+        }
+
+        showToast(`¡Limpieza completada! Se eliminaron ${vacios.length} registro(s) vacío(s) exitosamente.`, "success", 5000);
+        
+      } catch (error) {
+        console.error("Error en aspiradora:", error);
+        showAlert("Error de Limpieza", "Hubo un fallo al intentar limpiar la base de datos: " + error.message, "danger");
+      } finally {
+        btnLimpiarBdVacios.disabled = false;
+        btnLimpiarBdVacios.innerHTML = '🧹 Limpiar Registros Vacíos';
+      }
+    };
+  }
+
+  // --- FIN ASPIRADORA INTELIGENTE ---
+
   loadConfig();
 
     // --- GESTOR DE BD: CATALOGOS MAESTROS (PLANES DE ESTUDIO) ---
@@ -2134,7 +2196,7 @@ export function initAdminDashboard(dbInstance, user) {
         .map(d => ({ id: d.id, ...d.data() }))
         .filter(emp => {
           const ced = (emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÉDULA'] || '').toString().trim();
-          const nom = (emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || '').toString().trim();
+          const nom = (emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || emp['APELLIDOS Y NOMBRES'] || '').toString().trim();
           return !!(ced || nom);
         });
 
@@ -2184,7 +2246,7 @@ export function initAdminDashboard(dbInstance, user) {
         const pTurnos = pInfo['turno-plantel'] || '';
         const pUbicacion = pInfo['ubicacion-geografica'] || '';
 
-        const cedulaNum = emp['cedula-identidad'] || emp.cedula || '';
+        const cedulaNum = emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÉDULA'] || '';
         const nacionalidad = emp['nacionalidad'] || (String(cedulaNum).startsWith('E') ? 'E' : 'V');
 
         const priNombre = emp['primer-nombre'] || emp.primer_nombre || '';
@@ -2192,7 +2254,7 @@ export function initAdminDashboard(dbInstance, user) {
         const priApellido = emp['primer-apellido'] || emp.primer_apellido || '';
         const segApellido = emp['segundo-apellido'] || emp.segundo_apellido || '';
         
-        let nombreCompleto = emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || '';
+        let nombreCompleto = emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || emp['APELLIDOS Y NOMBRES'] || '';
         if (!nombreCompleto) {
           nombreCompleto = `${priApellido} ${segApellido} ${priNombre} ${segNombre}`.trim().replace(/\s+/g, ' ');
         }

@@ -1560,11 +1560,11 @@ export async function exportarNominaExcel() {
     const filasExcel = (window._personalPlantelData || [])
         .filter(emp => {
             const ced = (emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÉDULA'] || '').toString().trim();
-            const nom = (emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || '').toString().trim();
+            const nom = (emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || emp['APELLIDOS Y NOMBRES'] || '').toString().trim();
             return !!(ced || nom);
         })
         .map((emp, index) => {
-        const cedulaNum = emp['cedula-identidad'] || emp.cedula || '';
+        const cedulaNum = emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÉDULA'] || '';
         const nacionalidad = emp['nacionalidad'] || (String(cedulaNum).startsWith('E') ? 'E' : 'V');
         const cedulaCompleta = emp['cedula_completa'] || (cedulaNum ? `${nacionalidad}-${cedulaNum}` : '');
 
@@ -1573,7 +1573,7 @@ export async function exportarNominaExcel() {
         const priApellido = emp['primer-apellido'] || emp.primer_apellido || '';
         const segApellido = emp['segundo-apellido'] || emp.segundo_apellido || '';
         
-        let nombreCompleto = emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || '';
+        let nombreCompleto = emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || emp['APELLIDOS Y NOMBRES'] || '';
         if (!nombreCompleto) {
             nombreCompleto = `${priApellido} ${segApellido} ${priNombre} ${segNombre}`.trim().replace(/\s+/g, ' ');
         }
