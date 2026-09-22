@@ -316,6 +316,18 @@ export function initAdminDashboard(dbInstance, user) {
           }
       }
 
+      // Función auxiliar para renderizar números o badge de mantenimiento
+      function renderStatValue(el, val) {
+          if (!el) return;
+          if (typeof val === 'number' || (val !== null && val !== undefined && val !== '' && !isNaN(val) && val !== 'En mantenimiento')) {
+              el.classList.remove('badge-mantenimiento');
+              el.textContent = Number(val).toLocaleString();
+          } else {
+              el.classList.add('badge-mantenimiento');
+              el.innerHTML = '<i class="bi bi-exclamation-triangle"></i> En mantenimiento';
+          }
+      }
+
       const totalPersonal = await safeGetCount(qPersonal);
       const totalUsuarios = await safeGetCount(qUsuarios);
       const totalPlanteles = await safeGetCount(qPlanteles);
@@ -324,9 +336,9 @@ export function initAdminDashboard(dbInstance, user) {
       const elPersonal = document.getElementById('stat-personal');
       const elPlanteles = document.getElementById('stat-planteles');
       
-      if(elUsuarios) elUsuarios.textContent = totalUsuarios;
-      if(elPersonal) elPersonal.textContent = totalPersonal;
-      if(elPlanteles) elPlanteles.textContent = totalPlanteles;
+      renderStatValue(elUsuarios, totalUsuarios);
+      renderStatValue(elPersonal, totalPersonal);
+      renderStatValue(elPlanteles, totalPlanteles);
 
       // =========================================
       // EXTENSIÓN MUNADMIN Y ZONADMIN (Cálculo a Memoria Zero-Cost)
@@ -462,6 +474,11 @@ export function initAdminDashboard(dbInstance, user) {
               if (matLoading) matLoading.style.display = 'none';
               if (matContent) matContent.style.display = 'flex';
 
+              // Respaldo resiliente: si el servidor falló en safeGetCount, usamos los planteles reales descargados
+              if (snapPlantelesReal && elPlanteles && elPlanteles.classList.contains('badge-mantenimiento')) {
+                  renderStatValue(elPlanteles, snapPlantelesReal.size);
+              }
+
               // Procesar cargos personal
               let cDocente = 0, cAdmin = 0, cObrero = 0;
               const mapSituacion = {};
@@ -507,6 +524,11 @@ export function initAdminDashboard(dbInstance, user) {
               // Mostrar contenido de Discriminación de Personal y ocultar su spinner
               if (discLoading) discLoading.style.display = 'none';
               if (discContent) discContent.style.display = 'flex';
+
+              // Respaldo resiliente: si el servidor falló en safeGetCount, usamos la nómina real descargada
+              if (snapCargos && elPersonal && elPersonal.classList.contains('badge-mantenimiento')) {
+                  renderStatValue(elPersonal, snapCargos.size);
+              }
 
               // Mostrar Situación Laboral
               if (containerSit) {
@@ -629,10 +651,10 @@ export function initAdminDashboard(dbInstance, user) {
       textEl.textContent = text;
       
       if (type === 'success') {
-        iconEl.textContent = 'âœ…';
+        iconEl.textContent = '\u2705';
         btnOk.style.background = 'var(--success)';
       } else {
-        iconEl.textContent = 'âš ï¸';
+        iconEl.textContent = '\u26A0\uFE0F';
         btnOk.style.background = 'var(--danger)';
       }
       
@@ -744,7 +766,7 @@ export function initAdminDashboard(dbInstance, user) {
           <td style="padding: 15px 20px;">
             <div style="font-weight: 500; color: var(--primary-color);">${u.rol.toUpperCase()}</div>
             <div style="font-size: 0.8rem; color: var(--text-muted);">${ubicacion}</div>
-            ${u.rol === 'zonadmin' ? `<div style="font-size: 0.75rem; color: #16a34a; font-weight: 500; margin-top: 3px;">ðŸ”‘ ${u.permisos ? Object.entries(u.permisos).filter(([k, v]) => v === true && k !== 'listas' && k !== 'ultima_modificacion').length + ' competencias autorizadas' : 'Acceso Estándar'}</div>` : ''}
+            ${u.rol === 'zonadmin' ? `<div style="font-size: 0.75rem; color: #16a34a; font-weight: 500; margin-top: 3px;">\uD83D\uDD11 ${u.permisos ? Object.entries(u.permisos).filter(([k, v]) => v === true && k !== 'listas' && k !== 'ultima_modificacion').length + ' competencias autorizadas' : 'Acceso Estándar'}</div>` : ''}
           </td>
           <td style="padding: 15px 20px;">
             <span style="padding: 5px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; 
@@ -754,7 +776,7 @@ export function initAdminDashboard(dbInstance, user) {
             </span>
           </td>
           <td style="padding: 15px 20px; text-align: right; display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
-            ${(u.rol === 'zonadmin' && (userData.rol === 'superadmin' || userData.rol === 'admin')) ? `<button class="btn-competencias" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.82rem; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 600;" title="Configurar módulos y permisos del panel">ðŸ”‘ Competencias</button>` : ''}
+            ${(u.rol === 'zonadmin' && (userData.rol === 'superadmin' || userData.rol === 'admin')) ? `<button class="btn-competencias" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.82rem; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 600;" title="Configurar módulos y permisos del panel">\uD83D\uDD11 Competencias</button>` : ''}
             ${!isAprobado ? `<button class="btn-aprobar" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.85rem; background: var(--success);">Aprobar</button>` : ''}
             <button class="btn-eliminar btn-secondary" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.85rem; border-color: var(--danger); color: var(--danger);">${isAprobado ? 'Eliminar' : 'Rechazar'}</button>
           </td>
@@ -1114,7 +1136,7 @@ export function initAdminDashboard(dbInstance, user) {
     btnLimpiarBdVacios.onclick = async () => {
       try {
         btnLimpiarBdVacios.disabled = true;
-        btnLimpiarBdVacios.innerHTML = 'â³ Escaneando base de datos...';
+        btnLimpiarBdVacios.innerHTML = '\u23F3 Escaneando base de datos...';
         
         // 1. Escanear todos los registros (con Escudo de Memoria)
         window._cacheExportPersonal = window._cacheExportPersonal || {};
@@ -1143,7 +1165,7 @@ export function initAdminDashboard(dbInstance, user) {
         if (vacios.length === 0) {
           showToast("¡Excelente! La base de datos está limpia. No se encontraron registros vacíos.", "success");
           btnLimpiarBdVacios.disabled = false;
-          btnLimpiarBdVacios.innerHTML = 'ðŸ§¹ Limpiar Registros Vacíos';
+          btnLimpiarBdVacios.innerHTML = '\uD83E\uDDF9 Limpiar Registros Vacíos';
           return;
         }
 
@@ -1156,12 +1178,12 @@ export function initAdminDashboard(dbInstance, user) {
 
         if (!confirmado) {
           btnLimpiarBdVacios.disabled = false;
-          btnLimpiarBdVacios.innerHTML = 'ðŸ§¹ Limpiar Registros Vacíos';
+          btnLimpiarBdVacios.innerHTML = '\uD83E\uDDF9 Limpiar Registros Vacíos';
           return;
         }
 
         // 3. Proceder a borrar
-        btnLimpiarBdVacios.innerHTML = 'â³ Eliminando...';
+        btnLimpiarBdVacios.innerHTML = '\u23F3 Eliminando...';
         for (const id of vacios) {
           await deleteDoc(doc(db, 'cargos_personal', id));
         }
@@ -1177,7 +1199,7 @@ export function initAdminDashboard(dbInstance, user) {
         showAlert("Error de Limpieza", "Hubo un fallo al intentar limpiar la base de datos: " + error.message, "danger");
       } finally {
         btnLimpiarBdVacios.disabled = false;
-        btnLimpiarBdVacios.innerHTML = 'ðŸ§¹ Limpiar Registros Vacíos';
+        btnLimpiarBdVacios.innerHTML = '\uD83E\uDDF9 Limpiar Registros Vacíos';
       }
     };
   }
@@ -1187,7 +1209,7 @@ export function initAdminDashboard(dbInstance, user) {
     btnAnalizarMuestra.onclick = async () => {
       try {
         btnAnalizarMuestra.disabled = true;
-        btnAnalizarMuestra.innerHTML = 'â³ Buscando muestra...';
+        btnAnalizarMuestra.innerHTML = '\u23F3 Buscando muestra...';
         
         // Escudo de Memoria
         window._cacheExportPersonal = window._cacheExportPersonal || {};
@@ -1291,7 +1313,7 @@ export function initAdminDashboard(dbInstance, user) {
            <h4 style="margin: 0 0 5px; color: var(--text-main); font-size: 1.1rem;">${plan.especialidad || 'Sin Especialidad'}</h4>
            <p style="margin: 0; color: var(--text-muted); font-size: 0.9rem;">${plan.mencion || 'Sin Mención'}</p>
          </div>
-         <button class="btn-config-plan" data-cod="${cod}" style="margin-top: 20px; width: 100%; background: #f8fafc; border: 1px solid #e2e8f0; color: var(--primary-color); padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold;">âš™ï¸ Configurar</button>
+         <button class="btn-config-plan" data-cod="${cod}" style="margin-top: 20px; width: 100%; background: #f8fafc; border: 1px solid #e2e8f0; color: var(--primary-color); padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold;">\u2699\uFE0F Configurar</button>
        `;
        gridPlanes.appendChild(card);
     });
@@ -1393,7 +1415,7 @@ export function initAdminDashboard(dbInstance, user) {
           <td style="padding: 10px 15px; color: var(--text-main);">${asig.nombre}</td>
           <td style="padding: 10px 15px; color: var(--text-main);">${asig.horas}</td>
           <td style="padding: 10px 15px; text-align: right;">
-            <button class="btn-del-mat" data-idx="${index}" style="background: transparent; border: none; color: var(--danger); cursor: pointer; font-size: 1.1rem;">ðŸ—‘ï¸</button>
+            <button class="btn-del-mat" data-idx="${index}" style="background: transparent; border: none; color: var(--danger); cursor: pointer; font-size: 1.1rem;">\uD83D\uDDD1\uFE0F</button>
           </td>
         `;
         tbodyMaterias.appendChild(tr);
@@ -1487,7 +1509,7 @@ export function initAdminDashboard(dbInstance, user) {
            showConfirm("Error", "Ocurrió un problema guardando el plan.", "danger");
         } finally {
            btnGuardarPlan.disabled = false;
-           btnGuardarPlan.innerText = 'ðŸ’¾ Guardar Plan';
+           btnGuardarPlan.innerText = '\uD83D\uDCBE Guardar Plan';
         }
      };
   }
@@ -1604,8 +1626,8 @@ export function initAdminDashboard(dbInstance, user) {
          <td style="padding: 15px 20px; color: var(--text-muted); font-size: 0.9rem;">${p.municipio || 'N/A'}</td>
          <td style="padding: 15px 20px; color: var(--text-muted); font-size: 0.9rem;">${p.nivel || 'N/A'}</td>
          <td class="plantel-actions-cell">
-           <button class="btn-plantel-action btn-edit-plantel" data-id="${p.id}">âœï¸ Editar</button>
-           <button class="btn-plantel-action btn-del-plantel" data-id="${p.id}">ðŸ—‘ï¸ Eliminar</button>
+           <button class="btn-plantel-action btn-edit-plantel" data-id="${p.id}">\u270F\uFE0F Editar</button>
+           <button class="btn-plantel-action btn-del-plantel" data-id="${p.id}">\uD83D\uDDD1\uFE0F Eliminar</button>
          </td>
        `;
        tbodyPlanteles.appendChild(tr);
@@ -2198,7 +2220,7 @@ export function initAdminDashboard(dbInstance, user) {
               btnDiv.style.marginTop = '20px';
               
               const btnEdit = document.createElement('button');
-              btnEdit.innerHTML = 'âœï¸ Editar';
+              btnEdit.innerHTML = '\u270F\uFE0F Editar';
               btnEdit.style.cssText = 'flex: 1; background: #f8fafc; border: 1px solid #e2e8f0; color: var(--primary-color); padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem;';
               btnEdit.onclick = async () => {
                   const newVal = await showPrompt('Editar Valor', 'Modifique el valor:', item);
@@ -2210,7 +2232,7 @@ export function initAdminDashboard(dbInstance, user) {
               };
               
               const btnDel = document.createElement('button');
-              btnDel.innerHTML = 'ðŸ—‘ï¸ Eliminar';
+              btnDel.innerHTML = '\uD83D\uDDD1\uFE0F Eliminar';
               btnDel.style.cssText = 'flex: 1; background: #fee2e2; border: 1px solid #fecaca; color: #dc2626; padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem;';
               btnDel.onclick = async () => {
                   if(await showConfirm('Eliminar ítem', '¿Seguro que deseas eliminar este elemento de la lista?')) {
@@ -2266,7 +2288,7 @@ export function initAdminDashboard(dbInstance, user) {
               btnDiv.style.marginTop = '20px';
               
               const btnEdit = document.createElement('button');
-              btnEdit.innerHTML = 'âœï¸ Editar';
+              btnEdit.innerHTML = '\u270F\uFE0F Editar';
               btnEdit.style.cssText = 'flex: 1; background: #f8fafc; border: 1px solid #e2e8f0; color: var(--primary-color); padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem;';
               btnEdit.onclick = async () => {
                   const res = await showPromptDual('Editar Situación Laboral', 'Modifique la clave y/o descripción:', key, obj[key]);
@@ -2291,7 +2313,7 @@ export function initAdminDashboard(dbInstance, user) {
               };
               
               const btnDel = document.createElement('button');
-              btnDel.innerHTML = 'ðŸ—‘ï¸ Eliminar';
+              btnDel.innerHTML = '\uD83D\uDDD1\uFE0F Eliminar';
               btnDel.style.cssText = 'flex: 1; background: #fee2e2; border: 1px solid #fecaca; color: #dc2626; padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem;';
               btnDel.onclick = async () => {
                   if(await showConfirm('Eliminar Clave', '¿Seguro que quieres eliminar esta situación laboral? Esto podría afectar a los empleados que ya la tengan asignada.')) {
@@ -2319,18 +2341,18 @@ export function initAdminDashboard(dbInstance, user) {
           try {
               catalogosGlobal.ultima_actualizacion = new Date().toISOString();
               await safeSetDoc(doc(db, "sistema", "catalogos_maestros"), catalogosGlobal);
-              btnGuardarListas.innerText = 'âœ… Guardado Exitoso';
+              btnGuardarListas.innerText = '\u2705 Guardado Exitoso';
               btnGuardarListas.style.background = '#10b981';
               setTimeout(() => {
                   btnGuardarListas.style.display = 'none';
-                  btnGuardarListas.innerText = 'ðŸ’¾ Guardar Cambios';
+                  btnGuardarListas.innerText = '\uD83D\uDCBE Guardar Cambios';
                   btnGuardarListas.disabled = false;
                   btnGuardarListas.style.background = 'var(--success)';
               }, 2000);
           } catch(err) {
               console.error(err);
               showConfirm("Error", "Ocurrió un problema al guardar los cambios.", "danger");
-              btnGuardarListas.innerText = 'ðŸ’¾ Guardar Cambios';
+              btnGuardarListas.innerText = '\uD83D\uDCBE Guardar Cambios';
               btnGuardarListas.disabled = false;
           }
       });
@@ -2368,7 +2390,7 @@ export function initAdminDashboard(dbInstance, user) {
 
     if (isMunAdmin && userMun) {
       // Caso 3: munadmin selecciona por Nuevo Epónimo del plantel o Todos los del municipio
-      if (modalTitle) modalTitle.innerHTML = `<span>ðŸ“¥</span> Descargar Nómina - Municipio ${userMun}`;
+      if (modalTitle) modalTitle.innerHTML = `<span>\uD83D\uDCE5</span> Descargar Nómina - Municipio ${userMun}`;
       if (modalDesc) modalDesc.textContent = 'Seleccione si desea descargar la nómina completa de todo el municipio o la de un plantel específico por su Nuevo Epónimo:';
       if (modalLabel) modalLabel.textContent = 'Plantel (Nuevo Epónimo) / Ámbito:';
 
@@ -2396,22 +2418,22 @@ export function initAdminDashboard(dbInstance, user) {
         plantelesOpciones.sort((a, b) => a.eponimo.localeCompare(b.eponimo));
 
         selMunNomina.innerHTML = `
-          <option value="TODOS">â­ TODOS LOS PLANTELES DEL MUNICIPIO (${userMun})</option>
+          <option value="TODOS">\u2B50 TODOS LOS PLANTELES DEL MUNICIPIO (${userMun})</option>
           ${plantelesOpciones.map(p => `<option value="${p.cod}">${p.eponimo} (DEA: ${p.cod})</option>`).join('')}
         `;
       } catch (err) {
         console.error("Error cargando planteles para modal de nómina:", err);
-        selMunNomina.innerHTML = `<option value="TODOS">â­ TODOS LOS PLANTELES DEL MUNICIPIO (${userMun})</option>`;
+        selMunNomina.innerHTML = `<option value="TODOS">\u2B50 TODOS LOS PLANTELES DEL MUNICIPIO (${userMun})</option>`;
       }
     } else {
       // Caso 2: superadmin y zonadmin seleccionan municipio o TODOS (consolidado estatal)
-      if (modalTitle) modalTitle.innerHTML = '<span>ðŸ“¥</span> Descargar Nómina Institucional';
+      if (modalTitle) modalTitle.innerHTML = '<span>\uD83D\uDCE5</span> Descargar Nómina Institucional';
       if (modalDesc) modalDesc.textContent = 'Como usuario de nivel Estadal, seleccione el ámbito o municipio cuya nómina desea exportar en formato Excel (.xlsx):';
       if (modalLabel) modalLabel.textContent = 'Ámbito Territorial / Municipio:';
 
       selMunNomina.innerHTML = `
         <option value="">-- SELECCIONE MUNICIPIO O CONSOLIDADO --</option>
-        <option value="TODOS" style="font-weight: bold; color: #1e3a8a;">â­ TODOS LOS MUNICIPIOS (CONSOLIDADO ESTATAL)</option>
+        <option value="TODOS" style="font-weight: bold; color: #1e3a8a;">\u2B50 TODOS LOS MUNICIPIOS (CONSOLIDADO ESTATAL)</option>
         ${MUNICIPIOS_MERIDA.map(m => `<option value="${m}">${m}</option>`).join('')}
       `;
       modalSelMunNomina.style.display = 'flex';
@@ -2595,7 +2617,7 @@ export function initAdminDashboard(dbInstance, user) {
         const horasAdmin = Number(emp['horas-administrativas'] || emp['HORAS ADMINISTRATIVAS']) || 0;
 
         return {
-          'NÂ°': index + 1,
+          'N\u00B0': index + 1,
           // 1. Identificación y Datos Personales
           'Nacionalidad': nacionalidad,
           'Cédula': cedulaNum,
