@@ -989,3 +989,72 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > Especto. los resultados son satisfactorios
 
 ---
+### Sesión 22 de Septiembre de 2026 (Implementación de Ficha Resumen y Blindaje Zero-Cost en Estadísticas v2.13.0)
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Mientras resolvías la respuesta a los selectores municipio y parroquia, estuve observando en el local storage sgh_catalogos->despliegue->planteles_activos siempre aparece "OD17781401"
+> Cabe destacar, que hasta el momento no hay despliegue para un plantel en particular, puede ser que en el pasado se haya usado para pruebas del sistema, pero siendo así no debería quedar grabado por siempre.
+> Ahora, no sé si ya ese json está operativo, ya que el despliegue se maneja directamente por Firestore.
+> Solo dame una respuesta teórica a mi observación, sin modificar código
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se brindó explicación detallada:
+> 1. Se aclaró que el código "OD17781401" provenía de pruebas iniciales en la versión Google Apps Script (sgh_gas) y quedó como remanente histórico en la caché local del navegador del usuario.
+> 2. Se confirmó que en la versión actual sobre Firebase, la activación de planteles se gestiona 100% en tiempo real contra la colección planteles_auth en Firestore, por lo que ese valor residual en localStorage es inerte y puede borrarse limpiando los datos de navegación sin afectar la operación del sistema.
+
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Perfecto, gracias por la aclaratoria del local storage.
+> Pasando a otro tema con respecto al Zero-Cost, como ves en la imagen ***001.PNG ya se acabó la cuota, y apenas abrí el usuario superusuario imagen ***002.PNG. Si en la oficina de al lado el usuario zonadmin accede a su sesión no verá las metricas. ¿Cuál es la solución teórica? *si la hay*
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se diagnosticó el origen del consumo de cuota:
+> Al abrir la pestaña Estadísticas, loadEstadisticas ejecutaba getDocs sobre cargos_personal (23.288 docs) y planteles (1.159 docs), totalizando 24.447 lecturas por cada carga. Al recargar la página 2 veces, se consumían 48.894 lecturas, agotando el límite diario de 50.000 lecturas del Plan Spark de Firebase.
+> Se presentaron las alternativas de solución, destacando la **Solución A (Pre-computed Aggregation Pattern / Documento de Resumen Global)** para reducir el consumo de 24.447 lecturas a 1 sola lectura (o cero lecturas con respaldo local).
+
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> ¿Cómo se implementaría la Solución A?
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se explicó mediante la analogía de la "Ficha Resumen del Archivador": en vez de contar 24.000 expedientes uno a uno en cada visita, se consulta una sola tarjeta índice consolidada. Se describieron los pasos: 1) cálculo local sin gastar lecturas, 2) ajuste de loadEstadisticas con escudo salvavidas, 3) sincronización atómica al registrar planteles.
+
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> ¿De sonde vas a sacar los computos del personal registrado actualmente?
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se explicó que los datos residen en cargos_personal en Firebase, pero que para no gastar lecturas podíamos usar el archivo maestro local consolidado o el Excel descargado directamente desde el sistema el día anterior.
+
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Pero es que tú mencionas un archivo RAC ESTADO MERIDA - PERSONAL ENRIQUECIDO.csv el cual no es que descargué la ultima vez (aquí es donde no haces las cosas bien)
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se aceptó y validó la corrección del usuario: el CSV anterior era de la migración inicial. Se localizó el archivo exacto y más reciente descargado por el usuario: Nomina_Personal_Consolidado_Estadal_MERIDA_2026-09-21 (5).xlsx (57 MB) en la carpeta de Descargas, el cual representa la foto viva, depurada y fidedigna de Firestore.
+
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> estoy de acuerdo
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> 1. **Motor de Cálculo Local:** Se creó webapp/generar_resumen_estadisticas.mjs, procesando los 23.288 registros del Excel de nómina y los 1.221 planteles de bd_sgh.json en 10 segundos, generando webapp/public/resumen_estadisticas.json (137 KB) a CERO costo de lecturas. Totales consolidados: 14.955 docentes, 1.444 administrativos, 6.889 obreros, 1.741 jubilables proyectados y 1.221 planteles en 23 municipios.
+> 2. **Refactorización Zero-Cost en admin.js:** Se sustituyó la consulta masiva getDocs en loadEstadisticas por la carga de la Ficha Resumen (1 lectura en Firestore con respaldo automático en /resumen_estadisticas.json si la cuota de Firebase está agotada). Las métricas se muestran al instante sin congelamiento.
+> 3. **SemVer y Despliegue:** Se incrementó la versión a **v2.13.0** en package.json e index.html, se compiló exitosamente (npm run build) y se desplegó a producción en Firebase Hosting (https://sgh-merida.web.app).

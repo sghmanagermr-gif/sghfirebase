@@ -1,0 +1,5111 @@
+{
+  "fecha_generacion": "2026-09-22T12:54:36.140Z",
+  "origen": "Nomina_Personal_Consolidado_Estadal_MERIDA_2026-09-21.xlsx",
+  "global": {
+    "totalPersonal": 23288,
+    "totalPlanteles": 1221,
+    "docentes": 14955,
+    "administrativos": 1444,
+    "obreros": 6889,
+    "situacion_laboral": {
+      "ACTIVO": 19992,
+      "SINCERACIÓN DE NÓMINA": 589,
+      "ABANDONO DE CARGO": 138,
+      "RENUNCIA": 71,
+      "PERMISO PRE Y POST NATAL": 96,
+      "NO DEFINIDA": 50,
+      "PERMISO POR CUIDO": 71,
+      "INCAPACIDAD TEMPORAL": 96,
+      "REPOSO MEDICO": 226,
+      "EN PROCESO DE INCAPACIDAD": 329,
+      "APOYO INSTITUCIONAL": 327,
+      "INCUMPLIMIENTO DE FUNCIONES": 26,
+      "COMISION DE SERVICIO": 52,
+      "ADECUACIÓN LABORAL": 245,
+      "TRASLADO INTERZONAL": 45,
+      "LICENCIA SINDICAL": 95,
+      "VACACIONES": 31,
+      "EN PROCESO DE JUBILACIÓN": 592,
+      "INCAPACIDAD TOTAL Y DEFINITIVA POR IVSS": 121,
+      "INCAPACIDAD TOTAL POR IPASME": 57,
+      "PRIVADO DE LIBERTAD": 7,
+      "DEFUNCIONES": 27,
+      "PERMISO POR FALLECIMIENTO": 5
+    },
+    "jubilables": {
+      "total": 1741,
+      "porMunicipio": [
+        {
+          "clave": "LIBERTADOR",
+          "count": 505
+        },
+        {
+          "clave": "ALBERTO ADRIANI",
+          "count": 239
+        },
+        {
+          "clave": "CAMPO ELIAS",
+          "count": 178
+        },
+        {
+          "clave": "TOVAR",
+          "count": 138
+        },
+        {
+          "clave": "SUCRE",
+          "count": 96
+        },
+        {
+          "clave": "CARACCIOLO PARRA",
+          "count": 66
+        },
+        {
+          "clave": "OBISPO RAMOS DE LORA",
+          "count": 66
+        },
+        {
+          "clave": "ANDRES BELLO",
+          "count": 56
+        },
+        {
+          "clave": "RIVAS DAVILA",
+          "count": 47
+        },
+        {
+          "clave": "ARZOBISPO CHACON",
+          "count": 43
+        },
+        {
+          "clave": "TULIO FEBRES",
+          "count": 43
+        },
+        {
+          "clave": "ANTONIO PINTO SALINA",
+          "count": 39
+        },
+        {
+          "clave": "CARDENAL QUINTERO",
+          "count": 39
+        },
+        {
+          "clave": "MIRANDA",
+          "count": 36
+        },
+        {
+          "clave": "SANTOS MARQUINA",
+          "count": 27
+        },
+        {
+          "clave": "ZEA",
+          "count": 27
+        },
+        {
+          "clave": "JULIO CESAR",
+          "count": 21
+        },
+        {
+          "clave": "RANGEL",
+          "count": 20
+        },
+        {
+          "clave": "GUARAQUE",
+          "count": 15
+        },
+        {
+          "clave": "SIN MUNICIPIO",
+          "count": 9
+        },
+        {
+          "clave": "ARICAGUA",
+          "count": 8
+        },
+        {
+          "clave": "JUSTO BRICEÑO",
+          "count": 8
+        },
+        {
+          "clave": "PUEBLO LLANO",
+          "count": 8
+        },
+        {
+          "clave": "PADRE NOGUERA",
+          "count": 7
+        }
+      ]
+    },
+    "matricula": {
+      "cargados": 0,
+      "pendientes": 1221,
+      "porMunicipio": {
+        "ALBERTO ADRIANI": {
+          "cargados": 0,
+          "pendientes": 122
+        },
+        "ANDRES BELLO": {
+          "cargados": 0,
+          "pendientes": 32
+        },
+        "ANTONIO PINTO SALINA": {
+          "cargados": 0,
+          "pendientes": 70
+        },
+        "ARICAGUA": {
+          "cargados": 0,
+          "pendientes": 23
+        },
+        "ARZOBISPO CHACON": {
+          "cargados": 0,
+          "pendientes": 74
+        },
+        "CAMPO ELIAS": {
+          "cargados": 0,
+          "pendientes": 100
+        },
+        "CARACCIOLO PARRA": {
+          "cargados": 0,
+          "pendientes": 53
+        },
+        "CARDENAL QUINTERO": {
+          "cargados": 0,
+          "pendientes": 20
+        },
+        "GUARAQUE": {
+          "cargados": 0,
+          "pendientes": 32
+        },
+        "JULIO CESAR": {
+          "cargados": 0,
+          "pendientes": 23
+        },
+        "JUSTO BRICEÑO": {
+          "cargados": 0,
+          "pendientes": 21
+        },
+        "LIBERTADOR": {
+          "cargados": 0,
+          "pendientes": 190
+        },
+        "MIRANDA": {
+          "cargados": 0,
+          "pendientes": 42
+        },
+        "OBISPO RAMOS DE LORA": {
+          "cargados": 0,
+          "pendientes": 54
+        },
+        "PADRE NOGUERA": {
+          "cargados": 0,
+          "pendientes": 10
+        },
+        "PUEBLO LLANO": {
+          "cargados": 0,
+          "pendientes": 18
+        },
+        "RANGEL": {
+          "cargados": 0,
+          "pendientes": 37
+        },
+        "RIVAS DAVILA": {
+          "cargados": 0,
+          "pendientes": 29
+        },
+        "SANTOS MARQUINA": {
+          "cargados": 0,
+          "pendientes": 18
+        },
+        "SUCRE": {
+          "cargados": 0,
+          "pendientes": 120
+        },
+        "TOVAR": {
+          "cargados": 0,
+          "pendientes": 60
+        },
+        "TULIO FEBRES": {
+          "cargados": 0,
+          "pendientes": 50
+        },
+        "ZEA": {
+          "cargados": 0,
+          "pendientes": 26
+        }
+      }
+    }
+  },
+  "porMunicipio": {
+    "ALBERTO ADRIANI": {
+      "totalPersonal": 2975,
+      "totalPlanteles": 122,
+      "docentes": 1849,
+      "administrativos": 133,
+      "obreros": 993,
+      "situacion_laboral": {
+        "ACTIVO": 2589,
+        "EN PROCESO DE INCAPACIDAD": 43,
+        "EN PROCESO DE JUBILACIÓN": 67,
+        "REPOSO MEDICO": 27,
+        "APOYO INSTITUCIONAL": 15,
+        "NO DEFINIDA": 13,
+        "LICENCIA SINDICAL": 11,
+        "PERMISO POR CUIDO": 7,
+        "RENUNCIA": 4,
+        "SINCERACIÓN DE NÓMINA": 97,
+        "INCAPACIDAD TEMPORAL": 12,
+        "ADECUACIÓN LABORAL": 25,
+        "COMISION DE SERVICIO": 7,
+        "INCAPACIDAD TOTAL Y DEFINITIVA POR IVSS": 30,
+        "PERMISO PRE Y POST NATAL": 4,
+        "INCUMPLIMIENTO DE FUNCIONES": 3,
+        "ABANDONO DE CARGO": 9,
+        "INCAPACIDAD TOTAL POR IPASME": 6,
+        "TRASLADO INTERZONAL": 4,
+        "PRIVADO DE LIBERTAD": 1,
+        "DEFUNCIONES": 1
+      },
+      "jubilables": [
+        {
+          "clave": "S0270D1401",
+          "nombre": "ALBERTO ADRIANI",
+          "count": 13
+        },
+        {
+          "clave": "OD00661401",
+          "nombre": "BOLIVAR 2000",
+          "count": 11
+        },
+        {
+          "clave": "OD01681401",
+          "nombre": "RAFAEL URDANETA",
+          "count": 9
+        },
+        {
+          "clave": "OD02991401",
+          "nombre": "ASUNCIÓN DUGARTE",
+          "count": 8
+        },
+        {
+          "clave": "OD03171401",
+          "nombre": "1 DE MAYO",
+          "count": 7
+        },
+        {
+          "clave": "OD15871401",
+          "nombre": "LUIS BELTRÁN PRIETO FIGUEROA",
+          "count": 7
+        },
+        {
+          "clave": "OD17681401",
+          "nombre": "JUAN JOSE LANDAETA",
+          "count": 7
+        },
+        {
+          "clave": "OD17691401",
+          "nombre": "LUIS ALFONZO ACEVEDO QUINTERO",
+          "count": 7
+        },
+        {
+          "clave": "OD00631401",
+          "nombre": "PBRO JOSÉ IGNACIO OLIVARES",
+          "count": 6
+        },
+        {
+          "clave": "OD00671401",
+          "nombre": "24 DE JULIO",
+          "count": 6
+        },
+        {
+          "clave": "OD01691401",
+          "nombre": "MARTIN TOVAR Y PONTE",
+          "count": 6
+        },
+        {
+          "clave": "OD01811401",
+          "nombre": "ONIA CAÑO ISABEL",
+          "count": 6
+        },
+        {
+          "clave": "OD01711401",
+          "nombre": "MANUELITA SAENZ",
+          "count": 5
+        },
+        {
+          "clave": "OD01771401",
+          "nombre": "JOSE ANTONIO PAEZ",
+          "count": 5
+        },
+        {
+          "clave": "OD01831401",
+          "nombre": "MAURICIO ENCINOSO",
+          "count": 5
+        },
+        {
+          "clave": "OD02671401",
+          "nombre": "23 DE ENERO",
+          "count": 5
+        },
+        {
+          "clave": "OD17511401",
+          "nombre": "CARMEN CONSUELO CARRERO",
+          "count": 5
+        },
+        {
+          "clave": "S1463D1401",
+          "nombre": "EL VIGIA",
+          "count": 5
+        },
+        {
+          "clave": "S2183D1401",
+          "nombre": "12 DE FEBRERO DE 1814",
+          "count": 5
+        },
+        {
+          "clave": "S3064D1401",
+          "nombre": "JOSE ANTONIO RUJANO",
+          "count": 5
+        },
+        {
+          "clave": "OD01751401",
+          "nombre": "VICENTE SALIAS",
+          "count": 4
+        },
+        {
+          "clave": "OD01801401",
+          "nombre": "ANDRES BELLO",
+          "count": 4
+        },
+        {
+          "clave": "OD10091401",
+          "nombre": "MARIA DE LOS SANTOS MOLERO",
+          "count": 4
+        },
+        {
+          "clave": "OD10221401",
+          "nombre": "SAN RAFAEL",
+          "count": 4
+        },
+        {
+          "clave": "OD00491401",
+          "nombre": "LIBERTADOR BOLIVAR",
+          "count": 3
+        },
+        {
+          "clave": "OD01641401",
+          "nombre": "PULIDO MENDEZ",
+          "count": 3
+        },
+        {
+          "clave": "OD01761401",
+          "nombre": "SIMÓN RODRÍGUEZ",
+          "count": 3
+        },
+        {
+          "clave": "OD02611401",
+          "nombre": "VICENTE LECUNA",
+          "count": 3
+        },
+        {
+          "clave": "OD02981401",
+          "nombre": "TEL ELVIS DE JESUS APONCIO",
+          "count": 3
+        },
+        {
+          "clave": "OD04011401",
+          "nombre": "12 DE OCTUBRE",
+          "count": 3
+        },
+        {
+          "clave": "OD04691401",
+          "nombre": "URQUIA MARU",
+          "count": 3
+        },
+        {
+          "clave": "OD10001401",
+          "nombre": "NIÑO SIMÓN BOLÍVAR",
+          "count": 3
+        },
+        {
+          "clave": "OD10111401",
+          "nombre": "LUIS ENRIQUE GUILLEN",
+          "count": 3
+        },
+        {
+          "clave": "OD10331401",
+          "nombre": "GENERAL CARLOS SOUBLETTE",
+          "count": 3
+        },
+        {
+          "clave": "OD16041401",
+          "nombre": "DOCTOR ARTURO USLAR PIETRI",
+          "count": 3
+        },
+        {
+          "clave": "OD17241401",
+          "nombre": "19 DE ABRIL DE 1810",
+          "count": 3
+        },
+        {
+          "clave": "OD17631401",
+          "nombre": "GUILLERMO BRICEÑO",
+          "count": 3
+        },
+        {
+          "clave": "S1831D1401",
+          "nombre": "RAFAEL ANGEL RONDÓN MÁRQUEZ",
+          "count": 3
+        },
+        {
+          "clave": "OD01721401",
+          "nombre": "OFELIA TANCREDI CORREDOR",
+          "count": 2
+        },
+        {
+          "clave": "OD01731401",
+          "nombre": "CARMEN TERESA DE FERNÁNDEZ",
+          "count": 2
+        },
+        {
+          "clave": "OD04751401",
+          "nombre": "CORONEL LUIS MARÍA RIVAS DÁVILA",
+          "count": 2
+        },
+        {
+          "clave": "OD09941401",
+          "nombre": "JOSE ERADO RODRIGUEZ",
+          "count": 2
+        },
+        {
+          "clave": "OD10071401",
+          "nombre": "JOSE FELIX RIBAS",
+          "count": 2
+        },
+        {
+          "clave": "OD10081401",
+          "nombre": "ANA TERESA DUGARTE DE TORRES",
+          "count": 2
+        },
+        {
+          "clave": "OD10171401",
+          "nombre": "CARMEN ELISA SOCORRO DE UZCATEGUI",
+          "count": 2
+        },
+        {
+          "clave": "OD10341401",
+          "nombre": "JOSE ANTONIO CALDERON ZERPA",
+          "count": 2
+        },
+        {
+          "clave": "OD10801401",
+          "nombre": "FRANCISCO GONZÁLEZ",
+          "count": 2
+        },
+        {
+          "clave": "OD15301401",
+          "nombre": "MAURA LINA GUTIERREZ",
+          "count": 2
+        },
+        {
+          "clave": "OD16061401",
+          "nombre": "DOÑA OMAIRA ROSA CANDELA DE QUINTERO",
+          "count": 2
+        },
+        {
+          "clave": "OD17741401",
+          "nombre": "JOSEFA DEL CARMEN SALAZAR ROJAS",
+          "count": 2
+        },
+        {
+          "clave": "S0270N1401",
+          "nombre": "ANTONIO ARRAIZ",
+          "count": 2
+        },
+        {
+          "clave": "OD01661401",
+          "nombre": "FELIX MARIA RUIZ",
+          "count": 1
+        },
+        {
+          "clave": "OD01741401",
+          "nombre": "EDUARDO ENRIQUE CONTRERAS",
+          "count": 1
+        },
+        {
+          "clave": "OD01791401",
+          "nombre": "LUISA DE PACANINS",
+          "count": 1
+        },
+        {
+          "clave": "OD02651401",
+          "nombre": "MANUEL CABALLERO",
+          "count": 1
+        },
+        {
+          "clave": "OD09901401",
+          "nombre": "PEDRO CAMEJO",
+          "count": 1
+        },
+        {
+          "clave": "OD09921401",
+          "nombre": "MERCEDES CARVAJAL",
+          "count": 1
+        },
+        {
+          "clave": "OD09931401",
+          "nombre": "MAXIMILIANO RONDON ZERPA",
+          "count": 1
+        },
+        {
+          "clave": "OD09951401",
+          "nombre": "SAN JOSE DE LOS OLIVOS",
+          "count": 1
+        },
+        {
+          "clave": "OD09981401",
+          "nombre": "ANTONIO JOSE DE SUCRE",
+          "count": 1
+        },
+        {
+          "clave": "OD10141401",
+          "nombre": "CIPRIANO CASTRO",
+          "count": 1
+        },
+        {
+          "clave": "OD10241401",
+          "nombre": "MARIA DE LA CONCEPCION PALACIOS",
+          "count": 1
+        },
+        {
+          "clave": "OD10351401",
+          "nombre": "MATILDE MOLINA",
+          "count": 1
+        },
+        {
+          "clave": "OD16071401",
+          "nombre": "JOSEFA CAMEJO",
+          "count": 1
+        },
+        {
+          "clave": "OD16171401",
+          "nombre": "ROSA VIRGINIA MARTINEZ ARAUJO",
+          "count": 1
+        },
+        {
+          "clave": "OD16971401",
+          "nombre": "CELSA ROMERO DEL MAR",
+          "count": 1
+        },
+        {
+          "clave": "OD17501401",
+          "nombre": "DR JOSE MARIA VARGAS",
+          "count": 1
+        },
+        {
+          "clave": "OD17531401",
+          "nombre": "ALFREDO TOVAR RENGIFO",
+          "count": 1
+        },
+        {
+          "clave": "OD17551401",
+          "nombre": "BELEN MARIA SAN JUAN COLINA",
+          "count": 1
+        },
+        {
+          "clave": "OD17701401",
+          "nombre": "JOSE LEONARDO CHIRINO",
+          "count": 1
+        },
+        {
+          "clave": "OD17751401",
+          "nombre": "TERESA DE LA PARRA",
+          "count": 1
+        },
+        {
+          "clave": "ON09971401",
+          "nombre": "CONCEPCIÓN MARIÑO",
+          "count": 1
+        },
+        {
+          "clave": "ON10031401",
+          "nombre": "12 DE OCTUBRE",
+          "count": 1
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 122,
+        "arrCargados": [],
+        "arrPendientes": [
+          "1 DE MAYO",
+          "12 DE FEBRERO DE 1814",
+          "12 DE OCTUBRE",
+          "12 DE OCTUBRE",
+          "12 DE OCTUBRE (ANEXO)",
+          "19 DE ABRIL DE 1810",
+          "23 DE ENERO",
+          "24 DE JULIO",
+          "ALBERTO ADRIANI",
+          "ALFREDO TOVAR RENGIFO",
+          "ANA MARIA CAMPOS",
+          "ANA MARIA CAMPOS",
+          "ANA ROSA CHOURIO",
+          "ANA TERESA DUGARTE DE TORRES",
+          "ANDRES BELLO",
+          "ANDRES COLMENARES RAMÍREZ",
+          "ANTONIO ARRAIZ",
+          "ANTONIO JOSE DE SUCRE",
+          "APOLONIO ARAQUE ARAQUE",
+          "ARQU CLAUDIO CORREDOR",
+          "ARTURO MICHELENA",
+          "ASUNCIÓN DUGARTE",
+          "BATALLA DE CARABOBO DE 1821",
+          "BELEN MARIA SAN JUAN COLINA",
+          "BOLIVAR 2000",
+          "CARMEN CONSUELO CARRERO",
+          "CARMEN ELISA SOCORRO DE UZCATEGUI",
+          "CARMEN MARIA MEZA GAMARRA",
+          "CARMEN TERESA DE FERNÁNDEZ",
+          "CELSA ROMERO DEL MAR",
+          "CERRO AZUL",
+          "CIPRIANO CASTRO",
+          "COLEGIO SANTIAGO DE ONIA",
+          "COLINAS DE SAN BENITO",
+          "CONCEPCIÓN MARIÑO",
+          "CORONEL LUIS MARÍA RIVAS DÁVILA",
+          "DOCTOR ARTURO USLAR PIETRI",
+          "DOÑA OMAIRA ROSA CANDELA DE QUINTERO",
+          "DR JOSE MARIA VARGAS",
+          "EDUARDO ENRIQUE CONTRERAS",
+          "EL VIGIA",
+          "ELVIS DE JESUS APONCIO",
+          "EULALIA RAMOS SANCHEZ",
+          "EZEQUIEL ZAMORA",
+          "FELIX MARIA RUIZ",
+          "FRANCISCO DE MIRANDA",
+          "FRANCISCO DE MIRANDA",
+          "FRANCISCO GONZÁLEZ",
+          "GABRIELA DEL VALLE VILORIA RODRIGUEZ",
+          "GENERAL CARLOS SOUBLETTE",
+          "GLORIA STOK",
+          "GUILLERMO BRICEÑO",
+          "GUILLERMO MORÓN",
+          "HIPÓLITA BOLIVAR  (036)",
+          "JESÚS MANUEL QUINTERO MUÑOZ",
+          "JESÚS RAFAEL SOTO",
+          "JOSE ANANIAS MARQUEZ",
+          "JOSE ANTONIO CALDERON ZERPA",
+          "JOSE ANTONIO PAEZ",
+          "JOSE ANTONIO RUJANO",
+          "JOSE ERADO RODRIGUEZ",
+          "JOSE FELIX RIBAS",
+          "JOSE GIL FORTUIL",
+          "JOSE LEONARDO CHIRINO",
+          "JOSEFA CAMEJO",
+          "JOSEFA DEL CARMEN SALAZAR ROJAS",
+          "JOSÉ FRANCISCO BERMÚDEZ  (NER 036)",
+          "JOSÉ MARTI",
+          "JUAN GERMÁN ROSCIO NER 036",
+          "JUAN JOSE LANDAETA",
+          "JUANA RAMIREZ (CIERRE TECNICO)",
+          "KM 15",
+          "LIBERTADOR BOLIVAR",
+          "LUCILA PALACIOS",
+          "LUIS ALFONZO ACEVEDO QUINTERO",
+          "LUIS ALFREDO LOPEZ MENDEZ",
+          "LUIS BELTRÁN PRIETO FIGUEROA",
+          "LUIS ENRIQUE GUILLEN",
+          "LUISA CACERES DE ARISMENDI",
+          "LUISA DE PACANINS",
+          "LUZ QUINTERO RIVERA",
+          "MANUEL CABALLERO",
+          "MANUELITA SAENZ",
+          "MARIA ANTONIA DAVILA",
+          "MARIA DE LA CONCEPCION PALACIOS",
+          "MARIA DE LOS SANTOS MOLERO",
+          "MARIA ELADIA MARQUEZ",
+          "MARIA FLORA OVALLES",
+          "MARIA FRANCISCA GUTIERREZ",
+          "MARTIN TOVAR Y PONTE",
+          "MARÍA CHIQUINQUIRA MÁRQUEZ DE PIRELA",
+          "MATILDE MOLINA",
+          "MAURA LINA GUTIERREZ",
+          "MAURICIO ENCINOSO",
+          "MAXIMILIANO RONDON ZERPA",
+          "MERCEDES CARVAJAL",
+          "MIGUEL JOSE ANTONIO SANZ",
+          "NANCY MORA",
+          "NELSON DE JESUS MEDINA ROJAS",
+          "NIÑO SIMÓN BOLÍVAR",
+          "OFELIA TANCREDI CORREDOR",
+          "OMELIA BRICEÑO",
+          "ONIA CAÑO ISABEL",
+          "ORLANDO ARAUJO",
+          "PAULA CORREA DE ZAMORA",
+          "PBRO JOSÉ IGNACIO OLIVARES",
+          "PEDRO CAMEJO",
+          "PULIDO MENDEZ",
+          "RAFAEL ANGEL RONDÓN MÁRQUEZ",
+          "RAFAEL ANTONIO ROJAS SÁNCHEZ",
+          "RAFAEL URDANETA",
+          "ROMULO GALLEGOS   (SEDE)",
+          "ROSA VIRGINIA MARTINEZ ARAUJO",
+          "SAN JOSE DE LOS OLIVOS",
+          "SAN RAFAEL",
+          "SANTIAGO MARIÑO",
+          "SANTIAGO MARIÑO",
+          "SIMÓN RODRÍGUEZ",
+          "TERESA DE LA PARRA",
+          "URQUIA MARU",
+          "VICENTE LECUNA",
+          "VICENTE SALIAS"
+        ]
+      }
+    },
+    "ANDRES BELLO": {
+      "totalPersonal": 467,
+      "totalPlanteles": 32,
+      "docentes": 328,
+      "administrativos": 22,
+      "obreros": 117,
+      "situacion_laboral": {
+        "ACTIVO": 409,
+        "EN PROCESO DE JUBILACIÓN": 20,
+        "ABANDONO DE CARGO": 6,
+        "APOYO INSTITUCIONAL": 3,
+        "SINCERACIÓN DE NÓMINA": 5,
+        "TRASLADO INTERZONAL": 3,
+        "NO DEFINIDA": 7,
+        "REPOSO MEDICO": 4,
+        "INCAPACIDAD TOTAL Y DEFINITIVA POR IVSS": 1,
+        "EN PROCESO DE INCAPACIDAD": 5,
+        "INCUMPLIMIENTO DE FUNCIONES": 1,
+        "COMISION DE SERVICIO": 3
+      },
+      "jubilables": [
+        {
+          "clave": "OD02261402",
+          "nombre": "RAFAEL MARIA TORRES",
+          "count": 11
+        },
+        {
+          "clave": "T0703D1402",
+          "nombre": "SIMON BOLIVAR",
+          "count": 7
+        },
+        {
+          "clave": "OD02661402",
+          "nombre": "CARLOS SOUBLETTE",
+          "count": 5
+        },
+        {
+          "clave": "OD02681402",
+          "nombre": "ANTONIO MARIA MORALES",
+          "count": 5
+        },
+        {
+          "clave": "OD05511402",
+          "nombre": "JESUS MANUEL NAVA",
+          "count": 4
+        },
+        {
+          "clave": "OD05581402",
+          "nombre": "GRAN MARISCAL DE AYACUCHO",
+          "count": 4
+        },
+        {
+          "clave": "S1465D1402",
+          "nombre": "LA AZULITA",
+          "count": 4
+        },
+        {
+          "clave": "DN10371402",
+          "nombre": "HERMINIA ROSAS",
+          "count": 2
+        },
+        {
+          "clave": "OD05531402",
+          "nombre": "BONIFACIO PUENTES",
+          "count": 2
+        },
+        {
+          "clave": "OD05571402",
+          "nombre": "DEOGRACIAS CORREDOR ROJAS",
+          "count": 2
+        },
+        {
+          "clave": "OD05671402",
+          "nombre": "RODOLFO LA CRUZ",
+          "count": 2
+        },
+        {
+          "clave": "OD05701402",
+          "nombre": "LUIS MARIA ARAQUE GUERRERO",
+          "count": 2
+        },
+        {
+          "clave": "OD05521402",
+          "nombre": "JOSE FELIX RIBAS",
+          "count": 1
+        },
+        {
+          "clave": "OD05591402",
+          "nombre": "CARMEN TERESA PUENTES DE HERRERA",
+          "count": 1
+        },
+        {
+          "clave": "OD05651402",
+          "nombre": "ASUNCION UZCATEGUI",
+          "count": 1
+        },
+        {
+          "clave": "OD05681402",
+          "nombre": "BASILIO VERGARA",
+          "count": 1
+        },
+        {
+          "clave": "OD05721402",
+          "nombre": "RAMON MARIA LOBO",
+          "count": 1
+        },
+        {
+          "clave": "S1465N1402",
+          "nombre": "EDITH ALCANGEL IBARRA ALVAREZ",
+          "count": 1
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 32,
+        "arrCargados": [],
+        "arrPendientes": [
+          "ABDON ACOSTA",
+          "ALEJANDRA GRISOLIA",
+          "ANTONIO MARIA MORALES",
+          "ASUNCION UZCATEGUI",
+          "AZAEL VALERO GUERRERO",
+          "BASILIO VERGARA",
+          "BONIFACIO PUENTES",
+          "CARLOS SOUBLETTE",
+          "CARMEN TERESA PUENTES DE HERRERA",
+          "DEOGRACIAS CORREDOR ROJAS",
+          "EDITH ALCANGEL IBARRA ALVAREZ",
+          "FILADELFO ALBARRAN",
+          "FLORENCIO MARQUEZ",
+          "GRAN MARISCAL DE AYACUCHO",
+          "HERMINIA ROSAS",
+          "HILARIO LACRUZ",
+          "JESUS ENRIQUE RAMOS ROA",
+          "JESUS MANUEL NAVA",
+          "JOSE FELIX RIBAS",
+          "JOSE JAVIER VIELMA BECERRA",
+          "JOSE LUIS RAMOS",
+          "JOSE NOLBERTO MORENO PALMI",
+          "LA AZULITA",
+          "LUIS MARIA ARAQUE GUERRERO",
+          "LUZ MARINA SANCHEZ",
+          "MANUEL CABRE",
+          "MARIA CONCEPCION PALACIOS",
+          "RAFAEL MARIA TORRES",
+          "RAMON MARIA LOBO",
+          "RODOLFO LA CRUZ",
+          "SIMON BOLIVAR",
+          "VIANEY LISBETH VIELMA ALBARRAN"
+        ]
+      }
+    },
+    "ANTONIO PINTO SALINA": {
+      "totalPersonal": 855,
+      "totalPlanteles": 70,
+      "docentes": 528,
+      "administrativos": 47,
+      "obreros": 280,
+      "situacion_laboral": {
+        "ACTIVO": 719,
+        "NO DEFINIDA": 1,
+        "INCAPACIDAD TOTAL Y DEFINITIVA POR IVSS": 10,
+        "PERMISO POR CUIDO": 6,
+        "DEFUNCIONES": 3,
+        "REPOSO MEDICO": 14,
+        "EN PROCESO DE JUBILACIÓN": 15,
+        "INCAPACIDAD TEMPORAL": 4,
+        "EN PROCESO DE INCAPACIDAD": 19,
+        "ABANDONO DE CARGO": 4,
+        "ADECUACIÓN LABORAL": 12,
+        "APOYO INSTITUCIONAL": 11,
+        "SINCERACIÓN DE NÓMINA": 21,
+        "INCAPACIDAD TOTAL POR IPASME": 5,
+        "PRIVADO DE LIBERTAD": 1,
+        "RENUNCIA": 3,
+        "PERMISO PRE Y POST NATAL": 3,
+        "LICENCIA SINDICAL": 1,
+        "TRASLADO INTERZONAL": 1,
+        "PERMISO POR FALLECIMIENTO": 2
+      },
+      "jubilables": [
+        {
+          "clave": "OD02141403",
+          "nombre": "CARLOS MARIA ZERPA",
+          "count": 7
+        },
+        {
+          "clave": "S1357D1403",
+          "nombre": "EUTIMIO RIVAS",
+          "count": 6
+        },
+        {
+          "clave": "OD17121403",
+          "nombre": "RAFAEL ANTONIO GONZALEZ",
+          "count": 4
+        },
+        {
+          "clave": "OD10481403",
+          "nombre": "MANUEL GUERRERO",
+          "count": 3
+        },
+        {
+          "clave": "OD10661403",
+          "nombre": "ANTONIO RICAURTE",
+          "count": 3
+        },
+        {
+          "clave": "OD01981403",
+          "nombre": "RAFAEL ANTONIO GONZALEZ",
+          "count": 2
+        },
+        {
+          "clave": "OD10491403",
+          "nombre": "ROSA MARIA CONTRERAS",
+          "count": 2
+        },
+        {
+          "clave": "OD17181403",
+          "nombre": "ANDRES ELOY BLANCO",
+          "count": 2
+        },
+        {
+          "clave": "OD00411403",
+          "nombre": "NELI INES ESCALANTE",
+          "count": 1
+        },
+        {
+          "clave": "OD02191403",
+          "nombre": "MARIA CONCEPCION CARRERO",
+          "count": 1
+        },
+        {
+          "clave": "OD04791403",
+          "nombre": "VICTORIANO MOLINA ZERPA",
+          "count": 1
+        },
+        {
+          "clave": "OD04811403",
+          "nombre": "ESTANISLAO GUTIERREZ",
+          "count": 1
+        },
+        {
+          "clave": "OD17011403",
+          "nombre": "LA VICTORIA",
+          "count": 1
+        },
+        {
+          "clave": "OD17191403",
+          "nombre": "ANTONIO PINTO SALINAS",
+          "count": 1
+        },
+        {
+          "clave": "OD17211403",
+          "nombre": "OCTAVIO DUGARTE",
+          "count": 1
+        },
+        {
+          "clave": "ON10471403",
+          "nombre": "MESA BOLIVAR",
+          "count": 1
+        },
+        {
+          "clave": "S1153D1403",
+          "nombre": "SANTOS MARQUINA",
+          "count": 1
+        },
+        {
+          "clave": "S1357N1403",
+          "nombre": "RAMON OVIDIO BARRIOS",
+          "count": 1
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 70,
+        "arrCargados": [],
+        "arrPendientes": [
+          "ANASTACIA MORA DE MORA",
+          "ANDRES ELOY BLANCO",
+          "ANTONIO PINTO SALINAS",
+          "ANTONIO RICAURTE",
+          "BELEN DE JESUS VARGAS",
+          "CARLOS MARIA ZERPA",
+          "CARLOS RAMON CONTRERAS",
+          "CARLOS ZERPA",
+          "CARMEN DE JESUS MOLINA",
+          "CAYETANO CARREÑO",
+          "DEBORA GUTIERREZ",
+          "DIBRASKA SOLANO",
+          "DIEGO MENDEZ",
+          "ELEUTERIO CONTRERAS",
+          "ERCILIA MUÑOZ",
+          "ERNESTO DUGARTE",
+          "ESTANISLAO GUTIERREZ",
+          "EUTIMIO RIVAS",
+          "FRANCISCO LAZO MARTI",
+          "FRANCISCO MARQUEZ",
+          "GUSTAVO JOSE SANTAROMITA",
+          "HARRY ALMELA",
+          "HECTOR POLEO",
+          "JACINTO MORA",
+          "JACINTO NOGUERA GARCIA",
+          "JESUS MANUEL MENDEZ",
+          "JOSE AQUILES ROSALES",
+          "JOSE GONZALO GUERRERO",
+          "JOSE GONZALO MORA ARAQUE",
+          "JOSE GREGORIO HERNANDEZ",
+          "JOSE MARIA ESPAÑA",
+          "JOSE MODESTO MOLINA",
+          "JOSE RAFAEL MIRANDA",
+          "JOSE RICARDO ARAQUE",
+          "JOSE VICENTE CARRERO",
+          "JULIAN PEREIRA",
+          "LA VICTORIA",
+          "LUCRECIA FERNANDEZ",
+          "MAGALY RAMIREZ TORRES",
+          "MANUEL DE JESUS MORA GARCIA",
+          "MANUEL GUERRERO",
+          "MANUEL PAREDES",
+          "MARCELINO CHACON",
+          "MARCOS DUARTE",
+          "MARIA ANTONIETA ROSSI",
+          "MARIA AUXILIADORA CHACON",
+          "MARIA CONCEPCION CARRERO",
+          "MARIA TRINIDAD HERNANDEZ VELAZCO",
+          "MARTINIANO GONZALEZ ROJAS",
+          "MESA BOLIVAR",
+          "MORELLA MUÑOZ",
+          "NELI INES ESCALANTE",
+          "NICOLAS ANTONIO RONDON",
+          "OCTAVIO DUGARTE",
+          "PEDRO ELIAS GUTIERREZ",
+          "PEDRO JOSE CONTRERAS",
+          "RAFAEL ANTONIO GONZALEZ",
+          "RAFAEL ANTONIO GONZALEZ",
+          "RAMON OVIDIO BARRIOS",
+          "ROGER MARQUEZ",
+          "ROSA MARIA CONTRERAS",
+          "ROSARIO MERCHAN",
+          "SAN FRANCISCO DE ASIS",
+          "SAN JOSE",
+          "SANTA CRUZ DE MORA",
+          "SANTA MARTA",
+          "SANTO TOMAS DE AQUINO",
+          "SANTOS MARQUINA",
+          "VICTOR FERNANDEZ",
+          "VICTORIANO MOLINA ZERPA"
+        ]
+      }
+    },
+    "ARICAGUA": {
+      "totalPersonal": 129,
+      "totalPlanteles": 23,
+      "docentes": 88,
+      "administrativos": 4,
+      "obreros": 37,
+      "situacion_laboral": {
+        "ACTIVO": 117,
+        "EN PROCESO DE JUBILACIÓN": 4,
+        "COMISION DE SERVICIO": 2,
+        "REPOSO MEDICO": 1,
+        "EN PROCESO DE INCAPACIDAD": 2,
+        "PERMISO PRE Y POST NATAL": 2,
+        "ADECUACIÓN LABORAL": 1
+      },
+      "jubilables": [
+        {
+          "clave": "OD11031404",
+          "nombre": "CESAR RENGIFO",
+          "count": 2
+        },
+        {
+          "clave": "S2996D1404",
+          "nombre": "UNIDAD EDUCATIVA BOLIVARIANA FRANCISCO UZCÁTEGUI DÁVILA",
+          "count": 2
+        },
+        {
+          "clave": "OD02461404",
+          "nombre": "MANUEL BARILLAS",
+          "count": 1
+        },
+        {
+          "clave": "OD10811404",
+          "nombre": "SAN JOSÉ DE LAS TENDIDAS",
+          "count": 1
+        },
+        {
+          "clave": "OD10901404",
+          "nombre": "CECILIA MUJICA",
+          "count": 1
+        },
+        {
+          "clave": "OD10961404",
+          "nombre": "MONSEÑOR MIGUEL ANTONIO SALAS",
+          "count": 1
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 23,
+        "arrCargados": [],
+        "arrPendientes": [
+          "ANTONIO FEBRES CORDERO",
+          "ARTURO MICHELENA",
+          "CECILIA MUJICA",
+          "CESAR RENGIFO",
+          "DIEGO DE NAVARRO",
+          "FRANCISCO ESPEJO",
+          "GABRIELA MISTRAL",
+          "JOSE GREGORIO HERNANDEZ",
+          "JOSEFA DUGARTE",
+          "JOSÉ ANTONIO ROJAS",
+          "JUANA RAMIREZ",
+          "LEONOR DE LA GUERRA",
+          "LUIS MARIA ARAQUE",
+          "MANUEL BARILLAS",
+          "MANUELA SAENZ",
+          "MARIANO PICON SALAS",
+          "MODESTA BOR",
+          "MONSEÑOR MIGUEL ANTONIO SALAS",
+          "PRESBÍTERO JOSÉ EUSTORGIO RIVAS TORRES",
+          "SAN JOSÉ DE LAS TENDIDAS",
+          "SAN RAFAEL",
+          "TERESA DE LA PARRA",
+          "UNIDAD EDUCATIVA BOLIVARIANA FRANCISCO UZCÁTEGUI DÁVILA"
+        ]
+      }
+    },
+    "ARZOBISPO CHACON": {
+      "totalPersonal": 558,
+      "totalPlanteles": 74,
+      "docentes": 415,
+      "administrativos": 17,
+      "obreros": 126,
+      "situacion_laboral": {
+        "ACTIVO": 480,
+        "EN PROCESO DE JUBILACIÓN": 30,
+        "PERMISO PRE Y POST NATAL": 4,
+        "LICENCIA SINDICAL": 2,
+        "NO DEFINIDA": 10,
+        "EN PROCESO DE INCAPACIDAD": 3,
+        "ADECUACIÓN LABORAL": 7,
+        "APOYO INSTITUCIONAL": 5,
+        "SINCERACIÓN DE NÓMINA": 6,
+        "ABANDONO DE CARGO": 1,
+        "PERMISO POR CUIDO": 1,
+        "INCAPACIDAD TOTAL POR IPASME": 1,
+        "REPOSO MEDICO": 3,
+        "INCAPACIDAD TOTAL Y DEFINITIVA POR IVSS": 1,
+        "TRASLADO INTERZONAL": 4
+      },
+      "jubilables": [
+        {
+          "clave": "S1358D1405",
+          "nombre": "DON NEPTALI NOGUERA MORA",
+          "count": 8
+        },
+        {
+          "clave": "OD01441405",
+          "nombre": "HERMELINDA NOGUERA",
+          "count": 7
+        },
+        {
+          "clave": "OD04021405",
+          "nombre": "MALDONADO LOPEZ",
+          "count": 3
+        },
+        {
+          "clave": "T0714D1405",
+          "nombre": "AGROPECUARIA MUCUCHACHI",
+          "count": 3
+        },
+        {
+          "clave": "OD01361405",
+          "nombre": "ARCENIA GUERRERO DE CARRERO",
+          "count": 2
+        },
+        {
+          "clave": "OD01591405",
+          "nombre": "JESUS ENRIQUE LOSSADA",
+          "count": 2
+        },
+        {
+          "clave": "OD02871405",
+          "nombre": "SAN MIGUEL",
+          "count": 2
+        },
+        {
+          "clave": "S3635D1405",
+          "nombre": "RAMON DIAZ SANCHEZ",
+          "count": 2
+        },
+        {
+          "clave": "OD00741405",
+          "nombre": "BLANCA EMILCE RIVAS",
+          "count": 1
+        },
+        {
+          "clave": "OD02881405",
+          "nombre": "SANTA LUCIA",
+          "count": 1
+        },
+        {
+          "clave": "OD03201405",
+          "nombre": "JACINTO PLAZA",
+          "count": 1
+        },
+        {
+          "clave": "OD03271405",
+          "nombre": "MANUEL CABALLERO",
+          "count": 1
+        },
+        {
+          "clave": "OD04541405",
+          "nombre": "PULIDO MENDEZ",
+          "count": 1
+        },
+        {
+          "clave": "OD04641405",
+          "nombre": "VICENTE SALIAS",
+          "count": 1
+        },
+        {
+          "clave": "OD11141405",
+          "nombre": "ESTHER MARIA MORA MOLINA",
+          "count": 1
+        },
+        {
+          "clave": "OD11161405",
+          "nombre": "VICENTE LECUNA",
+          "count": 1
+        },
+        {
+          "clave": "OD11171405",
+          "nombre": "ALEJANDRA RAMIREZ",
+          "count": 1
+        },
+        {
+          "clave": "OD11201405",
+          "nombre": "OD11201405",
+          "count": 1
+        },
+        {
+          "clave": "OD11241405",
+          "nombre": "ANA FELIX MOLINA",
+          "count": 1
+        },
+        {
+          "clave": "OD11351405",
+          "nombre": "RAUL GUERRERO GARCÍA",
+          "count": 1
+        },
+        {
+          "clave": "OD11361405",
+          "nombre": "JACINTO CONVIT",
+          "count": 1
+        },
+        {
+          "clave": "S1828D1405",
+          "nombre": "PADRE MANUEL VARELA",
+          "count": 1
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 74,
+        "arrCargados": [],
+        "arrPendientes": [
+          "22 DE OCTUBRE DE 1818",
+          "23 DE MAYO",
+          "ADELIA MONTES",
+          "AGROPECUARIA MUCUCHACHI",
+          "ALEJANDRA RAMIREZ",
+          "ALI PRIMERA",
+          "ANA FELIX MOLINA",
+          "ANGEL MARIA MOLINA",
+          "ANTONIO RICAURTE",
+          "APOLONIA GUERRERO",
+          "AQUILES NAZOA",
+          "ARCENIA GUERRERO DE CARRERO",
+          "ARGELIA LAYA",
+          "ARMANDO REVERON",
+          "BARBARA MORA",
+          "BATALLA DE LA VICTORIA DE 1814",
+          "BLANCA EMILCE RIVAS",
+          "BLANCA ESPERANZA SIERRA",
+          "CAMILO DEL CARMEN CONTRERAS",
+          "CAMPO ELIAS",
+          "CIPRIANO CASTRO",
+          "CONCEPCIÓN MARIÑO",
+          "DON NEPTALI NOGUERA MORA",
+          "ECOLASTICO ESCALONA",
+          "EL CURO",
+          "ELOISA CONTRERAS",
+          "ELPIDIO BRANDTT",
+          "ESTHER MARIA MORA MOLINA",
+          "EZEQUIEL DE JESÚS MOLINA CONTRERAS",
+          "FELICITA FLORES",
+          "FILOMENA MOLINA",
+          "FRANCISCO ESPEJO",
+          "FRANCISCO ESTEBAN GOMEZ",
+          "GABRIEL BRACHO",
+          "GETULIO AGOSTINI",
+          "GUILLERMINA FERNANDEZ",
+          "HECTOR POLEO",
+          "HERMELINDA NOGUERA",
+          "HILARION ALTUVE ZERPA",
+          "IGNACIO ESCALANTE",
+          "JACINTO CONVIT",
+          "JACINTO PLAZA",
+          "JESUS ENRIQUE LOSSADA",
+          "JOSE DE LOS SANTOS MARQUINA",
+          "JOSE EUSTORGIO RIVAS",
+          "JOSE MANUEL SISO",
+          "JOSE MARIA VARGAS",
+          "JUAN EVANGELISTA",
+          "JUAN GERMAN ROSCIO",
+          "JUAN LOVERA",
+          "JUANA RAMÍREZ",
+          "LEONOR DE LA GUERRA",
+          "MALDONADO LOPEZ",
+          "MANUEL CABALLERO",
+          "MARIA ADMITA",
+          "MARIANO PICÓN SALAS",
+          "MODESTA BOR",
+          "OTOPUM",
+          "PADRE MANUEL VARELA",
+          "PASTOR CONTRERAS",
+          "PULIDO MENDEZ",
+          "RAFAEL RANGEL",
+          "RAMON DIAZ SANCHEZ",
+          "RAUL GUERRERO GARCÍA",
+          "SAN MIGUEL",
+          "SANTA INES",
+          "SANTA LUCIA",
+          "SANTA ROSA",
+          "TECLA ARTEMISIA MOSTESSORI",
+          "TERESA DE LA PARRA",
+          "UDON PEREZ",
+          "VICENTE LECUNA",
+          "VICENTE ROJAS",
+          "VICENTE SALIAS"
+        ]
+      }
+    },
+    "CAMPO ELIAS": {
+      "totalPersonal": 2623,
+      "totalPlanteles": 100,
+      "docentes": 1640,
+      "administrativos": 226,
+      "obreros": 757,
+      "situacion_laboral": {
+        "ACTIVO": 2153,
+        "NO DEFINIDA": 7,
+        "SINCERACIÓN DE NÓMINA": 109,
+        "EN PROCESO DE INCAPACIDAD": 49,
+        "REPOSO MEDICO": 38,
+        "APOYO INSTITUCIONAL": 78,
+        "LICENCIA SINDICAL": 17,
+        "ADECUACIÓN LABORAL": 26,
+        "PERMISO POR CUIDO": 14,
+        "EN PROCESO DE JUBILACIÓN": 68,
+        "VACACIONES": 5,
+        "PERMISO PRE Y POST NATAL": 10,
+        "INCAPACIDAD TOTAL POR IPASME": 5,
+        "INCAPACIDAD TOTAL Y DEFINITIVA POR IVSS": 7,
+        "PERMISO POR FALLECIMIENTO": 1,
+        "INCAPACIDAD TEMPORAL": 6,
+        "TRASLADO INTERZONAL": 6,
+        "COMISION DE SERVICIO": 1,
+        "ABANDONO DE CARGO": 11,
+        "DEFUNCIONES": 1,
+        "RENUNCIA": 7,
+        "INCUMPLIMIENTO DE FUNCIONES": 4
+      },
+      "jubilables": [
+        {
+          "clave": "S1725D1406",
+          "nombre": "RICARDO GUILLEN SUAREZ",
+          "count": 25
+        },
+        {
+          "clave": "OD00521406",
+          "nombre": "EDELMIRA QUINTERO DL",
+          "count": 12
+        },
+        {
+          "clave": "ON11571406",
+          "nombre": "SIMÓN BOLÍVAR",
+          "count": 12
+        },
+        {
+          "clave": "S0718D1406",
+          "nombre": "ALI RODRIGUEZ ARAQUE",
+          "count": 12
+        },
+        {
+          "clave": "S3979D1406",
+          "nombre": "JUAN FELIX SANCHEZ",
+          "count": 12
+        },
+        {
+          "clave": "OD01461406",
+          "nombre": "MONSEÑOR JAUREGUI",
+          "count": 10
+        },
+        {
+          "clave": "S1965D1406",
+          "nombre": "JOSE ENRIQUE ARIAS",
+          "count": 8
+        },
+        {
+          "clave": "OD01531406",
+          "nombre": "CAMPO ELIAS",
+          "count": 6
+        },
+        {
+          "clave": "OD03831406",
+          "nombre": "ALFREDO  LARA ANGULO",
+          "count": 5
+        },
+        {
+          "clave": "OD01251406",
+          "nombre": "MARIA HORTENSIA ZERPA UZCATEGUI",
+          "count": 4
+        },
+        {
+          "clave": "OD03061406",
+          "nombre": "TIBISAY MORENO",
+          "count": 4
+        },
+        {
+          "clave": "OD11651406",
+          "nombre": "RESURRECCION ARAQUE",
+          "count": 4
+        },
+        {
+          "clave": "OD01261406",
+          "nombre": "ANTONIO ARMANDO PICÓN CÁRDENAS",
+          "count": 3
+        },
+        {
+          "clave": "OD01341406",
+          "nombre": "BLANCA ESPERANZA SIERRA",
+          "count": 3
+        },
+        {
+          "clave": "OD01391406",
+          "nombre": "MONSEÑOR DUQUE",
+          "count": 3
+        },
+        {
+          "clave": "OD01411406",
+          "nombre": "JOSE ANGEL MANRIQUE MEJIA",
+          "count": 3
+        },
+        {
+          "clave": "S0288D1406",
+          "nombre": "CAYETANO MONTES",
+          "count": 3
+        },
+        {
+          "clave": "OD01271406",
+          "nombre": "NELLY TERESA MEJIAS",
+          "count": 2
+        },
+        {
+          "clave": "OD01291406",
+          "nombre": "GRAN MARISCAL DE AYACUCHO",
+          "count": 2
+        },
+        {
+          "clave": "OD01301406",
+          "nombre": "JUSTINA PAREDES VIELMA",
+          "count": 2
+        },
+        {
+          "clave": "OD03141406",
+          "nombre": "FIDELIA ARAQUE DE PEÑA",
+          "count": 2
+        },
+        {
+          "clave": "OD03691406",
+          "nombre": "RAMON AMADOR FONSECA",
+          "count": 2
+        },
+        {
+          "clave": "OD11671406",
+          "nombre": "PEDRO PABLO RODRIGUEZ FLORES",
+          "count": 2
+        },
+        {
+          "clave": "OD11921406",
+          "nombre": "ROSA ELVINA FLORES",
+          "count": 2
+        },
+        {
+          "clave": "OD17611406",
+          "nombre": "YUBAN ORTEGA",
+          "count": 2
+        },
+        {
+          "clave": "ON11501406",
+          "nombre": "MIGUEL LORENZO GIL CHIPIA",
+          "count": 2
+        },
+        {
+          "clave": "ON15631406",
+          "nombre": "PADRE BARILLAS",
+          "count": 2
+        },
+        {
+          "clave": "OD00611406",
+          "nombre": "AUGUSTO RODRIGUEZ ARANGUREN",
+          "count": 1
+        },
+        {
+          "clave": "OD01241406",
+          "nombre": "ALFONSO PAREDES DEZEO",
+          "count": 1
+        },
+        {
+          "clave": "OD01281406",
+          "nombre": "EUDYS DIONICIA MONTILLA",
+          "count": 1
+        },
+        {
+          "clave": "OD01521406",
+          "nombre": "DIGNA ROSA ANGARITA BENITEZ",
+          "count": 1
+        },
+        {
+          "clave": "OD01561406",
+          "nombre": "MARIA GUILLERMINA CONTRERAS",
+          "count": 1
+        },
+        {
+          "clave": "OD04131406",
+          "nombre": "ANTONIO JOSE FEBRES CORDERO",
+          "count": 1
+        },
+        {
+          "clave": "OD05191406",
+          "nombre": "LA RANCHERÍA",
+          "count": 1
+        },
+        {
+          "clave": "OD11461406",
+          "nombre": "12 DE OCTUBRE",
+          "count": 1
+        },
+        {
+          "clave": "OD11481406",
+          "nombre": "ALFREDO DINI",
+          "count": 1
+        },
+        {
+          "clave": "OD11661406",
+          "nombre": "SAN ONOFRE",
+          "count": 1
+        },
+        {
+          "clave": "OD11691406",
+          "nombre": "EZEQUIEL ZAMORA",
+          "count": 1
+        },
+        {
+          "clave": "OD11711406",
+          "nombre": "LOS GUAIMAROS",
+          "count": 1
+        },
+        {
+          "clave": "OD11741406",
+          "nombre": "JOSE GREGORIO HERNANDEZ",
+          "count": 1
+        },
+        {
+          "clave": "OD11761406",
+          "nombre": "JUAN XXIII",
+          "count": 1
+        },
+        {
+          "clave": "OD11801406",
+          "nombre": "JOSE VICENTE SALAS",
+          "count": 1
+        },
+        {
+          "clave": "OD11891406",
+          "nombre": "VIRGEN DEL ROSARIO",
+          "count": 1
+        },
+        {
+          "clave": "OD11931406",
+          "nombre": "ANA MARIA CAMPOS",
+          "count": 1
+        },
+        {
+          "clave": "OD11961406",
+          "nombre": "BERTHA CORINA ORTIZ OVIEDO",
+          "count": 1
+        },
+        {
+          "clave": "OD12001406",
+          "nombre": "PUBLIO ROJAS DURAN",
+          "count": 1
+        },
+        {
+          "clave": "OD12011406",
+          "nombre": "CATALINA PLAZA DE UZCATEGUI",
+          "count": 1
+        },
+        {
+          "clave": "OD16091406",
+          "nombre": "ANTONIO JOSE DE SUCRE",
+          "count": 1
+        },
+        {
+          "clave": "OD16251406",
+          "nombre": "FELIX TAMAYO ROJAS",
+          "count": 1
+        },
+        {
+          "clave": "OD16291406",
+          "nombre": "MONSEÑOR JOSÉ ESCOLÁSTICO DUQUE",
+          "count": 1
+        },
+        {
+          "clave": "OD17091406",
+          "nombre": "RAFAEL URDANETA",
+          "count": 1
+        },
+        {
+          "clave": "ON11621406",
+          "nombre": "ELOINA SANCHEZ DE RAMIREZ",
+          "count": 1
+        },
+        {
+          "clave": "ON15671406",
+          "nombre": "CANÓNIGO UZCÁTEGUI",
+          "count": 1
+        },
+        {
+          "clave": "S2958D1406",
+          "nombre": "JULIO CESAR DAVILA",
+          "count": 1
+        },
+        {
+          "clave": "S3877D1406",
+          "nombre": "ISABEL BRICEÑO DE FORNEZ",
+          "count": 1
+        },
+        {
+          "clave": "T0715D1406",
+          "nombre": "MISTAJA",
+          "count": 1
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 100,
+        "arrCargados": [],
+        "arrPendientes": [
+          "12 DE OCTUBRE",
+          "19 DE ABRIL DE 1810",
+          "ADOLFO OVIEDO",
+          "AGUSTIN DUGARTE",
+          "ALFONSO PAREDES DEZEO",
+          "ALFREDO  LARA ANGULO",
+          "ALFREDO DINI",
+          "ALI RODRIGUEZ ARAQUE",
+          "ANA MARIA CAMPOS",
+          "ANA MARQUEZ",
+          "ANTONIO ARMANDO PICÓN CÁRDENAS",
+          "ANTONIO GUZMAN BLANCO",
+          "ANTONIO JOSE DE SUCRE",
+          "ANTONIO JOSE FEBRES CORDERO",
+          "AUGUSTO RODRIGUEZ ARANGUREN",
+          "BALDOMERA MENDOZA",
+          "BALVINO ALBORNOZ RODRIGUEZ",
+          "BELEN SAN JUAN COLINA",
+          "BELKIS COROMOTO PEREZ",
+          "BERTHA CORINA ORTIZ OVIEDO",
+          "BLANCA ESPERANZA SIERRA",
+          "CAMPO ELIAS",
+          "CANÓNIGO UZCÁTEGUI",
+          "CATALINA PLAZA DE UZCATEGUI",
+          "CAYETANO MONTES",
+          "CELEDONIO RIVAS",
+          "CLEMENTE CALDERÒN",
+          "CRISTOBAL ROJAS ROJAS",
+          "DAVID RAMÓN TORRES CALDERON",
+          "DIGNA ROSA ANGARITA BENITEZ",
+          "DOCTOR JOSE MIGUEL MONAGAS",
+          "DR GONZALO BENAIM PINTO",
+          "EDELMIRA QUINTERO DL",
+          "EL SALADO",
+          "ELOINA SANCHEZ DE RAMIREZ",
+          "EUDYS DIONICIA MONTILLA",
+          "EZEQUIEL ZAMORA",
+          "FABIO EMILIO CONTRERAS RODRIGUEZ",
+          "FELICIANO RANGEL",
+          "FELIX TAMAYO ROJAS",
+          "FIDELIA ARAQUE DE PEÑA",
+          "GINES RAMOS SANCHEZ",
+          "GRAN MARISCAL DE AYACUCHO",
+          "HIPOLITO ELIAS GONZALEZ",
+          "HUMBOLT",
+          "ISABEL BRICEÑO DE FORNEZ",
+          "JHON DE JESUS GONZALEZ",
+          "JOSE ANGEL MANRIQUE MEJIA",
+          "JOSE ENRIQUE ARIAS",
+          "JOSE GREGORIO HERNANDEZ",
+          "JOSE OMAR MONZON SALAS",
+          "JOSE PEÑA",
+          "JOSE VICENTE SALAS",
+          "JOSÉ ROQUE MUÑOZ",
+          "JUAN BAUTISTA TORRES VIELMA",
+          "JUAN EVANGELISTA QUINTERO",
+          "JUAN FELIX SANCHEZ",
+          "JUAN XXIII",
+          "JULIAN DUGARTE MUÑOZ",
+          "JULIO CESAR DAVILA",
+          "JUSTINA PAREDES VIELMA",
+          "LA MESA",
+          "LA RANCHERÍA",
+          "LORENZO TINJACA",
+          "LOS GUAIMAROS",
+          "LOS ÁNGELES",
+          "MARGARITA GUTIERREZ DE MERCADO",
+          "MARIA DE LOS REYES ROJAS ROJAS",
+          "MARIA GUILLERMINA CONTRERAS",
+          "MARIA HORTENSIA ZERPA UZCATEGUI",
+          "MARIA OLIVA DEL ROSARIO RANGEL",
+          "MARTIN PEÑA ROJAS",
+          "MARTIN RODRIGUEZ",
+          "MIGUEL LORENZO GIL CHIPIA",
+          "MISTAJA",
+          "MONSEÑOR DUQUE",
+          "MONSEÑOR JAUREGUI",
+          "MONSEÑOR JOSÉ ESCOLÁSTICO DUQUE",
+          "NELLY TERESA MEJIAS",
+          "NICOLASA QUINTERO SALAZAR",
+          "PADRE BARILLAS",
+          "PADRE DUQUE",
+          "PAULINO PEÑA",
+          "PEDRO CLEMENTE ARAQUE",
+          "PEDRO JUSTO ANDRADE",
+          "PEDRO PABLO RODRIGUEZ FLORES",
+          "PUBLIO ROJAS DURAN",
+          "RAFAEL URDANETA",
+          "RAMON AMADOR FONSECA",
+          "RESURRECCION ARAQUE",
+          "RICARDO GUILLEN SUAREZ",
+          "ROSA ELVINA FLORES",
+          "SAN BUENAVENTURA",
+          "SAN ISIDRO LABRADOR",
+          "SAN ONOFRE",
+          "SIMON RODRIGUEZ",
+          "SIMÓN BOLÍVAR",
+          "TIBISAY MORENO",
+          "VIRGEN DEL ROSARIO",
+          "YUBAN ORTEGA"
+        ]
+      }
+    },
+    "CARACCIOLO PARRA": {
+      "totalPersonal": 519,
+      "totalPlanteles": 53,
+      "docentes": 397,
+      "administrativos": 19,
+      "obreros": 103,
+      "situacion_laboral": {
+        "ACTIVO": 437,
+        "ADECUACIÓN LABORAL": 7,
+        "PERMISO PRE Y POST NATAL": 5,
+        "EN PROCESO DE JUBILACIÓN": 31,
+        "INCAPACIDAD TEMPORAL": 2,
+        "EN PROCESO DE INCAPACIDAD": 1,
+        "NO DEFINIDA": 9,
+        "APOYO INSTITUCIONAL": 9,
+        "SINCERACIÓN DE NÓMINA": 3,
+        "RENUNCIA": 3,
+        "COMISION DE SERVICIO": 4,
+        "PERMISO POR CUIDO": 1,
+        "ABANDONO DE CARGO": 1,
+        "REPOSO MEDICO": 3,
+        "INCUMPLIMIENTO DE FUNCIONES": 1,
+        "LICENCIA SINDICAL": 1,
+        "INCAPACIDAD TOTAL Y DEFINITIVA POR IVSS": 1
+      },
+      "jubilables": [
+        {
+          "clave": "OD00991407",
+          "nombre": "PASCUAL IGNACIO VILLASMIL",
+          "count": 11
+        },
+        {
+          "clave": "S1064D1407",
+          "nombre": "VICENTE CAMPO ELIAS",
+          "count": 9
+        },
+        {
+          "clave": "OD01011407",
+          "nombre": "PABLO TERAN FRIAS",
+          "count": 4
+        },
+        {
+          "clave": "OD04161407",
+          "nombre": "MARIA SIMONA CORREDOR",
+          "count": 4
+        },
+        {
+          "clave": "OD04191407",
+          "nombre": "RAMON MORENO VILORIA",
+          "count": 4
+        },
+        {
+          "clave": "OD04241407",
+          "nombre": "LA CHIQUINQUIRA",
+          "count": 3
+        },
+        {
+          "clave": "OD16331407",
+          "nombre": "FRANCISCO PLAZA",
+          "count": 3
+        },
+        {
+          "clave": "OD17441407",
+          "nombre": "PASCUAL IGNACIO VILLASMIL",
+          "count": 3
+        },
+        {
+          "clave": "OD17721407",
+          "nombre": "WILLIAN DELGADO ALVIAREZ",
+          "count": 3
+        },
+        {
+          "clave": "S3879N1407",
+          "nombre": "HUMBERTO ROJAS",
+          "count": 3
+        },
+        {
+          "clave": "OD01101407",
+          "nombre": "PROF ANTONIO MORALES",
+          "count": 2
+        },
+        {
+          "clave": "OD03731407",
+          "nombre": "JOSE OCTAVIO IBARRA",
+          "count": 2
+        },
+        {
+          "clave": "OD04181407",
+          "nombre": "JOSE TIBURCIO RODRIGUEZ",
+          "count": 2
+        },
+        {
+          "clave": "OD16321407",
+          "nombre": "JUAN CARLOS AZUAJE",
+          "count": 2
+        },
+        {
+          "clave": "OD17601407",
+          "nombre": "RAMON CELESTINO CONTRERAS",
+          "count": 2
+        },
+        {
+          "clave": "OD01001407",
+          "nombre": "EL NIÑO SIMON",
+          "count": 1
+        },
+        {
+          "clave": "OD01081407",
+          "nombre": "MAURO ANTONIO HUIZA",
+          "count": 1
+        },
+        {
+          "clave": "OD01091407",
+          "nombre": "MARIA DELMIRA UZCATEGUI",
+          "count": 1
+        },
+        {
+          "clave": "OD03751407",
+          "nombre": "JOSE MANUEL SISO",
+          "count": 1
+        },
+        {
+          "clave": "OD03761407",
+          "nombre": "SALOMON ROSALES",
+          "count": 1
+        },
+        {
+          "clave": "OD04151407",
+          "nombre": "JESUS MANUEL SANTADER",
+          "count": 1
+        },
+        {
+          "clave": "OD04201407",
+          "nombre": "ABEL MORA  MARQUEZ",
+          "count": 1
+        },
+        {
+          "clave": "OD12041407",
+          "nombre": "ARTURO MICHELENA",
+          "count": 1
+        },
+        {
+          "clave": "OD17711407",
+          "nombre": "CINTA CERERA AUDI",
+          "count": 1
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 53,
+        "arrCargados": [],
+        "arrPendientes": [
+          "ABEL MORA  MARQUEZ",
+          "ARTURO MICHELENA",
+          "CARMEN JOSEFINA VIERA",
+          "CARMEN TERESA SALCEDO DE EPIEYÚ",
+          "CINTA CERERA AUDI",
+          "DELICIAS ALTAS",
+          "EL NIÑO SIMON",
+          "ELVIS DE JESUS APONCIO",
+          "EUMELIA HERNANDEZ",
+          "FRANCISCO PLAZA",
+          "GENERAL JOSE ANTONIO PAEZ",
+          "GUACHIZON ARRIBA",
+          "HUMBERTO ROJAS",
+          "ISABEL TERESA CHACON",
+          "JESUS MANUEL SANTADER",
+          "JOSE ADELMO RAMIREZ",
+          "JOSE ARMANDO PLAZA CUEVAS",
+          "JOSE ARMANDO PLAZA CUEVAS",
+          "JOSE DE JESUS AVENDAÑO",
+          "JOSE EPIMENIDES SULBARAN",
+          "JOSE FELIX RIBAS",
+          "JOSE GREGORIO HERNANDEZ",
+          "JOSE MANUEL SISO",
+          "JOSE NICOLAS MORENO",
+          "JOSE OCTAVIO IBARRA",
+          "JOSE TIBURCIO RODRIGUEZ",
+          "JOSE VICTOR RAMIREZ",
+          "JUAN CARLOS AZUAJE",
+          "LA CHIQUINQUIRA",
+          "LEONOR DE LA GUERRA",
+          "MARIA DELMIRA UZCATEGUI",
+          "MARIA FELICIA PARRA",
+          "MARIA SIMONA CORREDOR",
+          "MARTA LEON",
+          "MAURO ANTONIO HUIZA",
+          "MODESTA BOR",
+          "PABLO TERAN FRIAS",
+          "PASCUAL IGNACIO VILLASMIL",
+          "PASCUAL IGNACIO VILLASMIL",
+          "PROF ANTONIO MORALES",
+          "RAMON CELESTINO CONTRERAS",
+          "RAMON MORENO VILORIA",
+          "RICARDO AGUIRRE",
+          "RICARDO RAMIREZ MORENO",
+          "SALOMON ROSALES",
+          "SAN BENITO",
+          "SANTA MARIA ROSA MOLAS FE Y ALEGRIA",
+          "SIMON RODRIGUEZ",
+          "TRIBILIN HUGUITO",
+          "UVENCIO TORRES",
+          "VICENTE CAMPO ELIAS",
+          "WILLIAN DELGADO ALVIAREZ",
+          "YSAURO MORENO TORRES"
+        ]
+      }
+    },
+    "CARDENAL QUINTERO": {
+      "totalPersonal": 304,
+      "totalPlanteles": 20,
+      "docentes": 206,
+      "administrativos": 9,
+      "obreros": 89,
+      "situacion_laboral": {
+        "ACTIVO": 276,
+        "ADECUACIÓN LABORAL": 6,
+        "EN PROCESO DE JUBILACIÓN": 4,
+        "VACACIONES": 5,
+        "ABANDONO DE CARGO": 2,
+        "EN PROCESO DE INCAPACIDAD": 1,
+        "PERMISO PRE Y POST NATAL": 3,
+        "REPOSO MEDICO": 2,
+        "APOYO INSTITUCIONAL": 1,
+        "SINCERACIÓN DE NÓMINA": 1,
+        "RENUNCIA": 1,
+        "PERMISO POR CUIDO": 1,
+        "INCAPACIDAD TOTAL Y DEFINITIVA POR IVSS": 1
+      },
+      "jubilables": [
+        {
+          "clave": "OD00881408",
+          "nombre": "MARTHA GONZALEZ",
+          "count": 14
+        },
+        {
+          "clave": "OD17281408",
+          "nombre": "DON PABLO MORENO",
+          "count": 7
+        },
+        {
+          "clave": "S0922D1408",
+          "nombre": "MAXIMO TORO",
+          "count": 7
+        },
+        {
+          "clave": "S2994D1408",
+          "nombre": "YOLANDA ALBARRÁN MORENO",
+          "count": 5
+        },
+        {
+          "clave": "OD17291408",
+          "nombre": "SIMON RODRIGUEZ",
+          "count": 2
+        },
+        {
+          "clave": "OD00821408",
+          "nombre": "MARTHA GONZALEZ",
+          "count": 1
+        },
+        {
+          "clave": "OD03921408",
+          "nombre": "RIFINO BLANCO FOMBONA",
+          "count": 1
+        },
+        {
+          "clave": "OD17261408",
+          "nombre": "MARIA S CAMACHO",
+          "count": 1
+        },
+        {
+          "clave": "OD17311408",
+          "nombre": "RAFAEL ÁNGEL VALERO MORENO",
+          "count": 1
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 20,
+        "arrCargados": [],
+        "arrPendientes": [
+          "AUGUSTO MIJARES",
+          "CARLOS CRUZ DIEZ",
+          "DOMINGO ANTONIO IZARRA",
+          "DON PABLO MORENO",
+          "EMILIANOSALCEDO",
+          "JOSE MARÍA CARREÑO",
+          "LUIS BELTRAN PRIETO FIGUEROA",
+          "MARIA FLORENRTINA JEREZ",
+          "MARIA ISABEL RONDON",
+          "MARIA S CAMACHO",
+          "MARIANO MONTILLA",
+          "MARTHA GONZALEZ",
+          "MARTHA GONZALEZ",
+          "MAXIMO TORO",
+          "MITISUS",
+          "RAFAEL ÁNGEL VALERO MORENO",
+          "RAMON DIAZ SANCHEZ",
+          "RIFINO BLANCO FOMBONA",
+          "SIMON RODRIGUEZ",
+          "YOLANDA ALBARRÁN MORENO"
+        ]
+      }
+    },
+    "GUARAQUE": {
+      "totalPersonal": 383,
+      "totalPlanteles": 32,
+      "docentes": 214,
+      "administrativos": 16,
+      "obreros": 153,
+      "situacion_laboral": {
+        "SINCERACIÓN DE NÓMINA": 5,
+        "ACTIVO": 333,
+        "EN PROCESO DE JUBILACIÓN": 20,
+        "INCAPACIDAD TEMPORAL": 5,
+        "EN PROCESO DE INCAPACIDAD": 3,
+        "ADECUACIÓN LABORAL": 4,
+        "INCAPACIDAD TOTAL Y DEFINITIVA POR IVSS": 4,
+        "RENUNCIA": 1,
+        "PERMISO PRE Y POST NATAL": 1,
+        "APOYO INSTITUCIONAL": 1,
+        "ABANDONO DE CARGO": 3,
+        "REPOSO MEDICO": 1,
+        "COMISION DE SERVICIO": 1,
+        "LICENCIA SINDICAL": 1
+      },
+      "jubilables": [
+        {
+          "clave": "OD01941409",
+          "nombre": "LIGIA ESPERANZA MOLINA QUINTERO",
+          "count": 3
+        },
+        {
+          "clave": "OD02121409",
+          "nombre": "FIDELIA MOLINA DE RAMIREZ",
+          "count": 2
+        },
+        {
+          "clave": "OD09581409",
+          "nombre": "VIRGINIA GARCÍA DE DAVILA",
+          "count": 2
+        },
+        {
+          "clave": "OD12111409",
+          "nombre": "EGLEIDY LIZBETH  RAMIREZ MOLINA",
+          "count": 2
+        },
+        {
+          "clave": "OD12121409",
+          "nombre": "VIRGINIA MARTINEZ DE MORENO",
+          "count": 2
+        },
+        {
+          "clave": "OD08301409",
+          "nombre": "LUIS EMIRO GARCÍA",
+          "count": 1
+        },
+        {
+          "clave": "OD09801409",
+          "nombre": "ELIBERTO CONTRERAS",
+          "count": 1
+        },
+        {
+          "clave": "OD12161409",
+          "nombre": "BAUDILIO QUINTERO PÉREZ",
+          "count": 1
+        },
+        {
+          "clave": "S1541D1409",
+          "nombre": "JAVIER ELIAS ROA SANCHEZ",
+          "count": 1
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 32,
+        "arrCargados": [],
+        "arrPendientes": [
+          "ANA REYES RUJANO MENDEZ",
+          "ANGEL DOMINGO MOLINA",
+          "ANTONIA RAMIREZ DE SANTANA",
+          "AZAEL CONTRERAS",
+          "BAUDILIO QUINTERO PÉREZ",
+          "CAYETANA RAMÍREZ DE SÁNCHEZ",
+          "DORA JOSEFINA MARQUEZ CASTRO",
+          "EGLEIDY LIZBETH  RAMIREZ MOLINA",
+          "ELIBERTO CONTRERAS",
+          "FELICITO MONTOYA SERRANO",
+          "FIDEL ALCIDES RAMIREZ MOLINA",
+          "FIDELIA MOLINA DE RAMIREZ",
+          "FÉLIX MARQUEZ MÉNDEZ",
+          "GROGORIO MORA LEONI",
+          "HECTOR MOLINA RAMIREZ",
+          "JAVIER ELIAS ROA SANCHEZ",
+          "JUANA DE LA MERCED CAMACHO GARCIA",
+          "LEOVIGILDA ROA DE ROA",
+          "LIGIA ESPERANZA MOLINA QUINTERO",
+          "LUCILA NOGUERA DE MORA",
+          "LUIS EMIRO GARCÍA",
+          "LUIS MARIA RIVAS DAVILA",
+          "MANUEL AMABLE CONTRERAS",
+          "MARTA GARCÍA  GARCIA",
+          "MAXIA FLORINDA ROSALES DE ROMERO",
+          "MAXIA FLORINDA ROSALES DE ROMERO",
+          "PERSILIANO CONTRERAS",
+          "RAMON NOGUERA ARAQUE",
+          "RITA ELENA MÁRQUEZ",
+          "VICENTE ALARCÓN",
+          "VIRGINIA GARCÍA DE DAVILA",
+          "VIRGINIA MARTINEZ DE MORENO"
+        ]
+      }
+    },
+    "JULIO CESAR": {
+      "totalPersonal": 374,
+      "totalPlanteles": 23,
+      "docentes": 266,
+      "administrativos": 11,
+      "obreros": 97,
+      "situacion_laboral": {
+        "ACTIVO": 343,
+        "TRASLADO INTERZONAL": 4,
+        "EN PROCESO DE INCAPACIDAD": 4,
+        "DEFUNCIONES": 1,
+        "EN PROCESO DE JUBILACIÓN": 5,
+        "COMISION DE SERVICIO": 6,
+        "APOYO INSTITUCIONAL": 5,
+        "SINCERACIÓN DE NÓMINA": 1,
+        "INCAPACIDAD TOTAL POR IPASME": 3,
+        "INCAPACIDAD TEMPORAL": 1,
+        "REPOSO MEDICO": 1
+      },
+      "jubilables": [
+        {
+          "clave": "OD01021410",
+          "nombre": "ROBERTO PICON LARES",
+          "count": 5
+        },
+        {
+          "clave": "S1068D1410",
+          "nombre": "JOSE AMERICO TORRES",
+          "count": 5
+        },
+        {
+          "clave": "OD17131410",
+          "nombre": "ANA YLDA UZCATEGUI DE BASTIDAS",
+          "count": 3
+        },
+        {
+          "clave": "OD12181410",
+          "nombre": "SAN LORENZO",
+          "count": 2
+        },
+        {
+          "clave": "OD12231410",
+          "nombre": "JOSE DE LA CRUZ ARAUJO GONZALEZ",
+          "count": 2
+        },
+        {
+          "clave": "OD12251410",
+          "nombre": "JOSE ELPIDIO SALCEDO",
+          "count": 2
+        },
+        {
+          "clave": "OD12281410",
+          "nombre": "RAMON IGNACIO VERGARA",
+          "count": 1
+        },
+        {
+          "clave": "S2855D1410",
+          "nombre": "OMAR GREGORIO RIVAS",
+          "count": 1
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 23,
+        "arrCargados": [],
+        "arrPendientes": [
+          "23 DE ENERO DE 1958",
+          "ANA YLDA UZCATEGUI DE BASTIDAS",
+          "BRAULIO BELANDRIA",
+          "DELFIN RAMON QUIROZ DURAN",
+          "ELISABEL SIERRA MARTINEZ",
+          "EMIRA MATHEUS",
+          "JOSE AMERICO TORRES",
+          "JOSE DE LA CRUZ ARAUJO GONZALEZ",
+          "JOSE ELPIDIO SALCEDO",
+          "JOSE MIGUEL FERNANDEZ RIVAS",
+          "JOSE NATIVIDAD TORRES DIAZ",
+          "JOSE SABAS MONTILLA",
+          "LUISA CACERES DE ARISMENDI",
+          "MARIA DALIA DURAN DE MONTILLA",
+          "MAXIMO RAMIREZ",
+          "NATIVIDAD PEÑA UTRILLA",
+          "OMAR GREGORIO RIVAS",
+          "RAMON IGNACIO VERGARA",
+          "RESURRECCION ARAQUE",
+          "ROBERTO PICON LARES",
+          "SAN LORENZO",
+          "SANTA CRUZ",
+          "SIMON RODRIGUEZ"
+        ]
+      }
+    },
+    "JUSTO BRICEÑO": {
+      "totalPersonal": 211,
+      "totalPlanteles": 21,
+      "docentes": 141,
+      "administrativos": 8,
+      "obreros": 62,
+      "situacion_laboral": {
+        "ACTIVO": 197,
+        "INCUMPLIMIENTO DE FUNCIONES": 3,
+        "ABANDONO DE CARGO": 1,
+        "PERMISO PRE Y POST NATAL": 3,
+        "REPOSO MEDICO": 1,
+        "EN PROCESO DE INCAPACIDAD": 2,
+        "EN PROCESO DE JUBILACIÓN": 4
+      },
+      "jubilables": [
+        {
+          "clave": "OD00971411",
+          "nombre": "BRICEÑO MENDEZ",
+          "count": 3
+        },
+        {
+          "clave": "OD05231411",
+          "nombre": "ANA MARÍA REYES",
+          "count": 1
+        },
+        {
+          "clave": "OD09611411",
+          "nombre": "MARIA MONTESSORI",
+          "count": 1
+        },
+        {
+          "clave": "OD09651411",
+          "nombre": "SIMON RODRIGUEZ",
+          "count": 1
+        },
+        {
+          "clave": "OD12351411",
+          "nombre": "PEDRO ANÍBAL CABRERA",
+          "count": 1
+        },
+        {
+          "clave": "OD17491411",
+          "nombre": "SAN CRISTOBAL",
+          "count": 1
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 21,
+        "arrCargados": [],
+        "arrPendientes": [
+          "ANA MARÍA REYES",
+          "ARMANDO REVERÓN",
+          "BRICEÑO MENDEZ",
+          "CARLOS ANTONIO MORENO",
+          "HERMELINDA DEL CARMEN BONILLA",
+          "HUGO RAFAEL CHÁVEZ FRÍAS",
+          "ISABEL MONTILLA",
+          "JOSÉ MARÍA VARGAS",
+          "JOSÉ VIRGILIO TERÁN",
+          "LUIS RAMÓN CAMACHO",
+          "MANUEL GUAL",
+          "MARIA CIRA GARCIA",
+          "MARIA MONTESSORI",
+          "OLGA MARGARITA PARRA",
+          "PEDRO ANÍBAL CABRERA",
+          "RUFINO BETANCOURT TORRES",
+          "SAN ANTONIO",
+          "SAN CRISTOBAL",
+          "SAN CRISTOBAL",
+          "SANTA ROSA",
+          "SIMON RODRIGUEZ"
+        ]
+      }
+    },
+    "LIBERTADOR": {
+      "totalPersonal": 5214,
+      "totalPlanteles": 190,
+      "docentes": 3256,
+      "administrativos": 498,
+      "obreros": 1460,
+      "situacion_laboral": {
+        "ACTIVO": 4309,
+        "APOYO INSTITUCIONAL": 88,
+        "EN PROCESO DE JUBILACIÓN": 150,
+        "REPOSO MEDICO": 58,
+        "LICENCIA SINDICAL": 41,
+        "EN PROCESO DE INCAPACIDAD": 90,
+        "INCAPACIDAD TOTAL Y DEFINITIVA POR IVSS": 36,
+        "SINCERACIÓN DE NÓMINA": 186,
+        "PERMISO POR CUIDO": 22,
+        "RENUNCIA": 22,
+        "PERMISO PRE Y POST NATAL": 16,
+        "ADECUACIÓN LABORAL": 63,
+        "INCAPACIDAD TEMPORAL": 39,
+        "COMISION DE SERVICIO": 11,
+        "VACACIONES": 7,
+        "ABANDONO DE CARGO": 35,
+        "INCAPACIDAD TOTAL POR IPASME": 11,
+        "DEFUNCIONES": 8,
+        "INCUMPLIMIENTO DE FUNCIONES": 8,
+        "TRASLADO INTERZONAL": 12,
+        "PERMISO POR FALLECIMIENTO": 2
+      },
+      "jubilables": [
+        {
+          "clave": "S0269D1412",
+          "nombre": "CARACCIOLO PARRA Y OLMEDO",
+          "count": 25
+        },
+        {
+          "clave": "S0273D1412",
+          "nombre": "LIBERTADOR",
+          "count": 21
+        },
+        {
+          "clave": "S3456D1412",
+          "nombre": "JOSE ANTONIO PEÑA TREJO",
+          "count": 19
+        },
+        {
+          "clave": "T0097D1412",
+          "nombre": "MANUEL ANTONIO PULIDO MENDEZ",
+          "count": 18
+        },
+        {
+          "clave": "S0919D1412",
+          "nombre": "DR ARMANDO GONZALEZ PUCCINI",
+          "count": 15
+        },
+        {
+          "clave": "N0060D1412",
+          "nombre": "ALBERTO CARNEVALLI",
+          "count": 13
+        },
+        {
+          "clave": "T0627D1412",
+          "nombre": "SIMON RODRIGUEZ",
+          "count": 13
+        },
+        {
+          "clave": "S2869D1412",
+          "nombre": "FERMIN RUIZ VALERO",
+          "count": 12
+        },
+        {
+          "clave": "S0920D1412",
+          "nombre": "GONZALO PICON FEBRES",
+          "count": 11
+        },
+        {
+          "clave": "OD02571412",
+          "nombre": "JACINTO LARA",
+          "count": 9
+        },
+        {
+          "clave": "OD03851412",
+          "nombre": "EL EDUCADOR",
+          "count": 9
+        },
+        {
+          "clave": "S2236D1412",
+          "nombre": "ELOY PAREDES",
+          "count": 9
+        },
+        {
+          "clave": "OD02511412",
+          "nombre": "NIÑO SIMON",
+          "count": 8
+        },
+        {
+          "clave": "OD02561412",
+          "nombre": "VICENTE DAVILA",
+          "count": 8
+        },
+        {
+          "clave": "OD13251412",
+          "nombre": "VICENTE SALIAS (ANTES LOS CUROS (SEDE PARROQUIAL)",
+          "count": 8
+        },
+        {
+          "clave": "S0746D1412",
+          "nombre": "ANTONIO NICOLAS RANGEL",
+          "count": 8
+        },
+        {
+          "clave": "T0099D1412",
+          "nombre": "TULIO FEBRES CORDERO",
+          "count": 8
+        },
+        {
+          "clave": "OD02931412",
+          "nombre": "RAFAEL ANTONIO GODOY",
+          "count": 7
+        },
+        {
+          "clave": "OD12741412",
+          "nombre": "SAN JACINTO",
+          "count": 7
+        },
+        {
+          "clave": "OD13261412",
+          "nombre": "HUMBERTO TEJERA",
+          "count": 7
+        },
+        {
+          "clave": "OD15311412",
+          "nombre": "ROMULO GALLEGOS",
+          "count": 7
+        },
+        {
+          "clave": "S1151N1412",
+          "nombre": "HAYDEE CARDENAS",
+          "count": 7
+        },
+        {
+          "clave": "S1464D1412",
+          "nombre": "ANDRES ELOY BLANCO",
+          "count": 7
+        },
+        {
+          "clave": "OD02381412",
+          "nombre": "BELÉN SAN JUAN COLINA (ANTES EL EDUCADOR)",
+          "count": 6
+        },
+        {
+          "clave": "OD02421412",
+          "nombre": "GABRIEL PICON GONZALEZ",
+          "count": 6
+        },
+        {
+          "clave": "OD02601412",
+          "nombre": "ANASTACIA LA HEROÍNA (ANTES JUAN RUIZ FAJARDO)",
+          "count": 6
+        },
+        {
+          "clave": "OD02631412",
+          "nombre": "JUAN BAUTISTA ARISMENDI (ANTES 10 DE DICIEMBRE)",
+          "count": 6
+        },
+        {
+          "clave": "OD13141412",
+          "nombre": "AGUSTIN CODAZZI (ANTES INAVITO)",
+          "count": 6
+        },
+        {
+          "clave": "OD13181412",
+          "nombre": "DELIA PAREDES (ANTES FERMIN RUIZ VALERO)",
+          "count": 6
+        },
+        {
+          "clave": "OD02391412",
+          "nombre": "JUAN LOVERA (ANTES ESTADO LARA)",
+          "count": 5
+        },
+        {
+          "clave": "OD02451412",
+          "nombre": "DOCTOR RAMON REINOSO NUÑEZ",
+          "count": 5
+        },
+        {
+          "clave": "OD02781412",
+          "nombre": "JEAN PIAGET",
+          "count": 5
+        },
+        {
+          "clave": "OD04101412",
+          "nombre": "JOSE GIL FORTOUL (ANTES EL ANDINITO)",
+          "count": 5
+        },
+        {
+          "clave": "OD12561412",
+          "nombre": "JUAN PABLO II",
+          "count": 5
+        },
+        {
+          "clave": "OD13031412",
+          "nombre": "COROMOTO",
+          "count": 5
+        },
+        {
+          "clave": "S1632N1412",
+          "nombre": "MERIDA",
+          "count": 5
+        },
+        {
+          "clave": "S1964D1412",
+          "nombre": "JOSE FELIX RIBAS",
+          "count": 5
+        },
+        {
+          "clave": "S2878D1412",
+          "nombre": "RAMON IGNACIO GUERRA",
+          "count": 5
+        },
+        {
+          "clave": "OD00121412",
+          "nombre": "LEONOR DE LA GUERRA  (ANTES CREACION EL VALLE",
+          "count": 4
+        },
+        {
+          "clave": "OD00251412",
+          "nombre": "OFELIA TANCREDI DE CORREDOR",
+          "count": 4
+        },
+        {
+          "clave": "OD01171412",
+          "nombre": "MANUEL MUJICA MILLAN (ANTES GABRIEL PICON GONZALEZ)",
+          "count": 4
+        },
+        {
+          "clave": "OD02401412",
+          "nombre": "NIÑA AVELINA GIL",
+          "count": 4
+        },
+        {
+          "clave": "OD02441412",
+          "nombre": "RIVAS DAVILA",
+          "count": 4
+        },
+        {
+          "clave": "OD02721412",
+          "nombre": "GLADYS CELINA LOBO DE CARNEVALI",
+          "count": 4
+        },
+        {
+          "clave": "OD02801412",
+          "nombre": "LUIS ALFONSO MARTOS RIVAS (ANTES ELOY PAREDES)",
+          "count": 4
+        },
+        {
+          "clave": "OD03551412",
+          "nombre": "CAMILO CONTRERAS",
+          "count": 4
+        },
+        {
+          "clave": "OD03701412",
+          "nombre": "MONSEÑOR DOCTOR SANTIAGO HERNANDEZ MILANES",
+          "count": 4
+        },
+        {
+          "clave": "OD05201412",
+          "nombre": "DOCTOR RAMON PARRA PICON",
+          "count": 4
+        },
+        {
+          "clave": "OD12751412",
+          "nombre": "HIRIA EMILIA MARQUEZ (ANTES EL LLANO",
+          "count": 4
+        },
+        {
+          "clave": "OD12771412",
+          "nombre": "16 DE SEPTIEMBRE DE 1810 (ANTES 16 DE SEPTIEMBRE)",
+          "count": 4
+        },
+        {
+          "clave": "S3880N1412",
+          "nombre": "8 DE SEPTIEMBRE DE 1867 (ANTES 8 DE SEPTIEMBRE)",
+          "count": 4
+        },
+        {
+          "clave": "OD02361412",
+          "nombre": "ANTONIO PINTO SALINAS (ANTES SIMON RODRIGUEZ)",
+          "count": 3
+        },
+        {
+          "clave": "OD02551412",
+          "nombre": "ANTONIO JOSE DE SUCRE (ANTES VICENTE DAVILA)",
+          "count": 3
+        },
+        {
+          "clave": "OD03051412",
+          "nombre": "JOSEFA MOLINA DE DUQUE",
+          "count": 3
+        },
+        {
+          "clave": "OD12641412",
+          "nombre": "BOLIVAR",
+          "count": 3
+        },
+        {
+          "clave": "OD12701412",
+          "nombre": "RAFAELA DEL CARMEN DIAZ DE LEON",
+          "count": 3
+        },
+        {
+          "clave": "OD12861412",
+          "nombre": "BICENTENARIO DEL LIBERTADOR",
+          "count": 3
+        },
+        {
+          "clave": "OD12901412",
+          "nombre": "SANTA ROSA",
+          "count": 3
+        },
+        {
+          "clave": "OD17231412",
+          "nombre": "EPIFANIA GIL",
+          "count": 3
+        },
+        {
+          "clave": "OD17401412",
+          "nombre": "JESUS MANUEL GUERRERO (ANTES NIÑO BOLIVAR)",
+          "count": 3
+        },
+        {
+          "clave": "S0272N1412",
+          "nombre": "FLORENCIO RAMIREZ",
+          "count": 3
+        },
+        {
+          "clave": "S1464N1412",
+          "nombre": "JACINTO PLAZA (ANTES ANDRES ELOY BLANCO)",
+          "count": 3
+        },
+        {
+          "clave": "OD00751412",
+          "nombre": "GENERAL ELEAZAR LOPEZ CONTRERAS",
+          "count": 2
+        },
+        {
+          "clave": "OD00781412",
+          "nombre": "FRANCISCO ESTEBAN GOMEZ (ANTES ESPECIAL N 1)",
+          "count": 2
+        },
+        {
+          "clave": "OD01191412",
+          "nombre": "MARIA SIMONA CORREDOR (ANTES EL CHAMITA)",
+          "count": 2
+        },
+        {
+          "clave": "OD02331412",
+          "nombre": "JOSÉ GREGORIO HERNÁNDEZ (ANTES FORESTALITO)",
+          "count": 2
+        },
+        {
+          "clave": "OD02521412",
+          "nombre": "CECILIO ACOSTA",
+          "count": 2
+        },
+        {
+          "clave": "OD02641412",
+          "nombre": "ANA EMILIA DELON",
+          "count": 2
+        },
+        {
+          "clave": "OD02701412",
+          "nombre": "CINCO AGUILAS",
+          "count": 2
+        },
+        {
+          "clave": "OD03021412",
+          "nombre": "MIGUEL DE CERVANTES Y SAAVEDRA",
+          "count": 2
+        },
+        {
+          "clave": "OD03031412",
+          "nombre": "ELOY CHALBAUD CARDONA",
+          "count": 2
+        },
+        {
+          "clave": "OD03071412",
+          "nombre": "DOMINGO GUZMAN PEÑA (ANTES 15 DE ENERO)",
+          "count": 2
+        },
+        {
+          "clave": "OD04091412",
+          "nombre": "DOMINGO SALAZAR ROJAS (ANTES ARCO IRIS)",
+          "count": 2
+        },
+        {
+          "clave": "OD04111412",
+          "nombre": "JOSÉ ZOILO MERCADO",
+          "count": 2
+        },
+        {
+          "clave": "OD12851412",
+          "nombre": "MARIA MONTESSORI",
+          "count": 2
+        },
+        {
+          "clave": "OD12871412",
+          "nombre": "SIERRA NEVADA",
+          "count": 2
+        },
+        {
+          "clave": "OD13011412",
+          "nombre": "SAN RAFAEL (ANTES SAN RAFAEL DEL CHAMA)",
+          "count": 2
+        },
+        {
+          "clave": "OD13221412",
+          "nombre": "ANTONIO DAVILA PEÑA (ANTES EL QUINO)",
+          "count": 2
+        },
+        {
+          "clave": "OD17721412",
+          "nombre": "ARGELIA MERCEDES LAYA LOPEZ",
+          "count": 2
+        },
+        {
+          "clave": "ON15541412",
+          "nombre": "LOS CUROS",
+          "count": 2
+        },
+        {
+          "clave": "ON15611412",
+          "nombre": "MARIA LUCILA SALINAS DE LEÓN (ANTES MODULO SANTA ELENA)",
+          "count": 2
+        },
+        {
+          "clave": "S2860D1412",
+          "nombre": "EMIRO FUENMAYOR",
+          "count": 2
+        },
+        {
+          "clave": "OD00211412",
+          "nombre": "JUAN DE DIOS DAVILA",
+          "count": 1
+        },
+        {
+          "clave": "OD00731412",
+          "nombre": "EZEQUIEL ZAMORA",
+          "count": 1
+        },
+        {
+          "clave": "OD00871412",
+          "nombre": "JUAN RUIZ FAJARDO",
+          "count": 1
+        },
+        {
+          "clave": "OD02321412",
+          "nombre": "ANDRES BELLO",
+          "count": 1
+        },
+        {
+          "clave": "OD02351412",
+          "nombre": "EMIRO FUENMAYOR",
+          "count": 1
+        },
+        {
+          "clave": "OD02471412",
+          "nombre": "MARIANO PICON SALAS (ANTES EL RINCON)",
+          "count": 1
+        },
+        {
+          "clave": "OD02481412",
+          "nombre": "CARIBAY",
+          "count": 1
+        },
+        {
+          "clave": "OD02711412",
+          "nombre": "SAN JOSE (ANTES SAN JOSÉ OBRERO)",
+          "count": 1
+        },
+        {
+          "clave": "OD02741412",
+          "nombre": "GLORIA STOKL (ANTES FRAY JUAN RAMOS DE LORA)",
+          "count": 1
+        },
+        {
+          "clave": "OD02811412",
+          "nombre": "ZAYDI LACRUZ (ANTES LOS ANDES)",
+          "count": 1
+        },
+        {
+          "clave": "OD02901412",
+          "nombre": "MARCOLINA DE LAMUS",
+          "count": 1
+        },
+        {
+          "clave": "OD03121412",
+          "nombre": "SIMON RODRIGUEZ",
+          "count": 1
+        },
+        {
+          "clave": "OD03681412",
+          "nombre": "TERESA MANRIQUE",
+          "count": 1
+        },
+        {
+          "clave": "OD12551412",
+          "nombre": "CENTRO DE REHABILITACION DEL LENGUAJE",
+          "count": 1
+        },
+        {
+          "clave": "OD12581412",
+          "nombre": "CARLOTA FLORES DE VALIENTE (ANTES LA PUEBLITA)",
+          "count": 1
+        },
+        {
+          "clave": "OD12591412",
+          "nombre": "ALFREDO SILVA ARMAS",
+          "count": 1
+        },
+        {
+          "clave": "OD12651412",
+          "nombre": "JOSE TRINIDAD MALDONADO",
+          "count": 1
+        },
+        {
+          "clave": "OD12731412",
+          "nombre": "SIERRA LA CULATA",
+          "count": 1
+        },
+        {
+          "clave": "OD12781412",
+          "nombre": "PICO BOLIVAR",
+          "count": 1
+        },
+        {
+          "clave": "OD12881412",
+          "nombre": "MAHATMA GANDHI",
+          "count": 1
+        },
+        {
+          "clave": "OD12911412",
+          "nombre": "MANUELA CAÑIZARES (ANTES LAS QUEBRADITAS)",
+          "count": 1
+        },
+        {
+          "clave": "OD12921412",
+          "nombre": "JOSEFA ANTONIA RINCÓN (ANTES LOMA DE LA VIRGEN BAJA)",
+          "count": 1
+        },
+        {
+          "clave": "OD12951412",
+          "nombre": "SAN ANTONIO (VEGA DE SAN ANTONIO)",
+          "count": 1
+        },
+        {
+          "clave": "OD12961412",
+          "nombre": "JOSE DE JESUS MARQUINA (ANTES LA VEGA DE LA PARROQUIA)",
+          "count": 1
+        },
+        {
+          "clave": "OD12981412",
+          "nombre": "LUIS ALFREDO LOPEZ MENDEZ (ANTES LA CUESTA DE BELEN)",
+          "count": 1
+        },
+        {
+          "clave": "OD13231412",
+          "nombre": "CONCEPCION MARIÑO (ANTES LOS NEVADOS)",
+          "count": 1
+        },
+        {
+          "clave": "OD13271412",
+          "nombre": "VIRGEN DEL CARMEN (ANTES MESA DE LA VIRGEN)",
+          "count": 1
+        },
+        {
+          "clave": "OD13301412",
+          "nombre": "VICENTE LECUNA (ANTES LA CAÑA)",
+          "count": 1
+        },
+        {
+          "clave": "OD15281412",
+          "nombre": "OTILIO DE JESUS QUINTERO DUGARTE",
+          "count": 1
+        },
+        {
+          "clave": "OD16391412",
+          "nombre": "MARIA AGUSTINA LACRUZ MORENO (ANTES COSTURERO POPULAR)",
+          "count": 1
+        },
+        {
+          "clave": "OD17321412",
+          "nombre": "EL VALLE DE MUCUJUN",
+          "count": 1
+        },
+        {
+          "clave": "OD17471412",
+          "nombre": "DOMINGO PEÑA",
+          "count": 1
+        },
+        {
+          "clave": "ON12411412",
+          "nombre": "LUIS ZAMBRANO (ANTES VICENTE DAVILA)",
+          "count": 1
+        },
+        {
+          "clave": "ON12491412",
+          "nombre": "LOS SAUZALES",
+          "count": 1
+        },
+        {
+          "clave": "ON12501412",
+          "nombre": "MARIANITA MENDOZA",
+          "count": 1
+        },
+        {
+          "clave": "ON12631412",
+          "nombre": "SAN CRISTOBAL",
+          "count": 1
+        },
+        {
+          "clave": "ON15501412",
+          "nombre": "UGO ANZIL (ANTES LA PARROQUIA)",
+          "count": 1
+        },
+        {
+          "clave": "ON15531412",
+          "nombre": "MARIA LEONOR ESCALANTE DE CALDERON (ANTES LA MILAGROSA)",
+          "count": 1
+        },
+        {
+          "clave": "ON15551412",
+          "nombre": "SANTA JUANA",
+          "count": 1
+        },
+        {
+          "clave": "ON15601412",
+          "nombre": "UDON PEREZ (ANTES CAMPO DE ORO)",
+          "count": 1
+        },
+        {
+          "clave": "ON17791412",
+          "nombre": "HERMENEGILDO CONTRERAS",
+          "count": 1
+        },
+        {
+          "clave": "S3455D1412",
+          "nombre": "ARISTÓBULO IZTÚRIZ ALMEIDA (ANTES ROMULO BETANCOURT)",
+          "count": 1
+        },
+        {
+          "clave": "S3980D1412",
+          "nombre": "DOCTOR LUIS BELTRAN PRIETO FIGUEROA",
+          "count": 1
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 190,
+        "arrCargados": [],
+        "arrPendientes": [
+          "16 DE SEPTIEMBRE DE 1810 (ANTES 16 DE SEPTIEMBRE)",
+          "5 DE JULIO",
+          "5 DE JULIO DE 1811",
+          "8 DE SEPTIEMBRE DE 1867 (ANTES 8 DE SEPTIEMBRE)",
+          "ABRAHAM PEÑA PEÑA (ANTES MOCOTONE)",
+          "AGUSTIN CODAZZI (ANTES INAVITO)",
+          "ALBERTO CARNEVALLI",
+          "ALFREDO SILVA ARMAS",
+          "ALTERNATIVA DE HOSPITALIDAD Y TURISMO MARIA ROSARIO NAVA",
+          "ANA EMILIA DELON",
+          "ANASTACIA LA HEROÍNA (ANTES JUAN RUIZ FAJARDO)",
+          "ANDRES BELLO",
+          "ANDRES BELLO",
+          "ANDRES ELOY BLANCO",
+          "ANTONIO ARRAIZ (ANTES EL HATO)",
+          "ANTONIO DAVILA PEÑA (ANTES EL QUINO)",
+          "ANTONIO JOSE DE SUCRE (ANTES VICENTE DAVILA)",
+          "ANTONIO NICOLAS RANGEL",
+          "ANTONIO PINTO SALINAS (ANTES SIMON RODRIGUEZ)",
+          "ANTONIO RICAURTE (ANTES EL ESPEJO)",
+          "ARGELIA MERCEDES LAYA LOPEZ",
+          "ARISTIDES ROJAS (ANTES LAS PLUMAS)",
+          "ARISTÓBULO IZTÚRIZ ALMEIDA (ANTES ROMULO BETANCOURT)",
+          "AUGUSTA DAVILA DE VALERI (ANTES ZUMBA)",
+          "AURA MARINA SAAVEDRA DE TORRES",
+          "AURELIO SANCHEZ SANCHEZ (ANTES MOCOSOS)",
+          "BELÉN SAN JUAN COLINA (ANTES EL EDUCADOR)",
+          "BICENTENARIO 16 DE SEPTIEMBRE DE 2010",
+          "BICENTENARIO DEL LIBERTADOR",
+          "BOLIVAR",
+          "CAMILO CONTRERAS",
+          "CARACCIOLO PARRA Y OLMEDO",
+          "CARIBAY",
+          "CARLOTA FLORES DE VALIENTE (ANTES LA PUEBLITA)",
+          "CECILIA MUJICA (ANTES BELLA VISTA)",
+          "CECILIO ACOSTA",
+          "CENTRO DE REHABILITACION DEL LENGUAJE",
+          "CINCO AGUILAS",
+          "COLEGIO DE ABOGADOS",
+          "COLEGIO NATIVIDAD NIÑO",
+          "COLEGIO TIMOTEO AGUIRRE PE",
+          "CONCEPCION MARIÑO (ANTES LOS NEVADOS)",
+          "COROMOTO",
+          "DELIA PAREDES (ANTES FERMIN RUIZ VALERO)",
+          "DOCTOR LUIS BELTRAN PRIETO FIGUEROA",
+          "DOCTOR RAMON PARRA PICON",
+          "DOCTOR RAMON REINOSO NUÑEZ",
+          "DOMINGO GUZMAN PEÑA (ANTES 15 DE ENERO)",
+          "DOMINGO PEÑA",
+          "DOMINGO PEÑA",
+          "DOMINGO SALAZAR ROJAS (ANTES ARCO IRIS)",
+          "DON ANDRES BELLO",
+          "DR ARMANDO GONZALEZ PUCCINI",
+          "EL EDUCADOR",
+          "EL VALLE DE MUCUJUN",
+          "EL VALLECITO",
+          "ELOY CHALBAUD CARDONA",
+          "ELOY PAREDES",
+          "ELPIDIO BRANDTT MELENDEZ (ANTES ELPIDIO BRANTH)",
+          "EMIRO FUENMAYOR",
+          "EMIRO FUENMAYOR",
+          "EPIFANIA GIL",
+          "ERNESTINA QUIROZ",
+          "EVELINA GIL (ANTES AUGUSTO MALAVE VILLALBA)",
+          "EZEQUIEL ZAMORA",
+          "FERMIN RUIZ VALERO",
+          "FILADELFO COLMENARES ANGULO",
+          "FILOMENA DAVILA NUCETE",
+          "FLORENCIO RAMIREZ",
+          "FRANCISCO CADENAS (ANTES CURAZAO)",
+          "FRANCISCO ESTEBAN GOMEZ (ANTES ESPECIAL N 1)",
+          "GABRIEL PICON GONZALEZ",
+          "GABRIELA MISTRAL (ANTES COLONIA INFANTIL LOS ANDES)",
+          "GENERAL ELEAZAR LOPEZ CONTRERAS",
+          "GLADYS CELINA LOBO DE CARNEVALI",
+          "GLORIA STOKL (ANTES FRAY JUAN RAMOS DE LORA)",
+          "GONZALO PICON FEBRES",
+          "HARRY ALMELA (ANTES AÑO INTERNACIONAL DEL NIÑO I)",
+          "HAYDEE CARDENAS",
+          "HERMENEGILDO CONTRERAS",
+          "HILDA GRACIELA VERA (ANTES HUMBOLDT)",
+          "HIRIA EMILIA MARQUEZ (ANTES EL LLANO",
+          "HUMBERTO TEJERA",
+          "INSTITUTO SAN JAVIER DEL VALLE GRANDE",
+          "INÉS CONTRERAS DE CASALETTO (ANTES MONTERREY)",
+          "JACINTO LARA",
+          "JACINTO PLAZA (ANTES ANDRES ELOY BLANCO)",
+          "JEAN PIAGET",
+          "JESUS MANUEL GUERRERO (ANTES NIÑO BOLIVAR)",
+          "JESUS MANUEL PEÑA (ANTES EL HATICO)",
+          "JOSE ANTONIO PEÑA TREJO",
+          "JOSE DE JESUS MARQUINA (ANTES LA VEGA DE LA PARROQUIA)",
+          "JOSE FELIX RIBAS",
+          "JOSE GIL FORTOUL (ANTES EL ANDINITO)",
+          "JOSE ITALO PEÑA MARQUEZ",
+          "JOSE MARIA VELAZ",
+          "JOSE TRINIDAD MALDONADO",
+          "JOSEFA ANTONIA RINCÓN (ANTES LOMA DE LA VIRGEN BAJA)",
+          "JOSEFA MOLINA DE DUQUE",
+          "JOSÉ GREGORIO HERNÁNDEZ (ANTES FORESTALITO)",
+          "JOSÉ ZOILO MERCADO",
+          "JUAN BAUTISTA ARISMENDI (ANTES 10 DE DICIEMBRE)",
+          "JUAN DE ARCOS",
+          "JUAN DE DIOS DAVILA",
+          "JUAN FELIX SANCHEZ",
+          "JUAN FELIX SANCHEZ",
+          "JUAN GERMAN ROSCIO (ANTES EL RODEO)",
+          "JUAN LOVERA (ANTES ESTADO LARA)",
+          "JUAN PABLO II",
+          "JUAN RUIZ FAJARDO",
+          "LEONOR DE LA GUERRA  (ANTES CREACION EL VALLE",
+          "LIBERTADOR",
+          "LILIA TERESA NEGRON RUIZ",
+          "LOS CUROS",
+          "LOS SAUZALES",
+          "LUIS ALFONSO MARTOS RIVAS (ANTES ELOY PAREDES)",
+          "LUIS ALFREDO LOPEZ MENDEZ (ANTES LA CUESTA DE BELEN)",
+          "LUIS ZAMBRANO (ANTES VICENTE DAVILA)",
+          "MAHATMA GANDHI",
+          "MANUEL ANTONIO PULIDO MENDEZ",
+          "MANUEL MUJICA MILLAN (ANTES GABRIEL PICON GONZALEZ)",
+          "MANUELA CAÑIZARES (ANTES LAS QUEBRADITAS)",
+          "MANUELITA SAENZ (ANTES PEDREGOSA ALTA)",
+          "MARCOLINA DE LAMUS",
+          "MARCOLINA DE VOLCANES",
+          "MARIA ADELA DE VIELMA",
+          "MARIA AGUSTINA LACRUZ MORENO (ANTES COSTURERO POPULAR)",
+          "MARIA LEONOR ESCALANTE DE CALDERON (ANTES LA MILAGROSA)",
+          "MARIA LUCILA SALINAS DE LEÓN (ANTES MODULO SANTA ELENA)",
+          "MARIA MONTESSORI",
+          "MARIA SIMONA CORREDOR (ANTES EL CHAMITA)",
+          "MARIANITA MENDOZA",
+          "MARIANO PICON SALAS (ANTES EL RINCON)",
+          "MARÍA ANASTASIA PERÓN (ANTES HIPOPOTAMO)",
+          "MAXIMO SAAVEDRA (ANTES MUCUTARAY)",
+          "MERIDA",
+          "MERIDA",
+          "MIGUEL DE CERVANTES Y SAAVEDRA",
+          "MONSEÑOR DOCTOR SANTIAGO HERNANDEZ MILANES",
+          "NEGRA MATEA",
+          "NIÑA AVELINA GIL",
+          "NIÑO SIMON",
+          "OBDULIO PICON PICON",
+          "OFELIA TANCREDI DE CORREDOR",
+          "OLGA VALENTINA DAVILA DE PRIETO (ANTES GONZALO PICON)",
+          "ORLANDO ARAUJO (ANTES EL APURE)",
+          "OTILIO DE JESUS QUINTERO DUGARTE",
+          "PADRE BILBAO",
+          "PADRE MADARIAGA",
+          "PEDRO ALEJANDRINO GUERRERO PLAZA (ANTES ALTO VIENTO)",
+          "PEDRO ELIAS GUTIERREZ",
+          "PICO BOLIVAR",
+          "RAFAEL ANTONIO GODOY",
+          "RAFAELA DEL CARMEN DIAZ DE LEON",
+          "RAFAELA PEÑA DE PEÑA",
+          "RAMON IGNACIO GUERRA",
+          "RIVAS DAVILA",
+          "ROMULO GALLEGOS",
+          "ROSITA BALZA",
+          "SAN ANTONIO (VEGA DE SAN ANTONIO)",
+          "SAN CRISTOBAL",
+          "SAN JACINTO",
+          "SAN JOSE (ANTES SAN JOSÉ OBRERO)",
+          "SAN RAFAEL (ANTES SAN RAFAEL DEL CHAMA)",
+          "SANTA CATALINA DE SIENA",
+          "SANTA JUANA",
+          "SANTA ROSA",
+          "SEÑOR DE LA BUENA ESPERANZA",
+          "SIERRA LA CULATA",
+          "SIERRA NEVADA",
+          "SIMON RODRIGUEZ",
+          "SIMON RODRIGUEZ",
+          "TECLA ARTEMISIA MONTESSORI (ANTES INDEPENDENCIA)",
+          "TERESA CARREÑO (ANTES LA MILAGROSA)",
+          "TERESA HEREIDA (ANTES ANEXA NORMAL MERIDA)",
+          "TERESA MANRIQUE",
+          "TITO DAVILA (ANTES LOMA DE LA VIRGEN ALTA)",
+          "TULIO FEBRES CORDERO",
+          "TULIO FEBRES CORDERO",
+          "UDON PEREZ (ANTES CAMPO DE ORO)",
+          "UGO ANZIL (ANTES LA PARROQUIA)",
+          "VICENTE DAVILA",
+          "VICENTE LECUNA (ANTES LA CAÑA)",
+          "VICENTE SALIAS (ANTES LOS CUROS (SEDE PARROQUIAL)",
+          "VICTOR MANUEL PEÑA (ANTES MIQUIRURA)",
+          "VIRGEN DE LAS NIEVES",
+          "VIRGEN DEL CARMEN (ANTES MESA DE LA VIRGEN)",
+          "VITALIA GUTIERREZ DE RINCON",
+          "YOLANDA TERESA SARCOS (ANTES MONTERREY)",
+          "ZAYDI LACRUZ (ANTES LOS ANDES)"
+        ]
+      }
+    },
+    "MIRANDA": {
+      "totalPersonal": 549,
+      "totalPlanteles": 42,
+      "docentes": 418,
+      "administrativos": 20,
+      "obreros": 111,
+      "situacion_laboral": {
+        "ACTIVO": 498,
+        "EN PROCESO DE JUBILACIÓN": 12,
+        "ADECUACIÓN LABORAL": 4,
+        "REPOSO MEDICO": 5,
+        "EN PROCESO DE INCAPACIDAD": 9,
+        "PERMISO POR CUIDO": 1,
+        "APOYO INSTITUCIONAL": 9,
+        "ABANDONO DE CARGO": 3,
+        "INCUMPLIMIENTO DE FUNCIONES": 2,
+        "LICENCIA SINDICAL": 1,
+        "INCAPACIDAD TOTAL POR IPASME": 2,
+        "COMISION DE SERVICIO": 1,
+        "INCAPACIDAD TEMPORAL": 1,
+        "PERMISO PRE Y POST NATAL": 1
+      },
+      "jubilables": [
+        {
+          "clave": "OD00861413",
+          "nombre": "CANONIGO UZCATEGUI",
+          "count": 9
+        },
+        {
+          "clave": "SO832D1413",
+          "nombre": "FRANCISCO DE PAULA ANDRADE",
+          "count": 6
+        },
+        {
+          "clave": "OD02541413",
+          "nombre": "FRANCISCA BALZA",
+          "count": 3
+        },
+        {
+          "clave": "OD00851413",
+          "nombre": "FILOMENA RUIZ DE RODRIGUEZ",
+          "count": 2
+        },
+        {
+          "clave": "OD13361413",
+          "nombre": "MARIA SIMONA CORREDOR",
+          "count": 2
+        },
+        {
+          "clave": "OD13441413",
+          "nombre": "MESA CERRADA",
+          "count": 2
+        },
+        {
+          "clave": "OD13451413",
+          "nombre": "GLORIA STOLK",
+          "count": 2
+        },
+        {
+          "clave": "OD17561413",
+          "nombre": "MESA CERRADA",
+          "count": 2
+        },
+        {
+          "clave": "OD00841413",
+          "nombre": "ANDRES ELOY BLANCO",
+          "count": 1
+        },
+        {
+          "clave": "OD13331413",
+          "nombre": "SIMON RODRIGUEZ",
+          "count": 1
+        },
+        {
+          "clave": "OD13381413",
+          "nombre": "RAFAEL RODRIGUEZ",
+          "count": 1
+        },
+        {
+          "clave": "OD13431413",
+          "nombre": "JOSE HONORIO BAPTISTA",
+          "count": 1
+        },
+        {
+          "clave": "OD13551413",
+          "nombre": "SIMÓN BOLÍVAR",
+          "count": 1
+        },
+        {
+          "clave": "OD17581413",
+          "nombre": "TIMOTE",
+          "count": 1
+        },
+        {
+          "clave": "S2995D1413",
+          "nombre": "EMILIO MALDONADO",
+          "count": 1
+        },
+        {
+          "clave": "S3636D1413",
+          "nombre": "FROILANA MONTILLA LOBO",
+          "count": 1
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 42,
+        "arrCargados": [],
+        "arrPendientes": [
+          "ANDRES BELLO",
+          "ANDRES BELLO",
+          "ANDRES ELOY BLANCO",
+          "ANGEL MIRO VILLARREAL",
+          "CANONIGO UZCATEGUI",
+          "CLODOMIRO CASTELLANO",
+          "DOCTOR IGNACIO FERNÁNDEZ PEÑA",
+          "DOMITILA DAVILA",
+          "EL HATICO",
+          "EMILIO ENRIQUE RAMIREZ",
+          "EMILIO MALDONADO",
+          "EUMELIA FERNANDEZ",
+          "EZEQUIEL ZAMORA",
+          "FILOMENA RUIZ DE RODRIGUEZ",
+          "FRANCISCA BALZA",
+          "FRANCISCA SÁNCHEZ DE PALMI",
+          "FRANCISCO DE MIRANDA",
+          "FRANCISCO DE PAULA ANDRADE",
+          "FROILANA MONTILLA LOBO",
+          "GLORIA STOLK",
+          "JOSE GREGORIO MONAGAS",
+          "JOSE HONORIO BAPTISTA",
+          "JOSÉ AUDELINO DELGADO CASTELLANO",
+          "JOSÉ TOMÁS PAREDES",
+          "JUAN IGNACIO BRICEÑO DIAZ",
+          "LUIS BELTRAN PRIETO FIGUEROA",
+          "MARI DEL ROSARIO VILLAREAL",
+          "MARIA ISABEL BRICEÑO",
+          "MARIA MONTESSORI",
+          "MARIA SIMONA CORREDOR",
+          "MESA CERRADA",
+          "MESA CERRADA",
+          "MIJARA",
+          "PABLO LOBO",
+          "PEDRO MARIA RAMIREZ",
+          "RAFAEL RODRIGUEZ",
+          "SIMON BOLIVAR",
+          "SIMON RODRIGUEZ",
+          "SIMÓN BOLÍVAR",
+          "SIMÓN RODRÍGUEZ",
+          "TIMOTE",
+          "TORIBIO ANDRADE"
+        ]
+      }
+    },
+    "OBISPO RAMOS DE LORA": {
+      "totalPersonal": 770,
+      "totalPlanteles": 54,
+      "docentes": 481,
+      "administrativos": 26,
+      "obreros": 263,
+      "situacion_laboral": {
+        "ACTIVO": 708,
+        "REPOSO MEDICO": 6,
+        "PRIVADO DE LIBERTAD": 1,
+        "INCAPACIDAD TOTAL Y DEFINITIVA POR IVSS": 3,
+        "LICENCIA SINDICAL": 3,
+        "EN PROCESO DE JUBILACIÓN": 10,
+        "COMISION DE SERVICIO": 1,
+        "EN PROCESO DE INCAPACIDAD": 7,
+        "RENUNCIA": 4,
+        "PERMISO POR CUIDO": 1,
+        "PERMISO PRE Y POST NATAL": 3,
+        "ABANDONO DE CARGO": 8,
+        "APOYO INSTITUCIONAL": 7,
+        "SINCERACIÓN DE NÓMINA": 3,
+        "DEFUNCIONES": 2,
+        "INCAPACIDAD TOTAL POR IPASME": 1,
+        "INCAPACIDAD TEMPORAL": 2
+      },
+      "jubilables": [
+        {
+          "clave": "OD01671414",
+          "nombre": "DOCTOR MARIANO UZCATEGUI",
+          "count": 11
+        },
+        {
+          "clave": "OD15891414",
+          "nombre": "DOCTOR MARIANO UZCATEGUI",
+          "count": 6
+        },
+        {
+          "clave": "S3126N1414",
+          "nombre": "RAFAEL JOSE ROMERO ALMEIDA",
+          "count": 6
+        },
+        {
+          "clave": "S1360D1414",
+          "nombre": "JOSE JESUS OSUNA RODRIGUEZ",
+          "count": 4
+        },
+        {
+          "clave": "OD01871414",
+          "nombre": "ROSA INES GARCIA",
+          "count": 3
+        },
+        {
+          "clave": "OD03431414",
+          "nombre": "DIONISIO MONCADA VASQUEZ",
+          "count": 3
+        },
+        {
+          "clave": "OD13731414",
+          "nombre": "ANTONIO VERDI",
+          "count": 3
+        },
+        {
+          "clave": "OD00471414",
+          "nombre": "DOÑA MENCA DE LEONI",
+          "count": 2
+        },
+        {
+          "clave": "OD01861414",
+          "nombre": "JOSE EMILIO BALTAZAR",
+          "count": 2
+        },
+        {
+          "clave": "OD03441414",
+          "nombre": "JOSE GONZALO RINCON",
+          "count": 2
+        },
+        {
+          "clave": "OD04391414",
+          "nombre": "SAMUEL ROBINSON",
+          "count": 2
+        },
+        {
+          "clave": "OD04401414",
+          "nombre": "MARÍA TERESA DEL TORO",
+          "count": 2
+        },
+        {
+          "clave": "OD04411414",
+          "nombre": "MARIA DE JESUS NOGUERA DE TORRES",
+          "count": 2
+        },
+        {
+          "clave": "OD13721414",
+          "nombre": "JOSE TRINIDAD PAEZ",
+          "count": 2
+        },
+        {
+          "clave": "OD16531414",
+          "nombre": "IROCHKA APOLINAR DE PORRAS",
+          "count": 2
+        },
+        {
+          "clave": "ON13841414",
+          "nombre": "DAYSI MATILDE BRAVO ALVAREZ",
+          "count": 2
+        },
+        {
+          "clave": "ON15771414",
+          "nombre": "LICENCIADO NELSON ROJAS EXTENSION PANAMERICANO",
+          "count": 2
+        },
+        {
+          "clave": "OD00301414",
+          "nombre": "SIMON RODRIGUEZ",
+          "count": 1
+        },
+        {
+          "clave": "OD03451414",
+          "nombre": "EDUCATIVO JOSE ANTONIO ABREU",
+          "count": 1
+        },
+        {
+          "clave": "OD03471414",
+          "nombre": "ANDRES BELLO",
+          "count": 1
+        },
+        {
+          "clave": "OD03511414",
+          "nombre": "LUISA CÁCERES DE ARISMENDI",
+          "count": 1
+        },
+        {
+          "clave": "OD13671414",
+          "nombre": "JOSEFA ROA DE MOLINA",
+          "count": 1
+        },
+        {
+          "clave": "OD13681414",
+          "nombre": "FROILÁN ZAMBRANO CALDERÓN",
+          "count": 1
+        },
+        {
+          "clave": "OD13711414",
+          "nombre": "HECTOR JOSE MENA GUERRERO",
+          "count": 1
+        },
+        {
+          "clave": "OD13751414",
+          "nombre": "DOMINGO GUTIERREZ",
+          "count": 1
+        },
+        {
+          "clave": "OD13821414",
+          "nombre": "FELIPE FERNANDEZ MARQUEZ",
+          "count": 1
+        },
+        {
+          "clave": "OD16561414",
+          "nombre": "MARÍA INÉS MOLINA",
+          "count": 1
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 54,
+        "arrCargados": [],
+        "arrPendientes": [
+          "ANA MARÍA CAMPOS",
+          "ANDRES BELLO",
+          "ANTONIO JOSÉ DE SUCRE",
+          "ANTONIO VERDI",
+          "ARGIMIRO MARQUEZ",
+          "ARISTIDES TORRES VIELMA",
+          "ARISTOBULO ISTURIS",
+          "ARMANDO ALEXIS MEDINA",
+          "BAUDILIO VIVAS",
+          "CARMEN AURORA VERA DE VARELA",
+          "CARMEN MALDONADO DE VIELMA",
+          "DAYSI MATILDE BRAVO ALVAREZ",
+          "DIONISIO MONCADA VASQUEZ",
+          "DOCTOR MARIANO UZCATEGUI",
+          "DOCTOR MARIANO UZCATEGUI",
+          "DOMINGO GUTIERREZ",
+          "DOÑA MENCA DE LEONI",
+          "EDUCATIVO JOSE ANTONIO ABREU",
+          "FELIPE FERNANDEZ MARQUEZ",
+          "FROILÁN ZAMBRANO CALDERÓN",
+          "GABRIEL MARCIANO PARRA",
+          "GONZALO SALAZAR FERNANDEZ",
+          "HECTOR JOSE MENA GUERRERO",
+          "HERNAN ANTONIO BRACHO MORÁN",
+          "IROCHKA APOLINAR DE PORRAS",
+          "JACINTO MORA",
+          "JOSE EMILIO BALTAZAR",
+          "JOSE FRANCISCO BRAVO CATAÑO",
+          "JOSE GONZALO RINCON",
+          "JOSE GREGORIO RONDON ORTEGA",
+          "JOSE JESUS OSUNA RODRIGUEZ",
+          "JOSE LUIS GUTIERREZ",
+          "JOSE ONESIMO RIVAS URBINA",
+          "JOSE TRINIDAD PAEZ",
+          "JOSEFA CAMEJO",
+          "JOSEFA ROA DE MOLINA",
+          "JUAN  RODRIGUEZ SUAREZ",
+          "JUAN ANTONIO RODRIGUEZ SALAZAR",
+          "LICENCIADO NELSON ROJAS EXTENSION PANAMERICANO",
+          "LUISA CÁCERES DE ARISMENDI",
+          "MARIA DE JESUS NOGUERA DE TORRES",
+          "MARTIN RUIZ",
+          "MARÍA ELBA RAMÍREZ",
+          "MARÍA INÉS MOLINA",
+          "MARÍA TERESA DEL TORO",
+          "PEDRO ANTONIO TORRES VALERO",
+          "PEDRO DE JESÚS PINO",
+          "PRESBITERO CARLOS ERNESTO MORALES",
+          "RAFAEL JOSE ROMERO ALMEIDA",
+          "RAMONA DEL CARMEN ARAQUE",
+          "ROSA INES GARCIA",
+          "SAMUEL ROBINSON",
+          "SANTA ELENA",
+          "SIMON RODRIGUEZ"
+        ]
+      }
+    },
+    "PADRE NOGUERA": {
+      "totalPersonal": 123,
+      "totalPlanteles": 10,
+      "docentes": 80,
+      "administrativos": 2,
+      "obreros": 41,
+      "situacion_laboral": {
+        "ACTIVO": 121,
+        "ABANDONO DE CARGO": 1,
+        "ADECUACIÓN LABORAL": 1
+      },
+      "jubilables": [
+        {
+          "clave": "OD16541415",
+          "nombre": "MAESTRO SIMON RODRIGUEZ",
+          "count": 5
+        },
+        {
+          "clave": "OD13901415",
+          "nombre": "PADRE NOGUERA",
+          "count": 2
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 10,
+        "arrCargados": [],
+        "arrPendientes": [
+          "ARNOLDO CONTRERAS",
+          "ELIAS MOLINA",
+          "JOSE ARCANGEL MOLINA VIAS",
+          "JOSE VICENTE NUCETE",
+          "LENDER MOLINA",
+          "MAESTRO SIMON RODRIGUEZ",
+          "MARIA DE LA CRUZ VELAZCO",
+          "MARIA DEL ROSARIO MOLINA MARUEZ",
+          "PABLO RAMON DIAZ ARAQUE",
+          "PADRE NOGUERA"
+        ]
+      }
+    },
+    "PUEBLO LLANO": {
+      "totalPersonal": 327,
+      "totalPlanteles": 18,
+      "docentes": 215,
+      "administrativos": 16,
+      "obreros": 96,
+      "situacion_laboral": {
+        "ACTIVO": 291,
+        "EN PROCESO DE JUBILACIÓN": 10,
+        "PERMISO POR CUIDO": 4,
+        "EN PROCESO DE INCAPACIDAD": 4,
+        "ABANDONO DE CARGO": 2,
+        "LICENCIA SINDICAL": 3,
+        "INCAPACIDAD TOTAL POR IPASME": 2,
+        "REPOSO MEDICO": 4,
+        "INCAPACIDAD TEMPORAL": 1,
+        "APOYO INSTITUCIONAL": 1,
+        "RENUNCIA": 1,
+        "COMISION DE SERVICIO": 1,
+        "INCAPACIDAD TOTAL Y DEFINITIVA POR IVSS": 1,
+        "PERMISO PRE Y POST NATAL": 2
+      },
+      "jubilables": [
+        {
+          "clave": "OD08201416",
+          "nombre": "GETULIO AGUSTÍNI",
+          "count": 3
+        },
+        {
+          "clave": "OD00581416",
+          "nombre": "MANUEL ANTONIO ALBARRÁN",
+          "count": 1
+        },
+        {
+          "clave": "OD02431416",
+          "nombre": "PEDRO CAMEJO",
+          "count": 1
+        },
+        {
+          "clave": "OD05371416",
+          "nombre": "ADELA BASTIDAS",
+          "count": 1
+        },
+        {
+          "clave": "OD05381416",
+          "nombre": "GLORIA DEL CARMEN QUINTERO DE PAREDES",
+          "count": 1
+        },
+        {
+          "clave": "S1757D1416",
+          "nombre": "MARIANO PICÓN SALAS",
+          "count": 1
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 18,
+        "arrCargados": [],
+        "arrPendientes": [
+          "ADELA BASTIDAS",
+          "AQUILES NAZOA",
+          "CARMELITA SURBARAN",
+          "CESAR RENGIFO",
+          "EMILIANO SALCEDO",
+          "GETULIO AGUSTÍNI",
+          "GILBERTO ANTONIO VALERO GONZÁLEZ",
+          "GLORIA DEL CARMEN QUINTERO DE PAREDES",
+          "MANUEL ANTONIO ALBARRÁN",
+          "MANUELA SÁENZ",
+          "MARIA ELODIA MORENO DE VALERO",
+          "MARIA ISABEL BRICEÑO",
+          "MARIANO PICÓN SALAS",
+          "MARÍA SIMONA CORREDOR",
+          "MERCEDES CARVAJAL",
+          "NICOLASA DEL CARMEN SALCEDO MOLINA",
+          "PEDRO CAMEJO",
+          "PEDRO JOSÉ GONZÁLEZ"
+        ]
+      }
+    },
+    "RANGEL": {
+      "totalPersonal": 518,
+      "totalPlanteles": 37,
+      "docentes": 322,
+      "administrativos": 39,
+      "obreros": 157,
+      "situacion_laboral": {
+        "ACTIVO": 428,
+        "PERMISO PRE Y POST NATAL": 4,
+        "APOYO INSTITUCIONAL": 9,
+        "PERMISO POR CUIDO": 1,
+        "RENUNCIA": 2,
+        "ABANDONO DE CARGO": 4,
+        "REPOSO MEDICO": 8,
+        "COMISION DE SERVICIO": 3,
+        "LICENCIA SINDICAL": 2,
+        "ADECUACIÓN LABORAL": 17,
+        "SINCERACIÓN DE NÓMINA": 20,
+        "INCAPACIDAD TEMPORAL": 5,
+        "EN PROCESO DE JUBILACIÓN": 7,
+        "DEFUNCIONES": 2,
+        "VACACIONES": 3,
+        "INCAPACIDAD TOTAL Y DEFINITIVA POR IVSS": 1,
+        "EN PROCESO DE INCAPACIDAD": 2
+      },
+      "jubilables": [
+        {
+          "clave": "OD03331417",
+          "nombre": "CÉSAR RENGIFO",
+          "count": 2
+        },
+        {
+          "clave": "OD14031417",
+          "nombre": "MARIA GRACIELA PARRA",
+          "count": 2
+        },
+        {
+          "clave": "S1540D1417",
+          "nombre": "JOSE MARIA VARGAS",
+          "count": 2
+        },
+        {
+          "clave": "S2905D1417",
+          "nombre": "GILBERTO BENITEZ LOBO",
+          "count": 2
+        },
+        {
+          "clave": "OD00891417",
+          "nombre": "TOMAS ZERPA",
+          "count": 1
+        },
+        {
+          "clave": "OD03351417",
+          "nombre": "MARÍA ISABEL BRICEÑO",
+          "count": 1
+        },
+        {
+          "clave": "OD03371417",
+          "nombre": "PATRICIO ZERPA",
+          "count": 1
+        },
+        {
+          "clave": "OD13951417",
+          "nombre": "MARGARITA TORO",
+          "count": 1
+        },
+        {
+          "clave": "OD14041417",
+          "nombre": "NO APLICA",
+          "count": 1
+        },
+        {
+          "clave": "OD17591417",
+          "nombre": "MUCURUBA",
+          "count": 1
+        },
+        {
+          "clave": "OD17671417",
+          "nombre": "ALEXANDER QUINTERO",
+          "count": 1
+        },
+        {
+          "clave": "OD17681417",
+          "nombre": "JUANA RAMIREZ",
+          "count": 1
+        },
+        {
+          "clave": "OD17691417",
+          "nombre": "MARIA SIXTA MOLINA DE ZERPA",
+          "count": 1
+        },
+        {
+          "clave": "ON00401417",
+          "nombre": "NESTOR CONTRERAS TORO",
+          "count": 1
+        },
+        {
+          "clave": "ON15791417",
+          "nombre": "FRANCISCA DE SANTIAGO",
+          "count": 1
+        },
+        {
+          "clave": "S3459D1417",
+          "nombre": "JOSE GUERRERO",
+          "count": 1
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 37,
+        "arrCargados": [],
+        "arrPendientes": [
+          "ADA MARINA RIVAS",
+          "ALEXANDER QUINTERO",
+          "ANA ELDA PARRA",
+          "ANTONIO FEBRES CORDERO",
+          "ANTONIO RICAURTE",
+          "ARGELIA LAYA",
+          "ARMANDO REVERON",
+          "CARMEN ELENA LOBO",
+          "CÉSAR RENGIFO",
+          "FRANCISCA DE SANTIAGO",
+          "GILBERTO BENITEZ LOBO",
+          "ILDEMARO ARISMENDI",
+          "IRMA ROSA DE SULBARAN",
+          "JESÚS MANUEL JAUREGUI",
+          "JOSE GUERRERO",
+          "JOSE MARIA VARGAS",
+          "JOSE NATIVIDAD RIVAS SANCHEZ",
+          "JOSE NICOMEDES CASTILLO",
+          "JOSE RAFAEL TREJO PAREDES",
+          "JOSÉ ANDRES SÁNCHEZ MORA",
+          "JOSÉ EBERTO CALDERÓN",
+          "JOSÉ GRIMALDO LOBO",
+          "JUAN RAMÓN LOBO",
+          "JUANA RAMIREZ",
+          "LEONOR DE LA GUERRA",
+          "MANUEL MUJICA MILLAN",
+          "MARGARITA TORO",
+          "MARIA GRACIELA PARRA",
+          "MARIA SIXTA MOLINA DE ZERPA",
+          "MARÍA ISABEL BRICEÑO",
+          "MUCURUBA",
+          "NESTOR CONTRERAS TORO",
+          "NO APLICA",
+          "PATRICIO ZERPA",
+          "TOMAS ZERPA",
+          "UNIDAD EDUCATIVA COLEGIO CARDENAL QUINTERO",
+          "VICTORIANO LOBO"
+        ]
+      }
+    },
+    "RIVAS DAVILA": {
+      "totalPersonal": 587,
+      "totalPlanteles": 29,
+      "docentes": 353,
+      "administrativos": 42,
+      "obreros": 192,
+      "situacion_laboral": {
+        "ACTIVO": 516,
+        "INCAPACIDAD TOTAL Y DEFINITIVA POR IVSS": 4,
+        "APOYO INSTITUCIONAL": 5,
+        "RENUNCIA": 4,
+        "EN PROCESO DE JUBILACIÓN": 6,
+        "EN PROCESO DE INCAPACIDAD": 21,
+        "PERMISO POR CUIDO": 2,
+        "TRASLADO INTERZONAL": 1,
+        "ADECUACIÓN LABORAL": 10,
+        "REPOSO MEDICO": 6,
+        "ABANDONO DE CARGO": 3,
+        "INCAPACIDAD TEMPORAL": 1,
+        "DEFUNCIONES": 1,
+        "SINCERACIÓN DE NÓMINA": 6,
+        "PERMISO PRE Y POST NATAL": 1
+      },
+      "jubilables": [
+        {
+          "clave": "OD02291418",
+          "nombre": "TULIO FEBRES CORDERO",
+          "count": 8
+        },
+        {
+          "clave": "S1066D1418",
+          "nombre": "DR GERONIMO MALDONADO",
+          "count": 7
+        },
+        {
+          "clave": "OD01921418",
+          "nombre": "FLOR DE MALDONADO",
+          "count": 6
+        },
+        {
+          "clave": "OD00701418",
+          "nombre": "APOLONIO ROSALES",
+          "count": 4
+        },
+        {
+          "clave": "OD01931418",
+          "nombre": "SAN PABLO",
+          "count": 4
+        },
+        {
+          "clave": "OD02311418",
+          "nombre": "FELIX MANUEL LUCES",
+          "count": 4
+        },
+        {
+          "clave": "OD02301418",
+          "nombre": "PBRO DR EZEQUIEL ARELLANO",
+          "count": 2
+        },
+        {
+          "clave": "OD17651418",
+          "nombre": "OCTAVIO RUJANO",
+          "count": 2
+        },
+        {
+          "clave": "ON15731418",
+          "nombre": "DON LUIS ZAMBRANO",
+          "count": 2
+        },
+        {
+          "clave": "OD02271418",
+          "nombre": "JOSÉ GREGORIO RAMIREZ",
+          "count": 1
+        },
+        {
+          "clave": "OD02861418",
+          "nombre": "ELIO CASTILLO",
+          "count": 1
+        },
+        {
+          "clave": "OD08191418",
+          "nombre": "PROF VICTOR EVENCIO CASTILLO",
+          "count": 1
+        },
+        {
+          "clave": "OD14061418",
+          "nombre": "TERESA DE JESUS MARQUEZ",
+          "count": 1
+        },
+        {
+          "clave": "OD14111418",
+          "nombre": "JOSE VICENCIO MEDINA",
+          "count": 1
+        },
+        {
+          "clave": "ON14131418",
+          "nombre": "SARA BENAVIDEZ",
+          "count": 1
+        },
+        {
+          "clave": "ON14181418",
+          "nombre": "LAS PLAYITAS",
+          "count": 1
+        },
+        {
+          "clave": "ON16571418",
+          "nombre": "LA PLAYA NOCTURNO",
+          "count": 1
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 29,
+        "arrCargados": [],
+        "arrPendientes": [
+          "ABELARDO CARRERO",
+          "ANA MIREYA CEBALLOS DE MARQUEZ",
+          "APOLONIO ROSALES",
+          "ARSENIO PARRA",
+          "DON LUIS ZAMBRANO",
+          "DR GERONIMO MALDONADO",
+          "EFRAIN EDUARDO",
+          "ELIO CASTILLO",
+          "FELIX MANUEL LUCES",
+          "FLOR DE MALDONADO",
+          "HERENIA ACEDO DE VAZQUEZ",
+          "JOSE VICENCIO MEDINA",
+          "JOSÉ GREGORIO RAMIREZ",
+          "LA PLAYA DIURNO",
+          "LA PLAYA NOCTURNO",
+          "LAS PLAYITAS",
+          "MARIA TERESA DE CALCUTA",
+          "NUESTRA SEÑORA DE LA CANDELARIA",
+          "OCTAVIO RUJANO",
+          "OTRABANDA / DR MISAEL ROSALES",
+          "PBRO DR EZEQUIEL ARELLANO",
+          "PROF VICTOR EVENCIO CASTILLO",
+          "RAMON EMILIO PERNIA",
+          "RITA VERDI",
+          "SAN PABLO",
+          "SARA BENAVIDEZ",
+          "TERESA DE JESUS MARQUEZ",
+          "TULIO FEBRES CORDERO",
+          "ZAISA ISABEL MORA"
+        ]
+      }
+    },
+    "SANTOS MARQUINA": {
+      "totalPersonal": 374,
+      "totalPlanteles": 18,
+      "docentes": 241,
+      "administrativos": 28,
+      "obreros": 105,
+      "situacion_laboral": {
+        "ACTIVO": 336,
+        "APOYO INSTITUCIONAL": 9,
+        "INCAPACIDAD TOTAL POR IPASME": 1,
+        "ADECUACIÓN LABORAL": 1,
+        "EN PROCESO DE JUBILACIÓN": 7,
+        "SINCERACIÓN DE NÓMINA": 4,
+        "COMISION DE SERVICIO": 3,
+        "EN PROCESO DE INCAPACIDAD": 6,
+        "PERMISO POR CUIDO": 1,
+        "INCAPACIDAD TOTAL Y DEFINITIVA POR IVSS": 1,
+        "LICENCIA SINDICAL": 2,
+        "ABANDONO DE CARGO": 1,
+        "RENUNCIA": 1,
+        "REPOSO MEDICO": 1
+      },
+      "jubilables": [
+        {
+          "clave": "S2872D1419",
+          "nombre": "JOSE ROBERTO CONTRERAS MARQUEZ",
+          "count": 7
+        },
+        {
+          "clave": "OD14311419",
+          "nombre": "ANA ROMELIA VELA",
+          "count": 4
+        },
+        {
+          "clave": "S1539D1419",
+          "nombre": "DOCTOR MIGUEL OTERO SILVA",
+          "count": 4
+        },
+        {
+          "clave": "OD02891419",
+          "nombre": "LEOPOLDINA ALBORNOZ",
+          "count": 3
+        },
+        {
+          "clave": "OD14241419",
+          "nombre": "AMABLE ANTONIO RANGEL",
+          "count": 2
+        },
+        {
+          "clave": "OD14271419",
+          "nombre": "LUIS ALBERTO SULBARAN",
+          "count": 2
+        },
+        {
+          "clave": "OD14321419",
+          "nombre": "LAUREANO MALDONADO",
+          "count": 2
+        },
+        {
+          "clave": "OD14231419",
+          "nombre": "MARIANA MONSALVE",
+          "count": 1
+        },
+        {
+          "clave": "OD14281419",
+          "nombre": "DIOLYS MARIA PAREDES",
+          "count": 1
+        },
+        {
+          "clave": "OD15241419",
+          "nombre": "ANA ROSA SANCHEZ",
+          "count": 1
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 18,
+        "arrCargados": [],
+        "arrPendientes": [
+          "AMABLE ANTONIO RANGEL",
+          "ANA ROMELIA VELA",
+          "ANA ROSA SANCHEZ",
+          "AQUILES NAZOA",
+          "DIOLYS MARIA PAREDES",
+          "DOCTOR MIGUEL OTERO SILVA",
+          "ELIAS ALBORNOZ",
+          "ELIO ANTONIO BARRIOS",
+          "FRANCISCO ANTONIO ZERPA",
+          "ISIDRA ANTONIA MONSALVE",
+          "JOSE DE LOS SANTOS MARQUINA",
+          "JOSE ROBERTO CONTRERAS MARQUEZ",
+          "LAUREANO MALDONADO",
+          "LEOPOLDINA ALBORNOZ",
+          "LUIS ALBERTO SULBARAN",
+          "MANUEL SALVADOR VALERO",
+          "MARIANA MONSALVE",
+          "TABAY"
+        ]
+      }
+    },
+    "SUCRE": {
+      "totalPersonal": 1440,
+      "totalPlanteles": 120,
+      "docentes": 995,
+      "administrativos": 53,
+      "obreros": 392,
+      "situacion_laboral": {
+        "ABANDONO DE CARGO": 7,
+        "SINCERACIÓN DE NÓMINA": 6,
+        "ACTIVO": 1280,
+        "ADECUACIÓN LABORAL": 29,
+        "EN PROCESO DE INCAPACIDAD": 7,
+        "DEFUNCIONES": 3,
+        "LICENCIA SINDICAL": 5,
+        "APOYO INSTITUCIONAL": 14,
+        "EN PROCESO DE JUBILACIÓN": 48,
+        "INCAPACIDAD TOTAL Y DEFINITIVA POR IVSS": 4,
+        "REPOSO MEDICO": 17,
+        "COMISION DE SERVICIO": 2,
+        "PERMISO PRE Y POST NATAL": 5,
+        "INCAPACIDAD TEMPORAL": 4,
+        "INCAPACIDAD TOTAL POR IPASME": 2,
+        "RENUNCIA": 1,
+        "VACACIONES": 2,
+        "PERMISO POR CUIDO": 1,
+        "PRIVADO DE LIBERTAD": 2,
+        "INCUMPLIMIENTO DE FUNCIONES": 1
+      },
+      "jubilables": [
+        {
+          "clave": "OD14841420",
+          "nombre": "24 DE JUNIO DE 1821",
+          "count": 9
+        },
+        {
+          "clave": "OD01221420",
+          "nombre": "JUAN BAUTISTA ARISMENDI",
+          "count": 7
+        },
+        {
+          "clave": "OD14851420",
+          "nombre": "MARIA ELIZA DAVILA",
+          "count": 6
+        },
+        {
+          "clave": "S0622D1420",
+          "nombre": "LUIS ENRIQUE MARQUEZ BARILLAS",
+          "count": 6
+        },
+        {
+          "clave": "OD01401420",
+          "nombre": "MANUEL GUAL",
+          "count": 5
+        },
+        {
+          "clave": "OD17411420",
+          "nombre": "HIPOLITA BOLIVAR",
+          "count": 5
+        },
+        {
+          "clave": "S2863D1420",
+          "nombre": "JOSÉ MARÍA VARGAS",
+          "count": 5
+        },
+        {
+          "clave": "OD01211420",
+          "nombre": "MARIA MONTESORI",
+          "count": 4
+        },
+        {
+          "clave": "OD01231420",
+          "nombre": "HOMERO IZARRA",
+          "count": 4
+        },
+        {
+          "clave": "OD01481420",
+          "nombre": "JOSEFA ELENA MORALES",
+          "count": 4
+        },
+        {
+          "clave": "OD01491420",
+          "nombre": "MARIA ANASTASIA PERON",
+          "count": 3
+        },
+        {
+          "clave": "OD14871420",
+          "nombre": "LOS CARACOLES",
+          "count": 3
+        },
+        {
+          "clave": "OD17311420",
+          "nombre": "LLANO EL ANIS",
+          "count": 3
+        },
+        {
+          "clave": "OD01421420",
+          "nombre": "FERMIN TORO",
+          "count": 2
+        },
+        {
+          "clave": "OD01451420",
+          "nombre": "CAMUCAY",
+          "count": 2
+        },
+        {
+          "clave": "OD01551420",
+          "nombre": "MARIA ISABEL BRICEÑO",
+          "count": 2
+        },
+        {
+          "clave": "OD04911420",
+          "nombre": "JOSE HONORIO MOLINA ZERPA",
+          "count": 2
+        },
+        {
+          "clave": "OD14641420",
+          "nombre": "MARIA HORTENCIA DAVILA",
+          "count": 2
+        },
+        {
+          "clave": "OD14651420",
+          "nombre": "RAFAEL OMAR CALDERON",
+          "count": 2
+        },
+        {
+          "clave": "S1152D1420",
+          "nombre": "FRANCISCO ANTONIO UZCATEGUI",
+          "count": 2
+        },
+        {
+          "clave": "S2862D1420",
+          "nombre": "GENARINA DUGARTE C.",
+          "count": 2
+        },
+        {
+          "clave": "OD01431420",
+          "nombre": "VICENTE EMILIO SOJO",
+          "count": 1
+        },
+        {
+          "clave": "OD01541420",
+          "nombre": "MARIA DE LA LUZ GUILLEN",
+          "count": 1
+        },
+        {
+          "clave": "OD05451420",
+          "nombre": "ANA ROSAS SANCHEZ",
+          "count": 1
+        },
+        {
+          "clave": "OD08371420",
+          "nombre": "BERNARDINO ZERPA",
+          "count": 1
+        },
+        {
+          "clave": "OD09441420",
+          "nombre": "JOSÉ FELIX RIBAS",
+          "count": 1
+        },
+        {
+          "clave": "OD09461420",
+          "nombre": "MARÍA ANTONIA ARAQUE",
+          "count": 1
+        },
+        {
+          "clave": "OD09491420",
+          "nombre": "JOSEFA CAMEJO",
+          "count": 1
+        },
+        {
+          "clave": "OD09521420",
+          "nombre": "GILBERTO MÉNDEZ",
+          "count": 1
+        },
+        {
+          "clave": "OD09561420",
+          "nombre": "SAN ANTONIO DE PADUA",
+          "count": 1
+        },
+        {
+          "clave": "OD14351420",
+          "nombre": "LOS UVITOS",
+          "count": 1
+        },
+        {
+          "clave": "OD14621420",
+          "nombre": "ANA MARIA CAMPOS",
+          "count": 1
+        },
+        {
+          "clave": "OD14741420",
+          "nombre": "EMPERATRIZ PARRA",
+          "count": 1
+        },
+        {
+          "clave": "OD14811420",
+          "nombre": "QUIRORA",
+          "count": 1
+        },
+        {
+          "clave": "OD14861420",
+          "nombre": "ELADIO QUINTERO RONDON",
+          "count": 1
+        },
+        {
+          "clave": "OD16651420",
+          "nombre": "ZENON DIAZ CAMACHO",
+          "count": 1
+        },
+        {
+          "clave": "OD17441420",
+          "nombre": "MARIA DAVILA",
+          "count": 1
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 120,
+        "arrCargados": [],
+        "arrPendientes": [
+          "24 DE JUNIO DE 1821",
+          "ACEQUIA LA GUADALUPE",
+          "AGUSTÍN CODAZZI",
+          "ALEJANDRO CHACÓN ROSALES",
+          "ALI RAFAEL PRIMERA",
+          "ANA MARIA CAMPOS",
+          "ANA ROSAS SANCHEZ",
+          "ANDRES GUILLEN GONZALES",
+          "ANDRÉS BELLO",
+          "ANGEL ANTONIO ZERPA ROJAS",
+          "ANGEL IGNACIO GUILLEN",
+          "ARTURO MICHELENA",
+          "ASUNCION SOSA CONTRERAS",
+          "AURORA MARQUEZ",
+          "BENITO DE PALERMO",
+          "BERNARDINO ZERPA",
+          "CACIQUE GUAICAIPURO",
+          "CACIQUE GUAICAIPURO",
+          "CACIQUE TENOQUE",
+          "CAMUCAY",
+          "CARMEN AURORA CARRERO",
+          "CARMEN ELINA PERNIA",
+          "CASES",
+          "COSTANTINO VILLASMIL",
+          "CRISTOBAL SANCHEZ",
+          "EL NIÑO SIMÓN BOLIVAR",
+          "EL PARAMO DEL TAMBOR",
+          "EL QUEBRADON",
+          "ELADIO QUINTERO RONDON",
+          "ELIA MARIA PEÑA",
+          "ELVA MÉNDEZ",
+          "EMPERATRIZ PARRA",
+          "ESTILITA GARCIA",
+          "EUMELIA HERNÁNDEZ",
+          "EZEQUIEL ZAMORA",
+          "EZIO PULIDO ALBORNOZ",
+          "FELIPE SANTIAGO GUTIERREZ",
+          "FERMIN TORO",
+          "FERMÍN ANTONIO RONDÓN",
+          "FRANCISCO ANAYA",
+          "FRANCISCO ANTONIO UZCATEGUI",
+          "FRANCISCO DE MIRANDA",
+          "GABRIELA MISTRAL",
+          "GENARINA DUGARTE C.",
+          "GENARINO GUILLEN",
+          "GILBERTO MÉNDEZ",
+          "HECTOR RAMON IZQUIERDO",
+          "HERIBERTO PUENTES VIELMA ( LA MAJUMBA)",
+          "HIPOLITA BOLIVAR",
+          "HOMERO IZARRA",
+          "ISAURA ELENA LOBO MÁRQUEZ",
+          "JACINTO CONVIT",
+          "JICACUY",
+          "JOSE BAUDILIO ROJAS",
+          "JOSE DE JESUS MERCADO",
+          "JOSE FELIPE RODRIGUEZ GUILLEN",
+          "JOSE FELIX MORENO",
+          "JOSE HONORIO MOLINA ZERPA",
+          "JOSE MARIA ESPAÑA",
+          "JOSE TADEO MONAGAS",
+          "JOSEFA CAMEJO",
+          "JOSEFA ELENA MORALES",
+          "JOSÉ ANALIO DÁVILA DÁVILA",
+          "JOSÉ FELIX RIBAS",
+          "JOSÉ MARÍA VARGAS",
+          "JUAN BAUTISTA ARISMENDI",
+          "JUAN PEDRO VARELA",
+          "LLANO EL ANIS",
+          "LOS CARACOLES",
+          "LOS UVITOS",
+          "LUCINDA MARQUEZ DE OSUNA",
+          "LUIS ALBERTO ARAUJO",
+          "LUIS ENRIQUE CONTRERAS MORA",
+          "LUIS ENRIQUE MARQUEZ BARILLAS",
+          "LUISA GARCÍA FERNÁNDEZ",
+          "LUZ ELINA PEÑA",
+          "MANUEL GUAL",
+          "MANUELA SÁENZ",
+          "MARCO TULIO UZCATEGUI ROJAS",
+          "MARIA ANASTASIA PERON",
+          "MARIA ARMINDA DAVILA",
+          "MARIA CONCEPCION PALACIOS",
+          "MARIA DAVILA",
+          "MARIA DE LA LUZ GUILLEN",
+          "MARIA DOLORES ROJAS DE MARQUEZ",
+          "MARIA ELIZA DAVILA",
+          "MARIA GREGORIA CARMONA",
+          "MARIA HORTENCIA DAVILA",
+          "MARIA ISABEL BRICEÑO",
+          "MARIA MONTESORI",
+          "MARTÌN GUILLÉN FERNÁNDEZ",
+          "MARÍA ANTONIA ARAQUE",
+          "MARÍA SANTOS ROJAS",
+          "MELECIO GUERRERO GUTIERREZ",
+          "MIGUEL ANGEL PULIDO DAVILA",
+          "NATALIA FERNÁNDEZ",
+          "OLINTO FERNÁNDEZ ALBORNOZ",
+          "OSCAR ENRIQUE ROJAS",
+          "PABLO ROJAS",
+          "QUIRORA",
+          "RAFAEL OMAR CALDERON",
+          "RITA DE CASIA",
+          "RUBEN DARIO VIELMA",
+          "SAN ANTONIO DE PADUA",
+          "SAN BENITO",
+          "SAN JOSE",
+          "SAN JUAN",
+          "SANTA CATALINA",
+          "SANTO DOMINGO",
+          "SARALINA FLORIDA",
+          "SILVERIO MÁRQUEZ GUILLÉN",
+          "SIMON RODRIGUEZ",
+          "SIMONA CORREDOR DE PICO",
+          "SIMÓN FERNÁNDEZ",
+          "TERESITA DE JESUS MONSALVE",
+          "TRINA SANDIA",
+          "VICENTE EMILIO SOJO",
+          "VICENTE GAUDENCIO GUILLEN GUILLEN",
+          "ZENON DIAZ CAMACHO",
+          "ÁNGEL ANTONIO ALTUVE"
+        ]
+      }
+    },
+    "TOVAR": {
+      "totalPersonal": 1357,
+      "totalPlanteles": 60,
+      "docentes": 819,
+      "administrativos": 86,
+      "obreros": 452,
+      "situacion_laboral": {
+        "EN PROCESO DE JUBILACIÓN": 50,
+        "EN PROCESO DE INCAPACIDAD": 30,
+        "ACTIVO": 1110,
+        "INCAPACIDAD TEMPORAL": 10,
+        "ABANDONO DE CARGO": 6,
+        "APOYO INSTITUCIONAL": 34,
+        "SINCERACIÓN DE NÓMINA": 47,
+        "LICENCIA SINDICAL": 3,
+        "ADECUACIÓN LABORAL": 20,
+        "INCAPACIDAD TOTAL Y DEFINITIVA POR IVSS": 13,
+        "VACACIONES": 4,
+        "DEFUNCIONES": 4,
+        "REPOSO MEDICO": 12,
+        "PRIVADO DE LIBERTAD": 1,
+        "INCAPACIDAD TOTAL POR IPASME": 5,
+        "PERMISO PRE Y POST NATAL": 3,
+        "PERMISO POR CUIDO": 3,
+        "INCUMPLIMIENTO DE FUNCIONES": 1,
+        "RENUNCIA": 1
+      },
+      "jubilables": [
+        {
+          "clave": "OD02051421",
+          "nombre": "CORONEL ANTONIO RANGEL",
+          "count": 13
+        },
+        {
+          "clave": "S0271D1421",
+          "nombre": "FÉLIX ROMÁN DUQUE",
+          "count": 11
+        },
+        {
+          "clave": "S1067D1421",
+          "nombre": "JOSE NUCETE SARDI",
+          "count": 9
+        },
+        {
+          "clave": "OD00191421",
+          "nombre": "ESC.SAN FRANCISCO",
+          "count": 7
+        },
+        {
+          "clave": "OD01891421",
+          "nombre": "MARIA SIMONA CORREDOR",
+          "count": 7
+        },
+        {
+          "clave": "OD01901421",
+          "nombre": "JACINTO MORA",
+          "count": 7
+        },
+        {
+          "clave": "OD02031421",
+          "nombre": "CLAUDIO VIVAS",
+          "count": 7
+        },
+        {
+          "clave": "OD02221421",
+          "nombre": "JUAN PICON GONZALEZ",
+          "count": 7
+        },
+        {
+          "clave": "OD17051421",
+          "nombre": "EZEQUIEL ZAMORA",
+          "count": 7
+        },
+        {
+          "clave": "OD02021421",
+          "nombre": "SAN JOSE",
+          "count": 6
+        },
+        {
+          "clave": "OD15841421",
+          "nombre": "GENOVEBA MONTERO DE V",
+          "count": 6
+        },
+        {
+          "clave": "S0271N1421",
+          "nombre": "ALI HERNANDEZ",
+          "count": 6
+        },
+        {
+          "clave": "OD02161421",
+          "nombre": "DULCE GUERRERO",
+          "count": 5
+        },
+        {
+          "clave": "OD02281421",
+          "nombre": "MONSEÑOR MORENO",
+          "count": 4
+        },
+        {
+          "clave": "OD02081421",
+          "nombre": "CIRO RAMIREZ",
+          "count": 3
+        },
+        {
+          "clave": "OD02151421",
+          "nombre": "MERCEDES ELENA CORDERO DE G",
+          "count": 3
+        },
+        {
+          "clave": "ON14981421",
+          "nombre": "NOHEMI HIGUERA DE GUZMAN",
+          "count": 3
+        },
+        {
+          "clave": "S2959D1421",
+          "nombre": "MARÍA YOLANDA PERNIA",
+          "count": 3
+        },
+        {
+          "clave": "D1067D1421",
+          "nombre": "D1067D1421",
+          "count": 2
+        },
+        {
+          "clave": "OD02001421",
+          "nombre": "CARMEN DELIA BENCOMO",
+          "count": 2
+        },
+        {
+          "clave": "OD02201421",
+          "nombre": "DON TOMAS LABRADOR RAMIREZ",
+          "count": 2
+        },
+        {
+          "clave": "OD02841421",
+          "nombre": "JOSE ABRAHAN HERNANDEZ",
+          "count": 2
+        },
+        {
+          "clave": "OD09671421",
+          "nombre": "LUIS ANTONIO HERNÁNDEZ",
+          "count": 2
+        },
+        {
+          "clave": "OD09741421",
+          "nombre": "ASUNCION MARQUEZ",
+          "count": 2
+        },
+        {
+          "clave": "OD14881421",
+          "nombre": "MILAGRO CHIQUINQUIRA QUIÑONES",
+          "count": 2
+        },
+        {
+          "clave": "OD05081421",
+          "nombre": "SANTA JUANA",
+          "count": 1
+        },
+        {
+          "clave": "OD05101421",
+          "nombre": "JOSE RAMON MARQUEZ",
+          "count": 1
+        },
+        {
+          "clave": "OD05111421",
+          "nombre": "ARTURO ALARCON",
+          "count": 1
+        },
+        {
+          "clave": "OD05161421",
+          "nombre": "JUSTO MANSILLA DURÁN",
+          "count": 1
+        },
+        {
+          "clave": "OD14891421",
+          "nombre": "MARTIN TOVAR Y TOVAR",
+          "count": 1
+        },
+        {
+          "clave": "OD14961421",
+          "nombre": "JOSE MARIA MENDEZ",
+          "count": 1
+        },
+        {
+          "clave": "OD15321421",
+          "nombre": "HERMINIO GUERRERO",
+          "count": 1
+        },
+        {
+          "clave": "OD17381421",
+          "nombre": "MARIA ANASTASIA PERON",
+          "count": 1
+        },
+        {
+          "clave": "OD17391421",
+          "nombre": "JUAN EDUARDO RAMIREZ ROA",
+          "count": 1
+        },
+        {
+          "clave": "ON14941421",
+          "nombre": "CIUDAD TOVAR",
+          "count": 1
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 60,
+        "arrCargados": [],
+        "arrPendientes": [
+          "ALI HERNANDEZ",
+          "ANA JULIA CONTRERAS DE RODRIGUEZ",
+          "ANA RITA GUILLEN DE QUIÑONES",
+          "ANANIAS AVENDAÑO",
+          "ARGIMIRO MOLINA MENDEZ",
+          "ARTURO ALARCON",
+          "ASUNCION MARQUEZ",
+          "CARMEN DELIA BENCOMO",
+          "CIRO RAMIREZ",
+          "CIUDAD TOVAR",
+          "CLAUDIO VIVAS",
+          "COLEGIO FE Y ALEGRIA",
+          "COLEGIO HERMANA FELISA ELUSTONDO FE Y ALEGRIA",
+          "CORONEL ANTONIO RANGEL",
+          "DON TOMAS LABRADOR RAMIREZ",
+          "DULCE GUERRERO",
+          "EMERENCIANA MÁRQUEZ DE CONTRERAS",
+          "ESC.SAN FRANCISCO",
+          "EULALIO ZAMBRANO",
+          "EZEQUIEL ZAMORA",
+          "FÉLIX ROMÁN DUQUE",
+          "GENOVEBA MONTERO DE V",
+          "HERMINIO GUERRERO",
+          "JACINTO MORA",
+          "JESUS ALVEIRO BUSTAMANTE RAMIREZ",
+          "JOSE ABRAHAN HERNANDEZ",
+          "JOSE AMENODORO ARAQUE",
+          "JOSE MARIA MENDEZ",
+          "JOSE NUCETE SARDI",
+          "JOSE RAMON MARQUEZ",
+          "JOSE RODRIGO CONTRERAS ESCALONA",
+          "JOSEPH HUBERT",
+          "JUAN EDUARDO RAMIREZ ROA",
+          "JUAN PICON GONZALEZ",
+          "JUSTO MANSILLA DURÁN",
+          "LEONOR DE LA GUERRA",
+          "LUIS ALBERTO FLORES",
+          "LUIS ANTONIO HERNÁNDEZ",
+          "LUZ MARINA CALDERON",
+          "MARIA ANASTASIA PERON",
+          "MARIA JESUS UZCATEGUI",
+          "MARIA SIMONA CORREDOR",
+          "MARTIN TOVAR Y TOVAR",
+          "MARÍA LUISA CÁCERES DÍAZ",
+          "MARÍA YOLANDA PERNIA",
+          "MATIAS CODINA",
+          "MERCEDES ELENA CORDERO DE G",
+          "MILAGRO CHIQUINQUIRA QUIÑONES",
+          "MONSEÑOR CHACON",
+          "MONSEÑOR MORENO",
+          "NOHEMI HIGUERA DE GUZMAN",
+          "OBDULIA JAIMES DE MEDINA",
+          "SAN ISIDRO",
+          "SAN JOSE",
+          "SAN PEDRO",
+          "SANTA BÁRBARA",
+          "SANTA INÉS",
+          "SANTA JUANA",
+          "SIMON RODRIGUEZ",
+          "TEL ELVIS DE JESUS APONCIO"
+        ]
+      }
+    },
+    "TULIO FEBRES": {
+      "totalPersonal": 890,
+      "totalPlanteles": 50,
+      "docentes": 575,
+      "administrativos": 37,
+      "obreros": 278,
+      "situacion_laboral": {
+        "ACTIVO": 786,
+        "APOYO INSTITUCIONAL": 10,
+        "EN PROCESO DE INCAPACIDAD": 11,
+        "TRASLADO INTERZONAL": 6,
+        "INCAPACIDAD TOTAL Y DEFINITIVA POR IVSS": 3,
+        "RENUNCIA": 3,
+        "ABANDONO DE CARGO": 13,
+        "INCAPACIDAD TOTAL POR IPASME": 12,
+        "REPOSO MEDICO": 5,
+        "DEFUNCIONES": 1,
+        "EN PROCESO DE JUBILACIÓN": 15,
+        "INCAPACIDAD TEMPORAL": 1,
+        "PERMISO PRE Y POST NATAL": 5,
+        "INCUMPLIMIENTO DE FUNCIONES": 1,
+        "VACACIONES": 3,
+        "ADECUACIÓN LABORAL": 4,
+        "COMISION DE SERVICIO": 1,
+        "SINCERACIÓN DE NÓMINA": 9,
+        "PRIVADO DE LIBERTAD": 1
+      },
+      "jubilables": [
+        {
+          "clave": "S2257D1422",
+          "nombre": "DORLISA GUERRA CAMPO ELIAS",
+          "count": 6
+        },
+        {
+          "clave": "OD00931422",
+          "nombre": "MIGUEL ARISMENDI",
+          "count": 5
+        },
+        {
+          "clave": "OD00941422",
+          "nombre": "JUAN JOSE LANDAETA",
+          "count": 5
+        },
+        {
+          "clave": "OD17371422",
+          "nombre": "HUMBERTO FERNANDEZ MORAN",
+          "count": 4
+        },
+        {
+          "clave": "OD01041422",
+          "nombre": "CAYETANO CARREÑO",
+          "count": 3
+        },
+        {
+          "clave": "S1726D1422",
+          "nombre": "JOSE MANUEL BRICEÑO/ O MONSILLO",
+          "count": 3
+        },
+        {
+          "clave": "OD01071422",
+          "nombre": "ARMANDO REVERON",
+          "count": 2
+        },
+        {
+          "clave": "OD01131422",
+          "nombre": "GABRIELA MISTRAL",
+          "count": 2
+        },
+        {
+          "clave": "OD01161422",
+          "nombre": "RAMONA ALDANA DE ARAUJO",
+          "count": 2
+        },
+        {
+          "clave": "OD16101422",
+          "nombre": "TOMAS AGUSTIN CASTELAO FERNANDEZ",
+          "count": 2
+        },
+        {
+          "clave": "OD00921422",
+          "nombre": "MIGUEL MARIA CANDALES",
+          "count": 1
+        },
+        {
+          "clave": "OD00951422",
+          "nombre": "VICENTE SALIAS",
+          "count": 1
+        },
+        {
+          "clave": "OD01151422",
+          "nombre": "BELEN SAN JUAN",
+          "count": 1
+        },
+        {
+          "clave": "OD04031422",
+          "nombre": "TOMAS MONTILLA DIAZ",
+          "count": 1
+        },
+        {
+          "clave": "OD04061422",
+          "nombre": "HIPOLITA BOLIVAR",
+          "count": 1
+        },
+        {
+          "clave": "OD04071422",
+          "nombre": "CONCEPCIÓN MARIÑO",
+          "count": 1
+        },
+        {
+          "clave": "OD04321422",
+          "nombre": "SAN ROQUE",
+          "count": 1
+        },
+        {
+          "clave": "OD17361422",
+          "nombre": "MARIA ROSARIO NAVA",
+          "count": 1
+        },
+        {
+          "clave": "S4143D1422",
+          "nombre": "RAMON ALBERTO ALARCON",
+          "count": 1
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 50,
+        "arrCargados": [],
+        "arrPendientes": [
+          "AQUILES NAZOA",
+          "ARGELIA LAYA",
+          "ARMANDO REVERON",
+          "BATALLA DE LA VICTORIA DE 1814",
+          "BELEN SAN JUAN",
+          "CAYETANO CARREÑO",
+          "CONCEPCIÓN MARIÑO",
+          "DON LUIS ZAMBRANO",
+          "DORLISA GUERRA CAMPO ELIAS",
+          "EDILIA ARAUJO",
+          "EP.E. NUEVA BOLIVIA",
+          "ESC ANTONIO RICAURTE",
+          "ESC. ALEXIS SANCHEZ",
+          "ESC. GETULIO AGOSTINI",
+          "ESC. MIGUEL ACOSTA SAIGNES",
+          "ESC. TERESA DE LA PARRA",
+          "FRANCISCO DE MIRANDA",
+          "FÉLIX ALBERTO PEÑA",
+          "GABRIELA MISTRAL",
+          "GONZALO DE JESUS PINEDA PAREDES",
+          "HIPOLITA BOLIVAR",
+          "HUMBERTO FERNANDEZ MORAN",
+          "JOSE MANUEL BRICEÑO/ O MONSILLO",
+          "JOSE MARIA VARGAS",
+          "JOSE RAFAEL CARMONA LINARES",
+          "JOSE RAFAEL FEBRES CORDERO",
+          "JUAN BAUTISTA ARAUJO ARAUJO",
+          "JUAN JOSE LANDAETA",
+          "LAS HEROINAS",
+          "LUIS BELTRAN PRIETO FIGUEROA",
+          "LUIS BIGOT",
+          "LUISA CACERES DIAZ DE ARISMENDI",
+          "MANUEL MUJICA MILLAN",
+          "MANUELA SAENZ VERGARA",
+          "MARIA ELENA MEJIA DE DULCEY",
+          "MARIA ROSARIO NAVA",
+          "MIGUEL ARISMENDI",
+          "MIGUEL MARIA CANDALES",
+          "ORESTI ARAUJO BAPTISTA",
+          "PEDRO CAMEJO",
+          "PREESCOLAR LA COROMOTO",
+          "RAMON ALBERTO ALARCON",
+          "RAMONA ALDANA DE ARAUJO",
+          "SAMUEL ROBINSON",
+          "SAN BENITO DE PALERMO",
+          "SAN ROQUE",
+          "TOMAS AGUSTIN CASTELAO FERNANDEZ",
+          "TOMAS MONTILLA DIAZ",
+          "UBALDO ENRIQUE MORILLO",
+          "VICENTE SALIAS"
+        ]
+      }
+    },
+    "ZEA": {
+      "totalPersonal": 319,
+      "totalPlanteles": 26,
+      "docentes": 220,
+      "administrativos": 13,
+      "obreros": 86,
+      "situacion_laboral": {
+        "ACTIVO": 276,
+        "EN PROCESO DE JUBILACIÓN": 9,
+        "ADECUACIÓN LABORAL": 5,
+        "REPOSO MEDICO": 4,
+        "EN PROCESO DE INCAPACIDAD": 5,
+        "INCAPACIDAD TOTAL POR IPASME": 1,
+        "SINCERACIÓN DE NÓMINA": 3,
+        "ABANDONO DE CARGO": 3,
+        "PERMISO POR CUIDO": 2,
+        "COMISION DE SERVICIO": 1,
+        "TRASLADO INTERZONAL": 2,
+        "APOYO INSTITUCIONAL": 5,
+        "VACACIONES": 1,
+        "LICENCIA SINDICAL": 1,
+        "RENUNCIA": 1
+      },
+      "jubilables": [
+        {
+          "clave": "OD02071423",
+          "nombre": "FELIX ROMAN DUQUE",
+          "count": 10
+        },
+        {
+          "clave": "OD01951423",
+          "nombre": "MARIA AURORA ZAMBRANO",
+          "count": 3
+        },
+        {
+          "clave": "OD01971423",
+          "nombre": "HAYDEE MALDONADO DE TORO",
+          "count": 3
+        },
+        {
+          "clave": "OD02061423",
+          "nombre": "MARTA LUCILA CONTRERAS",
+          "count": 3
+        },
+        {
+          "clave": "OD17541423",
+          "nombre": "DON SANTIGO DE JESUS ESCALANTE",
+          "count": 2
+        },
+        {
+          "clave": "OD02101423",
+          "nombre": "RAFAEL RONDON PENA",
+          "count": 1
+        },
+        {
+          "clave": "OD02231423",
+          "nombre": "FLOR DE MARIA MENDEZ DE SALAS",
+          "count": 1
+        },
+        {
+          "clave": "OD02241423",
+          "nombre": "FRANCISCO PEREZ LOPEZ",
+          "count": 1
+        },
+        {
+          "clave": "OD02791423",
+          "nombre": "SANTA LUCIA",
+          "count": 1
+        },
+        {
+          "clave": "OD04651423",
+          "nombre": "AVELINO CARRERO MOLINA",
+          "count": 1
+        },
+        {
+          "clave": "OD17371423",
+          "nombre": "ANDRES BELLO",
+          "count": 1
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 26,
+        "arrCargados": [],
+        "arrPendientes": [
+          "ANDRES BELLO",
+          "AVELINO CARRERO MOLINA",
+          "DOCTOR JOSE RAMON VEGA",
+          "DON SANTIGO DE JESUS ESCALANTE",
+          "EZEQUIEL PRADA ARAQUE",
+          "FELIX RAMON ROJAS MONCADA",
+          "FELIX ROMAN DUQUE",
+          "FLOR DE MARIA MENDEZ DE SALAS",
+          "FRANCISCO PEREZ LOPEZ",
+          "HAYDEE MALDONADO DE TORO",
+          "ISABEL MOLINA DE JAIMES",
+          "ISMENIA MORA",
+          "MARIA AURORA ZAMBRANO",
+          "MARIA CONCEPCION MENDEZ",
+          "MARIA CRISTINA BARRAGAN",
+          "MARIO MORA",
+          "MARTA LUCILA CONTRERAS",
+          "MILAGROS DEL VALLE RONDON",
+          "PASCUAL ALARCON",
+          "RAFAEL RONDON PENA",
+          "RAMON MORENO",
+          "RUTH DEL CARMEN SARAUZ",
+          "SANTA BARBARA",
+          "SANTA LUCIA",
+          "TEL RAMON RAMIREZ",
+          "TOMAS RAMON CONTRERAS RODRIGUEZ"
+        ]
+      }
+    },
+    "SIN MUNICIPIO": {
+      "totalPersonal": 1422,
+      "totalPlanteles": 0,
+      "docentes": 908,
+      "administrativos": 72,
+      "obreros": 442,
+      "situacion_laboral": {
+        "ACTIVO": 1280,
+        "SINCERACIÓN DE NÓMINA": 57,
+        "ABANDONO DE CARGO": 14,
+        "RENUNCIA": 12,
+        "PERMISO PRE Y POST NATAL": 21,
+        "NO DEFINIDA": 3,
+        "PERMISO POR CUIDO": 3,
+        "INCAPACIDAD TEMPORAL": 2,
+        "REPOSO MEDICO": 5,
+        "EN PROCESO DE INCAPACIDAD": 5,
+        "APOYO INSTITUCIONAL": 8,
+        "INCUMPLIMIENTO DE FUNCIONES": 1,
+        "COMISION DE SERVICIO": 4,
+        "ADECUACIÓN LABORAL": 3,
+        "TRASLADO INTERZONAL": 2,
+        "LICENCIA SINDICAL": 1,
+        "VACACIONES": 1
+      },
+      "jubilables": [
+        {
+          "clave": "SIN_DEA",
+          "nombre": "SIN_DEA",
+          "count": 9
+        }
+      ],
+      "matricula": {
+        "cargados": 0,
+        "pendientes": 0,
+        "arrCargados": [],
+        "arrPendientes": []
+      }
+    }
+  }
+}

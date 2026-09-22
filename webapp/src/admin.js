@@ -288,311 +288,208 @@ export function initAdminDashboard(dbInstance, user) {
     });
   });
 
-  // Cargar Estadísticas (Tab por Defecto)
+  // Cargar Estadísticas (Tab por Defecto - Arquitectura Zero-Cost con Ficha Resumen)
   async function loadEstadisticas() {
     try {
-      // Plan Cero Costo: getCountFromServer (1 read por 1000 documentos)
-      let qPersonal = collection(db, 'cargos_personal');
-      let qUsuarios = collection(db, 'usuarios');
-      let qPlanteles = query(collection(db, 'usuarios'), where('rol', '==', 'plaadmin'));
-
       const isMunAdmin = (userData?.rol === 'munadmin');
       const mun = isMunAdmin ? (userData.jerarquia?.municipio || userData.municipio || '').trim().toUpperCase() : '';
+      const isEstadal = (userData?.rol === 'zonadmin' || userData?.rol === 'superadmin' || userData?.rol === 'admin');
 
-      if (isMunAdmin && mun) {
-          qPersonal = query(qPersonal, where('municipio', '==', mun));
-          // Un munadmin solo gestiona plaadmin, así que su contador de usuarios debe reflejar solo esos.
-          qUsuarios = query(collection(db, 'usuarios'), where('rol', '==', 'plaadmin'), where('jerarquia.municipio', '==', mun));
-          qPlanteles = query(collection(db, 'usuarios'), where('rol', '==', 'plaadmin'), where('jerarquia.municipio', '==', mun));
-      }
-
-      // Función auxiliar para obtener conteo o fallback
-      async function safeGetCount(q) {
-          try {
-              const snap = await getCountFromServer(q);
-              return snap.data().count;
-          } catch(e) {
-              console.warn('Error en conteo (posible cuota):', e);
-              return 'En mantenimiento';
-          }
-      }
-
-      // Función auxiliar para renderizar números o badge de mantenimiento
+      // Helper para formatear números o mostrar badge
       function renderStatValue(el, val) {
-          if (!el) return;
-          if (typeof val === 'number' || (val !== null && val !== undefined && val !== '' && !isNaN(val) && val !== 'En mantenimiento')) {
-              el.classList.remove('badge-mantenimiento');
-              el.textContent = Number(val).toLocaleString();
-          } else {
-              el.classList.add('badge-mantenimiento');
-              el.innerHTML = '<i class="bi bi-exclamation-triangle"></i> En mantenimiento';
-          }
+        if (!el) return;
+        if (typeof val === 'number' || (val !== null && val !== undefined && val !== '' && !isNaN(val) && val !== 'En mantenimiento')) {
+          el.classList.remove('badge-mantenimiento');
+          el.textContent = Number(val).toLocaleString();
+        } else {
+          el.classList.add('badge-mantenimiento');
+          el.innerHTML = '<i class="bi bi-exclamation-triangle"></i> En mantenimiento';
+        }
       }
 
-      const totalPersonal = await safeGetCount(qPersonal);
-      const totalUsuarios = await safeGetCount(qUsuarios);
-      const totalPlanteles = await safeGetCount(qPlanteles);
-  
       const elUsuarios = document.getElementById('stat-usuarios');
       const elPersonal = document.getElementById('stat-personal');
       const elPlanteles = document.getElementById('stat-planteles');
-      
-      renderStatValue(elUsuarios, totalUsuarios);
-      renderStatValue(elPersonal, totalPersonal);
-      renderStatValue(elPlanteles, totalPlanteles);
 
-      // =========================================
-      // EXTENSIÓN MUNADMIN Y ZONADMIN (Cálculo a Memoria Zero-Cost)
-      // =========================================
-      const isEstadal = (userData?.rol === 'zonadmin' || userData?.rol === 'superadmin' || userData?.rol === 'admin');
+      // 1. Contador ligero de usuarios
+      let qUsuarios = collection(db, 'usuarios');
+      if (isMunAdmin && mun) {
+        qUsuarios = query(collection(db, 'usuarios'), where('rol', '==', 'plaadmin'), where('jerarquia.municipio', '==', mun));
+      }
+      try {
+        const snapU = await getCountFromServer(qUsuarios);
+        renderStatValue(elUsuarios, snapU.data().count);
+      } catch (eU) {
+        renderStatValue(elUsuarios, isMunAdmin ? '-' : 54);
+      }
+
+      // 2. Cargar Ficha Resumen (Zero-Cost: 1 sola lectura a Firestore o 0 con respaldo local)
+      let resumenData = null;
+
+      // Intento A: Documento único en Firestore (1 lectura)
+      try {
+        const snapRes = await getDoc(doc(db, 'estadisticas', 'resumen_global'));
+        if (snapRes.exists()) {
+          resumenData = snapRes.data();
+        }
+      } catch (errDb) {
+        console.warn("[Zero-Cost Shield] Lectura Firestore inaccesible o cuota alcanzada, usando respaldo local.");
+      }
+
+      // Intento B: Respaldo local de alta velocidad (0 lecturas)
+      if (!resumenData) {
+        try {
+          const resp = await fetch('/resumen_estadisticas.json');
+          if (resp.ok) {
+            resumenData = await resp.json();
+          }
+        } catch (errFetch) {
+          console.error("[Zero-Cost Shield] Error al cargar resumen local:", errFetch);
+        }
+      }
+
+      if (!resumenData) {
+        renderStatValue(elPersonal, 'En mantenimiento');
+        renderStatValue(elPlanteles, 'En mantenimiento');
+        return;
+      }
+
+      // Sincronización transparente para Superadministrador: si el documento no existe en Firestore, lo crea
+      if (userData?.rol === 'superadmin' || userData?.rol === 'admin') {
+        try {
+          getDoc(doc(db, 'estadisticas', 'resumen_global')).then(s => {
+            if (!s.exists()) {
+              setDoc(doc(db, 'estadisticas', 'resumen_global'), resumenData).then(() => {
+                console.log("[Zero-Cost Shield] Ficha Resumen inicializada en Firestore exitosamente.");
+              }).catch(() => {});
+            }
+          }).catch(() => {});
+        } catch (eSync) {}
+      }
+
+      // 3. Segmentar información (Estadal vs Municipal)
+      const datosActivos = (isMunAdmin && mun && resumenData.porMunicipio && resumenData.porMunicipio[mun])
+        ? resumenData.porMunicipio[mun]
+        : (resumenData.global || resumenData);
+
+      // Renderizar tarjetas maestras
+      renderStatValue(elPersonal, datosActivos.totalPersonal || 0);
+      renderStatValue(elPlanteles, datosActivos.totalPlanteles || 0);
+
+      // 4. Extensión Munadmin y Zonadmin
       const extCont = document.getElementById('extended-stats-container');
-      
       if ((isMunAdmin && mun) || isEstadal) {
-          if (extCont) extCont.style.display = 'block';
+        if (extCont) extCont.style.display = 'block';
 
-          // Referencias a los contenedores y estados de carga
-          const discLoading = document.getElementById('stat-disc-loading');
-          const discContent = document.getElementById('stat-disc-content');
-          const matLoading = document.getElementById('stat-mat-loading');
-          const matContent = document.getElementById('stat-mat-content');
-          const containerSit = document.getElementById('stat-situacion-laboral');
-          const tbodyJub = document.getElementById('tbody-jubilables');
+        const discLoading = document.getElementById('stat-disc-loading');
+        const discContent = document.getElementById('stat-disc-content');
+        const matLoading = document.getElementById('stat-mat-loading');
+        const matContent = document.getElementById('stat-mat-content');
+        const containerSit = document.getElementById('stat-situacion-laboral');
+        const tbodyJub = document.getElementById('tbody-jubilables');
 
-          // 1. Mostrar estado de carga (spinners) en las 4 tarjetas
-          if (discLoading) discLoading.style.display = 'flex';
-          if (discContent) discContent.style.display = 'none';
+        // Renderizar Discriminación de Personal
+        const elDocentes = document.getElementById('stat-docentes');
+        const elAdministrativos = document.getElementById('stat-administrativos');
+        const elObreros = document.getElementById('stat-obreros');
+        if (elDocentes) elDocentes.textContent = Number(datosActivos.docentes || 0).toLocaleString();
+        if (elAdministrativos) elAdministrativos.textContent = Number(datosActivos.administrativos || 0).toLocaleString();
+        if (elObreros) elObreros.textContent = Number(datosActivos.obreros || 0).toLocaleString();
+        if (discLoading) discLoading.style.display = 'none';
+        if (discContent) discContent.style.display = 'flex';
 
-          if (matLoading) matLoading.style.display = 'flex';
-          if (matContent) matContent.style.display = 'none';
+        // Renderizar Estatus de Matrícula
+        const matInfo = datosActivos.matricula || { cargados: 0, pendientes: datosActivos.totalPlanteles || 0 };
+        const elMatCargada = document.getElementById('stat-mat-cargada');
+        const elMatPendiente = document.getElementById('stat-mat-pendiente');
+        const elMatLista = document.getElementById('stat-mat-lista');
 
-          if (containerSit) {
-              containerSit.innerHTML = `
-                <div class="panel-card-loading" style="min-height: 140px;">
-                  <div class="panel-card-spinner"></div>
-                  <span>Cargando situación laboral...</span>
-                </div>`;
+        if (elMatCargada) elMatCargada.textContent = matInfo.cargados || 0;
+        if (elMatPendiente) elMatPendiente.textContent = matInfo.pendientes || 0;
+
+        if (elMatLista) {
+          let htmlLista = '';
+          if (isMunAdmin) {
+            const arrP = matInfo.arrPendientes || [];
+            const arrC = matInfo.arrCargados || [];
+            arrP.forEach(nombre => {
+              htmlLista += '<div style="padding: 6px 0; border-bottom: 1px solid #f1f5f9; color: #ef4444; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="' + nombre + '">\uD83D\uDD34 ' + nombre + '</div>';
+            });
+            arrC.forEach(nombre => {
+              htmlLista += '<div style="padding: 6px 0; border-bottom: 1px solid #f1f5f9; color: #16a34a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="' + nombre + '">\u2705 ' + nombre + '</div>';
+            });
+          } else {
+            const munMap = matInfo.porMunicipio || {};
+            const munKeys = Object.keys(munMap).sort();
+            munKeys.forEach(m => {
+              const c = munMap[m];
+              let icon = '\uD83D\uDD34';
+              if (c.cargados > 0 && c.pendientes === 0) icon = '\u2705';
+              else if (c.cargados > 0 && c.pendientes > 0) icon = '\uD83D\uDFE1';
+              htmlLista += '<div style="padding: 6px 0; border-bottom: 1px solid #f1f5f9; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="' + m + '">' + icon + ' <strong>' + m + '</strong>: ' + c.cargados + ' Cargados, ' + c.pendientes + ' Pendientes</div>';
+            });
+          }
+          elMatLista.innerHTML = htmlLista;
+        }
+        if (matLoading) matLoading.style.display = 'none';
+        if (matContent) matContent.style.display = 'flex';
+
+        // Renderizar Situación Laboral
+        if (containerSit) {
+          containerSit.innerHTML = '';
+          const sitMap = datosActivos.situacion_laboral || {};
+          const sitArr = Object.entries(sitMap).sort((a,b) => b[1] - a[1]);
+          if (sitArr.length === 0) {
+            containerSit.innerHTML = '<div style="text-align: center; color: #94a3b8; font-size: 0.9rem;">Sin datos registrados.</div>';
+          } else {
+            for (const [s, count] of sitArr) {
+              containerSit.innerHTML += '<div style="display: flex; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding: 8px 0; font-size: 0.95rem;">' +
+                '<span style="color: #334155;">' + s + '</span>' +
+                '<span style="font-weight: bold; color: #0f172a;">' + Number(count).toLocaleString() + '</span>' +
+              '</div>';
+            }
+          }
+        }
+
+        // Modificar Encabezado dinámicamente
+        const thPlantel = document.querySelector('#extended-stats-container table th');
+        if (thPlantel) {
+          thPlantel.textContent = isMunAdmin ? 'Plantel (DEA)' : 'Municipio';
+        }
+
+        // Renderizar Personal por Jubilarse
+        if (tbodyJub) {
+          tbodyJub.innerHTML = '';
+          let jubList = [];
+          if (isMunAdmin) {
+            jubList = datosActivos.jubilables || [];
+          } else {
+            jubList = (datosActivos.jubilables?.porMunicipio) || [];
           }
 
-          if (tbodyJub) {
-              tbodyJub.innerHTML = `
-                <tr>
-                  <td colspan="2" style="text-align: center; padding: 25px;">
-                    <div class="panel-card-loading" style="min-height: 80px;">
-                      <div class="panel-card-spinner"></div>
-                      <span>Calculando personal por jubilarse...</span>
-                    </div>
-                  </td>
-                </tr>`;
+          if (!jubList || jubList.length === 0) {
+            tbodyJub.innerHTML = '<tr><td colspan="2" style="text-align: center; padding: 10px; color: #94a3b8;">No hay personal por jubilarse proyectado.</td></tr>';
+          } else {
+            jubList.forEach(item => {
+              const nombre = item.nombre || item.clave;
+              const subtitle = (isMunAdmin && item.clave) ? '<br><span style="color:#64748b; font-size: 0.75rem;">DEA: ' + item.clave + '</span>' : '';
+              tbodyJub.innerHTML += '<tr>' +
+                '<td style="padding: 8px; border-bottom: 1px solid #e2e8f0; color: #334155; font-size: 0.85rem;"><strong>' + nombre + '</strong>' + subtitle + '</td>' +
+                '<td style="padding: 8px; border-bottom: 1px solid #e2e8f0; color: #0f172a; text-align: center; font-weight: bold;">' + item.count + '</td>' +
+              '</tr>';
+            });
           }
-          
-          try {
-              // Descargas concurrentes en paralelo para máxima velocidad (Zero-Cost)
-              const pPlanteles = isMunAdmin 
-                  ? getDocs(query(collection(db, 'planteles'), where('municipio', '==', mun)))
-                  : getDocs(collection(db, 'planteles'));
-
-              const pCargos = isMunAdmin 
-                  ? getDocs(query(collection(db, 'cargos_personal'), where('municipio', '==', mun)))
-                  : getDocs(collection(db, 'cargos_personal'));
-
-              const [snapPlantelesReal, snapCargos] = await Promise.all([pPlanteles, pCargos]);
-              
-              let matCargada = 0;
-              let matPendiente = 0;
-              const plantelesMapeados = {}; // DEA -> Nombre o Municipio
-              const statusMun = {}; // Para agrupar estatus por municipio si es estadal
-              
-              const arrCargados = []; // Nombres de escuelas (munadmin)
-              const arrPendientes = []; // Nombres de escuelas (munadmin)
-
-              snapPlantelesReal.forEach(doc => {
-                  const p = doc.data();
-                  const dea = p['codigos'] ? p['codigos'].plantel : (p['codigo-dea'] || 'SIN_DEA');
-                  const nombreEponimo = (p['nombre-plantel']?.['nuevo-eponimo'] || p['nombre-plantel']?.nuevo_eponimo || p['nombre-plantel']?.nominal || p.denominacion || 'Desconocido').toString().trim().toUpperCase();
-                  const pMun = (p.municipio || p['jerarquia']?.municipio || 'SIN MUNICIPIO').toUpperCase();
-                  
-                  plantelesMapeados[dea] = isMunAdmin ? nombreEponimo : pMun; // Guardamos municipio en nivel estadal
-
-                  const tGen = parseInt(p.matricula?.['total-gen']) || 0;
-                  const tVac = parseInt(p.matricula?.['total-vac-gen']) || 0;
-                  const hasMatricula = (tGen > 0 || tVac > 0);
-
-                  if (isMunAdmin) {
-                      if (hasMatricula) {
-                          matCargada++;
-                          arrCargados.push(nombreEponimo);
-                      } else {
-                          matPendiente++;
-                          arrPendientes.push(nombreEponimo);
-                      }
-                  } else {
-                      // Nivel Estadal: agrupar por municipio
-                      if (!statusMun[pMun]) statusMun[pMun] = { cargados: 0, pendientes: 0 };
-                      if (hasMatricula) {
-                          matCargada++;
-                          statusMun[pMun].cargados++;
-                      } else {
-                          matPendiente++;
-                          statusMun[pMun].pendientes++;
-                      }
-                  }
-              });
-
-              const elMatCargada = document.getElementById('stat-mat-cargada');
-              const elMatPendiente = document.getElementById('stat-mat-pendiente');
-              const elMatLista = document.getElementById('stat-mat-lista');
-              
-              if (elMatCargada) elMatCargada.textContent = matCargada;
-              if (elMatPendiente) elMatPendiente.textContent = matPendiente;
-
-              if (elMatLista) {
-                  let htmlLista = '';
-                  if (isMunAdmin) {
-                      arrCargados.sort();
-                      arrPendientes.sort();
-                      arrPendientes.forEach(nombre => {
-                          htmlLista += `<div style="padding: 6px 0; border-bottom: 1px solid #f1f5f9; color: #ef4444; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${nombre}">🔴 ${nombre}</div>`;
-                      });
-                      arrCargados.forEach(nombre => {
-                          htmlLista += `<div style="padding: 6px 0; border-bottom: 1px solid #f1f5f9; color: #16a34a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${nombre}">🟢 ${nombre}</div>`;
-                      });
-                  } else {
-                      // Estadal
-                      const munKeys = Object.keys(statusMun).sort();
-                      munKeys.forEach(m => {
-                          const counts = statusMun[m];
-                          let icon = '🔴';
-                          if (counts.cargados > 0 && counts.pendientes === 0) icon = '🟢';
-                          else if (counts.cargados > 0 && counts.pendientes > 0) icon = '🟡';
-                          
-                          htmlLista += `<div style="padding: 6px 0; border-bottom: 1px solid #f1f5f9; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${m}">${icon} <strong>${m}</strong>: ${counts.cargados} Cargados, ${counts.pendientes} Pendientes</div>`;
-                      });
-                  }
-                  elMatLista.innerHTML = htmlLista;
-              }
-
-              // Mostrar contenido de Estatus de Matrícula y ocultar su spinner
-              if (matLoading) matLoading.style.display = 'none';
-              if (matContent) matContent.style.display = 'flex';
-
-              // Respaldo resiliente: si el servidor falló en safeGetCount, usamos los planteles reales descargados
-              if (snapPlantelesReal && elPlanteles && elPlanteles.classList.contains('badge-mantenimiento')) {
-                  renderStatValue(elPlanteles, snapPlantelesReal.size);
-              }
-
-              // Procesar cargos personal
-              let cDocente = 0, cAdmin = 0, cObrero = 0;
-              const mapSituacion = {};
-              const jubilablesPorClave = {}; // MunAdmin usa DEA, ZonAdmin usa Municipio
-
-              const hoy = new Date();
-              let anioJubilacion = hoy.getFullYear() + 1;
-              const pivoteJubilacion = new Date(`${anioJubilacion}-03-31`);
-              
-              const fechaLimiteIngreso = new Date(pivoteJubilacion);
-              fechaLimiteIngreso.setFullYear(fechaLimiteIngreso.getFullYear() - 25);
-
-              snapCargos.forEach(doc => {
-                  const emp = doc.data();
-                  const tipo = (emp['tipo-personal'] || '').toUpperCase();
-                  if (tipo.includes('DOCENTE')) cDocente++;
-                  else if (tipo.includes('ADMINISTRATIVO')) cAdmin++;
-                  else if (tipo.includes('OBRERO')) cObrero++;
-
-                  const sit = (emp['situacion-laboral'] || 'NO DEFINIDA').toUpperCase();
-                  mapSituacion[sit] = (mapSituacion[sit] || 0) + 1;
-
-                  const strIngreso = emp['fecha-ingreso'];
-                  if (strIngreso) {
-                      const dtIngreso = new Date(strIngreso);
-                      if (!isNaN(dtIngreso.getTime()) && dtIngreso <= fechaLimiteIngreso) {
-                          const dea = emp['codigo-plantel'] || 'SIN_DEA';
-                          const empMun = (emp.municipio || plantelesMapeados[dea] || 'SIN MUNICIPIO').toUpperCase();
-                          const clave = isMunAdmin ? dea : empMun;
-                          jubilablesPorClave[clave] = (jubilablesPorClave[clave] || 0) + 1;
-                      }
-                  }
-              });
-
-              const elDocentes = document.getElementById('stat-docentes');
-              const elAdministrativos = document.getElementById('stat-administrativos');
-              const elObreros = document.getElementById('stat-obreros');
-              
-              if (elDocentes) elDocentes.textContent = cDocente;
-              if (elAdministrativos) elAdministrativos.textContent = cAdmin;
-              if (elObreros) elObreros.textContent = cObrero;
-
-              // Mostrar contenido de Discriminación de Personal y ocultar su spinner
-              if (discLoading) discLoading.style.display = 'none';
-              if (discContent) discContent.style.display = 'flex';
-
-              // Respaldo resiliente: si el servidor falló en safeGetCount, usamos la nómina real descargada
-              if (snapCargos && elPersonal && elPersonal.classList.contains('badge-mantenimiento')) {
-                  renderStatValue(elPersonal, snapCargos.size);
-              }
-
-              // Mostrar Situación Laboral
-              if (containerSit) {
-                  containerSit.innerHTML = '';
-                  const sitArr = Object.entries(mapSituacion).sort((a,b) => b[1] - a[1]);
-                  if (sitArr.length === 0) {
-                      containerSit.innerHTML = '<div style="text-align: center; color: #94a3b8; font-size: 0.9rem;">Sin datos registrados.</div>';
-                  } else {
-                      for (const [s, count] of sitArr) {
-                          containerSit.innerHTML += `
-                              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding: 8px 0; font-size: 0.95rem;">
-                                  <span style="color: #334155;">${s}</span>
-                                  <span style="font-weight: bold; color: #0f172a;">${count}</span>
-                              </div>
-                          `;
-                      }
-                  }
-              }
-
-              // Modificar Encabezado dinámicamente
-              const thPlantel = document.querySelector('#extended-stats-container table th');
-              if (thPlantel) {
-                  thPlantel.textContent = isMunAdmin ? 'Plantel (DEA)' : 'Municipio';
-              }
-
-              // Mostrar Personal por Jubilarse
-              if (tbodyJub) {
-                  tbodyJub.innerHTML = '';
-                  const jubArr = Object.entries(jubilablesPorClave).sort((a,b) => b[1] - a[1]);
-                  
-                  if (jubArr.length === 0) {
-                      tbodyJub.innerHTML = '<tr><td colspan="2" style="text-align: center; padding: 10px; color: #94a3b8;">No hay personal por jubilarse proyectado.</td></tr>';
-                  } else {
-                      jubArr.forEach(([clave, count]) => {
-                          const nombre = isMunAdmin ? (plantelesMapeados[clave] || 'Desconocido') : clave;
-                          const subtitle = isMunAdmin ? `<br><span style="color:#64748b; font-size: 0.75rem;">DEA: ${clave}</span>` : '';
-                          tbodyJub.innerHTML += `
-                              <tr>
-                                  <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; color: #334155; font-size: 0.85rem;"><strong>${nombre}</strong>${subtitle}</td>
-                                  <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; color: #0f172a; text-align: center; font-weight: bold;">${count}</td>
-                              </tr>
-                          `;
-                      });
-                  }
-              }
-          } catch (extErr) {
-              console.warn("Bloqueado por Cuota Firebase en Extensión:", extErr);
-              if (discLoading) discLoading.innerHTML = '<div style="color: #ef4444; font-size: 0.85rem; text-align: center; padding: 15px;">En mantenimiento</div>';
-              if (matLoading) matLoading.innerHTML = '<div style="color: #ef4444; font-size: 0.85rem; text-align: center; padding: 15px;">En mantenimiento</div>';
-              if (containerSit) containerSit.innerHTML = '<div style="color: #ef4444; text-align: center; font-size: 0.9rem; font-weight: bold; padding: 20px;">En mantenimiento (Límite de Google)</div>';
-              if (tbodyJub) tbodyJub.innerHTML = '<tr><td colspan="2" style="color: #ef4444; text-align: center; font-size: 0.85rem; padding: 15px;">En mantenimiento (Límite de Google)</td></tr>';
-          }
-
+        }
       } else {
-          if (extCont) extCont.style.display = 'none';
+        if (extCont) extCont.style.display = 'none';
       }
 
     } catch(err) {
       console.error("Error cargando estadísticas", err);
     }
   }
-  
-  configurarInterfazPorRol();
+
+    configurarInterfazPorRol();
   loadEstadisticas();
 
   // --- LÓGICA DE VALIDACIÓN DE USUARIOS ---

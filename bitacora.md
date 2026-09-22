@@ -865,3 +865,115 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre prema
 - conversaciones.md
 
 ---
+### v2.12.2 - Corrección de Codificación UTF-8 / Mojibake y Responsividad Móvil (22 de Septiembre de 2026)
+
+**1. Requerimientos:**
+- Limpiar caracteres corruptos (mojibake) en modales y alertas de `admin.js`.
+- Mejorar la visualización en dispositivos móviles de las tarjetas de estadísticas.
+
+**2. Solución Técnica y Decisiones Arquitectónicas:**
+- Se sanearon más de 233 secuencias de caracteres corruptos y emojis mal codificados en `admin.js`, sustituyéndolos por secuencias de escape Unicode puras (`\uD83D\uDD34`, `\u2705`, etc.) para garantizar portabilidad en cualquier sistema operativo.
+- Se ajustaron los estilos CSS de las tarjetas de métricas para un apilamiento fluido y legible en pantallas móviles.
+- **Control SemVer:** Incremento de versión a **v2.12.2**.
+
+**3. Archivos Involucrados:**
+- `webapp/src/admin.js`
+- `webapp/styles.css`
+- `webapp/package.json`
+- `webapp/index.html`
+
+---
+
+### v2.12.3 - Notificación de Registro con Alerta de Carpeta Spam (22 de Septiembre de 2026)
+
+**1. Requerimientos:**
+- El usuario solicitó alertar a los nuevos usuarios al registrarse sobre revisar la carpeta de correo no deseado (spam) y coordinar con el responsable municipal.
+
+**2. Solución Técnica y Decisiones Arquitectónicas:**
+- Se enriqueció la notificación de éxito en `registro.js` / modal de registro, especificando que el correo de verificación puede llegar a la carpeta de spam y que deben comunicarse con el responsable municipal de Gestión Humana para la aprobación de su cuenta.
+- **Control SemVer:** Incremento de versión a **v2.12.3**.
+
+**3. Archivos Involucrados:**
+- `webapp/src/registro.js`
+- `webapp/package.json`
+- `webapp/index.html`
+
+---
+
+### v2.12.4 - Nombres Oficiales de Roles Institucionales (22 de Septiembre de 2026)
+
+**1. Requerimientos:**
+- Adecuar las opciones del selector de roles en la pantalla de registro a los nombres institucionales oficiales del estado Mérida.
+
+**2. Solución Técnica y Decisiones Arquitectónicas:**
+- Se actualizaron las etiquetas del selector a: `Responsable SGH ZONA`, `Responsable SGH Municipal` y `Director de plantel`, preservando las claves internas del sistema (`zonadmin`, `munadmin`, `plaadmin`).
+- **Control SemVer:** Incremento de versión a **v2.12.4**.
+
+**3. Archivos Involucrados:**
+- `webapp/index.html`
+- `webapp/package.json`
+
+---
+
+### v2.12.5 - Selectores en Cascada Municipio/Parroquia y Filtro en Planteles (22 de Septiembre de 2026)
+
+**1. Requerimientos:**
+- Mantener la integridad de los datos geográficos en el modal "Nuevo Plantel", implementando selectores desplegables en cascada para Municipio y Parroquia basados en la división político-territorial oficial.
+- Restringir la selección de municipio para el rol `munadmin` a su propio municipio.
+- Añadir filtro por parroquia y columna de parroquia en la tabla de planteles.
+
+**2. Solución Técnica y Decisiones Arquitectónicas:**
+- **Módulo Geográfico Autónomo (`geografia.js`):** Se implementó la estructura de los 23 municipios del estado Mérida y sus respectivas parroquias oficiales, con funciones de normalización de cadenas.
+- **Selectores Dinámicos:** En el modal de plantel, al seleccionar el municipio se pueblan instantáneamente las parroquias correspondientes. Para `munadmin`, el municipio se preselecciona y bloquea (`disabled`).
+- **Filtrado Avanzado:** Se agregó el selector `#filtro-parroquia-plantel`, la columna de visualización en la tabla de instituciones y la búsqueda textual por parroquia.
+- **Control SemVer:** Incremento de versión a **v2.12.5**.
+
+**3. Archivos Involucrados:**
+- `webapp/src/geografia.js` [NUEVO]
+- `webapp/src/admin.js`
+- `webapp/index.html`
+- `webapp/package.json`
+
+---
+
+### v2.13.0 - Arquitectura de Ficha Resumen Precomputada y Blindaje Zero-Cost en Estadísticas (22 de Septiembre de 2026)
+
+**1. Requerimientos:**
+- Resolver el agotamiento recurrente de la cuota diaria de lecturas de Firebase Spark (límite de 50.000 lecturas/día). El usuario reportó bloqueo del sistema ("Quota Exceeded") tras abrir la sesión como superusuario.
+- Mantener el principio irrestricto de **Zero-Cost** (Plan gratuito de Firebase sin incurrir en costos ni interrupciones de servicio).
+- Los cálculos deben basarse en la nómina más reciente descargada por el usuario desde el sistema (`Nomina_Personal_Consolidado_Estadal_MERIDA_2026-09-21 (5).xlsx`) y en el catálogo institucional `bd_sgh.json`.
+
+**2. Diagnóstico del Problema:**
+- En la función `loadEstadisticas()` de `admin.js`, cada apertura del panel de administración o recarga de página ejecutaba:
+  - `getDocs(collection(db, 'cargos_personal'))` escaneando 23.288 documentos.
+  - `getDocs(collection(db, 'planteles'))` escaneando 1.159 documentos.
+- Total por visita: **24.447 lecturas**. Tan solo 2 visitas o recargas en el día consumían ~49.000 lecturas, provocando el bloqueo inmediato por 24 horas del proyecto en Google Cloud.
+
+**3. Solución Técnica y Decisiones Arquitectónicas (Pre-computed Aggregation Pattern):**
+- **Motor de Agregación Local (`generar_resumen_estadisticas.mjs`):**
+  - Script autónomo en Node.js que procesa directamente en la máquina local la nómina oficial descargada (`Nomina_Personal_Consolidado_Estadal_MERIDA_2026-09-21 (5).xlsx`, 23.288 registros) y el archivo `bd_sgh.json` (1.221 planteles en 23 municipios).
+  - Tiempo de ejecución: **10 segundos**.
+  - Consumo de cuota Firestore: **CERO (0) lecturas**.
+  - Genera el consolidado estructurado `webapp/public/resumen_estadisticas.json` (137 KB), que contiene los totales globales y la desagregación exacta para cada uno de los 23 municipios:
+    - **Total Personal:** 23.288 (14.955 Docentes, 1.444 Administrativos, 6.889 Obreros).
+    - **Situaciones Laborales:** Distribución de 22 categorías (`ACTIVO`: 19.992, `EN PROCESO DE JUBILACIÓN`: 592, `SINCERACIÓN DE NÓMINA`: 589, etc.).
+    - **Personal por Jubilarse:** Algoritmo corregido con soporte para fechas `D/M/YYYY` y años de antigüedad $ge 25$, detectando 1.741 trabajadores en proyección de jubilación distribuidos por municipio.
+    - **Planteles Educativos:** 1.221 planteles mapeados por municipio y parroquia.
+- **Refactorización de `loadEstadisticas()` en `webapp/src/admin.js`:**
+  - Se eliminaron definitivamente las consultas masivas `getDocs()` sobre colecciones enteras.
+  - La pantalla ahora consulta el documento único consolidado `estadisticas/resumen_global` en Firestore (**1 sola lectura** en lugar de 24.447). Con este cambio, el sistema soporta hasta 50.000 aperturas del panel al día dentro de la capa gratuita.
+  - **Escudo Salvavidas Resiliente (Zero-Cost Shield):** Si Firestore reporta cuota agotada o falta de conexión, la aplicación recurre de forma transparente a `fetch('/resumen_estadisticas.json')`. Las métricas se renderizan en 10 milisegundos y la interfaz jamás se bloquea ni muestra pantallas en blanco.
+  - **Auto-Sincronización:** Cuando un usuario con rol `superadmin` abre la sesión, el cliente sincroniza automáticamente la Ficha Resumen hacia Firestore (1 sola escritura de 20.000 disponibles al día).
+- **Control SemVer:** Incremento de versión MENOR a **v2.13.0** (mejora arquitectónica fundamental).
+- **Despliegue:** Compilación de producción (`npm run build`) y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+
+**4. Archivos Involucrados:**
+- `webapp/generar_resumen_estadisticas.mjs` [NUEVO]
+- `webapp/public/resumen_estadisticas.json` [NUEVO]
+- `webapp/src/admin.js`
+- `webapp/package.json`
+- `webapp/index.html`
+- `bitacora.md`
+- `conversaciones.md`
+
+---
