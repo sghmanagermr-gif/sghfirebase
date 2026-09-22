@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SGH - v2.13.0</title>
+  <title>SGH - v2.13.4</title>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
@@ -186,7 +186,7 @@
     <section id="dashboard-view" class="view">
       <nav class="navbar">
         <div class="nav-brand">
-          <span style="color: var(--primary-color);">SGH</span> v2.13.0
+          <span style="color: var(--primary-color);">SGH</span> v2.13.4
         </div>
         <div class="nav-user">
           <span id="user-display-name" style="font-weight: 500;">Cargando...</span>
@@ -215,7 +215,7 @@
     <!-- HEADER / NAVBAR -->
     <nav class="navbar" style="width: 100%; margin-bottom: 20px;">
       <div class="nav-brand">
-        <span style="color: var(--primary-color);">SGH</span> v2.13.0
+        <span style="color: var(--primary-color);">SGH</span> v2.13.4
       </div>
       <div class="nav-user" style="display: flex; gap: 15px; align-items: center;">
 
@@ -1470,25 +1470,25 @@
             <!-- Tarjeta 🏫 Planteles -->
             <div class="stat-card glass-panel">
               <div class="stat-card-icon">🏫</div>
-              <h3 class="stat-card-title">Planteles Activos</h3>
-              <span id="stat-planteles" class="stat-card-number" style="color: #16a34a;">0</span>
-              <p class="stat-card-desc">Basado en Directores Registrados</p>
+              <h3 id="stat-planteles-title" class="stat-card-title">Planteles del Municipio</h3>
+              <span id="stat-planteles" class="stat-card-number" style="color: #16a34a;"><span style="font-size: 1.1rem; font-weight: 600; color: #64748b;">En cálculo...</span></span>
+              <p id="stat-planteles-desc" class="stat-card-desc">Total escuelas en el municipio</p>
             </div>
 
             <!-- Tarjeta 👥 Personal -->
             <div class="stat-card glass-panel">
               <div class="stat-card-icon">👥</div>
               <h3 class="stat-card-title">Personal Registrado</h3>
-              <span id="stat-personal" class="stat-card-number" style="color: var(--primary-color);">0</span>
-              <p class="stat-card-desc">Nómina activa</p>
+              <span id="stat-personal" class="stat-card-number" style="color: var(--primary-color);"><span style="font-size: 1.1rem; font-weight: 600; color: #64748b;">En cálculo...</span></span>
+              <p id="stat-personal-desc" class="stat-card-desc">Nómina activa</p>
             </div>
 
             <!-- Tarjeta 👤 Usuarios -->
             <div class="stat-card glass-panel">
               <div class="stat-card-icon">👤</div>
               <h3 class="stat-card-title">Usuarios del Sistema</h3>
-              <span id="stat-usuarios" class="stat-card-number" style="color: #8b5cf6;">0</span>
-              <p class="stat-card-desc">Cuentas de acceso</p>
+              <span id="stat-usuarios" class="stat-card-number" style="color: #8b5cf6;"><span style="font-size: 1.1rem; font-weight: 600; color: #64748b;">En cálculo...</span></span>
+              <p id="stat-usuarios-desc" class="stat-card-desc">Cuentas de acceso</p>
             </div>
 
           </div>
@@ -1537,11 +1537,11 @@
                   <div id="stat-mat-content" style="display: none; flex-direction: column;">
                     <div style="display: flex; gap: 10px; text-align: center; margin-bottom: 10px;">
                       <div style="flex: 1; padding: 10px; background: #f8fafc; border-radius: 8px; border: 1px solid #f1f5f9;">
-                        <div id="stat-mat-cargada" style="font-size: 1.2rem; font-weight: 800; color: #16a34a;">0</div>
+                        <div id="stat-mat-cargada" style="font-size: 1.2rem; font-weight: 800; color: #16a34a;"><span style="font-size: 0.95rem; font-weight: 600; color: #64748b;">En cálculo...</span></div>
                         <div style="font-size: 0.7rem; color: #64748b;">Cargados</div>
                       </div>
                       <div style="flex: 1; padding: 10px; background: #f8fafc; border-radius: 8px; border: 1px solid #f1f5f9;">
-                        <div id="stat-mat-pendiente" style="font-size: 1.2rem; font-weight: 800; color: #ef4444;">0</div>
+                        <div id="stat-mat-pendiente" style="font-size: 1.2rem; font-weight: 800; color: #ef4444;"><span style="font-size: 0.95rem; font-weight: 600; color: #64748b;">En cálculo...</span></div>
                         <div style="font-size: 0.7rem; color: #64748b;">Pendientes</div>
                       </div>
                     </div>

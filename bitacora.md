@@ -977,3 +977,79 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre prema
 - `conversaciones.md`
 
 ---
+
+### v2.13.1 - Títulos y Subtítulos Contextuales en Tarjetas Estadísticas (22 de Septiembre de 2026)
+
+**1. Requerimientos:**
+- Clarificar la tarjeta de "Planteles Activos" que mostraba el texto confuso "Basado en Directores Registrados", generando discordancia con el contador de usuarios.
+- Adaptar dinámicamente las etiquetas según la jerarquía institucional (Municipal vs Estadal).
+
+**2. Solución Técnica y Decisiones Arquitectónicas:**
+- En `webapp/index.html` y `webapp/src/admin.js`, se implementaron IDs dedicados (`stat-planteles-title`, `stat-planteles-desc`, `stat-personal-desc`, `stat-usuarios-desc`) para inyectar textos adaptados al rol:
+  - **MunAdmin:** "Planteles del Municipio" ("Total escuelas en el municipio"), "Personal Registrado" ("Nómina municipal activa"), "Usuarios del Sistema" ("Directores con cuenta de acceso").
+  - **ZonAdmin / SuperAdmin:** "Planteles del Estado" ("Total escuelas del estado"), "Personal Registrado" ("Nómina estadal activa"), "Usuarios del Sistema" ("Cuentas de acceso activas").
+- **Control SemVer:** Incremento a **v2.13.1**.
+
+**3. Archivos Involucrados:**
+- `webapp/index.html`
+- `webapp/src/admin.js`
+- `webapp/package.json`
+
+---
+
+### v2.13.2 - Sincronización Real del Contador de Usuarios y Eliminación de Fallback Estático (22 de Septiembre de 2026)
+
+**1. Requerimientos:**
+- El superadministrador detectó que la tarjeta "Usuarios del Sistema" mostraba 54 usuarios cuando en la tabla de validación solo residían 11 cuentas registradas.
+
+**2. Diagnóstico y Solución Técnica:**
+- **Diagnóstico:** En la función `loadEstadisticas()`, la llamada `getCountFromServer(qUsuarios)` arrojaba error de cuota diaria excedida de Firebase, cayendo en un bloque `catch` que contenía un valor de reserva estático residual (`54`).
+- **Solución:**
+  - Se eliminó definitivamente el valor quemado 54.
+  - Se vinculó la tarjeta directamente a la memoria local (`usuariosLocales.length`) y se inyectó una actualización reactiva dentro del listener en tiempo real `onSnapshot` de la colección `usuarios`.
+  - Ahora refleja con fidelidad matemática los 11 usuarios gestionados para el superadministrador y los 10 directores para el coordinador municipal de Santos Marquina.
+- **Control SemVer:** Incremento a **v2.13.2**.
+
+**3. Archivos Involucrados:**
+- `webapp/src/admin.js`
+- `webapp/package.json`
+- `webapp/index.html`
+
+---
+
+### v2.13.3 - Tratamiento Resiliente y Sobrio para Métricas Pendientes ("En cálculo...") (22 de Septiembre de 2026)
+
+**1. Requerimientos:**
+- Ante la indisponibilidad de consultas en vivo por límite de cuota Spark en Firebase, evitar mostrar ceros fríos (ej. "0 Cargados" en matrícula) que induzcan a interpretaciones erróneas de inactividad de las instituciones.
+
+**2. Solución Técnica y Decisiones Arquitectónicas:**
+- En `renderStatValue()` y en el panel de Estatus de Matrícula, cuando un valor numérico dependa de sincronización de servidor y esté en 0 o pendiente, se sustituye por la etiqueta sobria y modesta: **"En cálculo..."**.
+- En la lista de planteles de matrícula, se reemplazó el listado masivo de puntos rojos por una tarjeta informativa explicativa que aclara que el reporte de carga escolar se sincronizará al normalizarse las consultas con el servidor de base de datos.
+- **Control SemVer:** Incremento a **v2.13.3**.
+
+**3. Archivos Involucrados:**
+- `webapp/src/admin.js`
+- `webapp/index.html`
+- `webapp/package.json`
+
+---
+
+### v2.13.4 - Corrección de Ámbito Léxico (TDZ) y Restauración Integral del Dashboard (22 de Septiembre de 2026)
+
+**1. Requerimientos:**
+- Resolver incidente reportado en v2.13.3 donde las tarjetas superiores permanecían en "En cálculo..." y el panel extendido inferior no se mostraba.
+
+**2. Diagnóstico y Solución Técnica:**
+- **Diagnóstico:** Al reorganizar las llamadas de inicio en `initAdminDashboard`, la invocación de `loadUsuariosList()` se ejecutaba antes de la declaración léxica de las variables `let usuariosLocales` y `let unsubscribeUsuarios`, generando un error de tiempo de ejecución (`ReferenceError` por Temporal Dead Zone) que detenía abruptamente la ejecución antes de invocar `loadEstadisticas()`.
+- **Solución:** Se reubicaron las declaraciones de variables al inicio del bloque de inicialización, asegurando su disponibilidad antes de ejecutar los procesos asíncronos.
+- **Resultado:** Restauración completa de todas las tarjetas con sus datos consolidados (Planteles: 1.221, Personal: 23.288, Usuarios: 11) y el panel extendido con todas sus gráficas y tablas.
+- **Control SemVer:** Incremento a **v2.13.4**.
+
+**3. Archivos Involucrados:**
+- `webapp/src/admin.js`
+- `webapp/package.json`
+- `webapp/index.html`
+- `bitacora.md`
+- `conversaciones.md`
+
+---

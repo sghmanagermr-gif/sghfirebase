@@ -1058,3 +1058,95 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 1. **Motor de Cálculo Local:** Se creó webapp/generar_resumen_estadisticas.mjs, procesando los 23.288 registros del Excel de nómina y los 1.221 planteles de bd_sgh.json en 10 segundos, generando webapp/public/resumen_estadisticas.json (137 KB) a CERO costo de lecturas. Totales consolidados: 14.955 docentes, 1.444 administrativos, 6.889 obreros, 1.741 jubilables proyectados y 1.221 planteles en 23 municipios.
 > 2. **Refactorización Zero-Cost en admin.js:** Se sustituyó la consulta masiva getDocs en loadEstadisticas por la carga de la Ficha Resumen (1 lectura en Firestore con respaldo automático en /resumen_estadisticas.json si la cuota de Firebase está agotada). Las métricas se muestran al instante sin congelamiento.
 > 3. **SemVer y Despliegue:** Se incrementó la versión a **v2.13.0** en package.json e index.html, se compiló exitosamente (npm run build) y se desplegó a producción en Firebase Hosting (https://sgh-merida.web.app).
+
+### Sesión 22 de Septiembre de 2026 (Clarificación de Etiquetas de Tarjetas Estadísticas v2.13.1)
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Para poderte hacer una pregunta, necesito recordar cual es la lógica de la metrica de las tarjetas planteles activos, personal registrado y usuarios del sistema, con el usuario rol munadmin
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se explicó de forma conceptual y administrativa el propósito de cada tarjeta para el rol munadmin:
+> 1. Usuarios del Sistema: cuentas de directores creadas bajo su municipio.
+> 2. Personal Registrado: universo de nómina adscrito a las escuelas de su municipio.
+> 3. Planteles: censo de escuelas oficiales existentes bajo la jurisdicción municipal.
+
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."
+> Como ves en la imagen ***005.PNG estoy logueado como usuario munadmin (del municipio Santos Marquina), dice planteles activos 18 *Basado en Directores Registrados*, sin embargo en usuarios del sistema se refleja 10 (que es lo correcto) *Cuentas de acceso*. Y te muestro en la imagen ***006.PNG que efectivamente hay 10 usuarios registrados. Si la cantidad de planteles activos es el reflejo de la cantidad de usuarios registrados: pasa algo raro
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se identificó la discrepancia: el número 18 corresponde al total de escuelas del Municipio Santos Marquina (censo institucional), mientras que el 10 son los directores que ya tienen cuenta creada. La confusión se debía a la etiqueta residual fija en el diseño HTML ("Basado en Directores Registrados"). Se propuso corregir el título y subtítulo para reflejar con exactitud la realidad administrativa.
+
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Sí
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> 1. **Ajuste en index.html y admin.js:** Se implementaron títulos y descripciones contextuales según el rol:
+>    - Para munadmin: "Planteles del Municipio" ("Total escuelas en el municipio"), "Personal Registrado" ("Nómina municipal activa"), "Usuarios del Sistema" ("Directores con cuenta de acceso").
+>    - Para zonadmin / estadal: "Planteles del Estado" ("Total escuelas del estado"), "Personal Registrado" ("Nómina estadal activa"), "Usuarios del Sistema" ("Cuentas de acceso activas").
+> 2. **SemVer y Despliegue:** Incremento a **v2.13.1** en package.json e index.html, compilación y despliegue a producción en Firebase Hosting (https://sgh-merida.web.app).
+
+### Sesión 22 de Septiembre de 2026 (Corrección de Conteo Real de Usuarios en Estadísticas v2.13.2)
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Con respecto a las etiqueta son satisfactorios. pero sigo dudando de la contabilidad de los datos: estoy logueado con el usuario superadmin y como ves en la imagen Captura0001 dice que hay 54 usuarios en el sistema. sin embargo, en la imagen Captura0002 se puede ver que solo hay 11 usuarios.
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se identificó y resolvió la discrepancia:
+> 1. **Diagnóstico:** Al estar la cuota de lectura de Firebase agotada hoy, la consulta getCountFromServer fallaba y caía en el bloque catch(eU). En ese bloque existía un valor de reserva estático residual (54) que se mostraba en pantalla cuando el servidor de Google no respondía.
+> 2. **Solución Aplicada:**
+>    - Se eliminó por completo el número 54 hardcodeado.
+>    - Se conectó la tarjeta de Usuarios del Sistema directamente a la lista de usuarios en memoria (usuariosLocales), sincronizándose en tiempo real mediante onSnapshot.
+>    - Ahora, para el Superadministrador muestra con exactitud los 11 usuarios administrados visibles en su tabla (o 10 para munadmin según su municipio).
+> 3. **SemVer y Despliegue:** Incremento de versión a **v2.13.2** en package.json e index.html, compilado y desplegado a producción en Firebase Hosting (https://sgh-merida.web.app).
+
+### Sesión 22 de Septiembre de 2026 (Sustitución de Ceros por Mensaje Modesto "En cálculo..." v2.13.3)
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Ok como la cuota está alcanzada, entonces no mostremos ceros sino un mensaje modesto: "En cálculo..."
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se implementó el cambio solicitado:
+> 1. **Estatus de Matrícula:** Al estar la cuota de lectura alcanzada impidiendo escanear en tiempo real qué planteles han completado matrícula, se sustituyeron los valores de "0 Cargados" y "1.221 Pendientes" (y las listas de puntos rojos) por el mensaje modesto: **"En cálculo..."** y una tarjeta limpia explicando que los consolidados detallados de carga escolar se sincronizarán al restablecerse las consultas con el servidor.
+> 2. **Tarjetas de Estadísticas:** Se actualizaron los valores por defecto y la función renderStatValue para que en lugar de mostrar ceros fríos o alarmas de mantenimiento, se muestre elegantemente **"En cálculo..."** mientras los datos se completan.
+> 3. **SemVer y Despliegue:** Incremento de versión a **v2.13.3** en package.json e index.html, compilación y despliegue a producción en Firebase Hosting (https://sgh-merida.web.app).
+
+### Sesión 22 de Septiembre de 2026 (Corrección de Orden de Inicialización y Restauración del Panel Extendido v2.13.4)
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> pero la demás información desapareció
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se diagnosticó y corrigió el fallo inmediatamente:
+> 1. **Causa Raíz:** Al adelantar la llamada de loadUsuariosList() en admin.js, dos variables internas (usuariosLocales y unsubscribeUsuarios) estaban declaradas más abajo en el archivo con "let", provocando un error de inicialización en tiempo de ejecución (ReferenceError en JavaScript) que detenía la ejecución de loadEstadisticas(). Como consecuencia, las tarjetas quedaban con su texto inicial y el panel extendido inferior no llegaba a mostrarse.
+> 2. **Solución:** Se reordenó la declaración de variables al inicio de la función para garantizar su disponibilidad inmediata antes de ejecutar loadUsuariosList() y loadEstadisticas().
+> 3. **Resultado:** Se restablecieron por completo todas las tarjetas superiores con sus cifras reales consolidadas (Planteles del Estado: 1.221, Personal Registrado: 23.288, Usuarios del Sistema: 11) y el panel extendido inferior con la Discriminación de Personal, Situación Laboral, Jubilables y Estatus de Matrícula ("En cálculo...").
+> 4. **SemVer y Despliegue:** Incremento de versión a **v2.13.4** en package.json e index.html, compilación y despliegue a producción en Firebase Hosting (https://sgh-merida.web.app).
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Sí, satisfactorios
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se ejecutó el protocolo de cierre institucional:
+> 1. Registro técnico profundo en `bitacora.md` documentando las versiones v2.13.1, v2.13.2, v2.13.3 y v2.13.4.
+> 2. Registro histórico íntegro en `conversaciones.md`.
+> 3. Versionamiento SemVer confirmado en **v2.13.4**.
+> 4. Commit y sincronización remota hacia GitHub (`git push origin main`).
