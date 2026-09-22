@@ -952,3 +952,34 @@ pm run build) y se desplegó a producción en Firebase Hosting (
 px firebase-tools deploy --only hosting).
 
 ---
+### Sesión 22 de Septiembre de 2026 (Selectores en Cascada Municipio/Parroquia y Filtro en Planteles v2.12.5)
+
+* **Emisor:** Usuario
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."
+> 
+> Tocó agregar un plantel, y vi un detalle que es importante para mantener la firmeza de los datos, y es que al agregar el nuevo plantel, Municipio y Parroquia deben ser selectores en cascada. no recuerdo donde están guardados esos datos (json).
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se indicó la ubicación de los datos geográficos oficiales en d_sgh.json (tanto en la raíz como en webapp/public/bd_sgh.json), donde los 23 municipios contienen el árbol de parroquias y planteles asociados. Se propuso el plan de implementación para reemplazar los inputs libres por selectores en cascada y se consultó si también se requería filtrar los planteles por parroquia en la tabla principal.
+
+* **Emisor:** Usuario
+
+> **Mensaje del Usuario:**  
+> ¿y también filtra lo planteles asociados a la parroquia?
+> sí
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se implementó la solución completa:
+> 1. **Módulo Geográfico:** Creación de webapp/src/geografia.js con los 23 municipios, sus parroquias correspondientes y normalización de nombres/acentos (100% en cliente, Zero-Cost).
+> 2. **Selectores en Cascada:** En el modal #modal-plantel (index.html y dmin.js), Municipio y Parroquia ahora son selectores desplegables dinámicos. Al elegir municipio, se cargan de inmediato sus parroquias. Para munadmin, el municipio queda prefijado y bloqueado a su jurisdicción.
+> 3. **Filtro y Columna de Parroquia:** Se agregó un selector desplegable #filtro-parroquia-plantel en la tabla de planteles, se añadió la columna visual **PARROQUIA** en la tabla y se habilitó la búsqueda por parroquia en #inp-buscar-plantel.
+> 4. **SemVer y Despliegue:** Se incrementó la versión a **v2.12.5** en package.json e index.html, se compiló (
+pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
+
+---

@@ -2,6 +2,7 @@ import { safeSetDoc, safeUpdateDoc, safeAddDoc } from './dbUtils.js';
 import { doc, getDoc, setDoc, updateDoc, collection, query, where, getCountFromServer, getDocs, onSnapshot, deleteDoc, deleteField } from 'firebase/firestore';
 import * as XLSX from 'xlsx';
 import { showToast, showAlert } from './uiUtils.js';
+import { getMunicipios, getParroquias, normalizarMunicipio } from './geografia.js';
 
 let isInitialized = false;
 let db = null;
@@ -1542,10 +1543,36 @@ export function initAdminDashboard(dbInstance, user) {
     });
   });
 
+  function poblarFiltroParroquiasTabla() {
+    const selFiltro = document.getElementById('filtro-parroquia-plantel');
+    if (!selFiltro) return;
+    const userMun = (userData?.rol === 'munadmin') 
+      ? (userData?.jerarquia?.municipio || userData?.municipio || '').trim().toUpperCase() 
+      : null;
+
+    let parroquias = [];
+    if (userMun) {
+      parroquias = getParroquias(userMun);
+    } else {
+      const setPars = new Set();
+      currentPlanteles.forEach(p => {
+        if (p.parroquia) setPars.add(p.parroquia.trim().toUpperCase());
+      });
+      parroquias = Array.from(setPars).sort((a, b) => a.localeCompare(b, 'es'));
+    }
+
+    const valActual = selFiltro.value;
+    selFiltro.innerHTML = '<option value="">Todas las Parroquias</option>' +
+      parroquias.map(p => `<option value="${p}">${p}</option>`).join('');
+    if (valActual && parroquias.includes(valActual)) {
+      selFiltro.value = valActual;
+    }
+  }
+
   async function loadPlanteles() {
     if(!tbodyPlanteles) return;
     try {
-      tbodyPlanteles.innerHTML = '<tr><td colspan="5" style="padding: 20px; text-align: center; color: var(--text-muted);">Cargando planteles...</td></tr>';
+      tbodyPlanteles.innerHTML = '<tr><td colspan="6" style="padding: 20px; text-align: center; color: var(--text-muted);">Cargando planteles...</td></tr>';
 
       const userMun = (userData?.rol === 'munadmin') 
         ? (userData?.jerarquia?.municipio || userData?.municipio || '').trim().toUpperCase() 
@@ -1570,11 +1597,12 @@ export function initAdminDashboard(dbInstance, user) {
         }
         currentPlanteles.push({ id: doc.id, ...data });
       });
+      poblarFiltroParroquiasTabla();
       renderPlantelesList();
     } catch(err) {
       console.error("Error loading planteles:", err);
       if(tbodyPlanteles) {
-        tbodyPlanteles.innerHTML = '<tr><td colspan="5" style="padding: 20px; text-align: center; color: var(--danger);">Error cargando planteles.</td></tr>';
+        tbodyPlanteles.innerHTML = '<tr><td colspan="6" style="padding: 20px; text-align: center; color: var(--danger);">Error cargando planteles.</td></tr>';
       }
     }
   }
@@ -1588,14 +1616,19 @@ export function initAdminDashboard(dbInstance, user) {
       : null;
 
     if (inpBuscarPlantel && userMun) {
-      inpBuscarPlantel.placeholder = `Buscar por DEA o nombre en ${userMun}...`;
+      inpBuscarPlantel.placeholder = `Buscar por DEA, nombre o parroquia en ${userMun}...`;
     }
 
     const term = inpBuscarPlantel ? inpBuscarPlantel.value.toLowerCase().trim() : '';
+    const filtroParroquia = document.getElementById('filtro-parroquia-plantel')?.value || '';
     let filtered = currentPlanteles;
 
     if (userMun) {
       filtered = filtered.filter(p => (p.municipio || '').trim().toUpperCase() === userMun);
+    }
+
+    if (filtroParroquia) {
+      filtered = filtered.filter(p => (p.parroquia || '').trim().toUpperCase() === filtroParroquia.toUpperCase());
     }
 
     if(term) {
@@ -1603,7 +1636,8 @@ export function initAdminDashboard(dbInstance, user) {
          const d = p.codigos?.plantel?.toLowerCase() || '';
          const n = (p['nombre-plantel']?.nominal || '').toLowerCase();
          const m = (p.municipio || '').toLowerCase();
-         return d.includes(term) || n.includes(term) || m.includes(term);
+         const pr = (p.parroquia || '').toLowerCase();
+         return d.includes(term) || n.includes(term) || m.includes(term) || pr.includes(term);
       });
     }
 
@@ -1611,7 +1645,7 @@ export function initAdminDashboard(dbInstance, user) {
       const msgVacio = userMun 
         ? `No se encontraron planteles registrados para el municipio ${userMun}.` 
         : 'No se encontraron planteles.';
-      tbodyPlanteles.innerHTML = `<tr><td colspan="5" style="padding: 20px; text-align: center; color: var(--text-muted);">${msgVacio}</td></tr>`;
+      tbodyPlanteles.innerHTML = `<tr><td colspan="6" style="padding: 20px; text-align: center; color: var(--text-muted);">${msgVacio}</td></tr>`;
       return;
     }
 
@@ -1624,10 +1658,11 @@ export function initAdminDashboard(dbInstance, user) {
          </td>
          <td style="padding: 15px 20px; font-weight: 500; color: var(--text-main);">${p['nombre-plantel']?.nominal || 'SIN NOMBRE'}</td>
          <td style="padding: 15px 20px; color: var(--text-muted); font-size: 0.9rem;">${p.municipio || 'N/A'}</td>
+         <td style="padding: 15px 20px; color: var(--text-muted); font-size: 0.9rem;">${p.parroquia || 'N/A'}</td>
          <td style="padding: 15px 20px; color: var(--text-muted); font-size: 0.9rem;">${p.nivel || 'N/A'}</td>
          <td class="plantel-actions-cell">
-           <button class="btn-plantel-action btn-edit-plantel" data-id="${p.id}">\u270F\uFE0F Editar</button>
-           <button class="btn-plantel-action btn-del-plantel" data-id="${p.id}">\uD83D\uDDD1\uFE0F Eliminar</button>
+           <button class="btn-plantel-action btn-edit-plantel" data-id="${p.id}">✏️ Editar</button>
+           <button class="btn-plantel-action btn-del-plantel" data-id="${p.id}">🗑️ Eliminar</button>
          </td>
        `;
        tbodyPlanteles.appendChild(tr);
@@ -1664,6 +1699,11 @@ export function initAdminDashboard(dbInstance, user) {
 
   if(inpBuscarPlantel) {
     inpBuscarPlantel.addEventListener('input', renderPlantelesList);
+  }
+
+  const selFiltroParroquia = document.getElementById('filtro-parroquia-plantel');
+  if(selFiltroParroquia) {
+    selFiltroParroquia.addEventListener('change', renderPlantelesList);
   }
 
   function asegurarOpcionEnSelect(selectElem, valor) {
@@ -1753,6 +1793,49 @@ export function initAdminDashboard(dbInstance, user) {
         dependencias.map(d => `<option value="${d}">${d}</option>`).join('');
       if (valActual) selDep.value = valActual;
     }
+
+    // 6. Municipios desde catalogo geografico
+    const userMun = (userData?.rol === 'munadmin') 
+      ? (userData?.jerarquia?.municipio || userData?.municipio || '').trim().toUpperCase() 
+      : null;
+    const selMun = document.getElementById('p-municipio');
+    if (selMun) {
+      const muns = getMunicipios();
+      selMun.innerHTML = '<option value="">-- SELECCIONE MUNICIPIO --</option>' +
+        muns.map(m => `<option value="${m}">${m}</option>`).join('');
+      if (userMun) {
+        const normUserMun = normalizarMunicipio(userMun);
+        asegurarOpcionEnSelect(selMun, normUserMun);
+        selMun.value = normUserMun;
+        selMun.disabled = true;
+        actualizarParroquiasModal(normUserMun);
+      } else {
+        selMun.disabled = false;
+      }
+    }
+  }
+
+  function actualizarParroquiasModal(munSeleccionado, parroquiaPrevia = '') {
+    const selPar = document.getElementById('p-parroquia');
+    if (!selPar) return;
+    if (!munSeleccionado) {
+      selPar.innerHTML = '<option value="">-- PRIMERO SELECCIONE UN MUNICIPIO --</option>';
+      return;
+    }
+    const parroquias = getParroquias(munSeleccionado);
+    selPar.innerHTML = '<option value="">-- SELECCIONE PARROQUIA --</option>' +
+      parroquias.map(p => `<option value="${p}">${p}</option>`).join('');
+    if (parroquiaPrevia) {
+      asegurarOpcionEnSelect(selPar, parroquiaPrevia);
+      selPar.value = parroquiaPrevia;
+    }
+  }
+
+  const selMunModal = document.getElementById('p-municipio');
+  if (selMunModal) {
+    selMunModal.addEventListener('change', (e) => {
+      actualizarParroquiasModal(e.target.value);
+    });
   }
 
   // Inicializar selectores desde sgh_catalogos
@@ -1906,7 +1989,7 @@ export function initAdminDashboard(dbInstance, user) {
      const userMun = (userData?.rol === 'munadmin') 
        ? (userData?.jerarquia?.municipio || userData?.municipio || '').trim().toUpperCase() 
        : null;
-     const inpMun = document.getElementById('p-municipio');
+     const selMun = document.getElementById('p-municipio');
 
      if(plantel) {
        document.getElementById('p-uid').value = plantel.id;
@@ -1915,11 +1998,15 @@ export function initAdminDashboard(dbInstance, user) {
        document.getElementById('p-denominacion').value = plantel.denominacion || '';
        document.getElementById('p-nominal').value = plantel['nombre-plantel']?.nominal || '';
        document.getElementById('p-eponimo').value = plantel['nombre-plantel']?.nuevo_eponimo || plantel['nombre-plantel']?.['nuevo-eponimo'] || '';
-       if (inpMun) {
-         inpMun.value = plantel.municipio || userMun || '';
-         inpMun.readOnly = !!userMun;
+       
+       const munVal = normalizarMunicipio(plantel.municipio || userMun || '');
+       if (selMun) {
+         asegurarOpcionEnSelect(selMun, munVal);
+         selMun.value = munVal;
+         selMun.disabled = !!userMun;
        }
-       document.getElementById('p-parroquia').value = plantel.parroquia || '';
+       const parVal = (plantel.parroquia || '').trim().toUpperCase();
+       actualizarParroquiasModal(munVal, parVal);
        
        // Dependencia desde sgh_catalogos
        asegurarOpcionEnSelect(document.getElementById('p-dependencia'), plantel.dependencia || 'NACIONAL');
@@ -1954,13 +2041,17 @@ export function initAdminDashboard(dbInstance, user) {
        poblarCheckboxesPlanes(planesDelPlantel);
 
      } else {
-       if (inpMun) {
+       if (selMun) {
          if (userMun) {
-           inpMun.value = userMun;
-           inpMun.readOnly = true;
+           const normUserMun = normalizarMunicipio(userMun);
+           asegurarOpcionEnSelect(selMun, normUserMun);
+           selMun.value = normUserMun;
+           selMun.disabled = true;
+           actualizarParroquiasModal(normUserMun);
          } else {
-           inpMun.value = '';
-           inpMun.readOnly = false;
+           selMun.value = '';
+           selMun.disabled = false;
+           actualizarParroquiasModal('');
          }
        }
        document.getElementById('p-ubicacion').value = '';
@@ -2038,6 +2129,16 @@ export function initAdminDashboard(dbInstance, user) {
          ? (userData?.jerarquia?.municipio || userData?.municipio || '').trim().toUpperCase() 
          : null;
        const munFinal = userMun || document.getElementById('p-municipio').value.toUpperCase().trim();
+       const parFinal = document.getElementById('p-parroquia').value.toUpperCase().trim();
+
+       if (!munFinal) {
+         await showAlert("Municipio Requerido", "Por favor seleccione un municipio para el plantel.", "warning");
+         return;
+       }
+       if (!parFinal) {
+         await showAlert("Parroquia Requerida", "Por favor seleccione una parroquia para el plantel.", "warning");
+         return;
+       }
        
        const metros2Raw = document.getElementById('p-metros-cuadrados').value;
        const metros2Val = metros2Raw !== '' ? (parseFloat(metros2Raw) || 0) : null;
@@ -2068,7 +2169,7 @@ export function initAdminDashboard(dbInstance, user) {
 
        const newData = {
           "municipio": munFinal,
-          "parroquia": document.getElementById('p-parroquia').value.toUpperCase(),
+          "parroquia": parFinal,
           "denominacion": document.getElementById('p-denominacion').value.toUpperCase(),
           "nombre-plantel": {
             "nominal": document.getElementById('p-nominal').value.toUpperCase(),
