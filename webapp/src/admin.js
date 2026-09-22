@@ -329,39 +329,61 @@ export function initAdminDashboard(dbInstance, user) {
       if(elPlanteles) elPlanteles.textContent = totalPlanteles;
 
       // =========================================
-      // EXTENSIÓN MUNADMIN (Cálculo a Memoria Zero-Cost)
+      // EXTENSIÓN MUNADMIN Y ZONADMIN (Cálculo a Memoria Zero-Cost)
       // =========================================
+      const isEstadal = (userData?.rol === 'zonadmin' || userData?.rol === 'superadmin' || userData?.rol === 'admin');
       const extCont = document.getElementById('extended-stats-container');
-      if (isMunAdmin && mun) {
+      
+      if ((isMunAdmin && mun) || isEstadal) {
           if (extCont) extCont.style.display = 'block';
           
           try {
-              // 1. Descargar planteles del municipio
-              const snapPlantelesReal = await getDocs(query(collection(db, 'planteles'), where('municipio', '==', mun)));
+              // 1. Descargar planteles
+              let snapPlantelesReal;
+              if (isMunAdmin) {
+                  snapPlantelesReal = await getDocs(query(collection(db, 'planteles'), where('municipio', '==', mun)));
+              } else {
+                  snapPlantelesReal = await getDocs(collection(db, 'planteles'));
+              }
               
               let matCargada = 0;
               let matPendiente = 0;
-              const plantelesMapeados = {}; // Para la tabla de jubilados
+              const plantelesMapeados = {}; // DEA -> Nombre o Municipio
+              const statusMun = {}; // Para agrupar estatus por municipio si es estadal
               
-              const arrCargados = [];
-              const arrPendientes = [];
+              const arrCargados = []; // Nombres de escuelas (munadmin)
+              const arrPendientes = []; // Nombres de escuelas (munadmin)
 
               snapPlantelesReal.forEach(doc => {
                   const p = doc.data();
                   const dea = p['codigos'] ? p['codigos'].plantel : (p['codigo-dea'] || 'SIN_DEA');
                   const nombreEponimo = (p['nombre-plantel']?.['nuevo-eponimo'] || p['nombre-plantel']?.nuevo_eponimo || p['nombre-plantel']?.nominal || p.denominacion || 'Desconocido').toString().trim().toUpperCase();
-                  plantelesMapeados[dea] = nombreEponimo;
+                  const pMun = (p.municipio || p['jerarquia']?.municipio || 'SIN MUNICIPIO').toUpperCase();
+                  
+                  plantelesMapeados[dea] = isMunAdmin ? nombreEponimo : pMun; // Guardamos municipio en nivel estadal
 
                   const tGen = parseInt(p.matricula?.['total-gen']) || 0;
                   const tVac = parseInt(p.matricula?.['total-vac-gen']) || 0;
                   const hasMatricula = (tGen > 0 || tVac > 0);
 
-                  if (hasMatricula) {
-                      matCargada++;
-                      arrCargados.push(nombreEponimo);
+                  if (isMunAdmin) {
+                      if (hasMatricula) {
+                          matCargada++;
+                          arrCargados.push(nombreEponimo);
+                      } else {
+                          matPendiente++;
+                          arrPendientes.push(nombreEponimo);
+                      }
                   } else {
-                      matPendiente++;
-                      arrPendientes.push(nombreEponimo);
+                      // Nivel Estadal: agrupar por municipio
+                      if (!statusMun[pMun]) statusMun[pMun] = { cargados: 0, pendientes: 0 };
+                      if (hasMatricula) {
+                          matCargada++;
+                          statusMun[pMun].cargados++;
+                      } else {
+                          matPendiente++;
+                          statusMun[pMun].pendientes++;
+                      }
                   }
               });
 
@@ -373,24 +395,42 @@ export function initAdminDashboard(dbInstance, user) {
               if (elMatPendiente) elMatPendiente.textContent = matPendiente;
 
               if (elMatLista) {
-                  arrCargados.sort();
-                  arrPendientes.sort();
                   let htmlLista = '';
-                  arrPendientes.forEach(nombre => {
-                      htmlLista += `<div style="padding: 6px 0; border-bottom: 1px solid #f1f5f9; color: #ef4444; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${nombre}">🔴 ${nombre}</div>`;
-                  });
-                  arrCargados.forEach(nombre => {
-                      htmlLista += `<div style="padding: 6px 0; border-bottom: 1px solid #f1f5f9; color: #16a34a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${nombre}">🟢 ${nombre}</div>`;
-                  });
+                  if (isMunAdmin) {
+                      arrCargados.sort();
+                      arrPendientes.sort();
+                      arrPendientes.forEach(nombre => {
+                          htmlLista += `<div style="padding: 6px 0; border-bottom: 1px solid #f1f5f9; color: #ef4444; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${nombre}">🔴 ${nombre}</div>`;
+                      });
+                      arrCargados.forEach(nombre => {
+                          htmlLista += `<div style="padding: 6px 0; border-bottom: 1px solid #f1f5f9; color: #16a34a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${nombre}">🟢 ${nombre}</div>`;
+                      });
+                  } else {
+                      // Estadal
+                      const munKeys = Object.keys(statusMun).sort();
+                      munKeys.forEach(m => {
+                          const counts = statusMun[m];
+                          let icon = '🔴';
+                          if (counts.cargados > 0 && counts.pendientes === 0) icon = '🟢';
+                          else if (counts.cargados > 0 && counts.pendientes > 0) icon = '🟡';
+                          
+                          htmlLista += `<div style="padding: 6px 0; border-bottom: 1px solid #f1f5f9; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${m}">${icon} <strong>${m}</strong>: ${counts.cargados} Cargados, ${counts.pendientes} Pendientes</div>`;
+                      });
+                  }
                   elMatLista.innerHTML = htmlLista;
               }
 
-              // 2. Descargar cargos personal del municipio
-              const snapCargos = await getDocs(query(collection(db, 'cargos_personal'), where('municipio', '==', mun)));
+              // 2. Descargar cargos personal
+              let snapCargos;
+              if (isMunAdmin) {
+                  snapCargos = await getDocs(query(collection(db, 'cargos_personal'), where('municipio', '==', mun)));
+              } else {
+                  snapCargos = await getDocs(collection(db, 'cargos_personal'));
+              }
               
               let cDocente = 0, cAdmin = 0, cObrero = 0;
               const mapSituacion = {};
-              const jubilablesPorPlantel = {};
+              const jubilablesPorClave = {}; // MunAdmin usa DEA, ZonAdmin usa Municipio
 
               const hoy = new Date();
               let anioJubilacion = hoy.getFullYear() + 1;
@@ -414,7 +454,9 @@ export function initAdminDashboard(dbInstance, user) {
                       const dtIngreso = new Date(strIngreso);
                       if (!isNaN(dtIngreso.getTime()) && dtIngreso <= fechaLimiteIngreso) {
                           const dea = emp['codigo-plantel'] || 'SIN_DEA';
-                          jubilablesPorPlantel[dea] = (jubilablesPorPlantel[dea] || 0) + 1;
+                          const empMun = (emp.municipio || plantelesMapeados[dea] || 'SIN MUNICIPIO').toUpperCase();
+                          const clave = isMunAdmin ? dea : empMun;
+                          jubilablesPorClave[clave] = (jubilablesPorClave[clave] || 0) + 1;
                       }
                   }
               });
@@ -445,18 +487,26 @@ export function initAdminDashboard(dbInstance, user) {
                   }
               }
 
+              // Modificar Encabezado dinámicamente
+              const thPlantel = document.querySelector('#extended-stats-container table th');
+              if (thPlantel) {
+                  thPlantel.textContent = isMunAdmin ? 'Plantel (DEA)' : 'Municipio';
+              }
+
               const tbodyJub = document.getElementById('tbody-jubilables');
               if (tbodyJub) {
                   tbodyJub.innerHTML = '';
-                  const jubArr = Object.entries(jubilablesPorPlantel).sort((a,b) => b[1] - a[1]);
+                  const jubArr = Object.entries(jubilablesPorClave).sort((a,b) => b[1] - a[1]);
                   
                   if (jubArr.length === 0) {
                       tbodyJub.innerHTML = '<tr><td colspan="2" style="text-align: center; padding: 10px; color: #94a3b8;">No hay personal por jubilarse proyectado.</td></tr>';
                   } else {
-                      jubArr.forEach(([dea, count]) => {
+                      jubArr.forEach(([clave, count]) => {
+                          const nombre = isMunAdmin ? (plantelesMapeados[clave] || 'Desconocido') : clave;
+                          const subtitle = isMunAdmin ? `<br><span style="color:#64748b; font-size: 0.75rem;">DEA: ${clave}</span>` : '';
                           tbodyJub.innerHTML += `
                               <tr>
-                                  <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; color: #334155; font-size: 0.85rem;"><strong>${plantelesMapeados[dea] || 'Desconocido'}</strong><br><span style="color:#64748b; font-size: 0.75rem;">DEA: ${dea}</span></td>
+                                  <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; color: #334155; font-size: 0.85rem;"><strong>${nombre}</strong>${subtitle}</td>
                                   <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; color: #0f172a; text-align: center; font-weight: bold;">${count}</td>
                               </tr>
                           `;

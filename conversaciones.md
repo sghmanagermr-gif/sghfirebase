@@ -798,3 +798,9 @@ ombre-apellido). Por lo tanto, al generar el Excel, el sistema no encontraba la 
 - **Agente**: Se reestructuró la UI para incorporar una lista scrollable con identificadores rojo/verde para planteles pendientes/cargados. Durante el proceso de diagnóstico, se comprobó que el error era un falso positivo generado por la variable genérica datos_completados del objeto Plantel, la cual podía estar en 	rue incluso con formularios de matrícula vacíos. Se reconstruyó la validación matemática apuntando directamente a p.matricula.total-gen > 0 y 	otal-vac-gen > 0.
 - **Usuario**: Validó la solución y dio confirmación de 'Estoy Satisfecho'.
 
+
+### Sesión 21 de Septiembre de 2026 (Extensión Estadal del Panel)
+- **Usuario**: Solicitó habilitar el mismo panel extendido para los usuarios zonadmin (nivel estadal), especificando literalmente que en lugar de mostrar el nombre de planteles (para estatus de matrícula y jubilaciones), se muestre agrupado por municipios.
+- **Agente**: Propuso un plan de implementación para refactorizar la lógica en dmin.js, inyectando bifurcaciones condicionales que, al detectar un usuario de nivel Estadal, realizan peticiones sin el filtro de where, agrupando luego los resultados usando diccionarios en memoria y adaptando el renderizado de la UI de acuerdo al alcance (Escuelas para Munadmin, Municipios para Zonadmin). Además se alertó que esto podría estresar el Plan Spark si se abusa sin el caché offline.
+- **Usuario**: Aprobó el plan y posteriormente confirmó su satisfacción con los resultados obtenidos.
+

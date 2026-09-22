@@ -831,3 +831,11 @@ ode.js que el contenedor principal <main id="admin-main"> sufría un cierre prema
 4. **Corrección Visual de Matrícula:** Se sustituyó la presentación de números simples en el panel de Estatus de Matrícula por una lista escroleable donde se muestran los Epónimos de los planteles Cargados (??) y Pendientes (??).
 5. **Corrección de Lógica Falsa-Positiva:** Se modificó la validación de estado de carga de matrícula. Anteriormente se verificaba la variable transaccional `p.datos_completados`, la cual podía arrojar verdaderos en planteles con matrícula vacía por clicks accidentales. Ahora, la validación escanea matemáticamente la propiedad interna (`total-gen > 0 || total-vac-gen > 0`), eliminando discrepancias con los planteles vacíos (Ej: Amable Antonio Rangel).
 
+
+### v2.12.0 - Panel de Métricas Nivel Estadal (ZonAdmin) (21 de Septiembre de 2026)
+
+1. **Activación de Panel Extendido Estadal:** Se rediseñó el panel inferior de estadísticas extendidas para activarse en cuentas con jerarquía `zonadmin`, `admin` o `superadmin`. 
+2. **Lectura Completa y Agrupación Dinámica:** En lugar de buscar planteles o nómina por un solo municipio, el código detecta el contexto `isEstadal`, trayendo la data integral y aplicando algoritmos de agrupación dinámica por Municipio en memoria (Zero-Cost sobre caché en reads subsecuentes).
+3. **Rediseño Estatus de Matrícula (Semáforo Zonal):** La lista de escuelas pasó a ser un consolidador de carga por Municipio, indicando la cantidad de planteles Cargados y Pendientes en la jurisdicción bajo un esquema visual de semáforo (Verde, Amarillo, Rojo).
+4. **Refactorización Tabla Jubilables:** Se adaptó la renderización para mostrar el total consolidado de posibles jubilados por Municipio en la vista Zonal, preservando la vista por DEA (código de plantel) en la vista Municipal.
+
