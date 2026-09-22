@@ -501,7 +501,7 @@ document.getElementById('register-form')?.addEventListener('submit', async (e) =
             creado_el: new Date().toISOString()
         });
 
-        await showAlert("¡Registro Exitoso!", "Revise su correo electrónico para verificar su cuenta y comuníquese con su superior para la aprobación.", "success");
+        await showAlert("¡Registro Exitoso!", "Revise su correo en la carpeta spam para verificar su cuenta y comuníquese con el responsable de Sistema de gestión humana municipal para la aprobación.", "success");
         await signOut(auth);
 
     } catch (error) {

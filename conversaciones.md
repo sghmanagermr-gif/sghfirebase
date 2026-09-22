@@ -911,3 +911,24 @@ px firebase-tools deploy --only hosting).
 > - [https://sgh-merida.firebaseapp.com](https://sgh-merida.firebaseapp.com)
 
 ---
+### Sesión 21 de Septiembre de 2026 (Actualización de Mensaje de Registro y Despliegue v2.12.3)
+
+* **Emisor:** Usuario
+
+> **Mensaje del Usuario:**  
+> En el mensaje satisfactorio de nuevo registro dice: Registro exitoso Revise su correo para verificar su cuenta y comuniquese con su superior para la aprobación. Aceptar
+> 
+> El emnsaje debe decir lo siguiente: Registro exitoso Revise su correo en la carpeta spam para verificar su cuenta y comuniquese con el responsable de Sistema de gestión huamana municipal para la aprobación. Aceptar
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se actualizó el mensaje de registro exitoso en webapp/src/main.js:
+> 1. Nuevo texto configurado: *"Revise su correo en la carpeta spam para verificar su cuenta y comuníquese con el responsable de Sistema de gestión humana municipal para la aprobación."*
+> 2. Se actualizó la versión del sistema a **v2.12.3** en package.json y index.html.
+> 3. Se generó la compilación de producción con Vite (
+pm run build).
+> 4. Se desplegó la versión a producción en Firebase Hosting (
+px firebase-tools deploy --only hosting).
+
+---
