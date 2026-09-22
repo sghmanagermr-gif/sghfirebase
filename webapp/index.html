@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SGH - v2.11.25</title>
+  <title>SGH - v2.11.26</title>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
@@ -186,7 +186,7 @@
     <section id="dashboard-view" class="view">
       <nav class="navbar">
         <div class="nav-brand">
-          <span style="color: var(--primary-color);">SGH</span> v2.11.25
+          <span style="color: var(--primary-color);">SGH</span> v2.11.26
         </div>
         <div class="nav-user">
           <span id="user-display-name" style="font-weight: 500;">Cargando...</span>
@@ -215,7 +215,7 @@
     <!-- HEADER / NAVBAR -->
     <nav class="navbar" style="width: 100%; margin-bottom: 20px;">
       <div class="nav-brand">
-        <span style="color: var(--primary-color);">SGH</span> v2.11.25
+        <span style="color: var(--primary-color);">SGH</span> v2.11.26
       </div>
       <div class="nav-user" style="display: flex; gap: 15px; align-items: center;">
 
@@ -921,7 +921,8 @@
         <div style="grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
           <div>
             <label
-              style="display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; color: var(--text-main);">Ubicación Geográfica *</label>
+              style="display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; color: var(--text-main);">Ubicación
+              Geográfica *</label>
             <select id="p-ubicacion" required
               style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; background: white;">
               <option value="">-- SELECCIONE UBICACIÓN --</option>
@@ -929,7 +930,8 @@
           </div>
           <div>
             <label
-              style="display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; color: var(--text-main);">Turno *</label>
+              style="display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; color: var(--text-main);">Turno
+              *</label>
             <select id="p-turno" required
               style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; background: white;">
               <option value="">-- SELECCIONE TURNO --</option>
@@ -940,7 +942,8 @@
         <div style="grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
           <div>
             <label
-              style="display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; color: var(--text-main);">Nivel Educativo *</label>
+              style="display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; color: var(--text-main);">Nivel
+              Educativo *</label>
             <select id="p-nivel" required
               style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; background: white;">
               <option value="">-- SELECCIONE NIVEL --</option>
@@ -959,7 +962,8 @@
         <div style="grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
           <div>
             <label
-              style="display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; color: var(--text-main);">Metros Cuadrados (m²)</label>
+              style="display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; color: var(--text-main);">Metros
+              Cuadrados (m²)</label>
             <input type="number" step="0.01" min="0" id="p-metros-cuadrados" placeholder="0.00"
               style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc;">
           </div>
@@ -975,20 +979,22 @@
         <!-- SECCIÓN: PLANES DE ESTUDIO QUE IMPARTE EL PLANTEL -->
         <div style="grid-column: 1 / -1; margin-top: 5px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <label
-              style="display: block; font-size: 0.85rem; font-weight: bold; margin: 0; color: var(--text-main);">
+            <label style="display: block; font-size: 0.85rem; font-weight: bold; margin: 0; color: var(--text-main);">
               Planes de Estudio que Imparte el Plantel
             </label>
-            <span id="p-planes-counter" style="font-size: 0.75rem; color: var(--primary-color); font-weight: bold; background: rgba(37,99,235,0.1); padding: 2px 8px; border-radius: 12px;">
+            <span id="p-planes-counter"
+              style="font-size: 0.75rem; color: var(--primary-color); font-weight: bold; background: rgba(37,99,235,0.1); padding: 2px 8px; border-radius: 12px;">
               0 seleccionados
             </span>
           </div>
           <div id="plantel-planes-container"
             style="display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; max-height: 200px; overflow-y: auto; padding: 12px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px;">
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; grid-column: 1 / -1;">Cargando planes de estudio...</p>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; grid-column: 1 / -1;">Cargando planes de
+              estudio...</p>
           </div>
           <small style="display: block; margin-top: 5px; color: var(--text-muted); font-size: 0.75rem;">
-            Marque la casilla correspondiente a cada plan de estudio que imparte este plantel para habilitarlo en la estructura institucional.
+            Marque la casilla correspondiente a cada plan de estudio que imparte este plantel para habilitarlo en la
+            estructura institucional.
           </small>
         </div>
 
@@ -1078,17 +1084,21 @@
 
   <!-- MODAL DE COMPETENCIAS ZONALES (SISTEMA DE LLAVERO) -->
   <div id="modal-competencias-zonal" class="lock-screen" aria-hidden="true" style="display: none; z-index: 10004;">
-    <div class="lock-card glass-panel" style="max-width: 560px; width: 95%; text-align: left; max-height: 90vh; overflow-y: auto; padding: 24px;">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; border-bottom: 1px solid var(--glass-border); padding-bottom: 12px;">
+    <div class="lock-card glass-panel"
+      style="max-width: 560px; width: 95%; text-align: left; max-height: 90vh; overflow-y: auto; padding: 24px;">
+      <div
+        style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; border-bottom: 1px solid var(--glass-border); padding-bottom: 12px;">
         <div>
-          <h2 style="margin: 0 0 5px; color: var(--primary-color); font-size: 1.25rem; display: flex; align-items: center; gap: 8px;">
+          <h2
+            style="margin: 0 0 5px; color: var(--primary-color); font-size: 1.25rem; display: flex; align-items: center; gap: 8px;">
             <span>🔑</span> Competencias del Coordinador Zonal
           </h2>
           <p id="competencias-user-info" style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">
             Configurando permisos para el usuario
           </p>
         </div>
-        <button type="button" id="btn-cerrar-competencias" style="background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--text-muted); padding: 0; line-height: 1; width: auto; box-shadow: none;">✖</button>
+        <button type="button" id="btn-cerrar-competencias"
+          style="background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--text-muted); padding: 0; line-height: 1; width: auto; box-shadow: none;">✖</button>
       </div>
 
       <p style="color: var(--text-main); font-size: 0.88rem; margin-bottom: 15px; line-height: 1.4;">
@@ -1097,178 +1107,247 @@
 
       <!-- Botones de selección rápida -->
       <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-        <button type="button" id="btn-seleccionar-todos-permisos" class="btn-secondary" style="font-size: 0.78rem; padding: 5px 12px; width: auto; cursor: pointer;">Marcar Todos</button>
-        <button type="button" id="btn-limpiar-todos-permisos" class="btn-secondary" style="font-size: 0.78rem; padding: 5px 12px; width: auto; cursor: pointer;">Desmarcar Todos</button>
+        <button type="button" id="btn-seleccionar-todos-permisos" class="btn-secondary"
+          style="font-size: 0.78rem; padding: 5px 12px; width: auto; cursor: pointer;">Marcar Todos</button>
+        <button type="button" id="btn-limpiar-todos-permisos" class="btn-secondary"
+          style="font-size: 0.78rem; padding: 5px 12px; width: auto; cursor: pointer;">Desmarcar Todos</button>
       </div>
 
       <!-- Lista de permisos con checkboxes -->
       <div id="lista-permisos-zonales" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 25px;">
         <!-- 1. Estadísticas -->
-        <label style="display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #f8fafc;">
-          <input type="checkbox" id="chk-perm-estadisticas" class="chk-permiso" value="estadisticas" style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
+        <label
+          style="display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #f8fafc;">
+          <input type="checkbox" id="chk-perm-estadisticas" class="chk-permiso" value="estadisticas"
+            style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
           <div>
-            <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-main);">📊 Métricas y Estadísticas Globales</div>
-            <div style="font-size: 0.8rem; color: var(--text-muted);">Visualizar contadores de planteles, funcionarios y usuarios en tiempo real.</div>
+            <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-main);">📊 Métricas y Estadísticas
+              Globales</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Visualizar contadores de planteles, funcionarios y
+              usuarios en tiempo real.</div>
           </div>
         </label>
 
         <!-- 2. Validación de Usuarios -->
-        <label style="display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #f8fafc;">
-          <input type="checkbox" id="chk-perm-validacion" class="chk-permiso" value="validacion" style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
+        <label
+          style="display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #f8fafc;">
+          <input type="checkbox" id="chk-perm-validacion" class="chk-permiso" value="validacion"
+            style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
           <div>
             <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-main);">👥 Validación de Usuarios</div>
-            <div style="font-size: 0.8rem; color: var(--text-muted);">Aprobar o desincorporar cuentas de directores y coordinadores.</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Aprobar o desincorporar cuentas de directores y
+              coordinadores.</div>
           </div>
         </label>
 
         <!-- 3. Planteles -->
-        <label style="display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #f8fafc;">
-          <input type="checkbox" id="chk-perm-planteles" class="chk-permiso" value="planteles" style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
+        <label
+          style="display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #f8fafc;">
+          <input type="checkbox" id="chk-perm-planteles" class="chk-permiso" value="planteles"
+            style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
           <div>
             <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-main);">🏫 Gestor de Planteles</div>
-            <div style="font-size: 0.8rem; color: var(--text-muted);">Crear, editar, consultar y auditar instituciones educativas y su planta física.</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Crear, editar, consultar y auditar instituciones
+              educativas y su planta física.</div>
           </div>
         </label>
 
         <!-- 4. Descarga de Nóminas -->
-        <label style="display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #f8fafc;">
-          <input type="checkbox" id="chk-perm-nomina" class="chk-permiso" value="nomina" style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
+        <label
+          style="display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #f8fafc;">
+          <input type="checkbox" id="chk-perm-nomina" class="chk-permiso" value="nomina"
+            style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
           <div>
-            <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-main);">📥 Descarga de Nóminas (.xlsx)</div>
-            <div style="font-size: 0.8rem; color: var(--text-muted);">Exportar nóminas institucionales completas con las 55 columnas oficiales.</div>
+            <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-main);">📥 Descarga de Nóminas (.xlsx)
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Exportar nóminas institucionales completas con las
+              55 columnas oficiales.</div>
           </div>
         </label>
 
         <!-- 5. Planes de Estudio -->
-        <label style="display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #f8fafc;">
-          <input type="checkbox" id="chk-perm-planes" class="chk-permiso" value="planes" style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
+        <label
+          style="display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #f8fafc;">
+          <input type="checkbox" id="chk-perm-planes" class="chk-permiso" value="planes"
+            style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
           <div>
             <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-main);">🎓 Planes de Estudio</div>
-            <div style="font-size: 0.8rem; color: var(--text-muted);">Administrar la malla curricular, códigos, menciones y especialidades.</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Administrar la malla curricular, códigos,
+              menciones y especialidades.</div>
           </div>
         </label>
 
         <!-- 6. SECCIÓN DISCRIMINADA: CATÁLOGOS Y LISTAS MAESTRAS -->
-        <div style="margin-top: 5px; margin-bottom: 5px; padding: 14px; background: #f8fafc; border-radius: 10px; border: 1px solid #cbd5e1;">
-          <div style="font-weight: 700; font-size: 0.92rem; color: var(--text-main); margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
+        <div
+          style="margin-top: 5px; margin-bottom: 5px; padding: 14px; background: #f8fafc; border-radius: 10px; border: 1px solid #cbd5e1;">
+          <div
+            style="font-weight: 700; font-size: 0.92rem; color: var(--text-main); margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
             <span style="font-size: 1.1rem;">🗂️</span> Catálogos y Listas Maestras (Acceso Individual)
           </div>
           <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.3;">
             Habilite individualmente cada catálogo según la competencia técnica asignada al funcionario:
           </div>
-          
+
           <div style="display: flex; flex-direction: column; gap: 8px;">
             <!-- Dependencias -->
-            <label style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
-              <input type="checkbox" id="chk-perm-cat-dependencia" class="chk-permiso" value="cat_dependencia" style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
+            <label
+              style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
+              <input type="checkbox" id="chk-perm-cat-dependencia" class="chk-permiso" value="cat_dependencia"
+                style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
               <div>
-                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">🏢 Gestionar Dependencias</div>
-                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar entes de dependencia (Nacional, Estadal, Municipal, Privada, etc.).</div>
+                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">🏢 Gestionar Dependencias
+                </div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar entes de dependencia (Nacional,
+                  Estadal, Municipal, Privada, etc.).</div>
               </div>
             </label>
 
             <!-- Modalidades -->
-            <label style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
-              <input type="checkbox" id="chk-perm-cat-modalidades" class="chk-permiso" value="cat_modalidades" style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
+            <label
+              style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
+              <input type="checkbox" id="chk-perm-cat-modalidades" class="chk-permiso" value="cat_modalidades"
+                style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
               <div>
-                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">🧩 Gestionar Modalidades</div>
-                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar modalidades educativas (Regular, Especial, Adultos, etc.).</div>
+                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">🧩 Gestionar Modalidades
+                </div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar modalidades educativas (Regular,
+                  Especial, Adultos, etc.).</div>
               </div>
             </label>
 
             <!-- Niveles Educativos -->
-            <label style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
-              <input type="checkbox" id="chk-perm-cat-niveles-educativos" class="chk-permiso" value="cat_niveles_educativos" style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
+            <label
+              style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
+              <input type="checkbox" id="chk-perm-cat-niveles-educativos" class="chk-permiso"
+                value="cat_niveles_educativos" style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
               <div>
-                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">📚 Gestionar Niveles Educativos</div>
-                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar niveles escolares (Inicial, Primaria, Media General, Técnica).</div>
+                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">📚 Gestionar Niveles
+                  Educativos</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar niveles escolares (Inicial,
+                  Primaria, Media General, Técnica).</div>
               </div>
             </label>
 
             <!-- Municipios -->
-            <label style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
-              <input type="checkbox" id="chk-perm-cat-municipios" class="chk-permiso" value="cat_municipios" style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
+            <label
+              style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
+              <input type="checkbox" id="chk-perm-cat-municipios" class="chk-permiso" value="cat_municipios"
+                style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
               <div>
-                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">📍 Gestionar Municipios</div>
-                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar catálogo territorial de los municipios del estado Mérida.</div>
+                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">📍 Gestionar Municipios
+                </div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar catálogo territorial de los
+                  municipios del estado Mérida.</div>
               </div>
             </label>
 
             <!-- Situación Laboral -->
-            <label style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
-              <input type="checkbox" id="chk-perm-cat-situacion-laboral" class="chk-permiso" value="cat_situacion_laboral" style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
+            <label
+              style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
+              <input type="checkbox" id="chk-perm-cat-situacion-laboral" class="chk-permiso"
+                value="cat_situacion_laboral" style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
               <div>
-                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">💼 Gestionar Situación Laboral</div>
-                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar condiciones laborales (Docente, Administrativo, Obrero) y códigos de nómina.</div>
+                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">💼 Gestionar Situación
+                  Laboral</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar condiciones laborales (Docente,
+                  Administrativo, Obrero) y códigos de nómina.</div>
               </div>
             </label>
 
             <!-- Nivel de Instrucción -->
-            <label style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
-              <input type="checkbox" id="chk-perm-cat-instruccion" class="chk-permiso" value="cat_instruccion" style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
+            <label
+              style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
+              <input type="checkbox" id="chk-perm-cat-instruccion" class="chk-permiso" value="cat_instruccion"
+                style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
               <div>
-                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">📜 Gestionar Nivel de Instrucción</div>
-                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar títulos, grados académicos y niveles de instrucción del personal.</div>
+                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">📜 Gestionar Nivel de
+                  Instrucción</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar títulos, grados académicos y
+                  niveles de instrucción del personal.</div>
               </div>
             </label>
 
             <!-- Tipo y Condición de Vivienda -->
-            <label style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
-              <input type="checkbox" id="chk-perm-cat-vivienda" class="chk-permiso" value="cat_vivienda" style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
+            <label
+              style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
+              <input type="checkbox" id="chk-perm-cat-vivienda" class="chk-permiso" value="cat_vivienda"
+                style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
               <div>
-                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">🏠 Gestionar Tipo y Condición de Vivienda</div>
-                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar categorías habitacionales y estatus de vivienda del personal.</div>
+                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">🏠 Gestionar Tipo y
+                  Condición de Vivienda</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar categorías habitacionales y
+                  estatus de vivienda del personal.</div>
               </div>
             </label>
 
             <!-- Estado Civil -->
-            <label style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
-              <input type="checkbox" id="chk-perm-cat-estado-civil" class="chk-permiso" value="cat_estado_civil" style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
+            <label
+              style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; background: #ffffff;">
+              <input type="checkbox" id="chk-perm-cat-estado-civil" class="chk-permiso" value="cat_estado_civil"
+                style="margin-top: 2px; width: 16px; height: 16px; cursor: pointer;">
               <div>
-                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">💍 Gestionar Estado Civil</div>
-                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar estados conyugales para fichas socioeconómicas.</div>
+                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main);">💍 Gestionar Estado Civil
+                </div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Administrar estados conyugales para fichas
+                  socioeconómicas.</div>
               </div>
             </label>
           </div>
         </div>
 
         <!-- 7. Despliegue -->
-        <label style="display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #f8fafc;">
-          <input type="checkbox" id="chk-perm-despliegue" class="chk-permiso" value="despliegue" style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
+        <label
+          style="display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #f8fafc;">
+          <input type="checkbox" id="chk-perm-despliegue" class="chk-permiso" value="despliegue"
+            style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
           <div>
-            <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-main);">🚀 Despliegue Técnico y Mantenimiento</div>
-            <div style="font-size: 0.8rem; color: var(--text-muted);">Apertura y cierre de municipios o excepciones territoriales del sistema.</div>
+            <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-main);">🚀 Despliegue Técnico y
+              Mantenimiento</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Apertura y cierre de municipios o excepciones
+              territoriales del sistema.</div>
           </div>
         </label>
       </div>
 
       <input type="hidden" id="competencias-target-uid" value="">
 
-      <div style="display: flex; gap: 10px; justify-content: flex-end; border-top: 1px solid var(--glass-border); padding-top: 15px;">
-        <button type="button" id="btn-cancelar-competencias" class="btn-secondary" style="width: auto; padding: 8px 18px; cursor: pointer;">Cancelar</button>
-        <button type="button" id="btn-guardar-competencias" style="width: auto; padding: 8px 22px; background: var(--primary-color); font-weight: bold; color: white; border: none; border-radius: 6px; cursor: pointer;">Guardar Competencias</button>
+      <div
+        style="display: flex; gap: 10px; justify-content: flex-end; border-top: 1px solid var(--glass-border); padding-top: 15px;">
+        <button type="button" id="btn-cancelar-competencias" class="btn-secondary"
+          style="width: auto; padding: 8px 18px; cursor: pointer;">Cancelar</button>
+        <button type="button" id="btn-guardar-competencias"
+          style="width: auto; padding: 8px 22px; background: var(--primary-color); font-weight: bold; color: white; border: none; border-radius: 6px; cursor: pointer;">Guardar
+          Competencias</button>
       </div>
     </div>
   </div>
 
   <!-- MODAL SELECCIONAR ÁMBITO O MUNICIPIO PARA NÓMINA -->
-  <div id="modal-seleccionar-municipio-nomina" class="lock-screen" aria-hidden="true" style="display: none; z-index: 10005;">
+  <div id="modal-seleccionar-municipio-nomina" class="lock-screen" aria-hidden="true"
+    style="display: none; z-index: 10005;">
     <div class="lock-card glass-panel" style="max-width: 480px; width: 90%; text-align: left; padding: 24px;">
-      <h3 id="modal-nomina-title" style="margin: 0 0 10px; color: var(--primary-color); font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+      <h3 id="modal-nomina-title"
+        style="margin: 0 0 10px; color: var(--primary-color); font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
         <span>📥</span> Descargar Nómina en Excel
       </h3>
-      <p id="modal-nomina-desc" style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px; line-height: 1.4;">
+      <p id="modal-nomina-desc"
+        style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px; line-height: 1.4;">
         Seleccione el filtro para generar el archivo Excel (.xlsx):
       </p>
       <div style="margin-bottom: 20px;">
-        <label id="modal-nomina-label" style="display: block; font-size: 0.8rem; font-weight: bold; margin-bottom: 6px; color: var(--text-main);">Municipio:</label>
-        <select id="sel-municipio-nomina-modal" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; font-size: 0.9rem;">
+        <label id="modal-nomina-label"
+          style="display: block; font-size: 0.8rem; font-weight: bold; margin-bottom: 6px; color: var(--text-main);">Municipio:</label>
+        <select id="sel-municipio-nomina-modal"
+          style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; font-size: 0.9rem;">
           <option value="">-- SELECCIONE OPCIÓN --</option>
         </select>
       </div>
       <div style="display: flex; gap: 10px; justify-content: flex-end;">
-        <button type="button" id="btn-cancelar-sel-mun-nomina" class="btn-secondary" style="width: auto; padding: 8px 16px; cursor: pointer;">Cancelar</button>
-        <button type="button" id="btn-confirmar-sel-mun-nomina" style="width: auto; padding: 8px 20px; background: #107c41; color: white; font-weight: bold; border: none; border-radius: 6px; cursor: pointer;">Descargar (.xlsx)</button>
+        <button type="button" id="btn-cancelar-sel-mun-nomina" class="btn-secondary"
+          style="width: auto; padding: 8px 16px; cursor: pointer;">Cancelar</button>
+        <button type="button" id="btn-confirmar-sel-mun-nomina"
+          style="width: auto; padding: 8px 20px; background: #107c41; color: white; font-weight: bold; border: none; border-radius: 6px; cursor: pointer;">Descargar
+          (.xlsx)</button>
       </div>
     </div>
   </div>
@@ -1308,11 +1387,13 @@
 
       <!-- SIDEBAR OCULTO (OFF-CANVAS) -->
       <aside id="admin-sidebar"
-        style="position: absolute; left: 0; top: 0; bottom: 0; width: 280px; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-right: 1px solid var(--glass-border); display: flex; flex-direction: column; z-index: 50; transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 5px 0 15px rgba(0,0,0,0.05);">
+        style="position: absolute; left: 0; top: 0; bottom: 0; width: 280px; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-right: 1px solid var(--glass-border); display: flex; flex-direction: column; z-index: 9000; transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 5px 0 15px rgba(0,0,0,0.05);">
 
         <nav style="padding: 20px 10px; display: flex; flex-direction: column; gap: 5px; flex-grow: 1;">
-          <button id="btn-sidebar-estadisticas" class="sidebar-btn active" data-target="admin-tab-estadisticas">📊 Estadísticas</button>
-          <button id="btn-sidebar-validacion" class="sidebar-btn" data-target="admin-tab-validacion">👥 Validación de Usuarios</button>
+          <button id="btn-sidebar-estadisticas" class="sidebar-btn active" data-target="admin-tab-estadisticas">📊
+            Estadísticas</button>
+          <button id="btn-sidebar-validacion" class="sidebar-btn" data-target="admin-tab-validacion">👥 Validación de
+            Usuarios</button>
 
           <!-- ACORDEON: GESTOR DE BD -->
           <button id="btn-sidebar-bd" class="sidebar-btn accordion-btn"
@@ -1325,9 +1406,12 @@
           </button>
           <div class="accordion-content custom-scrollbar"
             style="display: none; flex-direction: column; padding-left: 15px; border-left: 2px solid var(--glass-border); margin-left: 15px; gap: 5px; overflow-y: auto; max-height: 300px; padding-right: 5px;">
-            <button id="btn-sidebar-planteles" class="sidebar-btn" data-target="admin-tab-planteles" style="font-size: 0.85rem;">🏫
+            <button id="btn-sidebar-planteles" class="sidebar-btn" data-target="admin-tab-planteles"
+              style="font-size: 0.85rem;">🏫
               Planteles</button>
-            <button id="btn-sidebar-descargar-nomina-mun" class="sidebar-btn" style="font-size: 0.85rem; color: #16a34a; font-weight: bold; display: flex; align-items: center; gap: 6px;">📥 Nómina Municipal</button>
+            <button id="btn-sidebar-descargar-nomina-mun" class="sidebar-btn"
+              style="font-size: 0.85rem; color: #16a34a; font-weight: bold; display: flex; align-items: center; gap: 6px;">📥
+              Nómina Municipal</button>
             <button class="sidebar-btn" data-target="admin-tab-planes" style="font-size: 0.85rem;">🎓 Planes de
               Estudio</button>
             <button class="sidebar-btn" data-target="admin-tab-listas" data-lista="dependencia" data-tipo="array"
@@ -1354,12 +1438,16 @@
 
           <button id="btn-sidebar-despliegue" class="sidebar-btn" data-target="admin-tab-despliegue">🚀
             Despliegue</button>
+          <button id="btn-sidebar-aspiradora" class="sidebar-btn" data-target="admin-tab-aspiradora"
+            style="display: flex; gap: 8px; align-items: center; font-size: 0.95rem;">
+            <span>🧹</span> Mantenimiento BD
+          </button>
         </nav>
       </aside>
 
       <!-- OVERLAY PARA CERRAR EL SIDEBAR HACIENDO CLIC AFUERA -->
       <div id="admin-sidebar-overlay"
-        style="display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.3); z-index: 40; opacity: 0; transition: opacity 0.3s ease;">
+        style="display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.3); z-index: 8999; opacity: 0; transition: opacity 0.3s ease;">
       </div>
 
       <!-- MAIN CONTENT -->
@@ -1368,8 +1456,10 @@
 
         <!-- TAB: ESTADÍSTICAS -->
         <div id="admin-tab-estadisticas" class="admin-tab active">
-          <h2 id="admin-stats-title" style="font-size: 1.8rem; color: var(--primary-color); margin: 0 0 5px;">Métricas Globales</h2>
-          <p id="admin-stats-desc" style="color: var(--text-muted); margin-bottom: 30px;">Resumen del sistema en tiempo real.</p>
+          <h2 id="admin-stats-title" style="font-size: 1.8rem; color: var(--primary-color); margin: 0 0 5px;">Métricas
+            Globales</h2>
+          <p id="admin-stats-desc" style="color: var(--text-muted); margin-bottom: 30px;">Resumen del sistema en tiempo
+            real.</p>
 
           <div class="stats-grid">
 
@@ -1531,146 +1621,156 @@
               <p style="color: var(--text-muted);">Cargando planes...</p>
             </div>
           </div>
-        </div>
-        <!-- VISTA 2: EDITOR DE PLAN -->
-        <div id="cat-vista-editor" style="display: none;">
-          <div
-            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px;">
-            <div style="display: flex; align-items: center; gap: 15px;">
-              <button id="btn-volver-grid-planes"
-                style="background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer;">⬅️
-                Volver</button>
-              <h2 id="titulo-editor-plan" style="margin: 0; color: var(--text-main); font-size: 1.4rem;">Editando Plan
-              </h2>
+          <!-- VISTA 2: EDITOR DE PLAN -->
+          <div id="cat-vista-editor" style="display: none;">
+            <div
+              style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px;">
+              <div style="display: flex; align-items: center; gap: 15px;">
+                <button id="btn-volver-grid-planes"
+                  style="background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer;">⬅️
+                  Volver</button>
+                <h2 id="titulo-editor-plan" style="margin: 0; color: var(--text-main); font-size: 1.4rem;">Editando Plan
+                </h2>
+              </div>
+              <div>
+                <button id="btn-guardar-plan"
+                  style="background: var(--success); color: white; padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; width: auto; box-shadow: none;">💾
+                  Guardar Plan</button>
+              </div>
             </div>
-            <div>
-              <button id="btn-guardar-plan"
-                style="background: var(--success); color: white; padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; width: auto; box-shadow: none;">💾
-                Guardar Plan</button>
+
+            <!-- Cabecera del Plan -->
+            <div
+              style="display: grid; grid-template-columns: 100px 1fr 1fr 100px; gap: 15px; margin-bottom: 20px; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+              <div>
+                <label
+                  style="display: block; font-size: 0.8rem; font-weight: bold; color: var(--text-muted); margin-bottom: 5px;">CÓDIGO
+                  *</label>
+                <input type="number" id="ep-codigo"
+                  style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" required>
+              </div>
+              <div>
+                <label
+                  style="display: block; font-size: 0.8rem; font-weight: bold; color: var(--text-muted); margin-bottom: 5px;">ESPECIALIDAD
+                  *</label>
+                <input type="text" id="ep-especialidad"
+                  style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" required>
+              </div>
+              <div>
+                <label
+                  style="display: block; font-size: 0.8rem; font-weight: bold; color: var(--text-muted); margin-bottom: 5px;">MENCIÓN</label>
+                <input type="text" id="ep-mencion"
+                  style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+              </div>
+              <div>
+                <label
+                  style="display: block; font-size: 0.8rem; font-weight: bold; color: var(--text-muted); margin-bottom: 5px;">AÑOS
+                  *</label>
+                <input type="number" id="ep-numanios" min="1" max="6"
+                  style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" required>
+              </div>
             </div>
+
+            <!-- Malla Curricular -->
+            <h3 style="margin-top: 0; color: var(--text-main); font-size: 1.1rem; margin-bottom: 15px;">Malla Curricular
+            </h3>
+
+            <!-- Pestañas de Años -->
+            <div id="ep-tabs-anios"
+              style="display: flex; gap: 5px; border-bottom: 2px solid #e2e8f0; margin-bottom: 20px;">
+              <!-- Botones de años generados dinámicamente -->
+            </div>
+
+            <!-- Tabla de Materias del Año Seleccionado -->
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
+              <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead style="background: #f1f5f9; border-bottom: 1px solid #e2e8f0;">
+                  <tr>
+                    <th style="padding: 12px 15px; font-weight: 600; color: var(--text-muted); font-size: 0.85rem;">
+                      ASIGNATURA</th>
+                    <th
+                      style="padding: 12px 15px; font-weight: 600; color: var(--text-muted); font-size: 0.85rem; width: 100px;">
+                      HORAS</th>
+                    <th style="padding: 12px 15px; width: 50px;"></th>
+                  </tr>
+                </thead>
+                <tbody id="ep-tbody-materias">
+                  <!-- Materias del año -->
+                </tbody>
+                <tfoot style="background: #f8fafc; border-top: 1px solid #e2e8f0;">
+                  <tr>
+                    <td style="padding: 10px 15px;"><input type="text" id="ep-nueva-materia"
+                        placeholder="Nueva asignatura..."
+                        style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;"></td>
+                    <td style="padding: 10px 15px;"><input type="number" id="ep-nuevas-horas" placeholder="Horas"
+                        min="1" style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;"></td>
+                    <td style="padding: 10px 15px; text-align: right;"><button id="btn-add-materia"
+                        style="background: var(--primary-color); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; width: auto; box-shadow: none;">➕</button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
           </div>
+        </div>
 
-          <!-- Cabecera del Plan -->
-          <div
-            style="display: grid; grid-template-columns: 100px 1fr 1fr 100px; gap: 15px; margin-bottom: 20px; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
-            <div>
-              <label
-                style="display: block; font-size: 0.8rem; font-weight: bold; color: var(--text-muted); margin-bottom: 5px;">CÓDIGO
-                *</label>
-              <input type="number" id="ep-codigo"
-                style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" required>
-            </div>
-            <div>
-              <label
-                style="display: block; font-size: 0.8rem; font-weight: bold; color: var(--text-muted); margin-bottom: 5px;">ESPECIALIDAD
-                *</label>
-              <input type="text" id="ep-especialidad"
-                style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" required>
-            </div>
-            <div>
-              <label
-                style="display: block; font-size: 0.8rem; font-weight: bold; color: var(--text-muted); margin-bottom: 5px;">MENCIÓN</label>
-              <input type="text" id="ep-mencion"
-                style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
-            </div>
-            <div>
-              <label
-                style="display: block; font-size: 0.8rem; font-weight: bold; color: var(--text-muted); margin-bottom: 5px;">AÑOS
-                *</label>
-              <input type="number" id="ep-numanios" min="1" max="6"
-                style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" required>
-            </div>
+        <!-- TAB: DESPLIEGUE -->
+        <div id="admin-tab-despliegue" class="admin-tab">
+          <h2 style="font-size: 1.8rem; color: var(--primary-color); margin: 0 0 5px;">Control de Despliegue Global</h2>
+          <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+            <button id="btn-save-despliegue" style="width: auto;">Guardar Despliegue</button>
+            <span id="despliegue-status" style="color: var(--success); align-self: center;"></span>
           </div>
+          <div id="despliegue-grid"
+            style="display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:16px;"></div>
 
-          <!-- Malla Curricular -->
-          <h3 style="margin-top: 0; color: var(--text-main); font-size: 1.1rem; margin-bottom: 15px;">Malla Curricular
-          </h3>
-
-          <!-- Pestañas de Años -->
-          <div id="ep-tabs-anios"
-            style="display: flex; gap: 5px; border-bottom: 2px solid #e2e8f0; margin-bottom: 20px;">
-            <!-- Botones de años generados dinámicamente -->
+          <h3 style="margin-top: 40px; border-top: 1px solid var(--glass-border); padding-top: 20px;">Excepciones
+            Individuales por Plantel</h3>
+          <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <input type="text" id="inp-new-excepcion" placeholder="Código DEA (Ej. OD01771401)"
+              style="max-width: 250px; background: white;">
+            <button id="btn-add-excepcion" style="width: auto;">Añadir Excepción</button>
           </div>
+          <div id="excepciones-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+        </div>
 
-          <!-- Tabla de Materias del Año Seleccionado -->
-          <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
-            <table style="width: 100%; border-collapse: collapse; text-align: left;">
-              <thead style="background: #f1f5f9; border-bottom: 1px solid #e2e8f0;">
-                <tr>
-                  <th style="padding: 12px 15px; font-weight: 600; color: var(--text-muted); font-size: 0.85rem;">
-                    ASIGNATURA</th>
-                  <th
-                    style="padding: 12px 15px; font-weight: 600; color: var(--text-muted); font-size: 0.85rem; width: 100px;">
-                    HORAS</th>
-                  <th style="padding: 12px 15px; width: 50px;"></th>
-                </tr>
-              </thead>
-              <tbody id="ep-tbody-materias">
-                <!-- Materias del año -->
-              </tbody>
-              <tfoot style="background: #f8fafc; border-top: 1px solid #e2e8f0;">
-                <tr>
-                  <td style="padding: 10px 15px;"><input type="text" id="ep-nueva-materia"
-                      placeholder="Nueva asignatura..."
-                      style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;"></td>
-                  <td style="padding: 10px 15px;"><input type="number" id="ep-nuevas-horas" placeholder="Horas" min="1"
-                      style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;"></td>
-                  <td style="padding: 10px 15px; text-align: right;"><button id="btn-add-materia"
-                      style="background: var(--primary-color); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; width: auto; box-shadow: none;">➕</button>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
+        <!-- TAB: MANTENIMIENTO BD -->
+        <div id="admin-tab-aspiradora" class="admin-tab">
+          <h2 style="font-size: 1.8rem; color: var(--primary-color); margin: 0 0 5px;">Mantenimiento de Base de Datos
+            (Aspiradora Inteligente)</h2>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">
+            Escanea la base de datos en busca de registros de personal completamente en blanco o huérfanos (sin cédula y
+            sin nombre) y los elimina de forma segura. No afecta a los registros válidos.
+          </p>
+          <div style="display: flex; gap: 15px; margin-bottom: 30px;">
+            <button id="btn-limpiar-bd-vacios"
+              style="width: auto; background-color: #ef4444; border-color: #ef4444; display: flex; align-items: center; gap: 8px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 6h18" />
+                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                <line x1="10" x2="10" y1="11" y2="17" />
+                <line x1="14" x2="14" y1="11" y2="17" />
+              </svg>
+              Limpiar Registros Vacíos
+            </button>
+            <button id="btn-analizar-muestra"
+              style="width: auto; background-color: #3b82f6; border-color: #3b82f6; display: flex; align-items: center; gap: 8px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                <line x1="11" y1="8" x2="11" y2="14" />
+                <line x1="8" y1="11" x2="14" y2="11" />
+              </svg>
+              Analizar Registro Sospechoso
+            </button>
           </div>
-
-        </div>
-    </div>
-
-    </div>
-    </div>
-
-
-
-
-    <!-- TAB: DESPLIEGUE -->
-    <div id="admin-tab-despliegue" class="admin-tab">
-      <div class="glass-panel" style="padding: 30px;">
-        <h2>Control de Despliegue Global</h2>
-        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
-          <button id="btn-save-despliegue" style="width: auto;">Guardar Despliegue</button>
-          <span id="despliegue-status" style="color: var(--success); align-self: center;"></span>
-        </div>
-        <div id="despliegue-grid"
-          style="display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:16px;"></div>
-
-        <h3 style="margin-top: 40px; border-top: 1px solid var(--glass-border); padding-top: 20px;">Mantenimiento de Base de Datos (Aspiradora Inteligente)</h3>
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">
-          Escanea la base de datos en busca de registros de personal completamente en blanco o huérfanos (sin cédula y sin nombre) y los elimina de forma segura. No afecta a los registros válidos.
-        </p>
-        <div style="display: flex; gap: 15px; margin-bottom: 30px;">
-          <button id="btn-limpiar-bd-vacios" style="width: auto; background-color: #ef4444; border-color: #ef4444; display: flex; align-items: center; gap: 8px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-            Limpiar Registros Vacíos
-          </button>
-          <button id="btn-analizar-muestra" style="width: auto; background-color: #3b82f6; border-color: #3b82f6; display: flex; align-items: center; gap: 8px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-            Analizar Registro Sospechoso
-          </button>
         </div>
 
-        <h3 style="margin-top: 40px; border-top: 1px solid var(--glass-border); padding-top: 20px;">Excepciones
-          Individuales por Plantel</h3>
-        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-          <input type="text" id="inp-new-excepcion" placeholder="Código DEA (Ej. OD01771401)"
-            style="max-width: 250px; background: white;">
-          <button id="btn-add-excepcion" style="width: auto;">Añadir Excepción</button>
-        </div>
-        <div id="excepciones-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
-      </div>
-    </div>
-
-    </main>
-    </div>
+      </main>
   </section>
   <script type="module" src="/src/main.js"></script>
 

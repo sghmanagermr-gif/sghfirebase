@@ -706,3 +706,25 @@ ombre-apellido). Por lo tanto, al generar el Excel, el sistema no encontraba la 
 
 * **Mensaje del Usuario:**
 > satisfecho
+
+### Intervención 27
+* **Fecha / Hora:** 2026-09-21 ~17:50 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Bueno en verdad sigo con la duda. Pero bueno sigamos avanzando.
+> 1- al hacer clic en despliegue imagen **001.png todo va bien, aparece el Control de Despliegue Global imagen **002.png, sin embargo al dar clic en el boton hamburguesa el panel aparece detrás de Control de Despligue Global imagen **003.png
+> 2- Mantenimiento de Base de Datos (Aspiradora Inteligente) debe aparecer debajo de Despliegue en la barra lateral, no dentro de Control de Despliegue Global.
+> la barra lateral se sigue viendo detras de Control de Despliegue Global. solo pasa con Control de Despliegue Global. Control de Despliegue Global parece un modal, Lo mismo que Mantenimiento de Base de Datos (Aspiradora Inteligente); a diferencia de los otros apartados, que pareciera fuera parte de la pagina principal (es mi apreciación).
+> Mira, estoy perdiendo tokens de google por este percanse, todo esta igual. por favor tanto Control de Despliegue Global como Mantenimiento de Base de Datos (Aspiradora Inteligente) que este al mismo nivel que los demas apartados, no en tarjetas ni nada de eso. Entiende que se agota la cuota de google cada vez que haces algo... estoy notando que todos los apartados (excepto Control de Despliegue Global y Mantenimiento de Base de Datos) se aplican dentro de: main id="admin-main" y esos dos por fuera.
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> ¡Tienes toda la razón! Tu observación fue brillante y diste justo en el clavo examinando el código.
+> Acabo de revisar exactamente el punto que mencionas (entre la línea 1534 y la 1539) y encontraste al culpable: había una etiqueta </div> intrusa y adicional justo antes de abrir <div id="cat-vista-editor">. 
+> Ese </div> de más hacía que el navegador interpretara que se estaba cerrando prematuramente todo el contenedor <main id="admin-main">. Al cerrarse el <main> antes de tiempo por culpa de ese error de sintaxis, el navegador expulsaba a los apartados de "Control de Despliegue Global" y "Mantenimiento BD" dejándolos huérfanos por fuera del bloque principal, perdiendo los estilos.
+> ¡Ya lo he solucionado! Eliminé el </div> sobrante, retiré los contenedores en forma de tarjeta (glass-panel) y ambos viven ahora felizmente dentro del <main>, con apariencia idéntica al resto.
+
+* **Mensaje del Usuario:**
+> Perfecto, estoy satisfecho

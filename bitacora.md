@@ -798,3 +798,27 @@ Se implementÃ³ el requerimiento de inyectar una tabla resumen con el personal pr
 
 ---
 
+
+### Hito 27: Reestructuración de la Interfaz UI de Despliegue y Aspiradora (Z-Index y DOM)
+**Fecha:** 2026-09-21  
+**Módulo:** Interfaz Principal (index.html) y Permisos (admin.js)
+
+**1. Requerimientos:**
+- El usuario reportó que el panel lateral (sidebar) aparecía detrás de la vista de "Control de Despliegue Global".
+- También reportó que "Mantenimiento de Base de Datos" debía tener su propia pestaña en la barra lateral en lugar de estar contenida dentro de Despliegue.
+- Posteriormente, indicó que ambas pestañas parecían "tarjetas" modales y no se integraban visualmente al nivel de los demás apartados (fuera del main principal).
+
+**2. Solución Técnica Implementada:**
+- Se extrajo el contenido de "Mantenimiento de Base de Datos" hacia su propia etiqueta <div id="admin-tab-aspiradora">, creando un botón lateral dedicado.
+- En dmin.js, se inyectó la lógica de visibilidad de los botones tn-sidebar-despliegue y tn-sidebar-aspiradora condicionada al rol de superadministrador.
+- **Corrección Estructural Crítica (El DOM roto):** Se detectó mediante depuración manual y 
+ode.js que el contenedor principal <main id="admin-main"> sufría un cierre prematuro debido a la presencia de un </div> adicional en la línea 1537 (inmediatamente después de cat-vista-grid).
+- Este cierre prematuro empujaba forzosamente los apartados dmin-tab-despliegue y dmin-tab-aspiradora fuera del flujo del <main>, despojándolos de márgenes y paddings.
+- Se eliminó el </div> intruso, reubicando ambas vistas dentro del <main>, y se eliminaron las clases .glass-panel y paddings residuales para garantizar homogeneidad con el estilo de dmin-tab-estadisticas.
+
+**3. Archivos Involucrados:**
+- webapp/index.html
+- webapp/src/admin.js
+- webapp/package.json
+- bitacora.md
+- conversaciones.md

@@ -1,4 +1,4 @@
-import { safeSetDoc, safeUpdateDoc, safeAddDoc } from './dbUtils.js';
+﻿import { safeSetDoc, safeUpdateDoc, safeAddDoc } from './dbUtils.js';
 import { doc, getDoc, setDoc, updateDoc, collection, query, where, getCountFromServer, getDocs, onSnapshot, deleteDoc, deleteField } from 'firebase/firestore';
 import * as XLSX from 'xlsx';
 import { showToast, showAlert } from './uiUtils.js';
@@ -18,7 +18,7 @@ export function initAdminDashboard(dbInstance, user) {
     const mun = (userData.jerarquia?.municipio || userData.municipio || '').trim().toUpperCase();
     const permisos = (isZonAdmin && userData?.permisos) ? userData.permisos : null;
 
-    // Helper de evaluación de permisos modulares (Llavero)
+    // Helper de evaluaciÃ³n de permisos modulares (Llavero)
     const tienePermiso = (modulo, defecto = true) => {
       if (isSuperAdmin) return true;
       if (isMunAdmin) {
@@ -29,22 +29,24 @@ export function initAdminDashboard(dbInstance, user) {
         if (permisos) {
           return permisos[modulo] === true;
         }
-        // Retrocompatibilidad para zonadmin sin permisos configurados aún (todo excepto despliegue)
+        // Retrocompatibilidad para zonadmin sin permisos configurados aÃºn (todo excepto despliegue)
         return modulo !== 'despliegue';
       }
       return defecto;
     };
 
-    // 1. Botones de nivel superior: Estadísticas, Validación y Despliegue
+    // 1. Botones de nivel superior: EstadÃ­sticas, ValidaciÃ³n y Despliegue
     const btnEstadisticas = document.getElementById('btn-sidebar-estadisticas') || document.querySelector('.sidebar-btn[data-target="admin-tab-estadisticas"]');
     const btnValidacion = document.getElementById('btn-sidebar-validacion') || document.querySelector('.sidebar-btn[data-target="admin-tab-validacion"]');
     const btnDespliegue = document.getElementById('btn-sidebar-despliegue');
+      const btnAspiradora = document.getElementById('btn-sidebar-aspiradora');
 
     if (btnEstadisticas) btnEstadisticas.style.display = tienePermiso('estadisticas') ? 'block' : 'none';
     if (btnValidacion) btnValidacion.style.display = tienePermiso('validacion') ? 'block' : 'none';
     if (btnDespliegue) btnDespliegue.style.display = tienePermiso('despliegue', false) ? 'block' : 'none';
+      if (btnAspiradora) btnAspiradora.style.display = tienePermiso('despliegue', false) ? 'flex' : 'none';
 
-    // 2. Acordeón Gestor de BD y sus opciones
+    // 2. AcordeÃ³n Gestor de BD y sus opciones
     const btnAcordeonBd = document.getElementById('btn-sidebar-bd');
     const accordionBd = document.querySelector('.accordion-content');
     let algunSubItemVisible = false;
@@ -88,7 +90,7 @@ export function initAdminDashboard(dbInstance, user) {
       btnAcordeonBd.style.display = algunSubItemVisible ? 'flex' : 'none';
     }
 
-    // 3. Encabezado y Títulos Contextuales
+    // 3. Encabezado y TÃ­tulos Contextuales
     const adminNameEl = document.getElementById('admin-user-name');
     const adminAvatarEl = document.getElementById('admin-user-avatar') || adminNameEl?.previousElementSibling;
     const statsTitleEl = document.getElementById('admin-stats-title');
@@ -99,22 +101,22 @@ export function initAdminDashboard(dbInstance, user) {
       if (isMunAdmin) {
         adminNameEl.textContent = userData.nombre ? `${userData.nombre} (${mun})` : `Coordinador (${mun})`;
         if (adminAvatarEl) adminAvatarEl.textContent = 'CM';
-        if (statsTitleEl) statsTitleEl.textContent = `Métricas Municipales - ${mun}`;
+        if (statsTitleEl) statsTitleEl.textContent = `MÃ©tricas Municipales - ${mun}`;
         if (statsDescEl) statsDescEl.textContent = `Resumen del municipio ${mun} en tiempo real.`;
       } else if (isZonAdmin) {
         adminNameEl.textContent = userData.nombre || 'Coordinador Zonal';
         if (adminAvatarEl) adminAvatarEl.textContent = 'ZA';
-        if (statsTitleEl) statsTitleEl.textContent = 'Métricas Estatales';
-        if (statsDescEl) statsDescEl.textContent = 'Resumen consolidado del estado Mérida.';
+        if (statsTitleEl) statsTitleEl.textContent = 'MÃ©tricas Estatales';
+        if (statsDescEl) statsDescEl.textContent = 'Resumen consolidado del estado MÃ©rida.';
       } else {
         adminNameEl.textContent = userData.nombre || 'Administrador';
         if (adminAvatarEl) adminAvatarEl.textContent = 'SA';
-        if (statsTitleEl) statsTitleEl.textContent = 'Métricas Globales';
+        if (statsTitleEl) statsTitleEl.textContent = 'MÃ©tricas Globales';
         if (statsDescEl) statsDescEl.textContent = 'Resumen del sistema en tiempo real.';
       }
     }
 
-    // 4. Determinar la primera pestaña activa permitida
+    // 4. Determinar la primera pestaÃ±a activa permitida
     document.querySelectorAll('.sidebar-btn').forEach(b => {
       if (!b.classList.contains('accordion-btn')) b.classList.remove('active');
     });
@@ -144,7 +146,7 @@ export function initAdminDashboard(dbInstance, user) {
         if (tabPlanes) tabPlanes.classList.add('active');
       }
     } else {
-      // Buscar el primer botón visible del sidebar que no sea descarga directa
+      // Buscar el primer botÃ³n visible del sidebar que no sea descarga directa
       const primerBotonVisible = Array.from(document.querySelectorAll('#admin-sidebar .sidebar-btn:not(.accordion-btn)'))
         .find(b => b.style.display !== 'none' && b.id !== 'btn-sidebar-descargar-nomina-mun');
       if (primerBotonVisible) {
@@ -172,7 +174,7 @@ export function initAdminDashboard(dbInstance, user) {
   }
 
   if (isInitialized) {
-     // Si ya se inicializó el DOM, solo recargamos los datos para el nuevo usuario
+     // Si ya se inicializÃ³ el DOM, solo recargamos los datos para el nuevo usuario
      currentPlanteles = [];
      configurarInterfazPorRol();
      loadEstadisticas();
@@ -183,7 +185,7 @@ export function initAdminDashboard(dbInstance, user) {
      return;
   }
   isInitialized = true;
-  // Lógica de Pestañas (Sidebar)
+  // LÃ³gica de PestaÃ±as (Sidebar)
   document.querySelectorAll('.sidebar-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const button = e.target.closest('.sidebar-btn');
@@ -205,7 +207,7 @@ export function initAdminDashboard(dbInstance, user) {
          return; // No navegar ni cerrar el sidebar
       }
 
-      // Descarga de Nómina en Excel
+      // Descarga de NÃ³mina en Excel
       if (button.id === 'btn-sidebar-descargar-nomina-mun') {
          abrirModalSeleccionarNomina();
          if(typeof window.closeSidebar === 'function') window.closeSidebar();
@@ -224,11 +226,11 @@ export function initAdminDashboard(dbInstance, user) {
       if (userData?.rol === 'zonadmin' && userData?.permisos) {
          const p = userData.permisos;
          if (targetId === 'admin-tab-estadisticas' && !p.estadisticas) {
-            showToast("No tiene permisos para acceder a Métricas.", "warning");
+            showToast("No tiene permisos para acceder a MÃ©tricas.", "warning");
             return;
          }
          if (targetId === 'admin-tab-validacion' && !p.validacion) {
-            showToast("No tiene permisos para acceder a Validación de Usuarios.", "warning");
+            showToast("No tiene permisos para acceder a ValidaciÃ³n de Usuarios.", "warning");
             return;
          }
          if (targetId === 'admin-tab-planteles' && !p.planteles) {
@@ -253,11 +255,11 @@ export function initAdminDashboard(dbInstance, user) {
 
              const permitido = (permKey && typeof p[permKey] !== 'undefined') ? p[permKey] : p.listas;
              if (!permitido) {
-                showToast(`No tiene permisos para acceder a este catálogo.`, "warning");
+                showToast(`No tiene permisos para acceder a este catÃ¡logo.`, "warning");
                 return;
              }
           }
-         if (targetId === 'admin-tab-despliegue' && !p.despliegue) {
+         if ((targetId === 'admin-tab-despliegue' || targetId === 'admin-tab-aspiradora') && !p.despliegue) {
             showToast("No tiene permisos para acceder a Despliegue.", "warning");
             return;
          }
@@ -285,7 +287,7 @@ export function initAdminDashboard(dbInstance, user) {
     });
   });
 
-  // Cargar Estadísticas (Tab por Defecto)
+  // Cargar EstadÃ­sticas (Tab por Defecto)
   async function loadEstadisticas() {
     try {
       // Plan Cero Costo: getCountFromServer (1 read por 1000 documentos)
@@ -297,7 +299,7 @@ export function initAdminDashboard(dbInstance, user) {
           const mun = (userData.jerarquia?.municipio || userData.municipio || '').trim().toUpperCase();
           if (mun) {
               qPersonal = query(qPersonal, where('municipio', '==', mun));
-              // Un munadmin solo gestiona plaadmin, así que su contador de usuarios debe reflejar solo esos.
+              // Un munadmin solo gestiona plaadmin, asÃ­ que su contador de usuarios debe reflejar solo esos.
               qUsuarios = query(collection(db, 'usuarios'), where('rol', '==', 'plaadmin'), where('jerarquia.municipio', '==', mun));
               qPlanteles = query(collection(db, 'usuarios'), where('rol', '==', 'plaadmin'), where('jerarquia.municipio', '==', mun));
           }
@@ -321,14 +323,14 @@ export function initAdminDashboard(dbInstance, user) {
       if(elPersonal) elPersonal.textContent = totalPersonal;
       if(elPlanteles) elPlanteles.textContent = totalPlanteles;
     } catch(err) {
-      console.error("Error cargando estadísticas", err);
+      console.error("Error cargando estadÃ­sticas", err);
     }
   }
   
   configurarInterfazPorRol();
   loadEstadisticas();
 
-  // --- LÓGICA DE VALIDACIÓN DE USUARIOS ---
+  // --- LÃ“GICA DE VALIDACIÃ“N DE USUARIOS ---
   const tbodyUsuarios = document.getElementById('tbody-usuarios');
   const filterEstado = document.getElementById('filter-estado');
   let usuariosLocales = []; // Cache local para filtrar
@@ -341,14 +343,14 @@ export function initAdminDashboard(dbInstance, user) {
        unsubscribeUsuarios();
     }
 
-    const q = query(collection(db, 'usuarios')); // Traemos todos para filtrar en cliente rápido
+    const q = query(collection(db, 'usuarios')); // Traemos todos para filtrar en cliente rÃ¡pido
     unsubscribeUsuarios = onSnapshot(q, (snap) => {
       usuariosLocales = [];
       snap.forEach(doc => {
         const u = doc.data();
         u.uid = doc.id;
         
-        // Ocultar al propio usuario de su lista para evitar auto-eliminación
+        // Ocultar al propio usuario de su lista para evitar auto-eliminaciÃ³n
         if (u.uid === userData.uid) return;
         
         // --- RBAC FILTER ---
@@ -357,7 +359,7 @@ export function initAdminDashboard(dbInstance, user) {
             if (u.rol !== 'plaadmin' || u.jerarquia?.municipio !== userData.jerarquia?.municipio) return;
         }
 
-        // Evitar que un superadmin se borre a sí mismo accidentalmente o a otros admins
+        // Evitar que un superadmin se borre a sÃ­ mismo accidentalmente o a otros admins
         if (u.rol !== 'admin' && u.rol !== 'superadmin') {
           usuariosLocales.push(u);
         }
@@ -385,10 +387,10 @@ export function initAdminDashboard(dbInstance, user) {
       textEl.textContent = text;
       
       if (type === 'success') {
-        iconEl.textContent = '✅';
+        iconEl.textContent = 'âœ…';
         btnOk.style.background = 'var(--success)';
       } else {
-        iconEl.textContent = '⚠️';
+        iconEl.textContent = 'âš ï¸';
         btnOk.style.background = 'var(--danger)';
       }
       
@@ -481,7 +483,7 @@ export function initAdminDashboard(dbInstance, user) {
     }
 
     tbodyUsuarios.innerHTML = filtrados.map(u => {
-      // Determinar ubicación
+      // Determinar ubicaciÃ³n
       let ubicacion = 'N/A';
       if (u.jerarquia) {
         if (u.rol === 'plaadmin' && u.jerarquia.plantel_codigo) ubicacion = `Plantel: ${u.jerarquia.plantel_codigo}`;
@@ -500,7 +502,7 @@ export function initAdminDashboard(dbInstance, user) {
           <td style="padding: 15px 20px;">
             <div style="font-weight: 500; color: var(--primary-color);">${u.rol.toUpperCase()}</div>
             <div style="font-size: 0.8rem; color: var(--text-muted);">${ubicacion}</div>
-            ${u.rol === 'zonadmin' ? `<div style="font-size: 0.75rem; color: #16a34a; font-weight: 500; margin-top: 3px;">🔑 ${u.permisos ? Object.entries(u.permisos).filter(([k, v]) => v === true && k !== 'listas' && k !== 'ultima_modificacion').length + ' competencias autorizadas' : 'Acceso Estándar'}</div>` : ''}
+            ${u.rol === 'zonadmin' ? `<div style="font-size: 0.75rem; color: #16a34a; font-weight: 500; margin-top: 3px;">ðŸ”‘ ${u.permisos ? Object.entries(u.permisos).filter(([k, v]) => v === true && k !== 'listas' && k !== 'ultima_modificacion').length + ' competencias autorizadas' : 'Acceso EstÃ¡ndar'}</div>` : ''}
           </td>
           <td style="padding: 15px 20px;">
             <span style="padding: 5px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; 
@@ -510,7 +512,7 @@ export function initAdminDashboard(dbInstance, user) {
             </span>
           </td>
           <td style="padding: 15px 20px; text-align: right; display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
-            ${(u.rol === 'zonadmin' && (userData.rol === 'superadmin' || userData.rol === 'admin')) ? `<button class="btn-competencias" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.82rem; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 600;" title="Configurar módulos y permisos del panel">🔑 Competencias</button>` : ''}
+            ${(u.rol === 'zonadmin' && (userData.rol === 'superadmin' || userData.rol === 'admin')) ? `<button class="btn-competencias" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.82rem; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 600;" title="Configurar mÃ³dulos y permisos del panel">ðŸ”‘ Competencias</button>` : ''}
             ${!isAprobado ? `<button class="btn-aprobar" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.85rem; background: var(--success);">Aprobar</button>` : ''}
             <button class="btn-eliminar btn-secondary" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.85rem; border-color: var(--danger); color: var(--danger);">${isAprobado ? 'Eliminar' : 'Rechazar'}</button>
           </td>
@@ -533,7 +535,7 @@ export function initAdminDashboard(dbInstance, user) {
     document.querySelectorAll('.btn-aprobar').forEach(btn => {
       btn.onclick = async (e) => {
         const uid = e.target.getAttribute('data-uid');
-        const conf = await showConfirm("¿Aprobar Acceso?", "El usuario tendrá permiso para ingresar al sistema.", "success");
+        const conf = await showConfirm("Â¿Aprobar Acceso?", "El usuario tendrÃ¡ permiso para ingresar al sistema.", "success");
         if(conf) {
           e.target.disabled = true;
           e.target.textContent = '...';
@@ -543,7 +545,7 @@ export function initAdminDashboard(dbInstance, user) {
             loadEstadisticas(); // Actualiza contadores
           } catch(err) {
             console.error(err);
-            showConfirm("Error", "Ocurrió un problema al aprobar el usuario.", "danger");
+            showConfirm("Error", "OcurriÃ³ un problema al aprobar el usuario.", "danger");
           }
         }
       };
@@ -552,7 +554,7 @@ export function initAdminDashboard(dbInstance, user) {
     document.querySelectorAll('.btn-eliminar').forEach(btn => {
       btn.onclick = async (e) => {
         const uid = e.target.getAttribute('data-uid');
-        const conf = await showConfirm("Eliminar Perfil", "Esta acción es irreversible. El usuario perderá acceso al sistema.", "danger");
+        const conf = await showConfirm("Eliminar Perfil", "Esta acciÃ³n es irreversible. El usuario perderÃ¡ acceso al sistema.", "danger");
         if(conf) {
           e.target.disabled = true;
           e.target.textContent = '...';
@@ -562,7 +564,7 @@ export function initAdminDashboard(dbInstance, user) {
             loadEstadisticas(); // Actualiza contadores
           } catch(err) {
             console.error(err);
-            showConfirm("Error", "Ocurrió un problema al eliminar el usuario.", "danger");
+            showConfirm("Error", "OcurriÃ³ un problema al eliminar el usuario.", "danger");
           }
         }
       };
@@ -621,14 +623,14 @@ export function initAdminDashboard(dbInstance, user) {
     const permisos = user.permisos || null;
 
     // Si tiene permisos definidos, marcamos exactamente esos.
-    // Si no tiene permisos previos, marcamos el estándar (todo true excepto despliegue).
+    // Si no tiene permisos previos, marcamos el estÃ¡ndar (todo true excepto despliegue).
     document.getElementById('chk-perm-estadisticas').checked = permisos ? !!permisos.estadisticas : true;
     document.getElementById('chk-perm-validacion').checked = permisos ? !!permisos.validacion : true;
     document.getElementById('chk-perm-planteles').checked = permisos ? !!permisos.planteles : true;
     document.getElementById('chk-perm-nomina').checked = permisos ? !!permisos.nomina : true;
     document.getElementById('chk-perm-planes').checked = permisos ? !!permisos.planes : true;
     
-    // Catálogos discriminados (con soporte de herencia si antes tenía 'listas')
+    // CatÃ¡logos discriminados (con soporte de herencia si antes tenÃ­a 'listas')
     const defaultListas = permisos ? (typeof permisos.listas !== 'undefined' ? !!permisos.listas : true) : true;
     const setChk = (id, key) => {
       const el = document.getElementById(id);
@@ -692,7 +694,7 @@ export function initAdminDashboard(dbInstance, user) {
       try {
         await safeUpdateDoc(doc(db, 'usuarios', uid), { permisos: nuevosPermisos });
 
-        // Si el usuario editado es el mismo de la sesión activa, actualizar en tiempo real
+        // Si el usuario editado es el mismo de la sesiÃ³n activa, actualizar en tiempo real
         if (userData && userData.uid === uid) {
           userData.permisos = nuevosPermisos;
           configurarInterfazPorRol();
@@ -746,7 +748,7 @@ export function initAdminDashboard(dbInstance, user) {
     "ALBERTO ADRIANI", "ANDRES BELLO", "ANTONIO PINTO SALINAS", // Note: En bd_sgh.json it's SALINAS or SALINA?
     "ARICAGUA", "ARZOBISPO CHACON", "CAMPO ELIAS",
     "CARACCIOLO PARRA", "CARDENAL QUINTERO", "GUARAQUE",
-    "JULIO CESAR", "JUSTO BRICEÑO", "LIBERTADOR",
+    "JULIO CESAR", "JUSTO BRICEÃ‘O", "LIBERTADOR",
     "MIRANDA", "OBISPO RAMOS DE LORA", "PADRE NOGUERA",
     "PUEBLO LLANO", "RANGEL", "RIVAS DAVILA",
     "SANTOS MARQUINA", "SUCRE", "TOVAR",
@@ -770,7 +772,7 @@ export function initAdminDashboard(dbInstance, user) {
       renderGrid();
       renderExcepciones();
     } catch(err) {
-      console.error("Error cargando configuración", err);
+      console.error("Error cargando configuraciÃ³n", err);
     }
   }
 
@@ -842,7 +844,7 @@ export function initAdminDashboard(dbInstance, user) {
       });
       // Update cache
       sessionStorage.setItem('sgh_despliegue_config', JSON.stringify(configActual));
-      statusSpan.textContent = '¡Guardado con éxito!';
+      statusSpan.textContent = 'Â¡Guardado con Ã©xito!';
       setTimeout(() => statusSpan.textContent = '', 3000);
     } catch(err) {
       console.error(err);
@@ -860,14 +862,14 @@ export function initAdminDashboard(dbInstance, user) {
     btnLimpiarBdVacios.onclick = async () => {
       try {
         btnLimpiarBdVacios.disabled = true;
-        btnLimpiarBdVacios.innerHTML = '⏳ Escaneando base de datos...';
+        btnLimpiarBdVacios.innerHTML = 'â³ Escaneando base de datos...';
         
         // 1. Escanear todos los registros (con Escudo de Memoria)
         window._cacheExportPersonal = window._cacheExportPersonal || {};
         let personalData = null;
 
         if (window._cacheExportPersonal['TODOS']) {
-          console.log("[Zero-Cost Shield] Aspiradora usando caché local.");
+          console.log("[Zero-Cost Shield] Aspiradora usando cachÃ© local.");
           personalData = window._cacheExportPersonal['TODOS'];
         } else {
           const snap = await getDocs(collection(db, 'cargos_personal'));
@@ -878,7 +880,7 @@ export function initAdminDashboard(dbInstance, user) {
         const vacios = [];
         
         personalData.forEach(emp => {
-          const ced = (emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÉDULA'] || '').toString().trim();
+          const ced = (emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÃ‰DULA'] || '').toString().trim();
           const nom = (emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || emp['APELLIDOS Y NOMBRES'] || emp['NOMBRE Y APELLIDO'] || '').toString().trim();
           
           if (!ced && !nom) {
@@ -887,27 +889,27 @@ export function initAdminDashboard(dbInstance, user) {
         });
 
         if (vacios.length === 0) {
-          showToast("¡Excelente! La base de datos está limpia. No se encontraron registros vacíos.", "success");
+          showToast("Â¡Excelente! La base de datos estÃ¡ limpia. No se encontraron registros vacÃ­os.", "success");
           btnLimpiarBdVacios.disabled = false;
-          btnLimpiarBdVacios.innerHTML = '🧹 Limpiar Registros Vacíos';
+          btnLimpiarBdVacios.innerHTML = 'ðŸ§¹ Limpiar Registros VacÃ­os';
           return;
         }
 
-        // 2. Pedir confirmación segura
+        // 2. Pedir confirmaciÃ³n segura
         const confirmado = await showConfirm(
           "Limpieza de Base de Datos",
-          `La aspiradora detectó ${vacios.length} registro(s) completamente en blanco o huérfano(s). ¿Deseas eliminarlos definitivamente? Esto NO afectará a tus trabajadores válidos.`,
+          `La aspiradora detectÃ³ ${vacios.length} registro(s) completamente en blanco o huÃ©rfano(s). Â¿Deseas eliminarlos definitivamente? Esto NO afectarÃ¡ a tus trabajadores vÃ¡lidos.`,
           "warning"
         );
 
         if (!confirmado) {
           btnLimpiarBdVacios.disabled = false;
-          btnLimpiarBdVacios.innerHTML = '🧹 Limpiar Registros Vacíos';
+          btnLimpiarBdVacios.innerHTML = 'ðŸ§¹ Limpiar Registros VacÃ­os';
           return;
         }
 
         // 3. Proceder a borrar
-        btnLimpiarBdVacios.innerHTML = '⏳ Eliminando...';
+        btnLimpiarBdVacios.innerHTML = 'â³ Eliminando...';
         for (const id of vacios) {
           await deleteDoc(doc(db, 'cargos_personal', id));
         }
@@ -916,14 +918,14 @@ export function initAdminDashboard(dbInstance, user) {
           delete window._cacheExportPersonal['TODOS'];
         }
 
-        showToast(`¡Limpieza completada! Se eliminaron ${vacios.length} registro(s) vacío(s) exitosamente.`, "success", 5000);
+        showToast(`Â¡Limpieza completada! Se eliminaron ${vacios.length} registro(s) vacÃ­o(s) exitosamente.`, "success", 5000);
         
       } catch (error) {
         console.error("Error en aspiradora:", error);
         showAlert("Error de Limpieza", "Hubo un fallo al intentar limpiar la base de datos: " + error.message, "danger");
       } finally {
         btnLimpiarBdVacios.disabled = false;
-        btnLimpiarBdVacios.innerHTML = '🧹 Limpiar Registros Vacíos';
+        btnLimpiarBdVacios.innerHTML = 'ðŸ§¹ Limpiar Registros VacÃ­os';
       }
     };
   }
@@ -933,7 +935,7 @@ export function initAdminDashboard(dbInstance, user) {
     btnAnalizarMuestra.onclick = async () => {
       try {
         btnAnalizarMuestra.disabled = true;
-        btnAnalizarMuestra.innerHTML = '⏳ Buscando muestra...';
+        btnAnalizarMuestra.innerHTML = 'â³ Buscando muestra...';
         
         // Escudo de Memoria
         window._cacheExportPersonal = window._cacheExportPersonal || {};
@@ -949,7 +951,7 @@ export function initAdminDashboard(dbInstance, user) {
 
         let muestra = null;
         
-        // Buscamos el primero que NO tenga la llave en minúscula (el que generaba el blanco en Excel)
+        // Buscamos el primero que NO tenga la llave en minÃºscula (el que generaba el blanco en Excel)
         for (const emp of personalData) {
           if (!emp['cedula-identidad'] && !emp.cedula && !emp['nombre-apellido'] && !emp.nombre) {
             muestra = emp;
@@ -958,11 +960,11 @@ export function initAdminDashboard(dbInstance, user) {
         }
 
         if (!muestra) {
-          showAlert("Sin Muestras", "No se encontró ningún registro sospechoso. Todos tienen el formato estándar.", "info");
+          showAlert("Sin Muestras", "No se encontrÃ³ ningÃºn registro sospechoso. Todos tienen el formato estÃ¡ndar.", "info");
         } else {
           const jsonStr = JSON.stringify(muestra, null, 2);
           await showAlert(
-            "Muestra de Registro Extraído",
+            "Muestra de Registro ExtraÃ­do",
             `<div style="text-align: left; background: #f1f5f9; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 0.8rem; overflow-x: auto; max-height: 400px; overflow-y: auto;"><pre>${jsonStr}</pre></div>`,
             "info"
           );
@@ -1014,7 +1016,7 @@ export function initAdminDashboard(dbInstance, user) {
       }
     } catch(err) {
       console.error("Error loading catalogos:", err);
-      gridPlanes.innerHTML = '<p style="color:var(--danger);">Error cargando catálogos.</p>';
+      gridPlanes.innerHTML = '<p style="color:var(--danger);">Error cargando catÃ¡logos.</p>';
     }
   }
 
@@ -1032,12 +1034,12 @@ export function initAdminDashboard(dbInstance, user) {
          <div>
            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
              <span style="background: rgba(37,99,235,0.1); color: var(--primary-color); padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold;">${cod}</span>
-             <span style="font-size: 0.8rem; color: var(--text-muted);">${plan.numAnios || '?'} Años</span>
+             <span style="font-size: 0.8rem; color: var(--text-muted);">${plan.numAnios || '?'} AÃ±os</span>
            </div>
            <h4 style="margin: 0 0 5px; color: var(--text-main); font-size: 1.1rem;">${plan.especialidad || 'Sin Especialidad'}</h4>
-           <p style="margin: 0; color: var(--text-muted); font-size: 0.9rem;">${plan.mencion || 'Sin Mención'}</p>
+           <p style="margin: 0; color: var(--text-muted); font-size: 0.9rem;">${plan.mencion || 'Sin MenciÃ³n'}</p>
          </div>
-         <button class="btn-config-plan" data-cod="${cod}" style="margin-top: 20px; width: 100%; background: #f8fafc; border: 1px solid #e2e8f0; color: var(--primary-color); padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold;">⚙️ Configurar</button>
+         <button class="btn-config-plan" data-cod="${cod}" style="margin-top: 20px; width: 100%; background: #f8fafc; border: 1px solid #e2e8f0; color: var(--primary-color); padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold;">âš™ï¸ Configurar</button>
        `;
        gridPlanes.appendChild(card);
     });
@@ -1049,7 +1051,7 @@ export function initAdminDashboard(dbInstance, user) {
 
   if(btnNuevoPlan) {
     btnNuevoPlan.onclick = () => {
-      editingPlan = { isNew: true, codigo: '', especialidad: '', mencion: '', numAnios: 1, grados: [{ anio: 1, label: "1ER AÑO", asignaturas: [] }] };
+      editingPlan = { isNew: true, codigo: '', especialidad: '', mencion: '', numAnios: 1, grados: [{ anio: 1, label: "1ER AÃ‘O", asignaturas: [] }] };
       currentYearTab = 1;
       showEditor();
     };
@@ -1101,7 +1103,7 @@ export function initAdminDashboard(dbInstance, user) {
         if(existing) newGrados.push(existing);
         else {
            const labels = ['1ER', '2DO', '3ER', '4TO', '5TO', '6TO'];
-           newGrados.push({ anio: i, label: `${labels[i-1] || i} AÑO`, asignaturas: [] });
+           newGrados.push({ anio: i, label: `${labels[i-1] || i} AÃ‘O`, asignaturas: [] });
         }
      }
      editingPlan.grados = newGrados;
@@ -1139,7 +1141,7 @@ export function initAdminDashboard(dbInstance, user) {
           <td style="padding: 10px 15px; color: var(--text-main);">${asig.nombre}</td>
           <td style="padding: 10px 15px; color: var(--text-main);">${asig.horas}</td>
           <td style="padding: 10px 15px; text-align: right;">
-            <button class="btn-del-mat" data-idx="${index}" style="background: transparent; border: none; color: var(--danger); cursor: pointer; font-size: 1.1rem;">🗑️</button>
+            <button class="btn-del-mat" data-idx="${index}" style="background: transparent; border: none; color: var(--danger); cursor: pointer; font-size: 1.1rem;">ðŸ—‘ï¸</button>
           </td>
         `;
         tbodyMaterias.appendChild(tr);
@@ -1161,7 +1163,7 @@ export function initAdminDashboard(dbInstance, user) {
         const horas = parseInt(inpH.value);
         
         if(!nombre || isNaN(horas) || horas < 1) {
-           showConfirm("Atención", "Debes ingresar un nombre y horas válidas.", "danger");
+           showConfirm("AtenciÃ³n", "Debes ingresar un nombre y horas vÃ¡lidas.", "danger");
            return;
         }
 
@@ -1183,7 +1185,7 @@ export function initAdminDashboard(dbInstance, user) {
         const numA = parseInt(document.getElementById('ep-numanios').value) || 1;
 
         if(!codigoForm || !esp) {
-           showConfirm("Atención", "Código y Especialidad son requeridos.", "danger");
+           showConfirm("AtenciÃ³n", "CÃ³digo y Especialidad son requeridos.", "danger");
            return;
         }
 
@@ -1230,10 +1232,10 @@ export function initAdminDashboard(dbInstance, user) {
 
         } catch(e) {
            console.error(e);
-           showConfirm("Error", "Ocurrió un problema guardando el plan.", "danger");
+           showConfirm("Error", "OcurriÃ³ un problema guardando el plan.", "danger");
         } finally {
            btnGuardarPlan.disabled = false;
-           btnGuardarPlan.innerText = '💾 Guardar Plan';
+           btnGuardarPlan.innerText = 'ðŸ’¾ Guardar Plan';
         }
      };
   }
@@ -1287,7 +1289,7 @@ export function initAdminDashboard(dbInstance, user) {
       currentPlanteles = [];
       snap.forEach(doc => {
         const data = doc.data();
-        // Doble validación en cliente
+        // Doble validaciÃ³n en cliente
         if (userMun) {
           const pMun = (data.municipio || '').trim().toUpperCase();
           if (pMun !== userMun) return;
@@ -1350,8 +1352,8 @@ export function initAdminDashboard(dbInstance, user) {
          <td style="padding: 15px 20px; color: var(--text-muted); font-size: 0.9rem;">${p.municipio || 'N/A'}</td>
          <td style="padding: 15px 20px; color: var(--text-muted); font-size: 0.9rem;">${p.nivel || 'N/A'}</td>
          <td class="plantel-actions-cell">
-           <button class="btn-plantel-action btn-edit-plantel" data-id="${p.id}">✏️ Editar</button>
-           <button class="btn-plantel-action btn-del-plantel" data-id="${p.id}">🗑️ Eliminar</button>
+           <button class="btn-plantel-action btn-edit-plantel" data-id="${p.id}">âœï¸ Editar</button>
+           <button class="btn-plantel-action btn-del-plantel" data-id="${p.id}">ðŸ—‘ï¸ Eliminar</button>
          </td>
        `;
        tbodyPlanteles.appendChild(tr);
@@ -1370,7 +1372,7 @@ export function initAdminDashboard(dbInstance, user) {
        b.onclick = async () => {
          const id = b.getAttribute('data-id');
          const plantel = currentPlanteles.find(x => x.id === id);
-         const ok = await showConfirm("Eliminar Plantel", `¿Estás seguro de eliminar el plantel ${plantel['nombre-plantel']?.nominal}? Esta acción es irreversible.`, "danger");
+         const ok = await showConfirm("Eliminar Plantel", `Â¿EstÃ¡s seguro de eliminar el plantel ${plantel['nombre-plantel']?.nominal}? Esta acciÃ³n es irreversible.`, "danger");
          if(ok) {
             try {
               b.disabled = true;
@@ -1379,7 +1381,7 @@ export function initAdminDashboard(dbInstance, user) {
               await loadPlanteles();
             } catch(e) {
               console.error(e);
-              showConfirm("Error", "Ocurrió un problema eliminando el plantel.", "danger");
+              showConfirm("Error", "OcurriÃ³ un problema eliminando el plantel.", "danger");
             }
          }
        };
@@ -1426,13 +1428,13 @@ export function initAdminDashboard(dbInstance, user) {
 
     const ld = catData.listas_desplegables || {};
 
-    // 1. Ubicación Geográfica desde sgh_catalogos
+    // 1. UbicaciÃ³n GeogrÃ¡fica desde sgh_catalogos
     const ubicaciones = (Array.isArray(catData.ubicacion) && catData.ubicacion.length > 0) 
       ? catData.ubicacion 
       : (Array.isArray(ld.ubicacion) && ld.ubicacion.length > 0 ? ld.ubicacion : ["URBANO", "RURAL"]);
     const selUbicacion = document.getElementById('p-ubicacion');
     if (selUbicacion) {
-      selUbicacion.innerHTML = '<option value="">-- SELECCIONE UBICACIÓN --</option>' +
+      selUbicacion.innerHTML = '<option value="">-- SELECCIONE UBICACIÃ“N --</option>' +
         ubicaciones.map(u => `<option value="${u}">${u}</option>`).join('');
     }
 
@@ -1459,7 +1461,7 @@ export function initAdminDashboard(dbInstance, user) {
     // 4. Turnos desde sgh_catalogos
     const turnos = (Array.isArray(catData.turnos) && catData.turnos.length > 0)
       ? catData.turnos
-      : (Array.isArray(ld.turnos) && ld.turnos.length > 0 ? ld.turnos : ["MAÑANA", "TARDE", "DOBLE TURNO", "NOCTURNO", "SABATINO"]);
+      : (Array.isArray(ld.turnos) && ld.turnos.length > 0 ? ld.turnos : ["MAÃ‘ANA", "TARDE", "DOBLE TURNO", "NOCTURNO", "SABATINO"]);
     const selTurno = document.getElementById('p-turno');
     if (selTurno) {
       selTurno.innerHTML = '<option value="">-- SELECCIONE TURNO --</option>' +
@@ -1484,35 +1486,35 @@ export function initAdminDashboard(dbInstance, user) {
 
   // --- GESTOR DE PLANES DE ESTUDIO DEL PLANTEL ---
   const PLANES_ESTUDIO_FALLBACK = {
-    "20000": { codigo: 20000, especialidad: null, mencion: null, nombre: "EDUCACIÓN INICIAL" },
-    "21000": { codigo: 21000, especialidad: null, mencion: null, nombre: "EDUCACIÓN PRIMARIA" },
+    "20000": { codigo: 20000, especialidad: null, mencion: null, nombre: "EDUCACIÃ“N INICIAL" },
+    "21000": { codigo: 21000, especialidad: null, mencion: null, nombre: "EDUCACIÃ“N PRIMARIA" },
     "31059": { codigo: 31059, especialidad: "MEDIA GENERAL", mencion: "CIENCIAS" },
     "31060": { codigo: 31060, especialidad: "MEDIA GENERAL", mencion: "CIENCIAS Y TECNOLOGIA" },
     "41048": { codigo: 41048, especialidad: "AGROPECUARIA", mencion: "ECOTURISMO" },
-    "41049": { codigo: 41049, especialidad: "AGROPECUARIA", mencion: "CIENCIAS AGRÍCOLAS Y PECUARIAS" },
-    "41052": { codigo: 41052, especialidad: "AGROPECUARIA", mencion: "TECNOLOGÍA DE LOS ALIMENTOS" },
-    "41056": { codigo: 41056, especialidad: "AGROPECUARIA", mencion: "CIENCIAS AGRÍCOLAS, OPCIÓN CACAO" },
-    "42000": { codigo: 42000, especialidad: "HIDROCARBUROS", mencion: "PETRÓLEO Y GAS NATURAL" },
-    "43291": { codigo: 43291, especialidad: "INDUSTRIAL", mencion: "ELECTRÓNICA" },
-    "43292": { codigo: 43292, especialidad: "INDUSTRIAL", mencion: "CONSTRUCCIÓN CIVIL" },
-    "43293": { codigo: 43293, especialidad: "INDUSTRIAL", mencion: "MECÁNICA TÉRMICA" },
+    "41049": { codigo: 41049, especialidad: "AGROPECUARIA", mencion: "CIENCIAS AGRÃCOLAS Y PECUARIAS" },
+    "41052": { codigo: 41052, especialidad: "AGROPECUARIA", mencion: "TECNOLOGÃA DE LOS ALIMENTOS" },
+    "41056": { codigo: 41056, especialidad: "AGROPECUARIA", mencion: "CIENCIAS AGRÃCOLAS, OPCIÃ“N CACAO" },
+    "42000": { codigo: 42000, especialidad: "HIDROCARBUROS", mencion: "PETRÃ“LEO Y GAS NATURAL" },
+    "43291": { codigo: 43291, especialidad: "INDUSTRIAL", mencion: "ELECTRÃ“NICA" },
+    "43292": { codigo: 43292, especialidad: "INDUSTRIAL", mencion: "CONSTRUCCIÃ“N CIVIL" },
+    "43293": { codigo: 43293, especialidad: "INDUSTRIAL", mencion: "MECÃNICA TÃ‰RMICA" },
     "43294": { codigo: 43294, especialidad: "INDUSTRIAL", mencion: "MECATRONICA" },
-    "43295": { codigo: 43295, especialidad: "INDUSTRIAL", mencion: "METALMECÁNICA" },
+    "43295": { codigo: 43295, especialidad: "INDUSTRIAL", mencion: "METALMECÃNICA" },
     "43298": { codigo: 43298, especialidad: "INDUSTRIAL", mencion: "TELEMATICA" },
     "44001": { codigo: 44001, especialidad: "TRANSPORTE MULTIMODAL", mencion: "TRANSPORTE TERRESTRE" },
-    "44004": { codigo: 44004, especialidad: "TRANSPORTE MULTIMODAL", mencion: "AERONÁUTICAS, OPCIÓN SERVICIOS AÉREOS" },
-    "45041": { codigo: 45041, especialidad: "SALUD", mencion: "ENFERMERÍA" },
+    "44004": { codigo: 44004, especialidad: "TRANSPORTE MULTIMODAL", mencion: "AERONÃUTICAS, OPCIÃ“N SERVICIOS AÃ‰REOS" },
+    "45041": { codigo: 45041, especialidad: "SALUD", mencion: "ENFERMERÃA" },
     "45043": { codigo: 45043, especialidad: "SALUD", mencion: "FARMACIA" },
-    "45045": { codigo: 45045, especialidad: "SALUD", mencion: "LABORATORIO CLÍNICO" },
-    "45049": { codigo: 45049, especialidad: "SALUD", mencion: "REGISTRO Y ESTADÍSTICA DE SALUD" },
-    "46067": { codigo: 46067, especialidad: "ECONOMÍA SOCIAL", mencion: "ADMINISTRACIÓN" },
-    "46068": { codigo: 46068, especialidad: "ECONOMÍA SOCIAL", mencion: "ADUANA" },
-    "46069": { codigo: 46069, especialidad: "ECONOMÍA SOCIAL", mencion: "ECONOMÍA DIGITAL" },
-    "46070": { codigo: 46070, especialidad: "ECONOMÍA SOCIAL", mencion: "CONTABILIDAD" },
-    "46071": { codigo: 46071, especialidad: "ECONOMÍA SOCIAL", mencion: "TURISMO" },
+    "45045": { codigo: 45045, especialidad: "SALUD", mencion: "LABORATORIO CLÃNICO" },
+    "45049": { codigo: 45049, especialidad: "SALUD", mencion: "REGISTRO Y ESTADÃSTICA DE SALUD" },
+    "46067": { codigo: 46067, especialidad: "ECONOMÃA SOCIAL", mencion: "ADMINISTRACIÃ“N" },
+    "46068": { codigo: 46068, especialidad: "ECONOMÃA SOCIAL", mencion: "ADUANA" },
+    "46069": { codigo: 46069, especialidad: "ECONOMÃA SOCIAL", mencion: "ECONOMÃA DIGITAL" },
+    "46070": { codigo: 46070, especialidad: "ECONOMÃA SOCIAL", mencion: "CONTABILIDAD" },
+    "46071": { codigo: 46071, especialidad: "ECONOMÃA SOCIAL", mencion: "TURISMO" },
     "48069": { codigo: 48069, especialidad: "ARTE", mencion: "ARTES AUDIOVISUALES" },
-    "49000": { codigo: 49000, especialidad: "EDUCACIÓN FÍSICA", mencion: "PROMOCIÓN DEL ENTRENAMIENTO DEPORTIVO" },
-    "49001": { codigo: 49001, especialidad: "EDUCACIÓN FÍSICA", mencion: "PROMOCIÓN DE LA ACTIVIDAD FÍSICA Y RECREACIÓN" }
+    "49000": { codigo: 49000, especialidad: "EDUCACIÃ“N FÃSICA", mencion: "PROMOCIÃ“N DEL ENTRENAMIENTO DEPORTIVO" },
+    "49001": { codigo: 49001, especialidad: "EDUCACIÃ“N FÃSICA", mencion: "PROMOCIÃ“N DE LA ACTIVIDAD FÃSICA Y RECREACIÃ“N" }
   };
 
   function obtenerPlanesEstudioCatalogo() {
@@ -1559,8 +1561,8 @@ export function initAdminDashboard(dbInstance, user) {
       const isChecked = Boolean(planesActivos && (planesActivos.hasOwnProperty(planCod) || planesActivos[planCod] !== undefined));
       
       let desc = '';
-      if (planCod === '20000') desc = 'EDUCACIÓN INICIAL';
-      else if (planCod === '21000') desc = 'EDUCACIÓN PRIMARIA';
+      if (planCod === '20000') desc = 'EDUCACIÃ“N INICIAL';
+      else if (planCod === '21000') desc = 'EDUCACIÃ“N PRIMARIA';
       else if (planData.mencion && planData.especialidad) desc = `${planData.especialidad} - ${planData.mencion}`;
       else if (planData.mencion) desc = planData.mencion;
       else if (planData.especialidad) desc = planData.especialidad;
@@ -1624,7 +1626,7 @@ export function initAdminDashboard(dbInstance, user) {
      document.getElementById('p-uid').value = '';
      document.getElementById('modal-plantel-title').innerText = plantel ? 'Editar Plantel' : 'Nuevo Plantel';
      
-     // Poblar los selectores dinámicamente desde sgh_catalogos
+     // Poblar los selectores dinÃ¡micamente desde sgh_catalogos
      poblarSelectoresPlantel();
 
      const userMun = (userData?.rol === 'munadmin') 
@@ -1649,7 +1651,7 @@ export function initAdminDashboard(dbInstance, user) {
        asegurarOpcionEnSelect(document.getElementById('p-dependencia'), plantel.dependencia || 'NACIONAL');
        document.getElementById('p-cod-dependencia').value = plantel.codigos?.dependencia?.[0] || '';
        
-       // Ubicación Geográfica
+       // UbicaciÃ³n GeogrÃ¡fica
        const ubicVal = plantel['ubicacion-geografica'] || plantel.ubicacion || '';
        asegurarOpcionEnSelect(document.getElementById('p-ubicacion'), ubicVal);
 
@@ -1851,7 +1853,7 @@ export function initAdminDashboard(dbInstance, user) {
          
        } catch(err) {
          console.error(err);
-         showConfirm("Error", "Ocurrió un problema guardando el plantel.", "danger");
+         showConfirm("Error", "OcurriÃ³ un problema guardando el plantel.", "danger");
        } finally {
          btn.disabled = false;
          btn.innerText = 'Guardar Plantel';
@@ -1872,12 +1874,12 @@ export function initAdminDashboard(dbInstance, user) {
           }
         } catch (e) {
           console.error(e);
-          showConfirm("Error", "Ocurrió un problema cargando las listas.", "danger");
+          showConfirm("Error", "OcurriÃ³ un problema cargando las listas.", "danger");
           return;
         }
       }
       
-      // En vez de construir un menú selector, vamos directo al editor
+      // En vez de construir un menÃº selector, vamos directo al editor
       if (nombreLista && tipo) {
           window.renderEditorLista(nombreLista, tipo, null);
       }
@@ -1896,7 +1898,7 @@ export function initAdminDashboard(dbInstance, user) {
       if(btnAdd) {
           btnAdd.onclick = async () => {
               if(tipo === 'array') {
-                  const val = await showPrompt('Nuevo Valor', 'Ingrese el valor para añadir a la lista:');
+                  const val = await showPrompt('Nuevo Valor', 'Ingrese el valor para aÃ±adir a la lista:');
                   if(val && val.trim()) {
                       if(!catalogosGlobal.listas_desplegables[nombre]) catalogosGlobal.listas_desplegables[nombre] = [];
                       catalogosGlobal.listas_desplegables[nombre].push(val.trim().toUpperCase());
@@ -1904,12 +1906,12 @@ export function initAdminDashboard(dbInstance, user) {
                       document.getElementById('btn-guardar-listas').style.display = 'block';
                   }
               } else if (tipo === 'object') {
-                  const res = await showPromptDual('Añadir Situación Laboral', 'Ingrese la clave corta y su descripción correspondiente:', '', '');
+                  const res = await showPromptDual('AÃ±adir SituaciÃ³n Laboral', 'Ingrese la clave corta y su descripciÃ³n correspondiente:', '', '');
                   if(res && res.key.trim() && res.val.trim()) {
                       let k = res.key.trim().toUpperCase();
                       if(!catalogosGlobal[nombre]) catalogosGlobal[nombre] = {};
                       if(catalogosGlobal[nombre][k]) {
-                          showConfirm("Atención", "Esa clave ya existe en la lista.", "danger");
+                          showConfirm("AtenciÃ³n", "Esa clave ya existe en la lista.", "danger");
                           return;
                       }
                       catalogosGlobal[nombre][k] = res.val.trim().toUpperCase();
@@ -1944,7 +1946,7 @@ export function initAdminDashboard(dbInstance, user) {
               btnDiv.style.marginTop = '20px';
               
               const btnEdit = document.createElement('button');
-              btnEdit.innerHTML = '✏️ Editar';
+              btnEdit.innerHTML = 'âœï¸ Editar';
               btnEdit.style.cssText = 'flex: 1; background: #f8fafc; border: 1px solid #e2e8f0; color: var(--primary-color); padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem;';
               btnEdit.onclick = async () => {
                   const newVal = await showPrompt('Editar Valor', 'Modifique el valor:', item);
@@ -1956,10 +1958,10 @@ export function initAdminDashboard(dbInstance, user) {
               };
               
               const btnDel = document.createElement('button');
-              btnDel.innerHTML = '🗑️ Eliminar';
+              btnDel.innerHTML = 'ðŸ—‘ï¸ Eliminar';
               btnDel.style.cssText = 'flex: 1; background: #fee2e2; border: 1px solid #fecaca; color: #dc2626; padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem;';
               btnDel.onclick = async () => {
-                  if(await showConfirm('Eliminar ítem', '¿Seguro que deseas eliminar este elemento de la lista?')) {
+                  if(await showConfirm('Eliminar Ã­tem', 'Â¿Seguro que deseas eliminar este elemento de la lista?')) {
                       catalogosGlobal.listas_desplegables[nombre].splice(index, 1);
                       window.renderEditorLista(nombre, tipo, selectedBtn);
                       document.getElementById('btn-guardar-listas').style.display = 'block';
@@ -2012,10 +2014,10 @@ export function initAdminDashboard(dbInstance, user) {
               btnDiv.style.marginTop = '20px';
               
               const btnEdit = document.createElement('button');
-              btnEdit.innerHTML = '✏️ Editar';
+              btnEdit.innerHTML = 'âœï¸ Editar';
               btnEdit.style.cssText = 'flex: 1; background: #f8fafc; border: 1px solid #e2e8f0; color: var(--primary-color); padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem;';
               btnEdit.onclick = async () => {
-                  const res = await showPromptDual('Editar Situación Laboral', 'Modifique la clave y/o descripción:', key, obj[key]);
+                  const res = await showPromptDual('Editar SituaciÃ³n Laboral', 'Modifique la clave y/o descripciÃ³n:', key, obj[key]);
                   if(!res || !res.key.trim() || !res.val.trim()) return;
                   
                   let k = res.key.trim().toUpperCase();
@@ -2023,7 +2025,7 @@ export function initAdminDashboard(dbInstance, user) {
                   
                   if(k !== key) {
                       if(catalogosGlobal[nombre][k]) {
-                          showConfirm("Atención", "Esa clave ya existe en la lista.", "danger");
+                          showConfirm("AtenciÃ³n", "Esa clave ya existe en la lista.", "danger");
                           return;
                       }
                       catalogosGlobal[nombre][k] = newVal;
@@ -2037,10 +2039,10 @@ export function initAdminDashboard(dbInstance, user) {
               };
               
               const btnDel = document.createElement('button');
-              btnDel.innerHTML = '🗑️ Eliminar';
+              btnDel.innerHTML = 'ðŸ—‘ï¸ Eliminar';
               btnDel.style.cssText = 'flex: 1; background: #fee2e2; border: 1px solid #fecaca; color: #dc2626; padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem;';
               btnDel.onclick = async () => {
-                  if(await showConfirm('Eliminar Clave', '¿Seguro que quieres eliminar esta situación laboral? Esto podría afectar a los empleados que ya la tengan asignada.')) {
+                  if(await showConfirm('Eliminar Clave', 'Â¿Seguro que quieres eliminar esta situaciÃ³n laboral? Esto podrÃ­a afectar a los empleados que ya la tengan asignada.')) {
                       delete catalogosGlobal[nombre][key];
                       window.renderEditorLista(nombre, tipo, selectedBtn);
                       document.getElementById('btn-guardar-listas').style.display = 'block';
@@ -2065,24 +2067,24 @@ export function initAdminDashboard(dbInstance, user) {
           try {
               catalogosGlobal.ultima_actualizacion = new Date().toISOString();
               await safeSetDoc(doc(db, "sistema", "catalogos_maestros"), catalogosGlobal);
-              btnGuardarListas.innerText = '✅ Guardado Exitoso';
+              btnGuardarListas.innerText = 'âœ… Guardado Exitoso';
               btnGuardarListas.style.background = '#10b981';
               setTimeout(() => {
                   btnGuardarListas.style.display = 'none';
-                  btnGuardarListas.innerText = '💾 Guardar Cambios';
+                  btnGuardarListas.innerText = 'ðŸ’¾ Guardar Cambios';
                   btnGuardarListas.disabled = false;
                   btnGuardarListas.style.background = 'var(--success)';
               }, 2000);
           } catch(err) {
               console.error(err);
-              showConfirm("Error", "Ocurrió un problema al guardar los cambios.", "danger");
-              btnGuardarListas.innerText = '💾 Guardar Cambios';
+              showConfirm("Error", "OcurriÃ³ un problema al guardar los cambios.", "danger");
+              btnGuardarListas.innerText = 'ðŸ’¾ Guardar Cambios';
               btnGuardarListas.disabled = false;
           }
       });
   }
 
-  // --- EXPORTACIÓN DE NÓMINA A EXCEL (.XLSX) MULTI-ROL ---
+  // --- EXPORTACIÃ“N DE NÃ“MINA A EXCEL (.XLSX) MULTI-ROL ---
   const modalSelMunNomina = document.getElementById('modal-seleccionar-municipio-nomina');
   const selMunNomina = document.getElementById('sel-municipio-nomina-modal');
   const btnCancelarSelMunNomina = document.getElementById('btn-cancelar-sel-mun-nomina');
@@ -2113,10 +2115,10 @@ export function initAdminDashboard(dbInstance, user) {
     const modalLabel = document.getElementById('modal-nomina-label');
 
     if (isMunAdmin && userMun) {
-      // Caso 3: munadmin selecciona por Nuevo Epónimo del plantel o Todos los del municipio
-      if (modalTitle) modalTitle.innerHTML = `<span>📥</span> Descargar Nómina - Municipio ${userMun}`;
-      if (modalDesc) modalDesc.textContent = 'Seleccione si desea descargar la nómina completa de todo el municipio o la de un plantel específico por su Nuevo Epónimo:';
-      if (modalLabel) modalLabel.textContent = 'Plantel (Nuevo Epónimo) / Ámbito:';
+      // Caso 3: munadmin selecciona por Nuevo EpÃ³nimo del plantel o Todos los del municipio
+      if (modalTitle) modalTitle.innerHTML = `<span>ðŸ“¥</span> Descargar NÃ³mina - Municipio ${userMun}`;
+      if (modalDesc) modalDesc.textContent = 'Seleccione si desea descargar la nÃ³mina completa de todo el municipio o la de un plantel especÃ­fico por su Nuevo EpÃ³nimo:';
+      if (modalLabel) modalLabel.textContent = 'Plantel (Nuevo EpÃ³nimo) / Ãmbito:';
 
       selMunNomina.innerHTML = '<option value="">Cargando planteles del municipio...</option>';
       modalSelMunNomina.style.display = 'flex';
@@ -2142,22 +2144,22 @@ export function initAdminDashboard(dbInstance, user) {
         plantelesOpciones.sort((a, b) => a.eponimo.localeCompare(b.eponimo));
 
         selMunNomina.innerHTML = `
-          <option value="TODOS">⭐ TODOS LOS PLANTELES DEL MUNICIPIO (${userMun})</option>
+          <option value="TODOS">â­ TODOS LOS PLANTELES DEL MUNICIPIO (${userMun})</option>
           ${plantelesOpciones.map(p => `<option value="${p.cod}">${p.eponimo} (DEA: ${p.cod})</option>`).join('')}
         `;
       } catch (err) {
-        console.error("Error cargando planteles para modal de nómina:", err);
-        selMunNomina.innerHTML = `<option value="TODOS">⭐ TODOS LOS PLANTELES DEL MUNICIPIO (${userMun})</option>`;
+        console.error("Error cargando planteles para modal de nÃ³mina:", err);
+        selMunNomina.innerHTML = `<option value="TODOS">â­ TODOS LOS PLANTELES DEL MUNICIPIO (${userMun})</option>`;
       }
     } else {
       // Caso 2: superadmin y zonadmin seleccionan municipio o TODOS (consolidado estatal)
-      if (modalTitle) modalTitle.innerHTML = '<span>📥</span> Descargar Nómina Institucional';
-      if (modalDesc) modalDesc.textContent = 'Como usuario de nivel Estadal, seleccione el ámbito o municipio cuya nómina desea exportar en formato Excel (.xlsx):';
-      if (modalLabel) modalLabel.textContent = 'Ámbito Territorial / Municipio:';
+      if (modalTitle) modalTitle.innerHTML = '<span>ðŸ“¥</span> Descargar NÃ³mina Institucional';
+      if (modalDesc) modalDesc.textContent = 'Como usuario de nivel Estadal, seleccione el Ã¡mbito o municipio cuya nÃ³mina desea exportar en formato Excel (.xlsx):';
+      if (modalLabel) modalLabel.textContent = 'Ãmbito Territorial / Municipio:';
 
       selMunNomina.innerHTML = `
         <option value="">-- SELECCIONE MUNICIPIO O CONSOLIDADO --</option>
-        <option value="TODOS" style="font-weight: bold; color: #1e3a8a;">⭐ TODOS LOS MUNICIPIOS (CONSOLIDADO ESTATAL)</option>
+        <option value="TODOS" style="font-weight: bold; color: #1e3a8a;">â­ TODOS LOS MUNICIPIOS (CONSOLIDADO ESTATAL)</option>
         ${MUNICIPIOS_MERIDA.map(m => `<option value="${m}">${m}</option>`).join('')}
       `;
       modalSelMunNomina.style.display = 'flex';
@@ -2168,7 +2170,7 @@ export function initAdminDashboard(dbInstance, user) {
     btnConfirmarSelMunNomina.addEventListener('click', () => {
       const valorElegido = selMunNomina ? selMunNomina.value.trim().toUpperCase() : '';
       if (!valorElegido) {
-        showToast("Por favor, seleccione una opción para continuar.", "warning");
+        showToast("Por favor, seleccione una opciÃ³n para continuar.", "warning");
         return;
       }
       cerrarModalSelMunNomina();
@@ -2206,11 +2208,11 @@ export function initAdminDashboard(dbInstance, user) {
       const isTodosMunicipios = (municipio === 'TODOS');
 
       if (plantelCod) {
-        showToast(`Generando nómina del Plantel ${plantelCod}...`, "info", 4000);
+        showToast(`Generando nÃ³mina del Plantel ${plantelCod}...`, "info", 4000);
       } else if (isTodosMunicipios) {
-        showToast("Generando nómina consolidada de todo el Estado Mérida...", "info", 5000);
+        showToast("Generando nÃ³mina consolidada de todo el Estado MÃ©rida...", "info", 5000);
       } else {
-        showToast(`Generando nómina del Municipio ${municipio}...`, "info", 4000);
+        showToast(`Generando nÃ³mina del Municipio ${municipio}...`, "info", 4000);
       }
 
       // 1. Consultar cargos_personal en Firestore (con Escudo de Memoria)
@@ -2219,7 +2221,7 @@ export function initAdminDashboard(dbInstance, user) {
       let listaPersonalCache = null;
 
       if (window._cacheExportPersonal[cacheKey]) {
-        console.log(`[Zero-Cost Shield] Cargando ${cacheKey} desde caché de memoria.`);
+        console.log(`[Zero-Cost Shield] Cargando ${cacheKey} desde cachÃ© de memoria.`);
         listaPersonalCache = window._cacheExportPersonal[cacheKey];
       } else {
         let snapPersonal;
@@ -2270,10 +2272,10 @@ export function initAdminDashboard(dbInstance, user) {
         console.warn("Aviso consultando planteles para enriquecer Excel:", errP);
       }
 
-      // 3. Extraer funcionarios, descartar registros vacíos / huérfanos y ordenar
+      // 3. Extraer funcionarios, descartar registros vacÃ­os / huÃ©rfanos y ordenar
       const listaPersonal = listaPersonalCache
         .filter(emp => {
-          const ced = (emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÉDULA'] || '').toString().trim();
+          const ced = (emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÃ‰DULA'] || '').toString().trim();
           const nom = (emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || emp['APELLIDOS Y NOMBRES'] || emp['NOMBRE Y APELLIDO'] || '').toString().trim();
           return !!(ced || nom);
         });
@@ -2310,7 +2312,7 @@ export function initAdminDashboard(dbInstance, user) {
         const pNombreNominal = pInfo['nombre-plantel']?.nominal || '';
         const pNuevoEponimo = pInfo['nombre-plantel']?.['nuevo-eponimo'] || pInfo['nombre-plantel']?.nuevo_eponimo || '';
 
-        const pEstado = pInfo.estado || emp['estado'] || 'MÉRIDA';
+        const pEstado = pInfo.estado || emp['estado'] || 'MÃ‰RIDA';
         const pMunicipio = pInfo.municipio || emp['municipio'] || (isTodosMunicipios ? '' : municipio) || '';
         const pParroquia = pInfo.parroquia || emp['parroquia'] || '';
 
@@ -2324,7 +2326,7 @@ export function initAdminDashboard(dbInstance, user) {
         const pTurnos = pInfo['turno-plantel'] || '';
         const pUbicacion = pInfo['ubicacion-geografica'] || '';
 
-        const cedulaNum = emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÉDULA'] || '';
+        const cedulaNum = emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÃ‰DULA'] || '';
         const nacionalidad = emp['nacionalidad'] || (String(cedulaNum).startsWith('E') ? 'E' : 'V');
 
         const priNombre = emp['primer-nombre'] || emp.primer_nombre || '';
@@ -2341,69 +2343,69 @@ export function initAdminDashboard(dbInstance, user) {
         const horasAdmin = Number(emp['horas-administrativas'] || emp['HORAS ADMINISTRATIVAS']) || 0;
 
         return {
-          'N°': index + 1,
-          // 1. Identificación y Datos Personales
+          'NÂ°': index + 1,
+          // 1. IdentificaciÃ³n y Datos Personales
           'Nacionalidad': nacionalidad,
-          'Cédula': cedulaNum,
+          'CÃ©dula': cedulaNum,
           'Apellidos y Nombres': nombreCompleto.toUpperCase(),
-          'Género': emp['genero'] || emp['GENERO'] || '',
+          'GÃ©nero': emp['genero'] || emp['GENERO'] || '',
           'Fecha de Nacimiento': emp['fecha-nacimiento'] || emp['FECHA DE NACIMIENTO'] || '',
           'Edad': emp['edad'] || emp['EDAD'] || '',
           'Estado Civil': emp['estado-civil'] || emp['ESTADO CIVIL'] || '',
           'Lugar de Nacimiento': emp['lugar-nacimiento'] || emp['LUGAR DE NACIMIENTO'] || '',
 
-          // 2. Ubicación y Contacto
-          'Teléfono Habitación': emp['tel-habitacion'] || emp['TELEFONO HABITACION'] || '',
-          'Teléfono Celular': emp['tel-celular'] || emp['TELEFONO CELULAR'] || '',
-          'Teléfono Oficina': emp['tel-oficina'] || emp['TELEFONO OFICINA'] || '',
-          'Correo Electrónico': emp['correo'] || emp['CORREO ELECTRONICO'] || '',
-          'Dirección de Habitación': emp['direccion'] || emp['DIRECCION'] || '',
+          // 2. UbicaciÃ³n y Contacto
+          'TelÃ©fono HabitaciÃ³n': emp['tel-habitacion'] || emp['TELEFONO HABITACION'] || '',
+          'TelÃ©fono Celular': emp['tel-celular'] || emp['TELEFONO CELULAR'] || '',
+          'TelÃ©fono Oficina': emp['tel-oficina'] || emp['TELEFONO OFICINA'] || '',
+          'Correo ElectrÃ³nico': emp['correo'] || emp['CORREO ELECTRONICO'] || '',
+          'DirecciÃ³n de HabitaciÃ³n': emp['direccion'] || emp['DIRECCION'] || '',
 
-          // 3. Formación Académica
-          'Nivel de Instrucción': emp['nivel-instruccion'] || emp['instruccion'] || emp['NIVEL DE INSTRUCCIÓN'] || '',
-          'Profesión / Título': emp['profesion'] || emp['PROFESIÓN'] || emp['PROFESION'] || '',
+          // 3. FormaciÃ³n AcadÃ©mica
+          'Nivel de InstrucciÃ³n': emp['nivel-instruccion'] || emp['instruccion'] || emp['NIVEL DE INSTRUCCIÃ“N'] || '',
+          'ProfesiÃ³n / TÃ­tulo': emp['profesion'] || emp['PROFESIÃ“N'] || emp['PROFESION'] || '',
 
           // --- COLUMNAS TERRITORIALES (PUNTO 1) ---
           'Estado': pEstado,
           'Municipio': pMunicipio,
           'Parroquia': pParroquia,
 
-          'Denominación': pDenominacion,
+          'DenominaciÃ³n': pDenominacion,
           'Nombre Nominal': pNombreNominal,
-          'Nuevo Epónimo': pNuevoEponimo,
+          'Nuevo EpÃ³nimo': pNuevoEponimo,
 
-          // 4. Ubicación Administrativa y Cargo
-          'Código Plantel (DEA)': deaEmp,
-          'Cód. Dependencia': pCodDependencia,
-          'Cód. Estadístico': pCodEstadistico,
+          // 4. UbicaciÃ³n Administrativa y Cargo
+          'CÃ³digo Plantel (DEA)': deaEmp,
+          'CÃ³d. Dependencia': pCodDependencia,
+          'CÃ³d. EstadÃ­stico': pCodEstadistico,
           'Dependencia': pDependencia,
           'Niveles-Modalidades': pNivelesMod,
           'Turno(s)': pTurnos,
-          'Ubicación Geográfica': pUbicacion,
-          'Ubicación Administrativa': emp['ubicacion-administrativa'] || emp['UBICACIÓN ADMINISTRATIVA'] || '',
+          'UbicaciÃ³n GeogrÃ¡fica': pUbicacion,
+          'UbicaciÃ³n Administrativa': emp['ubicacion-administrativa'] || emp['UBICACIÃ“N ADMINISTRATIVA'] || '',
           'Tipo de Personal': emp['tipo-personal'] || emp['TIPO PERSONAL'] || '',
-          'Subcategoría': emp['subcategoria'] || emp['SUB CATEGORIA 1 TP'] || '',
+          'SubcategorÃ­a': emp['subcategoria'] || emp['SUB CATEGORIA 1 TP'] || '',
           'Cargo': emp['cargo'] || emp['CARGO'] || '',
-          'Código RAC': emp['codigo-rac'] || emp['codigo-cargo'] || emp['CODIGO RAC'] || '',
-          'Condición': emp['titular'] || emp['TITULAR'] || '',
+          'CÃ³digo RAC': emp['codigo-rac'] || emp['codigo-cargo'] || emp['CODIGO RAC'] || '',
+          'CondiciÃ³n': emp['titular'] || emp['TITULAR'] || '',
           'Fecha de Ingreso': emp['fecha-ingreso'] || emp['FECHA DE INGRESO'] || '',
-          'Años de Antigüedad': emp['antiguedad'] || emp['ANTIGUEDAD'] || '',
+          'AÃ±os de AntigÃ¼edad': emp['antiguedad'] || emp['ANTIGUEDAD'] || '',
           'Turnos que Atiende': emp['turnos-atiende'] || emp['TURNOS QUE ATIENDE'] || '',
 
-          // 5. Carga Horaria y Pedagógica
-          'Horas Académicas': horasAcad,
+          // 5. Carga Horaria y PedagÃ³gica
+          'Horas AcadÃ©micas': horasAcad,
           'Horas Administrativas': horasAdmin,
-          'Atiende Matrícula': emp['atiende-matricula'] || emp['ATIENDE MATRICUAL'] || '',
+          'Atiende MatrÃ­cula': emp['atiende-matricula'] || emp['ATIENDE MATRICUAL'] || '',
           'Nivel / Modalidad': emp['nivel-modalidad'] || emp['NIVEL O MODALIDAD'] || '',
           'Especialidad que Imparte': emp['especialidad-imparte'] || emp['ESPECIALIDAD QUE IMPARTE EL DOCENTE'] || '',
 
-          // 6. Situación Laboral
-          'Situación Laboral': emp['situacion-laboral'] || emp['SITUACIÓN DEL TRABAJADOR'] || '',
-          'Observaciones': emp['observaciones'] || emp['OBSERVACIÓN'] || emp['OBSERVACION'] || '',
+          // 6. SituaciÃ³n Laboral
+          'SituaciÃ³n Laboral': emp['situacion-laboral'] || emp['SITUACIÃ“N DEL TRABAJADOR'] || '',
+          'Observaciones': emp['observaciones'] || emp['OBSERVACIÃ“N'] || emp['OBSERVACION'] || '',
 
-          // 7. Dotación y Bienestar Social
+          // 7. DotaciÃ³n y Bienestar Social
           'Talla Camisa': emp['talla-camisa'] || emp['TALLA DE CAMISA'] || '',
-          'Talla Pantalón': emp['talla-pantalon'] || emp['TALLA DE PANTALÓN'] || '',
+          'Talla PantalÃ³n': emp['talla-pantalon'] || emp['TALLA DE PANTALÃ“N'] || '',
           'Talla Zapato': emp['talla-zapato'] || emp['TALLA DE ZAPATO'] || '',
           'Actividad Deportiva': emp['actividad-deportiva'] || emp['ACTIVIDAD DEPORTIVA'] || '',
           'Actividad Cultural': emp['actividad-cultural'] || emp['ACTIVIDAD CULTURAL'] || '',
@@ -2411,13 +2413,13 @@ export function initAdminDashboard(dbInstance, user) {
           'Requiere Medicamento': emp['requiere-medicamento'] || emp['MEDICAMENTO'] || '',
           'Discapacidad': emp['discapacidad'] || emp['POSEE DISCAPACIDAD'] || '',
 
-          // 8. Organización Comunitaria y Electoral
+          // 8. OrganizaciÃ³n Comunitaria y Electoral
           'UBCH': emp['ubch'] || emp['UBCH'] || '',
           'Circuito Comunal': emp['circuito-comunal'] || emp['CIRCUITO COMUNAL'] || '',
-          'Centro de Votación': emp['centro-votacion'] || emp['CENTRO DE VOTACION'] || '',
+          'Centro de VotaciÃ³n': emp['centro-votacion'] || emp['CENTRO DE VOTACION'] || '',
           'Tipo de Vivienda': emp['tipo-vivienda'] || emp['TIPO DE VIVIENDA'] || '',
           'Material de Vivienda': emp['material-vivienda'] || emp['TIPO DE MATERIAL'] || '',
-          'Condición de Vivienda': emp['condicion-vivienda'] || emp['CONDICIÓN DE VIVIENDA'] || ''
+          'CondiciÃ³n de Vivienda': emp['condicion-vivienda'] || emp['CONDICIÃ“N DE VIVIENDA'] || ''
         };
       });
 
@@ -2433,7 +2435,7 @@ export function initAdminDashboard(dbInstance, user) {
       ws['!cols'] = colWidths;
 
       const wb = XLSX.utils.book_new();
-      const sheetName = isTodosMunicipios ? "Nómina Estadal" : (plantelCod ? "Nómina Plantel" : `Nómina ${municipio}`);
+      const sheetName = isTodosMunicipios ? "NÃ³mina Estadal" : (plantelCod ? "NÃ³mina Plantel" : `NÃ³mina ${municipio}`);
       XLSX.utils.book_append_sheet(wb, ws, sheetName.slice(0, 31));
 
       const fechaHoy = new Date().toISOString().slice(0, 10);
@@ -2450,10 +2452,10 @@ export function initAdminDashboard(dbInstance, user) {
       }
 
       XLSX.writeFile(wb, nombreArchivo);
-      showToast(`Nómina descargada con éxito en Excel (${filasExcel.length} registros).`, "success", 4500);
+      showToast(`NÃ³mina descargada con Ã©xito en Excel (${filasExcel.length} registros).`, "success", 4500);
 
     } catch (err) {
-      console.error("Error exportando nómina a Excel:", err);
+      console.error("Error exportando nÃ³mina a Excel:", err);
       showAlert("Error", "No se pudo generar el archivo Excel: " + err.message, "danger");
     } finally {
       setTimeout(() => {
@@ -2466,5 +2468,6 @@ export function initAdminDashboard(dbInstance, user) {
   window.exportarNominaMunicipalExcel = abrirModalSeleccionarNomina;
 
 }
+
 
 
