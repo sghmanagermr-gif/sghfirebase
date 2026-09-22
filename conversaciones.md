@@ -889,3 +889,25 @@ ombre-apellido). Por lo tanto, al generar el Excel, el sistema no encontraba la 
 > satisfactorio
 
 ---
+### Sesión 21 de Septiembre de 2026 (Actualización y Despliegue en Firebase Hosting)
+
+* **Emisor:** Usuario
+
+> **Mensaje del Usuario:**  
+> Se requiere actualizar firebase hosting
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se ejecutó la compilación de producción y el despliegue a producción en Firebase Hosting:
+> 1. Compilación limpia ejecutada con Vite (
+pm run build) sobre la versión **v2.12.2** generando el bundle en dist/.
+> 2. Despliegue de los archivos estáticos hacia el proyecto **sgh-merida** mediante Firebase CLI (
+px firebase-tools deploy --only hosting).
+> 3. Despliegue completado satisfactoriamente.
+> 
+> **URLs de Producción:**
+> - [https://sgh-merida.web.app](https://sgh-merida.web.app)
+> - [https://sgh-merida.firebaseapp.com](https://sgh-merida.firebaseapp.com)
+
+---
