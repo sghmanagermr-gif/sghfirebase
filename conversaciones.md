@@ -844,3 +844,48 @@ ombre-apellido). Por lo tanto, al generar el Excel, el sistema no encontraba la 
 > satisfactorios
 
 ---
+### Sesión 21 de Septiembre de 2026 (Responsividad Móvil y Corrección Exhaustiva de Mojibake / Emojis)
+
+* **Emisor:** Usuario
+
+> **Mensaje del Usuario:**  
+> En mantenimiento se vemal en pantallas pequeñas
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se realizaron ajustes de diseño responsivo para garantizar que el panel de estadísticas y los estados de alerta ("En mantenimiento") se adapten perfectamente a pantallas móviles y reducidas:
+> 1. Inyección de reglas CSS para evitar desbordamientos horizontales en `.stats-cards-grid` y contenedores con aviso de mantenimiento.
+> 2. Flexibilización del tamaño de fuente, márgenes y saltos de línea para preservar la legibilidad en pantallas menores a 768px.
+
+* **Emisor:** Usuario
+
+> **Mensaje del Usuario:**  
+> Creo que no revisaste muy bien, la imagen muestra que salen caracteres extraños
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Tras un análisis detallado de la imagen provista (modal "Eliminar Perfil" mostrando caracteres `âš ï,□`), se detectó un problema global de *mojibake* (emojis UTF-8 corrompidos por doble codificación histórica) en `webapp/src/admin.js`:
+> 1. Se identificaron y mapearon 233 secuencias corruptas a lo largo de todo el archivo.
+> 2. Se reemplazaron de forma sistemática por secuencias de escape Unicode puras y seguras (por ejemplo, `\u26A0\uFE0F` para ⚠️, `\u2705` para ✅, `\uD83D\uDDD1\uFE0F` para 🗑️, `\uD83D\uDD11` para 🔑, `\u23F3` para ⏳, etc.).
+> 3. Se corrigieron símbolos especiales de reportes como el ordinal `N°` (`\u00B0`).
+> 4. Se verificó con scripts de validación de caracteres que el 100% del archivo está limpio y libre de mojibake.
+> 5. Se compiló el proyecto sin errores (`npm run build`), se actualizó la versión a **v2.12.2**, y se realizó commit y push al repositorio remoto.
+
+* **Emisor:** Usuario
+
+> **Mensaje del Usuario:**  
+> satisfecho
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Confirmación y cierre con éxito de las tareas solicitadas.
+
+* **Emisor:** Usuario
+
+> **Mensaje del Usuario:**  
+> satisfactorio
+
+---
