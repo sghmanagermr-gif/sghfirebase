@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SGH - v2.11.26</title>
+  <title>SGH - v2.11.27</title>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
@@ -186,7 +186,7 @@
     <section id="dashboard-view" class="view">
       <nav class="navbar">
         <div class="nav-brand">
-          <span style="color: var(--primary-color);">SGH</span> v2.11.26
+          <span style="color: var(--primary-color);">SGH</span> v2.11.27
         </div>
         <div class="nav-user">
           <span id="user-display-name" style="font-weight: 500;">Cargando...</span>
@@ -215,7 +215,7 @@
     <!-- HEADER / NAVBAR -->
     <nav class="navbar" style="width: 100%; margin-bottom: 20px;">
       <div class="nav-brand">
-        <span style="color: var(--primary-color);">SGH</span> v2.11.26
+        <span style="color: var(--primary-color);">SGH</span> v2.11.27
       </div>
       <div class="nav-user" style="display: flex; gap: 15px; align-items: center;">
 
@@ -1488,6 +1488,86 @@
             </div>
 
           </div>
+
+          <!-- EXTENDED STATS PARA MUNADMIN -->
+          <div id="extended-stats-container" style="display: none; margin-top: 30px;">
+              
+            <!-- Fila 1: Distribución Personal y Matrícula -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 20px;">
+              
+              <!-- Discriminación de Personal -->
+              <div class="glass-panel" style="padding: 20px;">
+                <h3 style="margin-top: 0; color: #1e293b; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; font-size: 1.1rem;">Discriminación de Personal</h3>
+                <div style="display: flex; justify-content: space-around; margin-top: 15px;">
+                  <div style="text-align: center;">
+                    <div style="font-size: 1.5rem; font-weight: bold; color: #3b82f6;" id="stat-docentes">0</div>
+                    <div style="font-size: 0.85rem; color: #64748b;">Docente</div>
+                  </div>
+                  <div style="text-align: center;">
+                    <div style="font-size: 1.5rem; font-weight: bold; color: #f59e0b;" id="stat-administrativos">0</div>
+                    <div style="font-size: 0.85rem; color: #64748b;">Admin.</div>
+                  </div>
+                  <div style="text-align: center;">
+                    <div style="font-size: 1.5rem; font-weight: bold; color: #10b981;" id="stat-obreros">0</div>
+                    <div style="font-size: 0.85rem; color: #64748b;">Obrero</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Matrícula -->
+              <div class="glass-panel" style="padding: 20px;">
+                <h3 style="margin-top: 0; color: #1e293b; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; font-size: 1.1rem;">Estatus de Matrícula</h3>
+                <div class="stat-group" style="display: flex; flex-direction: column; margin-top: 15px;">
+                  <div style="display: flex; gap: 10px; text-align: center; margin-bottom: 10px;">
+                    <div style="flex: 1; padding: 10px; background: #f8fafc; border-radius: 8px; border: 1px solid #f1f5f9;">
+                      <div id="stat-mat-cargada" style="font-size: 1.2rem; font-weight: 800; color: #16a34a;">0</div>
+                      <div style="font-size: 0.7rem; color: #64748b;">Cargados</div>
+                    </div>
+                    <div style="flex: 1; padding: 10px; background: #f8fafc; border-radius: 8px; border: 1px solid #f1f5f9;">
+                      <div id="stat-mat-pendiente" style="font-size: 1.2rem; font-weight: 800; color: #ef4444;">0</div>
+                      <div style="font-size: 0.7rem; color: #64748b;">Pendientes</div>
+                    </div>
+                  </div>
+                  <div id="stat-mat-lista" style="flex: 1; min-height: 120px; max-height: 200px; overflow-y: auto; padding-right: 5px; font-size: 0.8rem;">
+                     <!-- JavaScript inyectará la lista aquí -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fila 2: Situación Laboral y Jubilaciones -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+              
+              <!-- Situación Laboral -->
+              <div class="glass-panel" style="padding: 20px;">
+                <h3 style="margin-top: 0; color: #1e293b; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; font-size: 1.1rem;">Situación Laboral</h3>
+                <div id="stat-situacion-laboral" style="margin-top: 15px; max-height: 250px; overflow-y: auto;">
+                  <div style="text-align: center; color: #94a3b8; font-size: 0.9rem;">Cargando datos...</div>
+                </div>
+              </div>
+
+              <!-- Personal por Jubilarse -->
+              <div class="glass-panel" style="padding: 20px;">
+                <h3 style="margin-top: 0; color: #1e293b; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; font-size: 1.1rem;">Personal por Jubilarse (Próximo Año)</h3>
+                <p style="font-size: 0.8rem; color: #64748b; margin-top: 0;">Con 25 años de servicio acumulados a Marzo.</p>
+                <div style="margin-top: 10px; max-height: 215px; overflow-y: auto;">
+                  <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                    <thead style="background: #f1f5f9; position: sticky; top: 0;">
+                      <tr>
+                        <th style="padding: 8px; text-align: left; border-bottom: 1px solid #cbd5e1;">Plantel (DEA)</th>
+                        <th style="padding: 8px; text-align: center; border-bottom: 1px solid #cbd5e1;">Cantidad</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbody-jubilables">
+                      <tr><td colspan="2" style="text-align: center; padding: 10px; color: #94a3b8;">Cargando datos...</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
         </div>
 
         <!-- TAB: VALIDACIÓN -->
@@ -1718,6 +1798,19 @@
         <!-- TAB: DESPLIEGUE -->
         <div id="admin-tab-despliegue" class="admin-tab">
           <h2 style="font-size: 1.8rem; color: var(--primary-color); margin: 0 0 5px;">Control de Despliegue Global</h2>
+          
+          <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
+            <label style="display: block; font-size: 0.9rem; font-weight: bold; margin-bottom: 8px; color: var(--text-main);">Nivel de Acceso Concedido en este Despliegue (Modo Coacción):</label>
+            <select id="sel-modo-operacion" style="width: 100%; max-width: 500px; padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.9rem;">
+              <option value="TOTAL">Apertura Total (Matrícula y Personal)</option>
+              <option value="SOLO_MATRICULA">Solo Modificar Matrícula (Bloquea Personal)</option>
+              <option value="SOLO_AGREGAR_PERSONAL">Solo Cargar Nuevo Personal (Bloquea Editar y Matrícula)</option>
+              <option value="SOLO_EDITAR_PERSONAL">Solo Editar Personal Existente (Bloquea Nuevo y Matrícula)</option>
+              <option value="PERSONAL_COMPLETO">Personal Completo (Agrega y Edita, Bloquea Matrícula)</option>
+            </select>
+            <p style="margin: 5px 0 0 0; font-size: 0.8rem; color: var(--text-muted);">Esta configuración limita estrictamente lo que los directores (plaadmin) pueden ver y hacer mientras su plantel esté abierto.</p>
+          </div>
+
           <div style="display: flex; gap: 15px; margin-bottom: 20px;">
             <button id="btn-save-despliegue" style="width: auto;">Guardar Despliegue</button>
             <span id="despliegue-status" style="color: var(--success); align-self: center;"></span>

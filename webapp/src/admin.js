@@ -1,4 +1,4 @@
-﻿import { safeSetDoc, safeUpdateDoc, safeAddDoc } from './dbUtils.js';
+import { safeSetDoc, safeUpdateDoc, safeAddDoc } from './dbUtils.js';
 import { doc, getDoc, setDoc, updateDoc, collection, query, where, getCountFromServer, getDocs, onSnapshot, deleteDoc, deleteField } from 'firebase/firestore';
 import * as XLSX from 'xlsx';
 import { showToast, showAlert } from './uiUtils.js';
@@ -287,7 +287,7 @@ export function initAdminDashboard(dbInstance, user) {
     });
   });
 
-  // Cargar EstadÃ­sticas (Tab por Defecto)
+  // Cargar Estadísticas (Tab por Defecto)
   async function loadEstadisticas() {
     try {
       // Plan Cero Costo: getCountFromServer (1 read por 1000 documentos)
@@ -295,35 +295,186 @@ export function initAdminDashboard(dbInstance, user) {
       let qUsuarios = collection(db, 'usuarios');
       let qPlanteles = query(collection(db, 'usuarios'), where('rol', '==', 'plaadmin'));
 
-      if (userData?.rol === 'munadmin') {
-          const mun = (userData.jerarquia?.municipio || userData.municipio || '').trim().toUpperCase();
-          if (mun) {
-              qPersonal = query(qPersonal, where('municipio', '==', mun));
-              // Un munadmin solo gestiona plaadmin, asÃ­ que su contador de usuarios debe reflejar solo esos.
-              qUsuarios = query(collection(db, 'usuarios'), where('rol', '==', 'plaadmin'), where('jerarquia.municipio', '==', mun));
-              qPlanteles = query(collection(db, 'usuarios'), where('rol', '==', 'plaadmin'), where('jerarquia.municipio', '==', mun));
+      const isMunAdmin = (userData?.rol === 'munadmin');
+      const mun = isMunAdmin ? (userData.jerarquia?.municipio || userData.municipio || '').trim().toUpperCase() : '';
+
+      if (isMunAdmin && mun) {
+          qPersonal = query(qPersonal, where('municipio', '==', mun));
+          // Un munadmin solo gestiona plaadmin, así que su contador de usuarios debe reflejar solo esos.
+          qUsuarios = query(collection(db, 'usuarios'), where('rol', '==', 'plaadmin'), where('jerarquia.municipio', '==', mun));
+          qPlanteles = query(collection(db, 'usuarios'), where('rol', '==', 'plaadmin'), where('jerarquia.municipio', '==', mun));
+      }
+
+      // Función auxiliar para obtener conteo o fallback
+      async function safeGetCount(q) {
+          try {
+              const snap = await getCountFromServer(q);
+              return snap.data().count;
+          } catch(e) {
+              console.warn('Error en conteo (posible cuota):', e);
+              return 'En mantenimiento';
           }
       }
 
-      const snapPersonal = await getCountFromServer(qPersonal);
-      const totalPersonal = snapPersonal.data().count;
-      
-      const snapUsuarios = await getCountFromServer(qUsuarios);
-      const totalUsuarios = snapUsuarios.data().count;
-
-      const snapPlanteles = await getCountFromServer(qPlanteles);
-      const totalPlanteles = snapPlanteles.data().count;
-
+      const totalPersonal = await safeGetCount(qPersonal);
+      const totalUsuarios = await safeGetCount(qUsuarios);
+      const totalPlanteles = await safeGetCount(qPlanteles);
+  
       const elUsuarios = document.getElementById('stat-usuarios');
       const elPersonal = document.getElementById('stat-personal');
       const elPlanteles = document.getElementById('stat-planteles');
       
       if(elUsuarios) elUsuarios.textContent = totalUsuarios;
-      
       if(elPersonal) elPersonal.textContent = totalPersonal;
       if(elPlanteles) elPlanteles.textContent = totalPlanteles;
+
+      // =========================================
+      // EXTENSIÓN MUNADMIN (Cálculo a Memoria Zero-Cost)
+      // =========================================
+      const extCont = document.getElementById('extended-stats-container');
+      if (isMunAdmin && mun) {
+          if (extCont) extCont.style.display = 'block';
+          
+          try {
+              // 1. Descargar planteles del municipio
+              const snapPlantelesReal = await getDocs(query(collection(db, 'planteles'), where('municipio', '==', mun)));
+              
+              let matCargada = 0;
+              let matPendiente = 0;
+              const plantelesMapeados = {}; // Para la tabla de jubilados
+              
+              const arrCargados = [];
+              const arrPendientes = [];
+
+              snapPlantelesReal.forEach(doc => {
+                  const p = doc.data();
+                  const dea = p['codigos'] ? p['codigos'].plantel : (p['codigo-dea'] || 'SIN_DEA');
+                  const nombreEponimo = (p['nombre-plantel']?.['nuevo-eponimo'] || p['nombre-plantel']?.nuevo_eponimo || p['nombre-plantel']?.nominal || p.denominacion || 'Desconocido').toString().trim().toUpperCase();
+                  plantelesMapeados[dea] = nombreEponimo;
+
+                  const tGen = parseInt(p.matricula?.['total-gen']) || 0;
+                  const tVac = parseInt(p.matricula?.['total-vac-gen']) || 0;
+                  const hasMatricula = (tGen > 0 || tVac > 0);
+
+                  if (hasMatricula) {
+                      matCargada++;
+                      arrCargados.push(nombreEponimo);
+                  } else {
+                      matPendiente++;
+                      arrPendientes.push(nombreEponimo);
+                  }
+              });
+
+              const elMatCargada = document.getElementById('stat-mat-cargada');
+              const elMatPendiente = document.getElementById('stat-mat-pendiente');
+              const elMatLista = document.getElementById('stat-mat-lista');
+              
+              if (elMatCargada) elMatCargada.textContent = matCargada;
+              if (elMatPendiente) elMatPendiente.textContent = matPendiente;
+
+              if (elMatLista) {
+                  arrCargados.sort();
+                  arrPendientes.sort();
+                  let htmlLista = '';
+                  arrPendientes.forEach(nombre => {
+                      htmlLista += `<div style="padding: 6px 0; border-bottom: 1px solid #f1f5f9; color: #ef4444; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${nombre}">🔴 ${nombre}</div>`;
+                  });
+                  arrCargados.forEach(nombre => {
+                      htmlLista += `<div style="padding: 6px 0; border-bottom: 1px solid #f1f5f9; color: #16a34a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${nombre}">🟢 ${nombre}</div>`;
+                  });
+                  elMatLista.innerHTML = htmlLista;
+              }
+
+              // 2. Descargar cargos personal del municipio
+              const snapCargos = await getDocs(query(collection(db, 'cargos_personal'), where('municipio', '==', mun)));
+              
+              let cDocente = 0, cAdmin = 0, cObrero = 0;
+              const mapSituacion = {};
+              const jubilablesPorPlantel = {};
+
+              const hoy = new Date();
+              let anioJubilacion = hoy.getFullYear() + 1;
+              const pivoteJubilacion = new Date(`${anioJubilacion}-03-31`);
+              
+              const fechaLimiteIngreso = new Date(pivoteJubilacion);
+              fechaLimiteIngreso.setFullYear(fechaLimiteIngreso.getFullYear() - 25);
+
+              snapCargos.forEach(doc => {
+                  const emp = doc.data();
+                  const tipo = (emp['tipo-personal'] || '').toUpperCase();
+                  if (tipo.includes('DOCENTE')) cDocente++;
+                  else if (tipo.includes('ADMINISTRATIVO')) cAdmin++;
+                  else if (tipo.includes('OBRERO')) cObrero++;
+
+                  const sit = (emp['situacion-laboral'] || 'NO DEFINIDA').toUpperCase();
+                  mapSituacion[sit] = (mapSituacion[sit] || 0) + 1;
+
+                  const strIngreso = emp['fecha-ingreso'];
+                  if (strIngreso) {
+                      const dtIngreso = new Date(strIngreso);
+                      if (!isNaN(dtIngreso.getTime()) && dtIngreso <= fechaLimiteIngreso) {
+                          const dea = emp['codigo-plantel'] || 'SIN_DEA';
+                          jubilablesPorPlantel[dea] = (jubilablesPorPlantel[dea] || 0) + 1;
+                      }
+                  }
+              });
+
+              const elDocentes = document.getElementById('stat-docentes');
+              const elAdministrativos = document.getElementById('stat-administrativos');
+              const elObreros = document.getElementById('stat-obreros');
+              
+              if (elDocentes) elDocentes.textContent = cDocente;
+              if (elAdministrativos) elAdministrativos.textContent = cAdmin;
+              if (elObreros) elObreros.textContent = cObrero;
+
+              const containerSit = document.getElementById('stat-situacion-laboral');
+              if (containerSit) {
+                  containerSit.innerHTML = '';
+                  const sitArr = Object.entries(mapSituacion).sort((a,b) => b[1] - a[1]);
+                  if (sitArr.length === 0) {
+                      containerSit.innerHTML = '<div style="text-align: center; color: #94a3b8; font-size: 0.9rem;">Sin datos registrados.</div>';
+                  } else {
+                      for (const [s, count] of sitArr) {
+                          containerSit.innerHTML += `
+                              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding: 8px 0; font-size: 0.95rem;">
+                                  <span style="color: #334155;">${s}</span>
+                                  <span style="font-weight: bold; color: #0f172a;">${count}</span>
+                              </div>
+                          `;
+                      }
+                  }
+              }
+
+              const tbodyJub = document.getElementById('tbody-jubilables');
+              if (tbodyJub) {
+                  tbodyJub.innerHTML = '';
+                  const jubArr = Object.entries(jubilablesPorPlantel).sort((a,b) => b[1] - a[1]);
+                  
+                  if (jubArr.length === 0) {
+                      tbodyJub.innerHTML = '<tr><td colspan="2" style="text-align: center; padding: 10px; color: #94a3b8;">No hay personal por jubilarse proyectado.</td></tr>';
+                  } else {
+                      jubArr.forEach(([dea, count]) => {
+                          tbodyJub.innerHTML += `
+                              <tr>
+                                  <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; color: #334155; font-size: 0.85rem;"><strong>${plantelesMapeados[dea] || 'Desconocido'}</strong><br><span style="color:#64748b; font-size: 0.75rem;">DEA: ${dea}</span></td>
+                                  <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; color: #0f172a; text-align: center; font-weight: bold;">${count}</td>
+                              </tr>
+                          `;
+                      });
+                  }
+              }
+          } catch (extErr) {
+              console.warn("Bloqueado por Cuota Firebase en Extensión:", extErr);
+              const containerSit = document.getElementById('stat-situacion-laboral');
+              if (containerSit) containerSit.innerHTML = '<div style="color: red; text-align: center; font-size: 0.9rem; font-weight: bold;">En mantenimiento (Límite de Google)</div>';
+          }
+
+      } else {
+          if (extCont) extCont.style.display = 'none';
+      }
+
     } catch(err) {
-      console.error("Error cargando estadÃ­sticas", err);
+      console.error("Error cargando estadísticas", err);
     }
   }
   
@@ -755,7 +906,7 @@ export function initAdminDashboard(dbInstance, user) {
     "TULIO FEBRES", "ZEA"
   ];
 
-  let configActual = { municipios_activos: [], excepciones: [] };
+  let configActual = { municipios_activos: [], excepciones: [], modo_operacion: 'TOTAL' };
   const docRef = doc(db, 'configuracion', 'despliegue');
 
   async function loadConfig() {
@@ -763,11 +914,16 @@ export function initAdminDashboard(dbInstance, user) {
       const snap = await getDoc(docRef);
       if (snap.exists()) {
         configActual = snap.data();
+        const selModo = document.getElementById('sel-modo-operacion');
+        if (selModo && configActual.modo_operacion) {
+          selModo.value = configActual.modo_operacion;
+        }
       } else {
         await safeSetDoc(docRef, configActual);
       }
       if (!configActual.municipios_activos) configActual.municipios_activos = [];
       if (!configActual.excepciones) configActual.excepciones = [];
+      if (!configActual.modo_operacion) configActual.modo_operacion = 'TOTAL';
       
       renderGrid();
       renderExcepciones();
@@ -838,9 +994,14 @@ export function initAdminDashboard(dbInstance, user) {
     try {
       btnSave.textContent = 'Guardando...';
       btnSave.disabled = true;
+      const selModo = document.getElementById('sel-modo-operacion');
+      if (selModo) {
+        configActual.modo_operacion = selModo.value;
+      }
       await safeUpdateDoc(docRef, {
         municipios_activos: configActual.municipios_activos,
-        excepciones: configActual.excepciones
+        excepciones: configActual.excepciones,
+        modo_operacion: configActual.modo_operacion || 'TOTAL'
       });
       // Update cache
       sessionStorage.setItem('sgh_despliegue_config', JSON.stringify(configActual));

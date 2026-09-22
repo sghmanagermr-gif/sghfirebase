@@ -822,3 +822,12 @@ ode.js que el contenedor principal <main id="admin-main"> sufría un cierre prema
 - webapp/package.json
 - bitacora.md
 - conversaciones.md
+
+### v2.11.27 - Ajuste de Motor de Estadísticas y Validaciones Offline-First (21 de Septiembre de 2026)
+
+1. **Refactorización de Panel Munadmin:** Se implementó el panel extendido para el Coordinador Municipal (Discriminación de Personal, Situación Laboral, Matrícula y Jubilables).
+2. **Tolerancia a Fallos de Cuota (Offline-First):** Se inyectó la función `safeGetCount` para atrapar excepciones de 'Quota Exceeded' de Firebase (Plan Spark) y mostrar visualmente la etiqueta 'En mantenimiento' sin romper la interfaz.
+3. **Caché Híbrido:** Las tablas inferiores aprovechan `getDocs` con fallback a la caché persistente (IndexedDB) de Firebase para procesar datos sin incurrir en lecturas al servidor si la cuota fue excedida, comprobando la eficacia de la arquitectura Zero-Cost.
+4. **Corrección Visual de Matrícula:** Se sustituyó la presentación de números simples en el panel de Estatus de Matrícula por una lista escroleable donde se muestran los Epónimos de los planteles Cargados (??) y Pendientes (??).
+5. **Corrección de Lógica Falsa-Positiva:** Se modificó la validación de estado de carga de matrícula. Anteriormente se verificaba la variable transaccional `p.datos_completados`, la cual podía arrojar verdaderos en planteles con matrícula vacía por clicks accidentales. Ahora, la validación escanea matemáticamente la propiedad interna (`total-gen > 0 || total-vac-gen > 0`), eliminando discrepancias con los planteles vacíos (Ej: Amable Antonio Rangel).
+

@@ -728,3 +728,73 @@ ombre-apellido). Por lo tanto, al generar el Excel, el sistema no encontraba la 
 
 * **Mensaje del Usuario:**
 > Perfecto, estoy satisfecho
+
+---
+* **Fecha:** 21/09/2026
+* **Emisor:** Usuario
+
+> **Mensaje del Usuario:**  
+> Ok. Ahora necesito me ayudes a resolver algo: Por medidas de seguridad, Se requiere que al hacer un despliegue bien sea del estado, o un municipio o un plantel especifico, poder coaccionar al usuario plaadmin a:
+> Si es solo modificar matricula, que la pantalla del usuario plaadmin modifique matricula.
+> Si es solo agregar empleados, que la pantalla del usuario plaadmin pueda solo agregar usuario.
+> Si es solo modificar empleados, que la pantalla del usuario plaadmin pueda solo modificar sus empleados.
+> Si es solo agregar y modificar empleados, que la pantalla del usuario plaadmin pueda agregar y modificar sus empleados.
+> ¿Que respuesta me tienes para eso?
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> (Se analizó el requerimiento y se ofreció realizar el control mediante un Nivel de Acceso Concedido en el despliegue. Se preguntó si esta configuración de Coacción debería ser a nivel Global, por Municipio o por Plantel).
+
+* **Emisor:** Usuario
+
+> **Mensaje del Usuario:**  
+> global
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> ¡Perfecto! La opción "Global" es definitivamente la más sensata y limpia administrativamente hablando.
+> Acabo de inyectar toda la lógica en el código base siguiendo exactamente el plan:
+> 1. Agregué el menú desplegable en el Control de Despliegue.
+> 2. Le enseñé al "cerebro" (admin.js) a guardar esta configuración en Firebase.
+> 3. Le enseñé al guardián de la puerta (main.js) a revisar esta configuración de forma oculta en milisegundos cuando entra un plaadmin, aplicando "candados" invisibles. Todo procesado localmente para que consuma 0 cuotas adicionales.
+
+* **Emisor:** Usuario
+
+> **Mensaje del Usuario:**  
+> Guardé el municipio santos marquina con en nivel de acceso: Solo matrícula..., entré a un plantel de ese municipio, y pude acceder a los empleados, y hasta pude hacer una modificación
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> ¡Vaya, qué buen ojo! Tienes toda la razón, descubriste un "agujero" en la matriz del sistema.
+> Resulta que mi lógica anterior funcionaba perfecto al inicio (ocultando los paneles), pero descubrí que cuando interactuabas con la página o cargaban los datos de Firestore en segundo plano, el sistema original tiene funciones "tercas" (como mostrarFormularioPersonal()) que inyectan una orden de style.display = 'block' forzando a que los paneles del personal vuelvan a aparecer.
+> Acabo de inyectar una técnica de coacción con CSS Dinámico Bulletproof. Ahora el "Guardián" inyecta una regla de estilo global oculta con directivas !important. Esto significa que no importa cuántas veces o qué función del sistema intente forzar la reaparición, el navegador tiene una regla suprema.
+
+* **Emisor:** Usuario
+
+> **Mensaje del Usuario:**  
+> ok, trata de pensar un poco mas allá. al seleccionar SOLO_MATRICULA oculta perfectamente lo referente al personal. Pero al seleccionar SOLO_EDITAR_PERSONAL puedo ver la tabla con los registro del personal adscrito al plantel y al hacer clic en editar no se ve el formulario para realizar dicha edición. Por favor evalúa cada opción: TOTAL (Por defecto), SOLO_MATRICULA (ya sirve), SOLO_AGREGAR_PERSONAL, SOLO_EDITAR_PERSONAL y PERSONAL_COMPLETO. para que no tenga que estar solicitandote hacer más modificaciones al respecto
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> ¡Tienes toda la razón y agradezco la observación! Pensar en el flujo completo de "Solo Editar Personal" me hizo darme cuenta de un pequeño pero importante choque: si te ocultaba el formulario por completo con la orden de acero (CSS !important), la acción de *Editar* no tendría en dónde mostrarte los datos para que pudieras corregirlos.
+> He reprogramado la inyección de CSS !important para evaluar inteligentemente el estado y la visibilidad de los botones.
+> 1. TOTAL: Todo abierto.
+> 2. SOLO_MATRICULA: Oculta la tabla de personal y el formulario.
+> 3. SOLO_AGREGAR_PERSONAL: Matrícula bloqueada. Tabla visible pero botones de Editar/Eliminar ocultos. Formulario activo.
+> 4. SOLO_EDITAR_PERSONAL: Matrícula bloqueada. Tabla visible con acciones. Formulario invisible a menos que presione "Editar" (gracias a :has de CSS).
+> 5. PERSONAL_COMPLETO: Matrícula bloqueada. Personal 100% activo.
+
+* **Emisor:** Usuario
+
+> **Mensaje del Usuario:**  
+> satisfecho. copia todos los mensajes faltantes en conversaciones.md cronologicamente
+
+### Sesión 21 de Septiembre de 2026 (Panel Munadmin y Resolución de Firebase Quota)
+- **Usuario**: Solicitó que en el panel Estatus de Matrícula se visualice el nombre (epónimo) del plantel en lugar de la cantidad bruta. Solicitó investigar una discrepancia visual donde planteles sin matrícula cargada (ej. Amable Antonio Rangel y Doctor Miguel Otero Silva) aparecían como 'Cargados' (??).
+- **Agente**: Se reestructuró la UI para incorporar una lista scrollable con identificadores rojo/verde para planteles pendientes/cargados. Durante el proceso de diagnóstico, se comprobó que el error era un falso positivo generado por la variable genérica datos_completados del objeto Plantel, la cual podía estar en 	rue incluso con formularios de matrícula vacíos. Se reconstruyó la validación matemática apuntando directamente a p.matricula.total-gen > 0 y 	otal-vac-gen > 0.
+- **Usuario**: Validó la solución y dio confirmación de 'Estoy Satisfecho'.
+

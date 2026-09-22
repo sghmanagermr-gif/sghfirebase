@@ -1069,6 +1069,71 @@ async function checkPlantelData(codigoDEA) {
 async function mostrarCandado(codigoDEA, dataParcial) {
     showView('lock-screen');
     
+    // ==========================================
+    // SISTEMA DE COACCIÓN (MODOS DE OPERACIÓN) - BULLETPROOF CSS
+    // ==========================================
+    const sessionConfig = sessionStorage.getItem('sgh_despliegue_config');
+    if (sessionConfig) {
+        try {
+            const config = JSON.parse(sessionConfig);
+            const modo = config.modo_operacion || 'TOTAL';
+            
+            let styleTag = document.getElementById('style-coaccion');
+            if (!styleTag) {
+                styleTag = document.createElement('style');
+                styleTag.id = 'style-coaccion';
+                document.head.appendChild(styleTag);
+            }
+
+            let cssRules = '';
+            
+            // CSS rules with !important override any inline .style.display = 'block' from other scripts
+            if (modo === 'SOLO_MATRICULA') {
+                cssRules = `
+                    #seccion-personal-existente { display: none !important; }
+                    #seccion-registro-personal { display: none !important; }
+                `;
+            } 
+            else if (modo === 'SOLO_AGREGAR_PERSONAL') {
+                cssRules = `
+                    #btn-guardar-matricula { display: none !important; }
+                    #plantel-form input:not([readonly]), #plantel-form select { pointer-events: none !important; opacity: 0.6 !important; }
+                    #seccion-personal-existente .btn-editar, #seccion-personal-existente .btn-eliminar { display: none !important; }
+                `;
+            } 
+            else if (modo === 'SOLO_EDITAR_PERSONAL') {
+                cssRules = `
+                    #btn-guardar-matricula { display: none !important; }
+                    #plantel-form input:not([readonly]), #plantel-form select { pointer-events: none !important; opacity: 0.6 !important; }
+                    #seccion-registro-personal:not(:has(#banner-modo-edicion[style*="flex"])) { display: none !important; }
+                `;
+            } 
+            else if (modo === 'PERSONAL_COMPLETO') {
+                cssRules = `
+                    #btn-guardar-matricula { display: none !important; }
+                    #plantel-form input:not([readonly]), #plantel-form select { pointer-events: none !important; opacity: 0.6 !important; }
+                `;
+            }
+            
+            styleTag.innerHTML = cssRules;
+
+            // Also forcefully disable the inputs in the DOM to prevent 'Tab' key focusing
+            const secMatriculaForm = document.getElementById('plantel-form');
+            if (secMatriculaForm) {
+                const inputs = secMatriculaForm.querySelectorAll('input:not([readonly]), select');
+                const disableMatricula = (modo !== 'TOTAL' && modo !== 'SOLO_MATRICULA');
+                inputs.forEach(i => i.disabled = disableMatricula);
+            }
+            
+            // To be extra safe with the existing logic, apply inline disabling once
+            const btnMatricula = document.getElementById('btn-guardar-matricula');
+            if (btnMatricula && modo !== 'TOTAL' && modo !== 'SOLO_MATRICULA') {
+                btnMatricula.disabled = true;
+            }
+
+        } catch(e) { console.error("Error aplicando coacción CSS:", e); }
+    }
+    
     // Poblar Datos de Solo Lectura desde el Diccionario
     const dp = await findPlantel(codigoDEA);
     if (dp) {
