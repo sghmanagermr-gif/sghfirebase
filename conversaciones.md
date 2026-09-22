@@ -932,3 +932,23 @@ pm run build).
 px firebase-tools deploy --only hosting).
 
 ---
+### Sesión 21 de Septiembre de 2026 (Ajuste de Opciones de Roles en Registro y Despliegue v2.12.4)
+
+* **Emisor:** Usuario
+
+> **Mensaje del Usuario:**  
+> otro detalle: en las opciones de registro aparece: Coordinador de Zona (CDCE), Coordinador Municipal, Director de plantel. lo correcto es: Responsable SGH ZONA, Responsable SGH Municipal, Director de plantel
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se actualizaron las etiquetas del menú desplegable de selección de rol en el formulario de registro (webapp/index.html):
+> 1. Coordinador de Zona (CDCE) -> Responsable SGH ZONA (zonadmin).
+> 2. Coordinador Municipal -> Responsable SGH Municipal (munadmin).
+> 3. Director de Plantel -> Director de plantel (plaadmin).
+> 4. Se incrementó la versión a **v2.12.4** en package.json y index.html.
+> 5. Se compiló el proyecto (
+pm run build) y se desplegó a producción en Firebase Hosting (
+px firebase-tools deploy --only hosting).
+
+---
