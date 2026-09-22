@@ -387,4 +387,26 @@ body {
   transform: translateY(-1px);
 }
 
+/* 7. SPINNERS PARA TARJETAS ANALÍTICAS */
+.panel-card-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid rgba(37, 99, 235, 0.15);
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+}
 
+.panel-card-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px 10px;
+  color: #64748b;
+  font-size: 0.85rem;
+  font-weight: 500;
+  animation: pulse 1.8s ease-in-out infinite;
+}

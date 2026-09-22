@@ -336,15 +336,53 @@ export function initAdminDashboard(dbInstance, user) {
       
       if ((isMunAdmin && mun) || isEstadal) {
           if (extCont) extCont.style.display = 'block';
+
+          // Referencias a los contenedores y estados de carga
+          const discLoading = document.getElementById('stat-disc-loading');
+          const discContent = document.getElementById('stat-disc-content');
+          const matLoading = document.getElementById('stat-mat-loading');
+          const matContent = document.getElementById('stat-mat-content');
+          const containerSit = document.getElementById('stat-situacion-laboral');
+          const tbodyJub = document.getElementById('tbody-jubilables');
+
+          // 1. Mostrar estado de carga (spinners) en las 4 tarjetas
+          if (discLoading) discLoading.style.display = 'flex';
+          if (discContent) discContent.style.display = 'none';
+
+          if (matLoading) matLoading.style.display = 'flex';
+          if (matContent) matContent.style.display = 'none';
+
+          if (containerSit) {
+              containerSit.innerHTML = `
+                <div class="panel-card-loading" style="min-height: 140px;">
+                  <div class="panel-card-spinner"></div>
+                  <span>Cargando situación laboral...</span>
+                </div>`;
+          }
+
+          if (tbodyJub) {
+              tbodyJub.innerHTML = `
+                <tr>
+                  <td colspan="2" style="text-align: center; padding: 25px;">
+                    <div class="panel-card-loading" style="min-height: 80px;">
+                      <div class="panel-card-spinner"></div>
+                      <span>Calculando personal por jubilarse...</span>
+                    </div>
+                  </td>
+                </tr>`;
+          }
           
           try {
-              // 1. Descargar planteles
-              let snapPlantelesReal;
-              if (isMunAdmin) {
-                  snapPlantelesReal = await getDocs(query(collection(db, 'planteles'), where('municipio', '==', mun)));
-              } else {
-                  snapPlantelesReal = await getDocs(collection(db, 'planteles'));
-              }
+              // Descargas concurrentes en paralelo para máxima velocidad (Zero-Cost)
+              const pPlanteles = isMunAdmin 
+                  ? getDocs(query(collection(db, 'planteles'), where('municipio', '==', mun)))
+                  : getDocs(collection(db, 'planteles'));
+
+              const pCargos = isMunAdmin 
+                  ? getDocs(query(collection(db, 'cargos_personal'), where('municipio', '==', mun)))
+                  : getDocs(collection(db, 'cargos_personal'));
+
+              const [snapPlantelesReal, snapCargos] = await Promise.all([pPlanteles, pCargos]);
               
               let matCargada = 0;
               let matPendiente = 0;
@@ -420,14 +458,11 @@ export function initAdminDashboard(dbInstance, user) {
                   elMatLista.innerHTML = htmlLista;
               }
 
-              // 2. Descargar cargos personal
-              let snapCargos;
-              if (isMunAdmin) {
-                  snapCargos = await getDocs(query(collection(db, 'cargos_personal'), where('municipio', '==', mun)));
-              } else {
-                  snapCargos = await getDocs(collection(db, 'cargos_personal'));
-              }
-              
+              // Mostrar contenido de Estatus de Matrícula y ocultar su spinner
+              if (matLoading) matLoading.style.display = 'none';
+              if (matContent) matContent.style.display = 'flex';
+
+              // Procesar cargos personal
               let cDocente = 0, cAdmin = 0, cObrero = 0;
               const mapSituacion = {};
               const jubilablesPorClave = {}; // MunAdmin usa DEA, ZonAdmin usa Municipio
@@ -469,7 +504,11 @@ export function initAdminDashboard(dbInstance, user) {
               if (elAdministrativos) elAdministrativos.textContent = cAdmin;
               if (elObreros) elObreros.textContent = cObrero;
 
-              const containerSit = document.getElementById('stat-situacion-laboral');
+              // Mostrar contenido de Discriminación de Personal y ocultar su spinner
+              if (discLoading) discLoading.style.display = 'none';
+              if (discContent) discContent.style.display = 'flex';
+
+              // Mostrar Situación Laboral
               if (containerSit) {
                   containerSit.innerHTML = '';
                   const sitArr = Object.entries(mapSituacion).sort((a,b) => b[1] - a[1]);
@@ -493,7 +532,7 @@ export function initAdminDashboard(dbInstance, user) {
                   thPlantel.textContent = isMunAdmin ? 'Plantel (DEA)' : 'Municipio';
               }
 
-              const tbodyJub = document.getElementById('tbody-jubilables');
+              // Mostrar Personal por Jubilarse
               if (tbodyJub) {
                   tbodyJub.innerHTML = '';
                   const jubArr = Object.entries(jubilablesPorClave).sort((a,b) => b[1] - a[1]);
@@ -515,8 +554,10 @@ export function initAdminDashboard(dbInstance, user) {
               }
           } catch (extErr) {
               console.warn("Bloqueado por Cuota Firebase en Extensión:", extErr);
-              const containerSit = document.getElementById('stat-situacion-laboral');
-              if (containerSit) containerSit.innerHTML = '<div style="color: red; text-align: center; font-size: 0.9rem; font-weight: bold;">En mantenimiento (Límite de Google)</div>';
+              if (discLoading) discLoading.innerHTML = '<div style="color: #ef4444; font-size: 0.85rem; text-align: center; padding: 15px;">En mantenimiento</div>';
+              if (matLoading) matLoading.innerHTML = '<div style="color: #ef4444; font-size: 0.85rem; text-align: center; padding: 15px;">En mantenimiento</div>';
+              if (containerSit) containerSit.innerHTML = '<div style="color: #ef4444; text-align: center; font-size: 0.9rem; font-weight: bold; padding: 20px;">En mantenimiento (Límite de Google)</div>';
+              if (tbodyJub) tbodyJub.innerHTML = '<tr><td colspan="2" style="color: #ef4444; text-align: center; font-size: 0.85rem; padding: 15px;">En mantenimiento (Límite de Google)</td></tr>';
           }
 
       } else {

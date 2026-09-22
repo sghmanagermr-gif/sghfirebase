@@ -804,3 +804,43 @@ ombre-apellido). Por lo tanto, al generar el Excel, el sistema no encontraba la 
 - **Agente**: Propuso un plan de implementaci�n para refactorizar la l�gica en dmin.js, inyectando bifurcaciones condicionales que, al detectar un usuario de nivel Estadal, realizan peticiones sin el filtro de where, agrupando luego los resultados usando diccionarios en memoria y adaptando el renderizado de la UI de acuerdo al alcance (Escuelas para Munadmin, Municipios para Zonadmin). Adem�s se alert� que esto podr�a estresar el Plan Spark si se abusa sin el cach� offline.
 - **Usuario**: Aprob� el plan y posteriormente confirm� su satisfacci�n con los resultados obtenidos.
 
+
+### Sesión 21 de Septiembre de 2026 (Indicadores de Carga y Optimización de Consultas)
+
+* **Emisor:** Usuario
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."
+> 
+> Estoy notando que los datos de: Discriminación de Personal, Estatus de Matrícula, Situación Laboral, Personal por Jubilarse (Próximo Año); se tardan en cargar. se puede colocar un spinner para que luzca mejor
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> ¡Listo! He implementado los indicadores de carga (spinners) para que las 4 tarjetas luzcan elegantes y dinámicas mientras se consultan los datos:
+> 
+> 1. **Animación visual en cada tarjeta:**
+>    - **Discriminación de Personal:** En lugar de mostrar ceros vacíos, ahora muestra una animación circular con el mensaje *"Cargando distribución de personal..."*. En cuanto termina la consulta, los números aparecen de inmediato.
+>    - **Estatus de Matrícula:** Muestra un spinner animado con el mensaje *"Cargando estatus de matrícula..."* mientras organiza los planteles cargados y pendientes.
+>    - **Situación Laboral:** Despliega el indicador *"Cargando situación laboral..."* mientras agrupa los cargos.
+>    - **Personal por Jubilarse:** En la tabla se muestra el indicador *"Calculando personal por jubilarse..."* mientras proyecta las fechas de ingreso con los 25 años de servicio.
+> 
+> 2. **Carga más rápida:**
+>    - Aproveché para hacer que la consulta de los datos escolares y la del talento humano se ejecuten en paralelo (al mismo tiempo) en lugar de una detrás de la otra, lo que reduce el tiempo total de espera aproximadamente a la mitad.
+> 
+> 3. **Protección en caso de límite:**
+>    - Si la cuota de Google llega a saturarse, las tarjetas ahora informan de manera clara y en rojo que el módulo está *"En mantenimiento"*, en lugar de quedarse congeladas.
+> 
+> 4. **Actualización de Versión:**
+>    - Se actualizó el sistema a la versión **2.12.1**.
+> 
+> ---
+> 
+> **¿Los resultados fueron satisfactorios?**
+
+* **Emisor:** Usuario
+
+> **Mensaje del Usuario:**  
+> satisfactorios
+
+---

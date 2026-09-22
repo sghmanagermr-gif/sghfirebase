@@ -839,3 +839,29 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre prema
 3. **Redise�o Estatus de Matr�cula (Sem�foro Zonal):** La lista de escuelas pas� a ser un consolidador de carga por Municipio, indicando la cantidad de planteles Cargados y Pendientes en la jurisdicci�n bajo un esquema visual de sem�foro (Verde, Amarillo, Rojo).
 4. **Refactorizaci�n Tabla Jubilables:** Se adapt� la renderizaci�n para mostrar el total consolidado de posibles jubilados por Municipio en la vista Zonal, preservando la vista por DEA (c�digo de plantel) en la vista Municipal.
 
+
+### v2.12.1 - Indicadores de Carga Visual (Spinners) y Descargas Concurrentes (21 de Septiembre de 2026)
+
+**1. Requerimientos:**
+- El usuario reportó latencia perceptible durante la carga de las estadísticas extendidas: *Discriminación de Personal*, *Estatus de Matrícula*, *Situación Laboral* y *Personal por Jubilarse (Próximo Año)*.
+- Solicitó la incorporación de spinners de carga para mejorar la retroalimentación visual (UX) y evitar que los paneles permanezcan estáticos en 0 o con textos planos mientras se procesan los datos.
+
+**2. Solución Técnica y Decisiones Arquitectónicas (Zero-Cost Optimization):**
+- **Paralelismo de Consultas Firestore:** Anteriormente, las descargas de las colecciones planteles y cargos_personal se ejecutaban de forma secuencial (wait encadenado). Se optimizó mediante Promise.all([pPlanteles, pCargos]), ejecutando ambas consultas concurrentemente en los servidores de Google. Esto redujo el tiempo total de transferencia a la mitad manteniendo exactamente el mismo consumo de cuota Spark.
+- **Spinners y Estados de Carga Modulares:**
+  - En styles.css se incorporaron las clases .panel-card-spinner (anillo circular azul con rotación fluida mediante @keyframes spin) y .panel-card-loading (animación de pulso continuo con tipografía muted).
+  - En index.html se crearon contenedores desacoplados de carga (stat-disc-loading, stat-mat-loading) y de contenido (stat-disc-content, stat-mat-content) para Discriminación de Personal y Estatus de Matrícula.
+  - En Situación Laboral y Jubilables se inyectaron directamente los spinners animados dentro de #stat-situacion-laboral y #tbody-jubilables al inicializar la consulta.
+- **Manejo Dinámico de Transiciones:** Al activarse loadEstadisticas(), cada tarjeta se resetea a su estado de carga; en cuanto finaliza el cálculo de cada bloque, su respectivo spinner se oculta de forma atómica y se devela el contenido calculado (display: flex / tabla).
+- **Tolerancia a Bloqueos de Cuota:** En caso de interrupción de red o saturación de cuota Spark, los spinners son reemplazados limpiamente por advertencias no intrusivas en rojo (*"En mantenimiento"*), evitando que el usuario quede esperando indefinidamente.
+- **Control SemVer:** Incremento de versión a **v2.12.1** en package.json e index.html.
+
+**3. Archivos Involucrados:**
+- webapp/src/admin.js
+- webapp/index.html
+- webapp/styles.css
+- webapp/package.json
+- itacora.md
+- conversaciones.md
+
+---
