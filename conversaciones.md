@@ -983,3 +983,9 @@ px firebase-tools deploy --only hosting).
 pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 ---
+* **Emisor:** Usuario
+
+> **Mensaje del Usuario:**  
+> Especto. los resultados son satisfactorios
+
+---
