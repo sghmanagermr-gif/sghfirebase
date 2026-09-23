@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, inMemoryPersistence, setPersistence } from "firebase/auth";
+import { getAuth, browserSessionPersistence, inMemoryPersistence, setPersistence } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -17,9 +17,9 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 
 // --- SESIÓN SÓLO POR PESTAÑA ---
+// Permite recargar con F5 sin perder sesión.
 // Al cerrar la pestaña o el navegador, la sesión se destruye automáticamente.
-// El usuario SIEMPRE tendrá que iniciar sesión al abrir una nueva pestaña o ventana.
-setPersistence(auth, inMemoryPersistence).catch(console.error);
+setPersistence(auth, browserSessionPersistence).catch(console.error);
 auth.languageCode = 'es';
 
 // Instancia Secundaria Fantasma (Para crear usuarios sin cerrar sesión del admin)

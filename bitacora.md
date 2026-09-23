@@ -1212,3 +1212,49 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 
 ---
 
+### v2.14.7 - Persistencia de Sesión por Pestaña y Sincronización Global de Versión (23 de Septiembre de 2026)
+
+**1. Requerimientos:**
+- Evitar que al presionar F5 o refrescar la página se solicite nuevamente iniciar sesión.
+- Sincronizar los indicadores visuales del número de versión en todos los puntos de la interfaz (Login, Barra de navegación, Título de la pestaña y Panel Administrativo).
+
+**2. Solución Técnica y Arquitectura:**
+- **Persistencia en Firebase Auth (`firebase.js` y `main.js`):** Se configuró `browserSessionPersistence` para la instancia de autenticación primaria. Esto preserva el estado de sesión activo durante refrescos o navegación dentro de la misma pestaña, cerrándose únicamente al cerrar la pestaña o el navegador completo.
+- **Sincronización Visual Global (`index.html`):** Se unificó el indicador de versión en la etiqueta `<title>`, en el encabezado de la tarjeta de Login, en la barra superior del Dashboard y en el header del Panel de Administración.
+- **Control SemVer y Despliegue:** Incremento de versión PARCHE a **v2.14.7**, compilación en Vite y despliegue en Firebase Hosting.
+
+**3. Archivos Involucrados:**
+- `webapp/package.json`
+- `webapp/index.html`
+- `webapp/src/firebase.js`
+- `webapp/src/main.js`
+- `bitacora.md`
+- `conversaciones.md`
+
+---
+
+### v2.14.8 - Soporte de Matrícula y Secciones por Grupos para Modalidad Especial y Estabilización DOM (23 de Septiembre de 2026)
+
+**1. Requerimientos:**
+- Permitir a los planteles de Modalidad Especial (que no poseen códigos de planes de estudio tradicionales) registrar matrícula y secciones organizadas por Grupos (Grupo A, Grupo B, Grupo C...).
+- Desplegar selector/campo de 'Cantidad de Grupos' que genere dinámicamente las tarjetas de grupos con campos de género femenino y masculino.
+- Calcular en tiempo real subtotales por grupo, total de la modalidad y sumar a la matrícula general del plantel.
+- Presentar el desglose de grupos en la ficha del plantel dentro del módulo de administración.
+- Resolver desbalance estructural de etiquetas en el DOM HTML que provocaba pantalla en blanco tras el inicio de sesión.
+
+**2. Solución Técnica y Arquitectura:**
+- **Estructura HTML (`index.html`):** Incorporación del contenedor `#bloque-especial` dentro de `#contenedor-matricula` con input maestro `#secEsp` y contenedor dinámico `#cont-dinamico-especial`. Corrección y cierre estricto de etiquetas `</div>` en bloques de media técnica y contenedor principal del panel de administración, validando balanceo al 100% de la jerarquía.
+- **Motor Dinámico de Grupos (`main.js`):** Implementación de `_renderCajasEspecial(numGrupos)` para generar los bloques de cada grupo con inputs `.mat-especial`. Vinculación al motor de cálculo en tiempo real y persistencia estructurada en Firestore bajo `matricula.modalidades.especial = { grupos, 'total-especial-mas', 'total-especial-fem', 'total-especial' }`. Soporte en `mostrarCandado` para detectar `modalidad.includes('ESPECIAL')` e hidratar datos existentes.
+- **Enrutador de Inicio de Sesión (`main.js`):** Soporte unificado para roles `plaadmin` y `plant`, asegurando el despliegue inmediato de la vista del plantel.
+- **Módulo Administrativo (`admin.js`):** Adaptación del renderizado de la ficha del plantel para iterar sobre `mat.modalidades?.especial?.grupos` e imprimir filas detalladas de cada grupo con sus totales y secciones.
+- **Control SemVer y Despliegue:** Incremento de versión PARCHE a **v2.14.8**, compilación con Vite y despliegue a producción en Firebase Hosting.
+
+**3. Archivos Involucrados:**
+- `webapp/package.json`
+- `webapp/index.html`
+- `webapp/src/main.js`
+- `webapp/src/admin.js`
+- `bitacora.md`
+- `conversaciones.md`
+
+---

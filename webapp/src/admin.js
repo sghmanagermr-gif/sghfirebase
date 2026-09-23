@@ -3163,8 +3163,8 @@ export function initAdminDashboard(dbInstance, user) {
       const mtData = mediaMat['media-tecnica'] || {};
       
       Object.keys(sp).forEach(planId => {
-        // Ignorar planes básicos de inicial y primaria
-        if (planId === '20000' || planId === '21000') return;
+        // Ignorar planes básicos de inicial y primaria y modalidad especial
+        if (planId === '20000' || planId === '21000' || planId === 'especial') return;
         
         const plan = sp[planId];
         if (typeof plan === 'object' && plan !== null) {
@@ -3183,6 +3183,25 @@ export function initAdminDashboard(dbInstance, user) {
           });
         }
       });
+    }
+
+    // 4. Modalidad Especial (Grupos)
+    if (mat.modalidades?.especial) {
+      const esp = mat.modalidades.especial;
+      if (esp.grupos && typeof esp.grupos === 'object' && Object.keys(esp.grupos).length > 0) {
+        Object.keys(esp.grupos).sort().forEach(letra => {
+          const g = esp.grupos[letra];
+          const f = parseInt(g.fem || 0);
+          const m = parseInt(g.mas || 0);
+          filas.push({ nivel: `Educación Especial - Grupo ${letra}`, sec: 1, f, m, tot: f + m });
+        });
+      } else if (esp['total-especial']) {
+        const totEsp = parseInt(esp['total-especial'] || 0);
+        const totEspF = parseInt(esp['total-especial-fem'] || 0);
+        const totEspM = parseInt(esp['total-especial-mas'] || 0);
+        const secEsp = p["secciones-planes"]?.especial || "-";
+        filas.push({ nivel: "Educación Especial", sec: secEsp, f: totEspF, m: totEspM, tot: totEsp });
+      }
     }
     
     if (filas.length === 0) {

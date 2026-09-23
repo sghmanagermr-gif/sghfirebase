@@ -42,7 +42,7 @@ import { safeSetDoc, safeUpdateDoc, safeAddDoc } from './dbUtils.js';
 import './style.css';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, getDoc, setDoc, deleteField, onSnapshot } from 'firebase/firestore';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, signOut, setPersistence, inMemoryPersistence } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, signOut, setPersistence, browserSessionPersistence } from 'firebase/auth';
 import { initAuth } from './auth.js';
 
 const firebaseConfig = {
@@ -184,15 +184,20 @@ initAuth(auth, db, {
   },
   onLogin: async (userData) => {
       window.sgh_user_data = userData;
-      if(userData.rol === 'plaadmin') {
-        const dp = await findPlantel(userData.jerarquia.plantel_codigo);
-        const nombrePlantel = dp ? dp.nombre_plantel : "Plantel Desconocido";
-        userDisplayName.textContent = `${userData.jerarquia.plantel_codigo} - ${nombrePlantel}`;
-        await checkPlantelData(userData.jerarquia.plantel_codigo);
-    } else {
-        userDisplayName.textContent = `${userData.nombre}`;
-        // showView('dashboard-view'); // Removido por el motor dinámico
-    }
+      if (userData.rol === 'plaadmin' || userData.rol === 'plant') {
+        const codPlantel = userData.jerarquia?.plantel_codigo;
+        const dp = await findPlantel(codPlantel);
+        const nombrePlantel = dp ? (dp['nombre-plantel']?.nominal || dp.nombre_plantel || "Plantel") : "Plantel";
+        if (userDisplayName) userDisplayName.textContent = `${codPlantel || ''} - ${nombrePlantel}`;
+        if (codPlantel) {
+          await checkPlantelData(codPlantel);
+        } else {
+          showView('lock-screen');
+        }
+      } else {
+        if (userDisplayName) userDisplayName.textContent = `${userData.nombre || ''}`;
+        showView('lock-screen');
+      }
   },
 
   onAdmin: async (userData) => {
@@ -417,7 +422,7 @@ document.getElementById('login-form')?.addEventListener('submit', async (e) => {
     if (linkRegister) { linkRegister.style.pointerEvents = 'none'; linkRegister.style.opacity = '0.5'; }
     if (linkForgot) { linkForgot.style.pointerEvents = 'none'; linkForgot.style.opacity = '0.5'; }
 
-    await setPersistence(auth, inMemoryPersistence);
+    await setPersistence(auth, browserSessionPersistence);
     
     await signInWithEmailAndPassword(auth, email, password);
   } catch (error) {
@@ -620,6 +625,36 @@ function _renderCajasPrimaria(numSec) {
     cont.innerHTML = html;
 }
 
+function _renderCajasEspecial(numGrupos) {
+    const cont = document.getElementById('cont-dinamico-especial');
+    if (!cont) return;
+    if (numGrupos === 0) {
+        cont.innerHTML = '';
+        return;
+    }
+    let html = '<div style="margin-top: 15px;">';
+    html += '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px;">';
+    for (let i = 0; i < numGrupos; i++) {
+        const letra = numGrupos === 1 ? 'U' : _letraGrupo(i);
+        const ident = 'especial-' + letra;
+        html += '<div style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; background: #f8fafc;">';
+        html += '  <h5 style="margin: 0 0 8px; font-size: 0.85rem; color: #1e293b; text-align: center;">Grupo ' + letra + '</h5>';
+        html += '  <div style="display: flex; gap: 10px;">';
+        html += '    <div style="flex: 1;">';
+        html += '      <label style="font-size: 0.65rem; color: #64748b; display: block; text-align: center;">FEM</label>';
+        html += '      <input type="number" class="mat-input mat-especial" data-grupo="' + ident + '" data-sexo="F" min="0" value="" style="width: 100%; padding: 0.3rem; text-align: center; border: 1px solid #cbd5e1; border-radius: 4px;">';
+        html += '    </div>';
+        html += '    <div style="flex: 1;">';
+        html += '      <label style="font-size: 0.65rem; color: #64748b; display: block; text-align: center;">MAS</label>';
+        html += '      <input type="number" class="mat-input mat-especial" data-grupo="' + ident + '" data-sexo="M" min="0" value="" style="width: 100%; padding: 0.3rem; text-align: center; border: 1px solid #cbd5e1; border-radius: 4px;">';
+        html += '    </div>';
+        html += '  </div>';
+        html += '</div>';
+    }
+    html += '</div></div>';
+    cont.innerHTML = html;
+}
+
 document.addEventListener('input', (e) => {
     if (e.target.classList.contains('sec-master-input')) {
         const val = parseInt(e.target.value) || 0;
@@ -630,6 +665,8 @@ document.addEventListener('input', (e) => {
             _renderCajasInicial(tipo, val);
         } else if (plan === '21000') {
             _renderCajasPrimaria(val);
+        } else if (e.target.id === 'secEsp' || e.target.getAttribute('data-tipo') === 'especial') {
+            _renderCajasEspecial(val);
         }
         
         // Recalcular matrícula al redibujar
@@ -663,9 +700,11 @@ document.getElementById('plantel-form')?.addEventListener('input', (e) => {
         const totPri = sumInputs('.mat-primaria');
         const totMed = sumInputs('.mat-media');
         const totTec = sumInputs('.mat-tecnica');
+        const totEsp = sumInputs('.mat-especial');
         
         if(document.getElementById('tot-inicial')) document.getElementById('tot-inicial').textContent = totIni;
         if(document.getElementById('tot-primaria')) document.getElementById('tot-primaria').textContent = totPri;
+        if(document.getElementById('tot-especial')) document.getElementById('tot-especial').textContent = totEsp;
         
           // Calculate dynamic media gen
           let sumMg = 0, sumMt = 0;
@@ -1182,9 +1221,11 @@ async function mostrarCandado(codigoDEA, dataParcial) {
         document.getElementById('inp-nombre-nominal').value = "Plantel no encontrado";
     }
 
-    // Lógica dinámica de visibilidad basada en planes_estudio
+    // Lógica dinámica de visibilidad basada en planes_estudio y modalidad Especial
     const planes = dp ? (dp["planes-estudio"] || {}) : {};
     const tienePlanes = Object.keys(planes).length > 0;
+    const modPlantel = (dp ? (dp.modalidad || '') : '').toUpperCase();
+    const esEspecial = modPlantel.includes('ESPECIAL');
     
     const contMatricula = document.getElementById('contenedor-matricula');
     const msgSinPlanes = document.getElementById('mensaje-sin-planes');
@@ -1192,19 +1233,30 @@ async function mostrarCandado(codigoDEA, dataParcial) {
     const contSecDetalle = document.getElementById('cont-secciones-detalle');
 
     // Ocultar todos los bloques educativos inicialmente
-    ['bloque-inicial', 'bloque-primaria', 'bloque-mediageneral', 'bloque-mediatecnica'].forEach(id => {
+    ['bloque-inicial', 'bloque-primaria', 'bloque-mediageneral', 'bloque-mediatecnica', 'bloque-especial'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.style.display = 'none';
     });
 
-    if (!tienePlanes) {
-        // REGLA: Si el plantel NO tiene plan de estudio asociado:
-        // Ocultar contenedor de matrícula, secciones y botones de acción
+    if (esEspecial) {
+        // REGLA: Plantel con Modalidad Especial (opera por grupos sin plan formal)
+        if (contMatricula) contMatricula.style.display = 'block';
+        if (contAcciones) contAcciones.style.display = 'flex';
+        if (msgSinPlanes) msgSinPlanes.style.display = 'none';
+        if (contSecDetalle) contSecDetalle.style.display = 'none';
+
+        const bloqueEsp = document.getElementById('bloque-especial');
+        if (bloqueEsp) bloqueEsp.style.display = 'block';
+
+        const contVacantes = document.getElementById('contenedor-pregunta-vacantes');
+        if (contVacantes) contVacantes.style.display = 'none';
+    } else if (!tienePlanes) {
+        // REGLA: Si el plantel NO es Especial y NO tiene plan de estudio asociado:
         if (contMatricula) contMatricula.style.display = 'none';
         if (contSecDetalle) contSecDetalle.style.display = 'none';
         if (contAcciones) contAcciones.style.display = 'none';
         
-        // Mostrar única y exclusivamente el mensaje de orientación bajo la ficha de datos del plantel
+        // Mostrar exclusivamente el mensaje de orientación
         if (msgSinPlanes) msgSinPlanes.style.display = 'block';
     } else {
         // REGLA: Si el plantel SÍ tiene planes de estudio:
@@ -1242,6 +1294,24 @@ async function mostrarCandado(codigoDEA, dataParcial) {
         
         /* button always enabled initially */
         
+
+    // Cargar datos previos de Modalidad Especial si existen
+    const espExistente = dataParcial?.matricula?.modalidades?.especial || dp?.matricula?.modalidades?.especial;
+    if (esEspecial && espExistente) {
+        const gruposObj = espExistente.grupos || {};
+        const letras = Object.keys(gruposObj).filter(k => k.length === 1).sort();
+        const numGrupos = letras.length || parseInt(dataParcial?.["secciones-planes"]?.especial || dp?.["secciones-planes"]?.especial || 0);
+        if (numGrupos > 0) {
+            if (document.getElementById('secEsp')) document.getElementById('secEsp').value = numGrupos;
+            _renderCajasEspecial(numGrupos);
+            letras.forEach(letra => {
+                const f = document.querySelector('.mat-input.mat-especial[data-grupo="especial-' + letra + '"][data-sexo="F"]');
+                const m = document.querySelector('.mat-input.mat-especial[data-grupo="especial-' + letra + '"][data-sexo="M"]');
+                if (f) f.value = gruposObj[letra].fem || 0;
+                if (m) m.value = gruposObj[letra].mas || 0;
+            });
+        }
+    }
 
     if (dataParcial && dataParcial.matricula && typeof dataParcial.matricula === 'object' && Object.keys(dataParcial.matricula).length > 0) {
         const mat = dataParcial.matricula;
@@ -1338,6 +1408,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
 
     if (dataParcial) {
         if (dataParcial.datos_completados) hasData = true;
+        if (dataParcial.matricula?.modalidades?.especial && checkObjHasNumbers(dataParcial.matricula.modalidades.especial)) hasData = true;
         if (dataParcial.matricula && (checkObjHasNumbers(dataParcial.matricula) || (dataParcial.matricula['total-gen'] > 0))) hasData = true;
         if (dataParcial['matricula-total'] && parseInt(dataParcial['matricula-total']) > 0) hasData = true;
         if (dataParcial['secciones-planes'] && checkObjHasNumbers(dataParcial['secciones-planes'])) hasData = true;
@@ -1406,6 +1477,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
           secTotal += parseInt(document.getElementById('secMat')?.value) || 0;
           secTotal += parseInt(document.getElementById('secPre')?.value) || 0;
           secTotal += parseInt(document.getElementById('secPri')?.value) || 0;
+           secTotal += parseInt(document.getElementById('secEsp')?.value) || 0;
           document.querySelectorAll('.sec-anio-input').forEach(inp => {
               if (isVisible(inp)) {
                   secTotal += parseInt(inp.value || 0);
@@ -1718,6 +1790,43 @@ async function mostrarCandado(codigoDEA, dataParcial) {
               });
 
               matricula.media['media-tecnica'] = mediaTec;
+          }
+
+          // ── 6. MODALIDAD ESPECIAL (GRUPOS) ────────────────────────────────
+          if (document.getElementById('bloque-especial')?.style.display !== 'none') {
+              const espGrupos = {};
+              let tEspMas = 0, tEspFem = 0;
+
+              document.querySelectorAll('.mat-input.mat-especial').forEach(inp => {
+                  if (!isVisible(inp)) return;
+                  const secLetra = inp.dataset.grupo.split('-')[1];
+                  const val = parseInt(inp.value) || 0;
+                  if (!espGrupos[secLetra]) espGrupos[secLetra] = { mas: 0, fem: 0 };
+                  if (inp.dataset.sexo === 'F') {
+                      espGrupos[secLetra].fem += val;
+                      tEspFem += val;
+                  } else {
+                      espGrupos[secLetra].mas += val;
+                      tEspMas += val;
+                  }
+              });
+
+              const numGrupos = parseInt(document.getElementById('secEsp')?.value) || 0;
+              if (numGrupos > 0) {
+                  seccionesPlanes['especial'] = numGrupos;
+              }
+
+              if (Object.keys(espGrupos).length > 0 || numGrupos > 0) {
+                  matricula.modalidades.especial = {
+                      grupos: espGrupos,
+                      'total-especial-mas': tEspMas,
+                      'total-especial-fem': tEspFem,
+                      'total-especial': tEspMas + tEspFem
+                  };
+                  matricula['total-gen-fem'] += tEspFem;
+                  matricula['total-gen-mas'] += tEspMas;
+                  matricula['total-gen']     += (tEspMas + tEspFem);
+              }
           }
 
           // ── 6. TOTAL GENERAL MEDIA ────────────────────────────────────────
