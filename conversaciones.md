@@ -1150,3 +1150,72 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 2. Registro histórico íntegro en `conversaciones.md`.
 > 3. Versionamiento SemVer confirmado en **v2.13.4**.
 > 4. Commit y sincronización remota hacia GitHub (`git push origin main`).
+
+
+### Sesión 23 de Septiembre de 2026 (Suite de Supervisión Institucional v2.14.0)
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa.
+> 
+> Entonces, aclaremos todo. con los últimos ajustes, a partir de la próxima renovación de cuota de google firebase ¿cuando entren los dos funcionarios de Zona, los 23 responsables de municipios, y unos que otros directores de planteles; no habrá problema con las metricas de las pantallas de superadmin, zonadmin y munadmin?
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se confirmó la viabilidad y solvencia técnica del sistema: gracias al motor de precálculo agregado implementado en v2.13.0, el acceso de los 2 directivos zonales, los 23 coordinadores municipales y los directores escolares consume únicamente 1 lectura por carga de panel (o lectura local en JSON), utilizando menos del 1% del límite gratuito de 50.000 lecturas diarias de Firebase Spark, garantizando costo cero y cero caídas por cuota.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Hay algo que necesito resolver. como parte de la supervisión de los usuarios munadmin hacia el trabajo de los usuarios plaadmin, se necesita que los munadmin vean el trabajo de los plaadmin.
+> 
+> ¿Cómo crees que se puede resolver? Yo tengo algunas ideas, pero me gustaría conocer tus opciones
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se propusieron tres opciones de diseño:
+> 1. Opción 1: Modo Supervisor (visión espejo en vivo con banner superior y botón de retorno al panel municipal).
+> 2. Opción 2: Ficha Rápida / Expediente de Auditoría (ventana emergente con pestañas institucional, matrícula y nómina).
+> 3. Opción 3: Subpanel de Auditoría incrustado en el dashboard municipal.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Me gustaron solo las opciones 1 y 2. Me gustaría poder ver las dos. pero no sé como hacer para poder ver las dos opciones, yo evaluarlas y sin que afecte el Zero-Cost
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se explicó que ambas opciones pueden convivir perfectamente en la tabla de planteles (botones 'Ficha' y 'Supervisar') y que, al reutilizar los datos ya presentes en memoria y cachear en sesión las consultas, se mantiene un consumo de cero lecturas adicionales (Zero-Cost).
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Cual sería el plan?
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se estructuró y presentó el plan de implementación detallado en `implementation_plan.md` con la arquitectura técnica, controles de solo lectura, experiencia de usuario y plan de verificación.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> [Aprobación del plan de implementación]
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se implementaron y desplegaron exitosamente ambas opciones:
+> 1. **Opción 1 (Modo Supervisor):** Botón 'Supervisar' en la tabla de planteles que traslada al supervisor a la pantalla del plantel en modo de solo lectura, con un banner superior fijo distintivo y botón 'Volver a mi Panel' para retornar en cualquier momento.
+> 2. **Opción 2 (Ficha Rápida / Expediente de Auditoría):** Modal emergente con tres pestañas ejecutivas (Institucional, Matrícula y Secciones, Nómina de Personal) y botón directo hacia el Modo Supervisor.
+> 3. **Blindaje Zero-Cost:** Consultas basadas en caché de memoria local evitando lecturas innecesarias a Firestore.
+> 4. **SemVer y Despliegue:** Actualización de versión a **v2.14.0** en package.json e index.html, compilación con Vite y despliegue a producción en Firebase Hosting (https://sgh-merida.web.app).
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."
+> Me gusto la opción 2 está muy completa. Sin embargo hay unos detalles de la ficha en  la pestaña Matriculas y Secciones, a pesar de que el plantel declaró la matricula en la descriminación de varones hembras y total no hay datos imagen ***001.PNG. 
+> Otra cosa, el boton "Abrir en Modo Supervisor Completo" está genial -al hacer clic se puede ver la pantalla del plantel-, pero me me gustaría que de esa pantalla, poder devolverme a la ficha (no sé si se puede hacer desde el boton Volver a mi panel o mejor hacer otro boton: Volver a la ficha). 
+> Porlo demas, me quedo con la opción 2
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se corrigieron y optimizaron los dos puntos solicitados, consagrando la Opción 2:
+> 1. **Corrección de la Matrícula Detallada en la Ficha:** Se adaptó el algoritmo de lectura en `admin.js` para extraer con exactitud la estructura NoSQL real de grados (`1` al `6`), secciones (`A`, `B`, `U`) y géneros (`mas`, `fem`), desglosando grado por grado con sus secciones, varones, hembras y subtotales, e inyectando al final la fila de **TOTAL CONSOLIDADO** (104 alumnos, 6 secciones, 63 varones, 41 hembras en la EB 21 de Noviembre).
+> 2. **Navegación Bidireccional hacia la Ficha:** Se añadió en el banner superior de supervisión el botón azul **`📋 Volver a la Ficha`**, que permite al usuario regresar de inmediato a la ficha rápida del plantel sin perder su contexto, manteniendo además el botón rojo de retorno al panel general.
+> 3. **Consolidación de la Opción 2 en la Tabla:** Se optimizó la tabla de planteles del municipio dejando el botón **`📋 Ficha`** como punto de acceso principal, eliminando la duplicidad visual.
+> 4. **SemVer y Despliegue:** Incremento a **v2.14.1**, compilación y despliegue exitoso a producción en Firebase Hosting (https://sgh-merida.web.app).

@@ -1596,7 +1596,8 @@ export function initAdminDashboard(dbInstance, user) {
          <td style="padding: 15px 20px; color: var(--text-muted); font-size: 0.9rem;">${p.municipio || 'N/A'}</td>
          <td style="padding: 15px 20px; color: var(--text-muted); font-size: 0.9rem;">${p.parroquia || 'N/A'}</td>
          <td style="padding: 15px 20px; color: var(--text-muted); font-size: 0.9rem;">${p.nivel || 'N/A'}</td>
-         <td class="plantel-actions-cell">
+         <td class="plantel-actions-cell" style="display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end;">
+           <button class="btn-plantel-action btn-ficha-plantel" data-id="${p.id}" data-dea="${p.codigos?.plantel || p.id}" title="Ver Ficha y Expediente de Auditoría">📋 Ficha</button>
            <button class="btn-plantel-action btn-edit-plantel" data-id="${p.id}">✏️ Editar</button>
            <button class="btn-plantel-action btn-del-plantel" data-id="${p.id}">🗑️ Eliminar</button>
          </td>
@@ -1605,6 +1606,15 @@ export function initAdminDashboard(dbInstance, user) {
     });
 
     // Attach events
+    document.querySelectorAll('.btn-ficha-plantel').forEach(b => {
+       b.onclick = () => {
+         const id = b.getAttribute('data-id');
+         const dea = b.getAttribute('data-dea') || id;
+         const plantel = currentPlanteles.find(x => x.id === id || x.codigos?.plantel === dea);
+         abrirFichaAuditoria(dea, plantel);
+       };
+    });
+
     document.querySelectorAll('.btn-edit-plantel').forEach(b => {
        b.onclick = () => {
          const id = b.getAttribute('data-id');
@@ -2775,6 +2785,413 @@ export function initAdminDashboard(dbInstance, user) {
     }
   }
 
+  // =========================================================================
+  // MÓDULO DE FICHA RÁPIDA / EXPEDIENTE DE AUDITORÍA (OPCIÓN 2)
+  // =========================================================================
+  window._cacheSupervision = window._cacheSupervision || {};
+  window._cacheStaffSupervision = window._cacheStaffSupervision || {};
+  let currentPlantelFicha = null;
+
+  function activarPestanaFicha(tabId) {
+    const tabs = ['institucional', 'matricula', 'personal'];
+    tabs.forEach(t => {
+      const btn = document.getElementById(`tab-btn-${t}`);
+      const content = document.getElementById(`tab-content-${t}`);
+      if (btn) {
+        if (t === tabId) btn.classList.add('active');
+        else btn.classList.remove('active');
+      }
+      if (content) {
+        content.style.display = (t === tabId) ? 'block' : 'none';
+      }
+    });
+  }
+
+  function renderFilasMatriculaFicha(p) {
+    const tbody = document.getElementById('ficha-tbody-matricula');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    
+    const mat = p.matricula || {};
+    let filas = [];
+    
+    // 1. Inicial (Plan 20000)
+    if (mat.basica && mat.basica["20000"]) {
+      const b20 = mat.basica["20000"];
+      // Maternal
+      const matObj = b20.materna || b20.maternal;
+      if (matObj && typeof matObj === 'object') {
+        let f = 0, m = 0, sec = 0;
+        Object.keys(matObj).forEach(k => {
+          if (k.length === 1 && typeof matObj[k] === 'object' && matObj[k] !== null) {
+            sec++;
+            f += parseInt(matObj[k].fem || 0);
+            m += parseInt(matObj[k].mas || 0);
+          }
+        });
+        if (sec > 0 || (f + m) > 0) {
+          filas.push({ nivel: "Educación Inicial - Maternal", sec, f, m, tot: f + m });
+        }
+      }
+      // Preescolar
+      if (b20.preescolar && typeof b20.preescolar === 'object') {
+        let f = 0, m = 0, sec = 0;
+        Object.keys(b20.preescolar).forEach(k => {
+          if (k.length === 1 && typeof b20.preescolar[k] === 'object' && b20.preescolar[k] !== null) {
+            sec++;
+            f += parseInt(b20.preescolar[k].fem || 0);
+            m += parseInt(b20.preescolar[k].mas || 0);
+          }
+        });
+        if (sec > 0 || (f + m) > 0) {
+          filas.push({ nivel: "Educación Inicial - Preescolar", sec, f, m, tot: f + m });
+        }
+      }
+    }
+    
+    // 2. Primaria (Plan 21000)
+    if (mat.basica && mat.basica["21000"]) {
+      const b21 = mat.basica["21000"];
+      const nombresGrados = ["", "1er", "2do", "3er", "4to", "5to", "6to"];
+      for (let g = 1; g <= 6; g++) {
+        const gKey = String(g);
+        const gData = b21[gKey] || b21[`${g}ero`] || b21[`${g}to`] || b21[`${g}do`];
+        if (gData && typeof gData === 'object') {
+          let f = 0, m = 0, sec = 0;
+          Object.keys(gData).forEach(secLetra => {
+            if (secLetra.length === 1 && typeof gData[secLetra] === 'object' && gData[secLetra] !== null) {
+              sec++;
+              f += parseInt(gData[secLetra].fem || 0);
+              m += parseInt(gData[secLetra].mas || 0);
+            }
+          });
+          if (sec > 0 || (f + m) > 0) {
+            filas.push({ nivel: `Educación Primaria - ${nombresGrados[g]} Grado`, sec, f, m, tot: f + m });
+          }
+        }
+      }
+      // Fallback si no hay desglose por grado pero hay total primaria
+      if (filas.filter(x => x.nivel.startsWith('Educación Primaria')).length === 0) {
+        const totPri = parseInt(b21['total-21000'] || 0);
+        const totPriF = parseInt(b21['total-21000-fem'] || 0);
+        const totPriM = parseInt(b21['total-21000-mas'] || 0);
+        if (totPri > 0) {
+          filas.push({ nivel: "Educación Primaria", sec: "-", f: totPriF, m: totPriM, tot: totPri });
+        }
+      }
+    }
+    
+    // 3. Media General y Técnica (Planes distintos a 20000 y 21000)
+    if (p["secciones-planes"]) {
+      const sp = p["secciones-planes"];
+      const mediaMat = mat.media || {};
+      const mgData = mediaMat['media-general'] || {};
+      const mtData = mediaMat['media-tecnica'] || {};
+      
+      Object.keys(sp).forEach(planId => {
+        // Ignorar planes básicos de inicial y primaria
+        if (planId === '20000' || planId === '21000') return;
+        
+        const plan = sp[planId];
+        if (typeof plan === 'object' && plan !== null) {
+          Object.keys(plan).forEach(grado => {
+            const numSec = parseInt(plan[grado] || 0);
+            if (numSec > 0) {
+              const pMat = mgData[planId] || mtData[planId];
+              const f = pMat?.fem !== undefined ? pMat.fem : '-';
+              const m = pMat?.mas !== undefined ? pMat.mas : '-';
+              const tot = pMat?.total !== undefined ? pMat.total : (typeof f === 'number' && typeof m === 'number' ? f + m : '-');
+              
+              const esTecnica = String(planId).startsWith('4');
+              const tipoMedia = esTecnica ? 'Media Técnica' : 'Media General';
+              filas.push({ nivel: `${tipoMedia} (Plan ${planId}) - ${grado}° Año`, sec: numSec, f, m, tot });
+            }
+          });
+        }
+      });
+    }
+    
+    if (filas.length === 0) {
+      const totalGen = parseInt(mat['total-gen'] || 0);
+      const totalF = parseInt(mat['total-gen-fem'] || 0);
+      const totalM = parseInt(mat['total-gen-mas'] || 0);
+      if (totalGen > 0) {
+        tbody.innerHTML = `<tr>
+          <td style="padding: 10px 14px; font-weight: 500;">Matrícula Global Declarada</td>
+          <td style="padding: 10px 14px; text-align: center;">-</td>
+          <td style="padding: 10px 14px; text-align: center; color: #64748b;">${totalF || '-'}</td>
+          <td style="padding: 10px 14px; text-align: center; color: #64748b;">${totalM || '-'}</td>
+          <td style="padding: 10px 14px; text-align: right; font-weight: bold; color: #166534;">${totalGen.toLocaleString()}</td>
+        </tr>`;
+      } else {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 20px; color: #64748b;">No hay registro de matrícula detallada para este plantel.</td></tr>`;
+      }
+      return;
+    }
+    
+    let sumSec = 0, sumF = 0, sumM = 0, sumTot = 0;
+    const filasHtml = filas.map(r => {
+      if (typeof r.sec === 'number') sumSec += r.sec;
+      if (typeof r.f === 'number') sumF += r.f;
+      if (typeof r.m === 'number') sumM += r.m;
+      if (typeof r.tot === 'number') sumTot += r.tot;
+      
+      return `
+        <tr style="border-bottom: 1px solid #f1f5f9;">
+          <td style="padding: 10px 14px; color: #334155; font-weight: 500;">${r.nivel}</td>
+          <td style="padding: 10px 14px; text-align: center; color: #475569; font-weight: 600;">${r.sec}</td>
+          <td style="padding: 10px 14px; text-align: center; color: #64748b;">${r.f}</td>
+          <td style="padding: 10px 14px; text-align: center; color: #64748b;">${r.m}</td>
+          <td style="padding: 10px 14px; text-align: right; font-weight: 600; color: #1e293b;">${r.tot}</td>
+        </tr>
+      `;
+    }).join('');
+    
+    // Fila de Total Consolidado
+    const totalRowHtml = `
+      <tr style="background: #f8fafc; font-weight: bold; border-top: 2px solid #cbd5e1;">
+        <td style="padding: 12px 14px; color: #1e293b; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.05em;">Total Consolidado</td>
+        <td style="padding: 12px 14px; text-align: center; color: #1e293b; font-size: 0.95rem;">${sumSec || '-'}</td>
+        <td style="padding: 12px 14px; text-align: center; color: #475569;">${sumF}</td>
+        <td style="padding: 12px 14px; text-align: center; color: #475569;">${sumM}</td>
+        <td style="padding: 12px 14px; text-align: right; color: #15803d; font-size: 1.05rem;">${sumTot.toLocaleString()}</td>
+      </tr>
+    `;
+    
+    tbody.innerHTML = filasHtml + totalRowHtml;
+  }
+
+  async function renderFilasPersonalFicha(codigoDEA, p, forceRefresh = false) {
+    const tbody = document.getElementById('ficha-tbody-personal');
+    if (!tbody) return;
+    
+    window._cacheStaffSupervision = window._cacheStaffSupervision || {};
+    let staffList = window._cacheStaffSupervision[codigoDEA];
+    
+    if (!staffList || forceRefresh) {
+      if (forceRefresh) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px; color: #64748b;">Cargando nómina desde Firestore...</td></tr>';
+        try {
+          const q = query(collection(db, 'cargos_personal'), where('codigo-plantel', '==', codigoDEA));
+          const snap = await getDocs(q);
+          staffList = [];
+          snap.forEach(d => {
+            staffList.push({ id: d.id, ...d.data() });
+          });
+          window._cacheStaffSupervision[codigoDEA] = staffList;
+          
+          // Actualizar indicador en pestaña 1 también
+          const elEstPer = document.getElementById('ficha-estatus-per');
+          if (elEstPer) elEstPer.textContent = `${staffList.length} Cargos Registrados`;
+        } catch (err) {
+          console.error("Error al cargar personal en ficha:", err);
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px; color: var(--danger);">Error cargando nómina.</td></tr>';
+          return;
+        }
+      } else if (p.personal_resumen && Array.isArray(p.personal_resumen) && p.personal_resumen.length > 0) {
+        staffList = p.personal_resumen;
+      }
+    }
+    
+    if (!staffList || staffList.length === 0) {
+      tbody.innerHTML = `<tr>
+        <td colspan="4" style="text-align: center; padding: 25px; color: #64748b;">
+          No hay datos de personal en caché.<br>
+          <button id="btn-cargar-nomina-inline" type="button" style="margin-top: 10px; background: #0284c7; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">
+            🔍 Cargar Nómina de este Plantel
+          </button>
+        </td>
+      </tr>`;
+      document.getElementById('btn-cargar-nomina-inline')?.addEventListener('click', () => {
+        renderFilasPersonalFicha(codigoDEA, p, true);
+      });
+      return;
+    }
+    
+    tbody.innerHTML = staffList.map(emp => {
+      const ced = emp['cedula-identidad'] || emp.cedula || 'N/A';
+      const nom = (emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || 'N/A').toUpperCase();
+      const tipo = emp['tipo-personal'] || emp.cargo || 'N/A';
+      const sit = emp['situacion-laboral'] || 'ACTIVO';
+      return `
+        <tr style="border-bottom: 1px solid #f1f5f9;">
+          <td style="padding: 10px 14px; color: #334155; font-family: monospace;">${ced}</td>
+          <td style="padding: 10px 14px; color: #1e293b; font-weight: 500;">${nom}</td>
+          <td style="padding: 10px 14px; color: #475569;">${tipo}</td>
+          <td style="padding: 10px 14px; color: #64748b;"><span style="background: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem;">${sit}</span></td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  async function abrirFichaAuditoria(dea, plantelPreload = null) {
+    if (!dea) return;
+    
+    let p = plantelPreload || window._cacheSupervision[dea];
+    if (!p && typeof currentPlanteles !== 'undefined' && Array.isArray(currentPlanteles)) {
+      p = currentPlanteles.find(x => x.id === dea || x.codigos?.plantel === dea);
+    }
+    
+    if (!p) {
+      try {
+        if (window.showLoading) window.showLoading("Cargando ficha del plantel...");
+        const snap = await getDoc(doc(db, "planteles", dea));
+        if (snap.exists()) {
+          p = { id: snap.id, ...snap.data() };
+        }
+      } catch (e) {
+        console.error("Error obteniendo plantel para ficha:", e);
+      } finally {
+        if (window.hideLoading) window.hideLoading();
+      }
+    }
+    
+    if (!p) {
+      if (showAlert) showAlert("Plantel no disponible", "No se encontraron datos para el código DEA: " + dea, "warning");
+      return;
+    }
+    
+    // Guardar en caché Zero-Cost
+    window._cacheSupervision[dea] = p;
+    currentPlantelFicha = p;
+    
+    // Poblar Modal
+    const modal = document.getElementById('modal-ficha-auditoria');
+    if (!modal) return;
+    
+    // Header
+    const nombre = p['nombre-plantel']?.nominal || p.denominacion || 'PLANTEL SIN NOMBRE';
+    const codigoDEA = p.codigos?.plantel || p.id || dea;
+    const mun = p.municipio || 'N/A';
+    const par = p.parroquia || 'N/A';
+    
+    const elNombre = document.getElementById('ficha-nombre-plantel');
+    if (elNombre) elNombre.textContent = nombre;
+    
+    const elDEA = document.getElementById('ficha-codigo-dea');
+    if (elDEA) elDEA.textContent = `DEA: ${codigoDEA}`;
+    
+    const elMunPar = document.getElementById('ficha-municipio-parroquia');
+    if (elMunPar) elMunPar.textContent = `📍 ${mun} — Parroquia ${par}`;
+    
+    // Badge Estatus Matrícula
+    const totalGen = parseInt(p.matricula?.['total-gen'] || 0);
+    const badge = document.getElementById('ficha-badge-estatus');
+    if (badge) {
+      if (totalGen > 0) {
+        badge.textContent = "Matrícula Declarada";
+        badge.style.background = "rgba(16, 185, 129, 0.2)";
+        badge.style.color = "#34d399";
+      } else {
+        badge.textContent = "Pendiente de Carga";
+        badge.style.background = "rgba(245, 158, 11, 0.2)";
+        badge.style.color = "#fbbf24";
+      }
+    }
+    
+    // Pestaña 1: Institucional
+    const elDep = document.getElementById('ficha-dependencia');
+    if (elDep) elDep.textContent = p.dependencia || 'N/A';
+    
+    const elCodEst = document.getElementById('ficha-codigos-est');
+    if (elCodEst) {
+      let depCod = p.codigos?.dependencia;
+      if (Array.isArray(depCod)) depCod = depCod.join(', ');
+      elCodEst.textContent = `${p.codigos?.estadistico || 'S/N'} / ${depCod || 'S/N'}`;
+    }
+    
+    const elNivel = document.getElementById('ficha-nivel');
+    if (elNivel) elNivel.textContent = p.nivel || 'N/A';
+    
+    const elTurno = document.getElementById('ficha-turno');
+    if (elTurno) elTurno.textContent = p['turno-plantel'] || 'N/A';
+    
+    const elUbicacion = document.getElementById('ficha-ubicacion');
+    if (elUbicacion) elUbicacion.textContent = p['ubicacion-geografica'] || 'No especificada en el registro';
+    
+    const elEstMat = document.getElementById('ficha-estatus-mat');
+    if (elEstMat) {
+      elEstMat.textContent = totalGen > 0 ? `${totalGen.toLocaleString()} Estudiantes` : "Sin matrícula declarada";
+    }
+    
+    const elEstPer = document.getElementById('ficha-estatus-per');
+    if (elEstPer) {
+      const cachedStaff = window._cacheStaffSupervision[codigoDEA];
+      if (cachedStaff && Array.isArray(cachedStaff)) {
+        elEstPer.textContent = `${cachedStaff.length} Cargos Registrados`;
+      } else if (p.personal_resumen && Array.isArray(p.personal_resumen)) {
+        elEstPer.textContent = `${p.personal_resumen.length} Cargos Registrados`;
+      } else {
+        elEstPer.textContent = "Consultar pestaña nómina";
+      }
+    }
+    
+    // Pestaña 2: Matrícula y Secciones
+    const elMatTotalDest = document.getElementById('ficha-mat-total-destacada');
+    if (elMatTotalDest) elMatTotalDest.textContent = totalGen.toLocaleString();
+    
+    const elVacantesBadge = document.getElementById('ficha-vacantes-badge');
+    if (elVacantesBadge) {
+      if (p.vacantes && typeof p.vacantes === 'object' && Object.keys(p.vacantes).length > 0) {
+        elVacantesBadge.textContent = "Vacantes: Declaradas";
+        elVacantesBadge.style.background = "#dcfce7";
+        elVacantesBadge.style.color = "#166534";
+      } else {
+        elVacantesBadge.textContent = "Vacantes: Sin reporte";
+        elVacantesBadge.style.background = "#fef3c7";
+        elVacantesBadge.style.color = "#92400e";
+      }
+    }
+    
+    // Renderizar filas de matrícula en ficha
+    renderFilasMatriculaFicha(p);
+    
+    // Pestaña 3: Nómina de Personal
+    renderFilasPersonalFicha(codigoDEA, p, false);
+    
+    // Activar por defecto la Pestaña 1
+    activarPestanaFicha('institucional');
+    
+    // Mostrar modal
+    modal.style.display = 'flex';
+  }
+
+  // Configurar listeners de la ficha de auditoría
+  const setupFichaEventListeners = () => {
+    document.getElementById('tab-btn-institucional')?.addEventListener('click', () => activarPestanaFicha('institucional'));
+    document.getElementById('tab-btn-matricula')?.addEventListener('click', () => activarPestanaFicha('matricula'));
+    document.getElementById('tab-btn-personal')?.addEventListener('click', () => activarPestanaFicha('personal'));
+    
+    document.getElementById('btn-cerrar-ficha-modal')?.addEventListener('click', () => {
+      const modal = document.getElementById('modal-ficha-auditoria');
+      if (modal) modal.style.display = 'none';
+    });
+    
+    document.getElementById('btn-cerrar-ficha-pie')?.addEventListener('click', () => {
+      const modal = document.getElementById('modal-ficha-auditoria');
+      if (modal) modal.style.display = 'none';
+    });
+    
+    document.getElementById('btn-cargar-nomina-ficha')?.addEventListener('click', () => {
+      if (currentPlantelFicha) {
+        const dea = currentPlantelFicha.codigos?.plantel || currentPlantelFicha.id;
+        renderFilasPersonalFicha(dea, currentPlantelFicha, true);
+      }
+    });
+    
+    document.getElementById('btn-abrir-modo-supervisor-desde-ficha')?.addEventListener('click', () => {
+      const modal = document.getElementById('modal-ficha-auditoria');
+      if (modal) modal.style.display = 'none';
+      if (currentPlantelFicha && typeof window.iniciarSupervisionPlantel === 'function') {
+        const dea = currentPlantelFicha.codigos?.plantel || currentPlantelFicha.id;
+        const nom = currentPlantelFicha['nombre-plantel']?.nominal || dea;
+        window.iniciarSupervisionPlantel(dea, nom);
+      }
+    });
+  };
+  setupFichaEventListeners();
+
+  window.abrirFichaAuditoria = abrirFichaAuditoria;
   window.abrirModalSeleccionarNomina = abrirModalSeleccionarNomina;
   window.exportarNominaMunicipalExcel = abrirModalSeleccionarNomina;
 

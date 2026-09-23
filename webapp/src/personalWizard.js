@@ -1302,37 +1302,41 @@ async function cargarPersonalExistente(codigoDEA) {
             tdAcc.style.textAlign = 'center';
             tdAcc.style.verticalAlign = 'middle';
             
-            const btnEditStyle = "width: 32px; height: 32px; padding: 0; border-radius: 6px; border: 1px solid #bfdbfe; background: #eff6ff; color: #2563eb; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;";
-            const btnDelStyle = "width: 32px; height: 32px; padding: 0; border-radius: 6px; border: 1px solid #fecaca; background: #fef2f2; color: #dc2626; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;";
-            
-            tdAcc.innerHTML = `
-                <div style="display: flex; flex-direction: row; flex-wrap: nowrap; gap: 8px; justify-content: center; align-items: center; width: 100%;">
-                    <button class="btn-editar" style="${btnEditStyle}" onmouseover="this.style.background='#dbeafe';" onmouseout="this.style.background='#eff6ff';" title="Editar datos del funcionario">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8z"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                    </button>
-                    <button class="btn-eliminar" style="${btnDelStyle}" onmouseover="this.style.background='#fee2e2';" onmouseout="this.style.background='#fef2f2';" title="Desincorporar funcionario">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                    </button>
-                </div>
-            `;
-            
-            // Conectar eventos click
-            const btnEditar = tdAcc.querySelector('.btn-editar');
-            if (btnEditar) {
-                btnEditar.onclick = (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    cargarEmpleadoEnFormulario(data, docId);
-                };
-            }
+            if (window._modoSupervision) {
+                tdAcc.innerHTML = `<span style="color: #64748b; font-size: 0.8rem; background: #f1f5f9; padding: 4px 8px; border-radius: 4px; font-weight: 500;">👁️ Solo Lectura</span>`;
+            } else {
+                const btnEditStyle = "width: 32px; height: 32px; padding: 0; border-radius: 6px; border: 1px solid #bfdbfe; background: #eff6ff; color: #2563eb; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;";
+                const btnDelStyle = "width: 32px; height: 32px; padding: 0; border-radius: 6px; border: 1px solid #fecaca; background: #fef2f2; color: #dc2626; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;";
+                
+                tdAcc.innerHTML = `
+                    <div style="display: flex; flex-direction: row; flex-wrap: nowrap; gap: 8px; justify-content: center; align-items: center; width: 100%;">
+                        <button class="btn-editar" style="${btnEditStyle}" onmouseover="this.style.background='#dbeafe';" onmouseout="this.style.background='#eff6ff';" title="Editar datos del funcionario">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8z"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                        </button>
+                        <button class="btn-eliminar" style="${btnDelStyle}" onmouseover="this.style.background='#fee2e2';" onmouseout="this.style.background='#fef2f2';" title="Desincorporar funcionario">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                        </button>
+                    </div>
+                `;
+                
+                // Conectar eventos click
+                const btnEditar = tdAcc.querySelector('.btn-editar');
+                if (btnEditar) {
+                    btnEditar.onclick = (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        cargarEmpleadoEnFormulario(data, docId);
+                    };
+                }
 
-            const btnEliminar = tdAcc.querySelector('.btn-eliminar');
-            if (btnEliminar) {
-                btnEliminar.onclick = (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    mostrarModalEliminarPersonal(data, docId, codigoDEA);
-                };
+                const btnEliminar = tdAcc.querySelector('.btn-eliminar');
+                if (btnEliminar) {
+                    btnEliminar.onclick = (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        mostrarModalEliminarPersonal(data, docId, codigoDEA);
+                    };
+                }
             }
 
             tr.appendChild(tdCed);
@@ -1342,6 +1346,10 @@ async function cargarPersonalExistente(codigoDEA) {
             tr.appendChild(tdAcc);
             tbody.appendChild(tr);
         });
+
+        // Guardar en caché en memoria para Zero-Cost en expedientes y fichas rápidas
+        window._cacheStaffSupervision = window._cacheStaffSupervision || {};
+        window._cacheStaffSupervision[codigoDEA] = [...window._personalPlantelData];
         
     } catch (error) {
         console.error("Error cargando personal:", error);
@@ -1692,3 +1700,5 @@ export async function exportarNominaExcel() {
     }
 }
 window.exportarNominaExcel = exportarNominaExcel;
+window.cargarPersonalExistente = cargarPersonalExistente;
+export { cargarPersonalExistente };

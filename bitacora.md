@@ -1053,3 +1053,53 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre prema
 - `conversaciones.md`
 
 ---
+
+### v2.14.0 - Suite de Supervisión Institucional (Modo Supervisor y Ficha Rápida) (23 de Septiembre de 2026)
+
+**1. Requerimientos:**
+- Permitir a los usuarios municipales (`munadmin`), zonales (`zonadmin`) y `superadmin` supervisar el trabajo de los planteles educativos (`plaadmin`).
+- Implementar y permitir la evaluación simultánea de dos modalidades:
+  - Opción 1: Modo Supervisor (visión espejo en vivo con banner superior y botón de retorno al panel municipal).
+  - Opción 2: Ficha Rápida / Expediente de Auditoría (modal emergente con tres pestañas: Institucional, Matrícula y Nómina).
+- Respetar rigurosamente el principio Zero-Cost (0 lecturas adicionales a Firestore utilizando datos locales en memoria y caché de sesión).
+
+**2. Solución Técnica y Arquitectura:**
+- **Banner Modo Supervisor:** Implementación de `#banner-modo-supervision` fijo en el encabezado de `#lock-screen`, con identificación del plantel, código DEA y botón de retorno seguro al panel municipal (`window.salirSupervisionPlantel()`).
+- **Seguridad y Solo Lectura:** Coacción visual y en el DOM que bloquea inputs de matrícula, oculta botones de guardado e inhabilita edición/eliminación de personal en modo supervisión.
+- **Modal de Ficha Rápida:** Implementación de `#modal-ficha-auditoria` con navegación por pestañas: Ficha Institucional, Matrícula y Secciones, y Nómina de Personal.
+- **Zero-Cost Shield:** Consultas alimentadas de `currentPlanteles` en memoria y caché temporal de auditoría (`_cacheSupervision` y `_cacheStaffSupervision`).
+- **Control SemVer:** Incremento de versión MENOR a **v2.14.0**.
+
+**3. Archivos Involucrados:**
+- `webapp/index.html`
+- `webapp/package.json`
+- `webapp/styles.css`
+- `webapp/src/admin.js`
+- `webapp/src/main.js`
+- `webapp/src/personalWizard.js`
+
+---
+
+### v2.14.1 - Optimización de Desglose de Matrícula y Navegación Bidireccional (23 de Septiembre de 2026)
+
+**1. Requerimientos:**
+- Corregir el desglose de matrícula en la Ficha de Auditoría para reflejar con exactitud los datos de varones, hembras, secciones y subtotales por cada grado en planteles que ya declararon matrícula.
+- Incorporar navegación bidireccional desde el Modo Supervisor de vuelta hacia la Ficha de Auditoría.
+- Consagrar la Opción 2 (Ficha Rápida) como puerta de entrada principal en la tabla de planteles municipales.
+
+**2. Solución Técnica:**
+- **Parser NoSQL Robusto:** Reescritura de `renderFilasMatriculaFicha` para leer e interpretar correctamente los mapas de grados (`1` al `6`), secciones (`A`, `B`, `U`) y géneros (`mas`, `fem`) tanto de Educación Básica/Primaria (`21000`), Inicial (`20000`) como de Media (`31011`, etc.).
+- **Fila de Total Consolidado:** Inyección de fila de resumen al pie de la tabla con la sumatoria automática de secciones, varones, hembras y gran total escolar (ej. 104 estudiantes en la EB 21 de Noviembre).
+- **Botón Volver a la Ficha:** Incorporación del botón `#btn-volver-a-ficha` en el banner de supervisión que cierra la pantalla completa y reabre de forma inmediata el expediente de auditoría del plantel supervisado.
+- **Simplificación de la Tabla:** Enfoque prioritario en el botón `📋 Ficha` en la lista de planteles.
+- **Control SemVer:** Incremento de versión PARCHE a **v2.14.1**.
+
+**3. Archivos Involucrados:**
+- `webapp/index.html`
+- `webapp/package.json`
+- `webapp/src/admin.js`
+- `webapp/src/main.js`
+- `bitacora.md`
+- `conversaciones.md`
+
+---

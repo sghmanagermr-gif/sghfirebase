@@ -1070,68 +1070,81 @@ async function mostrarCandado(codigoDEA, dataParcial) {
     showView('lock-screen');
     
     // ==========================================
-    // SISTEMA DE COACCIÓN (MODOS DE OPERACIÓN) - BULLETPROOF CSS
+    // SISTEMA DE COACCIÓN Y MODO SUPERVISIÓN
     // ==========================================
-    const sessionConfig = sessionStorage.getItem('sgh_despliegue_config');
-    if (sessionConfig) {
-        try {
-            const config = JSON.parse(sessionConfig);
-            const modo = config.modo_operacion || 'TOTAL';
-            
-            let styleTag = document.getElementById('style-coaccion');
-            if (!styleTag) {
-                styleTag = document.createElement('style');
-                styleTag.id = 'style-coaccion';
-                document.head.appendChild(styleTag);
-            }
+    let styleTag = document.getElementById('style-coaccion');
+    if (!styleTag) {
+        styleTag = document.createElement('style');
+        styleTag.id = 'style-coaccion';
+        document.head.appendChild(styleTag);
+    }
 
-            let cssRules = '';
-            
-            // CSS rules with !important override any inline .style.display = 'block' from other scripts
-            if (modo === 'SOLO_MATRICULA') {
-                cssRules = `
-                    #seccion-personal-existente { display: none !important; }
-                    #seccion-registro-personal { display: none !important; }
-                `;
-            } 
-            else if (modo === 'SOLO_AGREGAR_PERSONAL') {
-                cssRules = `
-                    #btn-guardar-matricula { display: none !important; }
-                    #plantel-form input:not([readonly]), #plantel-form select { pointer-events: none !important; opacity: 0.6 !important; }
-                    #seccion-personal-existente .btn-editar, #seccion-personal-existente .btn-eliminar { display: none !important; }
-                `;
-            } 
-            else if (modo === 'SOLO_EDITAR_PERSONAL') {
-                cssRules = `
-                    #btn-guardar-matricula { display: none !important; }
-                    #plantel-form input:not([readonly]), #plantel-form select { pointer-events: none !important; opacity: 0.6 !important; }
-                    #seccion-registro-personal:not(:has(#banner-modo-edicion[style*="flex"])) { display: none !important; }
-                `;
-            } 
-            else if (modo === 'PERSONAL_COMPLETO') {
-                cssRules = `
-                    #btn-guardar-matricula { display: none !important; }
-                    #plantel-form input:not([readonly]), #plantel-form select { pointer-events: none !important; opacity: 0.6 !important; }
-                `;
-            }
-            
-            styleTag.innerHTML = cssRules;
+    if (window._modoSupervision) {
+        styleTag.innerHTML = `
+            #btn-guardar-matricula { display: none !important; }
+            #plantel-form input:not([readonly]), #plantel-form select { pointer-events: none !important; opacity: 0.7 !important; }
+            #seccion-registro-personal { display: none !important; }
+            #seccion-personal-existente { display: block !important; }
+        `;
+        const secMatriculaForm = document.getElementById('plantel-form');
+        if (secMatriculaForm) {
+            const inputs = secMatriculaForm.querySelectorAll('input:not([readonly]), select');
+            inputs.forEach(i => i.disabled = true);
+        }
+    } else {
+        const sessionConfig = sessionStorage.getItem('sgh_despliegue_config');
+        if (sessionConfig) {
+            try {
+                const config = JSON.parse(sessionConfig);
+                const modo = config.modo_operacion || 'TOTAL';
+                let cssRules = '';
+                
+                // CSS rules with !important override any inline .style.display = 'block' from other scripts
+                if (modo === 'SOLO_MATRICULA') {
+                    cssRules = `
+                        #seccion-personal-existente { display: none !important; }
+                        #seccion-registro-personal { display: none !important; }
+                    `;
+                } 
+                else if (modo === 'SOLO_AGREGAR_PERSONAL') {
+                    cssRules = `
+                        #btn-guardar-matricula { display: none !important; }
+                        #plantel-form input:not([readonly]), #plantel-form select { pointer-events: none !important; opacity: 0.6 !important; }
+                        #seccion-personal-existente .btn-editar, #seccion-personal-existente .btn-eliminar { display: none !important; }
+                    `;
+                } 
+                else if (modo === 'SOLO_EDITAR_PERSONAL') {
+                    cssRules = `
+                        #btn-guardar-matricula { display: none !important; }
+                        #plantel-form input:not([readonly]), #plantel-form select { pointer-events: none !important; opacity: 0.6 !important; }
+                        #seccion-registro-personal:not(:has(#banner-modo-edicion[style*="flex"])) { display: none !important; }
+                    `;
+                } 
+                else if (modo === 'PERSONAL_COMPLETO') {
+                    cssRules = `
+                        #btn-guardar-matricula { display: none !important; }
+                        #plantel-form input:not([readonly]), #plantel-form select { pointer-events: none !important; opacity: 0.6 !important; }
+                    `;
+                }
+                
+                styleTag.innerHTML = cssRules;
 
-            // Also forcefully disable the inputs in the DOM to prevent 'Tab' key focusing
-            const secMatriculaForm = document.getElementById('plantel-form');
-            if (secMatriculaForm) {
-                const inputs = secMatriculaForm.querySelectorAll('input:not([readonly]), select');
-                const disableMatricula = (modo !== 'TOTAL' && modo !== 'SOLO_MATRICULA');
-                inputs.forEach(i => i.disabled = disableMatricula);
-            }
-            
-            // To be extra safe with the existing logic, apply inline disabling once
-            const btnMatricula = document.getElementById('btn-guardar-matricula');
-            if (btnMatricula && modo !== 'TOTAL' && modo !== 'SOLO_MATRICULA') {
-                btnMatricula.disabled = true;
-            }
+                // Also forcefully disable the inputs in the DOM to prevent 'Tab' key focusing
+                const secMatriculaForm = document.getElementById('plantel-form');
+                if (secMatriculaForm) {
+                    const inputs = secMatriculaForm.querySelectorAll('input:not([readonly]), select');
+                    const disableMatricula = (modo !== 'TOTAL' && modo !== 'SOLO_MATRICULA');
+                    inputs.forEach(i => i.disabled = disableMatricula);
+                }
+                
+                // To be extra safe with the existing logic, apply inline disabling once
+                const btnMatricula = document.getElementById('btn-guardar-matricula');
+                if (btnMatricula && modo !== 'TOTAL' && modo !== 'SOLO_MATRICULA') {
+                    btnMatricula.disabled = true;
+                }
 
-        } catch(e) { console.error("Error aplicando coacción CSS:", e); }
+            } catch(e) { console.error("Error aplicando coacción CSS:", e); }
+        }
     }
     
     // Poblar Datos de Solo Lectura desde el Diccionario
@@ -1327,7 +1340,13 @@ async function mostrarCandado(codigoDEA, dataParcial) {
     if (currentInpTotal > 0) hasData = true;
 
     console.log("🏫 [SGH] ¿Plantel posee matrícula/secciones previas?:", hasData);
-    if (hasData && typeof window.mostrarFormularioPersonal === "function") {
+    if (window._modoSupervision) {
+        const secPersonal = document.getElementById('seccion-personal-existente');
+        if (secPersonal) secPersonal.style.display = 'block';
+        if (typeof window.cargarPersonalExistente === "function") {
+            window.cargarPersonalExistente(codigoDEA);
+        }
+    } else if (hasData && typeof window.mostrarFormularioPersonal === "function") {
         window.mostrarFormularioPersonal(false);
     }
 
@@ -1336,6 +1355,10 @@ async function mostrarCandado(codigoDEA, dataParcial) {
     if (form) {
       form.onsubmit = async (e) => {
           e.preventDefault();
+          if (window._modoSupervision) {
+              if (window.showAlert) window.showAlert("Modo Supervisión", "Está en modo de supervisión (solo lectura). No se pueden guardar cambios.", "info");
+              return;
+          }
           const btn = form.querySelector('button[type="submit"]');
           if (!btn) return;
           btn.textContent = "Guardando...";
@@ -1827,5 +1850,83 @@ document.getElementById('btn-aceptar-incompleta')?.addEventListener('click', () 
         form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
     }
 });
+
+// =========================================================================
+// MÓDULO DE SUPERVISIÓN INSTITUCIONAL (OPCIÓN 1 - PANTALLA COMPLETA)
+// =========================================================================
+window.iniciarSupervisionPlantel = async function(codigoDEA, nombrePlantel) {
+    if (!codigoDEA) return;
+    try {
+        if (window.showLoading) window.showLoading("Accediendo a supervisión del plantel...");
+        window._modoSupervision = true;
+        
+        // Actualizar datos del banner de supervisión
+        const titulo = document.getElementById('supervision-plantel-titulo');
+        if (titulo) {
+            titulo.textContent = `${nombrePlantel || codigoDEA} (${codigoDEA})`;
+        }
+        
+        const banner = document.getElementById('banner-modo-supervision');
+        if (banner) {
+            banner.style.display = 'flex';
+        }
+        
+        // Guardar DEA en el contexto global
+        window.currentPlantelDEA = codigoDEA;
+        
+        // Cargar datos del plantel en la vista lock-screen
+        await checkPlantelData(codigoDEA);
+        
+        // Asegurar que la tabla de personal esté visible y cargue el personal
+        const secPersonal = document.getElementById('seccion-personal-existente');
+        if (secPersonal) secPersonal.style.display = 'block';
+        if (typeof window.cargarPersonalExistente === 'function') {
+            await window.cargarPersonalExistente(codigoDEA);
+        }
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (e) {
+        console.error("Error iniciando supervisión:", e);
+        if (window.showAlert) window.showAlert("Error", "No se pudo cargar la vista del plantel: " + e.message, "error");
+    } finally {
+        if (window.hideLoading) window.hideLoading();
+    }
+};
+
+window.salirSupervisionPlantel = function() {
+    window._modoSupervision = false;
+    
+    // Ocultar banner
+    const banner = document.getElementById('banner-modo-supervision');
+    if (banner) banner.style.display = 'none';
+    
+    // Desuscribir listener de cambios en tiempo real si existía
+    if (window._unsubPlantel) {
+        window._unsubPlantel();
+        window._unsubPlantel = null;
+    }
+    
+    // Limpiar estilos de coacción / supervisión
+    const styleTag = document.getElementById('style-coaccion');
+    if (styleTag) styleTag.innerHTML = '';
+    
+    // Volver inmediatamente a la vista de administración
+    showView('admin-view');
+};
+
+// Conectar botón de salida del banner
+document.getElementById('btn-salir-supervision')?.addEventListener('click', () => {
+    window.salirSupervisionPlantel();
+});
+
+// Conectar botón para volver a la ficha desde el banner
+document.getElementById('btn-volver-a-ficha')?.addEventListener('click', () => {
+    const dea = window.currentPlantelDEA;
+    window.salirSupervisionPlantel();
+    if (dea && typeof window.abrirFichaAuditoria === 'function') {
+        window.abrirFichaAuditoria(dea);
+    }
+});
+
 
 

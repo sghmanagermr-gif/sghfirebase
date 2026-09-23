@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SGH - v2.13.4</title>
+  <title>SGH - v2.14.1</title>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
@@ -186,7 +186,7 @@
     <section id="dashboard-view" class="view">
       <nav class="navbar">
         <div class="nav-brand">
-          <span style="color: var(--primary-color);">SGH</span> v2.13.4
+          <span style="color: var(--primary-color);">SGH</span> v2.14.1
         </div>
         <div class="nav-user">
           <span id="user-display-name" style="font-weight: 500;">Cargando...</span>
@@ -212,10 +212,30 @@
   <div id="lock-screen" class="view"
     style="flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; background: var(--bg-light);">
 
+    <!-- BANNER MODO SUPERVISIÓN -->
+    <div id="banner-modo-supervision" style="display: none; width: 100%; background: linear-gradient(90deg, #0f172a 0%, #1e293b 100%); color: #f8fafc; padding: 12px 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); position: sticky; top: 0; z-index: 1005; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; border-bottom: 3px solid #0284c7;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span style="font-size: 1.5rem;">👁️</span>
+        <div>
+          <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #38bdf8; font-weight: 700;">Modo Supervisión Institucional &bull; Solo Lectura</div>
+          <div id="supervision-plantel-titulo" style="font-size: 1.05rem; font-weight: 600; color: #ffffff;">Plantel: Cargando...</div>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <span style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); color: #bae6fd; font-size: 0.75rem; padding: 4px 10px; border-radius: 6px; font-weight: 500;">Zero-Cost Audit</span>
+        <button id="btn-volver-a-ficha" type="button" style="background: #0284c7; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3); transition: all 0.2s ease;">
+          <span>📋</span> Volver a la Ficha
+        </button>
+        <button id="btn-salir-supervision" type="button" style="background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3); transition: all 0.2s ease;">
+          <span>⬅️</span> Volver a mi Panel
+        </button>
+      </div>
+    </div>
+
     <!-- HEADER / NAVBAR -->
     <nav class="navbar" style="width: 100%; margin-bottom: 20px;">
       <div class="nav-brand">
-        <span style="color: var(--primary-color);">SGH</span> v2.13.4
+        <span style="color: var(--primary-color);">SGH</span> v2.14.1
       </div>
       <div class="nav-user" style="display: flex; gap: 15px; align-items: center;">
 
@@ -1917,6 +1937,154 @@
         <button type="button" id="btn-aceptar-incompleta"
           style="background: #003399; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer;">Aceptar</button>
       </div>
+    </div>
+  </div>
+
+  <!-- Modal Ficha Rápida / Expediente de Auditoría (Opción 2) -->
+  <div id="modal-ficha-auditoria" class="lock-screen" aria-hidden="true"
+    style="display: none; z-index: 10008; align-items: center; justify-content: center; padding: 15px; overflow-y: auto;">
+    <div class="lock-card glass-panel" style="max-width: 850px; width: 100%; max-height: 92vh; display: flex; flex-direction: column; padding: 0; overflow: hidden; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); background: #ffffff;">
+      
+      <!-- Modal Header -->
+      <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; padding: 20px 24px; display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #0284c7;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+            <span style="font-size: 1.2rem;">📋</span>
+            <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #38bdf8; font-weight: 700;">Expediente de Auditoría Rápida</span>
+            <span id="ficha-badge-estatus" style="background: rgba(16, 185, 129, 0.2); color: #34d399; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; font-weight: 600;">Verificado</span>
+          </div>
+          <h2 id="ficha-nombre-plantel" style="margin: 0; font-size: 1.25rem; font-weight: 700; color: #ffffff;">Nombre del Plantel</h2>
+          <div style="display: flex; gap: 10px; margin-top: 6px; flex-wrap: wrap;">
+            <span id="ficha-codigo-dea" style="background: rgba(255,255,255,0.1); color: #e2e8f0; font-size: 0.8rem; padding: 2px 8px; border-radius: 4px; font-family: monospace;">DEA: OD00000000</span>
+            <span id="ficha-municipio-parroquia" style="color: #94a3b8; font-size: 0.8rem; display: flex; align-items: center; gap: 4px;">📍 Municipio - Parroquia</span>
+          </div>
+        </div>
+        <button id="btn-cerrar-ficha-modal" type="button" style="background: rgba(255,255,255,0.1); border: none; color: #ffffff; width: 32px; height: 32px; border-radius: 8px; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;">&times;</button>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div style="display: flex; background: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 0 16px;">
+        <button id="tab-btn-institucional" type="button" class="tab-ficha-btn active">🏢 Ficha Institucional</button>
+        <button id="tab-btn-matricula" type="button" class="tab-ficha-btn">📊 Matrícula y Secciones</button>
+        <button id="tab-btn-personal" type="button" class="tab-ficha-btn">👥 Nómina de Personal</button>
+      </div>
+
+      <!-- Tab Content Area (Scrollable) -->
+      <div style="padding: 20px 24px; overflow-y: auto; flex: 1; max-height: calc(92vh - 200px); background: #ffffff;">
+        
+        <!-- Pestaña 1: Ficha Institucional -->
+        <div id="tab-content-institucional">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 16px;">
+            <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+              <div style="font-size: 0.7rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Dependencia</div>
+              <div id="ficha-dependencia" style="font-weight: 600; color: #1e293b; font-size: 0.95rem; margin-top: 2px;">-</div>
+            </div>
+            <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+              <div style="font-size: 0.7rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Cód. Estadístico / Dep.</div>
+              <div id="ficha-codigos-est" style="font-weight: 600; color: #1e293b; font-size: 0.95rem; margin-top: 2px;">-</div>
+            </div>
+            <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+              <div style="font-size: 0.7rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Nivel / Modalidades</div>
+              <div id="ficha-nivel" style="font-weight: 600; color: #1e293b; font-size: 0.95rem; margin-top: 2px;">-</div>
+            </div>
+            <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+              <div style="font-size: 0.7rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Turno(s)</div>
+              <div id="ficha-turno" style="font-weight: 600; color: #1e293b; font-size: 0.95rem; margin-top: 2px;">-</div>
+            </div>
+          </div>
+
+          <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 16px;">
+            <div style="font-size: 0.7rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Ubicación Geográfica</div>
+            <div id="ficha-ubicacion" style="font-weight: 500; color: #334155; font-size: 0.9rem; margin-top: 4px;">-</div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
+            <div style="background: #ecfdf5; padding: 14px; border-radius: 8px; border: 1px solid #a7f3d0;">
+              <div style="font-size: 0.75rem; color: #065f46; font-weight: 700; text-transform: uppercase;">Estatus Matrícula</div>
+              <div id="ficha-estatus-mat" style="font-weight: 700; color: #047857; font-size: 1.1rem; margin-top: 4px;">En cálculo...</div>
+            </div>
+            <div style="background: #eff6ff; padding: 14px; border-radius: 8px; border: 1px solid #bfdbfe;">
+              <div style="font-size: 0.75rem; color: #1e40af; font-weight: 700; text-transform: uppercase;">Personal en Plantilla</div>
+              <div id="ficha-estatus-per" style="font-weight: 700; color: #1d4ed8; font-size: 1.1rem; margin-top: 4px;">Consultar en pestaña</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pestaña 2: Matrícula y Secciones -->
+        <div id="tab-content-matricula" style="display: none;">
+          <div style="display: flex; align-items: center; justify-content: space-between; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 14px 20px; border-radius: 10px; margin-bottom: 18px;">
+            <div>
+              <div style="font-size: 0.8rem; font-weight: 700; color: #166534; text-transform: uppercase;">Matrícula Total Reportada</div>
+              <div id="ficha-mat-total-destacada" style="font-size: 1.8rem; font-weight: 800; color: #15803d; line-height: 1.2;">0</div>
+            </div>
+            <div id="ficha-vacantes-badge" style="background: #fef3c7; color: #92400e; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; border: 1px solid #fde68a;">
+              Vacantes: Sin reporte
+            </div>
+          </div>
+
+          <h4 style="font-size: 0.9rem; color: #475569; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 0.05em;">Desglose de Secciones y Estudiantes por Nivel</h4>
+          <div id="ficha-secciones-container" style="border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; margin-bottom: 16px;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+              <thead style="background: #f8fafc; border-bottom: 1px solid #cbd5e1;">
+                <tr>
+                  <th style="padding: 10px 14px; color: #475569;">Nivel / Grado</th>
+                  <th style="padding: 10px 14px; color: #475569; text-align: center;">Secciones</th>
+                  <th style="padding: 10px 14px; color: #475569; text-align: center;">Varones</th>
+                  <th style="padding: 10px 14px; color: #475569; text-align: center;">Hembras</th>
+                  <th style="padding: 10px 14px; color: #475569; text-align: right;">Total</th>
+                </tr>
+              </thead>
+              <tbody id="ficha-tbody-matricula">
+                <!-- Se llena dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Pestaña 3: Nómina de Personal -->
+        <div id="tab-content-personal" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <h4 style="margin: 0; font-size: 0.95rem; color: #1e293b;">Nómina de Cargos del Plantel</h4>
+              <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: #64748b;">Consulte los funcionarios docentes, administrativos y obreros registrados.</p>
+            </div>
+            <button id="btn-cargar-nomina-ficha" type="button" style="background: #0284c7; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s ease;">
+              <span>🔍</span> Actualizar Nómina
+            </button>
+          </div>
+
+          <div style="border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; max-height: 280px; overflow-y: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+              <thead style="background: #f8fafc; position: sticky; top: 0; border-bottom: 1px solid #cbd5e1; z-index: 1;">
+                <tr>
+                  <th style="padding: 10px 14px; color: #475569;">Cédula</th>
+                  <th style="padding: 10px 14px; color: #475569;">Nombre y Apellido</th>
+                  <th style="padding: 10px 14px; color: #475569;">Tipo Personal</th>
+                  <th style="padding: 10px 14px; color: #475569;">Situación</th>
+                </tr>
+              </thead>
+              <tbody id="ficha-tbody-personal">
+                <tr><td colspan="4" style="text-align: center; padding: 20px; color: #64748b;">Haga clic en 'Actualizar Nómina' o consulte en Modo Supervisión.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer Actions -->
+      <div style="background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div style="font-size: 0.75rem; color: #64748b;">
+          💡 Haga clic en <strong>Modo Supervisor Completo</strong> para revisar las pantallas originales del director.
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <button id="btn-cerrar-ficha-pie" type="button" class="btn-secondary" style="padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; cursor: pointer;">Cerrar</button>
+          <button id="btn-abrir-modo-supervisor-desde-ficha" type="button" style="background: #059669; color: white; border: none; padding: 8px 18px; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3); transition: all 0.2s ease;">
+            <span>👁️</span> Abrir en Modo Supervisor Completo
+          </button>
+        </div>
+      </div>
+
     </div>
   </div>
 
