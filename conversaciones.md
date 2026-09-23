@@ -1439,3 +1439,25 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > Se ejecutó la compilación de producción con Vite para la versión **v2.14.9** y se completó exitosamente el despliegue a Firebase Hosting (https://sgh-merida.web.app).
 > Se consolidó el soporte formal para planteles con Modalidad Adulto (Educación de Adultos), permitiendo registrar su matrícula y secciones por Grupos con cálculo reactivo, persistencia en Firestore y desglose administrativo en la ficha del plantel.
 > Se registró el hito técnico en `bitacora.md`, se actualizó `conversaciones.md` y se sincronizó el repositorio remoto en GitHub (`main`).
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Me estoy dando cuenta de una irregularidad, el boton Nuevo plantel solo lo puede ver los usuarios superadmin y zonadmin.
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Totalmente de acuerdo, era una irregularidad en el control de acceso de la interfaz: el botón '➕ Nuevo Plantel' en la pestaña de planteles se renderizaba de forma visible para todos los administradores, permitiendo que un usuario con rol de Coordinador Municipal (munadmin) lo viera y pudiera abrir el modal de creación.
+> Se aplicó la corrección en el entorno local bajo la versión v2.14.10:
+> 1. Restricción visual estricta en el DOM: Se configuró el botón para permanecer oculto por defecto y activarse con visibilidad única y exclusivamente cuando el usuario autenticado posee rol superadmin o zonadmin. Si el usuario es munadmin, el botón queda completamente oculto.
+> 2. Protección a nivel de función y guardado: En admin.js se añadieron validaciones de seguridad tanto al abrir el modal como al intentar procesar el formulario de creación, bloqueando cualquier intento no autorizado con un aviso de acceso restringido.
+> 3. Control SemVer: Se elevó la versión a v2.14.10 en todos los encabezados y puntos de control.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> aprobado, súbelo a Firebase
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se compiló la versión de producción con Vite para la versión **v2.14.10** y se completó exitosamente el despliegue a Firebase Hosting (https://sgh-merida.web.app).
+> Se aplicó la restricción de seguridad RBAC solicitada, garantizando que el botón de creación de planteles y sus operaciones correspondientes sean de acceso exclusivo para usuarios con roles Superadmin y Coordinador Zonal.
+> Se asentó el hito técnico en `bitacora.md`, se actualizó `conversaciones.md` y se sincronizó el repositorio remoto central en GitHub (`main`).

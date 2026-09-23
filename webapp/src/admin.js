@@ -170,6 +170,12 @@ export function initAdminDashboard(dbInstance, user) {
       btnAcordeonBd.style.display = algunSubItemVisible ? 'flex' : 'none';
     }
 
+    // 2.1. Control de visibilidad del botón 'Nuevo Plantel' (exclusivo para superadmin y zonadmin)
+    const btnNuevoPlantel = document.getElementById('btn-nuevo-plantel');
+    if (btnNuevoPlantel) {
+      btnNuevoPlantel.style.display = (isSuperAdmin || isZonAdmin) ? 'flex' : 'none';
+    }
+
     // 3. Encabezado y Títulos Contextuales
     const adminNameEl = document.getElementById('admin-user-name');
     const adminAvatarEl = document.getElementById('admin-user-avatar') || adminNameEl?.previousElementSibling;
@@ -2178,6 +2184,10 @@ export function initAdminDashboard(dbInstance, user) {
   }
 
   function openPlantelModal(plantel = null) {
+     if (!plantel && !isSuperAdmin && !isZonAdmin) {
+       showAlert("Acceso Restringido", "Solo los usuarios Superadmin y Coordinador Zonal tienen permisos para crear nuevos planteles.", "warning");
+       return;
+     }
      formPlantel.reset();
      document.getElementById('p-uid').value = '';
      document.getElementById('modal-plantel-title').innerText = plantel ? 'Editar Plantel' : 'Nuevo Plantel';
@@ -2327,6 +2337,10 @@ export function initAdminDashboard(dbInstance, user) {
 
        const id = document.getElementById('p-uid').value;
        const isEdit = !!id;
+       if (!isEdit && !isSuperAdmin && !isZonAdmin) {
+         await showAlert("Acceso Restringido", "No posee los privilegios requeridos para registrar nuevos planteles.", "danger");
+         return;
+       }
        const btn = document.getElementById('btn-guardar-plantel');
        
        const codP = document.getElementById('p-codigo').value.toUpperCase();

@@ -1283,3 +1283,23 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `conversaciones.md`
 
 ---
+
+### v2.14.10 - Restricción de Acceso para Creación de Planteles por Rol (23 de Septiembre de 2026)
+
+**1. Requerimientos:**
+- Restringir la visibilidad y uso del botón '➕ Nuevo Plantel' en la pestaña de planteles del panel administrativo exclusivamente a usuarios con rol 'superadmin' y 'zonadmin'.
+- Ocultar el botón para usuarios con rol 'munadmin' (Coordinador Municipal) e impedir la apertura o guardado no autorizado del modal de creación.
+
+**2. Solución Técnica y Arquitectura:**
+- **Control de Interfaz en DOM (`index.html` y `admin.js`):** Se estableció `display: none;` por defecto para el botón `#btn-nuevo-plantel` en `index.html`, eliminando destellos no deseados. En la función `configurarInterfazPorRol()` de `admin.js`, se condicionó su activación visual únicamente a que el usuario posea privilegios `isSuperAdmin` o `isZonAdmin`.
+- **Protección Transaccional en Código (`admin.js`):** Se añadieron barreras lógicas de validación en `openPlantelModal()` y en el escuchador de `submit` del formulario `#form-plantel` para bloquear cualquier invocación o envío que carezca de los privilegios correspondientes.
+- **Control SemVer y Despliegue:** Incremento de versión PARCHE a **v2.14.10**, compilación con Vite y despliegue a producción en Firebase Hosting (https://sgh-merida.web.app).
+
+**3. Archivos Involucrados:**
+- `webapp/package.json`
+- `webapp/index.html`
+- `webapp/src/admin.js`
+- `bitacora.md`
+- `conversaciones.md`
+
+---
