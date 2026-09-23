@@ -1184,46 +1184,61 @@ async function mostrarCandado(codigoDEA, dataParcial) {
 
     // Lógica dinámica de visibilidad basada en planes_estudio
     const planes = dp ? (dp["planes-estudio"] || {}) : {};
-    let mostrarInicial = "20000" in planes;
-    let mostrarPrimaria = "21000" in planes;
-    let mostrarMediaGen = false;
-    let mostrarMediaTec = false;
+    const tienePlanes = Object.keys(planes).length > 0;
+    
+    const contMatricula = document.getElementById('contenedor-matricula');
+    const msgSinPlanes = document.getElementById('mensaje-sin-planes');
+    const contAcciones = document.getElementById('contenedor-acciones-matricula');
+    const contSecDetalle = document.getElementById('cont-secciones-detalle');
 
-    Object.keys(planes).forEach(cod => {
-        if (cod.startsWith("3")) mostrarMediaGen = true;
-        if (cod.startsWith("4")) mostrarMediaTec = true;
-    });
-
-    // Fallback: Si el DEA no existe en el diccionario (planes vacíos), mostrar todos los bloques para no dejar la pantalla vacía
-    if (Object.keys(planes).length === 0) {
-        mostrarInicial = true;
-        mostrarPrimaria = true;
-        mostrarMediaGen = true;
-        mostrarMediaTec = true;
-        document.getElementById('inp-nombre-plantel').value = "Plantel no encontrado en diccionario local";
-    }
-
-    // Ocultar todos primero y resetear inputs
+    // Ocultar todos los bloques educativos inicialmente
     ['bloque-inicial', 'bloque-primaria', 'bloque-mediageneral', 'bloque-mediatecnica'].forEach(id => {
-        document.getElementById(id).style.display = 'none';
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
     });
 
-    if (mostrarInicial) document.getElementById('bloque-inicial').style.display = 'block';
-    if (mostrarPrimaria) document.getElementById('bloque-primaria').style.display = 'block';
-    if (mostrarMediaGen) document.getElementById('bloque-mediageneral').style.display = 'block';
-    if (mostrarMediaTec) document.getElementById('bloque-mediatecnica').style.display = 'block';
-
-    // Carga de Secciones Dinámicas para Media (Pasando los guardados)
-    const savedSeccionesPlanes = dataParcial ? (dataParcial["secciones-planes"] || {}) : {};
-    _renderizarDetalleSecciones(planes, savedSeccionesPlanes);
-      const savedMatricula = dataParcial ? dataParcial.matricula : null;
-      _renderizarMatriculaMedia(planes, savedMatricula);
+    if (!tienePlanes) {
+        // REGLA: Si el plantel NO tiene plan de estudio asociado:
+        // Ocultar contenedor de matrícula, secciones y botones de acción
+        if (contMatricula) contMatricula.style.display = 'none';
+        if (contSecDetalle) contSecDetalle.style.display = 'none';
+        if (contAcciones) contAcciones.style.display = 'none';
         
+        // Mostrar única y exclusivamente el mensaje de orientación bajo la ficha de datos del plantel
+        if (msgSinPlanes) msgSinPlanes.style.display = 'block';
+    } else {
+        // REGLA: Si el plantel SÍ tiene planes de estudio:
+        if (contMatricula) contMatricula.style.display = 'block';
+        if (contAcciones) contAcciones.style.display = 'flex';
+        if (msgSinPlanes) msgSinPlanes.style.display = 'none';
+
+        let mostrarInicial = "20000" in planes;
+        let mostrarPrimaria = "21000" in planes;
+        let mostrarMediaGen = false;
+        let mostrarMediaTec = false;
+
+        Object.keys(planes).forEach(cod => {
+            if (cod.startsWith("3")) mostrarMediaGen = true;
+            if (cod.startsWith("4")) mostrarMediaTec = true;
+        });
+
+        if (mostrarInicial) document.getElementById('bloque-inicial').style.display = 'block';
+        if (mostrarPrimaria) document.getElementById('bloque-primaria').style.display = 'block';
+        if (mostrarMediaGen) document.getElementById('bloque-mediageneral').style.display = 'block';
+        if (mostrarMediaTec) document.getElementById('bloque-mediatecnica').style.display = 'block';
+
+        // Carga de Secciones Dinámicas para Media (Pasando los guardados)
+        const savedSeccionesPlanes = dataParcial ? (dataParcial["secciones-planes"] || {}) : {};
+        _renderizarDetalleSecciones(planes, savedSeccionesPlanes);
+        const savedMatricula = dataParcial ? dataParcial.matricula : null;
+        _renderizarMatriculaMedia(planes, savedMatricula);
+            
         const tieneBasica = ("20000" in planes) || ("21000" in planes);
         const contVacantes = document.getElementById('contenedor-pregunta-vacantes');
         if (contVacantes) {
             contVacantes.style.display = tieneBasica ? 'flex' : 'none';
         }
+    }
         
         /* button always enabled initially */
         
@@ -1346,8 +1361,13 @@ async function mostrarCandado(codigoDEA, dataParcial) {
         if (typeof window.cargarPersonalExistente === "function") {
             window.cargarPersonalExistente(codigoDEA);
         }
-    } else if (hasData && typeof window.mostrarFormularioPersonal === "function") {
+    } else if (tienePlanes && hasData && typeof window.mostrarFormularioPersonal === "function") {
         window.mostrarFormularioPersonal(false);
+    } else if (!tienePlanes) {
+        const secReg = document.getElementById('seccion-registro-personal');
+        if (secReg) secReg.style.display = 'none';
+        const secPersonal = document.getElementById('seccion-personal-existente');
+        if (secPersonal) secPersonal.style.display = 'none';
     }
 
     // Guardar los datos cuando el director llene el form

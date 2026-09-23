@@ -1191,3 +1191,24 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 
 ---
 
+
+### v2.14.6 - Manejo Condicional de Matrícula y Mensaje de Orientación para Planteles sin Plan de Estudio (23 de Septiembre de 2026)
+
+**1. Requerimientos:**
+- Evitar que en los planteles sin planes de estudio asociados (como planteles de modalidades Especial o Adulto) se muestre el formulario de matrícula (`#contenedor-matricula`), secciones o botones de acción.
+- Mostrar únicamente la tarjeta de datos de la institución y un aviso destacado con el mensaje: "Comuníquese con el responsable de Gestión Humana Municipal, para orientaciones".
+
+**2. Solución Técnica y Arquitectura:**
+- **Estructura HTML (`index.html`):** Se incorporó el contenedor institucional `#mensaje-sin-planes` inmediatamente después del bloque de datos del plantel con estilo de alerta informativa, y se asignó identificador `#contenedor-acciones-matricula` al bloque inferior de guardado.
+- **Lógica de Visibilidad Dinámica (`main.js`):** En la función `mostrarCandado`, se reemplazó el fallback indiscriminado por una validación estricta de planes (`Object.keys(planes).length > 0`). Si no existen planes, se ocultan `#contenedor-matricula`, `#cont-secciones-detalle` y `#contenedor-acciones-matricula`, y se hace visible únicamente `#mensaje-sin-planes`. Si existen planes, se despliega la interfaz correspondiente con normalidad.
+- **Control SemVer y Despliegue:** Incremento de versión PARCHE a **v2.14.6**, compilación con Vite y despliegue en Firebase Hosting.
+
+**3. Archivos Involucrados:**
+- `webapp/package.json`
+- `webapp/index.html`
+- `webapp/src/main.js`
+- `bitacora.md`
+- `conversaciones.md`
+
+---
+

@@ -1322,3 +1322,26 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > Se registró la culminación exitosa en `bitacora.md`, se respaldó el historial íntegro en `conversaciones.md`, y se ejecutó el commit y push automático hacia el repositorio central de GitHub (`main`).
 > Con respecto a la duda planteada: la respuesta es **SÍ**. Se fundamentó la respuesta detallando la arquitectura del módulo de carga: cuando un plantel no posee planes de estudio registrados, el sistema aplica una regla de contingencia (fallback) que activa automáticamente los formularios de secciones y matrícula correspondientes a Educación Inicial y Educación Primaria para no dejar la interfaz en blanco. En contraste, para Media General y Técnica los formularios se construyen iterando de manera estrictamente dinámica sobre los códigos de planes, por lo que no muestran años ni menciones si el plantel carece de planes asignados.
 
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Ok entonces te explico: no es practico que que si el plantel no tiene plan de estudio asociado aparezcan id="contenedor-matricula". si elplantel no tiene plan de estudio asociado que solo aparezca <div style="background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.02);"> y debajo un mensaje: "Comuníquese con el responsable de Gestión Humana Municipal, para orientaciones"
+> Porque sucede por ejemplo que los planteles con modalidades adulto y especial, que por los momentos no tienen plan de estudio asociado aparezcan esos campos
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se implementó la visualización selectiva para planteles sin planes de estudio asociados:
+> 1. Si el plantel carece de planes de estudio registrados (como ocurre actualmente con planteles de modalidad Especial o Adulto sin planes catalogados), se oculta por completo el contenedor de matrícula (`#contenedor-matricula`), el detalle de secciones de media y los botones de acción/guardado.
+> 2. Se muestra únicamente la tarjeta blanca de datos del plantel y, directamente debajo de ella, un aviso institucional destacado con el texto solicitado: "Comuníquese con el responsable de Gestión Humana Municipal, para orientaciones".
+> 3. En caso de que el plantel cuente con planes de estudio asignados, la interfaz se habilita con normalidad para sus niveles respectivos.
+> Se incrementó la versión a v2.14.6, se compiló el proyecto y se desplegó en Firebase Hosting (https://sgh-merida.web.app).
+
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Sí, satisfactorios
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se registró la culminación exitosa en `bitacora.md`, se respaldó el historial íntegro en `conversaciones.md`, y se ejecutó el commit y push automático hacia el repositorio central de GitHub (`main`).
+
