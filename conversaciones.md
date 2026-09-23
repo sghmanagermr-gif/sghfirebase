@@ -1403,3 +1403,39 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 3. La visualización detallada por grupo en la ficha del plantel del panel administrativo.
 > 4. La estabilización total del árbol DOM de la aplicación, eliminando etiquetas desbalanceadas y fortaleciendo el enrutamiento de inicio de sesión.
 > Se asentó el hito técnico en `bitacora.md`, se actualizó `conversaciones.md` y se procedió con el commit y sincronización hacia el repositorio remoto central en GitHub (`main`).
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Ok, muy bien. Así como hicimos con la modalidad Especial, hagámoslo también con la modalidad Adulto. Igual trabajemoslo por Grupos. ¿Entendido?
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Entendido perfectamente. Replicaremos la misma solución arquitectónica implementada para Modalidad Especial:
+> 1. Bloque de Educación de Adultos en el formulario: Creación del componente con su campo maestro para la cantidad de grupos y su contenedor dinámico.
+> 2. Generación dinámica de Grupos (A, B, C...): Cada grupo con sus respectivos campos de matrícula femenina y masculina, sumatoria reactiva en tiempo real y acumulación al total general del plantel.
+> 3. Persistencia estructurada: Almacenamiento ordenado en Firestore bajo la modalidad adulto, hidratación automática de datos al cargar el formulario y visualización en la ficha institucional del módulo administrativo.
+> 4. Visibilidad condicional: Detección de la modalidad Adulto para habilitar de inmediato el contenedor de matrícula y su respectivo bloque de grupos, prescindiendo de planes formales de estudio.
+> Se preparó el detalle técnico en el Plan de Implementación y se solicitó confirmación para proceder en el entorno local (versión v2.14.9).
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Procede pero sin desplegarlo a Firebase, hasta que yo lo pruebe en local
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> La implementación para la Modalidad Adulto quedó lista y probada localmente bajo la versión v2.14.9:
+> 1. Bloque de Educación de Adultos: Se incorporó en el formulario el contenedor de la modalidad con su campo maestro para definir la Cantidad de Grupos y su franja de sumatoria total.
+> 2. Generación dinámica de Grupos: Al ingresar la cantidad deseada se despliegan automáticamente las tarjetas individuales (Grupo A, Grupo B, Grupo C...) con sus respectivos campos de matrícula femenina y masculina.
+> 3. Cálculo reactivo y persistencia: Los subtotales de la modalidad y los totales generales del plantel se actualizan de forma instantánea al escribir, guardándose de manera estructurada en la base de datos y cargándose de forma transparente al reabrir el formulario.
+> 4. Ficha institucional: El módulo administrativo ya reconoce y desglosa cada grupo de Adulto con su conteo de sección y matrícula por género.
+> 5. Control estricto de despliegue: La compilación finalizó con 0 errores y el árbol DOM se encuentra 100% balanceado. No se ha subido ningún cambio a Firebase Hosting, manteniéndose exclusivamente en tu entorno local.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Pefecto, súbelo a Fierebase
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se ejecutó la compilación de producción con Vite para la versión **v2.14.9** y se completó exitosamente el despliegue a Firebase Hosting (https://sgh-merida.web.app).
+> Se consolidó el soporte formal para planteles con Modalidad Adulto (Educación de Adultos), permitiendo registrar su matrícula y secciones por Grupos con cálculo reactivo, persistencia en Firestore y desglose administrativo en la ficha del plantel.
+> Se registró el hito técnico en `bitacora.md`, se actualizó `conversaciones.md` y se sincronizó el repositorio remoto en GitHub (`main`).

@@ -3163,8 +3163,8 @@ export function initAdminDashboard(dbInstance, user) {
       const mtData = mediaMat['media-tecnica'] || {};
       
       Object.keys(sp).forEach(planId => {
-        // Ignorar planes básicos de inicial y primaria y modalidad especial
-        if (planId === '20000' || planId === '21000' || planId === 'especial') return;
+        // Ignorar planes básicos de inicial y primaria, y modalidades especial y adulto
+        if (planId === '20000' || planId === '21000' || planId === 'especial' || planId === 'adulto') return;
         
         const plan = sp[planId];
         if (typeof plan === 'object' && plan !== null) {
@@ -3201,6 +3201,25 @@ export function initAdminDashboard(dbInstance, user) {
         const totEspM = parseInt(esp['total-especial-mas'] || 0);
         const secEsp = p["secciones-planes"]?.especial || "-";
         filas.push({ nivel: "Educación Especial", sec: secEsp, f: totEspF, m: totEspM, tot: totEsp });
+      }
+    }
+
+    // 5. Modalidad Adulto (Grupos)
+    if (mat.modalidades?.adulto) {
+      const adu = mat.modalidades.adulto;
+      if (adu.grupos && typeof adu.grupos === 'object' && Object.keys(adu.grupos).length > 0) {
+        Object.keys(adu.grupos).sort().forEach(letra => {
+          const g = adu.grupos[letra];
+          const f = parseInt(g.fem || 0);
+          const m = parseInt(g.mas || 0);
+          filas.push({ nivel: `Educación de Adultos - Grupo ${letra}`, sec: 1, f, m, tot: f + m });
+        });
+      } else if (adu['total-adulto']) {
+        const totAdu = parseInt(adu['total-adulto'] || 0);
+        const totAduF = parseInt(adu['total-adulto-fem'] || 0);
+        const totAduM = parseInt(adu['total-adulto-mas'] || 0);
+        const secAdu = p["secciones-planes"]?.adulto || "-";
+        filas.push({ nivel: "Educación de Adultos", sec: secAdu, f: totAduF, m: totAduM, tot: totAdu });
       }
     }
     

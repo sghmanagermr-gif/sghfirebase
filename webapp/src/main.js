@@ -654,6 +654,35 @@ function _renderCajasEspecial(numGrupos) {
     html += '</div></div>';
     cont.innerHTML = html;
 }
+function _renderCajasAdulto(numGrupos) {
+    const cont = document.getElementById('cont-dinamico-adulto');
+    if (!cont) return;
+    if (numGrupos === 0) {
+        cont.innerHTML = '';
+        return;
+    }
+    let html = '<div style="margin-top: 15px;">';
+    html += '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px;">';
+    for (let i = 0; i < numGrupos; i++) {
+        const letra = numGrupos === 1 ? 'U' : _letraGrupo(i);
+        const ident = 'adulto-' + letra;
+        html += '<div style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; background: #f8fafc;">';
+        html += '  <h5 style="margin: 0 0 8px; font-size: 0.85rem; color: #1e293b; text-align: center;">Grupo ' + letra + '</h5>';
+        html += '  <div style="display: flex; gap: 10px;">';
+        html += '    <div style="flex: 1;">';
+        html += '      <label style="font-size: 0.65rem; color: #64748b; display: block; text-align: center;">FEM</label>';
+        html += '      <input type="number" class="mat-input mat-adulto" data-grupo="' + ident + '" data-sexo="F" min="0" value="" style="width: 100%; padding: 0.3rem; text-align: center; border: 1px solid #cbd5e1; border-radius: 4px;">';
+        html += '    </div>';
+        html += '    <div style="flex: 1;">';
+        html += '      <label style="font-size: 0.65rem; color: #64748b; display: block; text-align: center;">MAS</label>';
+        html += '      <input type="number" class="mat-input mat-adulto" data-grupo="' + ident + '" data-sexo="M" min="0" value="" style="width: 100%; padding: 0.3rem; text-align: center; border: 1px solid #cbd5e1; border-radius: 4px;">';
+        html += '    </div>';
+        html += '  </div>';
+        html += '</div>';
+    }
+    html += '</div></div>';
+    cont.innerHTML = html;
+}
 
 document.addEventListener('input', (e) => {
     if (e.target.classList.contains('sec-master-input')) {
@@ -667,6 +696,8 @@ document.addEventListener('input', (e) => {
             _renderCajasPrimaria(val);
         } else if (e.target.id === 'secEsp' || e.target.getAttribute('data-tipo') === 'especial') {
             _renderCajasEspecial(val);
+        } else if (e.target.id === 'secAdu' || e.target.getAttribute('data-tipo') === 'adulto') {
+            _renderCajasAdulto(val);
         }
         
         // Recalcular matrícula al redibujar
@@ -701,10 +732,12 @@ document.getElementById('plantel-form')?.addEventListener('input', (e) => {
         const totMed = sumInputs('.mat-media');
         const totTec = sumInputs('.mat-tecnica');
         const totEsp = sumInputs('.mat-especial');
+        const totAdu = sumInputs('.mat-adulto');
         
         if(document.getElementById('tot-inicial')) document.getElementById('tot-inicial').textContent = totIni;
         if(document.getElementById('tot-primaria')) document.getElementById('tot-primaria').textContent = totPri;
         if(document.getElementById('tot-especial')) document.getElementById('tot-especial').textContent = totEsp;
+        if(document.getElementById('tot-adulto')) document.getElementById('tot-adulto').textContent = totAdu;
         
           // Calculate dynamic media gen
           let sumMg = 0, sumMt = 0;
@@ -1226,6 +1259,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
     const tienePlanes = Object.keys(planes).length > 0;
     const modPlantel = (dp ? (dp.modalidad || '') : '').toUpperCase();
     const esEspecial = modPlantel.includes('ESPECIAL');
+    const esAdulto = modPlantel.includes('ADULTO');
     
     const contMatricula = document.getElementById('contenedor-matricula');
     const msgSinPlanes = document.getElementById('mensaje-sin-planes');
@@ -1233,25 +1267,31 @@ async function mostrarCandado(codigoDEA, dataParcial) {
     const contSecDetalle = document.getElementById('cont-secciones-detalle');
 
     // Ocultar todos los bloques educativos inicialmente
-    ['bloque-inicial', 'bloque-primaria', 'bloque-mediageneral', 'bloque-mediatecnica', 'bloque-especial'].forEach(id => {
+    ['bloque-inicial', 'bloque-primaria', 'bloque-mediageneral', 'bloque-mediatecnica', 'bloque-especial', 'bloque-adulto'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.style.display = 'none';
     });
 
-    if (esEspecial) {
-        // REGLA: Plantel con Modalidad Especial (opera por grupos sin plan formal)
+    if (esEspecial || esAdulto) {
+        // REGLA: Plantel con Modalidad Especial o Adulto (opera por grupos sin plan formal)
         if (contMatricula) contMatricula.style.display = 'block';
         if (contAcciones) contAcciones.style.display = 'flex';
         if (msgSinPlanes) msgSinPlanes.style.display = 'none';
         if (contSecDetalle) contSecDetalle.style.display = 'none';
 
-        const bloqueEsp = document.getElementById('bloque-especial');
-        if (bloqueEsp) bloqueEsp.style.display = 'block';
+        if (esEspecial) {
+            const bloqueEsp = document.getElementById('bloque-especial');
+            if (bloqueEsp) bloqueEsp.style.display = 'block';
+        }
+        if (esAdulto) {
+            const bloqueAdu = document.getElementById('bloque-adulto');
+            if (bloqueAdu) bloqueAdu.style.display = 'block';
+        }
 
         const contVacantes = document.getElementById('contenedor-pregunta-vacantes');
         if (contVacantes) contVacantes.style.display = 'none';
     } else if (!tienePlanes) {
-        // REGLA: Si el plantel NO es Especial y NO tiene plan de estudio asociado:
+        // REGLA: Si el plantel NO es Especial/Adulto y NO tiene plan de estudio asociado:
         if (contMatricula) contMatricula.style.display = 'none';
         if (contSecDetalle) contSecDetalle.style.display = 'none';
         if (contAcciones) contAcciones.style.display = 'none';
@@ -1307,6 +1347,24 @@ async function mostrarCandado(codigoDEA, dataParcial) {
             letras.forEach(letra => {
                 const f = document.querySelector('.mat-input.mat-especial[data-grupo="especial-' + letra + '"][data-sexo="F"]');
                 const m = document.querySelector('.mat-input.mat-especial[data-grupo="especial-' + letra + '"][data-sexo="M"]');
+                if (f) f.value = gruposObj[letra].fem || 0;
+                if (m) m.value = gruposObj[letra].mas || 0;
+            });
+        }
+    }
+
+    // Cargar datos previos de Modalidad Adulto si existen
+    const aduExistente = dataParcial?.matricula?.modalidades?.adulto || dp?.matricula?.modalidades?.adulto;
+    if (esAdulto && aduExistente) {
+        const gruposObj = aduExistente.grupos || {};
+        const letras = Object.keys(gruposObj).filter(k => k.length === 1).sort();
+        const numGrupos = letras.length || parseInt(dataParcial?.["secciones-planes"]?.adulto || dp?.["secciones-planes"]?.adulto || 0);
+        if (numGrupos > 0) {
+            if (document.getElementById('secAdu')) document.getElementById('secAdu').value = numGrupos;
+            _renderCajasAdulto(numGrupos);
+            letras.forEach(letra => {
+                const f = document.querySelector('.mat-input.mat-adulto[data-grupo="adulto-' + letra + '"][data-sexo="F"]');
+                const m = document.querySelector('.mat-input.mat-adulto[data-grupo="adulto-' + letra + '"][data-sexo="M"]');
                 if (f) f.value = gruposObj[letra].fem || 0;
                 if (m) m.value = gruposObj[letra].mas || 0;
             });
@@ -1826,6 +1884,43 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                   matricula['total-gen-fem'] += tEspFem;
                   matricula['total-gen-mas'] += tEspMas;
                   matricula['total-gen']     += (tEspMas + tEspFem);
+              }
+          }
+
+          // ── 7. MODALIDAD ADULTO (GRUPOS) ──────────────────────────────────
+          if (document.getElementById('bloque-adulto')?.style.display !== 'none') {
+              const aduGrupos = {};
+              let tAduMas = 0, tAduFem = 0;
+
+              document.querySelectorAll('.mat-input.mat-adulto').forEach(inp => {
+                  if (!isVisible(inp)) return;
+                  const secLetra = inp.dataset.grupo.split('-')[1];
+                  const val = parseInt(inp.value) || 0;
+                  if (!aduGrupos[secLetra]) aduGrupos[secLetra] = { mas: 0, fem: 0 };
+                  if (inp.dataset.sexo === 'F') {
+                      aduGrupos[secLetra].fem += val;
+                      tAduFem += val;
+                  } else {
+                      aduGrupos[secLetra].mas += val;
+                      tAduMas += val;
+                  }
+              });
+
+              const numGrupos = parseInt(document.getElementById('secAdu')?.value) || 0;
+              if (numGrupos > 0) {
+                  seccionesPlanes['adulto'] = numGrupos;
+              }
+
+              if (Object.keys(aduGrupos).length > 0 || numGrupos > 0) {
+                  matricula.modalidades.adulto = {
+                      grupos: aduGrupos,
+                      'total-adulto-mas': tAduMas,
+                      'total-adulto-fem': tAduFem,
+                      'total-adulto': tAduMas + tAduFem
+                  };
+                  matricula['total-gen-fem'] += tAduFem;
+                  matricula['total-gen-mas'] += tAduMas;
+                  matricula['total-gen']     += (tAduMas + tAduFem);
               }
           }
 

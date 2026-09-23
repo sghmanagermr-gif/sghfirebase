@@ -1258,3 +1258,28 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `conversaciones.md`
 
 ---
+
+### v2.14.9 - Soporte de Matrícula y Secciones por Grupos para Modalidad Adulto (23 de Septiembre de 2026)
+
+**1. Requerimientos:**
+- Permitir a los planteles de Modalidad Adulto (Educación de Adultos) registrar matrícula y secciones organizadas por Grupos (Grupo A, Grupo B, Grupo C...).
+- Incorporar selector maestro de 'Cantidad de Grupos' que genere dinámicamente las tarjetas de grupos con desglose por género (FEM y MAS).
+- Calcular en tiempo real subtotales por grupo, total de la modalidad y acumular a la matrícula global del plantel.
+- Presentar el desglose de grupos en la ficha institucional del plantel dentro del módulo administrativo.
+
+**2. Solución Técnica y Arquitectura:**
+- **Estructura HTML (`index.html`):** Incorporación del componente `#bloque-adulto` dentro de `#contenedor-matricula` con input maestro `#secAdu` (clase `.sec-master-input`), contenedor dinámico `#cont-dinamico-adulto` y franja resumen `#tot-adulto`.
+- **Motor Dinámico de Grupos (`main.js`):** Creación de `_renderCajasAdulto(numGrupos)` para generar los bloques de grupos con inputs `.mat-adulto`. Integración en el motor de cálculo reactivo y persistencia estructurada en Firestore bajo `matricula.modalidades.adulto = { grupos, 'total-adulto-mas', 'total-adulto-fem', 'total-adulto' }`.
+- **Visibilidad Dinámica e Hidratación (`main.js`):** Detección automática en `mostrarCandado` de planteles con `modalidad.includes('ADULTO')`, desplegando el bloque correspondiente y precargando datos históricos desde Firestore.
+- **Ficha Administrativa (`admin.js`):** Integración de `mat.modalidades?.adulto` para detallar fila por fila cada grupo de Educación de Adultos con sus secciones y matrícula por género.
+- **Control SemVer y Despliegue:** Incremento de versión PARCHE a **v2.14.9**, compilación limpia con Vite y despliegue a producción en Firebase Hosting (https://sgh-merida.web.app).
+
+**3. Archivos Involucrados:**
+- `webapp/package.json`
+- `webapp/index.html`
+- `webapp/src/main.js`
+- `webapp/src/admin.js`
+- `bitacora.md`
+- `conversaciones.md`
+
+---
