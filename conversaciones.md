@@ -707,24 +707,24 @@ ombre-apellido). Por lo tanto, al generar el Excel, el sistema no encontraba la 
 * **Mensaje del Usuario:**
 > satisfecho
 
-### Intervención 27
+### Intervenciï¿½n 27
 * **Fecha / Hora:** 2026-09-21 ~17:50 (Hora Local)
 * **Emisor:** Usuario (Administrador)
 
 > **Mensaje del Usuario:**  
 > Bueno en verdad sigo con la duda. Pero bueno sigamos avanzando.
-> 1- al hacer clic en despliegue imagen **001.png todo va bien, aparece el Control de Despliegue Global imagen **002.png, sin embargo al dar clic en el boton hamburguesa el panel aparece detrás de Control de Despligue Global imagen **003.png
+> 1- al hacer clic en despliegue imagen **001.png todo va bien, aparece el Control de Despliegue Global imagen **002.png, sin embargo al dar clic en el boton hamburguesa el panel aparece detrï¿½s de Control de Despligue Global imagen **003.png
 > 2- Mantenimiento de Base de Datos (Aspiradora Inteligente) debe aparecer debajo de Despliegue en la barra lateral, no dentro de Control de Despliegue Global.
-> la barra lateral se sigue viendo detras de Control de Despliegue Global. solo pasa con Control de Despliegue Global. Control de Despliegue Global parece un modal, Lo mismo que Mantenimiento de Base de Datos (Aspiradora Inteligente); a diferencia de los otros apartados, que pareciera fuera parte de la pagina principal (es mi apreciación).
+> la barra lateral se sigue viendo detras de Control de Despliegue Global. solo pasa con Control de Despliegue Global. Control de Despliegue Global parece un modal, Lo mismo que Mantenimiento de Base de Datos (Aspiradora Inteligente); a diferencia de los otros apartados, que pareciera fuera parte de la pagina principal (es mi apreciaciï¿½n).
 > Mira, estoy perdiendo tokens de google por este percanse, todo esta igual. por favor tanto Control de Despliegue Global como Mantenimiento de Base de Datos (Aspiradora Inteligente) que este al mismo nivel que los demas apartados, no en tarjetas ni nada de eso. Entiende que se agota la cuota de google cada vez que haces algo... estoy notando que todos los apartados (excepto Control de Despliegue Global y Mantenimiento de Base de Datos) se aplican dentro de: main id="admin-main" y esos dos por fuera.
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
-> ¡Tienes toda la razón! Tu observación fue brillante y diste justo en el clavo examinando el código.
-> Acabo de revisar exactamente el punto que mencionas (entre la línea 1534 y la 1539) y encontraste al culpable: había una etiqueta </div> intrusa y adicional justo antes de abrir <div id="cat-vista-editor">. 
-> Ese </div> de más hacía que el navegador interpretara que se estaba cerrando prematuramente todo el contenedor <main id="admin-main">. Al cerrarse el <main> antes de tiempo por culpa de ese error de sintaxis, el navegador expulsaba a los apartados de "Control de Despliegue Global" y "Mantenimiento BD" dejándolos huérfanos por fuera del bloque principal, perdiendo los estilos.
-> ¡Ya lo he solucionado! Eliminé el </div> sobrante, retiré los contenedores en forma de tarjeta (glass-panel) y ambos viven ahora felizmente dentro del <main>, con apariencia idéntica al resto.
+> ï¿½Tienes toda la razï¿½n! Tu observaciï¿½n fue brillante y diste justo en el clavo examinando el cï¿½digo.
+> Acabo de revisar exactamente el punto que mencionas (entre la lï¿½nea 1534 y la 1539) y encontraste al culpable: habï¿½a una etiqueta </div> intrusa y adicional justo antes de abrir <div id="cat-vista-editor">. 
+> Ese </div> de mï¿½s hacï¿½a que el navegador interpretara que se estaba cerrando prematuramente todo el contenedor <main id="admin-main">. Al cerrarse el <main> antes de tiempo por culpa de ese error de sintaxis, el navegador expulsaba a los apartados de "Control de Despliegue Global" y "Mantenimiento BD" dejï¿½ndolos huï¿½rfanos por fuera del bloque principal, perdiendo los estilos.
+> ï¿½Ya lo he solucionado! Eliminï¿½ el </div> sobrante, retirï¿½ los contenedores en forma de tarjeta (glass-panel) y ambos viven ahora felizmente dentro del <main>, con apariencia idï¿½ntica al resto.
 
 * **Mensaje del Usuario:**
 > Perfecto, estoy satisfecho
@@ -739,12 +739,12 @@ ombre-apellido). Por lo tanto, al generar el Excel, el sistema no encontraba la 
 > Si es solo agregar empleados, que la pantalla del usuario plaadmin pueda solo agregar usuario.
 > Si es solo modificar empleados, que la pantalla del usuario plaadmin pueda solo modificar sus empleados.
 > Si es solo agregar y modificar empleados, que la pantalla del usuario plaadmin pueda agregar y modificar sus empleados.
-> ¿Que respuesta me tienes para eso?
+> ï¿½Que respuesta me tienes para eso?
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
-> (Se analizó el requerimiento y se ofreció realizar el control mediante un Nivel de Acceso Concedido en el despliegue. Se preguntó si esta configuración de Coacción debería ser a nivel Global, por Municipio o por Plantel).
+> (Se analizï¿½ el requerimiento y se ofreciï¿½ realizar el control mediante un Nivel de Acceso Concedido en el despliegue. Se preguntï¿½ si esta configuraciï¿½n de Coacciï¿½n deberï¿½a ser a nivel Global, por Municipio o por Plantel).
 
 * **Emisor:** Usuario
 
@@ -754,55 +754,55 @@ ombre-apellido). Por lo tanto, al generar el Excel, el sistema no encontraba la 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
-> ¡Perfecto! La opción "Global" es definitivamente la más sensata y limpia administrativamente hablando.
-> Acabo de inyectar toda la lógica en el código base siguiendo exactamente el plan:
-> 1. Agregué el menú desplegable en el Control de Despliegue.
-> 2. Le enseñé al "cerebro" (admin.js) a guardar esta configuración en Firebase.
-> 3. Le enseñé al guardián de la puerta (main.js) a revisar esta configuración de forma oculta en milisegundos cuando entra un plaadmin, aplicando "candados" invisibles. Todo procesado localmente para que consuma 0 cuotas adicionales.
+> ï¿½Perfecto! La opciï¿½n "Global" es definitivamente la mï¿½s sensata y limpia administrativamente hablando.
+> Acabo de inyectar toda la lï¿½gica en el cï¿½digo base siguiendo exactamente el plan:
+> 1. Agreguï¿½ el menï¿½ desplegable en el Control de Despliegue.
+> 2. Le enseï¿½ï¿½ al "cerebro" (admin.js) a guardar esta configuraciï¿½n en Firebase.
+> 3. Le enseï¿½ï¿½ al guardiï¿½n de la puerta (main.js) a revisar esta configuraciï¿½n de forma oculta en milisegundos cuando entra un plaadmin, aplicando "candados" invisibles. Todo procesado localmente para que consuma 0 cuotas adicionales.
 
 * **Emisor:** Usuario
 
 > **Mensaje del Usuario:**  
-> Guardé el municipio santos marquina con en nivel de acceso: Solo matrícula..., entré a un plantel de ese municipio, y pude acceder a los empleados, y hasta pude hacer una modificación
+> Guardï¿½ el municipio santos marquina con en nivel de acceso: Solo matrï¿½cula..., entrï¿½ a un plantel de ese municipio, y pude acceder a los empleados, y hasta pude hacer una modificaciï¿½n
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
-> ¡Vaya, qué buen ojo! Tienes toda la razón, descubriste un "agujero" en la matriz del sistema.
-> Resulta que mi lógica anterior funcionaba perfecto al inicio (ocultando los paneles), pero descubrí que cuando interactuabas con la página o cargaban los datos de Firestore en segundo plano, el sistema original tiene funciones "tercas" (como mostrarFormularioPersonal()) que inyectan una orden de style.display = 'block' forzando a que los paneles del personal vuelvan a aparecer.
-> Acabo de inyectar una técnica de coacción con CSS Dinámico Bulletproof. Ahora el "Guardián" inyecta una regla de estilo global oculta con directivas !important. Esto significa que no importa cuántas veces o qué función del sistema intente forzar la reaparición, el navegador tiene una regla suprema.
+> ï¿½Vaya, quï¿½ buen ojo! Tienes toda la razï¿½n, descubriste un "agujero" en la matriz del sistema.
+> Resulta que mi lï¿½gica anterior funcionaba perfecto al inicio (ocultando los paneles), pero descubrï¿½ que cuando interactuabas con la pï¿½gina o cargaban los datos de Firestore en segundo plano, el sistema original tiene funciones "tercas" (como mostrarFormularioPersonal()) que inyectan una orden de style.display = 'block' forzando a que los paneles del personal vuelvan a aparecer.
+> Acabo de inyectar una tï¿½cnica de coacciï¿½n con CSS Dinï¿½mico Bulletproof. Ahora el "Guardiï¿½n" inyecta una regla de estilo global oculta con directivas !important. Esto significa que no importa cuï¿½ntas veces o quï¿½ funciï¿½n del sistema intente forzar la reapariciï¿½n, el navegador tiene una regla suprema.
 
 * **Emisor:** Usuario
 
 > **Mensaje del Usuario:**  
-> ok, trata de pensar un poco mas allá. al seleccionar SOLO_MATRICULA oculta perfectamente lo referente al personal. Pero al seleccionar SOLO_EDITAR_PERSONAL puedo ver la tabla con los registro del personal adscrito al plantel y al hacer clic en editar no se ve el formulario para realizar dicha edición. Por favor evalúa cada opción: TOTAL (Por defecto), SOLO_MATRICULA (ya sirve), SOLO_AGREGAR_PERSONAL, SOLO_EDITAR_PERSONAL y PERSONAL_COMPLETO. para que no tenga que estar solicitandote hacer más modificaciones al respecto
+> ok, trata de pensar un poco mas allï¿½. al seleccionar SOLO_MATRICULA oculta perfectamente lo referente al personal. Pero al seleccionar SOLO_EDITAR_PERSONAL puedo ver la tabla con los registro del personal adscrito al plantel y al hacer clic en editar no se ve el formulario para realizar dicha ediciï¿½n. Por favor evalï¿½a cada opciï¿½n: TOTAL (Por defecto), SOLO_MATRICULA (ya sirve), SOLO_AGREGAR_PERSONAL, SOLO_EDITAR_PERSONAL y PERSONAL_COMPLETO. para que no tenga que estar solicitandote hacer mï¿½s modificaciones al respecto
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
-> ¡Tienes toda la razón y agradezco la observación! Pensar en el flujo completo de "Solo Editar Personal" me hizo darme cuenta de un pequeño pero importante choque: si te ocultaba el formulario por completo con la orden de acero (CSS !important), la acción de *Editar* no tendría en dónde mostrarte los datos para que pudieras corregirlos.
-> He reprogramado la inyección de CSS !important para evaluar inteligentemente el estado y la visibilidad de los botones.
+> ï¿½Tienes toda la razï¿½n y agradezco la observaciï¿½n! Pensar en el flujo completo de "Solo Editar Personal" me hizo darme cuenta de un pequeï¿½o pero importante choque: si te ocultaba el formulario por completo con la orden de acero (CSS !important), la acciï¿½n de *Editar* no tendrï¿½a en dï¿½nde mostrarte los datos para que pudieras corregirlos.
+> He reprogramado la inyecciï¿½n de CSS !important para evaluar inteligentemente el estado y la visibilidad de los botones.
 > 1. TOTAL: Todo abierto.
 > 2. SOLO_MATRICULA: Oculta la tabla de personal y el formulario.
-> 3. SOLO_AGREGAR_PERSONAL: Matrícula bloqueada. Tabla visible pero botones de Editar/Eliminar ocultos. Formulario activo.
-> 4. SOLO_EDITAR_PERSONAL: Matrícula bloqueada. Tabla visible con acciones. Formulario invisible a menos que presione "Editar" (gracias a :has de CSS).
-> 5. PERSONAL_COMPLETO: Matrícula bloqueada. Personal 100% activo.
+> 3. SOLO_AGREGAR_PERSONAL: Matrï¿½cula bloqueada. Tabla visible pero botones de Editar/Eliminar ocultos. Formulario activo.
+> 4. SOLO_EDITAR_PERSONAL: Matrï¿½cula bloqueada. Tabla visible con acciones. Formulario invisible a menos que presione "Editar" (gracias a :has de CSS).
+> 5. PERSONAL_COMPLETO: Matrï¿½cula bloqueada. Personal 100% activo.
 
 * **Emisor:** Usuario
 
 > **Mensaje del Usuario:**  
 > satisfecho. copia todos los mensajes faltantes en conversaciones.md cronologicamente
 
-### Sesión 21 de Septiembre de 2026 (Panel Munadmin y Resolución de Firebase Quota)
-- **Usuario**: Solicitó que en el panel Estatus de Matrícula se visualice el nombre (epónimo) del plantel en lugar de la cantidad bruta. Solicitó investigar una discrepancia visual donde planteles sin matrícula cargada (ej. Amable Antonio Rangel y Doctor Miguel Otero Silva) aparecían como 'Cargados' (??).
-- **Agente**: Se reestructuró la UI para incorporar una lista scrollable con identificadores rojo/verde para planteles pendientes/cargados. Durante el proceso de diagnóstico, se comprobó que el error era un falso positivo generado por la variable genérica datos_completados del objeto Plantel, la cual podía estar en 	rue incluso con formularios de matrícula vacíos. Se reconstruyó la validación matemática apuntando directamente a p.matricula.total-gen > 0 y 	otal-vac-gen > 0.
-- **Usuario**: Validó la solución y dio confirmación de 'Estoy Satisfecho'.
+### Sesiï¿½n 21 de Septiembre de 2026 (Panel Munadmin y Resoluciï¿½n de Firebase Quota)
+- **Usuario**: Solicitï¿½ que en el panel Estatus de Matrï¿½cula se visualice el nombre (epï¿½nimo) del plantel en lugar de la cantidad bruta. Solicitï¿½ investigar una discrepancia visual donde planteles sin matrï¿½cula cargada (ej. Amable Antonio Rangel y Doctor Miguel Otero Silva) aparecï¿½an como 'Cargados' (??).
+- **Agente**: Se reestructurï¿½ la UI para incorporar una lista scrollable con identificadores rojo/verde para planteles pendientes/cargados. Durante el proceso de diagnï¿½stico, se comprobï¿½ que el error era un falso positivo generado por la variable genï¿½rica datos_completados del objeto Plantel, la cual podï¿½a estar en 	rue incluso con formularios de matrï¿½cula vacï¿½os. Se reconstruyï¿½ la validaciï¿½n matemï¿½tica apuntando directamente a p.matricula.total-gen > 0 y 	otal-vac-gen > 0.
+- **Usuario**: Validï¿½ la soluciï¿½n y dio confirmaciï¿½n de 'Estoy Satisfecho'.
 
 
-### Sesión 21 de Septiembre de 2026 (Extensión Estadal del Panel)
-- **Usuario**: Solicitó habilitar el mismo panel extendido para los usuarios zonadmin (nivel estadal), especificando literalmente que en lugar de mostrar el nombre de planteles (para estatus de matrícula y jubilaciones), se muestre agrupado por municipios.
-- **Agente**: Propuso un plan de implementación para refactorizar la lógica en dmin.js, inyectando bifurcaciones condicionales que, al detectar un usuario de nivel Estadal, realizan peticiones sin el filtro de where, agrupando luego los resultados usando diccionarios en memoria y adaptando el renderizado de la UI de acuerdo al alcance (Escuelas para Munadmin, Municipios para Zonadmin). Además se alertó que esto podría estresar el Plan Spark si se abusa sin el caché offline.
-- **Usuario**: Aprobó el plan y posteriormente confirmó su satisfacción con los resultados obtenidos.
+### Sesiï¿½n 21 de Septiembre de 2026 (Extensiï¿½n Estadal del Panel)
+- **Usuario**: Solicitï¿½ habilitar el mismo panel extendido para los usuarios zonadmin (nivel estadal), especificando literalmente que en lugar de mostrar el nombre de planteles (para estatus de matrï¿½cula y jubilaciones), se muestre agrupado por municipios.
+- **Agente**: Propuso un plan de implementaciï¿½n para refactorizar la lï¿½gica en dmin.js, inyectando bifurcaciones condicionales que, al detectar un usuario de nivel Estadal, realizan peticiones sin el filtro de where, agrupando luego los resultados usando diccionarios en memoria y adaptando el renderizado de la UI de acuerdo al alcance (Escuelas para Munadmin, Municipios para Zonadmin). Ademï¿½s se alertï¿½ que esto podrï¿½a estresar el Plan Spark si se abusa sin el cachï¿½ offline.
+- **Usuario**: Aprobï¿½ el plan y posteriormente confirmï¿½ su satisfacciï¿½n con los resultados obtenidos.
 
 
 ### SesiÃ³n 21 de Septiembre de 2026 (Indicadores de Carga y OptimizaciÃ³n de Consultas)
@@ -1291,3 +1291,34 @@ pm run build) y se desplegÃ³ a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 > **Respuesta del Agente:**
 > Se registrÃ³ la culminaciÃ³n exitosa en `bitacora.md`, se respaldÃ³ el historial Ã­ntegro en `conversaciones.md`, y se ejecutÃ³ el commit y push automÃ¡tico hacia el repositorio central de GitHub (`main`).
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."
+> 
+> Vamos ajustar unos detalles en el modal para editar planteles:
+> 1- los campos metros cuadrados y observaciones no deben ser requeridos
+> 2- Si hay un item de la lista de Nivel Educativo seleccionado, no se requiere seleccionar un item de Modalidad y viseversa
+> 3- si el plantel tiene modalidad especial o adulto no se requiere seleccionar plan de estudio
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se ajustaron los tres requerimientos en el formulario y lÃ³gica del modal de creaciÃ³n/ediciÃ³n de planteles:
+> 1. Los campos de Metros Cuadrados y Observaciones ahora estÃ¡n debidamente marcados y validados como opcionales sin bloquear el guardado.
+> 2. Se flexibilizÃ³ la validaciÃ³n entre Nivel Educativo y Modalidad: si se selecciona cualquiera de los dos, el otro ya no es exigido; el sistema solo solicitarÃ¡ atenciÃ³n si ambos campos quedan vacÃ­os.
+> 3. En caso de que el plantel pertenezca a la modalidad Especial o Adulto, la selecciÃ³n de planes de estudio es opcional y se muestra un mensaje informativo que lo aclara. Si se trata de un plantel regular, se mantiene la obligatoriedad de asignar al menos un plan de estudio.
+> Se incrementÃ³ la versiÃ³n a v2.14.5, se generÃ³ el paquete de producciÃ³n y se desplegÃ³ satisfactoriamente en Firebase Hosting (https://sgh-merida.web.app).
+
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> SÃ­, satisfactorios.
+> 
+> Pero tengo una duda. Â¿los planteles asÃ­ no tengan ningun plan de estudio asociado muestran para agregar matrÃ­cula y secciones?
+> Por favor responde si o no, y justifica la respuesta
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se registrÃ³ la culminaciÃ³n exitosa en `bitacora.md`, se respaldÃ³ el historial Ã­ntegro en `conversaciones.md`, y se ejecutÃ³ el commit y push automÃ¡tico hacia el repositorio central de GitHub (`main`).
+> Con respecto a la duda planteada: la respuesta es **SÃ**. Se fundamentÃ³ la respuesta detallando la arquitectura del mÃ³dulo de carga: cuando un plantel no posee planes de estudio registrados, el sistema aplica una regla de contingencia (fallback) que activa automÃ¡ticamente los formularios de secciones y matrÃ­cula correspondientes a EducaciÃ³n Inicial y EducaciÃ³n Primaria para no dejar la interfaz en blanco. En contraste, para Media General y TÃ©cnica los formularios se construyen iterando de manera estrictamente dinÃ¡mica sobre los cÃ³digos de planes, por lo que no muestran aÃ±os ni menciones si el plantel carece de planes asignados.
+

@@ -799,22 +799,22 @@ Se implementÃ³ el requerimiento de inyectar una tabla resumen con el personal pr
 ---
 
 
-### Hito 27: Reestructuración de la Interfaz UI de Despliegue y Aspiradora (Z-Index y DOM)
+### Hito 27: Reestructuraciï¿½n de la Interfaz UI de Despliegue y Aspiradora (Z-Index y DOM)
 **Fecha:** 2026-09-21  
-**Módulo:** Interfaz Principal (index.html) y Permisos (admin.js)
+**Mï¿½dulo:** Interfaz Principal (index.html) y Permisos (admin.js)
 
 **1. Requerimientos:**
-- El usuario reportó que el panel lateral (sidebar) aparecía detrás de la vista de "Control de Despliegue Global".
-- También reportó que "Mantenimiento de Base de Datos" debía tener su propia pestaña en la barra lateral en lugar de estar contenida dentro de Despliegue.
-- Posteriormente, indicó que ambas pestañas parecían "tarjetas" modales y no se integraban visualmente al nivel de los demás apartados (fuera del main principal).
+- El usuario reportï¿½ que el panel lateral (sidebar) aparecï¿½a detrï¿½s de la vista de "Control de Despliegue Global".
+- Tambiï¿½n reportï¿½ que "Mantenimiento de Base de Datos" debï¿½a tener su propia pestaï¿½a en la barra lateral en lugar de estar contenida dentro de Despliegue.
+- Posteriormente, indicï¿½ que ambas pestaï¿½as parecï¿½an "tarjetas" modales y no se integraban visualmente al nivel de los demï¿½s apartados (fuera del main principal).
 
-**2. Solución Técnica Implementada:**
-- Se extrajo el contenido de "Mantenimiento de Base de Datos" hacia su propia etiqueta <div id="admin-tab-aspiradora">, creando un botón lateral dedicado.
-- En dmin.js, se inyectó la lógica de visibilidad de los botones tn-sidebar-despliegue y tn-sidebar-aspiradora condicionada al rol de superadministrador.
-- **Corrección Estructural Crítica (El DOM roto):** Se detectó mediante depuración manual y 
-ode.js que el contenedor principal <main id="admin-main"> sufría un cierre prematuro debido a la presencia de un </div> adicional en la línea 1537 (inmediatamente después de cat-vista-grid).
-- Este cierre prematuro empujaba forzosamente los apartados dmin-tab-despliegue y dmin-tab-aspiradora fuera del flujo del <main>, despojándolos de márgenes y paddings.
-- Se eliminó el </div> intruso, reubicando ambas vistas dentro del <main>, y se eliminaron las clases .glass-panel y paddings residuales para garantizar homogeneidad con el estilo de dmin-tab-estadisticas.
+**2. Soluciï¿½n Tï¿½cnica Implementada:**
+- Se extrajo el contenido de "Mantenimiento de Base de Datos" hacia su propia etiqueta <div id="admin-tab-aspiradora">, creando un botï¿½n lateral dedicado.
+- En dmin.js, se inyectï¿½ la lï¿½gica de visibilidad de los botones tn-sidebar-despliegue y tn-sidebar-aspiradora condicionada al rol de superadministrador.
+- **Correcciï¿½n Estructural Crï¿½tica (El DOM roto):** Se detectï¿½ mediante depuraciï¿½n manual y 
+ode.js que el contenedor principal <main id="admin-main"> sufrï¿½a un cierre prematuro debido a la presencia de un </div> adicional en la lï¿½nea 1537 (inmediatamente despuï¿½s de cat-vista-grid).
+- Este cierre prematuro empujaba forzosamente los apartados dmin-tab-despliegue y dmin-tab-aspiradora fuera del flujo del <main>, despojï¿½ndolos de mï¿½rgenes y paddings.
+- Se eliminï¿½ el </div> intruso, reubicando ambas vistas dentro del <main>, y se eliminaron las clases .glass-panel y paddings residuales para garantizar homogeneidad con el estilo de dmin-tab-estadisticas.
 
 **3. Archivos Involucrados:**
 - webapp/index.html
@@ -823,21 +823,21 @@ ode.js que el contenedor principal <main id="admin-main"> sufría un cierre prema
 - bitacora.md
 - conversaciones.md
 
-### v2.11.27 - Ajuste de Motor de Estadísticas y Validaciones Offline-First (21 de Septiembre de 2026)
+### v2.11.27 - Ajuste de Motor de Estadï¿½sticas y Validaciones Offline-First (21 de Septiembre de 2026)
 
-1. **Refactorización de Panel Munadmin:** Se implementó el panel extendido para el Coordinador Municipal (Discriminación de Personal, Situación Laboral, Matrícula y Jubilables).
-2. **Tolerancia a Fallos de Cuota (Offline-First):** Se inyectó la función `safeGetCount` para atrapar excepciones de 'Quota Exceeded' de Firebase (Plan Spark) y mostrar visualmente la etiqueta 'En mantenimiento' sin romper la interfaz.
-3. **Caché Híbrido:** Las tablas inferiores aprovechan `getDocs` con fallback a la caché persistente (IndexedDB) de Firebase para procesar datos sin incurrir en lecturas al servidor si la cuota fue excedida, comprobando la eficacia de la arquitectura Zero-Cost.
-4. **Corrección Visual de Matrícula:** Se sustituyó la presentación de números simples en el panel de Estatus de Matrícula por una lista escroleable donde se muestran los Epónimos de los planteles Cargados (??) y Pendientes (??).
-5. **Corrección de Lógica Falsa-Positiva:** Se modificó la validación de estado de carga de matrícula. Anteriormente se verificaba la variable transaccional `p.datos_completados`, la cual podía arrojar verdaderos en planteles con matrícula vacía por clicks accidentales. Ahora, la validación escanea matemáticamente la propiedad interna (`total-gen > 0 || total-vac-gen > 0`), eliminando discrepancias con los planteles vacíos (Ej: Amable Antonio Rangel).
+1. **Refactorizaciï¿½n de Panel Munadmin:** Se implementï¿½ el panel extendido para el Coordinador Municipal (Discriminaciï¿½n de Personal, Situaciï¿½n Laboral, Matrï¿½cula y Jubilables).
+2. **Tolerancia a Fallos de Cuota (Offline-First):** Se inyectï¿½ la funciï¿½n `safeGetCount` para atrapar excepciones de 'Quota Exceeded' de Firebase (Plan Spark) y mostrar visualmente la etiqueta 'En mantenimiento' sin romper la interfaz.
+3. **Cachï¿½ Hï¿½brido:** Las tablas inferiores aprovechan `getDocs` con fallback a la cachï¿½ persistente (IndexedDB) de Firebase para procesar datos sin incurrir en lecturas al servidor si la cuota fue excedida, comprobando la eficacia de la arquitectura Zero-Cost.
+4. **Correcciï¿½n Visual de Matrï¿½cula:** Se sustituyï¿½ la presentaciï¿½n de nï¿½meros simples en el panel de Estatus de Matrï¿½cula por una lista escroleable donde se muestran los Epï¿½nimos de los planteles Cargados (??) y Pendientes (??).
+5. **Correcciï¿½n de Lï¿½gica Falsa-Positiva:** Se modificï¿½ la validaciï¿½n de estado de carga de matrï¿½cula. Anteriormente se verificaba la variable transaccional `p.datos_completados`, la cual podï¿½a arrojar verdaderos en planteles con matrï¿½cula vacï¿½a por clicks accidentales. Ahora, la validaciï¿½n escanea matemï¿½ticamente la propiedad interna (`total-gen > 0 || total-vac-gen > 0`), eliminando discrepancias con los planteles vacï¿½os (Ej: Amable Antonio Rangel).
 
 
-### v2.12.0 - Panel de Métricas Nivel Estadal (ZonAdmin) (21 de Septiembre de 2026)
+### v2.12.0 - Panel de Mï¿½tricas Nivel Estadal (ZonAdmin) (21 de Septiembre de 2026)
 
-1. **Activación de Panel Extendido Estadal:** Se rediseñó el panel inferior de estadísticas extendidas para activarse en cuentas con jerarquía `zonadmin`, `admin` o `superadmin`. 
-2. **Lectura Completa y Agrupación Dinámica:** En lugar de buscar planteles o nómina por un solo municipio, el código detecta el contexto `isEstadal`, trayendo la data integral y aplicando algoritmos de agrupación dinámica por Municipio en memoria (Zero-Cost sobre caché en reads subsecuentes).
-3. **Rediseño Estatus de Matrícula (Semáforo Zonal):** La lista de escuelas pasó a ser un consolidador de carga por Municipio, indicando la cantidad de planteles Cargados y Pendientes en la jurisdicción bajo un esquema visual de semáforo (Verde, Amarillo, Rojo).
-4. **Refactorización Tabla Jubilables:** Se adaptó la renderización para mostrar el total consolidado de posibles jubilados por Municipio en la vista Zonal, preservando la vista por DEA (código de plantel) en la vista Municipal.
+1. **Activaciï¿½n de Panel Extendido Estadal:** Se rediseï¿½ï¿½ el panel inferior de estadï¿½sticas extendidas para activarse en cuentas con jerarquï¿½a `zonadmin`, `admin` o `superadmin`. 
+2. **Lectura Completa y Agrupaciï¿½n Dinï¿½mica:** En lugar de buscar planteles o nï¿½mina por un solo municipio, el cï¿½digo detecta el contexto `isEstadal`, trayendo la data integral y aplicando algoritmos de agrupaciï¿½n dinï¿½mica por Municipio en memoria (Zero-Cost sobre cachï¿½ en reads subsecuentes).
+3. **Rediseï¿½o Estatus de Matrï¿½cula (Semï¿½foro Zonal):** La lista de escuelas pasï¿½ a ser un consolidador de carga por Municipio, indicando la cantidad de planteles Cargados y Pendientes en la jurisdicciï¿½n bajo un esquema visual de semï¿½foro (Verde, Amarillo, Rojo).
+4. **Refactorizaciï¿½n Tabla Jubilables:** Se adaptï¿½ la renderizaciï¿½n para mostrar el total consolidado de posibles jubilados por Municipio en la vista Zonal, preservando la vista por DEA (cï¿½digo de plantel) en la vista Municipal.
 
 
 ### v2.12.1 - Indicadores de Carga Visual (Spinners) y Descargas Concurrentes (21 de Septiembre de 2026)
@@ -1169,3 +1169,25 @@ ode.js que el contenedor principal <main id="admin-main"> sufría un cierre prema
 - `conversaciones.md`
 
 ---
+
+### v2.14.5 - FlexibilizaciÃ³n y Reglas de ValidaciÃ³n en Formulario de Planteles (23 de Septiembre de 2026)
+
+**1. Requerimientos:**
+- Establecer como opcionales los campos de Metros Cuadrados y Observaciones en el modal de planteles.
+- Implementar validaciÃ³n condicional entre Nivel Educativo y Modalidad: si se selecciona uno de ellos, el otro no es requerido; solo se exige atenciÃ³n si ambos quedan vacÃ­os.
+- Eximir de la obligatoriedad de selecciÃ³n de planes de estudio a planteles con modalidad Especial o Adulto, manteniendo la obligatoriedad para planteles regulares.
+
+**2. SoluciÃ³n TÃ©cnica y Arquitectura:**
+- **Formulario e Interfaz (`index.html`):** Se eliminÃ³ el atributo nativo `required` del selector de nivel, aÃ±adiendo indicadores visuales claros `(o Modalidad *)`, `(o Nivel *)`, `(Opcional)` en Metros Cuadrados y Observaciones, y un contenedor de aviso contextual `#p-planes-info-msg`.
+- **LÃ³gica de ValidaciÃ³n DinÃ¡mica (`admin.js`):** Se implementÃ³ la funciÃ³n `actualizarReglasNivelModalidadPlanes()`, sincronizada mediante escuchadores de eventos sobre los selectores de nivel y modalidad y activada al abrir el modal. En el evento `submit`, se valida que exista al menos Nivel o Modalidad, y se condiciona la exigencia de planes segÃºn la modalidad detectada (`ESPECIAL` o `ADULTO`).
+- **Control SemVer y Despliegue:** Incremento de versiÃ³n PARCHE a **v2.14.5**, compilaciÃ³n en Vite y despliegue en Firebase Hosting.
+
+**3. Archivos Involucrados:**
+- `webapp/package.json`
+- `webapp/index.html`
+- `webapp/src/admin.js`
+- `bitacora.md`
+- `conversaciones.md`
+
+---
+

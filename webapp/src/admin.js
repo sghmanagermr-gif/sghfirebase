@@ -2138,6 +2138,27 @@ export function initAdminDashboard(dbInstance, user) {
     actualizarContadorPlanes();
   }
 
+  function actualizarReglasNivelModalidadPlanes() {
+    const selMod = document.getElementById('p-modalidad');
+    const badgeReq = document.getElementById('p-planes-req-badge');
+    const infoMsg = document.getElementById('p-planes-info-msg');
+
+    const modVal = (selMod?.value || '').trim().toUpperCase();
+    const esEspecialOAdulto = modVal.includes('ESPECIAL') || modVal.includes('ADULTO');
+
+    if (badgeReq) {
+      badgeReq.style.display = esEspecialOAdulto ? 'none' : 'inline';
+    }
+    if (infoMsg) {
+      if (esEspecialOAdulto) {
+        infoMsg.style.display = 'block';
+        infoMsg.textContent = `Modalidad ${modVal.includes('ESPECIAL') ? 'Especial' : 'Adulto'} seleccionada: La selección de Planes de Estudio es opcional.`;
+      } else {
+        infoMsg.style.display = 'none';
+      }
+    }
+  }
+
   function cerrarModalPlantel() {
      if (modalPlantel) {
        modalPlantel.style.display = 'none';
@@ -2243,6 +2264,8 @@ export function initAdminDashboard(dbInstance, user) {
        poblarCheckboxesPlanes({});
      }
      
+     // Sincronizar reglas visuales según la modalidad cargada o seleccionada
+     actualizarReglasNivelModalidadPlanes();
      modalPlantel.style.display = 'flex';
      const resetScroll = () => {
        modalPlantel.scrollTop = 0;
@@ -2265,6 +2288,11 @@ export function initAdminDashboard(dbInstance, user) {
        setTimeout(resetScroll, 150);
      });
   }
+
+  const selNivelInput = document.getElementById('p-nivel');
+  const selModInput = document.getElementById('p-modalidad');
+  if (selNivelInput) selNivelInput.addEventListener('change', actualizarReglasNivelModalidadPlanes);
+  if (selModInput) selModInput.addEventListener('change', actualizarReglasNivelModalidadPlanes);
 
   if(document.getElementById('btn-nuevo-plantel')) {
     document.getElementById('btn-nuevo-plantel').addEventListener('click', () => openPlantelModal(null));
@@ -2326,6 +2354,12 @@ export function initAdminDashboard(dbInstance, user) {
        const turnoVal = document.getElementById('p-turno').value.trim().toUpperCase();
        const obsVal = document.getElementById('p-observaciones').value.trim();
 
+       // Regla 2: Si hay Nivel seleccionado no se requiere Modalidad y viceversa. Si ambos faltan, se requiere al menos uno.
+       if (!nivelVal && !modalidadVal) {
+         await showAlert("Nivel o Modalidad Requerido", "Por favor seleccione al menos un Nivel Educativo o una Modalidad para el plantel.", "warning");
+         return;
+       }
+
        // Recolectar planes de estudio seleccionados
        const planesCatalogo = obtenerPlanesEstudioCatalogo();
        const planesSelected = {};
@@ -2344,6 +2378,14 @@ export function initAdminDashboard(dbInstance, user) {
            };
          }
        });
+
+       // Regla 3: Si tiene modalidad Especial o Adulto, no se requiere selección de planes de estudio.
+       // Si no es Especial ni Adulto, sí es obligatorio seleccionar al menos un plan de estudio.
+       const esEspecialOAdulto = modalidadVal.includes('ESPECIAL') || modalidadVal.includes('ADULTO');
+       if (!esEspecialOAdulto && Object.keys(planesSelected).length === 0) {
+         await showAlert("Plan de Estudio Requerido", "Para planteles regulares (que no correspondan a la modalidad Especial o Adulto), debe seleccionar al menos un Plan de Estudio que imparte la institución.", "warning");
+         return;
+       }
 
        const newData = {
           "municipio": munFinal,
