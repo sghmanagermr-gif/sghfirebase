@@ -1219,3 +1219,42 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 2. **Navegación Bidireccional hacia la Ficha:** Se añadió en el banner superior de supervisión el botón azul **`📋 Volver a la Ficha`**, que permite al usuario regresar de inmediato a la ficha rápida del plantel sin perder su contexto, manteniendo además el botón rojo de retorno al panel general.
 > 3. **Consolidación de la Opción 2 en la Tabla:** Se optimizó la tabla de planteles del municipio dejando el botón **`📋 Ficha`** como punto de acceso principal, eliminando la duplicidad visual.
 > 4. **SemVer y Despliegue:** Incremento a **v2.14.1**, compilación y despliegue exitoso a producción en Firebase Hosting (https://sgh-merida.web.app).
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Sí estoy satisfecho
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."
+> Ahora quiero que me digas porque hoy que la cuota de google firebase está renovada, no aparecen datos en el Estatus de Matrícula = ver imagen ***002.PNG
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se explicó que la causa raíz es que el archivo de resumen consolidado (`resumen_estadisticas.json` / `estadisticas/resumen_global`), generado durante el bloqueo previo a partir de un respaldo de nómina, tiene el contador de matrículas cargadas fijado en cero (`cargados: 0`), activando la condición que muestra "En cálculo...". A nivel de base de datos Firestore, en Santos Marquina ya existen 5 planteles con matrícula cargada y 13 pendientes.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> El municipio de mérida que tiene mas planteles es Libertador con ~200 planteles. ¿cual sería el plan?
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se estructuró el Plan de Arquitectura y Optimización Zero-Cost en `implementation_plan.md`, demostrando que 190 planteles representan apenas el 0.38% de la cuota diaria gratuita de Firebase (50.000 lecturas). Se establecieron tres pilares de optimización: Escudo de Memoria de Sesión (1 sola consulta al iniciar sesión y 0 lecturas en navegación), Unificación con la Tabla de Planteles (un solo viaje para métricas y gestión), y consumo bajo demanda para la supervisión zonal.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> [Aprobación del Plan de Implementación de Estatus de Matrícula Zero-Cost]
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se implementó y desplegó exitosamente la versión **v2.14.2**:
+> 1. **Sincronización en Vivo para munadmin:** Se conectó la tarjeta de Estatus de Matrícula directamente con los planteles del municipio, mostrando de inmediato los planteles cargados y pendientes con nombres reales.
+> 2. **Filtros Interactivos:** Se incorporaron botones de pestañas rápidas (Todos, Pendientes y Cargados) para facilitar el seguimiento de las escuelas.
+> 3. **Botón de Sincronización Manual:** Se habilitó el botón '🔄 Sincronizar' en la cabecera de la tarjeta para consultar actualizaciones recientes a demanda.
+> 4. **Escudo de Memoria Zero-Cost:** Se implementó una caché en memoria y sessionStorage unificada entre la tarjeta de métricas y la tabla de planteles, garantizando que un municipio como Libertador (~190 planteles) o Santos Marquina (18 planteles) realice una única lectura al servidor por sesión, con 0 lecturas adicionales durante toda la navegación.
+> 5. **SemVer y Despliegue:** Incremento de versión a **v2.14.2** en package.json e index.html, compilación limpia con Vite y despliegue a producción en Firebase Hosting (https://sgh-merida.web.app).
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Sí, son satisfactorios
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se registró la culminación exitosa del hito en `bitacora.md`, se respaldó el historial íntegro de la sesión en `conversaciones.md`, y se ejecutó el commit y push automático hacia el repositorio central de GitHub (`main`).

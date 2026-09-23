@@ -1103,3 +1103,28 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre prema
 - `conversaciones.md`
 
 ---
+
+### v2.14.2 - Estatus de Matrícula en Vivo con Escudo de Memoria Zero-Cost y Filtros Interactivos (23 de Septiembre de 2026)
+
+**1. Requerimientos:**
+- Resolver la causa por la cual la tarjeta "Estatus de Matrícula" permanecía en estado "En cálculo..." al renovarse la cuota de Firebase.
+- Implementar sincronización real para usuarios municipales (`munadmin`) sin poner en riesgo la cuota gratuita diaria de 50.000 lecturas de Firebase Spark, previendo municipios de alta densidad como Libertador (~190 planteles).
+- Dotar al usuario de herramientas de filtrado rápido entre planteles cargados y pendientes para facilitar el seguimiento operativo, junto con un botón de sincronización manual.
+
+**2. Solución Técnica y Arquitectura:**
+- **Análisis de Causa Raíz:** Se determinó que el archivo maestro `resumen_estadisticas.json` / `estadisticas/resumen_global`, generado desde un respaldo previo de nómina, poseía `matricula.cargados = 0`, activando la cláusula de respaldo visual. En Firestore real, Santos Marquina ya cuenta con 5 planteles cargados y 13 pendientes.
+- **Escudo de Memoria de Sesión (Zero-Cost Cache):** Creación de los módulos `obtenerPlantelesMunCache`, `guardarPlantelesMunCache` y `limpiarPlantelesMunCache` en `admin.js`. La consulta de planteles por municipio (`where("municipio", "==", mun)`) se ejecuta una sola vez al iniciar sesión y se almacena en memoria de aplicación y `sessionStorage`.
+- **Unificación de Datos:** La misma colección en memoria alimenta simultáneamente la tarjeta de métricas de matrícula y la tabla administrativa de planteles (`currentPlanteles`), eliminando peticiones redundantes al servidor (0 lecturas adicionales al navegar o refrescar).
+- **Filtros Interactivos en Cliente:** Inyección de pestañas dinámicas (`Todos`, `Pendientes` y `Cargados`) que permiten al coordinador municipal filtrar instantáneamente en pantalla las escuelas pendientes para su gestión operativa.
+- **Botón de Sincronización Manual:** Inyección del botón `🔄 Sincronizar` en el encabezado de la tarjeta de matrícula con purga de caché bajo demanda.
+- **Protección de Nivel Estadal:** Para Zonadmin y Superadmin se mantiene el esquema consolidado de 1 sola lectura (`estadisticas/resumen_global`), preservando el 97.5% de la cuota diaria libre.
+- **Control SemVer:** Incremento de versión PARCHE a **v2.14.2**.
+
+**3. Archivos Involucrados:**
+- `webapp/package.json`
+- `webapp/index.html`
+- `webapp/src/admin.js`
+- `bitacora.md`
+- `conversaciones.md`
+
+---

@@ -8,6 +8,77 @@ let isInitialized = false;
 let db = null;
 let userData = null;
 
+// --- ESCUDO ZERO-COST: GESTOR DE CACHÉ DE PLANTELES MUNICIPALES ---
+export function obtenerPlantelesMunCache(mun) {
+  if (!mun) return null;
+  const key = mun.trim().toUpperCase();
+  if (window._cachePlantelesMun && Array.isArray(window._cachePlantelesMun[key]) && window._cachePlantelesMun[key].length > 0) {
+    return window._cachePlantelesMun[key];
+  }
+  try {
+    const raw = sessionStorage.getItem('sgh_cache_planteles_' + key);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        window._cachePlantelesMun = window._cachePlantelesMun || {};
+        window._cachePlantelesMun[key] = parsed;
+        return parsed;
+      }
+    }
+  } catch (e) {}
+  return null;
+}
+
+export function guardarPlantelesMunCache(mun, list) {
+  if (!mun || !Array.isArray(list)) return;
+  const key = mun.trim().toUpperCase();
+  window._cachePlantelesMun = window._cachePlantelesMun || {};
+  window._cachePlantelesMun[key] = list;
+  try {
+    sessionStorage.setItem('sgh_cache_planteles_' + key, JSON.stringify(list));
+  } catch (e) {}
+}
+
+export function limpiarPlantelesMunCache(mun) {
+  if (!mun) return;
+  const key = mun.trim().toUpperCase();
+  if (window._cachePlantelesMun) delete window._cachePlantelesMun[key];
+  try {
+    sessionStorage.removeItem('sgh_cache_planteles_' + key);
+  } catch (e) {}
+}
+
+export function verificarPlantelTieneMatricula(p) {
+  if (!p) return { tiene: false, total: 0 };
+  if (p.matricula) {
+    const mat = p.matricula;
+    const totGen = parseInt(mat['total-gen'] || mat.total_gen || 0, 10);
+    if (!isNaN(totGen) && totGen > 0) return { tiene: true, total: totGen };
+
+    let suma = 0;
+    if (typeof mat === 'object') {
+      for (const k in mat) {
+        const val = mat[k];
+        if (typeof val === 'number' && val > 0) suma += val;
+        else if (typeof val === 'string' && !isNaN(parseInt(val, 10)) && parseInt(val, 10) > 0) suma += parseInt(val, 10);
+        else if (typeof val === 'object' && val !== null) {
+          for (const sk in val) {
+            const sval = val[sk];
+            if (typeof sval === 'number' && sval > 0) suma += sval;
+            else if (typeof sval === 'string' && !isNaN(parseInt(sval, 10)) && parseInt(sval, 10) > 0) suma += parseInt(sval, 10);
+          }
+        }
+      }
+    }
+    if (suma > 0) return { tiene: true, total: suma };
+  }
+  if (p['matricula-total']) {
+    const t = parseInt(p['matricula-total'], 10);
+    if (!isNaN(t) && t > 0) return { tiene: true, total: t };
+  }
+  return { tiene: false, total: 0 };
+}
+
 export function initAdminDashboard(dbInstance, user) {
   db = dbInstance;
   userData = user;
@@ -416,12 +487,86 @@ export function initAdminDashboard(dbInstance, user) {
         if (discContent) discContent.style.display = 'flex';
 
         // Renderizar Estatus de Matrícula
-        const matInfo = datosActivos.matricula || { cargados: 0, pendientes: datosActivos.totalPlanteles || 0 };
+        let matInfo = datosActivos.matricula || { cargados: 0, pendientes: datosActivos.totalPlanteles || 0 };
         const elMatCargada = document.getElementById('stat-mat-cargada');
         const elMatPendiente = document.getElementById('stat-mat-pendiente');
         const elMatLista = document.getElementById('stat-mat-lista');
+        const btnSyncMat = document.getElementById('btn-sync-matricula-mun');
 
-        const esMatriculaEnCalculo = (!matInfo.cargados || matInfo.cargados === 0);
+        // Para munadmin: Sincronización real con Escudo de Memoria Zero-Cost
+        if (isMunAdmin && mun) {
+          if (btnSyncMat) {
+            btnSyncMat.style.display = 'inline-flex';
+            if (!btnSyncMat._hasListener) {
+              btnSyncMat._hasListener = true;
+              btnSyncMat.addEventListener('click', async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                limpiarPlantelesMunCache(mun);
+                btnSyncMat.disabled = true;
+                btnSyncMat.innerHTML = '⏳ Sincronizando...';
+                await loadEstadisticas();
+                btnSyncMat.innerHTML = '🔄 Sincronizar';
+                btnSyncMat.disabled = false;
+                showToast('Estatus de matrícula sincronizado con éxito.', 'success');
+              });
+            }
+          }
+
+          let plantelesMun = obtenerPlantelesMunCache(mun);
+          if (!plantelesMun && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
+            const filt = currentPlanteles.filter(p => (p.municipio || '').trim().toUpperCase() === mun);
+            if (filt.length > 0) {
+              plantelesMun = filt;
+              guardarPlantelesMunCache(mun, plantelesMun);
+            }
+          }
+
+          if (!plantelesMun) {
+            try {
+              const snapP = await getDocs(query(collection(db, "planteles"), where("municipio", "==", mun)));
+              plantelesMun = [];
+              snapP.forEach(docSnap => {
+                plantelesMun.push({ id: docSnap.id, ...docSnap.data() });
+              });
+              guardarPlantelesMunCache(mun, plantelesMun);
+              if (!currentPlanteles || currentPlanteles.length === 0) {
+                currentPlanteles = plantelesMun;
+              }
+            } catch (errP) {
+              console.warn("[Zero-Cost Shield] Error al consultar planteles municipales:", errP);
+            }
+          }
+
+          if (plantelesMun && plantelesMun.length > 0) {
+            const arrCargados = [];
+            const arrPendientes = [];
+
+            plantelesMun.forEach(p => {
+              const eponimo = (p['nombre-plantel']?.['nuevo-eponimo'] || p['nombre-plantel']?.nuevo_eponimo || p['nombre-plantel']?.nominal || p.denominacion || p.codigos?.plantel || p.codigoDEA || p.id || 'Plantel').trim().toUpperCase();
+              const { tiene, total } = verificarPlantelTieneMatricula(p);
+              if (tiene) {
+                arrCargados.push({ nombre: eponimo, total });
+              } else {
+                arrPendientes.push({ nombre: eponimo });
+              }
+            });
+
+            arrCargados.sort((a, b) => a.nombre.localeCompare(b.nombre));
+            arrPendientes.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+            matInfo = {
+              cargados: arrCargados.length,
+              pendientes: arrPendientes.length,
+              arrCargados,
+              arrPendientes
+            };
+          }
+        } else {
+          if (btnSyncMat) btnSyncMat.style.display = 'none';
+        }
+
+        const esMatriculaEnCalculo = (!matInfo.cargados || matInfo.cargados === 0) && (!isMunAdmin);
 
         if (esMatriculaEnCalculo) {
           if (elMatCargada) elMatCargada.innerHTML = '<span style="font-size: 0.95rem; font-weight: 600; color: #64748b;">En cálculo...</span>';
@@ -446,24 +591,80 @@ export function initAdminDashboard(dbInstance, user) {
             if (isMunAdmin) {
               const arrP = matInfo.arrPendientes || [];
               const arrC = matInfo.arrCargados || [];
-              arrP.forEach(nombre => {
-                htmlLista += '<div style="padding: 6px 0; border-bottom: 1px solid #f1f5f9; color: #ef4444; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="' + nombre + '">\uD83D\uDD34 ' + nombre + '</div>';
+
+              htmlLista = `
+                <div style="display: flex; gap: 4px; margin-bottom: 8px; border-bottom: 1px solid #f1f5f9; padding-bottom: 6px;">
+                  <button type="button" class="btn-filtro-mat-tab active" data-filtro="todos" style="flex: 1; padding: 3px 6px; font-size: 0.72rem; border-radius: 4px; border: 1px solid #3b82f6; background: #3b82f6; color: white; cursor: pointer; font-weight: 600;">Todos (${arrC.length + arrP.length})</button>
+                  <button type="button" class="btn-filtro-mat-tab" data-filtro="pendientes" style="flex: 1; padding: 3px 6px; font-size: 0.72rem; border-radius: 4px; border: 1px solid #cbd5e1; background: #fff; color: #dc2626; cursor: pointer; font-weight: 600;">Pendientes (${arrP.length})</button>
+                  <button type="button" class="btn-filtro-mat-tab" data-filtro="cargados" style="flex: 1; padding: 3px 6px; font-size: 0.72rem; border-radius: 4px; border: 1px solid #cbd5e1; background: #fff; color: #16a34a; cursor: pointer; font-weight: 600;">Cargados (${arrC.length})</button>
+                </div>
+                <div id="stat-mat-items-container">
+              `;
+
+              arrP.forEach(item => {
+                const nombre = typeof item === 'object' ? item.nombre : item;
+                htmlLista += `
+                  <div class="item-mat-row item-mat-pendiente" style="padding: 5px 4px; border-bottom: 1px solid #f8fafc; color: #dc2626; display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem;" title="${nombre}">
+                    <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 78%;">🔴 ${nombre}</span>
+                    <span style="font-size: 0.68rem; color: #ef4444; font-weight: 600; background: #fef2f2; padding: 1px 6px; border-radius: 4px; border: 1px solid #fecaca; white-space: nowrap;">Pendiente</span>
+                  </div>`;
               });
-              arrC.forEach(nombre => {
-                htmlLista += '<div style="padding: 6px 0; border-bottom: 1px solid #f1f5f9; color: #16a34a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="' + nombre + '">\u2705 ' + nombre + '</div>';
+
+              arrC.forEach(item => {
+                const nombre = typeof item === 'object' ? item.nombre : item;
+                const totalText = (typeof item === 'object' && item.total > 0) ? `${item.total} est.` : 'Cargado';
+                htmlLista += `
+                  <div class="item-mat-row item-mat-cargado" style="padding: 5px 4px; border-bottom: 1px solid #f8fafc; color: #15803d; display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem;" title="${nombre}">
+                    <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 78%;">✅ ${nombre}</span>
+                    <span style="font-size: 0.68rem; color: #16a34a; font-weight: 600; background: #f0fdf4; padding: 1px 6px; border-radius: 4px; border: 1px solid #bbf7d0; white-space: nowrap;">${totalText}</span>
+                  </div>`;
+              });
+
+              htmlLista += `</div>`;
+              elMatLista.innerHTML = htmlLista;
+
+              // Manejador de clics para los botones de filtro
+              const btnFiltros = elMatLista.querySelectorAll('.btn-filtro-mat-tab');
+              btnFiltros.forEach(b => {
+                b.addEventListener('click', (ev) => {
+                  ev.preventDefault();
+                  btnFiltros.forEach(x => {
+                    x.style.background = '#fff';
+                    x.style.color = x.dataset.filtro === 'pendientes' ? '#dc2626' : (x.dataset.filtro === 'cargados' ? '#16a34a' : '#64748b');
+                    x.style.borderColor = '#cbd5e1';
+                  });
+                  b.style.background = b.dataset.filtro === 'pendientes' ? '#ef4444' : (b.dataset.filtro === 'cargados' ? '#16a34a' : '#3b82f6');
+                  b.style.color = '#fff';
+                  b.style.borderColor = 'transparent';
+
+                  const filtro = b.dataset.filtro;
+                  const filasPend = elMatLista.querySelectorAll('.item-mat-pendiente');
+                  const filasCarg = elMatLista.querySelectorAll('.item-mat-cargado');
+
+                  if (filtro === 'todos') {
+                    filasPend.forEach(r => r.style.display = 'flex');
+                    filasCarg.forEach(r => r.style.display = 'flex');
+                  } else if (filtro === 'pendientes') {
+                    filasPend.forEach(r => r.style.display = 'flex');
+                    filasCarg.forEach(r => r.style.display = 'none');
+                  } else if (filtro === 'cargados') {
+                    filasPend.forEach(r => r.style.display = 'none');
+                    filasCarg.forEach(r => r.style.display = 'flex');
+                  }
+                });
               });
             } else {
               const munMap = matInfo.porMunicipio || {};
               const munKeys = Object.keys(munMap).sort();
               munKeys.forEach(m => {
                 const c = munMap[m];
-                let icon = '\uD83D\uDD34';
-                if (c.cargados > 0 && c.pendientes === 0) icon = '\u2705';
-                else if (c.cargados > 0 && c.pendientes > 0) icon = '\uD83D\uDFE1';
+                let icon = '🔴';
+                if (c.cargados > 0 && c.pendientes === 0) icon = '✅';
+                else if (c.cargados > 0 && c.pendientes > 0) icon = '🟡';
                 htmlLista += '<div style="padding: 6px 0; border-bottom: 1px solid #f1f5f9; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="' + m + '">' + icon + ' <strong>' + m + '</strong>: ' + c.cargados + ' Cargados, ' + c.pendientes + ' Pendientes</div>';
               });
+              elMatLista.innerHTML = htmlLista;
             }
-            elMatLista.innerHTML = htmlLista;
           }
         }
         if (matLoading) matLoading.style.display = 'none';
@@ -1514,6 +1715,17 @@ export function initAdminDashboard(dbInstance, user) {
         ? (userData?.jerarquia?.municipio || userData?.municipio || '').trim().toUpperCase() 
         : null;
 
+      // Verificación de caché de sesión Zero-Cost
+      if (userMun) {
+        const plantelesEnCache = obtenerPlantelesMunCache(userMun);
+        if (plantelesEnCache && plantelesEnCache.length > 0) {
+          currentPlanteles = plantelesEnCache;
+          poblarFiltroParroquiasTabla();
+          renderPlantelesList();
+          return;
+        }
+      }
+
       let q;
       if (userMun) {
         // Zero-Cost Optimization (Spark): munadmin solo consulta los planteles de su municipio
@@ -1533,6 +1745,10 @@ export function initAdminDashboard(dbInstance, user) {
         }
         currentPlanteles.push({ id: doc.id, ...data });
       });
+
+      if (userMun && currentPlanteles.length > 0) {
+        guardarPlantelesMunCache(userMun, currentPlanteles);
+      }
       poblarFiltroParroquiasTabla();
       renderPlantelesList();
     } catch(err) {
