@@ -83,6 +83,14 @@ export function initAdminDashboard(dbInstance, user) {
   db = dbInstance;
   userData = user;
 
+  // Declaraciones principales de estado y elementos DOM de Planteles (Evita TDZ)
+  let currentPlanteles = [];
+  const tbodyPlanteles = document.getElementById('tbody-planteles');
+  const inpBuscarPlantel = document.getElementById('inp-buscar-plantel');
+  const modalPlantel = document.getElementById('modal-plantel');
+  const formPlantel = document.getElementById('form-plantel');
+  const btnDescargarNominaMun = document.getElementById('btn-descargar-nomina-mun');
+
   function configurarInterfazPorRol() {
     const isMunAdmin = userData?.rol === 'munadmin';
     const isZonAdmin = userData?.rol === 'zonadmin';
@@ -208,7 +216,7 @@ export function initAdminDashboard(dbInstance, user) {
         btnPlanteles.classList.add('active');
         const tabPlanteles = document.getElementById('admin-tab-planteles');
         if (tabPlanteles) tabPlanteles.classList.add('active');
-        if (typeof currentPlanteles !== 'undefined' && currentPlanteles.length === 0) loadPlanteles();
+        loadPlanteles();
       }
     } else if (tienePermiso('planes')) {
       const btnPlanes = document.querySelector('.sidebar-btn[data-target="admin-tab-planes"]');
@@ -346,7 +354,7 @@ export function initAdminDashboard(dbInstance, user) {
       if(targetId) {
          const targetElem = document.getElementById(targetId);
          if (targetElem) targetElem.classList.add('active');
-         if (targetId === 'admin-tab-planteles' && typeof currentPlanteles !== 'undefined' && currentPlanteles.length === 0) { loadPlanteles(); }
+         if (targetId === 'admin-tab-planteles') { loadPlanteles(); }
          if (targetId === 'admin-tab-planes' && typeof catalogosGlobal !== 'undefined' && (!catalogosGlobal['planes-estudio'] || Object.keys(catalogosGlobal['planes-estudio']).length === 0)) { loadCatalogos(); }
          if (targetId === 'admin-tab-listas') { 
             const lista = button.getAttribute('data-lista');
@@ -1654,18 +1662,13 @@ export function initAdminDashboard(dbInstance, user) {
 
 
   // --- GESTOR DE BD: PLANTELES ---
-  const tbodyPlanteles = document.getElementById('tbody-planteles');
-  const inpBuscarPlantel = document.getElementById('inp-buscar-plantel');
-  const modalPlantel = document.getElementById('modal-plantel');
-  const formPlantel = document.getElementById('form-plantel');
-  const btnDescargarNominaMun = document.getElementById('btn-descargar-nomina-mun');
-  if (btnDescargarNominaMun) {
+  if (btnDescargarNominaMun && !btnDescargarNominaMun._hasListener) {
+    btnDescargarNominaMun._hasListener = true;
     btnDescargarNominaMun.addEventListener('click', (e) => {
       e.preventDefault();
       abrirModalSeleccionarNomina();
     });
   }
-  let currentPlanteles = []; // Cache of downloaded planteles
 
   // Subtabs Logic
   document.querySelectorAll('.db-subtab-btn').forEach(btn => {
@@ -1717,9 +1720,22 @@ export function initAdminDashboard(dbInstance, user) {
 
       // Verificación de caché de sesión Zero-Cost
       if (userMun) {
-        const plantelesEnCache = obtenerPlantelesMunCache(userMun);
+        let plantelesEnCache = obtenerPlantelesMunCache(userMun);
+        if (!plantelesEnCache && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
+          const filt = currentPlanteles.filter(p => (p.municipio || '').trim().toUpperCase() === userMun);
+          if (filt.length > 0) {
+            plantelesEnCache = filt;
+            guardarPlantelesMunCache(userMun, plantelesEnCache);
+          }
+        }
         if (plantelesEnCache && plantelesEnCache.length > 0) {
           currentPlanteles = plantelesEnCache;
+          poblarFiltroParroquiasTabla();
+          renderPlantelesList();
+          return;
+        }
+      } else {
+        if (Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
           poblarFiltroParroquiasTabla();
           renderPlantelesList();
           return;

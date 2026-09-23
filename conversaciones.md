@@ -1258,3 +1258,20 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 > **Respuesta del Agente:**
 > Se registró la culminación exitosa del hito en `bitacora.md`, se respaldó el historial íntegro de la sesión en `conversaciones.md`, y se ejecutó el commit y push automático hacia el repositorio central de GitHub (`main`).
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."
+> Resuelves un problema y dejas otro. Antes se podía ver el listado de planteles del municipio, ahora no. ver imagen **004.PNG
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se identificó la causa exacta: en JavaScript, las variables de la tabla de planteles (`currentPlanteles`, `tbodyPlanteles`, etc.) estaban declaradas más abajo con `let` y `const`, lo que provocó una Zona Muerta Temporal (Temporal Dead Zone - TDZ) al ejecutarse la inicialización inicial del rol antes de llegar a dichas líneas, impidiendo que la función de renderizado se completara. Se corrigió reubicando las declaraciones en la cabecera de inicialización y asegurando que la activación de la pestaña 'Planteles' ejecute de inmediato `loadPlanteles()` aprovechando el escudo de memoria sin lecturas redundantes a Firestore. Se incrementó la versión a **v2.14.3**, se compiló y se desplegó en Firebase Hosting (https://sgh-merida.web.app).
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Sí, Satisfactorios
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se registró la culminación exitosa en `bitacora.md`, se respaldó el historial íntegro en `conversaciones.md`, y se ejecutó el commit y push automático hacia el repositorio central de GitHub (`main`).

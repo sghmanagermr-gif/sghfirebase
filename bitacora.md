@@ -1128,3 +1128,24 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre prema
 - `conversaciones.md`
 
 ---
+
+### v2.14.3 - Corrección de Inicialización de Planteles y Renderizado Incondicional en Pestañas (23 de Septiembre de 2026)
+
+**1. Requerimientos:**
+- Subsanar el bloqueo en la tabla de gestión de planteles que permanecía indefinidamente en el mensaje "Cargando planteles...".
+- Garantizar que al hacer clic en la pestaña "Planteles", la tabla siempre dibuje las instituciones registradas de forma inmediata, aprovechando el escudo de memoria Zero-Cost.
+
+**2. Solución Técnica y Arquitectura:**
+- **Resolución de Zona Muerta Temporal (TDZ):** Se identificó que las variables de control y referencias DOM (`currentPlanteles`, `tbodyPlanteles`, `inpBuscarPlantel`, `modalPlantel`, `formPlantel`, `btnDescargarNominaMun`) estaban declaradas con `let` y `const` cientos de líneas después de donde se ejecutaba el enrutamiento inicial por rol (`configurarInterfazPorRol`). Se reubicaron al inicio inmediato de `initAdminDashboard`, eliminando excepciones silenciosas de referencia.
+- **Disparador Incondicional de Pestaña:** Se actualizó el escuchador de eventos de pestañas en el sidebar para que, al seleccionar `admin-tab-planteles`, siempre invoque `loadPlanteles()`.
+- **Renderizado Instantáneo desde Memoria/Caché:** Dentro de `loadPlanteles()`, se validó que si los planteles ya existen en la caché municipal (`obtenerPlantelesMunCache`) o en el arreglo `currentPlanteles`, se ejecuten de inmediato `poblarFiltroParroquiasTabla()` y `renderPlantelesList()`, renderizando la tabla en 0 ms con 0 lecturas a Firestore.
+- **Control SemVer:** Incremento de versión PARCHE a **v2.14.3**.
+
+**3. Archivos Involucrados:**
+- `webapp/package.json`
+- `webapp/index.html`
+- `webapp/src/admin.js`
+- `bitacora.md`
+- `conversaciones.md`
+
+---
