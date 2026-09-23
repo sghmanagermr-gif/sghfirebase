@@ -1149,3 +1149,23 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre prema
 - `conversaciones.md`
 
 ---
+
+### v2.14.4 - Reorganización y Centrado Horizontal de Tarjetas Maestras (23 de Septiembre de 2026)
+
+**1. Requerimientos:**
+- Reordenar las tarjetas de estadísticas principales en la vista del panel: Usuarios del Sistema en primera posición, seguido de Planteles del Municipio y Personal Registrado.
+- Centrar horizontalmente el contenedor maestro de métricas (`div class="stats-grid"`) en la pantalla.
+
+**2. Solución Técnica y Arquitectura:**
+- **Reorganización Estructural del DOM:** Se actualizó `index.html` para posicionar la tarjeta de Usuarios (`#stat-usuarios`) como primer elemento de la cuadrícula, preservando los identificadores y clases dinámicas.
+- **Centrado y Justificación CSS:** En `styles.css` se incorporaron las reglas `margin: 0 auto;` y `justify-content: center;` sobre la clase `.stats-grid`, con refuerzo de estilo en línea en `index.html`, logrando una disposición equilibrada y armónica tanto en monitores de alta resolución como en pantallas medianas y móviles.
+- **Control SemVer:** Incremento de versión PARCHE a **v2.14.4**.
+
+**3. Archivos Involucrados:**
+- `webapp/package.json`
+- `webapp/index.html`
+- `webapp/styles.css`
+- `bitacora.md`
+- `conversaciones.md`
+
+---

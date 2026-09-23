@@ -291,6 +291,8 @@ body {
   gap: 16px;
   max-width: 900px;
   width: 100%;
+  margin: 0 auto;
+  justify-content: center;
 }
 
 .stat-card {
