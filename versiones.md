@@ -4,6 +4,15 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.14.17 (24 de Septiembre de 2026)
+- **Buscador con Selectores en Cascada para Planteles:** Implementación de dos selectores interactivos en la barra de herramientas del módulo de Planteles:
+  - **Selector de Municipios (`#filtro-municipio-plantel`):** Despliega los 23 municipios del estado para roles con competencia global (`superadmin` y `zonadmin`), o se fija de forma automática y protegida al municipio asignado para Coordinadores Municipales (`munadmin`).
+  - **Selector de Parroquias en Cascada (`#filtro-parroquia-plantel`):** Al elegir un municipio, actualiza inmediatamente en cascada su listado mostrando únicamente las parroquias pertenecientes al mismo.
+  - **Búsqueda Multicriterio Integrada (`#inp-buscar-plantel`):** El campo de texto y ambos selectores operan de manera simultánea en memoria del navegador (Zero-Cost), permitiendo filtrar por municipio, parroquia, código DEA y epónimo sin recargas de página.
+- **Alineación y Armonización Visual:** Eliminación de márgenes inferiores heredados y ajuste de altura uniforme a 42px con `box-sizing: border-box`, garantizando alineación horizontal perfecta entre el buscador, los selectores y los botones de acción.
+
+---
+
 ### v2.14.16 (24 de Septiembre de 2026)
 - **Saneamiento Histórico de Epónimos con Fechas de Excel:** Corrección definitiva de los 13 planteles educativos cuyos nombres se encontraban corrompidos con números negativos y seriales de fecha generados por Excel durante la migración original (tales como `-28678`, `-31367`, `-32763`, `46307`, etc.).
 - **Mapeo Institucional Exacto:** Se restituyeron formalmente sus nombres históricos y patrios oficiales (ej. `24 DE JUNIO DE 1821`, `12 DE FEBRERO DE 1814`, `19 DE ABRIL DE 1810`, `12 DE OCTUBRE`, etc.).

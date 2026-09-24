@@ -1641,3 +1641,38 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 3. Saneamiento automático en Firestore ejecutado de forma transparente al abrir el apartado de planteles con sesión autenticada de Superadministrador.
 > 4. Actualización defensiva en `main.js` y `personalWizard.js`.
 > 5. Incremento de versión a **v2.14.16** en `package.json` e `index.html`.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Sí, satisfactorios.
+> 
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."
+> 
+> Pasemos al buscador de planteles, como son mas de mil, agrega también dos delectores que actuen en cascada, uno para municipios y otro para parroquias. El id="inp-buscar-plantel" está bien también. pero con esos dos selectores, sería aún mas amigable
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se leyó la Skill obligatoria y se implementó la búsqueda en cascada bajo la versión **v2.14.17**:
+> 1. Selector de Municipios (`filtro-municipio-plantel`) con los 23 municipios para superadmin y zonadmin, o fijado y bloqueado con su municipio asignado para munadmin.
+> 2. Selector de Parroquias en cascada (`filtro-parroquia-plantel`) que se actualiza dinámicamente al seleccionar un municipio para mostrar únicamente sus parroquias correspondientes.
+> 3. Búsqueda simultánea con el campo de texto (`inp-buscar-plantel`) para refinar por código DEA o epónimo sobre el filtro territorial.
+> 4. Procesamiento 100% en memoria en el navegador sin lecturas añadidas a Firestore (Principio Zero-Cost).
+> Se solicitó confirmación de satisfacción al usuario.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> id="filtro-municipio-plantel" y id="filtro-parroquia-plantel" tienen un padding que no sé donde esta, que los desordenan con respecto a id="inp-buscar-plantel" debes quitar ese padding
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se diagnosticó que el desfase visual se debía a una regla global en `style.css` que inyectaba `margin-bottom: 16px` y `padding: 14px 18px` a las etiquetas `<select>`. Se corrigió eliminando el margen inferior, nivelando la altura exacta a 42px con `box-sizing: border-box` y ajustando el relleno interno horizontal a 10px tanto en línea como en las hojas de estilo (`styles.css` y `src/style.css`), logrando una alineación horizontal uniforme con `inp-buscar-plantel`.
+> Se consultó al usuario si los resultados eran satisfactorios.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Sí, satisfactorio
+> Despliega a Firebase
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se ejecutó la compilación de producción con Vite para la versión **v2.14.17** y se completó exitosamente el despliegue a Firebase Hosting (https://sgh-merida.web.app). Se registraron los cambios técnicos en `bitacora.md`, el historial en `versiones.md` y la memoria conversacional en `conversaciones.md`, salvaguardando todo el avance en el repositorio central de GitHub (`main`).

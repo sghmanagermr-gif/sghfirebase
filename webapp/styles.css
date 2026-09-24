@@ -509,3 +509,25 @@ body {
   font-weight: 500;
   animation: pulse 1.8s ease-in-out infinite;
 }
+
+/* 8. ALINEACIÓN PRECISA DE BUSCADOR Y FILTROS DE PLANTELES */
+#inp-buscar-plantel,
+#filtro-municipio-plantel,
+#filtro-parroquia-plantel {
+  margin: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  height: 42px !important;
+  max-height: 42px !important;
+  min-height: 42px !important;
+  box-sizing: border-box !important;
+  vertical-align: middle !important;
+}
+
+#filtro-municipio-plantel,
+#filtro-parroquia-plantel {
+  padding: 0 10px !important;
+  width: auto !important;
+  line-height: normal !important;
+}
+

@@ -1466,3 +1466,33 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `versiones.md`
 - `bitacora.md`
 - `conversaciones.md`
+
+---
+### Ciclo v2.14.17: Buscador con Selectores en Cascada para Planteles y Armonización Visual
+
+**1. Objetivos:**
+- Incorporar dos selectores en cascada (Municipio y Parroquia) en la barra de herramientas del módulo de Planteles para facilitar la navegación y búsqueda sobre el universo de más de mil instituciones educativas del Estado Mérida.
+- Mantener la cohesión jerárquica por rol: los coordinadores municipales (`munadmin`) tienen su municipio prefijado y protegido, mientras que `superadmin` y `zonadmin` pueden alternar libremente entre los 23 municipios.
+- Integrar la búsqueda en tiempo real combinando el texto ingresado en `#inp-buscar-plantel` con los filtros de municipio y parroquia.
+- Armonizar el diseño visual corrigiendo desalineaciones de altura, márgenes inferiores residuales (`margin-bottom: 16px`) y padding heredados de estilos globales.
+
+**2. Solución Técnica y Arquitectura:**
+- **Inyección de Componentes DOM (`index.html`):** Creación del selector `#filtro-municipio-plantel` junto al existente `#filtro-parroquia-plantel` y el buscador `#inp-buscar-plantel` en un contenedor flexible unificado.
+- **Lógica de Cascada y Poblamiento (`admin.js`):**
+  - Se crearon las funciones `poblarFiltrosGeograficosTabla()` y `actualizarParroquiasFiltro(municipioSeleccionado)` utilizando el catálogo de `geografia.js`.
+  - Al cambiar de municipio, el selector de parroquias se repuebla automáticamente en cascada con las parroquias correspondientes y se restablece a la opción "Todas las Parroquias".
+- **Filtrado Multicriterio en Memoria Client-Side (`admin.js`):** En `renderPlantelesList()`, la lista se filtra sucesivamente por: 1) Municipio (por rol o selector), 2) Parroquia seleccionada, 3) Término de búsqueda de texto (coincidencia en código DEA, epónimo, nombre nominal, municipio o parroquia). Costo de lecturas en Firestore: 0 (Principio Zero-Cost).
+- **Armonización Visual y Reset de Márgenes (`index.html`, `styles.css`, `src/style.css`):**
+  - Se asignó `margin: 0 !important;` y `box-sizing: border-box !important;` eliminando el margen inferior de 16px heredado de reglas globales para elementos `<select>`.
+  - Se niveló la altura exacta a 42px y el padding horizontal a `10px` para lograr una alineación perfecta en la línea base con el input de texto y los botones de acción.
+- **Control SemVer y Despliegue:** Incremento de versión a **v2.14.17** en `package.json` y en todos los puntos de `index.html`. Compilación de producción con Vite y despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`).
+
+**3. Archivos Involucrados:**
+- `webapp/package.json` (Versión 2.14.17)
+- `webapp/index.html` (Selectores en cascada, badges v2.14.17 y estilos de alineación)
+- `webapp/styles.css` (Reglas de alineación exacta de controles de planteles)
+- `webapp/src/style.css` (Reglas de prioridad para selectores de planteles)
+- `webapp/src/admin.js` (Declaraciones DOM, funciones de cascada geográfica, eventos y renderizado)
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
