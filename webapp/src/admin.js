@@ -236,6 +236,22 @@ export function initAdminDashboard(dbInstance, user) {
       btnNuevoPlantel.style.display = (isSuperAdmin || isZonAdmin) ? 'flex' : 'none';
     }
 
+    // 2.2. Control de visibilidad del selector de roles en Validación de Usuarios
+    const containerFilterRol = document.getElementById('container-filter-rol-usuario');
+    if (containerFilterRol) {
+      containerFilterRol.style.display = isSuperAdmin ? 'block' : 'none';
+    }
+    const valDescEl = document.getElementById('admin-validacion-desc');
+    if (valDescEl) {
+      if (isMunAdmin) {
+        valDescEl.textContent = `Gestiona los accesos de los directores de planteles del municipio ${mun}.`;
+      } else if (isZonAdmin) {
+        valDescEl.textContent = 'Gestiona los accesos de los coordinadores municipales.';
+      } else {
+        valDescEl.textContent = 'Gestiona y clasifica accesos de coordinadores zonales, municipales y directores.';
+      }
+    }
+
     // 3. Encabezado y Títulos Contextuales
     const adminNameEl = document.getElementById('admin-user-name');
     const adminAvatarEl = document.getElementById('admin-user-avatar') || adminNameEl?.previousElementSibling;
@@ -257,7 +273,7 @@ export function initAdminDashboard(dbInstance, user) {
       } else {
         adminNameEl.textContent = userData.nombre || 'Administrador';
         if (adminAvatarEl) adminAvatarEl.textContent = 'SA';
-        if (statsTitleEl) statsTitleEl.textContent = 'Métricas Globales';
+        if (statsTitleEl) statsTitleEl.textContent = 'Pizarra';
         if (statsDescEl) statsDescEl.textContent = 'Resumen del sistema en tiempo real.';
       }
     }
@@ -481,6 +497,13 @@ export function initAdminDashboard(dbInstance, user) {
         if (elUsuariosDesc) elUsuariosDesc.textContent = 'Directores con cuenta de acceso';
         if (elMatriculaTitle) elMatriculaTitle.textContent = 'Matrícula Municipal';
         if (elMatriculaDesc) elMatriculaDesc.textContent = 'Estudiantes en el municipio';
+      } else if (userData?.rol === 'zonadmin') {
+        if (elPlantelesTitle) elPlantelesTitle.textContent = 'Planteles del Estado';
+        if (elPlantelesDesc) elPlantelesDesc.textContent = 'Total escuelas del estado';
+        if (elPersonalDesc) elPersonalDesc.textContent = 'Nómina estadal activa';
+        if (elUsuariosDesc) elUsuariosDesc.textContent = 'Coordinadores municipales';
+        if (elMatriculaTitle) elMatriculaTitle.textContent = 'Matrícula Estadal';
+        if (elMatriculaDesc) elMatriculaDesc.textContent = 'Estudiantes en el estado';
       } else {
         if (elPlantelesTitle) elPlantelesTitle.textContent = 'Planteles del Estado';
         if (elPlantelesDesc) elPlantelesDesc.textContent = 'Total escuelas del estado';
@@ -494,6 +517,8 @@ export function initAdminDashboard(dbInstance, user) {
       let qUsuarios = collection(db, 'usuarios');
       if (isMunAdmin && mun) {
         qUsuarios = query(collection(db, 'usuarios'), where('rol', '==', 'plaadmin'), where('jerarquia.municipio', '==', mun));
+      } else if (userData?.rol === 'zonadmin') {
+        qUsuarios = query(collection(db, 'usuarios'), where('rol', '==', 'munadmin'));
       }
       try {
         const snapU = await getCountFromServer(qUsuarios);
@@ -1000,6 +1025,7 @@ export function initAdminDashboard(dbInstance, user) {
   // --- LÓGICA DE VALIDACIÓN DE USUARIOS ---
   const tbodyUsuarios = document.getElementById('tbody-usuarios');
   const filterEstado = document.getElementById('filter-estado');
+  const filterRolUsuario = document.getElementById('filter-rol-usuario');
   let usuariosLocales = []; // Cache local para filtrar
   let unsubscribeUsuarios = null;
 
@@ -1027,6 +1053,9 @@ export function initAdminDashboard(dbInstance, user) {
         if (userData.rol === 'munadmin') {
             // munadmin solo ve directores (plaadmin) de su municipio
             if (u.rol !== 'plaadmin' || u.jerarquia?.municipio !== userData.jerarquia?.municipio) return;
+        } else if (userData.rol === 'zonadmin') {
+            // zonadmin solo ve coordinadores municipales (munadmin)
+            if (u.rol !== 'munadmin') return;
         }
 
         // Evitar que un superadmin se borre a sí mismo accidentalmente o a otros admins
@@ -1148,15 +1177,108 @@ export function initAdminDashboard(dbInstance, user) {
   function renderUsuariosList() {
     if (!tbodyUsuarios) return;
     
-    const filtro = filterEstado.value; // "TODOS", "PENDIENTE", "APROBADO"
-    const filtrados = usuariosLocales.filter(u => filtro === 'TODOS' ? true : u.estado_aprobacion === filtro);
+    const filtro = filterEstado ? filterEstado.value : 'TODOS'; // "TODOS", "PENDIENTE", "APROBADO"
+    const containerFilterRol = document.getElementById('container-filter-rol-usuario');
+    const filtroRol = (filterRolUsuario && containerFilterRol && containerFilterRol.style.display !== 'none') ? filterRolUsuario.value : 'TODOS';
+
+    let filtrados = usuariosLocales.filter(u => {
+      const matchEstado = (filtro === 'TODOS') ? true : (u.estado_aprobacion === filtro);
+      const matchRol = (filtroRol === 'TODOS') ? true : (u.rol === filtroRol);
+      return matchEstado && matchRol;
+    });
 
     if (filtrados.length === 0) {
       tbodyUsuarios.innerHTML = '<tr><td colspan="4" style="padding: 30px; text-align: center; color: var(--text-muted);">No se encontraron usuarios</td></tr>';
       return;
     }
 
-    tbodyUsuarios.innerHTML = filtrados.map(u => {
+    // Orden de discriminación solicitado:
+    // Para superadmin: 1. zonadmin, 2. munadmin, 3. plaadmin
+    // Para zonadmin: solo munadmin (ya restringido en loadUsuariosList)
+    const rolOrder = {
+      'zonadmin': 1,
+      'munadmin': 2,
+      'plaadmin': 3
+    };
+
+    filtrados.sort((a, b) => {
+      const ordA = rolOrder[a.rol] || 99;
+      const ordB = rolOrder[b.rol] || 99;
+      if (ordA !== ordB) return ordA - ordB;
+
+      // Orden secundario: por municipio y luego por nombre
+      const munA = (a.jerarquia?.municipio || '').toUpperCase();
+      const munB = (b.jerarquia?.municipio || '').toUpperCase();
+      if (munA !== munB) return munA.localeCompare(munB);
+
+      const nomA = (a.nombre || '').toUpperCase();
+      const nomB = (b.nombre || '').toUpperCase();
+      return nomA.localeCompare(nomB);
+    });
+
+    const isSuperOrZon = (userData.rol === 'superadmin' || userData.rol === 'admin' || userData.rol === 'zonadmin');
+    
+    const roleHeaderConfig = {
+      'zonadmin': {
+        title: '🏛️ Coordinadores Zonales',
+        tag: 'ZONADMIN',
+        desc: 'Nivel Estadal',
+        bg: 'linear-gradient(90deg, #ede9fe 0%, #f8fafc 100%)',
+        border: '#c4b5fd',
+        color: '#6d28d9'
+      },
+      'munadmin': {
+        title: '🏢 Coordinadores Municipales',
+        tag: 'MUNADMIN',
+        desc: 'Nivel Municipal',
+        bg: 'linear-gradient(90deg, #e0f2fe 0%, #f8fafc 100%)',
+        border: '#7dd3fc',
+        color: '#0369a1'
+      },
+      'plaadmin': {
+        title: '🏫 Directores de Plantel',
+        tag: 'PLAADMIN',
+        desc: 'Nivel Institucional / Plantel',
+        bg: 'linear-gradient(90deg, #dcfce7 0%, #f8fafc 100%)',
+        border: '#86efac',
+        color: '#15803d'
+      }
+    };
+
+    let lastRolHeader = null;
+    let rowsHtml = '';
+
+    filtrados.forEach(u => {
+      // Inyección de separador de sección discriminado para superadmin y zonadmin
+      if (isSuperOrZon && u.rol !== lastRolHeader) {
+        lastRolHeader = u.rol;
+        const cfg = roleHeaderConfig[u.rol] || {
+          title: `👤 Usuarios (${(u.rol || 'OTROS').toUpperCase()})`,
+          tag: (u.rol || 'OTROS').toUpperCase(),
+          desc: 'Personal',
+          bg: '#f1f5f9',
+          border: '#cbd5e1',
+          color: '#475569'
+        };
+        const countRol = filtrados.filter(x => x.rol === u.rol).length;
+
+        rowsHtml += `
+          <tr class="role-section-header" style="background: ${cfg.bg}; border-top: 2px solid ${cfg.border}; border-bottom: 1px solid ${cfg.border};">
+            <td colspan="4" style="padding: 10px 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <strong style="color: ${cfg.color}; font-size: 0.88rem; letter-spacing: 0.5px; text-transform: uppercase;">${cfg.title}</strong>
+                  <span style="font-size: 0.78rem; color: #64748b; font-weight: 500;">(${cfg.desc})</span>
+                </div>
+                <span style="background: white; border: 1px solid ${cfg.border}; color: ${cfg.color}; font-weight: 700; font-size: 0.75rem; padding: 2px 10px; border-radius: 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                  ${countRol} ${countRol === 1 ? 'registrado' : 'registrados'}
+                </span>
+              </div>
+            </td>
+          </tr>
+        `;
+      }
+
       // Determinar ubicación
       let ubicacion = 'N/A';
       if (u.jerarquia) {
@@ -1166,17 +1288,29 @@ export function initAdminDashboard(dbInstance, user) {
       }
 
       const isAprobado = u.estado_aprobacion === 'APROBADO';
-      
-      return `
+
+      // Badge visual distintivo de rol
+      let roleBadgeHtml = '';
+      if (u.rol === 'zonadmin') {
+        roleBadgeHtml = `<span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; background: #ede9fe; color: #6d28d9; border: 1px solid #ddd6fe;">🏛️ ZONADMIN</span>`;
+      } else if (u.rol === 'munadmin') {
+        roleBadgeHtml = `<span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;">🏢 MUNADMIN</span>`;
+      } else if (u.rol === 'plaadmin') {
+        roleBadgeHtml = `<span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0;">🏫 PLAADMIN</span>`;
+      } else {
+        roleBadgeHtml = `<span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1;">👤 ${(u.rol || 'USUARIO').toUpperCase()}</span>`;
+      }
+
+      rowsHtml += `
         <tr style="border-bottom: 1px solid var(--glass-border); transition: background 0.2s;">
           <td style="padding: 15px 20px;">
             <div style="font-weight: 600; color: var(--text-main);">${u.nombre || 'Sin nombre'}</div>
             <div style="font-size: 0.8rem; color: var(--text-muted);">${u.email} <br> C.I: ${u.cedula}</div>
           </td>
           <td style="padding: 15px 20px;">
-            <div style="font-weight: 500; color: var(--primary-color);">${u.rol.toUpperCase()}</div>
-            <div style="font-size: 0.8rem; color: var(--text-muted);">${ubicacion}</div>
-            ${u.rol === 'zonadmin' ? `<div style="font-size: 0.75rem; color: #16a34a; font-weight: 500; margin-top: 3px;">\uD83D\uDD11 ${u.permisos ? Object.entries(u.permisos).filter(([k, v]) => v === true && k !== 'listas' && k !== 'ultima_modificacion').length + ' competencias autorizadas' : 'Acceso Estándar'}</div>` : ''}
+            <div>${roleBadgeHtml}</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 3px;">${ubicacion}</div>
+            ${u.rol === 'zonadmin' ? `<div style="font-size: 0.75rem; color: #16a34a; font-weight: 500; margin-top: 3px;">🔑 ${u.permisos ? Object.entries(u.permisos).filter(([k, v]) => v === true && k !== 'listas' && k !== 'ultima_modificacion').length + ' competencias autorizadas' : 'Acceso Estándar'}</div>` : ''}
           </td>
           <td style="padding: 15px 20px;">
             <span style="padding: 5px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; 
@@ -1186,13 +1320,15 @@ export function initAdminDashboard(dbInstance, user) {
             </span>
           </td>
           <td style="padding: 15px 20px; text-align: right; display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
-            ${(u.rol === 'zonadmin' && (userData.rol === 'superadmin' || userData.rol === 'admin')) ? `<button class="btn-competencias" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.82rem; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 600;" title="Configurar módulos y permisos del panel">\uD83D\uDD11 Competencias</button>` : ''}
+            ${(u.rol === 'zonadmin' && (userData.rol === 'superadmin' || userData.rol === 'admin')) ? `<button class="btn-competencias" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.82rem; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 600;" title="Configurar módulos y permisos del panel">🔑 Competencias</button>` : ''}
             ${!isAprobado ? `<button class="btn-aprobar" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.85rem; background: var(--success);">Aprobar</button>` : ''}
             <button class="btn-eliminar btn-secondary" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.85rem; border-color: var(--danger); color: var(--danger);">${isAprobado ? 'Eliminar' : 'Rechazar'}</button>
           </td>
         </tr>
       `;
-    }).join('');
+    });
+
+    tbodyUsuarios.innerHTML = rowsHtml;
 
     // Eventos de botones
     document.querySelectorAll('.btn-competencias').forEach(btn => {
@@ -1396,9 +1532,10 @@ export function initAdminDashboard(dbInstance, user) {
   if (filterEstado) {
     filterEstado.addEventListener('change', renderUsuariosList);
   }
+  if (filterRolUsuario) {
+    filterRolUsuario.addEventListener('change', renderUsuariosList);
+  }
 
-  // Cargar lista al iniciar
-  loadUsuariosList();
   // ----------------------------------------
 
   // Variables para Despliegue

@@ -1571,3 +1571,31 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Usuario
 > **Mensaje del Usuario:**
 > Sí, satisfactorios
+> Sí despliega en firebase
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se ejecutó la compilación de producción con Vite para la versión **v2.14.13** y se completó exitosamente el despliegue a Firebase Hosting (https://sgh-merida.web.app).
+> Se formalizó el cambio de visualización prioritaria por Nuevo Epónimo en la tabla de planteles, con referencia nominal secundaria y ordenamiento alfabético de la A a la Z.
+> Se asentó el hito en `bitacora.md`, se incorporó al registro de `versiones.md`, se actualizó `conversaciones.md` y se sincronizó el repositorio en GitHub (`main`).
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."
+> En el apartado usuarios, solo para los rol superadmin y zonadmin se pueden mostrar de forma discriminada: para superadmin primero los zonadmin, segundo los munadmin y después los pladmin; para los zonadmin solo los munadmin. Esto es para poder identificar que usuario pertenece a uno o otro rol
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se leyó la Skill obligatoria y se implementó en el entorno local bajo la versión **v2.14.14**:
+> 1. Para **Superadmin**: Lista clasificada y ordenada secuencialmente en bloques: primero Zonales (`zonadmin`), segundo Municipales (`munadmin`), y tercero Directores (`plaadmin`), con cabeceras de sección con conteos, insignias distintivas por rol y un selector de filtrado por rol.
+> 2. Para **Coordinador Zonal (`zonadmin`)**: Restricción estricta para mostrar únicamente a los Coordinadores Municipales (`munadmin`), con métricas contextualizadas.
+> 3. Para **Coordinador Municipal (`munadmin`)**: Se mantiene la visualización exclusiva de los Directores de Plantel de su municipio.
+> Se preguntó si los resultados eran satisfactorios.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Sí, satisfactorios, despliega en firebase
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se procedió con la compilación de producción con Vite para la versión **v2.14.14**, se desplegó a Firebase Hosting (https://sgh-merida.web.app), se actualizaron las memorias históricas del proyecto (`bitacora.md`, `versiones.md` y `conversaciones.md`), y se resguardó el avance en el repositorio remoto de GitHub (`main`).

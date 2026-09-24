@@ -4,6 +4,17 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.14.14 (24 de Septiembre de 2026)
+- **Discriminación Jerárquica de Usuarios por Rol:** Organización y visualización clasificada en el apartado de Usuarios según el rol de la sesión activa:
+  - Para **Superadmin (`superadmin`)**: Presentación secuencial y ordenada en bloques: 1º Coordinadores Zonales (`zonadmin`), 2º Coordinadores Municipales (`munadmin`), y 3º Directores de Plantel (`plaadmin`).
+  - Para **Coordinador Zonal (`zonadmin`)**: Restricción exclusiva para visualizar únicamente a los Coordinadores Municipales (`munadmin`).
+  - Para **Coordinador Municipal (`munadmin`)**: Visualización restringida a Directores de Plantel (`plaadmin`) de su municipio.
+- **Separadores Visuales e Insignias de Rol:** Inyección de barras divisorias con iconos y conteos por rol (🏛️ Zonales en morado, 🏢 Municipales en azul y 🏫 Directores en verde), acompañadas de insignias distintivas en cada registro.
+- **Filtro Selectivo por Rol (`#filter-rol-usuario`):** Incorporación de selector para alternar entre la vista global clasificada o filtrar por un rol específico.
+- **Actualización de Nomenclatura Institucional:** Ajuste formal de etiquetas en menú y encabezados a **Pizarra** (en lugar de Estadísticas/Métricas) y **Usuarios del Sistema** (en lugar de Validación de Usuarios).
+
+---
+
 ### v2.14.13 (24 de Septiembre de 2026)
 - **Visualización Prioritaria por Nuevo Epónimo en Tabla de Planteles:** Se modificó la columna principal de la tabla de planteles para mostrar de forma destacada el **Nuevo Epónimo** de cada institución educativa en sustitución del nombre tradicional.
 - **Referencia Nominal Secundaria:** Para planteles con denominación histórica que difiera del nuevo epónimo, se incorporó una sutil referencia institucional `(Nominal: ...)` debajo del título.

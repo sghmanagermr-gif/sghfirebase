@@ -1375,3 +1375,31 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `conversaciones.md`
 
 ---
+### Ciclo v2.14.14: Discriminación Jerárquica de Usuarios por Rol y Nomenclatura Institucional
+
+**1. Objetivos:**
+- Atender requerimiento institucional para discriminar y ordenar la lista de cuentas en el módulo de Usuarios (`#tbody-usuarios`) según el rol del usuario que inicia sesión:
+  - Para `superadmin`: Visualizar a los usuarios ordenados estrictamente por jerarquía: primero Coordinadores Zonales (`zonadmin`), segundo Coordinadores Municipales (`munadmin`), y tercero Directores de Plantel (`plaadmin`).
+  - Para `zonadmin`: Visualizar de forma exclusiva únicamente a los Coordinadores Municipales (`munadmin`), restringiendo directores u otros niveles.
+  - Para `munadmin`: Mantener visualización exclusiva de los Directores de Plantel (`plaadmin`) de su municipio.
+- Permitir al administrador y a las autoridades identificar de inmediato a qué rol pertenece cada usuario registrado.
+- Adaptar la nomenclatura del sistema a términos más intuitivos y corporativos: "Pizarra" (en sustitución de Estadísticas/Métricas) y "Usuarios del Sistema" (en sustitución de Validación de Usuarios).
+
+**2. Solución Técnica y Arquitectura:**
+- **Control de Acceso RBAC en Carga (`admin.js`):** En `loadUsuariosList()`, se inyectó la condición estricta para `zonadmin` (`if (userData.rol === 'zonadmin' && u.rol !== 'munadmin') return;`), asegurando que solo los coordinadores municipales se agreguen a la memoria local.
+- **Métricas de Pizarra Contextualizadas (`admin.js`):** En `loadEstadisticas()`, para el rol `zonadmin`, la tarjeta `#stat-usuarios` consulta mediante `getCountFromServer` los usuarios con `rol == 'munadmin'` y define la descripción en "Coordinadores municipales".
+- **Ordenamiento Jerárquico Client-Side (`admin.js`):** En `renderUsuariosList()`, se definió el mapa de prioridades (`zonadmin: 1, munadmin: 2, plaadmin: 3`). La lista se ordena primero por rol y secundariamente por municipio y nombre.
+- **Separadores Visuales por Categoría (`admin.js`):** Se crearon filas de cabecera (`.role-section-header`) que se intercalan automáticamente al cambiar de grupo de rol, indicando título con icono, descripción institucional y contador total de usuarios en ese rol.
+- **Insignias Visuales por Rol:** En la columna "Rol y Ubicación", cada registro exhibe un distintivo con estilos cromáticos y semánticos únicos (Morado/Violeta para Zonadmin 🏛️, Azul Celeste para Munadmin 🏢 y Verde Esmeralda para Plaadmin 🏫).
+- **Filtro Selectivo por Rol (`index.html` y `admin.js`):** Se integró el selector `#filter-rol-usuario` visible para superadmin para alternar entre ver todos los roles clasificados o filtrar uno individual.
+- **Actualización de Nomenclatura Institucional (`index.html` y `admin.js`):** Se unificó el término "Pizarra" en botones de navegación y encabezados de métricas, y "Usuarios del Sistema" en el acceso de personal administrativo.
+
+**3. Archivos Involucrados:**
+- `webapp/package.json` (Versión 2.14.14)
+- `webapp/index.html` (Badges de versión, selector de roles y nomenclatura institucional)
+- `webapp/src/admin.js` (Filtros RBAC, ordenamiento jerárquico, separadores visuales, insignias y métricas de Pizarra)
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
+
+---
