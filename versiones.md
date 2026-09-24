@@ -4,6 +4,20 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.14.16 (24 de Septiembre de 2026)
+- **Saneamiento Histórico de Epónimos con Fechas de Excel:** Corrección definitiva de los 13 planteles educativos cuyos nombres se encontraban corrompidos con números negativos y seriales de fecha generados por Excel durante la migración original (tales como `-28678`, `-31367`, `-32763`, `46307`, etc.).
+- **Mapeo Institucional Exacto:** Se restituyeron formalmente sus nombres históricos y patrios oficiales (ej. `24 DE JUNIO DE 1821`, `12 DE FEBRERO DE 1814`, `19 DE ABRIL DE 1810`, `12 DE OCTUBRE`, etc.).
+- **Escudo Preventivo y Filtro de Limpieza (`obtenerEponimoLimpioPlantel`):** Doble capa de validación en tiempo de ejecución para la tabla de planteles, búsqueda, ordenamiento alfabético, modal de edición y exportación de nómina a Excel, garantizando que nunca más se muestren valores numéricos.
+- **Saneamiento Automatizado en Firestore:** Al cargar el módulo de planteles con credenciales de `superadmin` o `admin`, el sistema actualiza de forma transparente e imperceptible los documentos en la base de datos de Firebase.
+
+---
+
+### v2.14.15 (24 de Septiembre de 2026)
+- **Corrección de Carga de Planteles para Superadmin y Zonadmin:** Optimización de la función de consulta en `admin.js` para usuarios estadales (`superadmin` y `zonadmin`), garantizando la descarga fluida y completa del universo de instituciones educativas sin bloqueos por ausencia de filtro municipal.
+- **Sincronización en Memoria:** Corrección de hidratación de tablas y selectores parroquiales en la vista global.
+
+---
+
 ### v2.14.14 (24 de Septiembre de 2026)
 - **Discriminación Jerárquica de Usuarios por Rol:** Organización y visualización clasificada en el apartado de Usuarios según el rol de la sesión activa:
   - Para **Superadmin (`superadmin`)**: Presentación secuencial y ordenada en bloques: 1º Coordinadores Zonales (`zonadmin`), 2º Coordinadores Municipales (`munadmin`), y 3º Directores de Plantel (`plaadmin`).

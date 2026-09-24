@@ -17,6 +17,7 @@ window.hideLoading = () => {
 };
 
 import { showToast, showAlert } from './uiUtils.js';
+import { obtenerEponimoLimpioPlantel } from './admin.js';
 
 // --- CAPA VISUAL: FORZAR MAYÚSCULAS GLOBALES ---
 document.addEventListener('input', (e) => {
@@ -1237,7 +1238,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
 
         document.getElementById('inp-denominacion').value = dp.denominacion || '';
         document.getElementById('inp-nombre-nominal').value = dp['nombre-plantel']?.nominal || '';
-        document.getElementById('inp-nuevo-eponimo').value = dp['nombre-plantel']?.['nuevo-eponimo'] || '';
+        document.getElementById('inp-nuevo-eponimo').value = obtenerEponimoLimpioPlantel(dp);
 
         document.getElementById('inp-niveles-modalidades').value = dp.nivel || '';
         

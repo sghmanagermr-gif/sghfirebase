@@ -1521,6 +1521,9 @@ export async function exportarNominaExcel() {
     let pDenominacion = valDOM('inp-denominacion') || infoPlantel.denominacion || '';
     let pNombreNominal = valDOM('inp-nombre-nominal') || infoPlantel['nombre-plantel']?.nominal || valDOM('inp-nombre-plantel') || '';
     let pNuevoEponimo = valDOM('inp-nuevo-eponimo') || infoPlantel['nombre-plantel']?.['nuevo-eponimo'] || infoPlantel['nombre-plantel']?.nuevo_eponimo || '';
+    if (pNuevoEponimo && (!isNaN(Number(pNuevoEponimo)) || pNuevoEponimo.startsWith('-') || /^-?\d+$/.test(pNuevoEponimo))) {
+        pNuevoEponimo = pNombreNominal || pNuevoEponimo;
+    }
 
     let pEstado = valDOM('inp-estado') || infoPlantel.estado || 'MÉRIDA';
     let pMunicipio = valDOM('inp-municipio') || infoPlantel.municipio || '';
@@ -1544,7 +1547,12 @@ export async function exportarNominaExcel() {
                 window.currentPlantelInfo = dataP;
                 if (!pDenominacion) pDenominacion = dataP.denominacion || '';
                 if (!pNombreNominal) pNombreNominal = dataP['nombre-plantel']?.nominal || '';
-                if (!pNuevoEponimo) pNuevoEponimo = dataP['nombre-plantel']?.['nuevo-eponimo'] || dataP['nombre-plantel']?.nuevo_eponimo || '';
+                if (!pNuevoEponimo || !isNaN(Number(pNuevoEponimo)) || pNuevoEponimo.startsWith('-')) {
+                    pNuevoEponimo = dataP['nombre-plantel']?.['nuevo-eponimo'] || dataP['nombre-plantel']?.nuevo_eponimo || '';
+                    if (pNuevoEponimo && (!isNaN(Number(pNuevoEponimo)) || pNuevoEponimo.startsWith('-'))) {
+                        pNuevoEponimo = pNombreNominal || pNuevoEponimo;
+                    }
+                }
                 if (!pEstado && dataP.estado) pEstado = dataP.estado;
                 if (!pMunicipio && dataP.municipio) pMunicipio = dataP.municipio;
                 if (!pParroquia && dataP.parroquia) pParroquia = dataP.parroquia;

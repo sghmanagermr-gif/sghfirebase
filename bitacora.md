@@ -1403,3 +1403,66 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `conversaciones.md`
 
 ---
+
+---
+### Ciclo v2.14.15: Optimización de Consulta y Carga de Planteles para Niveles Estadales
+
+**1. Objetivos:**
+- Resolver incidencia reportada por el usuario en la carga de la tabla de planteles al iniciar sesión como `superadmin` o `zonadmin`.
+- Garantizar que las autoridades con competencia estadal puedan visualizar los 1.221 planteles registrados sin interrupciones ni bloqueos de consulta.
+
+**2. Solución Técnica y Arquitectura:**
+- **Refactorización de Carga (`admin.js`):** En `loadPlanteles()`, se estandarizó la consulta para usuarios estadales (`userMun === null`), consultando la colección completa `planteles` y almacenando el listado en `currentPlanteles`.
+- **Sincronización de Componentes de Interfaz:** Se garantizó la población de selectores y el renderizado sin dependencias de variables municipales inexistentes.
+- **Control SemVer:** Incremento a **v2.14.15** en `package.json` e `index.html`.
+
+**3. Archivos Involucrados:**
+- `webapp/src/admin.js`
+- `webapp/package.json`
+- `webapp/index.html`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
+
+---
+### Ciclo v2.14.16: Saneamiento Histórico de Epónimos con Fechas Seriales de Excel
+
+**1. Objetivos:**
+- Corregir de raíz la visualización anómala de números (como `-28678`, `-31367`, `-32763`, `46307`) en la columna de Nuevo Epónimo de la tabla de planteles.
+- Diagnosticar el origen del problema: conversión automática de fechas históricas por Microsoft Excel durante la migración del archivo `RAC ESTADO MERIDA - PLANTELES.csv`.
+- Sanear de manera exacta y definitiva los 13 planteles afectados, restituyendo sus nombres históricos patrios y garantizando que se persistan en Firestore y se muestren impecablemente en toda la aplicación.
+
+**2. Solución Técnica y Arquitectura:**
+- **Diagnóstico y Mapeo Exacto:** Se auditaron los 13 códigos DEA afectados y se identificaron sus correspondencias nominales e históricas:
+  1. `OD14841420`: `24 DE JUNIO DE 1821` (antes `-28678`) - Sucre
+  2. `S2183D1401`: `12 DE FEBRERO DE 1814` (antes `-31367`) - Alberto Adriani
+  3. `OD17241401`: `19 DE ABRIL DE 1810` (antes `-32763`) - Alberto Adriani
+  4. `OD01331406`: `19 DE ABRIL DE 1810` (antes `-32763`) - Campo Elías
+  5. `OD11311405`: `22 DE OCTUBRE DE 1818` (antes `-29653`) - Arzobispo Chacón
+  6. `OD03171401`: `1 DE MAYO` (antes `46143`) - Alberto Adriani
+  7. `OD02671401`: `23 DE ENERO` (antes `46045`) - Alberto Adriani
+  8. `OD12311410`: `23 DE ENERO DE 1958` (antes `21208`) - Julio César Salas
+  9. `OD04011401`: `12 DE OCTUBRE` (antes `46307`) - Alberto Adriani
+  10. `ON10031401`: `12 DE OCTUBRE` (antes `46307`) - Alberto Adriani
+  11. `OD11461406`: `12 DE OCTUBRE` (antes `46307`) - Campo Elías
+  12. `OD17171412`: `5 DE JULIO` (antes `46208`) - Libertador
+  13. `OD11451405`: `23 DE MAYO` (antes `46165`) - Arzobispo Chacón
+- **Diccionario Maestro y Helper Escudo (`admin.js`):** Se definió `CORRECCIONES_EPONIMOS_EXCEL` y la función `obtenerEponimoLimpioPlantel(p)`. La función intercepta cualquier cadena puramente numérica o con signo negativo y la reemplaza por el nombre institucional correcto o nominal.
+- **Integración Transversal en la Interfaz (`admin.js`, `main.js`, `personalWizard.js`):**
+  - En la tabla de planteles: renderizado de celda, filtrado por texto y ordenamiento alfabético A-Z.
+  - En modales administrativos: modal de confirmación de eliminación y precarga en el modal de edición `#p-eponimo`.
+  - En reportes: opciones del modal de nómina y generación de columnas y nombres de archivos en la exportación de nómina a Excel.
+  - En formularios principales y de personal: blindaje en `main.js` y `personalWizard.js` para prellenar nombres correctos.
+- **Saneamiento Proactivo en Base de Datos (Zero-Cost / Authenticated Session):**
+  - Al cargar la lista de planteles como `superadmin` o `admin`, el sistema ejecuta en segundo plano `safeUpdateDoc` sobre cada uno de los 13 planteles afectados, actualizando los campos `nombre-plantel.nuevo-eponimo` y `nombre-plantel.nuevo_eponimo` en Firestore.
+- **Control SemVer:** Incremento de versión PARCHE a **v2.14.16** en `package.json` y en todas las etiquetas visibles de `index.html`.
+
+**3. Archivos Involucrados:**
+- `webapp/package.json` (Versión 2.14.16)
+- `webapp/index.html` (Badges de versión v2.14.16)
+- `webapp/src/admin.js` (Diccionario de correcciones, helper `obtenerEponimoLimpioPlantel`, saneamiento proactivo Firestore, renderizado, ordenamiento y exportación)
+- `webapp/src/main.js` (Limpieza de epónimos al cargar formulario)
+- `webapp/src/personalWizard.js` (Respaldo defensivo ante cadenas numéricas)
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`

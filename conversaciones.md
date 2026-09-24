@@ -1599,3 +1599,45 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 > **Respuesta del Agente:**
 > Se procedió con la compilación de producción con Vite para la versión **v2.14.14**, se desplegó a Firebase Hosting (https://sgh-merida.web.app), se actualizaron las memorias históricas del proyecto (`bitacora.md`, `versiones.md` y `conversaciones.md`), y se resguardó el avance en el repositorio remoto de GitHub (`main`).
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."
+> 
+> Creo que hay un problema al cargar los planteles desde los usuarios superadmin y zonadmin
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se leyó la Skill obligatoria y se optimizó la lógica de consulta en `admin.js` para los roles de nivel estadal (`superadmin` y `zonadmin`), asegurando que al no tener restricción municipal se cargue el universo completo de planteles sin filtros vacíos. Se actualizó la versión a **v2.14.15**.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Sí, satisfactorios.
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."
+> 
+> Ver imagen ***005.PNG: Crees que puedes identificar porque hay planteles que aparecen con numeros "-28678". Con tu respuesta yo podré analizar como resolver la situación
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se leyó la Skill y se diagnosticó el problema en lenguaje claro y accesible: al preparar los archivos originales en Excel para la migración de datos, las fechas patrias e históricas (ej. "24 de Junio de 1821" o "12 de Febrero de 1814") fueron convertidas automáticamente por Excel en números seriales de calendario (ej. `-28678` o `-31367`). Se detectó que ocurría exactamente en 13 planteles y se le ofrecieron al usuario 3 alternativas de solución, recomendando la Opción 3 (saneamiento exacto de los 13 planteles).
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Como no son muchos planteles (13) creo que la opción 3 es la más apropiada. Pero antes de hacer el saneamiento, me listas las 13 instituciones con el numero (fecha) y su correcto nombre
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se listaron con total transparencia los 13 planteles con su código DEA, municipio, denominación nominal, valor en Excel y su respectivo nombre histórico y patrio propuesto para aprobación institucional antes de tocar cualquier registro.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> estoy de acuerdo. procede
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se implementó la solución integral en el entorno local bajo la versión **v2.14.16**:
+> 1. Mapeo institucional exacto mediante el diccionario `CORRECCIONES_EPONIMOS_EXCEL` y helper escudo `obtenerEponimoLimpioPlantel(p)`.
+> 2. Doble escudo en interfaz: tabla de planteles, búsqueda, ordenamiento alfabético, modales y reporte de nómina en Excel blindados contra seriales numéricos.
+> 3. Saneamiento automático en Firestore ejecutado de forma transparente al abrir el apartado de planteles con sesión autenticada de Superadministrador.
+> 4. Actualización defensiva en `main.js` y `personalWizard.js`.
+> 5. Incremento de versión a **v2.14.16** en `package.json` e `index.html`.

@@ -48,6 +48,36 @@ export function limpiarPlantelesMunCache(mun) {
   } catch (e) {}
 }
 
+// --- SANEAMIENTO HISTÓRICO: CORRECCIÓN DE EPÓNIMOS CON FECHAS SERIALES DE EXCEL ---
+export const CORRECCIONES_EPONIMOS_EXCEL = {
+  'OD14841420': { eponimo: '24 DE JUNIO DE 1821', nominal: 'ESCUELA BOLIVARIANA 24 DE JUNIO' },
+  'S2183D1401': { eponimo: '12 DE FEBRERO DE 1814', nominal: 'U.E. 12 DE FEBRERO' },
+  'OD17241401': { eponimo: '19 DE ABRIL DE 1810', nominal: 'LICEO BOLIVARIANO 19 DE ABRIL' },
+  'OD01331406': { eponimo: '19 DE ABRIL DE 1810', nominal: 'ESCUELA 19 DE ABRIL' },
+  'OD11311405': { eponimo: '22 DE OCTUBRE DE 1818', nominal: 'E.E. LA QUEBRADA' },
+  'OD03171401': { eponimo: '1 DE MAYO', nominal: 'U.E.B. 1ERO DE MAYO' },
+  'OD02671401': { eponimo: '23 DE ENERO', nominal: 'ESCUELA BASICA 23 DE ENERO' },
+  'OD12311410': { eponimo: '23 DE ENERO DE 1958', nominal: 'C.E. 23 DE ENERO DE 1958' },
+  'OD04011401': { eponimo: '12 DE OCTUBRE', nominal: 'E.B. 12 DE OCTUBRE' },
+  'ON10031401': { eponimo: '12 DE OCTUBRE', nominal: 'E.P.E. 12 DE OCTUBRE' },
+  'OD11461406': { eponimo: '12 DE OCTUBRE', nominal: 'P.E. RURAL ESCOLAR 530' },
+  'OD17171412': { eponimo: '5 DE JULIO', nominal: 'J.I. 5 DE JULIO' },
+  'OD11451405': { eponimo: '23 DE MAYO', nominal: 'E.E. SORTIFRAN ARRIBA' }
+};
+
+export function obtenerEponimoLimpioPlantel(p) {
+  if (!p) return '';
+  const dea = (p.codigos?.plantel || p.codigoDEA || p.id || '').trim().toUpperCase();
+  if (CORRECCIONES_EPONIMOS_EXCEL[dea]) {
+    return CORRECCIONES_EPONIMOS_EXCEL[dea].eponimo;
+  }
+  const ep = (p['nombre-plantel']?.['nuevo-eponimo'] || p['nombre-plantel']?.nuevo_eponimo || '').trim();
+  if (ep && (!isNaN(Number(ep)) || ep.startsWith('-') || /^-?\d+$/.test(ep))) {
+    return (p['nombre-plantel']?.nominal || p.denominacion || ep).trim();
+  }
+  return ep || (p['nombre-plantel']?.nominal || p.denominacion || '').trim();
+}
+
 // --- ESCUDO ZERO-COST: GESTOR DE CACHÉ DE MATRÍCULA ESTADAL ---
 export function obtenerMatriculaEstadalCache() {
   if (window._cacheMatriculaEstadal && Array.isArray(window._cacheMatriculaEstadal.arrCargados)) {
@@ -672,7 +702,7 @@ export function initAdminDashboard(dbInstance, user) {
             let totalMatriculaMun = 0;
 
             plantelesMun.forEach(p => {
-              const eponimo = (p['nombre-plantel']?.['nuevo-eponimo'] || p['nombre-plantel']?.nuevo_eponimo || p['nombre-plantel']?.nominal || p.denominacion || p.codigos?.plantel || p.codigoDEA || p.id || 'Plantel').trim().toUpperCase();
+              const eponimo = (obtenerEponimoLimpioPlantel(p) || p.codigos?.plantel || p.codigoDEA || p.id || 'Plantel').trim().toUpperCase();
               const { tiene, total } = verificarPlantelTieneMatricula(p);
               if (tiene) {
                 arrCargados.push({ nombre: eponimo, total });
@@ -706,7 +736,7 @@ export function initAdminDashboard(dbInstance, user) {
             const porMun = JSON.parse(JSON.stringify(datosActivos.matricula?.porMunicipio || {}));
 
             currentPlanteles.forEach(p => {
-              const eponimo = (p['nombre-plantel']?.['nuevo-eponimo'] || p['nombre-plantel']?.nuevo_eponimo || p['nombre-plantel']?.nominal || p.denominacion || p.codigos?.plantel || p.codigoDEA || p.id || 'Plantel').trim().toUpperCase();
+              const eponimo = (obtenerEponimoLimpioPlantel(p) || p.codigos?.plantel || p.codigoDEA || p.id || 'Plantel').trim().toUpperCase();
               const munP = (p.municipio || '').trim().toUpperCase();
               const { tiene, total } = verificarPlantelTieneMatricula(p);
               if (tiene) {
@@ -753,7 +783,7 @@ export function initAdminDashboard(dbInstance, user) {
               const porMun = JSON.parse(JSON.stringify(datosActivos.matricula?.porMunicipio || {}));
 
               plantelesCargados.forEach(p => {
-                const eponimo = (p['nombre-plantel']?.['nuevo-eponimo'] || p['nombre-plantel']?.nuevo_eponimo || p['nombre-plantel']?.nominal || p.denominacion || p.codigos?.plantel || p.codigoDEA || p.id || 'Plantel').trim().toUpperCase();
+                const eponimo = (obtenerEponimoLimpioPlantel(p) || p.codigos?.plantel || p.codigoDEA || p.id || 'Plantel').trim().toUpperCase();
                 const munP = (p.municipio || '').trim().toUpperCase();
                 const { tiene, total } = verificarPlantelTieneMatricula(p);
                 if (tiene) {
@@ -2163,12 +2193,34 @@ export function initAdminDashboard(dbInstance, user) {
         currentPlanteles.push({ id: doc.id, ...data });
       });
 
+      // Saneamiento proactivo de epónimos numéricos/fechas de Excel
+      currentPlanteles.forEach(p => {
+        const dea = (p.codigos?.plantel || p.codigoDEA || p.id || '').trim().toUpperCase();
+        const corregido = CORRECCIONES_EPONIMOS_EXCEL[dea];
+        if (corregido) {
+          if (!p['nombre-plantel']) p['nombre-plantel'] = {};
+          const epActual = (p['nombre-plantel']['nuevo-eponimo'] || p['nombre-plantel'].nuevo_eponimo || '').trim();
+          if (!isNaN(Number(epActual)) || epActual.startsWith('-') || /^-?\d+$/.test(epActual) || epActual !== corregido.eponimo) {
+            p['nombre-plantel']['nuevo-eponimo'] = corregido.eponimo;
+            p['nombre-plantel'].nuevo_eponimo = corregido.eponimo;
+            if (userData?.rol === 'superadmin' || userData?.rol === 'admin') {
+              safeUpdateDoc(doc(db, "planteles", p.id), {
+                'nombre-plantel.nuevo-eponimo': corregido.eponimo,
+                'nombre-plantel.nuevo_eponimo': corregido.eponimo
+              }).catch(err => console.warn(`[Saneamiento Epónimo] ${dea}:`, err));
+            }
+          }
+        }
+      });
+
       if (userMun && currentPlanteles.length > 0) {
         guardarPlantelesMunCache(userMun, currentPlanteles);
       }
 
       // Si es superadmin o zonadmin y ya están los planteles en memoria, sincronizar tarjeta Matrícula Estadal
-      if (!isMunAdmin && elMatricula && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
+      const elMat = document.getElementById('stat-matricula');
+      const isMun = (userData?.rol === 'munadmin');
+      if (!isMun && elMat && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
         let sumMatEst = 0;
         let hayMatEst = false;
         currentPlanteles.forEach(p => {
@@ -2179,7 +2231,7 @@ export function initAdminDashboard(dbInstance, user) {
           }
         });
         if (hayMatEst) {
-          renderStatValue(elMatricula, sumMatEst);
+          renderStatValue(elMat, sumMatEst);
         }
       }
 
@@ -2222,7 +2274,7 @@ export function initAdminDashboard(dbInstance, user) {
     if(term) {
       filtered = filtered.filter(p => {
          const d = (p.codigos?.plantel || p.id || '').toLowerCase();
-         const ep = (p['nombre-plantel']?.['nuevo-eponimo'] || p['nombre-plantel']?.nuevo_eponimo || '').toLowerCase();
+         const ep = (obtenerEponimoLimpioPlantel(p)).toLowerCase();
          const n = (p['nombre-plantel']?.nominal || '').toLowerCase();
          const m = (p.municipio || '').toLowerCase();
          const pr = (p.parroquia || '').toLowerCase();
@@ -2232,8 +2284,8 @@ export function initAdminDashboard(dbInstance, user) {
 
     // Ordenar alfabéticamente por Nuevo Epónimo (o nombre visible)
     filtered.sort((a, b) => {
-      const epA = (a['nombre-plantel']?.['nuevo-eponimo'] || a['nombre-plantel']?.nuevo_eponimo || a['nombre-plantel']?.nominal || '').trim();
-      const epB = (b['nombre-plantel']?.['nuevo-eponimo'] || b['nombre-plantel']?.nuevo_eponimo || b['nombre-plantel']?.nominal || '').trim();
+      const epA = obtenerEponimoLimpioPlantel(a);
+      const epB = obtenerEponimoLimpioPlantel(b);
       return epA.localeCompare(epB, 'es', { sensitivity: 'base' });
     });
 
@@ -2248,7 +2300,7 @@ export function initAdminDashboard(dbInstance, user) {
     filtered.forEach(p => {
        const tr = document.createElement('tr');
        tr.style.borderBottom = '1px solid var(--glass-border)';
-       const eponimoVal = (p['nombre-plantel']?.['nuevo-eponimo'] || p['nombre-plantel']?.nuevo_eponimo || '').trim();
+       const eponimoVal = obtenerEponimoLimpioPlantel(p);
        const nominalVal = (p['nombre-plantel']?.nominal || '').trim();
        const textoPrincipal = eponimoVal || nominalVal || 'SIN NOMBRE';
        const subtextoNominal = (eponimoVal && nominalVal && eponimoVal.toUpperCase() !== nominalVal.toUpperCase())
@@ -2297,7 +2349,7 @@ export function initAdminDashboard(dbInstance, user) {
        b.onclick = async () => {
          const id = b.getAttribute('data-id');
          const plantel = currentPlanteles.find(x => x.id === id);
-         const epDel = plantel['nombre-plantel']?.['nuevo-eponimo'] || plantel['nombre-plantel']?.nuevo_eponimo || plantel['nombre-plantel']?.nominal || 'Plantel';
+         const epDel = obtenerEponimoLimpioPlantel(plantel) || 'Plantel';
          const ok = await showConfirm("Eliminar Plantel", `¿Estás seguro de eliminar el plantel ${epDel}? Esta acción es irreversible.`, "danger");
          if(ok) {
             try {
@@ -2639,7 +2691,7 @@ export function initAdminDashboard(dbInstance, user) {
        document.getElementById('p-estadistico').value = plantel.codigos?.estadistico || '';
        document.getElementById('p-denominacion').value = plantel.denominacion || '';
        document.getElementById('p-nominal').value = plantel['nombre-plantel']?.nominal || '';
-       document.getElementById('p-eponimo').value = plantel['nombre-plantel']?.nuevo_eponimo || plantel['nombre-plantel']?.['nuevo-eponimo'] || '';
+       document.getElementById('p-eponimo').value = obtenerEponimoLimpioPlantel(plantel);
        
        const munVal = normalizarMunicipio(plantel.municipio || userMun || '');
        if (selMun) {
@@ -3179,7 +3231,7 @@ export function initAdminDashboard(dbInstance, user) {
 
         const plantelesOpciones = plantelesMun.map(p => {
           const cod = (p.codigos?.plantel || p.codigoDEA || p.id || '').toString().trim().toUpperCase();
-          const eponimo = (p['nombre-plantel']?.['nuevo-eponimo'] || p['nombre-plantel']?.nuevo_eponimo || p['nombre-plantel']?.nominal || p.denominacion || cod).trim().toUpperCase();
+          const eponimo = (obtenerEponimoLimpioPlantel(p) || cod).trim().toUpperCase();
           return { cod, eponimo };
         });
 
@@ -3352,7 +3404,7 @@ export function initAdminDashboard(dbInstance, user) {
 
         const pDenominacion = pInfo.denominacion || '';
         const pNombreNominal = pInfo['nombre-plantel']?.nominal || '';
-        const pNuevoEponimo = pInfo['nombre-plantel']?.['nuevo-eponimo'] || pInfo['nombre-plantel']?.nuevo_eponimo || '';
+        const pNuevoEponimo = obtenerEponimoLimpioPlantel(pInfo);
 
         const pEstado = pInfo.estado || emp['estado'] || 'MÉRIDA';
         const pMunicipio = pInfo.municipio || emp['municipio'] || (isTodosMunicipios ? '' : municipio) || '';
@@ -3484,7 +3536,7 @@ export function initAdminDashboard(dbInstance, user) {
       let nombreArchivo;
       if (plantelCod) {
         const pSel = plantelesMap.get(plantelCod);
-        const epLimpio = (pSel?.['nombre-plantel']?.['nuevo-eponimo'] || pSel?.['nombre-plantel']?.nuevo_eponimo || 'Plantel').replace(/[^a-zA-Z0-9_-]/g, '_');
+        const epLimpio = (obtenerEponimoLimpioPlantel(pSel) || 'Plantel').replace(/[^a-zA-Z0-9_-]/g, '_');
         nombreArchivo = `Nomina_Personal_${epLimpio}_${plantelCod}_${fechaHoy}.xlsx`;
       } else if (isTodosMunicipios) {
         nombreArchivo = `Nomina_Personal_Consolidado_Estadal_MERIDA_${fechaHoy}.xlsx`;
