@@ -64,23 +64,23 @@ export function initAuth(auth, db, callbacks) {
 
       // Doble Candado: Verificación de correo
       if (!user.emailVerified && userData.rol !== 'superadmin') {
-          onWait("Tu cuenta requiere verificación. Por favor, haz clic en el enlace que te enviamos al correo (revisa tu carpeta de Spam si no lo encuentras).");
+          onWait("Tu cuenta requiere verificación. Por favor, haz clic en el enlace que te enviamos al correo (<b>revisa tu carpeta de Spam</b> si no lo encuentras).", "Cuenta en Revisión");
           return;
       }
 
       // 2. Revisión de estado de aprobación general
       if (userData.estado_aprobacion === 'PENDIENTE') {
-          onWait("Cuenta en revisión. Esperando validación de tu superior.");
+          onWait("Cuenta en revisión. Esperando validación de tu superior.", "Cuenta en Revisión");
           return;
       }
       if (userData.estado_aprobacion === 'RECHAZADO') {
-          onWait("Tu solicitud de acceso ha sido rechazada.");
+          onWait("Tu solicitud de acceso ha sido rechazada.", "Acceso Rechazado");
           return;
       }
 
       // Si tiene el campo y no es APROBADO ni los anteriores, es un estado desconocido
       if (userData.estado_aprobacion && userData.estado_aprobacion !== 'APROBADO') {
-          onWait("Tu cuenta tiene un estado desconocido: " + userData.estado_aprobacion);
+          onWait("Tu cuenta tiene un estado desconocido: " + userData.estado_aprobacion, "Cuenta en Revisión");
           return;
       }
 
@@ -102,7 +102,10 @@ export function initAuth(auth, db, callbacks) {
          const isMun = despliegue.municipios_activos?.includes(mun);
          
          if (!isExp && !isMun) {
-            onWait(`El Sistema SGH aún no está habilitado para ${mun ? 'el municipio ' + mun : 'su plantel'}. Por favor, manténgase atento a los canales oficiales.`);
+            const mensajeDespliegue = mun
+               ? `El Sistema SGH aún <b>no está habilitado para el municipio</b> ${mun}. Por favor, manténgase atento a los canales oficiales.`
+               : `El Sistema SGH aún <b>no está habilitado para su plantel</b>. Por favor, manténgase atento a los canales oficiales.`;
+            onWait(mensajeDespliegue, "Despliegue Institucional");
             return;
          }
 

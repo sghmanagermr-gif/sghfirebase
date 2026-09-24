@@ -1518,3 +1518,33 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `versiones.md`
 - `bitacora.md`
 - `conversaciones.md`
+
+---
+### Ciclo v2.14.19: Formato y Claridad en Mensajes de Autenticación y Despliegue
+
+**1. Objetivos:**
+- Atender la solicitud de visualización y refinamiento de los mensajes informativos emitidos a los usuarios en las etapas de registro, verificación de correo y restricción territorial por fase de despliegue institucional.
+- Resaltar en negritas frases clave que dirigen la atención del usuario a las carpetas de spam y a los pasos obligatorios de aprobación.
+- Desacoplar el mensaje de cierre por despliegue de la tarjeta genérica de "Cuenta en Revisión", otorgándole un encabezado propio e institucional ("Despliegue Institucional").
+
+**2. Solución Técnica y Arquitectura:**
+- **Soporte HTML en Sala de Espera (`main.js`):**
+  - Modificación del callback `onWait` para aceptar un segundo argumento opcional `titulo = 'Cuenta en Revisión'`.
+  - Reemplazo de `.textContent` por `.innerHTML` en el párrafo descriptivo de `#espera-view` para permitir el renderizado de etiquetas semánticas `<b>` y negritas.
+- **Refinamiento de Mensajes (`main.js` y `auth.js`):**
+  - `showAlert` en registro exitoso: `Revise su correo en la <b>carpeta spam</b> para verificar su cuenta y comuníquese con el responsable de Sistema de gestión humana municipal <b>para la aprobación</b>.`.
+  - Doble candado de verificación de correo en `auth.js`: `Tu cuenta requiere verificación. Por favor, haz clic en el enlace que te enviamos al correo (<b>revisa tu carpeta de Spam</b> si no lo encuentras).`.
+  - Candado de Despliegue Territorial en `auth.js`: Se inyecta título `"Despliegue Institucional"` y texto destacado `El Sistema SGH aún <b>no está habilitado para el municipio</b> ${mun}...` o plantel.
+- **Control SemVer y Despliegue:**
+  - Incremento a **v2.14.19** en `webapp/package.json` e `webapp/index.html`.
+  - Compilación de producción con Vite (`npm run build`) y despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`) mediante `npx firebase-tools deploy --only hosting`.
+
+**3. Archivos Involucrados:**
+- `webapp/src/main.js` (Renderizado HTML en `onWait` y negritas en alerta de registro)
+- `webapp/src/auth.js` (Mensajes de verificación y bloqueo por despliegue con título desacoplado)
+- `webapp/package.json` (Versión 2.14.19)
+- `webapp/index.html` (Badges de versión v2.14.19)
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
+

@@ -1684,3 +1684,53 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 > **Respuesta del Agente:**
 > Se incorporó la estandarización de títulos contextuales en la Pizarra de `admin.js` (unificando a "Pizarra Estadal" para autoridades zonales y superadmin, y "Pizarra Municipal - [Municipio]" para coordinadores municipales). Se elevó la versión a **v2.14.18** en `package.json` e `index.html`, se compiló el paquete de producción con Vite y se completó con éxito el despliegue a Firebase Hosting (https://sgh-merida.web.app). Se actualizaron `bitacora.md`, `versiones.md` y `conversaciones.md`, y se sincronizó el avance en el repositorio central de GitHub (`main`).
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Necesito me muestres todos los mensajes que les aparecen a los usuarios: Cuando se registran, Cuando no sea verificado el usuario, Cuando el sistema esta cerrado por despliegue
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> A continuación se detallan los mensajes exactos que el sistema presenta a los usuarios en cada una de las tres situaciones solicitadas:
+> 
+> ### 1. Cuando se registran
+> Al completar el formulario de registro y presionar el botón **Registrarse**, el sistema procesa la solicitud y muestra una ventana emergente de confirmación (modal con icono verde de éxito ✅):
+> - **Título:** ¡Registro Exitoso!
+> - **Mensaje:** «Revise su correo en la carpeta spam para verificar su cuenta y comuníquese con el responsable de Sistema de gestión humana municipal para la aprobación.»
+> 
+> ### 2. Cuando el usuario no ha verificado su correo
+> Si el usuario intenta iniciar sesión con sus credenciales pero aún no ha pulsado el enlace de confirmación recibido por correo electrónico:
+> El sistema lo redirige a la pantalla de espera con el encabezado «Cuenta en Revisión» y le muestra el mensaje:
+> - **Mensaje:** «Tu cuenta requiere verificación. Por favor, haz clic en el enlace que te enviamos al correo (revisa tu carpeta de Spam si no lo encuentras).»
+> - **Acción disponible:** Un botón para «Cerrar Sesión».
+> 
+> ### 3. Cuando el sistema está cerrado por despliegue institucional
+> Si el usuario (con rol de director o administrativo de plantel) ya tiene su correo verificado y su cuenta aprobada, pero el sistema aún no ha habilitado el acceso a su localidad territorial en la fase de despliegue actual:
+> El sistema lo ubica en la pantalla de espera y le muestra:
+> - **Mensaje (según su municipio):** «El Sistema SGH aún no está habilitado para el municipio [Nombre del Municipio]. Por favor, manténgase atento a los canales oficiales.» (O en caso de no tener municipio asignado directamente: «El Sistema SGH aún no está habilitado para su plantel. Por favor, manténgase atento a los canales oficiales.»)
+> - **Acción disponible:** Un botón para «Cerrar Sesión».
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Cambios:
+> Revise su correo en la carpeta spam para verificar su cuenta y comuníquese con el responsable de Sistema de gestión humana municipal para la aprobación. carpeta spam y para la aprobación en negritas
+> Tu cuenta requiere verificación. Por favor, haz clic en el enlace que te enviamos al correo (revisa tu carpeta de Spam si no lo encuentras). revisa tu carpeta de Spam en negritas
+> «El Sistema SGH aún no está habilitado para el municipio [Nombre del Municipio]. Por favor, manténgase atento a los canales oficiales.» (O en caso de no tener municipio asignado directamente: «El Sistema SGH aún no está habilitado para su plantel. Por favor, manténgase atento a los canales oficiales.»). no está habilitado para el municipio en negritas este mensaje no debe decir Cuenta en Revisión ya que no es por revisión sino por despliegue
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se han implementado con éxito todas las modificaciones solicitadas en los mensajes del sistema:
+> 1. **Mensaje de Registro Exitoso:** Se aplicó formato en negritas a las frases indicadas («Revise su correo en la **carpeta spam** para verificar su cuenta y comuníquese con el responsable de Sistema de gestión humana municipal **para la aprobación**.»).
+> 2. **Mensaje de Correo no Verificado:** Se habilitó el soporte visual para negritas en la sala de espera y se resaltó la advertencia de spam («Tu cuenta requiere verificación. Por favor, haz clic en el enlace que te enviamos al correo (**revisa tu carpeta de Spam** si no lo encuentras).»).
+> 3. **Mensaje de Cierre por Despliegue:** Se desacopló del título de revisión y ahora muestra como encabezado: «Despliegue Institucional». Se colocó en negritas la frase solicitada («El Sistema SGH aún **no está habilitado para el municipio** [Nombre del Municipio]. Por favor, manténgase atento a los canales oficiales.» o «El Sistema SGH aún **no está habilitado para su plantel**.»).
+> 4. **Control de Versión:** Se actualizó la versión del aplicativo a v2.14.19 en package.json e index.html, verificando la compilación limpia con Vite.
+> ¿Los resultados fueron satisfactorios?
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Sí, satisfactorios. 
+> Despliega a firebase
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se realizó la compilación de producción con Vite para la versión **v2.14.19** y se completó con éxito el despliegue a Firebase Hosting (https://sgh-merida.web.app). Se actualizaron `bitacora.md`, `versiones.md` y `conversaciones.md`, y se aseguraron todos los cambios en el repositorio de GitHub (`main`).

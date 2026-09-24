@@ -178,10 +178,12 @@ initAuth(auth, db, {
 
     showView('login-view');
   },
-  onWait: (mensaje) => {
+  onWait: (mensaje, titulo = 'Cuenta en Revisión') => {
     showView('espera-view');
+    const tituloEl = document.querySelector('#espera-view h2');
+    if (tituloEl) tituloEl.textContent = titulo;
     const msjEl = document.querySelector('#espera-view p');
-    if (msjEl) msjEl.textContent = mensaje;
+    if (msjEl) msjEl.innerHTML = mensaje;
   },
   onLogin: async (userData) => {
       window.sgh_user_data = userData;
@@ -507,7 +509,7 @@ document.getElementById('register-form')?.addEventListener('submit', async (e) =
             creado_el: new Date().toISOString()
         });
 
-        await showAlert("¡Registro Exitoso!", "Revise su correo en la carpeta spam para verificar su cuenta y comuníquese con el responsable de Sistema de gestión humana municipal para la aprobación.", "success");
+        await showAlert("¡Registro Exitoso!", "Revise su correo en la <b>carpeta spam</b> para verificar su cuenta y comuníquese con el responsable de Sistema de gestión humana municipal <b>para la aprobación</b>.", "success");
         await signOut(auth);
 
     } catch (error) {

@@ -4,6 +4,15 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.14.19 (24 de Septiembre de 2026)
+- **Formato y Claridad en Mensajes de Autenticación y Despliegue:**
+  - **Registro Exitoso:** Se aplicó formato en negritas para resaltar las directrices clave en la ventana de confirmación (`carpeta spam` y `para la aprobación`).
+  - **Verificación de Correo en Espera:** Habilitación de renderizado HTML dinámico en la sala de espera (`#espera-view`) y resaltado en negritas de la indicación (`revisa tu carpeta de Spam`).
+  - **Cierre Institucional por Fase de Despliegue:** Se desacopló del título genérico de revisión para mostrar explícitamente el encabezado **«Despliegue Institucional»** y destacar en negritas que el sistema **«no está habilitado para el municipio»** (o su plantel).
+  - **Despliegue a Producción:** Compilación optimizada y publicación en Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.14.18 (24 de Septiembre de 2026)
 - **Estandarización de Nomenclatura en Pizarra Administrativa:** Unificación definitiva de las etiquetas visuales del panel de control:
   - Títulos contextuales estandarizados a **Pizarra Municipal - [Municipio]** para Coordinadores Municipales (`munadmin`) y **Pizarra Estadal** para Coordinadores Zonales (`zonadmin`) y Superadministradores (`superadmin`).
