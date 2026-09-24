@@ -1327,3 +1327,28 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `conversaciones.md`
 
 ---
+### Ciclo v2.14.12: 4ta Tarjeta de Matrícula (Municipal/Estadal) y Cómputo Estadal Zero-Cost
+
+**1. Objetivos:**
+- Atender solicitud del Jefe de Supervisión Educativa para agregar una tarjeta de "Total Matrícula" junto a Usuarios, Planteles y Personal.
+- Contextualizar el nombre y valor según el rol: para `munadmin` debe decir **Matrícula Municipal** y totalizar los alumnos del municipio; para `superadmin` y `zonadmin` debe decir **Matrícula Estadal** y totalizar los alumnos de todo el estado Mérida.
+- Mantener estricto cumplimiento de la regla **Zero-Cost** (cero lecturas adicionales innecesarias de Firestore).
+- Corregir el estatus de matrícula estadal que mostraba "En cálculo..." para `superadmin` y `zonadmin`.
+
+**2. Solución Técnica y Arquitectura:**
+- **Tarjeta 4 en Interfaz (`index.html` y `styles.css`):** Se incorporó el elemento `#stat-matricula` en la cuadrícula `.stats-grid`, estilizado con icono 🎓 y tipografía numérica en color ámbar (`#ea580c`). Se calibró el ancho máximo de la cuadrícula a 1050px para garantizar alineación equilibrada de las 4 tarjetas en escritorio y responsividad fluida en móviles.
+- **Cálculo Municipal Zero-Cost (`admin.js`):** Para `munadmin`, la sumatoria municipal se ejecuta en el navegador sobre el arreglo de planteles que ya se encuentra en memoria/caché (`plantelesMun`), consumiendo exactamente 0 lecturas adicionales de Firestore.
+- **Cómputo Estadal Ultraligero y Caché (`admin.js`):** Para `superadmin` y `zonadmin`, se sustituyó la espera pasiva de la ficha estática por una consulta filtrada ultraligera (`where("datos_completados", "==", true)`), que solo lee las escuelas que ya enviaron matrícula (evitando escanear 1.221 registros). Se integró un gestor de caché de sesión en `sessionStorage` (`obtenerMatriculaEstadalCache`, `guardarMatriculaEstadalCache`, `limpiarMatriculaEstadalCache`).
+- **Estatus de Matrícula Estadal con Pestañas Dinámicas:** Se implementó una vista dual en `#stat-mat-lista`: pestaña "Planteles Cargados" (desglosa nombre, municipio y número de estudiantes de cada plantel registrado) y pestaña "Por Municipios" (muestra los 23 municipios con sus contadores de planteles cargados y pendientes).
+- **Sincronización Transparente:** El botón "🔄 Sincronizar" quedó activo tanto para coordinadores municipales como para autoridades estadales, permitiendo actualización inmediata y guardado de respaldo en `estadisticas/resumen_global`.
+
+**3. Archivos Involucrados:**
+- `webapp/package.json` (Versión 2.14.12)
+- `webapp/index.html` (Badge y 4ta tarjeta)
+- `webapp/styles.css` (Alineación cuadrícula)
+- `webapp/src/admin.js` (Lógica Zero-Cost, cachés, cómputos estadales/municipales y UI interactiva)
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
+
+---

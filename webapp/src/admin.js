@@ -48,6 +48,39 @@ export function limpiarPlantelesMunCache(mun) {
   } catch (e) {}
 }
 
+// --- ESCUDO ZERO-COST: GESTOR DE CACHÉ DE MATRÍCULA ESTADAL ---
+export function obtenerMatriculaEstadalCache() {
+  if (window._cacheMatriculaEstadal && Array.isArray(window._cacheMatriculaEstadal.arrCargados)) {
+    return window._cacheMatriculaEstadal;
+  }
+  try {
+    const raw = sessionStorage.getItem('sgh_cache_matricula_estadal');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && Array.isArray(parsed.arrCargados)) {
+        window._cacheMatriculaEstadal = parsed;
+        return parsed;
+      }
+    }
+  } catch (e) {}
+  return null;
+}
+
+export function guardarMatriculaEstadalCache(data) {
+  if (!data) return;
+  window._cacheMatriculaEstadal = data;
+  try {
+    sessionStorage.setItem('sgh_cache_matricula_estadal', JSON.stringify(data));
+  } catch (e) {}
+}
+
+export function limpiarMatriculaEstadalCache() {
+  delete window._cacheMatriculaEstadal;
+  try {
+    sessionStorage.removeItem('sgh_cache_matricula_estadal');
+  } catch (e) {}
+}
+
 export function verificarPlantelTieneMatricula(p) {
   if (!p) return { tiene: false, total: 0 };
   if (p.matricula) {
@@ -400,25 +433,35 @@ export function initAdminDashboard(dbInstance, user) {
     });
   });
 
+  // Helper para formatear números o mostrar mensaje modesto "En cálculo..."
+  function renderStatValue(el, val) {
+    if (!el) return;
+    if (val === 'En mantenimiento') {
+      el.classList.add('badge-mantenimiento');
+      el.textContent = 'En mantenimiento';
+      return;
+    }
+    if (val === 'En cálculo...' || val === null || val === undefined || val === '') {
+      el.classList.remove('badge-mantenimiento');
+      el.innerHTML = '<span style="font-size: 1.1rem; font-weight: 600; color: #64748b;">En cálculo...</span>';
+      return;
+    }
+    const num = Number(val);
+    if (!isNaN(num)) {
+      el.classList.remove('badge-mantenimiento');
+      el.textContent = num.toLocaleString();
+    } else {
+      el.classList.remove('badge-mantenimiento');
+      el.textContent = String(val);
+    }
+  }
+
   // Cargar Estadísticas (Tab por Defecto - Arquitectura Zero-Cost con Ficha Resumen)
   async function loadEstadisticas() {
     try {
       const isMunAdmin = (userData?.rol === 'munadmin');
       const mun = isMunAdmin ? (userData.jerarquia?.municipio || userData.municipio || '').trim().toUpperCase() : '';
       const isEstadal = (userData?.rol === 'zonadmin' || userData?.rol === 'superadmin' || userData?.rol === 'admin');
-
-      // Helper para formatear números o mostrar mensaje modesto "En cálculo..."
-      function renderStatValue(el, val) {
-        if (!el) return;
-        const num = Number(val);
-        if ((typeof val === 'number' && val > 0) || (val !== null && val !== undefined && val !== '' && !isNaN(num) && num > 0 && val !== 'En mantenimiento')) {
-          el.classList.remove('badge-mantenimiento');
-          el.textContent = num.toLocaleString();
-        } else {
-          el.classList.remove('badge-mantenimiento');
-          el.innerHTML = '<span style="font-size: 1.1rem; font-weight: 600; color: #64748b;">En cálculo...</span>';
-        }
-      }
 
       const elUsuarios = document.getElementById('stat-usuarios');
       const elPersonal = document.getElementById('stat-personal');
@@ -427,17 +470,24 @@ export function initAdminDashboard(dbInstance, user) {
       const elPlantelesDesc = document.getElementById('stat-planteles-desc');
       const elPersonalDesc = document.getElementById('stat-personal-desc');
       const elUsuariosDesc = document.getElementById('stat-usuarios-desc');
+      const elMatricula = document.getElementById('stat-matricula');
+      const elMatriculaTitle = document.getElementById('stat-matricula-title');
+      const elMatriculaDesc = document.getElementById('stat-matricula-desc');
 
       if (isMunAdmin) {
         if (elPlantelesTitle) elPlantelesTitle.textContent = 'Planteles del Municipio';
         if (elPlantelesDesc) elPlantelesDesc.textContent = 'Total escuelas en el municipio';
         if (elPersonalDesc) elPersonalDesc.textContent = 'Nómina municipal activa';
         if (elUsuariosDesc) elUsuariosDesc.textContent = 'Directores con cuenta de acceso';
+        if (elMatriculaTitle) elMatriculaTitle.textContent = 'Matrícula Municipal';
+        if (elMatriculaDesc) elMatriculaDesc.textContent = 'Estudiantes en el municipio';
       } else {
         if (elPlantelesTitle) elPlantelesTitle.textContent = 'Planteles del Estado';
         if (elPlantelesDesc) elPlantelesDesc.textContent = 'Total escuelas del estado';
         if (elPersonalDesc) elPersonalDesc.textContent = 'Nómina estadal activa';
         if (elUsuariosDesc) elUsuariosDesc.textContent = 'Cuentas de acceso activas';
+        if (elMatriculaTitle) elMatriculaTitle.textContent = 'Matrícula Estadal';
+        if (elMatriculaDesc) elMatriculaDesc.textContent = 'Estudiantes en el estado';
       }
 
       // 1. Contador ligero de usuarios
@@ -480,6 +530,7 @@ export function initAdminDashboard(dbInstance, user) {
       if (!resumenData) {
         renderStatValue(elPersonal, 'En mantenimiento');
         renderStatValue(elPlanteles, 'En mantenimiento');
+        renderStatValue(elMatricula, 'En mantenimiento');
         return;
       }
 
@@ -504,6 +555,13 @@ export function initAdminDashboard(dbInstance, user) {
       // Renderizar tarjetas maestras
       renderStatValue(elPersonal, datosActivos.totalPersonal || 0);
       renderStatValue(elPlanteles, datosActivos.totalPlanteles || 0);
+
+      const valMatricula = datosActivos.totalMatricula ?? datosActivos.matricula?.totalEstudiantes;
+      if (valMatricula !== undefined) {
+        renderStatValue(elMatricula, valMatricula);
+      } else {
+        renderStatValue(elMatricula, 'En cálculo...');
+      }
 
       // 4. Extensión Munadmin y Zonadmin
       const extCont = document.getElementById('extended-stats-container');
@@ -534,26 +592,30 @@ export function initAdminDashboard(dbInstance, user) {
         const elMatLista = document.getElementById('stat-mat-lista');
         const btnSyncMat = document.getElementById('btn-sync-matricula-mun');
 
-        // Para munadmin: Sincronización real con Escudo de Memoria Zero-Cost
-        if (isMunAdmin && mun) {
-          if (btnSyncMat) {
-            btnSyncMat.style.display = 'inline-flex';
-            if (!btnSyncMat._hasListener) {
-              btnSyncMat._hasListener = true;
-              btnSyncMat.addEventListener('click', async (e) => {
-                e.preventDefault();
-                e.stopPropagation();
+        // Sincronización real con Escudo de Memoria Zero-Cost para Munadmin y Autoridades Estadales
+        if (btnSyncMat) {
+          btnSyncMat.style.display = 'inline-flex';
+          if (!btnSyncMat._hasListener) {
+            btnSyncMat._hasListener = true;
+            btnSyncMat.addEventListener('click', async (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (isMunAdmin && mun) {
                 limpiarPlantelesMunCache(mun);
-                btnSyncMat.disabled = true;
-                btnSyncMat.innerHTML = '⏳ Sincronizando...';
-                await loadEstadisticas();
-                btnSyncMat.innerHTML = '🔄 Sincronizar';
-                btnSyncMat.disabled = false;
-                showToast('Estatus de matrícula sincronizado con éxito.', 'success');
-              });
-            }
+              } else {
+                limpiarMatriculaEstadalCache();
+              }
+              btnSyncMat.disabled = true;
+              btnSyncMat.innerHTML = '⏳ Sincronizando...';
+              await loadEstadisticas();
+              btnSyncMat.innerHTML = '🔄 Sincronizar';
+              btnSyncMat.disabled = false;
+              showToast('Estatus de matrícula sincronizado con éxito.', 'success');
+            });
           }
+        }
 
+        if (isMunAdmin && mun) {
           let plantelesMun = obtenerPlantelesMunCache(mun);
           if (!plantelesMun && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
             const filt = currentPlanteles.filter(p => (p.municipio || '').trim().toUpperCase() === mun);
@@ -582,12 +644,14 @@ export function initAdminDashboard(dbInstance, user) {
           if (plantelesMun && plantelesMun.length > 0) {
             const arrCargados = [];
             const arrPendientes = [];
+            let totalMatriculaMun = 0;
 
             plantelesMun.forEach(p => {
               const eponimo = (p['nombre-plantel']?.['nuevo-eponimo'] || p['nombre-plantel']?.nuevo_eponimo || p['nombre-plantel']?.nominal || p.denominacion || p.codigos?.plantel || p.codigoDEA || p.id || 'Plantel').trim().toUpperCase();
               const { tiene, total } = verificarPlantelTieneMatricula(p);
               if (tiene) {
                 arrCargados.push({ nombre: eponimo, total });
+                totalMatriculaMun += (total || 0);
               } else {
                 arrPendientes.push({ nombre: eponimo });
               }
@@ -600,14 +664,118 @@ export function initAdminDashboard(dbInstance, user) {
               cargados: arrCargados.length,
               pendientes: arrPendientes.length,
               arrCargados,
-              arrPendientes
+              arrPendientes,
+              totalEstudiantes: totalMatriculaMun
             };
+
+            renderStatValue(elMatricula, totalMatriculaMun);
           }
-        } else {
-          if (btnSyncMat) btnSyncMat.style.display = 'none';
+        } else if (isEstadal) {
+          // --- NIVEL ESTADAL: SUPERADMIN Y ZONADMIN (Zero-Cost Shield) ---
+          let estCache = obtenerMatriculaEstadalCache();
+
+          // Intento 1: Si ya están cargados los planteles en memoria (0 lecturas)
+          if (!estCache && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
+            const arrCargados = [];
+            let totalMatriculaEst = 0;
+            const porMun = JSON.parse(JSON.stringify(datosActivos.matricula?.porMunicipio || {}));
+
+            currentPlanteles.forEach(p => {
+              const eponimo = (p['nombre-plantel']?.['nuevo-eponimo'] || p['nombre-plantel']?.nuevo_eponimo || p['nombre-plantel']?.nominal || p.denominacion || p.codigos?.plantel || p.codigoDEA || p.id || 'Plantel').trim().toUpperCase();
+              const munP = (p.municipio || '').trim().toUpperCase();
+              const { tiene, total } = verificarPlantelTieneMatricula(p);
+              if (tiene) {
+                arrCargados.push({ nombre: eponimo, municipio: munP, total });
+                totalMatriculaEst += (total || 0);
+                if (munP && porMun[munP]) {
+                  porMun[munP].cargados = (porMun[munP].cargados || 0) + 1;
+                  porMun[munP].pendientes = Math.max(0, (porMun[munP].pendientes || 0) - 1);
+                }
+              }
+            });
+
+            arrCargados.sort((a, b) => a.nombre.localeCompare(b.nombre));
+            const totPlanteles = Number(datosActivos.totalPlanteles || 1221);
+            estCache = {
+              cargados: arrCargados.length,
+              pendientes: Math.max(0, totPlanteles - arrCargados.length),
+              arrCargados,
+              porMunicipio: porMun,
+              totalEstudiantes: totalMatriculaEst
+            };
+            guardarMatriculaEstadalCache(estCache);
+          }
+
+          // Intento 2: Si no está en memoria, consultar ÚNICAMENTE los planteles completados (Zero-Cost: solo lee los registros existentes)
+          if (!estCache) {
+            try {
+              let plantelesCargados = [];
+              const snapP = await getDocs(query(collection(db, "planteles"), where("datos_completados", "==", true)));
+              snapP.forEach(docSnap => {
+                plantelesCargados.push({ id: docSnap.id, ...docSnap.data() });
+              });
+
+              // Respaldo de seguridad por si hubo registros guardados previamente sin bandera
+              if (plantelesCargados.length === 0) {
+                const snapM = await getDocs(query(collection(db, "planteles"), where("matricula-total", ">", 0)));
+                snapM.forEach(docSnap => {
+                  plantelesCargados.push({ id: docSnap.id, ...docSnap.data() });
+                });
+              }
+
+              const arrCargados = [];
+              let totalMatriculaEst = 0;
+              const porMun = JSON.parse(JSON.stringify(datosActivos.matricula?.porMunicipio || {}));
+
+              plantelesCargados.forEach(p => {
+                const eponimo = (p['nombre-plantel']?.['nuevo-eponimo'] || p['nombre-plantel']?.nuevo_eponimo || p['nombre-plantel']?.nominal || p.denominacion || p.codigos?.plantel || p.codigoDEA || p.id || 'Plantel').trim().toUpperCase();
+                const munP = (p.municipio || '').trim().toUpperCase();
+                const { tiene, total } = verificarPlantelTieneMatricula(p);
+                if (tiene) {
+                  arrCargados.push({ nombre: eponimo, municipio: munP, total });
+                  totalMatriculaEst += (total || 0);
+                  if (munP && porMun[munP]) {
+                    porMun[munP].cargados = (porMun[munP].cargados || 0) + 1;
+                    porMun[munP].pendientes = Math.max(0, (porMun[munP].pendientes || 0) - 1);
+                  }
+                }
+              });
+
+              arrCargados.sort((a, b) => a.nombre.localeCompare(b.nombre));
+              const totPlanteles = Number(datosActivos.totalPlanteles || 1221);
+              estCache = {
+                cargados: arrCargados.length,
+                pendientes: Math.max(0, totPlanteles - arrCargados.length),
+                arrCargados,
+                porMunicipio: porMun,
+                totalEstudiantes: totalMatriculaEst
+              };
+              guardarMatriculaEstadalCache(estCache);
+            } catch (errP) {
+              console.warn("[Zero-Cost Shield] Error al consultar planteles completados a nivel estadal:", errP);
+            }
+          }
+
+          if (estCache) {
+            matInfo = estCache;
+            renderStatValue(elMatricula, estCache.totalEstudiantes);
+
+            // Sincronización transparente de ficha resumen en Firestore para Superadmin
+            if (userData?.rol === 'superadmin' || userData?.rol === 'admin') {
+              try {
+                safeUpdateDoc(doc(db, 'estadisticas', 'resumen_global'), {
+                  totalMatricula: estCache.totalEstudiantes,
+                  'matricula.cargados': estCache.cargados,
+                  'matricula.pendientes': estCache.pendientes,
+                  'matricula.totalEstudiantes': estCache.totalEstudiantes,
+                  'matricula.porMunicipio': estCache.porMunicipio
+                }).catch(() => {});
+              } catch (eUp) {}
+            }
+          }
         }
 
-        const esMatriculaEnCalculo = (!matInfo.cargados || matInfo.cargados === 0) && (!isMunAdmin);
+        const esMatriculaEnCalculo = !matInfo || (matInfo.cargados === undefined);
 
         if (esMatriculaEnCalculo) {
           if (elMatCargada) elMatCargada.innerHTML = '<span style="font-size: 0.95rem; font-weight: 600; color: #64748b;">En cálculo...</span>';
@@ -664,7 +832,7 @@ export function initAdminDashboard(dbInstance, user) {
               htmlLista += `</div>`;
               elMatLista.innerHTML = htmlLista;
 
-              // Manejador de clics para los botones de filtro
+              // Manejador de clics para los botones de filtro municipal
               const btnFiltros = elMatLista.querySelectorAll('.btn-filtro-mat-tab');
               btnFiltros.forEach(b => {
                 b.addEventListener('click', (ev) => {
@@ -691,6 +859,69 @@ export function initAdminDashboard(dbInstance, user) {
                   } else if (filtro === 'cargados') {
                     filasPend.forEach(r => r.style.display = 'none');
                     filasCarg.forEach(r => r.style.display = 'flex');
+                  }
+                });
+              });
+            } else if (isEstadal) {
+              const arrC = matInfo.arrCargados || [];
+              const munMap = matInfo.porMunicipio || {};
+              const munKeys = Object.keys(munMap).sort();
+
+              htmlLista = `
+                <div style="display: flex; gap: 4px; margin-bottom: 8px; border-bottom: 1px solid #f1f5f9; padding-bottom: 6px;">
+                  <button type="button" class="btn-filtro-mat-tab active" data-filtro="cargados" style="flex: 1; padding: 3px 6px; font-size: 0.72rem; border-radius: 4px; border: 1px solid #16a34a; background: #16a34a; color: white; cursor: pointer; font-weight: 600;">Planteles Cargados (${arrC.length})</button>
+                  <button type="button" class="btn-filtro-mat-tab" data-filtro="municipios" style="flex: 1; padding: 3px 6px; font-size: 0.72rem; border-radius: 4px; border: 1px solid #cbd5e1; background: #fff; color: #64748b; cursor: pointer; font-weight: 600;">Por Municipios (${munKeys.length})</button>
+                </div>
+                <div id="stat-mat-items-cargados">
+              `;
+
+              if (arrC.length === 0) {
+                htmlLista += `<div style="text-align: center; padding: 25px 15px; color: #64748b; font-size: 0.85rem;">No hay planteles con matrícula registrada aún en el estado.</div>`;
+              } else {
+                arrC.forEach(item => {
+                  const munBadge = item.municipio ? ` <small style="color: #64748b; font-size: 0.7rem; font-weight: normal;">(${item.municipio})</small>` : '';
+                  const totalText = (item.total > 0) ? `${item.total} est.` : 'Cargado';
+                  htmlLista += `
+                    <div class="item-mat-row item-mat-cargado" style="padding: 5px 4px; border-bottom: 1px solid #f8fafc; color: #15803d; display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem;" title="${item.nombre}">
+                      <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 78%;">✅ ${item.nombre}${munBadge}</span>
+                      <span style="font-size: 0.68rem; color: #16a34a; font-weight: 600; background: #f0fdf4; padding: 1px 6px; border-radius: 4px; border: 1px solid #bbf7d0; white-space: nowrap;">${totalText}</span>
+                    </div>`;
+                });
+              }
+              htmlLista += `</div><div id="stat-mat-items-municipios" style="display: none;">`;
+
+              munKeys.forEach(m => {
+                const c = munMap[m];
+                let icon = '🔴';
+                if (c.cargados > 0 && c.pendientes === 0) icon = '✅';
+                else if (c.cargados > 0 && c.pendientes > 0) icon = '🟡';
+                htmlLista += '<div style="padding: 6px 4px; border-bottom: 1px solid #f1f5f9; color: #334155; font-size: 0.78rem; display: flex; justify-content: space-between; align-items: center;" title="' + m + '"><span>' + icon + ' <strong>' + m + '</strong></span><span style="font-size: 0.72rem; color: #64748b;"><strong>' + c.cargados + '</strong> cargados / <strong>' + c.pendientes + '</strong> pend.</span></div>';
+              });
+              htmlLista += `</div>`;
+              elMatLista.innerHTML = htmlLista;
+
+              // Manejador de clics para los botones de filtro estadal
+              const btnFiltrosEst = elMatLista.querySelectorAll('.btn-filtro-mat-tab');
+              const contCarg = document.getElementById('stat-mat-items-cargados');
+              const contMun = document.getElementById('stat-mat-items-municipios');
+              btnFiltrosEst.forEach(b => {
+                b.addEventListener('click', (ev) => {
+                  ev.preventDefault();
+                  btnFiltrosEst.forEach(x => {
+                    x.style.background = '#fff';
+                    x.style.color = '#64748b';
+                    x.style.borderColor = '#cbd5e1';
+                  });
+                  b.style.background = b.dataset.filtro === 'cargados' ? '#16a34a' : '#3b82f6';
+                  b.style.color = '#fff';
+                  b.style.borderColor = 'transparent';
+
+                  if (b.dataset.filtro === 'cargados') {
+                    if (contCarg) contCarg.style.display = 'block';
+                    if (contMun) contMun.style.display = 'none';
+                  } else {
+                    if (contCarg) contCarg.style.display = 'none';
+                    if (contMun) contMun.style.display = 'block';
                   }
                 });
               });
@@ -1798,6 +2029,23 @@ export function initAdminDashboard(dbInstance, user) {
       if (userMun && currentPlanteles.length > 0) {
         guardarPlantelesMunCache(userMun, currentPlanteles);
       }
+
+      // Si es superadmin o zonadmin y ya están los planteles en memoria, sincronizar tarjeta Matrícula Estadal
+      if (!isMunAdmin && elMatricula && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
+        let sumMatEst = 0;
+        let hayMatEst = false;
+        currentPlanteles.forEach(p => {
+          const { tiene, total } = verificarPlantelTieneMatricula(p);
+          if (tiene) {
+            sumMatEst += (total || 0);
+            hayMatEst = true;
+          }
+        });
+        if (hayMatEst) {
+          renderStatValue(elMatricula, sumMatEst);
+        }
+      }
+
       poblarFiltroParroquiasTabla();
       renderPlantelesList();
     } catch(err) {

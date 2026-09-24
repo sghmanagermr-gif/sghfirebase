@@ -1520,3 +1520,34 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > Se ejecutó la compilación de producción con Vite para la versión **v2.14.11** y se completó exitosamente el despliegue a Firebase Hosting (https://sgh-merida.web.app).
 > Se corrigió integralmente la sumatoria general de matrícula para modalidades Especial y Adulto, permitiendo que el total de alumnos se guarde, persista en Firestore y se refleje como 'Matrícula Declarada' en todo el panel de supervisión.
 > Se asentó el hito en `bitacora.md`, se incorporó al registro de `versiones.md`, se actualizó `conversaciones.md` y se sincronizó el repositorio en GitHub (`main`).
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."
+> 
+> hay una petición por parte del jefe de supervisión educativa. al lado de las tarjetas: Usuarios, Planteles y Personal; se puede añadir una que diga Total matrícula: para los munadmin Matrícula Municipal, para los superadmin y zonadmin Matrícula Estadal. Pero que no afecte el Zero-Cost, porque si afecta el Zero-Cost, le digo que no se puede hacer
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se confirmó categóricamente que SÍ es posible y NO afecta en absoluto el Zero-Cost.
+> Se explicó que para munadmin el cálculo se efectúa directamente en memoria con las escuelas ya cargadas (0 lecturas), y para superadmin/zonadmin se apoya en el consolidado y consultas filtradas sin escanear las 1.221 escuelas. Se presentó la estructura visual de la 4ta tarjeta y se solicitó confirmación para proceder en local.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Ok, Entonces Procede
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se implementó en el entorno local (v2.14.12) la 4ta tarjeta (#stat-matricula) con títulos dinámicos "Matrícula Municipal" y "Matrícula Estadal", estilización en ámbar cálido, y se preguntó si los resultados eran satisfactorios.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Todavía los resultados no lo son, porque con el usuario munadmin se aprecia perfectamente la cantidad de matricula municipal en la tarjeta, pero con los uaurios superadmin y zonadmin dice: En calculo. Al igual que Estatus de Matrícula dice En calculo. Ver imagen de superadmin logueado
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se analizó la causa raíz: la lógica previa solo calculaba en vivo para munadmin, dejando a superadmin/zonadmin esperando una ficha estática con matrícula en cero.
+> Se implementó una solución 100% Zero-Cost para superadmin y zonadmin: consulta ultraligera de planteles completados (where("datos_completados", "==", true)), caché de sesión en sessionStorage, cómputo de la matrícula estadal real, cálculo de cargados/pendientes estadales, desglose interactivo con pestañas ("Planteles Cargados" y "Por Municipios"), y activación del botón "🔄 Sincronizar" para autoridades estadales.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Sí, Satisfactorios

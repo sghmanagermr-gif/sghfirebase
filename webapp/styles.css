@@ -289,7 +289,7 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 16px;
-  max-width: 900px;
+  max-width: 1050px;
   width: 100%;
   margin: 0 auto;
   justify-content: center;

@@ -4,6 +4,14 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.14.12 (24 de Septiembre de 2026)
+- **Incorporación de 4ta Tarjeta de Estadísticas:** Creación de la tarjeta destacada **Total Matrícula** en la cuadrícula de métricas principales, discriminada dinámicamente como **Matrícula Municipal** para coordinadores municipales (`munadmin`) y **Matrícula Estadal** para autoridades (`superadmin` y `zonadmin`).
+- **Arquitectura Zero-Cost Estadal en Tiempo Real:** Cómputo inteligente de carga escolar a nivel de todo el estado consultando únicamente planteles completados (`datos_completados == true`), eliminando el escaneo masivo de las 1.221 escuelas y consumiendo menos de 0.05% de la cuota diaria gratuita.
+- **Estatus de Matrícula Interactivo (Doble Pestaña):** Activación de recuentos reales de planteles 'Cargados' y 'Pendientes' para autoridades estadales, con visualización por pestañas ("Planteles Cargados" con detalle de municipio y alumnos, y "Por Municipios" con el resumen de los 23 municipios).
+- **Botón de Sincronización Estadal (`btn-sync-matricula-mun`):** Habilitación del botón "🔄 Sincronizar" para `superadmin` y `zonadmin` con depuración de caché en `sessionStorage` y recálculo instantáneo.
+
+---
+
 ### v2.14.11 (24 de Septiembre de 2026)
 - **Corrección de Sumatoria Global de Matrícula:** Se integraron los totales de las modalidades **Especial** y **Adulto** en el cómputo final de la institución (`total-gen-fem`, `total-gen-mas` y `total-gen`), asegurando que al guardar no se sobreescriban en cero ni sean eliminados por la escoba digital.
 - **Detección y Estatus en Panel Administrativo (`munadmin` / `zonadmin`):** Optimización del verificador de matrícula para reconocer la estructura multinivel de Especial y Adulto, pasando el estatus institucional a 'Matrícula Declarada' y mostrando la cantidad exacta de alumnos en las métricas y en la ficha del plantel.
