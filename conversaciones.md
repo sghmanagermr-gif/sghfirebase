@@ -1551,3 +1551,23 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Usuario
 > **Mensaje del Usuario:**
 > Sí, Satisfactorios
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Sí, Satisfactorios
+> 
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."
+> 
+> Vamos a acomodar la tabla del apartado planteles: en ves que aparezca el nombre del plantel, que aparezca el nuevo eponimo. He notado que muchos colegas manejan el nuevo eponimo y es mas manejable que todos lo leamos así
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se leyó el archivo de skill normativo y se implementó en el entorno local bajo la versión v2.14.13:
+> 1. Encabezado de la tabla modificado formalmente a "NUEVO EPÓNIMO".
+> 2. Visualización destacada del Nuevo Epónimo en cada fila, con sutil referencia al nombre nominal si difieren.
+> 3. Ordenamiento alfabético inteligente por Nuevo Epónimo.
+> 4. Buscador adaptado para coincidir instantáneamente por epónimo, nominal, DEA, municipio o parroquia.
+> Se preguntó si los resultados eran satisfactorios.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Sí, satisfactorios

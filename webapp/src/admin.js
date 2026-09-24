@@ -2064,8 +2064,10 @@ export function initAdminDashboard(dbInstance, user) {
       ? (userData?.jerarquia?.municipio || userData?.municipio || '').trim().toUpperCase() 
       : null;
 
-    if (inpBuscarPlantel && userMun) {
-      inpBuscarPlantel.placeholder = `Buscar por DEA, nombre o parroquia en ${userMun}...`;
+    if (inpBuscarPlantel) {
+      inpBuscarPlantel.placeholder = userMun 
+        ? `Buscar por DEA, epónimo o parroquia en ${userMun}...` 
+        : `Buscar por DEA, epónimo, nombre o municipio...`;
     }
 
     const term = inpBuscarPlantel ? inpBuscarPlantel.value.toLowerCase().trim() : '';
@@ -2082,13 +2084,21 @@ export function initAdminDashboard(dbInstance, user) {
 
     if(term) {
       filtered = filtered.filter(p => {
-         const d = p.codigos?.plantel?.toLowerCase() || '';
+         const d = (p.codigos?.plantel || p.id || '').toLowerCase();
+         const ep = (p['nombre-plantel']?.['nuevo-eponimo'] || p['nombre-plantel']?.nuevo_eponimo || '').toLowerCase();
          const n = (p['nombre-plantel']?.nominal || '').toLowerCase();
          const m = (p.municipio || '').toLowerCase();
          const pr = (p.parroquia || '').toLowerCase();
-         return d.includes(term) || n.includes(term) || m.includes(term) || pr.includes(term);
+         return d.includes(term) || ep.includes(term) || n.includes(term) || m.includes(term) || pr.includes(term);
       });
     }
+
+    // Ordenar alfabéticamente por Nuevo Epónimo (o nombre visible)
+    filtered.sort((a, b) => {
+      const epA = (a['nombre-plantel']?.['nuevo-eponimo'] || a['nombre-plantel']?.nuevo_eponimo || a['nombre-plantel']?.nominal || '').trim();
+      const epB = (b['nombre-plantel']?.['nuevo-eponimo'] || b['nombre-plantel']?.nuevo_eponimo || b['nombre-plantel']?.nominal || '').trim();
+      return epA.localeCompare(epB, 'es', { sensitivity: 'base' });
+    });
 
     if(filtered.length === 0) {
       const msgVacio = userMun 
@@ -2101,11 +2111,21 @@ export function initAdminDashboard(dbInstance, user) {
     filtered.forEach(p => {
        const tr = document.createElement('tr');
        tr.style.borderBottom = '1px solid var(--glass-border)';
+       const eponimoVal = (p['nombre-plantel']?.['nuevo-eponimo'] || p['nombre-plantel']?.nuevo_eponimo || '').trim();
+       const nominalVal = (p['nombre-plantel']?.nominal || '').trim();
+       const textoPrincipal = eponimoVal || nominalVal || 'SIN NOMBRE';
+       const subtextoNominal = (eponimoVal && nominalVal && eponimoVal.toUpperCase() !== nominalVal.toUpperCase())
+         ? `<div style="font-size: 0.75rem; color: #64748b; font-weight: normal; margin-top: 2px;">(Nominal: ${nominalVal})</div>`
+         : '';
+
        tr.innerHTML = `
          <td style="padding: 15px 20px;">
-           <span style="background: rgba(37,99,235,0.1); color: var(--primary-color); padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">${p.codigos?.plantel || 'N/A'}</span>
+           <span style="background: rgba(37,99,235,0.1); color: var(--primary-color); padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">${p.codigos?.plantel || 'N/A'}</span>
          </td>
-         <td style="padding: 15px 20px; font-weight: 500; color: var(--text-main);">${p['nombre-plantel']?.nominal || 'SIN NOMBRE'}</td>
+         <td style="padding: 15px 20px; font-weight: 600; color: var(--text-main);">
+           ${textoPrincipal}
+           ${subtextoNominal}
+         </td>
          <td style="padding: 15px 20px; color: var(--text-muted); font-size: 0.9rem;">${p.municipio || 'N/A'}</td>
          <td style="padding: 15px 20px; color: var(--text-muted); font-size: 0.9rem;">${p.parroquia || 'N/A'}</td>
          <td style="padding: 15px 20px; color: var(--text-muted); font-size: 0.9rem;">${p.nivel || 'N/A'}</td>
@@ -2140,7 +2160,8 @@ export function initAdminDashboard(dbInstance, user) {
        b.onclick = async () => {
          const id = b.getAttribute('data-id');
          const plantel = currentPlanteles.find(x => x.id === id);
-         const ok = await showConfirm("Eliminar Plantel", `¿Estás seguro de eliminar el plantel ${plantel['nombre-plantel']?.nominal}? Esta acción es irreversible.`, "danger");
+         const epDel = plantel['nombre-plantel']?.['nuevo-eponimo'] || plantel['nombre-plantel']?.nuevo_eponimo || plantel['nombre-plantel']?.nominal || 'Plantel';
+         const ok = await showConfirm("Eliminar Plantel", `¿Estás seguro de eliminar el plantel ${epDel}? Esta acción es irreversible.`, "danger");
          if(ok) {
             try {
               b.disabled = true;

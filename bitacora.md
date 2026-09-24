@@ -1352,3 +1352,26 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `conversaciones.md`
 
 ---
+### Ciclo v2.14.13: Estandarización de la Tabla de Planteles por Nuevo Epónimo
+
+**1. Objetivos:**
+- Atender requerimiento institucional para adecuar la tabla del módulo Planteles (`#tbody-planteles`), mostrando de forma predominante el **Nuevo Epónimo** de la institución educativa en lugar de la denominación nominal tradicional, adaptando la lectura a la nomenclatura manejada por el equipo de supervisores y directores.
+- Preservar la denominación histórica como referencia secundaria sin sobrecargar visualmente la interfaz.
+- Indexar las búsquedas por el nuevo epónimo y ordenar la tabla alfabéticamente.
+
+**2. Solución Técnica y Arquitectura:**
+- **Encabezado de Tabla (`index.html`):** Actualización del encabezado de la segunda columna de "NOMBRE" a "NUEVO EPÓNIMO".
+- **Lógica de Renderizado y Fallback (`admin.js`):** En `renderPlantelesList()`, se extrae prioritariamente `p['nombre-plantel']?.['nuevo-eponimo']` o `p['nombre-plantel']?.nuevo_eponimo`. Si existe un nombre nominal distinto, se inyecta como subtítulo complementario `(Nominal: ...)`. En ausencia de nuevo epónimo, se utiliza el nombre nominal como respaldo seguro.
+- **Algoritmo de Ordenamiento (`admin.js`):** Ordenamiento alfabético mediante `localeCompare` en español tomando como clave el Nuevo Epónimo visible.
+- **Motor de Búsqueda Adaptado (`admin.js`):** El placeholder del input `#inp-buscar-plantel` se actualizó a *"Buscar por DEA, epónimo o parroquia..."*, y el filtro evalúa en tiempo real coincidencias sobre epónimo, nominal, DEA, municipio y parroquia.
+- **Control SemVer:** Incremento de versión PARCHE a **v2.14.13** en `package.json` y todas las etiquetas visuales de `index.html`.
+
+**3. Archivos Involucrados:**
+- `webapp/package.json` (Versión 2.14.13)
+- `webapp/index.html` (Encabezado de tabla y badges de versión)
+- `webapp/src/admin.js` (Renderizado, ordenamiento y búsqueda por Nuevo Epónimo)
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
+
+---
