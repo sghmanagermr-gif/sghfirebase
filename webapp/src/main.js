@@ -775,7 +775,8 @@ document.getElementById('plantel-form')?.addEventListener('input', (e) => {
 
                 // Sumar todos los inputs de matrícula (.mat-input)
         document.querySelectorAll('.mat-input').forEach(input => {
-            if (input.closest('div[id^="bloque-"]').style.display !== 'none') {
+            const b = input.closest('div[id^="bloque-"]');
+            if (b && b.style.display !== 'none') {
                 matTotal += parseInt(input.value || 0);
             }
         });
@@ -1242,7 +1243,12 @@ async function mostrarCandado(codigoDEA, dataParcial) {
         
         document.getElementById('inp-ubicacion').value = dp['ubicacion-geografica'] || '';
         document.getElementById('inp-turnos-plantel').value = dp['turno-plantel'] || '';
-        document.getElementById('inp-matricula-total').value = dp.matricula?.['total-gen'] || '';
+        const totalGenDp = dp.matricula?.['total-gen'] 
+            || dp['matricula-total'] 
+            || dp.matricula?.modalidades?.especial?.['total-especial'] 
+            || dp.matricula?.modalidades?.adulto?.['total-adulto'] 
+            || '';
+        document.getElementById('inp-matricula-total').value = totalGenDp;
         
         // Mantener el oculto para no romper compatibilidad en otras funciones
         const hiddenInp = document.getElementById('inp-nombre-plantel');
@@ -1955,6 +1961,14 @@ async function mostrarCandado(codigoDEA, dataParcial) {
               sumFem += matricula.media['total-gen-med'].fem || 0;
               sumMas += matricula.media['total-gen-med'].mas || 0;
           }
+          if (matricula.modalidades?.especial?.['total-especial']) {
+              sumFem += (matricula.modalidades.especial['total-especial-fem'] || 0);
+              sumMas += (matricula.modalidades.especial['total-especial-mas'] || 0);
+          }
+          if (matricula.modalidades?.adulto?.['total-adulto']) {
+              sumFem += (matricula.modalidades.adulto['total-adulto-fem'] || 0);
+              sumMas += (matricula.modalidades.adulto['total-adulto-mas'] || 0);
+          }
           
           matricula['total-gen-fem'] = sumFem;
           matricula['total-gen-mas'] = sumMas;
@@ -1973,13 +1987,14 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                   secciones:  deleteField(),
                   "secciones-planes": seccionesPlanes,
                   matricula:  matricula,
+                  "matricula-total": sumFem + sumMas,
                   vacantes:   deleteField(),
                   datos_completados: true,
                   ultima_actualizacion: new Date().toISOString()
               };
 
               await safeSetDoc(docRef, payload, {
-                  mergeFields: ['secciones', 'secciones-planes', 'matricula', 'vacantes', 'datos_completados', 'ultima_actualizacion']
+                  mergeFields: ['secciones', 'secciones-planes', 'matricula', 'matricula-total', 'vacantes', 'datos_completados', 'ultima_actualizacion']
               });
 
 

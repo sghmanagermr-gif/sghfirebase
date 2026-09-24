@@ -1303,3 +1303,27 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `conversaciones.md`
 
 ---
+
+### v2.14.11 - Corrección de Sumatoria Global y Detección de Matrícula para Modalidades Especial y Adulto (24 de Septiembre de 2026)
+
+**1. Requerimientos:**
+- Corregir fallo por el cual los planteles de modalidades Especial y Adulto no reflejaban la sumatoria de matrícula total en el documento general de Firestore tras guardar, apareciendo como 'Pendiente' en el panel administrativo municipal (`munadmin`).
+- Asegurar que el cómputo final de matrícula global (`total-gen-fem`, `total-gen-mas` y `total-gen`) integre de forma vinculante los totales de grupos de Especial y Adulto.
+- Optimizar la función de detección de matrícula en el módulo administrativo para identificar modalidades multinivel y actualizar la ficha del plantel con el estatus 'Matrícula Declarada'.
+
+**2. Solución Técnica y Arquitectura:**
+- **Motor de Cómputo Global (`main.js`):** En el manejador de envío (`submit`) del formulario de matrícula, se incorporaron los acumuladores de `matricula.modalidades.especial` y `matricula.modalidades.adulto` dentro de las sumas maestras (`sumFem`, `sumMas`), evitando que la escoba digital (`sweepZeros`) purgue el campo `total-gen` por haber quedado sobreescrito en 0. Asimismo, se incorporó explícitamente el campo `matricula-total` en el payload transaccional.
+- **Hidratación en Carga de Formulario (`main.js`):** En la función `mostrarCandado()`, se ajustó la asignación del campo de solo lectura `#inp-matricula-total` para tomar resilentemente los totales de las modalidades especiales si el total genérico no estuviese presente.
+- **Escáner de Verificación en Panel (`admin.js`):** Se optimizó `verificarPlantelTieneMatricula(p)` para evaluar directamente las propiedades de Especial y Adulto y sus grupos, así como un recorrido recursivo profundo sobre cualquier propiedad numérica mayor a cero. En `abrirFichaAuditoria()`, se unificó la lectura con esta función para que el distintivo de estatus marque inmediatamente 'Matrícula Declarada' y exponga el número real de alumnos.
+- **Control SemVer y Despliegue:** Incremento de versión PARCHE a **v2.14.11**, compilación limpia con Vite y despliegue a producción en Firebase Hosting (https://sgh-merida.web.app).
+
+**3. Archivos Involucrados:**
+- `webapp/package.json`
+- `webapp/index.html`
+- `webapp/src/main.js`
+- `webapp/src/admin.js`
+- `bitacora.md`
+- `versiones.md`
+- `conversaciones.md`
+
+---

@@ -55,20 +55,47 @@ export function verificarPlantelTieneMatricula(p) {
     const totGen = parseInt(mat['total-gen'] || mat.total_gen || 0, 10);
     if (!isNaN(totGen) && totGen > 0) return { tiene: true, total: totGen };
 
+    // Detección directa en modalidades Especial y Adulto
+    if (mat.modalidades?.especial) {
+      const esp = mat.modalidades.especial;
+      const tEsp = parseInt(esp['total-especial'] || 0, 10);
+      if (!isNaN(tEsp) && tEsp > 0) return { tiene: true, total: tEsp };
+      if (esp.grupos && typeof esp.grupos === 'object') {
+        let sEsp = 0;
+        Object.values(esp.grupos).forEach(g => {
+          sEsp += (parseInt(g.fem || 0, 10) + parseInt(g.mas || 0, 10));
+        });
+        if (sEsp > 0) return { tiene: true, total: sEsp };
+      }
+    }
+    if (mat.modalidades?.adulto) {
+      const adu = mat.modalidades.adulto;
+      const tAdu = parseInt(adu['total-adulto'] || 0, 10);
+      if (!isNaN(tAdu) && tAdu > 0) return { tiene: true, total: tAdu };
+      if (adu.grupos && typeof adu.grupos === 'object') {
+        let sAdu = 0;
+        Object.values(adu.grupos).forEach(g => {
+          sAdu += (parseInt(g.fem || 0, 10) + parseInt(g.mas || 0, 10));
+        });
+        if (sAdu > 0) return { tiene: true, total: sAdu };
+      }
+    }
+
     let suma = 0;
     if (typeof mat === 'object') {
-      for (const k in mat) {
-        const val = mat[k];
-        if (typeof val === 'number' && val > 0) suma += val;
-        else if (typeof val === 'string' && !isNaN(parseInt(val, 10)) && parseInt(val, 10) > 0) suma += parseInt(val, 10);
-        else if (typeof val === 'object' && val !== null) {
-          for (const sk in val) {
-            const sval = val[sk];
-            if (typeof sval === 'number' && sval > 0) suma += sval;
-            else if (typeof sval === 'string' && !isNaN(parseInt(sval, 10)) && parseInt(sval, 10) > 0) suma += parseInt(sval, 10);
+      const sumarRecursivo = (obj) => {
+        for (const k in obj) {
+          const val = obj[k];
+          if (typeof val === 'number' && val > 0) {
+            if (!k.startsWith('total-') && !k.startsWith('tot-')) suma += val;
+          } else if (typeof val === 'string' && !isNaN(parseInt(val, 10)) && parseInt(val, 10) > 0) {
+            if (!k.startsWith('total-') && !k.startsWith('tot-')) suma += parseInt(val, 10);
+          } else if (typeof val === 'object' && val !== null) {
+            sumarRecursivo(val);
           }
         }
-      }
+      };
+      sumarRecursivo(mat);
     }
     if (suma > 0) return { tiene: true, total: suma };
   }
@@ -3401,10 +3428,10 @@ export function initAdminDashboard(dbInstance, user) {
     if (elMunPar) elMunPar.textContent = `📍 ${mun} — Parroquia ${par}`;
     
     // Badge Estatus Matrícula
-    const totalGen = parseInt(p.matricula?.['total-gen'] || 0);
+    const { tiene: tieneMat, total: totalGen } = verificarPlantelTieneMatricula(p);
     const badge = document.getElementById('ficha-badge-estatus');
     if (badge) {
-      if (totalGen > 0) {
+      if (tieneMat && totalGen > 0) {
         badge.textContent = "Matrícula Declarada";
         badge.style.background = "rgba(16, 185, 129, 0.2)";
         badge.style.color = "#34d399";

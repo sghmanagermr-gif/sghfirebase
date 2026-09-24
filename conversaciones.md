@@ -1461,3 +1461,62 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > Se compiló la versión de producción con Vite para la versión **v2.14.10** y se completó exitosamente el despliegue a Firebase Hosting (https://sgh-merida.web.app).
 > Se aplicó la restricción de seguridad RBAC solicitada, garantizando que el botón de creación de planteles y sus operaciones correspondientes sean de acceso exclusivo para usuarios con roles Superadmin y Coordinador Zonal.
 > Se asentó el hito técnico en `bitacora.md`, se actualizó `conversaciones.md` y se sincronizó el repositorio remoto central en GitHub (`main`).
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Si o no ¿hay alguna manera de listar las versiones con los detalles de sus cambios?
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> SÍ. Existen varias formas directas de hacerlo:
+> 1. A través del archivo bitacora.md del proyecto: Es el registro oficial y estructurado de la aplicación, con detalles técnicos y arquitectónicos de cada versión.
+> 2. Mediante el historial de Git en el repositorio: Cada versión desplegada cuenta con un commit formal y descriptivo en la rama principal de GitHub.
+> 3. A través de conversaciones.md: Registra cronológicamente cada instrucción, duda y ajuste acordado durante las sesiones.
+> 4. En la propia aplicación web: Se puede habilitar un modal o vista de historial de versiones si así se requiere.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Dentro del archivo SKILL_sgh_firebase.md agrega la normativa de realizar un archivo llamado versiones.md con todas las versiones y sus detalles; de manera que cada vez de dar la orientacion "Satisfactorio" se actulice este nuevo archivo .md
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> La normativa solicitada ha sido incorporada formalmente en SKILL_sgh_firebase.md y se ha creado el nuevo archivo en el proyecto:
+> 1. Actualización de la Skill (local y global): Se integró en la Skill 5 la regla obligatoria de mantener y actualizar el archivo físico versiones.md cada vez que se emita la orientación "Satisfactorio" (o "satisfecho"), junto con bitacora.md, conversaciones.md y el respaldo en Git.
+> 2. Creación de versiones.md: Se generó el archivo en la raíz del proyecto recopilando de forma clara, ordenada y cronológica el historial completo de versiones (desde las primeras entregas hasta la versión v2.14.10).
+> 3. Respaldo en GitHub: Los cambios en las directrices de la Skill y el nuevo archivo versiones.md quedaron sincronizados en la rama principal (main) del repositorio remoto.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."
+> 
+> Buen día. He notado algo referente a los planteles con modalidades Especial y Adulto: No suman la matrícula total: "Por ejemplo, un plantel de modalidad Especial, ayer registró su matricula y lo verifiqué con la función de usuario munadmin, sin embargo sigue apareciendo como pendiente en registrar matrícula, y me fije que en el total matrícula no esta la sumatoria"; eso me hace entender que al no estar la sumatoria, el sistema no lo ve.
+> 
+> Dime: ¿lo que digo es correcto? Si o no
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> SÍ, lo que dices es totalmente correcto. Diste exactamente en el clavo con el problema.
+> Ocurren dos cosas encadenadas en el código:
+> 1. Sobreescritura en el guardado (main.js): Al calcular la sumatoria final de la matrícula global (total-gen), una fórmula heredada solo sumaba los niveles tradicionales (Inicial, Primaria y Media), sobreescribiendo con cero los totales de Especial y Adulto. Al quedar en cero, la escoba digital eliminaba ese campo en Firestore.
+> 2. La "Escoba Digital" y la detección del panel (admin.js): Al no encontrar total-gen, el verificador administrativo asumía que la matrícula estaba en cero y catalogaba al plantel como "Pendiente".
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Si procede.
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se implementó la corrección en el entorno local bajo la versión v2.14.11:
+> 1. Sumatoria Global en el Guardado (main.js): Se integraron formalmente los totales de las modalidades Especial y Adulto en la fórmula de cómputo general del colegio (total-gen-fem, total-gen-mas y total-gen), y se incorporó el atributo matricula-total en el payload de Firestore.
+> 2. Detección y Estatus en el Panel (admin.js): Se optimizó la función de verificación de matrícula para que reconozca directamente la estructura de Especial y Adulto y sus grupos con escaneo recursivo.
+> 3. Carga y Visualización: El campo de Matrícula Total en el formulario y la ficha institucional reconocen inmediatamente la cifra declarada.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> perfecto, despliega a firebase
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se ejecutó la compilación de producción con Vite para la versión **v2.14.11** y se completó exitosamente el despliegue a Firebase Hosting (https://sgh-merida.web.app).
+> Se corrigió integralmente la sumatoria general de matrícula para modalidades Especial y Adulto, permitiendo que el total de alumnos se guarde, persista en Firestore y se refleje como 'Matrícula Declarada' en todo el panel de supervisión.
+> Se asentó el hito en `bitacora.md`, se incorporó al registro de `versiones.md`, se actualizó `conversaciones.md` y se sincronizó el repositorio en GitHub (`main`).
