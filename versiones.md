@@ -4,6 +4,13 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.14.18 (24 de Septiembre de 2026)
+- **Estandarización de Nomenclatura en Pizarra Administrativa:** Unificación definitiva de las etiquetas visuales del panel de control:
+  - Títulos contextuales estandarizados a **Pizarra Municipal - [Municipio]** para Coordinadores Municipales (`munadmin`) y **Pizarra Estadal** para Coordinadores Zonales (`zonadmin`) y Superadministradores (`superadmin`).
+  - Nombre de cabecera contextualizado para el rol Zonal (`userData.nombre || 'Pizarra Estadal'`).
+
+---
+
 ### v2.14.17 (24 de Septiembre de 2026)
 - **Buscador con Selectores en Cascada para Planteles:** Implementación de dos selectores interactivos en la barra de herramientas del módulo de Planteles:
   - **Selector de Municipios (`#filtro-municipio-plantel`):** Despliega los 23 municipios del estado para roles con competencia global (`superadmin` y `zonadmin`), o se fija de forma automática y protegida al municipio asignado para Coordinadores Municipales (`munadmin`).

@@ -1496,3 +1496,25 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `versiones.md`
 - `bitacora.md`
 - `conversaciones.md`
+
+---
+### Ciclo v2.14.18: Estandarización de Nomenclatura en Pizarra Administrativa
+
+**1. Objetivos:**
+- Unificar y formalizar los títulos y encabezados contextuales de la Pizarra en el panel administrativo (`admin.js`).
+- Asegurar que tanto para Coordinadores Zonales (`zonadmin`) como para Superadministradores (`superadmin`) la vista principal se identifique de manera homogénea como **Pizarra Estadal**, y para Coordinadores Municipales (`munadmin`) como **Pizarra Municipal - [Municipio]**.
+
+**2. Solución Técnica y Arquitectura:**
+- **Títulos y Encabezados Contextuales (`admin.js`):**
+  - Ajuste en `configurarInterfazPorRol()` para asignar `statsTitleEl.textContent = 'Pizarra Estadal'` para `zonadmin` y `superadmin`.
+  - Para `munadmin`: `statsTitleEl.textContent = 'Pizarra Municipal - ' + mun`.
+  - Nombre del usuario zonal en cabecera: `adminNameEl.textContent = userData.nombre || 'Pizarra Estadal'`.
+- **Control SemVer y Despliegue:** Incremento de versión PARCHE a **v2.14.18** en `package.json` y todas las etiquetas visuales de `index.html`. Compilación de producción con Vite y despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`).
+
+**3. Archivos Involucrados:**
+- `webapp/src/admin.js` (Ajustes de títulos contextuales de Pizarra)
+- `webapp/package.json` (Versión 2.14.18)
+- `webapp/index.html` (Badges de versión v2.14.18)
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`

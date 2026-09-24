@@ -295,17 +295,17 @@ export function initAdminDashboard(dbInstance, user) {
       if (isMunAdmin) {
         adminNameEl.textContent = userData.nombre ? `${userData.nombre} (${mun})` : `Coordinador (${mun})`;
         if (adminAvatarEl) adminAvatarEl.textContent = 'CM';
-        if (statsTitleEl) statsTitleEl.textContent = `Métricas Municipales - ${mun}`;
+        if (statsTitleEl) statsTitleEl.textContent = `Pizarra Municipal - ${mun}`;
         if (statsDescEl) statsDescEl.textContent = `Resumen del municipio ${mun} en tiempo real.`;
       } else if (isZonAdmin) {
-        adminNameEl.textContent = userData.nombre || 'Coordinador Zonal';
+        adminNameEl.textContent = userData.nombre || 'Pizarra Estadal';
         if (adminAvatarEl) adminAvatarEl.textContent = 'ZA';
-        if (statsTitleEl) statsTitleEl.textContent = 'Métricas Estatales';
+        if (statsTitleEl) statsTitleEl.textContent = 'Pizarra Estadal';
         if (statsDescEl) statsDescEl.textContent = 'Resumen consolidado del estado Mérida.';
       } else {
         adminNameEl.textContent = userData.nombre || 'Administrador';
         if (adminAvatarEl) adminAvatarEl.textContent = 'SA';
-        if (statsTitleEl) statsTitleEl.textContent = 'Pizarra';
+        if (statsTitleEl) statsTitleEl.textContent = 'Pizarra Estadal';
         if (statsDescEl) statsDescEl.textContent = 'Resumen del sistema en tiempo real.';
       }
     }

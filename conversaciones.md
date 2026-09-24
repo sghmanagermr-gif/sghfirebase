@@ -1676,3 +1676,11 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 > **Respuesta del Agente:**
 > Se ejecutó la compilación de producción con Vite para la versión **v2.14.17** y se completó exitosamente el despliegue a Firebase Hosting (https://sgh-merida.web.app). Se registraron los cambios técnicos en `bitacora.md`, el historial en `versiones.md` y la memoria conversacional en `conversaciones.md`, salvaguardando todo el avance en el repositorio central de GitHub (`main`).
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> satisfactorio. desplegar en firebase
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se incorporó la estandarización de títulos contextuales en la Pizarra de `admin.js` (unificando a "Pizarra Estadal" para autoridades zonales y superadmin, y "Pizarra Municipal - [Municipio]" para coordinadores municipales). Se elevó la versión a **v2.14.18** en `package.json` e `index.html`, se compiló el paquete de producción con Vite y se completó con éxito el despliegue a Firebase Hosting (https://sgh-merida.web.app). Se actualizaron `bitacora.md`, `versiones.md` y `conversaciones.md`, y se sincronizó el avance en el repositorio central de GitHub (`main`).
