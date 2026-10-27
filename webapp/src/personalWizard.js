@@ -865,18 +865,18 @@ export function mostrarModalEliminarPersonal(data, docId, codigoDEA) {
                     </select>
                 </div>
 
-                <div style="margin-bottom: 24px;">
-                    <label style="display: block; font-weight: 600; color: #334155; font-size: 0.88rem; margin-bottom: 6px;">
-                        Observaciones / Justificación
+                <div style="margin-bottom: 20px;">
+                    <label id="lbl-obs-desincorporacion" style="display: block; font-weight: 600; color: #334155; font-size: 0.88rem; margin-bottom: 6px;">
+                        Observaciones / Justificación <span id="badge-obs-req" style="color: #64748b; font-size: 0.82rem; font-weight: normal;">(Opcional)</span>
                     </label>
                     <textarea id="txt-obs-desincorporacion" class="form-input" rows="2" placeholder="Detalles de la resolución, número de oficio, etc. (Opcional)"></textarea>
                 </div>
 
                 <div style="display: flex; justify-content: flex-end; gap: 12px;">
-                    <button type="button" id="btn-cancelar-desincorporacion" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer;">
+                    <button type="button" id="btn-cancelar-desincorporacion" style="width: auto !important; margin: 0 !important; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 10px 22px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; box-shadow: none !important;">
                         Cancelar
                     </button>
-                    <button type="button" id="btn-confirmar-desincorporacion" style="background: #dc2626; color: white; border: none; padding: 10px 22px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                    <button type="button" id="btn-confirmar-desincorporacion" style="width: auto !important; margin: 0 !important; background: #dc2626; color: white; border: none; padding: 10px 22px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3) !important;">
                         Confirmar Eliminación
                     </button>
                 </div>
@@ -890,6 +890,26 @@ export function mostrarModalEliminarPersonal(data, docId, codigoDEA) {
     const btnConfirm = overlay.querySelector('#btn-confirmar-desincorporacion');
     const selMotivo = overlay.querySelector('#sel-motivo-desincorporacion');
     const txtObs = overlay.querySelector('#txt-obs-desincorporacion');
+    const lblObs = overlay.querySelector('#lbl-obs-desincorporacion');
+
+    selMotivo.onchange = () => {
+        selMotivo.style.borderColor = '#cbd5e1';
+        const esTr = (selMotivo.value || '').includes('TRASLADO');
+        if (esTr) {
+            lblObs.innerHTML = `Observaciones / Causa del Traslado <span style="color: #dc2626; font-weight: 700;">* (Obligatorio)</span>`;
+            txtObs.placeholder = "Especifique obligatoriamente por qué sucede el traslado, oficio o plantel destino...";
+            txtObs.style.borderColor = '#93c5fd';
+            txtObs.focus();
+        } else {
+            lblObs.innerHTML = `Observaciones / Justificación <span style="color: #64748b; font-size: 0.82rem; font-weight: normal;">(Opcional)</span>`;
+            txtObs.placeholder = "Detalles de la resolución, número de oficio, etc. (Opcional)";
+            txtObs.style.borderColor = '#cbd5e1';
+        }
+    };
+
+    txtObs.oninput = () => {
+        txtObs.style.borderColor = '#cbd5e1';
+    };
 
     btnCancel.onclick = () => overlay.remove();
 
@@ -899,6 +919,16 @@ export function mostrarModalEliminarPersonal(data, docId, codigoDEA) {
             selMotivo.style.borderColor = '#dc2626';
             selMotivo.focus();
             showToast("Por favor, seleccione el motivo de desincorporación.", "warning");
+            return;
+        }
+
+        const esTraslado = motivo.includes("TRASLADO");
+        const obsTexto = txtObs.value.trim();
+
+        if (esTraslado && !obsTexto) {
+            txtObs.style.borderColor = '#dc2626';
+            txtObs.focus();
+            showToast("Es obligatorio indicar en las observaciones el motivo o justificación del traslado.", "warning");
             return;
         }
 
@@ -1606,7 +1636,7 @@ export async function buscarFichaTraslado(cedulaInput, nac = 'V') {
                     ${ficha.observaciones_traslado ? `<div style="margin-top: 10px; font-size: 0.82rem; color: #475569; font-style: italic;">Observación: "${ficha.observaciones_traslado}"</div>` : ''}
                     <div style="margin-top: 16px; display: flex; justify-content: flex-end;">
                         <button type="button" id="btn-confirmar-incorporar-traslado"
-                            style="background: #16a34a; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3);">
+                            style="width: auto !important; background: #16a34a; color: white; border: none; padding: 10px 22px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3) !important;">
                             <span>📥</span> Confirmar e Incorporar a esta Nómina
                         </button>
                     </div>

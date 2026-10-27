@@ -531,3 +531,22 @@ body {
   line-height: normal !important;
 }
 
+/* 9. MODAL INCORPORAR TRASLADO (FICHA VIAJERA) Y DESINCORPORACIÓN */
+#modal-incorporar-traslado button,
+#modal-eliminar-personal button {
+  width: auto !important;
+  box-shadow: none;
+}
+#modal-incorporar-traslado button:hover,
+#modal-eliminar-personal button:hover {
+  transform: none;
+}
+#modal-incorporar-traslado select,
+#modal-incorporar-traslado input,
+#modal-eliminar-personal select,
+#modal-eliminar-personal textarea {
+  margin-bottom: 0 !important;
+}
+
+
+

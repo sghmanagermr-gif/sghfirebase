@@ -1933,6 +1933,96 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 
 > Por favor, refresca la página (o presiona `Ctrl + F5`) con el usuario del director y pruébalo ahora. ¡Quedo atento a tus comentarios!
 
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Mi último mensaje fue: "🤦🏻‍♂️ debí haberlo probado en local antes de montarlo en Firebase 😭". Se cayó el servicio eléctrico y, no guardaste tu respuesta
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se recuperó íntegramente de los registros internos el contexto exacto previo al corte eléctrico:
+> - El diagnóstico del bloqueo de la tabla de personal al no tener matrícula registrada bajo el modo «Solo Editar Personal Existente».
+> - La solución técnica aplicada que libera el acceso directo a la tabla de personal y al botón `📥 Incorporar Traslado` sin requerir matrícula previa.
+> - La confirmación del despliegue exitoso previo en Firebase Hosting y en el servidor local.
+
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> ok, entendido. Sí muestra la tabla y al dar al botón 📥 Incorporar Traslado se muestra como lo vez en la imagen. el input de cedula pequeñito y el boton buscar muy grande
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se corrigió la deformación visual en el modal de incorporación:
+> 1. Se desacopló de las reglas globales de botones e inputs en `styles.css`.
+> 2. Se dio prioridad expansiva al input de la cédula (`flex: 1 1 auto`).
+> 3. Se asignó tamaño proporcional al botón `🔍 Buscar` (`width: auto`).
+> 4. Se transformó el botón superior `✕` en un control circular compacto y estético.
+
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Ok ahora si se ve bien.
+> Ahora dime ¿cual es el procedimiento completo del plantel de origen para desincorporar el empleado?
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se detalló el procedimiento administrativo guiado en el plantel de origen:
+> 1. Ingreso con rol `plaadmin`.
+> 2. Localización del funcionario en la tabla de personal.
+> 3. Clic en el botón de desincorporación (`🗑️`).
+> 4. Selección del motivo «TRASLADO A OTRO PLANTEL» (o «TRASLADO INTERZONAL»).
+> 5. Confirmación de la acción y emisión automática de la Ficha Viajera digital hacia `personal_traslados` con respaldo en auditoría histórica (`personal_eliminado`).
+
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Ok el cuadro Observaciones sebe ser obligatorio. Obligando al Director especificar porque sucede el traslado
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se implementó la obligatoriedad estricta en el cuadro de Observaciones para desincorporaciones por traslado:
+> 1. Al seleccionar motivo de traslado, la etiqueta se actualiza dinámicamente a «Observaciones / Causa del Traslado * (Obligatorio)» en rojo y enfoca el campo.
+> 2. Candado de seguridad: bloquea la confirmación si el campo se deja vacío, alertando con notificación institucional.
+> 3. La justificación queda vinculada a la Ficha Viajera (`observaciones_traslado`) para ser consultada por el plantel receptor.
+
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Ok. ahora por favor ponme en contexto.
+> Ya se que cuando el director selecciona Traslado a Otro plantel el funcionario puede ser incorporado en otro. ahora bien el que sea eliminado por cualquiera de los otros motivos: RENUNCIA, JUBILACION, etc. ¿Se elimian de la base de datos 😱?
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se clarificó la arquitectura de persistencia y seguridad:
+> - El funcionario únicamente se retira de la nómina activa del plantel (`cargos_personal`).
+> - Su expediente completo (los 55 campos) queda 100% resguardado e inmutable en la colección de auditoría histórica (`personal_eliminado`), junto con la estampa de tiempo, responsable y motivo, imposibilitando la pérdida de datos.
+
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Actualmente no existe en la base de datos ninguna colección personal_eliminado porque hasta el momento no ha habido ninguna eliminación. En su momento: ¿Cómo pasará el personal eliminado por RENUNCIA, JUBILACIÓN, DEFUNCIÓN, etc. a personal_eliminado si no existe la colección personal_eliminado?
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se explicó el funcionamiento de Cloud Firestore: las colecciones operan bajo demanda y nacen de forma automática en el milisegundo en que se ejecuta el primer `setDoc` de desincorporación, sin requerir pre-creación manual de tablas.
+
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> ok estoy satisfecho
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Protocolo de cierre ejecutado: actualización a versión v2.16.1, compilación y despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`), registro en bitacora.md, versiones.md y conversaciones.md, y sincronización definitiva en GitHub (`main`).
+
+
 
 
 

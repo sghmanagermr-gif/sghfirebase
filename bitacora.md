@@ -1631,5 +1631,42 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `bitacora.md` (Bitácora técnica)
 - `conversaciones.md` (Registro textual íntegro)
 
+---
+### Ciclo v2.16.1: Calibración Visual y Obligatoriedad en Justificación de Traslados
+
+**1. Objetivos:**
+- Corregir distorsión visual en el modal de recepción de Fichas Viajeras (`#modal-incorporar-traslado`), donde el input de cédula quedaba comprimido por el ancho global del botón de búsqueda y el botón superior de cierre (`✕`) se estiraba horizontalmente.
+- Implementar la obligatoriedad estricta del campo de Observaciones en el modal de desincorporación (`#modal-eliminar-personal`) cuando el motivo seleccionado sea «TRASLADO A OTRO PLANTEL» o «TRASLADO INTERZONAL», forzando al director a especificar la causa legal o administrativa del traslado.
+- Garantizar que dicha observación viaje dentro de la Ficha Viajera y sea visible en el plantel de destino.
+- Despejar la duda conceptual sobre la creación dinámica de colecciones bajo demanda en Firebase Firestore (`personal_eliminado` y `personal_traslados`).
+
+**2. Solución Técnica y Arquitectura:**
+- **Ajuste Estético y Desacople en `webapp/styles.css`:**
+  - Sección específica `/* 9. MODAL INCORPORAR TRASLADO (FICHA VIAJERA) Y DESINCORPORACIÓN */`.
+  - Desactivación de `width: 100%` y box-shadow global para botones dentro de `#modal-incorporar-traslado` y `#modal-eliminar-personal`.
+  - Normalización de márgenes inferiores en inputs y selects (`margin-bottom: 0 !important`).
+- **Reestructuración de Inputs en `webapp/index.html`:**
+  - Botón de cierre `✕` convertido en botón circular compacto (`width: 34px !important`, `height: 34px !important`, `border-radius: 50% !important`, `display: inline-flex`).
+  - Input de cédula con prioridad flexible (`flex: 1 1 auto !important`, `min-width: 140px !important`).
+  - Botón `🔍 Buscar` con dimensiones fijas no expansivas (`width: auto !important`, `flex: 0 0 auto !important`).
+- **Validación Dinámica en `webapp/src/personalWizard.js` (`mostrarModalEliminarPersonal`):**
+  - Listener `selMotivo.onchange`: activa dinámicamente badge rojo `* (Obligatorio)` en el label de observaciones y actualiza el placeholder explicativo al seleccionar motivos con «TRASLADO».
+  - Guard de validación en `btnConfirm.onclick`: bloquea la acción con toast de advertencia si el campo de observaciones está en blanco para traslados, enfocando el textarea y marcándolo en rojo.
+  - El contenido de la justificación se inyecta en `observaciones_traslado` dentro del documento de `personal_traslados`.
+- **Control SemVer y Despliegue:**
+  - Incremento a **v2.16.1** en `webapp/package.json` y `webapp/index.html`.
+  - Compilación limpia con Vite (`npm run build`).
+  - Despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+
+**3. Archivos Involucrados:**
+- `webapp/src/personalWizard.js`
+- `webapp/styles.css`
+- `webapp/index.html`
+- `webapp/package.json`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
+
+
 
 

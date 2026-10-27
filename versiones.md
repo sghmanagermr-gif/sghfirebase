@@ -4,6 +4,15 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.16.1 (27 de Octubre de 2026)
+- **Calibración Visual y Obligatoriedad en Justificación de Traslados:**
+  - **Alineación y Dimensiones en Modal de Traslado (`#modal-incorporar-traslado`):** Corrección del ancho del input de cédula con propiedad expansiva prioritaria (`flex: 1 1 auto`), estandarización del botón `🔍 Buscar` con tamaño proporcionado (`width: auto`) y desacople del botón de cierre superior (`✕`) convirtiéndolo en un control circular compacto y no invasivo.
+  - **Obligatoriedad Estricta en Cuadro de Observaciones:** En el modal de desincorporación (`#modal-eliminar-personal`), al seleccionar «TRASLADO A OTRO PLANTEL» o «TRASLADO INTERZONAL», el sistema activa dinámicamente el indicador `* (Obligatorio)` en color rojo, enfoca el campo de texto y bloquea la operación si el director no especifica la causa o resolución del traslado.
+  - **Visibilidad de Observación en Plantel Destino:** La justificación asentada por el director de origen queda registrada en la Ficha Viajera (`observaciones_traslado`) y se visualiza íntegramente en la tarjeta de confirmación del nuevo plantel.
+  - **Despliegue a Producción:** Compilación optimizada con Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.16.0 (27 de Octubre de 2026)
 - **Implementación de la Ficha Viajera para Traslados Institucionales entre Planteles:**
   - **Emisión en Plantel de Origen:** Incorporación de la opción formal «TRASLADO A OTRO PLANTEL» en el modal de desincorporación (`#sel-motivo-desincorporacion`). Al seleccionarla, el sistema retira al empleado de la nómina activa del plantel de origen (`cargos_personal`) y genera de forma automática su expediente digital en la colección de Fichas Viajeras (`personal_traslados`), salvaguardando toda su información biográfica y laboral previa.
