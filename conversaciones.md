@@ -2022,6 +2022,33 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > **Respuesta del Agente:**
 > Protocolo de cierre ejecutado: actualización a versión v2.16.1, compilación y despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`), registro en bitacora.md, versiones.md y conversaciones.md, y sincronización definitiva en GitHub (`main`).
 
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Ok quiero que agregues a las opciones del sistema una opcion mas: Solo Editar Personal Existente y Modificar Matricula. Obviamente para que además de modificar personal. puedan modificar matrícula o en su defecto **deban ingresar matícula**
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se implementó la nueva opción `SOLO_EDITAR_PERSONAL_Y_MATRICULA` («Solo Editar Personal Existente y Modificar Matrícula (Bloquea Nuevo)»):
+> 1. En Pizarra de Control: Inyección de la opción en el selector `#sel-modo-operacion`.
+> 2. Formulario de Matrícula: Habilitado para edición y guardado permanente.
+> 3. Coacción Inteligente: Si el plantel no tiene matrícula previa, la tabla de personal permanece oculta hasta que el director guarde la matrícula. Si ya tenía matrícula, se le da acceso directo a la tabla de personal.
+> 4. Candado de Seguridad: El formulario de nuevo ingreso no autorizado permanece bloqueado y oculto.
+> 
+> ¿Los resultados fueron satisfactorios?
+
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Sí, estoy satisfecho
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Protocolo de cierre ejecutado: actualización a versión v2.17.0, compilación y despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`), registro en bitacora.md, versiones.md y conversaciones.md, y sincronización definitiva en GitHub (`main`).
+
+
 
 
 

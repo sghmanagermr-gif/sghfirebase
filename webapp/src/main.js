@@ -1206,6 +1206,11 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                         #seccion-registro-personal:not(:has(#banner-modo-edicion[style*="flex"])) { display: none !important; }
                     `;
                 } 
+                else if (modo === 'SOLO_EDITAR_PERSONAL_Y_MATRICULA') {
+                    cssRules = `
+                        #seccion-registro-personal:not(:has(#banner-modo-edicion[style*="flex"])) { display: none !important; }
+                    `;
+                }
                 else if (modo === 'PERSONAL_COMPLETO') {
                     cssRules = `
                         #btn-guardar-matricula { display: none !important; }
@@ -1219,13 +1224,13 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                 const secMatriculaForm = document.getElementById('plantel-form');
                 if (secMatriculaForm) {
                     const inputs = secMatriculaForm.querySelectorAll('input:not([readonly]), select');
-                    const disableMatricula = (modo !== 'TOTAL' && modo !== 'SOLO_MATRICULA');
+                    const disableMatricula = (modo !== 'TOTAL' && modo !== 'SOLO_MATRICULA' && modo !== 'SOLO_EDITAR_PERSONAL_Y_MATRICULA');
                     inputs.forEach(i => i.disabled = disableMatricula);
                 }
                 
                 // To be extra safe with the existing logic, apply inline disabling once
                 const btnMatricula = document.getElementById('btn-guardar-matricula');
-                if (btnMatricula && modo !== 'TOTAL' && modo !== 'SOLO_MATRICULA') {
+                if (btnMatricula && modo !== 'TOTAL' && modo !== 'SOLO_MATRICULA' && modo !== 'SOLO_EDITAR_PERSONAL_Y_MATRICULA') {
                     btnMatricula.disabled = true;
                 }
 
@@ -1551,6 +1556,22 @@ async function mostrarCandado(codigoDEA, dataParcial) {
             window.cargarPersonalExistente(codigoDEA);
         } else if (typeof window.mostrarFormularioPersonal === "function") {
             window.mostrarFormularioPersonal(false);
+        }
+    } else if (modoDespliegue === 'SOLO_EDITAR_PERSONAL_Y_MATRICULA') {
+        if (hasData) {
+            const secPersonal = document.getElementById('seccion-personal-existente');
+            if (secPersonal) secPersonal.style.display = 'block';
+            if (typeof window.cargarPersonalExistente === "function") {
+                window.cargarPersonalExistente(codigoDEA);
+            } else if (typeof window.mostrarFormularioPersonal === "function") {
+                window.mostrarFormularioPersonal(false);
+            }
+        } else {
+            // El plantel aún no posee matrícula: se mantiene oculta la tabla de personal hasta que guarde matrícula
+            const secPersonal = document.getElementById('seccion-personal-existente');
+            if (secPersonal) secPersonal.style.display = 'none';
+            const secReg = document.getElementById('seccion-registro-personal');
+            if (secReg) secReg.style.display = 'none';
         }
     } else if (tienePlanes && hasData && typeof window.mostrarFormularioPersonal === "function") {
         window.mostrarFormularioPersonal(false);

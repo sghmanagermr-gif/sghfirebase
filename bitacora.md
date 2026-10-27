@@ -1667,6 +1667,37 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `bitacora.md`
 - `conversaciones.md`
 
+---
+### Ciclo v2.17.0: Modalidad de Despliegue «Solo Editar Personal Existente y Modificar Matrícula»
+
+**1. Objetivos:**
+- Incorporar una nueva opción en el panel de despliegue (`#sel-modo-operacion`) orientada a jornadas donde se requiere actualizar matrícula y al mismo tiempo corregir o desincorporar personal existente e incorporar traslados, pero bloqueando la creación de nuevo ingreso no certificado.
+- Implementar la coacción de matrícula previa: si el plantel no posee matrícula registrada, la tabla de personal permanece oculta, obligando al director a cargar y guardar la matrícula primero. Al guardar, el sistema desbloquea automáticamente la tabla de personal existente.
+- Si el colegio ya posee matrícula cargada, se le concede acceso directo a la tabla de personal y a su vez se mantiene editable la matrícula en cualquier momento.
+
+**2. Solución Técnica y Arquitectura:**
+- **Inyección en Pizarra Administrativa (`webapp/index.html`):**
+  - Opción `<option value="SOLO_EDITAR_PERSONAL_Y_MATRICULA">Solo Editar Personal Existente y Modificar Matrícula (Bloquea Nuevo)</option>`.
+- **Lógica de Coacción y Estilos Dinámicos (`webapp/src/main.js`):**
+  - En `mostrarCandado()`:
+    - Regla CSS restrictiva: `#seccion-registro-personal:not(:has(#banner-modo-edicion[style*="flex"])) { display: none !important; }`.
+    - Habilitación de formulario de plantel: `disableMatricula = (modo !== 'TOTAL' && modo !== 'SOLO_MATRICULA' && modo !== 'SOLO_EDITAR_PERSONAL_Y_MATRICULA')`.
+    - Botón `#btn-guardar-matricula` habilitado.
+    - Condicional de apertura: `if (hasData)` despliega inmediatamente `#seccion-personal-existente` y ejecuta `cargarPersonalExistente(codigoDEA)`. Si `!hasData`, oculta ambas secciones de personal hasta que el director ejecute `form.onsubmit` y guarde la matrícula institucional.
+- **Control SemVer y Despliegue:**
+  - Incremento de versión Menor a **v2.17.0** en `webapp/package.json` e `webapp/index.html`.
+  - Compilación limpia con Vite (`npm run build`).
+  - Despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+
+**3. Archivos Involucrados:**
+- `webapp/src/main.js`
+- `webapp/index.html`
+- `webapp/package.json`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
+
+
 
 
 

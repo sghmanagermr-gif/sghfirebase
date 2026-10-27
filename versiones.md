@@ -4,6 +4,18 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.17.0 (27 de Octubre de 2026)
+- **Incorporación de la Modalidad de Despliegue «Solo Editar Personal Existente y Modificar Matrícula»:**
+  - **Nueva Opción en Pizarra de Control (`#sel-modo-operacion`):** Inyección del perfil `SOLO_EDITAR_PERSONAL_Y_MATRICULA` con la etiqueta visual *«Solo Editar Personal Existente y Modificar Matrícula (Bloquea Nuevo)»*.
+  - **Habilitación de Matrícula y Datos Institucionales:** A diferencia del modo restrictivo previo, este perfil mantiene completamente desbloqueados y editables los campos de matrícula, secciones y datos institucionales del colegio, así como el botón interactivo `#btn-guardar-matricula`.
+  - **Coacción Inteligente de Matrícula Previa:**
+    - *Planteles con Matrícula Previa:* Acceso inmediato a la tabla de personal registrado para realizar modificaciones, desincorporaciones o recepción de traslados institucionales.
+    - *Planteles Nuevos o sin Matrícula:* La tabla de personal se mantiene oculta por diseño; el sistema coacciona al director a completar y guardar primero la matrícula y secciones. Al pulsar «Guardar Datos y Continuar», el sistema desbloquea automáticamente la tabla de personal.
+  - **Candado de Seguridad Anti-Nuevo Ingreso:** El formulario de creación de personal desde cero permanece inmutablemente oculto y bloqueado (`display: none !important`), limitando las acciones del director estrictamente a la edición de empleados activos y a la incorporación certificada por Ficha Viajera.
+  - **Despliegue a Producción:** Compilación optimizada con Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.16.1 (27 de Octubre de 2026)
 - **Calibración Visual y Obligatoriedad en Justificación de Traslados:**
   - **Alineación y Dimensiones en Modal de Traslado (`#modal-incorporar-traslado`):** Corrección del ancho del input de cédula con propiedad expansiva prioritaria (`flex: 1 1 auto`), estandarización del botón `🔍 Buscar` con tamaño proporcionado (`width: auto`) y desacople del botón de cierre superior (`✕`) convirtiéndolo en un control circular compacto y no invasivo.
