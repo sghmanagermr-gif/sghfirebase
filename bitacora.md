@@ -1548,3 +1548,45 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `bitacora.md`
 - `conversaciones.md`
 
+---
+### Ciclo v2.15.0: Transferencia de Potestad de Modificación de Planteles a Directores (plaadmin) y Reordenamiento Estético Institucional
+
+**1. Objetivos:**
+- Cumplir con la directriz acordada con la jefatura de Gestión Humana para transferir la potestad de modificación de datos de planteles desde el rol Coordinador Municipal (`munadmin`) hacia los Directores de Plantel (`plaadmin`).
+- Retirar los botones de edición (`✏️ Editar`) y eliminación (`🗑️ Eliminar`) del rol `munadmin` en la tabla de planteles del Gestor de BD, reconfigurándolo como rol exclusivo de supervisión, consulta y auditoría mediante la Ficha del Plantel (`📋 Ficha`).
+- Reorganizar visual y estéticamente los datos institucionales del plantel en la pantalla de carga del director, respetando estrictamente el orden solicitado:
+  `ESTADO, MUNICIPIO, PARROQUIA, DEPENDENCIA, DENOMINACIÓN (lectura), NOMBRE NOMINAL DEL PLANTEL, NUEVO EPONIMO, CODIGO PLANTEL, CÓD. DEPENDENCIA, CÓD ESTADÍSTICO, NIVELES-MODALIDADES (selector), UBICACIÓN GEOGRÁFICA, TURNO(S), OBSERVACIONES, MATRÍCULA`.
+- Implementar trazabilidad histórica en Firestore (`fecha_modificacion_datos` y `modificado_por`) y actualización sincronizada de memoria activa y vista en vivo.
+
+**2. Solución Técnica y Arquitectura:**
+- **Restricción Municipal y Seguridad de Roles (`webapp/src/admin.js`):**
+  - En `renderPlantelesList`: Se condicionó la celda de acciones `plantel-actions-cell`. Para `munadmin` solo se inyecta el botón `📋 Ficha`. Para `superadmin` y `zonadmin` se mantienen `📋 Ficha`, `✏️ Editar` y `🗑️ Eliminar`.
+  - En `openPlantelModal`: Guard de acceso que detiene de inmediato la apertura del modal ante solicitudes de `munadmin`.
+  - En `formPlantel` (evento submit): Validación de seguridad institucional que rechaza escrituras si el rol activo es `munadmin`.
+- **Estructura HTML y Reordenamiento Estético (`webapp/index.html`):**
+  - Transformación del bloque `#plantel-form` en *«Datos Institucionales del Plantel»* con badge corporativo `✏️ Modificable por Dirección`.
+  - Reorganización de las filas en cuadrículas adaptativas (`form-grid-row`):
+    - Fila 1: Estado, Municipio, Parroquia (Solo lectura / Fondo `#f8fafc` con borde punteado `#cbd5e1`).
+    - Fila 2: Dependencia y Denominación (Solo lectura / Fijo).
+    - Fila 3: Nombre Nominal del Plantel y Nuevo Epónimo (Inputs interactivos editables con foco azul).
+    - Fila 4: Código Plantel (DEA), Cód. Dependencia (Fijos) y Cód. Estadístico (Numérico editable).
+    - Fila 5: Niveles-Modalidades (`<select>` con catálogo maestro de niveles y modalidades), Ubicación Geográfica (`<select>` Urbano/Rural), Turno(s) (`<select>` con 6 opciones operativas).
+    - Fila 6: Observaciones (Input amplio editable) y Matrícula Total (Cálculo automático protegido).
+- **Procesamiento y Persistencia en Cliente (`webapp/src/main.js`):**
+  - En `mostrarCandado`: Lógica de poblamiento dinámico que asegura la existencia de la opción previa en el selector `#inp-niveles-modalidades` y asigna turnos, ubicación y observaciones.
+  - En `form.onsubmit`: Recolección de los 15 campos, inyección en el payload hacia Firestore con `mergeFields` ampliado (`denominacion`, `nombre-plantel`, `codigos`, `nivel`, `modalidad`, `turno-plantel`, `turno`, `ubicacion-geografica`, `ubicacion`, `observaciones`, `modificado_por`, `fecha_modificacion_datos`).
+  - Sincronización transparente de las instancias en memoria (`window.currentPlantelInfo` y `currentPlantel`) y actualización del encabezado de navegación.
+- **Control SemVer y Validación de Compilación:**
+  - Actualización a versión Menor **v2.15.0** en `webapp/package.json` y todos los puntos de visualización de `webapp/index.html`.
+  - Ejecución de `npm run build` con Vite confirmando compilación 100% exitosa sin advertencias críticas.
+
+**3. Archivos Involucrados:**
+- `webapp/src/admin.js` (Restricción de botones y guards para `munadmin`)
+- `webapp/src/main.js` (Poblamiento de selector de niveles y guardado institucional en `form.onsubmit`)
+- `webapp/index.html` (Reordenamiento estricto de los 15 campos institucionales y badges v2.15.0)
+- `webapp/package.json` (Versión 2.15.0)
+- `versiones.md` (Registro cronológico de versión)
+- `bitacora.md` (Bitácora técnica)
+- `conversaciones.md` (Registro textual íntegro)
+
+

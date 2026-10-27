@@ -4,6 +4,30 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.15.0 (27 de Octubre de 2026)
+- **Delegación de Potestad de Modificación de Planteles a Directores (`plaadmin`):**
+  - **Restricción a Coordinadores Municipales (`munadmin`):** En el módulo *Gestor de BD ➔ Planteles*, se retiraron los botones de modificación (`✏️ Editar`) y eliminación (`🗑️ Eliminar`), transformando el rol municipal en un perfil de supervisión, consulta y auditoría mediante la Ficha del Plantel (`📋 Ficha`).
+  - **Empoderamiento del Director (`plaadmin`):** En la pantalla de carga del director, se habilitó la modificación directa de los datos institucionales de su sede, quedando protegidos exclusivamente los datos territoriales y de identidad legal del plantel.
+  - **Reordenamiento Estético Institucional de Datos del Plantel:** Ajuste estricto del orden visual de los campos según la directriz institucional:
+    1. *Estado* (Lectura / Fijo: MÉRIDA).
+    2. *Municipio* (Lectura / Fijo).
+    3. *Parroquia* (Lectura / Fijo).
+    4. *Dependencia* (Lectura / Fijo).
+    5. *Denominación* (Lectura / Fijo).
+    6. *Nombre Nominal del Plantel* (Editable).
+    7. *Nuevo Epónimo* (Editable).
+    8. *Código Plantel* (DEA - Lectura / Fijo).
+    9. *Cód. Dependencia* (Lectura / Fijo).
+    10. *Cód. Estadístico* (Editable).
+    11. *Niveles-Modalidades* (Selector interactivo con catálogo maestro).
+    12. *Ubicación Geográfica* (Selector: Urbano / Rural).
+    13. *Turno(s)* (Selector: Mañana, Tarde, Doble Turno, Integral, Nocturno, Sabatino).
+    14. *Observaciones* (Editable).
+    15. *Matrícula* (Cálculo automático de total).
+  - **Trazabilidad y Auditoría Institucional:** Registro en Firestore de estampa de tiempo (`fecha_modificacion_datos`) e identificación del usuario (`modificado_por`), con sincronización en tiempo real de memoria activa y bloqueo automático en Modo Supervisión.
+
+---
+
 ### v2.14.19 (24 de Septiembre de 2026)
 - **Formato y Claridad en Mensajes de Autenticación y Despliegue:**
   - **Registro Exitoso:** Se aplicó formato en negritas para resaltar las directrices clave en la ventana de confirmación (`carpeta spam` y `para la aprobación`).

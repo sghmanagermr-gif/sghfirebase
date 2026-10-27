@@ -1734,3 +1734,93 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 > **Respuesta del Agente:**
 > Se realizó la compilación de producción con Vite para la versión **v2.14.19** y se completó con éxito el despliegue a Firebase Hosting (https://sgh-merida.web.app). Se actualizaron `bitacora.md`, `versiones.md` y `conversaciones.md`, y se aseguraron todos los cambios en el repositorio de GitHub (`main`).
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."
+> 
+> Comencemos una nueva conversación con lo que temenos
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> He leído con éxito el archivo `SKILL_sgh_firebase.md` de `webapp-expert` mediante `view_file` y repasado todas las directrices obligatorias (optimización Zero-Cost en Firebase, comunicación sencilla y empática, registro riguroso en bitácora y conversaciones, y control semántico de versiones).
+> 
+> Iniciamos esta nueva conversación con el sistema al día:
+> - **Versión del Sistema:** v2.14.19, compilada, desplegada en Firebase Hosting (https://sgh-merida.web.app) y sincronizada en GitHub.
+> - **Últimos hitos concluidos:**
+>   1. Buscador territorial de planteles con selectores en cascada (Municipio y Parroquia) alineados con el campo de búsqueda.
+>   2. Mensajes al usuario refinados con negritas para mayor claridad visual (registro en spam/aprobación, verificación de correo y avisos por despliegue territorial).
+>   3. Pizarras informativas personalizadas según el nivel territorial del usuario (Estadal o Municipal).
+> 
+> Todo el entorno está listo y limpio para continuar. ¿En qué requerimiento o módulo trabajaremos hoy?
+> 
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."
+> 
+> hemos tenido dificultades con otras divisiones en Zona Educatica (celos de competencia), y paralelamente han sacado una herramienta en EXCEL para mitigar el SGH, en base al SGH que hemos desarrollado necesito analices esa herramienta y como podemos sacar partido de ella. Está en la siguiente direccion C:\Users\usuario\Downloads\Analizar_IA
+> 
+> La intención es buscar la manera de integrar al SGH lo que allí se solicita.
+> 
+> Primero el analisis en palabras sencillas, y de acuerdo a el analisis te diré que haremos
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se realizó la lectura obligatoria de la Skill y el análisis estratégico del archivo Excel (`CARACTERIZACION DEL PLANTEL Y NECESIDAD.xlsx`) ubicado en la carpeta del usuario.
+> Se desglosaron en palabras sencillas las dos hojas principales del archivo (con un total de 186 columnas), sus debilidades operativas (llenado manual agotador, consolidación precaria y alto margen de error humano) y la oportunidad maestra para SGH: absorber el formato, calcularlo automáticamente a partir de los datos que el sistema ya posee y permitirle al director generar con un solo clic el archivo oficial exactamente como la otra división lo exige, posicionando a SGH como la solución definitiva y facilitadora de la gestión escolar.
+> 
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Puedo observar que en la pantalla del director aparece el turno Captura0001.PNG
+> La aulas son la cantidad de secciones que el director declara Captura0002.PNG
+> Modulo de necesidades no aparece en la pantalla del director
+> 
+> Retroalimenta y espera instrucciones
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se valida la observación del usuario confirmando que el SGH ya cuenta con el 100% de los datos requeridos para la Hoja 1 del Excel (tanto el Turno como las Aulas/Secciones ya están presentes en el sistema). Se confirma que la Hoja 2 (Necesidades del Plantel) es la única pieza pendiente que no existe actualmente en la vista del director, quedando a la espera de las instrucciones del usuario para proceder.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."
+> 
+> En reunión con la jefe de Gestión Humana, sugirió que sean los directores de los planteles quienes tenga la potestad de modificar los datos del plantel, cosa que hace el rol munadmin. 
+> 
+> Entonces, que propones hacer para que ahora munadmin no modifique los datos del plantel en Gestor de BD->Planteles; si no que lo haga pladamin.
+> 
+> Estoy atento a tu sugerencia
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Para responder a la sugerencia de la jefa de Gestión Humana, primero revisé en detalle la arquitectura actual en el archivo SKILL_sgh_firebase.md de webapp-expert, así como el funcionamiento de los roles en admin.js e index.html.
+> 
+> Diagnóstico de la situación actual:
+> - El Coordinador Municipal (munadmin): En Gestor de BD -> Planteles tiene acceso para editar o eliminar cualquier escuela de su municipio.
+> - El Director del Plantel (plaadmin): Al ingresar, el bloque de datos del plantel está completamente bloqueado (modo solo lectura).
+> 
+> Propuesta de Solución:
+> 1. En Gestor de BD (munadmin): Retirar los botones de edición y eliminación, otorgando un rol exclusivo de supervisión y consulta mediante la Ficha del Plantel.
+> 2. En la Pantalla del Director (plaadmin): Liberar los campos institucionales (denominación, nombre, epónimo, turno, etc.) manteniendo protegidos los datos territoriales y el Código DEA. Incorporar guardado integrado con trazabilidad y estampa de tiempo.
+> 
+> ¿Te parece adecuado este esquema para proceder a implementarlo?
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Me parece adecuadoel esquema, procede
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se implementaron los ajustes acordados:
+> 1. Para munadmin: Restricción de botones Editar y Eliminar en Gestor de BD -> Planteles, dejando únicamente Ficha para consulta y auditoría.
+> 2. Para plaadmin: Habilitación de campos institucionales editables en el formulario del plantel con badge visual, guardado en Firestore y trazabilidad de usuario/fecha.
+> 3. Incremento de versión a v2.15.0 en package.json e index.html.
+> 
+> ¿Los resultados fueron satisfactorios?
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Satisfactorios
+> arregla unos detalles esteticos antes de pasar a la otra petición de la jefe de personal. acomoda el orden de los datos de plantel de la pantalla del director con el siguiente orden:
+> ESTADO, MUNICIPIO, PARROQUIA, DEPENDENCIA, DENOMINACIÓN (debe ser lectura), NOMBRE NOMINAL DEL PLANTEL, NUEVO EPONIMO, CODIGO PLANTEL, CÓD. DEPENDENCIA, CÓD ESTADÍSTICO, NIVELES-MODALIDADES (debe ser un selector), UBICACIÓN GEOGRÁFICA, TURNO(S), OBSERVACIONES, MATRÍCULA
+

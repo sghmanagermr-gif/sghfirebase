@@ -1242,10 +1242,43 @@ async function mostrarCandado(codigoDEA, dataParcial) {
         document.getElementById('inp-nombre-nominal').value = dp['nombre-plantel']?.nominal || '';
         document.getElementById('inp-nuevo-eponimo').value = obtenerEponimoLimpioPlantel(dp);
 
-        document.getElementById('inp-niveles-modalidades').value = dp.nivel || '';
+        const selNivMod = document.getElementById('inp-niveles-modalidades');
+        if (selNivMod) {
+            const nivVal = (dp.nivel || dp.modalidad || '').trim().toUpperCase();
+            if (nivVal) {
+                const existe = Array.from(selNivMod.options).some(o => o.value.toUpperCase() === nivVal);
+                if (!existe) {
+                    const opt = document.createElement('option');
+                    opt.value = nivVal;
+                    opt.textContent = nivVal;
+                    selNivMod.appendChild(opt);
+                }
+                selNivMod.value = nivVal;
+            } else {
+                selNivMod.value = '';
+            }
+        }
         
-        document.getElementById('inp-ubicacion').value = dp['ubicacion-geografica'] || '';
-        document.getElementById('inp-turnos-plantel').value = dp['turno-plantel'] || '';
+        const selUbic = document.getElementById('inp-ubicacion');
+        if (selUbic) {
+            const uVal = (dp['ubicacion-geografica'] || dp.ubicacion || '').trim().toUpperCase();
+            selUbic.value = uVal || '';
+        }
+        
+        const selTur = document.getElementById('inp-turnos-plantel');
+        if (selTur) {
+            const tVal = (dp['turno-plantel'] || dp.turno || '').trim().toUpperCase();
+            selTur.value = tVal || '';
+        }
+
+        const m2Val = (dp.metros2 !== undefined && dp.metros2 !== null) ? dp.metros2 :
+                      ((dp['metros-cuadrados'] !== undefined && dp['metros-cuadrados'] !== null) ? dp['metros-cuadrados'] : (dp.metros_cuadrados ?? ''));
+        const inpM2 = document.getElementById('inp-metros-cuadrados');
+        if (inpM2) inpM2.value = (m2Val !== '' && m2Val !== null && m2Val !== undefined) ? m2Val : '';
+
+        const inpObs = document.getElementById('inp-observaciones-plantel');
+        if (inpObs) inpObs.value = dp.observaciones || '';
+
         const totalGenDp = dp.matricula?.['total-gen'] 
             || dp['matricula-total'] 
             || dp.matricula?.modalidades?.especial?.['total-especial'] 
@@ -1985,6 +2018,18 @@ async function mostrarCandado(codigoDEA, dataParcial) {
               sweepZeros(matricula);
               sweepZeros(seccionesPlanes);
 
+              // Recolectar datos institucionales modificados por el Director (rol plaadmin)
+              const denominacionVal = document.getElementById('inp-denominacion')?.value?.trim()?.toUpperCase() || '';
+              const nominalVal = document.getElementById('inp-nombre-nominal')?.value?.trim()?.toUpperCase() || '';
+              const eponimoVal = document.getElementById('inp-nuevo-eponimo')?.value?.trim()?.toUpperCase() || '';
+              const nivelModVal = document.getElementById('inp-niveles-modalidades')?.value?.trim()?.toUpperCase() || '';
+              const codEstadisticoVal = Number(document.getElementById('inp-cod-estadistico')?.value) || 0;
+              const turnoVal = document.getElementById('inp-turnos-plantel')?.value?.trim()?.toUpperCase() || '';
+              const ubicacionVal = document.getElementById('inp-ubicacion')?.value?.trim()?.toUpperCase() || '';
+              const m2Raw = document.getElementById('inp-metros-cuadrados')?.value;
+              const metros2Val = (m2Raw !== '' && m2Raw !== undefined && m2Raw !== null) ? (parseFloat(m2Raw) || 0) : null;
+              const obsPlantelVal = document.getElementById('inp-observaciones-plantel')?.value?.trim() || '';
+
               const docRef = doc(db, "planteles", codigoDEA);
               const payload = {
                   secciones:  deleteField(),
@@ -1996,9 +2041,82 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                   ultima_actualizacion: new Date().toISOString()
               };
 
+              // Incorporar actualización de datos institucionales
+              if (denominacionVal) payload["denominacion"] = denominacionVal;
+              if (nominalVal || eponimoVal) {
+                  payload["nombre-plantel"] = {
+                      nominal: nominalVal,
+                      "nuevo-eponimo": eponimoVal,
+                      nuevo_eponimo: eponimoVal
+                  };
+              }
+              if (codEstadisticoVal) {
+                  const codigosActuales = (currentPlantel && currentPlantel.codigos) ? { ...currentPlantel.codigos } : { plantel: codigoDEA };
+                  codigosActuales.estadistico = codEstadisticoVal;
+                  payload["codigos"] = codigosActuales;
+              }
+              if (nivelModVal) {
+                  payload["nivel"] = nivelModVal;
+                  if (nivelModVal.includes('ESPECIAL') || nivelModVal.includes('ADULTO')) {
+                      payload["modalidad"] = nivelModVal;
+                  }
+              }
+              if (turnoVal) {
+                  payload["turno-plantel"] = turnoVal;
+                  payload["turno"] = deleteField();
+              }
+              if (ubicacionVal) {
+                  payload["ubicacion-geografica"] = ubicacionVal;
+                  payload["ubicacion"] = deleteField();
+              }
+              if (metros2Val !== null) {
+                  payload["metros2"] = metros2Val;
+              }
+              if (obsPlantelVal) {
+                  payload["observaciones"] = obsPlantelVal;
+              }
+
+              // Huella de trazabilidad de modificación institucional
+              payload["modificado_por"] = window.sgh_user_data?.email || window.sgh_user_data?.nombre || "DIRECTOR";
+              payload["fecha_modificacion_datos"] = new Date().toISOString();
+
+              const mergeFieldsList = [
+                  'secciones', 'secciones-planes', 'matricula', 'matricula-total', 'vacantes', 
+                  'datos_completados', 'ultima_actualizacion', 'denominacion', 'nombre-plantel', 
+                  'codigos', 'nivel', 'modalidad', 'turno-plantel', 'turno', 'ubicacion-geografica', 'ubicacion', 
+                  'metros2', 'observaciones', 'modificado_por', 'fecha_modificacion_datos'
+              ];
+
               await safeSetDoc(docRef, payload, {
-                  mergeFields: ['secciones', 'secciones-planes', 'matricula', 'matricula-total', 'vacantes', 'datos_completados', 'ultima_actualizacion']
+                  mergeFields: mergeFieldsList
               });
+
+              // Sincronizar memoria activa
+              if (window.currentPlantelInfo) {
+                  if (denominacionVal) window.currentPlantelInfo.denominacion = denominacionVal;
+                  if (nominalVal || eponimoVal) {
+                      window.currentPlantelInfo['nombre-plantel'] = { nominal: nominalVal, 'nuevo-eponimo': eponimoVal, nuevo_eponimo: eponimoVal };
+                  }
+                  if (nivelModVal) window.currentPlantelInfo.nivel = nivelModVal;
+                  if (turnoVal) window.currentPlantelInfo['turno-plantel'] = turnoVal;
+                  if (ubicacionVal) window.currentPlantelInfo['ubicacion-geografica'] = ubicacionVal;
+                  if (metros2Val !== null) window.currentPlantelInfo.metros2 = metros2Val;
+                  if (obsPlantelVal) window.currentPlantelInfo.observaciones = obsPlantelVal;
+              }
+              if (currentPlantel) {
+                  if (denominacionVal) currentPlantel.denominacion = denominacionVal;
+                  if (nominalVal || eponimoVal) {
+                      currentPlantel['nombre-plantel'] = { nominal: nominalVal, 'nuevo-eponimo': eponimoVal, nuevo_eponimo: eponimoVal };
+                  }
+                  if (nivelModVal) currentPlantel.nivel = nivelModVal;
+                  if (turnoVal) currentPlantel['turno-plantel'] = turnoVal;
+                  if (ubicacionVal) currentPlantel['ubicacion-geografica'] = ubicacionVal;
+                  if (metros2Val !== null) currentPlantel.metros2 = metros2Val;
+                  if (obsPlantelVal) currentPlantel.observaciones = obsPlantelVal;
+              }
+              if (userDisplayName && (nominalVal || eponimoVal)) {
+                  userDisplayName.textContent = `${codigoDEA} - ${nominalVal || eponimoVal}`;
+              }
 
 
 

@@ -2368,6 +2368,14 @@ export function initAdminDashboard(dbInstance, user) {
          ? `<div style="font-size: 0.75rem; color: #64748b; font-weight: normal; margin-top: 2px;">(Nominal: ${nominalVal})</div>`
          : '';
 
+       const botonesAccionHtml = isMunAdmin
+         ? `<button class="btn-plantel-action btn-ficha-plantel" data-id="${p.id}" data-dea="${p.codigos?.plantel || p.id}" title="Ver Ficha y Expediente de Auditoría">📋 Ficha</button>`
+         : `
+           <button class="btn-plantel-action btn-ficha-plantel" data-id="${p.id}" data-dea="${p.codigos?.plantel || p.id}" title="Ver Ficha y Expediente de Auditoría">📋 Ficha</button>
+           <button class="btn-plantel-action btn-edit-plantel" data-id="${p.id}">✏️ Editar</button>
+           <button class="btn-plantel-action btn-del-plantel" data-id="${p.id}">🗑️ Eliminar</button>
+         `;
+
        tr.innerHTML = `
          <td style="padding: 15px 20px;">
            <span style="background: rgba(37,99,235,0.1); color: var(--primary-color); padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">${p.codigos?.plantel || 'N/A'}</span>
@@ -2380,9 +2388,7 @@ export function initAdminDashboard(dbInstance, user) {
          <td style="padding: 15px 20px; color: var(--text-muted); font-size: 0.9rem;">${p.parroquia || 'N/A'}</td>
          <td style="padding: 15px 20px; color: var(--text-muted); font-size: 0.9rem;">${p.nivel || 'N/A'}</td>
          <td class="plantel-actions-cell" style="display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end;">
-           <button class="btn-plantel-action btn-ficha-plantel" data-id="${p.id}" data-dea="${p.codigos?.plantel || p.id}" title="Ver Ficha y Expediente de Auditoría">📋 Ficha</button>
-           <button class="btn-plantel-action btn-edit-plantel" data-id="${p.id}">✏️ Editar</button>
-           <button class="btn-plantel-action btn-del-plantel" data-id="${p.id}">🗑️ Eliminar</button>
+           ${botonesAccionHtml}
          </td>
        `;
        tbodyPlanteles.appendChild(tr);
@@ -2737,6 +2743,10 @@ export function initAdminDashboard(dbInstance, user) {
   }
 
   function openPlantelModal(plantel = null) {
+     if (isMunAdmin) {
+       showAlert("Acceso Restringido", "La modificación de datos institucionales de planteles corresponde al Director del Plantel o a las autoridades zonales.", "warning");
+       return;
+     }
      if (!plantel && !isSuperAdmin && !isZonAdmin) {
        showAlert("Acceso Restringido", "Solo los usuarios Superadmin y Coordinador Zonal tienen permisos para crear nuevos planteles.", "warning");
        return;
@@ -2890,6 +2900,10 @@ export function initAdminDashboard(dbInstance, user) {
 
        const id = document.getElementById('p-uid').value;
        const isEdit = !!id;
+       if (userData?.rol === 'munadmin') {
+         await showAlert("Acceso Restringido", "El rol Coordinador Municipal (munadmin) no tiene potestades para modificar los datos del plantel.", "danger");
+         return;
+       }
        if (!isEdit && !isSuperAdmin && !isZonAdmin) {
          await showAlert("Acceso Restringido", "No posee los privilegios requeridos para registrar nuevos planteles.", "danger");
          return;
