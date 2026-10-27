@@ -1168,7 +1168,16 @@ async function mostrarCandado(codigoDEA, dataParcial) {
             inputs.forEach(i => i.disabled = true);
         }
     } else {
-        const sessionConfig = sessionStorage.getItem('sgh_despliegue_config');
+        let sessionConfig = sessionStorage.getItem('sgh_despliegue_config');
+        if (!sessionConfig) {
+            try {
+                const snapDesp = await getDoc(doc(db, "configuracion", "despliegue"));
+                if (snapDesp.exists()) {
+                    sessionConfig = JSON.stringify(snapDesp.data());
+                    sessionStorage.setItem('sgh_despliegue_config', sessionConfig);
+                }
+            } catch(e) {}
+        }
         if (sessionConfig) {
             try {
                 const config = JSON.parse(sessionConfig);
@@ -1193,6 +1202,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                     cssRules = `
                         #btn-guardar-matricula { display: none !important; }
                         #plantel-form input:not([readonly]), #plantel-form select { pointer-events: none !important; opacity: 0.6 !important; }
+                        #seccion-personal-existente { display: block !important; }
                         #seccion-registro-personal:not(:has(#banner-modo-edicion[style*="flex"])) { display: none !important; }
                     `;
                 } 
@@ -1526,11 +1536,21 @@ async function mostrarCandado(codigoDEA, dataParcial) {
     if (currentInpTotal > 0) hasData = true;
 
     console.log("🏫 [SGH] ¿Plantel posee matrícula/secciones previas?:", hasData);
-    if (window._modoSupervision) {
+    let sessionConfigActual = sessionStorage.getItem('sgh_despliegue_config');
+    let modoDespliegue = 'TOTAL';
+    if (sessionConfigActual) {
+        try {
+            modoDespliegue = JSON.parse(sessionConfigActual).modo_operacion || 'TOTAL';
+        } catch(e) {}
+    }
+
+    if (window._modoSupervision || modoDespliegue === 'SOLO_EDITAR_PERSONAL') {
         const secPersonal = document.getElementById('seccion-personal-existente');
         if (secPersonal) secPersonal.style.display = 'block';
         if (typeof window.cargarPersonalExistente === "function") {
             window.cargarPersonalExistente(codigoDEA);
+        } else if (typeof window.mostrarFormularioPersonal === "function") {
+            window.mostrarFormularioPersonal(false);
         }
     } else if (tienePlanes && hasData && typeof window.mostrarFormularioPersonal === "function") {
         window.mostrarFormularioPersonal(false);

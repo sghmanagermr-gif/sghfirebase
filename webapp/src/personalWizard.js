@@ -1762,6 +1762,7 @@ window.mostrarModalEliminarPersonal = mostrarModalEliminarPersonal;
 window.abrirModalTraslado = abrirModalTraslado;
 window.cerrarModalTraslado = cerrarModalTraslado;
 window.buscarFichaTraslado = buscarFichaTraslado;
+window.cargarPersonalExistente = cargarPersonalExistente;
 
 poblarCatalogosGenerales();
 initCascadaPersonal();
