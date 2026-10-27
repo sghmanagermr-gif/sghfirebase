@@ -1697,6 +1697,39 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `bitacora.md`
 - `conversaciones.md`
 
+---
+### Ciclo v2.17.1: Integración de Identidad Institucional Oficial (SGH - CDCE Mérida)
+
+**1. Objetivos:**
+- Reemplazar por completo los íconos genéricos temporales de Vite (`vite.svg`) por el escudo oficial institucional de Gestión Humana del Centro de Desarrollo de la Calidad Educativa del Estado Mérida (`sgh-logo.png`).
+- Optimizar la imagen de origen (`sgh-logo.jfif` de 2.8MB) a una versión PNG de 512x512 ultraligera (~580KB) y generar el favicon de 64x64 (`favicon.png`) para los navegadores.
+- Homogeneizar la presencia de la marca en todas las interfaces de acceso y supervisión del sistema.
+
+**2. Solución Técnica y Arquitectura:**
+- **Procesamiento de Activos en `webapp/public/`:**
+  - Conversión y remuestreo bicúbico de alta calidad: `sgh-logo.png` (512x512) y `favicon.png` (64x64).
+- **Inyección en Vistas Institucionales (`webapp/index.html`):**
+  - `<link rel="icon" type="image/png" href="/favicon.png">` en el `<head>`.
+  - `#login-view`: logotipo central de 110x110px con esquinas redondeadas y micro-sombra moderna.
+  - `#espera-view`: avatar de 90x90px para sala de espera y verificación 2FA.
+  - `#register-view`: imagotipo de 85x85px en la solicitud de acceso.
+  - Navbar de Director (`.navbar`): miniatura de 32x32px contigua al título SGH.
+  - Navbar de Administración (`#admin-view`): miniatura de 36x36px contigua al título SGH Panel.
+- **Control SemVer y Despliegue:**
+  - Incremento de versión Parche a **v2.17.1** en `webapp/package.json` e `webapp/index.html`.
+  - Compilación limpia con Vite (`npm run build`).
+  - Despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+
+**3. Archivos Involucrados:**
+- `webapp/public/sgh-logo.png`
+- `webapp/public/favicon.png`
+- `webapp/index.html`
+- `webapp/package.json`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
+
+
 
 
 

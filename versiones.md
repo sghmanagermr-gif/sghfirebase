@@ -4,6 +4,20 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.17.1 (27 de Octubre de 2026)
+- **Integración de Identidad Institucional Oficial (SGH - CDCE Mérida):**
+  - **Reemplazo Global de Activos Temporales:** Sustitución definitiva del ícono genérico provisional (`vite.svg`) por el emblema oficial del Sistema de Gestión Humana y Centro de Desarrollo de la Calidad Educativa del Estado Mérida (`sgh-logo.png`).
+  - **Optimización y Creación de Favicon:** Generación de imagen PNG de 512x512 ultraligera para carga web instantánea y derivación de `favicon.png` de 64x64 para pestañas de navegadores.
+  - **Puntos de Integración en la Interfaz:**
+    - *Pantalla de Inicio de Sesión (`#login-view`):* Emblema central de 110x110 con bordes redondeados y micro-sombra institucional.
+    - *Sala de Espera (`#espera-view`):* Distintivo de 90x90 como encabezado de tarjeta 2FA.
+    - *Solicitud de Acceso (`#register-view`):* Emblema de 85x85 presidiendo el formulario de registro.
+    - *Barra de Navegación del Director (`.navbar`):* Imagotipo compacto de 32x32 junto a las siglas SGH.
+    - *Cabecera del Panel de Administración (`#admin-view`):* Imagotipo de 36x36 junto al título del panel de control.
+  - **Despliegue a Producción:** Compilación optimizada con Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.17.0 (27 de Octubre de 2026)
 - **Incorporación de la Modalidad de Despliegue «Solo Editar Personal Existente y Modificar Matrícula»:**
   - **Nueva Opción en Pizarra de Control (`#sel-modo-operacion`):** Inyección del perfil `SOLO_EDITAR_PERSONAL_Y_MATRICULA` con la etiqueta visual *«Solo Editar Personal Existente y Modificar Matrícula (Bloquea Nuevo)»*.

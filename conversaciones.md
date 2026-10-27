@@ -2048,6 +2048,50 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > **Respuesta del Agente:**
 > Protocolo de cierre ejecutado: actualización a versión v2.17.0, compilación y despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`), registro en bitacora.md, versiones.md y conversaciones.md, y sincronización definitiva en GitHub (`main`).
 
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> tengo la siguiente imagen guardada en mi computador. ¿Cómo puedo usarla a lo largo y ancho del proyecto? ¿Qué pasos debo seguir?
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se explicaron los pasos para alojar y utilizar imágenes en el proyecto:
+> 1. Ubicación en `webapp/public/` para acceso directo en Vite y Firebase Hosting.
+> 2. Puntos clave de aprovechamiento: login, favicon, encabezados y salas de espera.
+> 3. Disposición del agente para copiar y optimizar el activo desde el almacenamiento local.
+
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> la imagen está en: C:\Users\usuario\Pictures\sgh-logo
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se copió la imagen desde la ruta indicada, se procesó a formato PNG optimizado de 512x512 y se generó el favicon de 64x64. Se reemplazó el icono genérico en la pantalla de inicio de sesión, sala de espera, solicitud de acceso y barra de navegación.
+
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> perfecto pero en <img src="/vite.svg" alt="SGH Logo" style="width: 35px; height: 35px;"> no la incorporaste
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se identificó y actualizó la etiqueta residual en la cabecera superior del Panel de Administración (`#admin-view`), integrando el nuevo logo oficial de 36x36px y sincronizando la versión a v2.17.1.
+
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Estoy satisfecho
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Protocolo de cierre ejecutado: actualización a versión v2.17.1, compilación y despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`), registro en bitacora.md, versiones.md y conversaciones.md, y sincronización definitiva en GitHub (`main`).
+
+
 
 
 
