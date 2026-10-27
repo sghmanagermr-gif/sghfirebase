@@ -12,7 +12,7 @@ export const LISTA_EXTENSA_INSTRUCCION = [
 
 import { db } from './firebase.js';
 import { showToast, showAlert } from './uiUtils.js';
-import { collection, doc, setDoc, updateDoc, deleteDoc, query, where, getDocs, getDoc, getFirestore } from 'firebase/firestore';
+import { collection, doc, setDoc, updateDoc, deleteDoc, query, where, limit, getDocs, getDoc, getFirestore } from 'firebase/firestore';
 
 // --- Catálogos Maestros de Respaldo Institucional (Zero-Cost / Anti-Fallo) ---
 const CATALOGOS_FALLBACK = {
@@ -471,9 +471,27 @@ export function cerrarFormularioPersonal() {
 
 export function limpiarFormularioPersonal() {
     window._docIdEnEdicion = null;
+    window._esTraslado = false;
+    window._datosTraslado = null;
 
     const bannerEdit = document.getElementById('banner-modo-edicion');
-    if (bannerEdit) bannerEdit.style.display = 'none';
+    if (bannerEdit) {
+        bannerEdit.style.display = 'none';
+        bannerEdit.style.background = '#eff6ff';
+        bannerEdit.style.borderColor = '#bfdbfe';
+        const txtBanner = document.getElementById('texto-modo-edicion');
+        if (txtBanner) {
+            txtBanner.style.color = '#1e40af';
+            txtBanner.textContent = "Modo Edición: Actualizando datos de Funcionario";
+        }
+        const subBanner = document.getElementById('subtexto-modo-edicion');
+        if (subBanner) {
+            subBanner.style.color = '#3b82f6';
+            subBanner.textContent = "Modifique los campos requeridos y haga clic en Actualizar Empleado.";
+        }
+        const iconSpan = document.getElementById('icono-modo-edicion');
+        if (iconSpan) iconSpan.textContent = '✏️';
+    }
 
     const btnSubmit = document.getElementById('btn-guardar-empleado-inline');
     if (btnSubmit) btnSubmit.textContent = "Guardar Empleado";
@@ -835,6 +853,7 @@ export function mostrarModalEliminarPersonal(data, docId, codigoDEA) {
                     <select id="sel-motivo-desincorporacion" class="form-input" style="cursor: pointer;">
                         <option value="">— Seleccione el motivo —</option>
                         <option value="RENUNCIA">RENUNCIA</option>
+                        <option value="TRASLADO A OTRO PLANTEL">TRASLADO A OTRO PLANTEL</option>
                         <option value="TRASLADO INTERZONAL">TRASLADO INTERZONAL</option>
                         <option value="JUBILACION">JUBILACIÓN</option>
                         <option value="ABANDONO DE CARGO">ABANDONO DE CARGO</option>
@@ -905,6 +924,29 @@ export function mostrarModalEliminarPersonal(data, docId, codigoDEA) {
 
             await setDoc(doc(db, "personal_eliminado", auditoriaId), auditoriaData);
 
+            // 1.1 Si el motivo es TRASLADO, generar Ficha Viajera en personal_traslados
+            const esTraslado = motivo.includes("TRASLADO");
+            if (esTraslado) {
+                const fichaViajera = {
+                    cedula: cedula,
+                    nombre: nombre,
+                    cargo: cargo,
+                    codigoRAC: data['codigo-rac'] || data['codigo-cargo'] || '',
+                    tipo_personal: data['tipo-personal'] || '',
+                    plantel_origen_dea: codigoDEA,
+                    fecha_traslado: new Date().toISOString(),
+                    usuario_origen: window.sgh_user_data?.email || 'DIRECTOR_PLANTEL',
+                    motivo_traslado: motivo,
+                    observaciones_traslado: txtObs.value.trim(),
+                    datos_funcionario: data
+                };
+                await setDoc(doc(db, "personal_traslados", cedula), fichaViajera);
+            } else {
+                try {
+                    await deleteDoc(doc(db, "personal_traslados", cedula));
+                } catch(e) {}
+            }
+
             // 2. Eliminar de cargos_personal
             await deleteDoc(doc(db, "cargos_personal", docId));
 
@@ -924,7 +966,11 @@ export function mostrarModalEliminarPersonal(data, docId, codigoDEA) {
             }
 
             overlay.remove();
-            showToast("Funcionario desincorporado y registrado en auditoría exitosamente.", "success");
+            if (esTraslado) {
+                showToast("Funcionario desincorporado. Se ha generado exitosamente la Ficha Viajera para su recepción en el nuevo plantel.", "success");
+            } else {
+                showToast("Funcionario desincorporado y registrado en auditoría exitosamente.", "success");
+            }
 
             if (window._docIdEnEdicion === docId) {
                 limpiarFormularioPersonal();
@@ -1154,8 +1200,9 @@ export async function guardarPersonalInline() {
     };
 
     const isEditing = !!window._docIdEnEdicion;
-    // Si se está actualizando, limpiar el campo de búsqueda de inmediato
-    if (isEditing) {
+    const isTraslado = !!window._esTraslado;
+    // Si se está actualizando o incorporando por traslado, limpiar el campo de búsqueda de inmediato
+    if (isEditing || isTraslado) {
         const searchInput = document.getElementById('buscador-personal');
         if (searchInput) {
             searchInput.value = '';
@@ -1165,7 +1212,7 @@ export async function guardarPersonalInline() {
     const btn = document.getElementById('btn-guardar-empleado-inline');
     if (btn) {
         btn.disabled = true;
-        btn.textContent = isEditing ? "Actualizando..." : "Guardando...";
+        btn.textContent = isTraslado ? "Incorporando..." : (isEditing ? "Actualizando..." : "Guardando...");
     }
 
     try {
@@ -1177,6 +1224,26 @@ export async function guardarPersonalInline() {
         const ref = doc(db, "cargos_personal", docId);
         await setDoc(ref, payload, { merge: true });
         
+        // Si era un traslado, eliminar la ficha viajera de personal_traslados y registrar en auditoría de traslados
+        if (isTraslado) {
+            try {
+                await deleteDoc(doc(db, "personal_traslados", payload.cedula));
+                const logId = `${dea}_${payload.cedula}_${Date.now()}`;
+                await setDoc(doc(db, "personal_traslados_log", logId), {
+                    cedula: payload.cedula,
+                    nombre: payload.nombres,
+                    cargo: payload.cargo,
+                    codigoRAC: payload['codigo-rac'] || '',
+                    plantel_destino_dea: dea,
+                    plantel_origen_dea: window._datosTraslado?.plantel_origen_dea || '',
+                    fecha_incorporacion: new Date().toISOString(),
+                    usuario_responsable: window.sgh_user_data?.email || 'DIRECTOR_PLANTEL'
+                });
+            } catch(eTraslado) {
+                console.warn("Aviso procesando cierre de ficha viajera:", eTraslado);
+            }
+        }
+
         // Actualizar resumen en el documento del plantel
         if (dea) {
             try {
@@ -1197,15 +1264,18 @@ export async function guardarPersonalInline() {
             }
         }
 
-        showToast(isEditing ? "¡Empleado actualizado exitosamente!" : "¡Empleado guardado exitosamente!", "success");
+        const mensajeExito = isTraslado 
+            ? "¡Funcionario incorporado al plantel exitosamente por traslado!" 
+            : (isEditing ? "¡Empleado actualizado exitosamente!" : "¡Empleado guardado exitosamente!");
+        showToast(mensajeExito, "success");
         limpiarFormularioPersonal();
         if (dea) cargarPersonalExistente(dea);
 
         // Desplazamiento inteligente diferenciado:
-        // AL ACTUALIZAR -> Va a 'Personal Registrado en el Plantel' (con cursor en el buscador)
+        // AL ACTUALIZAR o TRASLADAR -> Va a 'Personal Registrado en el Plantel' (con cursor en el buscador)
         // AL GUARDAR (Nuevo) -> Va a 'Registro de Personal' (con cursor en la Cédula listo para el siguiente)
         const headerOffset = 95; // Margen para el header sticky
-        if (isEditing) {
+        if (isEditing || isTraslado) {
             const seccionTabla = document.getElementById('seccion-personal-existente');
             if (seccionTabla) {
                 setTimeout(() => {
@@ -1469,6 +1539,214 @@ window.toggleMatriculaUI = function() {
     }
 };
 
+// --- MODAL Y CONTROL DE TRASLADOS (FICHA VIAJERA) ---
+export function abrirModalTraslado() {
+    const modal = document.getElementById('modal-incorporar-traslado');
+    if (!modal) return;
+    const inpCed = document.getElementById('inp-cedula-traslado');
+    const contenedor = document.getElementById('contenedor-resultado-traslado');
+    if (inpCed) inpCed.value = '';
+    if (contenedor) contenedor.innerHTML = '';
+    modal.style.display = 'flex';
+    if (inpCed) setTimeout(() => inpCed.focus(), 100);
+}
+
+export function cerrarModalTraslado() {
+    const modal = document.getElementById('modal-incorporar-traslado');
+    if (modal) modal.style.display = 'none';
+}
+
+export async function buscarFichaTraslado(cedulaInput, nac = 'V') {
+    const cedula = (cedulaInput || '').trim();
+    if (!cedula) {
+        showToast("Por favor, ingrese un número de cédula válido.", "warning");
+        return;
+    }
+    
+    const contenedor = document.getElementById('contenedor-resultado-traslado');
+    if (!contenedor) return;
+    
+    contenedor.innerHTML = `
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; padding: 25px; color: #475569;">
+            <div class="spinner" style="width: 24px; height: 24px; border: 3px solid #cbd5e1; border-top-color: #0284c7; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+            <span>Consultando archivo de traslados...</span>
+        </div>
+    `;
+
+    try {
+        // 1. Direct doc lookup en personal_traslados (Exactamente 1 lectura de Firestore)
+        let snapTraslado = await getDoc(doc(db, "personal_traslados", cedula));
+        if (!snapTraslado.exists() && nac) {
+            snapTraslado = await getDoc(doc(db, "personal_traslados", `${nac}-${cedula}`));
+        }
+
+        if (snapTraslado.exists()) {
+            const ficha = snapTraslado.data();
+            const funcionario = ficha.datos_funcionario || {};
+            const nombre = (ficha.nombre || funcionario.nombres || funcionario['nombre-apellido'] || '').toUpperCase();
+            const cargo = ficha.cargo || funcionario.cargo || 'N/A';
+            const rac = ficha.codigoRAC || funcionario['codigo-rac'] || 'N/A';
+            const deaOrigen = ficha.plantel_origen_dea || 'DESCONOCIDO';
+            const fechaStr = ficha.fecha_traslado ? new Date(ficha.fecha_traslado).toLocaleDateString() : 'Reciente';
+
+            contenedor.innerHTML = `
+                <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 12px; padding: 18px; margin-top: 15px; animation: fadeIn 0.2s ease;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                        <span style="font-size: 1.25rem;">✅</span>
+                        <strong style="color: #166534; font-size: 0.95rem;">Ficha Viajera Encontrada</strong>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.88rem; color: #1e293b; background: white; padding: 12px; border-radius: 8px; border: 1px solid #bbf7d0;">
+                        <div><strong>Funcionario:</strong> ${nombre}</div>
+                        <div><strong>C.I.:</strong> ${cedula}</div>
+                        <div><strong>Cargo:</strong> ${cargo}</div>
+                        <div><strong>Código RAC:</strong> ${rac}</div>
+                        <div><strong>Plantel de Origen:</strong> ${deaOrigen}</div>
+                        <div><strong>Fecha Traslado:</strong> ${fechaStr}</div>
+                    </div>
+                    ${ficha.observaciones_traslado ? `<div style="margin-top: 10px; font-size: 0.82rem; color: #475569; font-style: italic;">Observación: "${ficha.observaciones_traslado}"</div>` : ''}
+                    <div style="margin-top: 16px; display: flex; justify-content: flex-end;">
+                        <button type="button" id="btn-confirmar-incorporar-traslado"
+                            style="background: #16a34a; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3);">
+                            <span>📥</span> Confirmar e Incorporar a esta Nómina
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('btn-confirmar-incorporar-traslado').onclick = () => {
+                cerrarModalTraslado();
+                cargarEmpleadoEnFormulario(funcionario, null);
+                
+                window._esTraslado = true;
+                window._datosTraslado = ficha;
+                window._docIdEnEdicion = null;
+
+                const bannerEdit = document.getElementById('banner-modo-edicion');
+                const txtBanner = document.getElementById('texto-modo-edicion');
+                const subBanner = document.getElementById('subtexto-modo-edicion');
+                const iconSpan = document.getElementById('icono-modo-edicion');
+
+                if (bannerEdit) {
+                    bannerEdit.style.background = '#f0fdf4';
+                    bannerEdit.style.borderColor = '#86efac';
+                    if (txtBanner) {
+                        txtBanner.style.color = '#166534';
+                        txtBanner.textContent = `📥 Modo Traslado: Incorporando a ${nombre} (C.I. ${cedula})`;
+                    }
+                    if (subBanner) {
+                        subBanner.style.color = '#15803d';
+                        subBanner.textContent = `Procedencia: Plantel ${deaOrigen}. Asigne el cargo/función correspondiente y presione "INCORPORAR AL PLANTEL".`;
+                    }
+                    if (iconSpan) iconSpan.textContent = '📥';
+                    bannerEdit.style.display = 'flex';
+                }
+
+                const btnSubmit = document.getElementById('btn-guardar-empleado-inline');
+                if (btnSubmit) {
+                    btnSubmit.textContent = "INCORPORAR AL PLANTEL";
+                }
+
+                const seccionRegistro = document.getElementById('seccion-registro-personal');
+                if (seccionRegistro) {
+                    const headerOffset = 95;
+                    const elementPosition = seccionRegistro.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                }
+
+                showToast(`Ficha de ${nombre} cargada en formulario. Complete la asignación institucional.`, "info");
+            };
+
+            return;
+        }
+
+        // 2. Si no está en personal_traslados, verificar si está activo en cargos_personal (Cero-Cost: query limit 1)
+        const posiblesCedulas = [cedula, `${nac}-${cedula}`, `${nac}${cedula}`];
+        const qActivo = query(collection(db, "cargos_personal"), where("cedula", "in", posiblesCedulas), limit(1));
+        const snapActivo = await getDocs(qActivo);
+
+        if (!snapActivo.empty) {
+            const dataActivo = snapActivo.docs[0].data();
+            const deaActivo = dataActivo['codigo-plantel'] || dataActivo.codigoDEA || 'OTRO PLANTEL';
+            const nomActivo = (dataActivo.nombres || dataActivo['nombre-apellido'] || '').toUpperCase();
+            
+            let deaActual = window.currentPlantelDEA || '';
+            if (!deaActual && window.sgh_user_data?.jerarquia?.plantel_codigo) {
+                deaActual = window.sgh_user_data.jerarquia.plantel_codigo;
+            }
+
+            if (deaActivo === deaActual) {
+                contenedor.innerHTML = `
+                    <div style="background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 12px; padding: 18px; margin-top: 15px; animation: fadeIn 0.2s ease;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <span style="font-size: 1.25rem;">ℹ️</span>
+                            <strong style="color: #1e40af; font-size: 0.95rem;">Funcionario Ya Registrado en este Plantel</strong>
+                        </div>
+                        <p style="margin: 0; font-size: 0.88rem; color: #334155;">
+                            El funcionario <strong>${nomActivo}</strong> (C.I. ${cedula}) ya forma parte de la plantilla activa de este plantel. Si desea modificar sus datos, búsquelo en la tabla inferior y use el botón <strong>Editar</strong>.
+                        </p>
+                    </div>
+                `;
+            } else {
+                contenedor.innerHTML = `
+                    <div style="background: #fffbeb; border: 1.5px solid #fcd34d; border-radius: 12px; padding: 18px; margin-top: 15px; animation: fadeIn 0.2s ease;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <span style="font-size: 1.25rem;">⚠️</span>
+                            <strong style="color: #92400e; font-size: 0.95rem;">Funcionario Activo en Otro Plantel</strong>
+                        </div>
+                        <p style="margin: 0 0 10px; font-size: 0.88rem; color: #334155;">
+                            El funcionario <strong>${nomActivo}</strong> (C.I. ${cedula}) figura como <strong>ACTIVO</strong> en el plantel <strong>${deaActivo}</strong>.
+                        </p>
+                        <p style="margin: 0; font-size: 0.84rem; color: #78350f; background: #fef3c7; padding: 8px 12px; border-radius: 6px;">
+                            📌 <strong>Instrucción:</strong> Para que este plantel pueda incorporarlo, la Dirección del plantel de origen (<strong>${deaActivo}</strong>) debe primero desincorporarlo seleccionando el motivo <strong>"TRASLADO A OTRO PLANTEL"</strong>.
+                        </p>
+                    </div>
+                `;
+            }
+            return;
+        }
+
+        // 3. No existe ni en traslados ni en cargos_personal (Cero colados no autorizados)
+        contenedor.innerHTML = `
+            <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 12px; padding: 18px; margin-top: 15px; animation: fadeIn 0.2s ease;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <span style="font-size: 1.25rem;">🚫</span>
+                    <strong style="color: #991b1b; font-size: 0.95rem;">Funcionario No Encontrado</strong>
+                </div>
+                <p style="margin: 0 0 10px; font-size: 0.88rem; color: #334155;">
+                    No existe ningún registro de nómina ni ficha de traslado asociada a la cédula <strong>${cedula}</strong>.
+                </p>
+                <div style="font-size: 0.82rem; color: #7f1d1d; background: #fee2e2; padding: 8px 12px; border-radius: 6px;">
+                    🔒 <strong>Acceso Restringido:</strong> En este despliegue de actualización solo se admiten modificaciones de nómina existente y traslados certificados. La incorporación de nuevo ingreso no registrado en la base de datos central debe ser canalizada a través de Gestión Humana.
+                </div>
+            </div>
+        `;
+
+    } catch (err) {
+        console.error("Error buscando ficha de traslado:", err);
+        contenedor.innerHTML = `
+            <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 14px; margin-top: 15px; color: #b91c1c; font-size: 0.88rem;">
+                Error al consultar ficha: ${err.message}
+            </div>
+        `;
+    }
+}
+
+window.buscarFichaTrasladoUI = function() {
+    const nac = document.getElementById('sel-nac-traslado')?.value || 'V';
+    const numRaw = document.getElementById('inp-cedula-traslado')?.value?.trim() || '';
+    if (!numRaw) {
+        showToast("Por favor, ingrese el número de cédula.", "warning");
+        return;
+    }
+    const soloNumeros = numRaw.replace(/\D/g, '');
+    if (!soloNumeros) {
+        showToast("El número de cédula debe contener solo dígitos.", "warning");
+        return;
+    }
+    buscarFichaTraslado(soloNumeros, nac);
+};
+
 // Asignaciones globales a window
 window.mostrarFormularioPersonal = mostrarFormularioPersonal;
 window.cerrarFormularioPersonal = cerrarFormularioPersonal;
@@ -1481,6 +1759,9 @@ window.poblarCatalogosGenerales = poblarCatalogosGenerales;
 window.initCascadaPersonal = initCascadaPersonal;
 window.cargarEmpleadoEnFormulario = cargarEmpleadoEnFormulario;
 window.mostrarModalEliminarPersonal = mostrarModalEliminarPersonal;
+window.abrirModalTraslado = abrirModalTraslado;
+window.cerrarModalTraslado = cerrarModalTraslado;
+window.buscarFichaTraslado = buscarFichaTraslado;
 
 poblarCatalogosGenerales();
 initCascadaPersonal();

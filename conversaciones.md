@@ -1845,4 +1845,67 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 
 > Se sincronizó la versión v2.15.0, se actualizaron bitacora.md, versiones.md y conversaciones.md, y se respaldó todo en GitHub. Quedo atento a la siguiente petición de la jefa de personal.
 
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Antes de pasar a la siguiente petición de la jefa. Quita el elemento <span style="font-size: 0.75rem; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 3px 8px; border-radius: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+>               ✏️ Modificable por Dirección
+>             </span>
+> No hace falta que aparezca
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se retiró de inmediato la etiqueta `✏️ Modificable por Dirección` del encabezado del formulario del plantel en `webapp/index.html`. El bloque luce ahora limpio con su título formal «Datos Institucionales del Plantel» y su descripción explicativa. Se probó la compilación limpia y se resguardaron los archivos en Git.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Ok la siguiente petición de la jefa creo que es mad complicada. Tenemos las siguiente opciones de Despliegue: id="sel-modo-operacion" que ya conoces. ahora bien. para la siguiente jornada de actualización del RAC hay una disyuntiva = TRASLADOS.
+> 
+> Que sucede: que un traslado es como eliminar un empleado de un plantel de origen, pero al mismo tiempo es volverlo a ingresar en el nuevo plantel destino. Nos preguntabamos, como resolver ese caso. El empleado ya esta en la base de datos, solo debe ser desincorporado del plantel de origen y que el plantel destino lo ubique por du numero de cedula y lo incorpore.
+> 
+> ¿Cuál sería tu propuesta?
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se propuso el concepto de **La Ficha Viajera** (o Expediente en Tránsito):
+> 1. En el plantel de origen: Al desincorporar, se selecciona el motivo «TRASLADO A OTRO PLANTEL», guardándolo en la colección `personal_traslados` y eliminándolo de la nómina de ese plantel.
+> 2. En el plantel de destino: El nuevo director lo busca por su cédula, el sistema valida la ficha y la carga con todos sus datos biográficos para asignarle el nuevo cargo, eliminando la ficha viajera y pasándolo a la nueva institución.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> tu propuesta de Jornada de Traslados y Sinceración de Nómina me parece bien, pero darle en detalles a la jefa con sus multiples oficios y que ella me responde de manera oportuna tardaría mucho. Ves que La Ficha Viajera entre en alguna de la opciones existentes que no sean «Personal Completo» o «Solo Cargar Nuevo Personal». Por que no «Personal Completo» o «Solo Cargar Nuevo Personal» porque se presta a que el director ingrese personal no autosizado; de hecho las jornadas de despliegue a corto plazo son: Solo Modificar Matrícula (Bloquea Personal), Solo Editar Personal Existente (Bloquea Nuevo y Matrícula).
+> 
+> ¿En cuál y cómo entraría La Ficha Viajera en esas dos opciones, que no afecte la lógia existente?
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se demostró que la opción existente perfecta es **«Solo Editar Personal Existente (Bloquea Nuevo y Matrícula)»**.
+> - ¿Por qué funciona?: Porque un funcionario trasladado NO es personal nuevo no autorizado; ya existe en el sistema.
+> - Bloqueo a personal no autorizado: El formulario en blanco de nuevo ingreso permanece bloqueado.
+> - Botón dedicado: En la tabla de personal existente se agrega `📥 Incorporar Traslado`. Si la cédula no existe en la base de datos central, se rechaza. Si está activo en otro colegio, se exige que el colegio de origen lo libere primero. Si tiene su Ficha Viajera, se desbloquea únicamente ese empleado para que el nuevo director le asigne su función y lo incorpore.
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."
+> Me parece excelente. procede
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se leyó la Skill obligatoria y se implementó la Ficha Viajera:
+> 1. Opción «TRASLADO A OTRO PLANTEL» en el modal de desincorporación, guardando en `personal_traslados`.
+> 2. Botón `📥 Incorporar Traslado` en la cabecera de la nómina activa y modal `#modal-incorporar-traslado`.
+> 3. Buscador inteligente por C.I. a costo cero con candados anti-colados y anti-duplicados.
+> 4. Precarga guiada con banner verde y guardado transaccional en `cargos_personal` con auditoría en `personal_traslados_log`.
+> 5. Elevación de versión a v2.16.0 y compilación limpia con Vite.
+> 
+> ¿Los resultados fueron satisfactorios?
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Satisfactorios, creo que sebes montarlo en Firebase tambien
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se ejecutó la compilación de producción con Vite (`npm run build`) para la versión **v2.16.0** y se realizó el despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`) mediante `npx -y firebase-tools deploy --only hosting`. Se actualizaron las memorias históricas del proyecto (`bitacora.md`, `versiones.md` y `conversaciones.md`), y se resguardó el avance con commit y push en el repositorio central de GitHub (`main`).
+
+
 

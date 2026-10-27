@@ -1589,4 +1589,47 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `bitacora.md` (Bitácora técnica)
 - `conversaciones.md` (Registro textual íntegro)
 
+---
+### Ciclo v2.16.0: Implementación de la Ficha Viajera para Traslados Institucionales entre Planteles (Zero-Cost)
+
+**1. Objetivos:**
+- Resolver el requerimiento acordado con la jefatura de Gestión Humana para la gestión de traslados de personal entre planteles educativos durante jornadas de despliegue restringido («Solo Editar Personal Existente»).
+- Permitir que un funcionario desincorporado de un plantel de origen con motivo de traslado sea recibido e incorporado por su plantel de destino mediante la búsqueda de su número de cédula.
+- Blindar el sistema contra la creación no autorizada de personal nuevo («anti-colados»), garantizando que en períodos de actualización restringida solo se incorporen funcionarios preexistentes en la base de datos central que cuenten con su Ficha Viajera.
+- Prevenir duplicidades o registros simultáneos alertando si el funcionario permanece activo en su plantel anterior.
+- Mantener la estricta política Zero-Cost: exactamente una lectura directa de documento por ID (`doc(db, "personal_traslados", cedula)`).
+
+**2. Solución Técnica y Arquitectura:**
+- **Emisión en Plantel de Origen (`webapp/src/personalWizard.js`):**
+  - En `mostrarModalEliminarPersonal`: Incorporación de la opción `<option value="TRASLADO A OTRO PLANTEL">` en `#sel-motivo-desincorporacion`.
+  - Al confirmar la desincorporación con motivo que incluya «TRASLADO», el sistema genera de forma atómica la Ficha Viajera en la colección `personal_traslados` indexada por `cedula`, conteniendo toda la información histórica, laboral y biográfica del funcionario, junto con el DEA de origen, estampa de tiempo y usuario responsable.
+  - Elimina al funcionario de `cargos_personal` del plantel de origen y actualiza el `personal_resumen` de la institución.
+- **Recepción e Incorporación en Plantel de Destino (`webapp/index.html` y `webapp/src/personalWizard.js`):**
+  - En `#seccion-personal-existente`: Se integró el botón `📥 Incorporar Traslado` (`#btn-incorporar-traslado`), visible bajo la modalidad `SOLO_EDITAR_PERSONAL`.
+  - Modal `#modal-incorporar-traslado`: Permite ingresar nacionalidad (`V`/`E`) y número de cédula, con disparador de búsqueda por Enter o clic.
+  - Motor de Validación Inteligente (`buscarFichaTraslado`):
+    - *Ficha Encontrada:* Muestra tarjeta con datos de origen y botón `Confirmar e Incorporar a esta Nómina`. Al hacer clic, carga el formulario mediante `cargarEmpleadoEnFormulario`, activa el banner institucional `#banner-modo-edicion` con estilo verde (`📥 Modo Traslado: Incorporando a [Nombre]`), ajusta el botón principal a «INCORPORAR AL PLANTEL» y hace scroll suave al formulario.
+    - *Funcionario Activo:* Si no está en traslados pero está en `cargos_personal`, identifica el DEA activo e instruye al director que la institución de origen debe liberarlo primero.
+    - *No Registrado:* Si no existe en la base de datos de Gestión Humana, bloquea la operación informando la prohibición de nuevo ingreso durante la jornada.
+  - Guardado y Cierre de Traslado (`guardarPersonalInline`):
+    - Detecta `window._esTraslado = true`.
+    - Asigna el documento en `cargos_personal` para el nuevo plantel (`${dea}_${cedula}`).
+    - Actualiza `personal_resumen` en el documento del plantel.
+    - Elimina la Ficha Viajera de `personal_traslados` (`deleteDoc`).
+    - Registra el evento en auditoría histórica (`personal_traslados_log`).
+    - Limpia el formulario y restaura el banner y los botones a su estado estándar.
+- **Control SemVer y Despliegue:**
+  - Incremento de versión Menor a **v2.16.0** en `webapp/package.json` y todos los puntos de `webapp/index.html`.
+  - Compilación de producción con Vite (`npm run build`).
+  - Despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`) mediante `npx -y firebase-tools deploy --only hosting`.
+
+**3. Archivos Involucrados:**
+- `webapp/src/personalWizard.js` (Lógica de emisión, búsqueda, validación, precarga y cierre de Ficha Viajera)
+- `webapp/index.html` (Botón Incorporar Traslado, modal de traslados, IDs del banner y badges v2.16.0)
+- `webapp/package.json` (Versión 2.16.0)
+- `versiones.md` (Registro cronológico de versión)
+- `bitacora.md` (Bitácora técnica)
+- `conversaciones.md` (Registro textual íntegro)
+
+
 

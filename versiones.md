@@ -4,6 +4,19 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.16.0 (27 de Octubre de 2026)
+- **Implementación de la Ficha Viajera para Traslados Institucionales entre Planteles:**
+  - **Emisión en Plantel de Origen:** Incorporación de la opción formal «TRASLADO A OTRO PLANTEL» en el modal de desincorporación (`#sel-motivo-desincorporacion`). Al seleccionarla, el sistema retira al empleado de la nómina activa del plantel de origen (`cargos_personal`) y genera de forma automática su expediente digital en la colección de Fichas Viajeras (`personal_traslados`), salvaguardando toda su información biográfica y laboral previa.
+  - **Recepción e Incorporación en Plantel de Destino:** Integración del botón interactivo `📥 Incorporar Traslado` en la cabecera de la tabla de personal registrado (`#seccion-personal-existente`), habilitado de manera exclusiva bajo la modalidad de despliegue restringido **«Solo Editar Personal Existente (Bloquea Nuevo y Matrícula)»**.
+  - **Buscador y Validación Inteligente por C.I.:** Modal especializado (`#modal-incorporar-traslado`) que consulta la cédula del funcionario directamente en `personal_traslados` a costo cero (1 lectura directa por ID de documento):
+    - *Ficha Disponible:* Previsualización de datos institucionales (nombres, cédula, cargo anterior, código RAC y DEA de origen) con botón de confirmación que precarga el formulario del director con todos los datos personales prellenados, cambia el banner a «Modo Traslado» y actualiza la acción a «INCORPORAR AL PLANTEL».
+    - *Candado de Seguridad (Cero Personal No Autorizado):* Si la cédula no existe en la base de datos central de Gestión Humana, el sistema bloquea la acción informando que en jornadas restringidas no se permite la creación de nuevo ingreso no certificado.
+    - *Candado contra Duplicados:* Si el empleado figura como ACTIVO en otro plantel educativo, el sistema detalla el código DEA del plantel de origen e instruye que dicho director debe primero desincorporarlo por traslado.
+  - **Cierre Transaccional y Auditoría:** Al guardar la incorporación en el nuevo plantel, el empleado se añade a la nómina del plantel destino, se actualiza el resumen del plantel (`personal_resumen`), se elimina su ficha de `personal_traslados` y se genera un registro histórico inmutable en `personal_traslados_log`.
+  - **Despliegue a Producción:** Compilación exitosa con Vite y publicación en Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.15.0 (27 de Octubre de 2026)
 - **Delegación de Potestad de Modificación de Planteles a Directores (`plaadmin`):**
   - **Restricción a Coordinadores Municipales (`munadmin`):** En el módulo *Gestor de BD ➔ Planteles*, se retiraron los botones de modificación (`✏️ Editar`) y eliminación (`🗑️ Eliminar`), transformando el rol municipal en un perfil de supervisión, consulta y auditoría mediante la Ficha del Plantel (`📋 Ficha`).
