@@ -2341,6 +2341,47 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 2. Versión activa en vivo: **v2.18.1**.
 > 3. URL de Producción: https://sgh-merida.web.app
 
+---
+
+### Intervención 12
+* **Fecha / Hora:** 2026-10-28 ~12:42 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> ok, algo sucedió al hacer la última actualización de los planes de estudio,  
+> No se está guardando las secciones y matricula  
+> index-lzXzeLrm.js:535 🔥 [onSnapshot] Datos recibidos de Firestore: {}  
+> index-lzXzeLrm.js:557 🏫 [SGH] ¿Plantel posee matrícula/secciones previas?: true  
+> index-lzXzeLrm.js:557 Uncaught (in promise) ReferenceError: tienePlanes is not defined  
+>     at RI (index-lzXzeLrm.js:557:10733)  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Presentación del Informe Diagnóstico y Solución Propuesta:
+> 1. Diagnóstico: Al dinamizar los planes de estudio en `mostrarCandado()`, la variable de ámbito local `tienePlanes` dejó de existir, lo que causó una excepción `ReferenceError` no capturada al evaluar la visibilidad del personal (línea 1795). Como consecuencia, la ejecución se interrumpió antes de enlazar el disparador de guardado `form.onsubmit`, impidiendo que el botón guardara datos en Firestore.
+> 2. Solución propuesta: Reincorporar la definición de `tienePlanes` en el ámbito correspondiente, incorporar la condición estricta para `modoDespliegue === 'SOLO_MATRICULA'`, y asegurar la precarga de planes existentes o por defecto según el nivel educativo del plantel.
+
+---
+
+### Intervención 13
+* **Fecha / Hora:** 2026-10-28 ~12:44 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Sí, estoy de acuerdo
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Ejecución de la corrección y despliegue a producción:
+> 1. Se definió de forma segura `tienePlanes` abarcando Modalidades (Especial / Adulto) y Planes regulares de `window._planesSeleccionadosDirector`.
+> 2. Se inyectó el manejo directo para `modoDespliegue === 'SOLO_MATRICULA'` ocultando la sección de personal sin evaluaciones colaterales.
+> 3. Se garantizó la precarga e inferencia por defecto de planes en `window._planesSeleccionadosDirector` a partir de `dataParcial["planes-estudio"]` o del nivel educativo del plantel.
+> 4. Se restauró el registro incondicional del evento `form.onsubmit = async (e) => { ... }`.
+> 5. Compilación y despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`).
+
+
 
 
 

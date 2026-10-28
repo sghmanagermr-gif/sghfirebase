@@ -1565,11 +1565,20 @@ async function mostrarCandado(codigoDEA, dataParcial) {
 
     // Lógica dinámica de visibilidad basada en planes_estudio y modalidad Especial
     window._dataParcialTemp = dataParcial || dp;
-    window._planesSeleccionadosDirector = { ...(dp ? (dp["planes-estudio"] || dp.planes_estudio || {}) : {}) };
+    const planesEstudioPrevios = dataParcial?.["planes-estudio"] || dataParcial?.planes_estudio || dp?.["planes-estudio"] || dp?.planes_estudio || {};
+    window._planesSeleccionadosDirector = { ...planesEstudioPrevios };
 
-    const modPlantel = (dp ? (dp.modalidad || '') : '').toUpperCase();
+    const modPlantel = (dataParcial?.modalidad || dp?.modalidad || dataParcial?.nivel || dp?.nivel || '').toUpperCase();
     const esEspecial = modPlantel.includes('ESPECIAL');
     const esAdulto = modPlantel.includes('ADULTO');
+
+    if (!esEspecial && !esAdulto && Object.keys(window._planesSeleccionadosDirector).length === 0) {
+        const allPlanes = obtenerCatalogoPlanesCompleto();
+        const niv = (dataParcial?.nivel || dp?.nivel || '').toUpperCase();
+        if (niv.includes('INICIAL') && allPlanes['20000']) window._planesSeleccionadosDirector['20000'] = allPlanes['20000'];
+        if (niv.includes('PRIMARIA') && allPlanes['21000']) window._planesSeleccionadosDirector['21000'] = allPlanes['21000'];
+        if (niv.includes('MEDIA GENERAL') && allPlanes['31059']) window._planesSeleccionadosDirector['31059'] = allPlanes['31059'];
+    }
     
     const contMatricula = document.getElementById('contenedor-matricula');
     const msgSinPlanes = document.getElementById('mensaje-sin-planes');
@@ -1768,7 +1777,14 @@ async function mostrarCandado(codigoDEA, dataParcial) {
         } catch(e) {}
     }
 
-    if (window._modoSupervision || modoDespliegue === 'SOLO_EDITAR_PERSONAL') {
+    const tienePlanes = esEspecial || esAdulto || (window._planesSeleccionadosDirector && Object.keys(window._planesSeleccionadosDirector).length > 0);
+
+    if (modoDespliegue === 'SOLO_MATRICULA') {
+        const secPersonal = document.getElementById('seccion-personal-existente');
+        if (secPersonal) secPersonal.style.display = 'none';
+        const secReg = document.getElementById('seccion-registro-personal');
+        if (secReg) secReg.style.display = 'none';
+    } else if (window._modoSupervision || modoDespliegue === 'SOLO_EDITAR_PERSONAL') {
         const secPersonal = document.getElementById('seccion-personal-existente');
         if (secPersonal) secPersonal.style.display = 'block';
         if (typeof window.cargarPersonalExistente === "function") {
@@ -1794,7 +1810,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
         }
     } else if (tienePlanes && hasData && typeof window.mostrarFormularioPersonal === "function") {
         window.mostrarFormularioPersonal(false);
-    } else if (!tienePlanes) {
+    } else {
         const secReg = document.getElementById('seccion-registro-personal');
         if (secReg) secReg.style.display = 'none';
         const secPersonal = document.getElementById('seccion-personal-existente');
