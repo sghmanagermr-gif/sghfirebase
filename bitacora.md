@@ -1809,6 +1809,34 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `bitacora.md`
 - `conversaciones.md`
 
+---
+### Hotfix v2.18.2: Restauración del Enlace de Guardado y Alcance de Planes
+
+**1. Objetivos:**
+- Subsanar la excepción fatal de JavaScript en producción `ReferenceError: tienePlanes is not defined` arrojada al inicializar `mostrarCandado()`.
+- Restaurar la vinculación del evento `form.onsubmit` para que el botón «GUARDAR DATOS Y CONTINUAR» guarde con normalidad secciones y matrícula en Firestore.
+- Asegurar la retrocompatibilidad y precarga inteligente de planes de estudio para planteles históricos.
+
+**2. Solución Técnica y Arquitectura:**
+- **Corrección de Alcance (`webapp/src/main.js`):**
+  - Se redefinió la constante `tienePlanes = esEspecial || esAdulto || (window._planesSeleccionadosDirector && Object.keys(window._planesSeleccionadosDirector).length > 0)`.
+  - Se desacopló el modo `SOLO_MATRICULA`, cerrando directamente la visibilidad de personal sin evaluar condiciones innecesarias.
+- **Precarga Bidireccional de Planes:**
+  - `window._planesSeleccionadosDirector` extrae de `dataParcial["planes-estudio"]` o `dp["planes-estudio"]`. Si el plantel es regular y no poseía el campo registrado, se infieren sus planes base (20000, 21000, 31059) según el nivel educativo institucional.
+- **Control SemVer y Despliegue:**
+  - Incremento de versión Parche a **v2.18.2** en `webapp/package.json` e `webapp/index.html`.
+  - Compilación de producción con Vite (`npm run build`).
+  - Despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+
+**3. Archivos Involucrados:**
+- `webapp/src/main.js`
+- `webapp/index.html`
+- `webapp/package.json`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
+
+
 
 
 

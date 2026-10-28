@@ -4,6 +4,20 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.18.2 (28 de Octubre de 2026)
+- **Hotfix: Restauración del Enlace de Guardado de Matrícula y Corrección de Alcance de Planes:**
+  - **Corrección de Excepción Crítica en Carga (`ReferenceError`):**
+    - Subsanado el fallo fatal en la consola `Uncaught (in promise) ReferenceError: tienePlanes is not defined` que ocurría al inicializar la pantalla del plantel en `mostrarCandado()`.
+    - Dicha interrupción impedía que el navegador alcanzara la instrucción `form.onsubmit = async (...)`, dejando el botón «GUARDAR DATOS Y CONTINUAR» desconectado e inoperativo para secciones y matrícula.
+  - **Definición Segura de Planes y Modalidades:**
+    - Se redefinió `tienePlanes` enlazándolo a las modalidades (Especial / Adulto) y al nuevo gestor interactivo `window._planesSeleccionadosDirector`.
+    - Se incorporó soporte condicional estricto para `modoDespliegue === 'SOLO_MATRICULA'`, ocultando el personal de forma directa sin evaluaciones intermedias.
+  - **Precarga Robusta de Planes Preexistentes:**
+    - Lectura bidireccional desde `dataParcial["planes-estudio"]` o datos maestros `dp`, infiriendo planes base por nivel institucional (20000 Inicial, 21000 Primaria, 31059 Media General) para garantizar compatibilidad total con planteles ya registrados.
+  - **Despliegue Inmediato:** Compilación limpia con Vite y publicación a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.18.1 (28 de Octubre de 2026)
 - **Gestor Dinámico de Planes de Estudio y Blindaje de Matrícula Institucional:**
   - **Corrección de Error Crítico en Guardado de Matrícula (`FieldMask`):**
