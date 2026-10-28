@@ -40,6 +40,7 @@ document.addEventListener('input', (e) => {
 });
 
 import { safeSetDoc, safeUpdateDoc, safeAddDoc } from './dbUtils.js';
+import { obtenerCatalogoPlanesCompleto } from './catalogosPlanes.js';
 import './style.css';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, getDoc, setDoc, deleteField, onSnapshot } from 'firebase/firestore';
@@ -784,8 +785,6 @@ document.getElementById('plantel-form')?.addEventListener('input', (e) => {
             }
         });
         
-        matTotal += sumMg + sumMt;
-        
         if (document.getElementById('lbl-matricula-total')) document.getElementById('lbl-matricula-total').textContent = matTotal;
         if (document.getElementById('inp-matricula-total')) document.getElementById('inp-matricula-total').value = matTotal;
     }
@@ -908,6 +907,218 @@ function _renderizarMatriculaMedia(planes, guardadas = null) {
             contMt.innerHTML += html;
         }
     });
+}
+
+// --- GESTOR DINÁMICO DE PLANES DE ESTUDIO DEL DIRECTOR ---
+window._planesSeleccionadosDirector = {};
+window._dataParcialTemp = null;
+
+function actualizarUIPlanesDirector() {
+    const planes = window._planesSeleccionadosDirector || {};
+    const planesKeys = Object.keys(planes);
+    const count = planesKeys.length;
+
+    const badge = document.getElementById('badge-contador-planes');
+    if (badge) {
+        badge.textContent = `${count} plan${count === 1 ? '' : 'es'} activo${count === 1 ? '' : 's'}`;
+    }
+
+    const tieneInicial = "20000" in planes;
+    const tienePrimaria = "21000" in planes;
+    let tieneMG = false;
+    let tieneMT = false;
+
+    planesKeys.forEach(k => {
+        if (k.startsWith('3')) tieneMG = true;
+        if (k.startsWith('4')) tieneMT = true;
+    });
+
+    const bIni = document.getElementById('bloque-inicial');
+    const bPri = document.getElementById('bloque-primaria');
+    const bMg = document.getElementById('bloque-mediageneral');
+    const bMt = document.getElementById('bloque-mediatecnica');
+    const contMat = document.getElementById('contenedor-matricula');
+    const contAcc = document.getElementById('contenedor-acciones-matricula');
+    const msgSin = document.getElementById('mensaje-sin-planes');
+
+    if (bIni) bIni.style.display = tieneInicial ? 'block' : 'none';
+    if (bPri) bPri.style.display = tienePrimaria ? 'block' : 'none';
+    if (bMg) bMg.style.display = tieneMG ? 'block' : 'none';
+    if (bMt) bMt.style.display = tieneMT ? 'block' : 'none';
+
+    // Re-render Media
+    if (typeof _renderizarMatriculaMedia === 'function') {
+        _renderizarMatriculaMedia(planes, window._dataParcialTemp?.matricula);
+    }
+    if (typeof _renderizarDetalleSecciones === 'function') {
+        _renderizarDetalleSecciones(planes, window._dataParcialTemp?.["secciones-planes"]);
+    }
+
+    const tieneBasica = tieneInicial || tienePrimaria;
+    const contVac = document.getElementById('contenedor-pregunta-vacantes');
+    if (contVac) contVac.style.display = tieneBasica ? 'flex' : 'none';
+
+    const tieneAlgunPlan = count > 0;
+    if (contMat) contMat.style.display = tieneAlgunPlan ? 'block' : 'none';
+    if (contAcc) contAcc.style.display = tieneAlgunPlan ? 'flex' : 'none';
+    if (msgSin) msgSin.style.display = tieneAlgunPlan ? 'none' : 'block';
+
+    // Disparar recálculo de sumatoria en vivo
+    document.getElementById('plantel-form')?.dispatchEvent(new Event('input', { bubbles: true }));
+}
+
+function renderizarSelectorPlanesDirector(planesActivos = {}) {
+    const grid = document.getElementById('plantel-planes-director-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    window._planesSeleccionadosDirector = { ...planesActivos };
+    const allPlanes = obtenerCatalogoPlanesCompleto();
+
+    // 1. Grupo Educación Básica
+    const divBasica = document.createElement('div');
+    divBasica.innerHTML = `
+      <div style="font-size: 0.8rem; font-weight: 700; color: #1e3a8a; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+        <span>🌱</span> Educación Básica (Inicial y Primaria)
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px;">
+        <label class="card-plan-selector" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1.5px solid ${planesActivos['20000'] ? '#2563eb' : '#cbd5e1'}; background: ${planesActivos['20000'] ? '#eff6ff' : '#ffffff'}; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+          <input type="checkbox" class="chk-plan-director" value="20000" ${planesActivos['20000'] ? 'checked' : ''} style="width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer;">
+          <div>
+            <div style="font-weight: 700; font-size: 0.88rem; color: #0f172a;">Plan 20000</div>
+            <div style="font-size: 0.75rem; color: #64748b;">EDUCACIÓN INICIAL (Maternal y Preescolar)</div>
+          </div>
+        </label>
+        <label class="card-plan-selector" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1.5px solid ${planesActivos['21000'] ? '#2563eb' : '#cbd5e1'}; background: ${planesActivos['21000'] ? '#eff6ff' : '#ffffff'}; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+          <input type="checkbox" class="chk-plan-director" value="21000" ${planesActivos['21000'] ? 'checked' : ''} style="width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer;">
+          <div>
+            <div style="font-weight: 700; font-size: 0.88rem; color: #0f172a;">Plan 21000</div>
+            <div style="font-size: 0.75rem; color: #64748b;">EDUCACIÓN PRIMARIA (1ero a 6to Grado)</div>
+          </div>
+        </label>
+      </div>
+    `;
+    grid.appendChild(divBasica);
+
+    // 2. Grupo Media General
+    const divMG = document.createElement('div');
+    divMG.innerHTML = `
+      <div style="font-size: 0.8rem; font-weight: 700; color: #1e3a8a; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+        <span>📚</span> Media General
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px;">
+        <label class="card-plan-selector" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1.5px solid ${planesActivos['31059'] ? '#2563eb' : '#cbd5e1'}; background: ${planesActivos['31059'] ? '#eff6ff' : '#ffffff'}; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+          <input type="checkbox" class="chk-plan-director" value="31059" ${planesActivos['31059'] ? 'checked' : ''} style="width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer;">
+          <div>
+            <div style="font-weight: 700; font-size: 0.88rem; color: #0f172a;">Plan 31059</div>
+            <div style="font-size: 0.75rem; color: #64748b;">CIENCIAS (Media General)</div>
+          </div>
+        </label>
+        <label class="card-plan-selector" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1.5px solid ${planesActivos['31060'] ? '#2563eb' : '#cbd5e1'}; background: ${planesActivos['31060'] ? '#eff6ff' : '#ffffff'}; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+          <input type="checkbox" class="chk-plan-director" value="31060" ${planesActivos['31060'] ? 'checked' : ''} style="width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer;">
+          <div>
+            <div style="font-weight: 700; font-size: 0.88rem; color: #0f172a;">Plan 31060</div>
+            <div style="font-size: 0.75rem; color: #64748b;">CIENCIAS Y TECNOLOGÍA (Media General)</div>
+          </div>
+        </label>
+      </div>
+    `;
+    grid.appendChild(divMG);
+
+    // 3. Grupo Media Técnica
+    const divMT = document.createElement('div');
+    const keysMT = Object.keys(allPlanes).filter(k => k.startsWith('4')).sort();
+    let opcionesSelectMT = '<option value="">-- Seleccionar mención técnica para agregar --</option>';
+    keysMT.forEach(k => {
+      const p = allPlanes[k];
+      const desc = p.mencion ? `${p.especialidad || 'TÉCNICA'} - ${p.mencion}` : (p.nombre || k);
+      opcionesSelectMT += `<option value="${k}">Plan ${k}: ${desc}</option>`;
+    });
+
+    divMT.innerHTML = `
+      <div style="font-size: 0.8rem; font-weight: 700; color: #1e3a8a; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+        <span>⚙️</span> Media Técnica (Especialidades y Menciones)
+      </div>
+      <div id="lista-menciones-tecnicas-activas" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; margin-bottom: 10px;">
+      </div>
+      <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+        <select id="sel-agregar-mencion-tecnica" style="flex: 1; max-width: 500px; height: 40px; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 0 12px; font-size: 0.86rem; background: white; font-weight: 500; color: #1e293b; cursor: pointer;">
+          ${opcionesSelectMT}
+        </select>
+      </div>
+    `;
+    grid.appendChild(divMT);
+
+    const renderMencionesTecnicas = () => {
+      const contMT = document.getElementById('lista-menciones-tecnicas-activas');
+      if (!contMT) return;
+      contMT.innerHTML = '';
+      const act = Object.keys(window._planesSeleccionadosDirector).filter(k => k.startsWith('4')).sort();
+      if (act.length === 0) {
+        contMT.innerHTML = '<p style="color: #64748b; font-size: 0.78rem; font-style: italic; margin: 4px 0 8px;">(Ninguna mención técnica activa. Si su plantel es Escuela Técnica, selecciónela en el menú de abajo)</p>';
+        return;
+      }
+      act.forEach(cod => {
+        const p = allPlanes[cod] || {};
+        const desc = p.mencion ? `${p.especialidad || 'TÉCNICA'} - ${p.mencion}` : (p.nombre || cod);
+        const card = document.createElement('div');
+        card.style.cssText = "display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 12px; border: 1.5px solid #2563eb; background: #eff6ff; border-radius: 8px;";
+        card.innerHTML = `
+          <div>
+            <div style="font-weight: 700; font-size: 0.85rem; color: #0f172a;">Plan ${cod}</div>
+            <div style="font-size: 0.74rem; color: #475569;">${desc}</div>
+          </div>
+          <button type="button" class="btn-quitar-plan-mt" data-plan="${cod}" style="background: #ef4444; color: white; border: none; width: 26px; height: 26px; border-radius: 50%; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center;" title="Quitar mención">✕</button>
+        `;
+        contMT.appendChild(card);
+      });
+
+      contMT.querySelectorAll('.btn-quitar-plan-mt').forEach(btn => {
+        btn.onclick = () => {
+          const cod = btn.dataset.plan;
+          delete window._planesSeleccionadosDirector[cod];
+          renderMencionesTecnicas();
+          actualizarUIPlanesDirector();
+        };
+      });
+    };
+
+    renderMencionesTecnicas();
+
+    const selAddMt = divMT.querySelector('#sel-agregar-mencion-tecnica');
+    if (selAddMt) {
+      selAddMt.onchange = () => {
+        const val = selAddMt.value;
+        if (!val) return;
+        window._planesSeleccionadosDirector[val] = allPlanes[val] || { codigo: val, mencion: val };
+        selAddMt.value = '';
+        renderMencionesTecnicas();
+        actualizarUIPlanesDirector();
+      };
+    }
+
+    grid.querySelectorAll('.chk-plan-director').forEach(chk => {
+      chk.onchange = () => {
+        const cod = chk.value;
+        const parentLabel = chk.closest('.card-plan-selector');
+        if (chk.checked) {
+          window._planesSeleccionadosDirector[cod] = allPlanes[cod] || { codigo: cod };
+          if (parentLabel) {
+            parentLabel.style.borderColor = '#2563eb';
+            parentLabel.style.background = '#eff6ff';
+          }
+        } else {
+          delete window._planesSeleccionadosDirector[cod];
+          if (parentLabel) {
+            parentLabel.style.borderColor = '#cbd5e1';
+            parentLabel.style.background = '#ffffff';
+          }
+        }
+        actualizarUIPlanesDirector();
+      };
+    });
+
+    actualizarUIPlanesDirector();
 }
 
 async function _abrirModalVacantes() {
@@ -1272,6 +1483,47 @@ async function mostrarCandado(codigoDEA, dataParcial) {
             } else {
                 selNivMod.value = '';
             }
+
+            selNivMod.onchange = (e) => {
+                const val = (e.target.value || '').trim().toUpperCase();
+                const esEsp = val.includes('ESPECIAL');
+                const esAdu = val.includes('ADULTO');
+                const contPlanes = document.getElementById('contenedor-seleccion-planes');
+                const bEsp = document.getElementById('bloque-especial');
+                const bAdu = document.getElementById('bloque-adulto');
+                
+                if (esEsp || esAdu) {
+                    if (contPlanes) contPlanes.style.display = 'none';
+                    if (bEsp) bEsp.style.display = esEsp ? 'block' : 'none';
+                    if (bAdu) bAdu.style.display = esAdu ? 'block' : 'none';
+                    ['bloque-inicial', 'bloque-primaria', 'bloque-mediageneral', 'bloque-mediatecnica'].forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.style.display = 'none';
+                    });
+                    const contSec = document.getElementById('cont-secciones-detalle');
+                    if (contSec) contSec.style.display = 'none';
+                    const contVac = document.getElementById('contenedor-pregunta-vacantes');
+                    if (contVac) contVac.style.display = 'none';
+                    const msgSin = document.getElementById('mensaje-sin-planes');
+                    if (msgSin) msgSin.style.display = 'none';
+                    const contMat = document.getElementById('contenedor-matricula');
+                    if (contMat) contMat.style.display = 'block';
+                    const contAcc = document.getElementById('contenedor-acciones-matricula');
+                    if (contAcc) contAcc.style.display = 'flex';
+                } else {
+                    if (bEsp) bEsp.style.display = 'none';
+                    if (bAdu) bAdu.style.display = 'none';
+                    if (contPlanes) contPlanes.style.display = 'block';
+                    if (!window._planesSeleccionadosDirector || Object.keys(window._planesSeleccionadosDirector).length === 0) {
+                        const allPlanes = obtenerCatalogoPlanesCompleto();
+                        if (!window._planesSeleccionadosDirector) window._planesSeleccionadosDirector = {};
+                        if (val.includes('INICIAL') && allPlanes['20000']) window._planesSeleccionadosDirector['20000'] = allPlanes['20000'];
+                        if (val.includes('PRIMARIA') && allPlanes['21000']) window._planesSeleccionadosDirector['21000'] = allPlanes['21000'];
+                        if (val.includes('MEDIA GENERAL') && allPlanes['31059']) window._planesSeleccionadosDirector['31059'] = allPlanes['31059'];
+                    }
+                    renderizarSelectorPlanesDirector(window._planesSeleccionadosDirector);
+                }
+            };
         }
         
         const selUbic = document.getElementById('inp-ubicacion');
@@ -1312,8 +1564,9 @@ async function mostrarCandado(codigoDEA, dataParcial) {
     }
 
     // Lógica dinámica de visibilidad basada en planes_estudio y modalidad Especial
-    const planes = dp ? (dp["planes-estudio"] || {}) : {};
-    const tienePlanes = Object.keys(planes).length > 0;
+    window._dataParcialTemp = dataParcial || dp;
+    window._planesSeleccionadosDirector = { ...(dp ? (dp["planes-estudio"] || dp.planes_estudio || {}) : {}) };
+
     const modPlantel = (dp ? (dp.modalidad || '') : '').toUpperCase();
     const esEspecial = modPlantel.includes('ESPECIAL');
     const esAdulto = modPlantel.includes('ADULTO');
@@ -1322,6 +1575,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
     const msgSinPlanes = document.getElementById('mensaje-sin-planes');
     const contAcciones = document.getElementById('contenedor-acciones-matricula');
     const contSecDetalle = document.getElementById('cont-secciones-detalle');
+    const contPlanesSelector = document.getElementById('contenedor-seleccion-planes');
 
     // Ocultar todos los bloques educativos inicialmente
     ['bloque-inicial', 'bloque-primaria', 'bloque-mediageneral', 'bloque-mediatecnica', 'bloque-especial', 'bloque-adulto'].forEach(id => {
@@ -1331,6 +1585,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
 
     if (esEspecial || esAdulto) {
         // REGLA: Plantel con Modalidad Especial o Adulto (opera por grupos sin plan formal)
+        if (contPlanesSelector) contPlanesSelector.style.display = 'none';
         if (contMatricula) contMatricula.style.display = 'block';
         if (contAcciones) contAcciones.style.display = 'flex';
         if (msgSinPlanes) msgSinPlanes.style.display = 'none';
@@ -1347,46 +1602,10 @@ async function mostrarCandado(codigoDEA, dataParcial) {
 
         const contVacantes = document.getElementById('contenedor-pregunta-vacantes');
         if (contVacantes) contVacantes.style.display = 'none';
-    } else if (!tienePlanes) {
-        // REGLA: Si el plantel NO es Especial/Adulto y NO tiene plan de estudio asociado:
-        if (contMatricula) contMatricula.style.display = 'none';
-        if (contSecDetalle) contSecDetalle.style.display = 'none';
-        if (contAcciones) contAcciones.style.display = 'none';
-        
-        // Mostrar exclusivamente el mensaje de orientación
-        if (msgSinPlanes) msgSinPlanes.style.display = 'block';
     } else {
-        // REGLA: Si el plantel SÍ tiene planes de estudio:
-        if (contMatricula) contMatricula.style.display = 'block';
-        if (contAcciones) contAcciones.style.display = 'flex';
-        if (msgSinPlanes) msgSinPlanes.style.display = 'none';
-
-        let mostrarInicial = "20000" in planes;
-        let mostrarPrimaria = "21000" in planes;
-        let mostrarMediaGen = false;
-        let mostrarMediaTec = false;
-
-        Object.keys(planes).forEach(cod => {
-            if (cod.startsWith("3")) mostrarMediaGen = true;
-            if (cod.startsWith("4")) mostrarMediaTec = true;
-        });
-
-        if (mostrarInicial) document.getElementById('bloque-inicial').style.display = 'block';
-        if (mostrarPrimaria) document.getElementById('bloque-primaria').style.display = 'block';
-        if (mostrarMediaGen) document.getElementById('bloque-mediageneral').style.display = 'block';
-        if (mostrarMediaTec) document.getElementById('bloque-mediatecnica').style.display = 'block';
-
-        // Carga de Secciones Dinámicas para Media (Pasando los guardados)
-        const savedSeccionesPlanes = dataParcial ? (dataParcial["secciones-planes"] || {}) : {};
-        _renderizarDetalleSecciones(planes, savedSeccionesPlanes);
-        const savedMatricula = dataParcial ? dataParcial.matricula : null;
-        _renderizarMatriculaMedia(planes, savedMatricula);
-            
-        const tieneBasica = ("20000" in planes) || ("21000" in planes);
-        const contVacantes = document.getElementById('contenedor-pregunta-vacantes');
-        if (contVacantes) {
-            contVacantes.style.display = tieneBasica ? 'flex' : 'none';
-        }
+        // REGLA: Plantel Regular con selector interactivo de planes de estudio
+        if (contPlanesSelector) contPlanesSelector.style.display = 'block';
+        renderizarSelectorPlanesDirector(window._planesSeleccionadosDirector);
     }
         
         /* button always enabled initially */
@@ -2097,9 +2316,12 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                   payload["codigos"] = codigosActuales;
               }
               if (nivelModVal) {
-                  payload["nivel"] = nivelModVal;
                   if (nivelModVal.includes('ESPECIAL') || nivelModVal.includes('ADULTO')) {
                       payload["modalidad"] = nivelModVal;
+                      payload["nivel"] = deleteField();
+                  } else {
+                      payload["nivel"] = nivelModVal;
+                      payload["modalidad"] = deleteField();
                   }
               }
               if (turnoVal) {
@@ -2117,20 +2339,16 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                   payload["observaciones"] = obsPlantelVal;
               }
 
+              // Incorporar planes de estudio actualizados por el director
+              if (!nivelModVal.includes('ESPECIAL') && !nivelModVal.includes('ADULTO')) {
+                  payload["planes-estudio"] = window._planesSeleccionadosDirector || {};
+              }
+
               // Huella de trazabilidad de modificación institucional
               payload["modificado_por"] = window.sgh_user_data?.email || window.sgh_user_data?.nombre || "DIRECTOR";
               payload["fecha_modificacion_datos"] = new Date().toISOString();
 
-              const mergeFieldsList = [
-                  'secciones', 'secciones-planes', 'matricula', 'matricula-total', 'vacantes', 
-                  'datos_completados', 'ultima_actualizacion', 'denominacion', 'nombre-plantel', 
-                  'codigos', 'nivel', 'modalidad', 'turno-plantel', 'turno', 'ubicacion-geografica', 'ubicacion', 
-                  'metros2', 'observaciones', 'modificado_por', 'fecha_modificacion_datos'
-              ];
-
-              await safeSetDoc(docRef, payload, {
-                  mergeFields: mergeFieldsList
-              });
+              await safeSetDoc(docRef, payload, { merge: true });
 
               // Sincronizar memoria activa
               if (window.currentPlantelInfo) {
@@ -2138,7 +2356,18 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                   if (nominalVal || eponimoVal) {
                       window.currentPlantelInfo['nombre-plantel'] = { nominal: nominalVal, 'nuevo-eponimo': eponimoVal, nuevo_eponimo: eponimoVal };
                   }
-                  if (nivelModVal) window.currentPlantelInfo.nivel = nivelModVal;
+                  if (nivelModVal) {
+                      if (nivelModVal.includes('ESPECIAL') || nivelModVal.includes('ADULTO')) {
+                          window.currentPlantelInfo.modalidad = nivelModVal;
+                          delete window.currentPlantelInfo.nivel;
+                      } else {
+                          window.currentPlantelInfo.nivel = nivelModVal;
+                          delete window.currentPlantelInfo.modalidad;
+                      }
+                  }
+                  if (!nivelModVal.includes('ESPECIAL') && !nivelModVal.includes('ADULTO') && window._planesSeleccionadosDirector) {
+                      window.currentPlantelInfo['planes-estudio'] = window._planesSeleccionadosDirector;
+                  }
                   if (turnoVal) window.currentPlantelInfo['turno-plantel'] = turnoVal;
                   if (ubicacionVal) window.currentPlantelInfo['ubicacion-geografica'] = ubicacionVal;
                   if (metros2Val !== null) window.currentPlantelInfo.metros2 = metros2Val;
@@ -2149,7 +2378,18 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                   if (nominalVal || eponimoVal) {
                       currentPlantel['nombre-plantel'] = { nominal: nominalVal, 'nuevo-eponimo': eponimoVal, nuevo_eponimo: eponimoVal };
                   }
-                  if (nivelModVal) currentPlantel.nivel = nivelModVal;
+                  if (nivelModVal) {
+                      if (nivelModVal.includes('ESPECIAL') || nivelModVal.includes('ADULTO')) {
+                          currentPlantel.modalidad = nivelModVal;
+                          delete currentPlantel.nivel;
+                      } else {
+                          currentPlantel.nivel = nivelModVal;
+                          delete currentPlantel.modalidad;
+                      }
+                  }
+                  if (!nivelModVal.includes('ESPECIAL') && !nivelModVal.includes('ADULTO') && window._planesSeleccionadosDirector) {
+                      currentPlantel['planes-estudio'] = window._planesSeleccionadosDirector;
+                  }
                   if (turnoVal) currentPlantel['turno-plantel'] = turnoVal;
                   if (ubicacionVal) currentPlantel['ubicacion-geografica'] = ubicacionVal;
                   if (metros2Val !== null) currentPlantel.metros2 = metros2Val;
@@ -2159,12 +2399,18 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                   userDisplayName.textContent = `${codigoDEA} - ${nominalVal || eponimoVal}`;
               }
 
-
-
               showToast("¡Datos del plantel actualizados con éxito!", "success");
 
-              // Desplegar Formulario de Personal y Tabla de Personal automáticamente al guardar
-              if (typeof window.mostrarFormularioPersonal === "function") {
+              // Desplegar Formulario de Personal y Tabla de Personal automáticamente al guardar (si el modo lo permite)
+              let sessionConfigActual = sessionStorage.getItem('sgh_despliegue_config');
+              let modoDespliegue = 'TOTAL';
+              if (sessionConfigActual) {
+                  try {
+                      modoDespliegue = JSON.parse(sessionConfigActual).modo_operacion || 'TOTAL';
+                  } catch(e) {}
+              }
+
+              if (modoDespliegue !== 'SOLO_MATRICULA' && typeof window.mostrarFormularioPersonal === "function") {
                    window.mostrarFormularioPersonal(true);
               }
 

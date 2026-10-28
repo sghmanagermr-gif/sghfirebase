@@ -1770,6 +1770,46 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `bitacora.md`
 - `conversaciones.md`
 
+---
+### Ciclo v2.18.1: Gestor Dinámico de Planes de Estudio y Blindaje de Matrícula Institucional
+
+**1. Objetivos:**
+- Corregir el error crítico de persistencia reportado por directores al guardar datos y matrícula bajo el modo «Solo Modificar Matrícula»: `FirebaseError: Field 'modalidad' is specified in your field mask but missing from your input data.`
+- Aplicar la regla de dominio institucional de exclusión mutua entre Nivel y Modalidad.
+- Subsanar la duplicación visual de la matrícula en tiempo real en planteles de Media General y Técnica.
+- Mejorar la estética y orientación visual de las tarjetas de matrícula por nivel educativo.
+- Permitir que el director configure libremente los planes de estudio correspondientes a su institución (Inicial 20000, Primaria 21000, Media General 31059/31060 y Menciones de Media Técnica 4xxxx), actualizando dinámicamente las planillas de secciones y matrícula.
+- Optimizar el flujo de selección de Media Técnica eliminando clics redundantes mediante adición instantánea al seleccionar en el menú desplegable.
+
+**2. Solución Técnica y Arquitectura:**
+- **Corrección de FieldMask y Mutua Exclusión (`webapp/src/main.js`):**
+  - Se sustituyó la lista estática `mergeFieldsList` en `safeSetDoc(docRef, payload, ...)` por `{ merge: true }`.
+  - Se implementó discriminación condicional: si el plantel pertenece a un Nivel regular, se aplica `payload["nivel"] = nivelModVal` y `payload["modalidad"] = deleteField()`; si es Especial o Adulto, se aplica `payload["modalidad"] = nivelModVal` y `payload["nivel"] = deleteField()`.
+  - Se condicionó `mostrarFormularioPersonal(true)` para no ejecutarse cuando el modo de despliegue configurado es `SOLO_MATRICULA`.
+- **Cómputo en Vivo de Matrícula:**
+  - Se suprimió la suma redundante `matTotal += sumMg + sumMt` del listener `plantel-form.oninput`, ya que los inputs de Media ya poseen la clase `.mat-input` y formaban parte de la sumatoria base.
+- **Catálogo y Selector Dinámico de Planes (`webapp/src/catalogosPlanes.js` y `webapp/src/main.js`):**
+  - Módulo exportando `CATALOGO_PLANES_ESTUDIO` y `obtenerCatalogoPlanesCompleto()`.
+  - Inyección de `#contenedor-seleccion-planes` en `webapp/index.html`.
+  - Función reactiva `actualizarUIPlanesDirector()` que conmuta visibilidad de bloques (`bloque-inicial`, `bloque-primaria`, `bloque-mediageneral`, `bloque-mediatecnica`, vacantes y sumatorias) y re-renderiza tarjetas de Media.
+  - Interfaz de Media Técnica con adición automática mediante `selAddMt.onchange`, tarjetas activas con botón de desvinculación `✕` y recálculo automático.
+  - Persistencia de `payload["planes-estudio"] = window._planesSeleccionadosDirector` al guardar en Firestore.
+- **Estandarización Estética (`webapp/index.html`):**
+  - Títulos descriptivos `Matrícula Estudiantil - [Nivel]`, ícono `📚` en Media General y textos de guía pedagógica adaptados a cada nivel.
+- **Control SemVer y Despliegue:**
+  - Incremento de versión a **v2.18.1** en `webapp/package.json` e `webapp/index.html`.
+  - Compilación limpia con Vite (`npm run build`).
+
+**3. Archivos Involucrados:**
+- `webapp/src/main.js`
+- `webapp/src/catalogosPlanes.js`
+- `webapp/index.html`
+- `webapp/package.json`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
+
+
 
 
 

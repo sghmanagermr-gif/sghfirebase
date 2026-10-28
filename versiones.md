@@ -4,6 +4,29 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.18.1 (28 de Octubre de 2026)
+- **Gestor Dinámico de Planes de Estudio y Blindaje de Matrícula Institucional:**
+  - **Corrección de Error Crítico en Guardado de Matrícula (`FieldMask`):**
+    - Subsanado el fallo en tiempo de ejecución de Firestore: `FirebaseError: Field 'modalidad' is specified in your field mask but missing from your input data.` reportado por directores bajo el modo de despliegue «Solo Modificar Matrícula».
+    - Sustitución de listas fijas `mergeFields` por `{ merge: true }` y aplicación de `deleteField()` dinámico en `webapp/src/main.js`.
+  - **Exclusión Mutua Institucional (Nivel vs. Modalidad):**
+    - Aplicación estricta de regla de dominio educativo: si un plantel es de Nivel regular (Inicial, Primaria, Media General, Media Técnica), se elimina de raíz el campo `modalidad`. Si el plantel es de Modalidad (Especial o Adulto), se elimina de raíz el campo `nivel`.
+  - **Corrección de Duplicación en Vivo en Matrícula de Media:**
+    - Se eliminó la doble sumatoria de campos de Media (`sumMg + sumMt`) en el detector de eventos en vivo `plantel-form.oninput`, resolviendo la discrepancia visual donde la matrícula total se duplicaba al escribir y solo corregía al guardar.
+  - **Estandarización y Guía Visual por Nivel Educativo:**
+    - Homogeneización de encabezados en tarjetas de matrícula a `Matrícula Estudiantil - [Nivel/Modalidad]`.
+    - Sustitución del símbolo `#` por el ícono representativo `📚` en Media General.
+    - Textos de orientación pedagógica diferenciados: para Inicial y Primaria se indica declarar primero secciones y luego estudiantes; para Media se orienta registrar primero matrícula por plan y luego distribuir secciones por año.
+  - **Gestor Interactivo de Planes de Estudio (`#contenedor-seleccion-planes`):**
+    - Creación del catálogo maestro unificado `webapp/src/catalogosPlanes.js` (Planes 20000, 21000, 31059, 31060 y oferta completa de menciones técnicas 4xxxx).
+    - Selector interactivo en la vista del director para habilitar o deshabilitar planes según la realidad de la institución, reconfigurando en tiempo real las planillas de matrícula y secciones.
+    - Flujo ágil en Media Técnica: selección directa desde el menú desplegable con incorporación instantánea (`onchange`) y botón de desvinculación (✕), sin botones redundantes.
+    - Persistencia garantizada de la estructura `planes-estudio` en el documento del plantel en Firestore.
+  - **Respeto a Candado en Modo «Solo Modificar Matrícula»:**
+    - Se restringió la llamada a `mostrarFormularioPersonal(true)` tras el guardado exitoso de la matrícula cuando la sesión se encuentra en modo restrictivo `SOLO_MATRICULA`.
+
+---
+
 ### v2.18.0 (27 de Octubre de 2026)
 - **Escudo de Carga Horaria Acumulada Docente por Nivel (Anti-Sobrecarga en Doble Cédula):**
   - **Topes Normativos por Nivel:** Detección dinámica y aplicación estricta de límites legales según normativa MPPE:
