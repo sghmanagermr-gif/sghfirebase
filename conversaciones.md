@@ -2324,6 +2324,24 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 5. Compilación de producción generada con Vite en `webapp`.
 > 6. Sincronización y respaldo en el repositorio remoto GitHub (`git commit` y `git push origin main`).
 
+---
+
+### Intervención 11
+* **Fecha / Hora:** 2026-10-28 ~12:07 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> por favor montalo en firebase
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Despliegue a Firebase Hosting ejecutado con éxito total:
+> 1. Paquete de producción desplegado a `sgh-merida` (10 archivos optimizados en `dist`).
+> 2. Versión activa en vivo: **v2.18.1**.
+> 3. URL de Producción: https://sgh-merida.web.app
+
+
 
 
 
