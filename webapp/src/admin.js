@@ -505,7 +505,7 @@ export function initAdminDashboard(dbInstance, user) {
   }
 
   // Cargar Estadísticas (Tab por Defecto - Arquitectura Zero-Cost con Ficha Resumen)
-  async function loadEstadisticas() {
+  async function loadEstadisticas(forzarSync = false) {
     try {
       const isMunAdmin = (userData?.rol === 'munadmin');
       const mun = isMunAdmin ? (userData.jerarquia?.municipio || userData.municipio || '').trim().toUpperCase() : '';
@@ -657,14 +657,19 @@ export function initAdminDashboard(dbInstance, user) {
             btnSyncMat.addEventListener('click', async (e) => {
               e.preventDefault();
               e.stopPropagation();
-              if (isMunAdmin && mun) {
-                limpiarPlantelesMunCache(mun);
-              } else {
-                limpiarMatriculaEstadalCache();
-              }
               btnSyncMat.disabled = true;
               btnSyncMat.innerHTML = '⏳ Sincronizando...';
-              await loadEstadisticas();
+
+              if (isMunAdmin && mun) {
+                limpiarPlantelesMunCache(mun);
+                currentPlanteles = [];
+              } else {
+                limpiarMatriculaEstadalCache();
+                currentPlanteles = [];
+              }
+
+              await loadEstadisticas(true);
+
               btnSyncMat.innerHTML = '🔄 Sincronizar';
               btnSyncMat.disabled = false;
               showToast('Estatus de matrícula sincronizado con éxito.', 'success');
@@ -673,8 +678,8 @@ export function initAdminDashboard(dbInstance, user) {
         }
 
         if (isMunAdmin && mun) {
-          let plantelesMun = obtenerPlantelesMunCache(mun);
-          if (!plantelesMun && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
+          let plantelesMun = forzarSync ? null : obtenerPlantelesMunCache(mun);
+          if (!forzarSync && !plantelesMun && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
             const filt = currentPlanteles.filter(p => (p.municipio || '').trim().toUpperCase() === mun);
             if (filt.length > 0) {
               plantelesMun = filt;
@@ -690,9 +695,7 @@ export function initAdminDashboard(dbInstance, user) {
                 plantelesMun.push({ id: docSnap.id, ...docSnap.data() });
               });
               guardarPlantelesMunCache(mun, plantelesMun);
-              if (!currentPlanteles || currentPlanteles.length === 0) {
-                currentPlanteles = plantelesMun;
-              }
+              currentPlanteles = plantelesMun;
             } catch (errP) {
               console.warn("[Zero-Cost Shield] Error al consultar planteles municipales:", errP);
             }
@@ -729,10 +732,10 @@ export function initAdminDashboard(dbInstance, user) {
           }
         } else if (isEstadal) {
           // --- NIVEL ESTADAL: SUPERADMIN Y ZONADMIN (Zero-Cost Shield) ---
-          let estCache = obtenerMatriculaEstadalCache();
+          let estCache = forzarSync ? null : obtenerMatriculaEstadalCache();
 
           // Intento 1: Si ya están cargados los planteles en memoria (0 lecturas)
-          if (!estCache && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
+          if (!forzarSync && !estCache && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
             const arrCargados = [];
             let totalMatriculaEst = 0;
             const porMun = JSON.parse(JSON.stringify(datosActivos.matricula?.porMunicipio || {}));

@@ -2402,6 +2402,62 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 6. Despliegue formalizado a Firebase Hosting (`https://sgh-merida.web.app`).
 > 7. Sincronización y respaldo en el repositorio remoto GitHub (`git commit` y `git push origin main`).
 
+---
+
+### Intervención 15
+* **Fecha / Hora:** 2026-10-28 ~15:05 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+> Fíjate en la imagen es el mismo panel del mismo usuario, el panel derecho es: https://sgh-merida.web.app/ el panel izquierdo es http://192.168.110.41:5173/ Pero hay una diferencia. en los planteles pendientes, cada pagina refleja unplantel distinto. cabe destacar que ambas paginas están recargadas (F5) y a ambas se les dio en el boton Sincronizar id="btn-sync-matricula-mun"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Lectura confirmada de `SKILL_sgh_firebase.md` y presentación del Informe Diagnóstico:
+> 1. Verificación de Firestore: La pantalla de producción (derecha) reflejaba la realidad de la base de datos (Tabay cargado con 111 estudiantes, Ana Romelia Vela pendiente con 0, total 2,008).
+> 2. Causa de la persistencia de datos obsoletos en la pantalla izquierda (1,898):
+>    - Al recargar con F5, la memoria temporal `sessionStorage` retiene los datos previos para ahorrar lecturas.
+>    - Al pulsar el botón «Sincronizar», este limpiaba `sessionStorage` pero no vaciaba la variable de memoria viva `currentPlanteles`. La función `loadEstadisticas()` detectaba que `currentPlanteles` no estaba vacía y reutilizaba los datos viejos en lugar de consultar a Firestore, volviéndolos a guardar en caché.
+> 3. Solución propuesta: Vaciado total de `sessionStorage` y `currentPlanteles = []` al pulsar Sincronizar, pasando bandera `forzarSync = true` para garantizar la descarga fresca de Firestore bajo demanda.
+
+---
+
+### Intervención 16
+* **Fecha / Hora:** 2026-10-28 ~15:25 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Y esa propuesta no consume mucha cuota?
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Análisis financiero/técnico de cuotas del Plan Spark:
+> - En Santos Marquina hay exactamente 18 planteles.
+> - Al pulsar «Sincronizar» se consumen exactamente 18 lecturas.
+> - Frente al límite gratuito diario de 50.000 lecturas, sincronizar 5 veces representa solo 90 lecturas (0,18% del límite diario).
+> - El resto del tiempo el escudo Zero-Cost permanece 100% activo consumiendo 0 lecturas.
+
+---
+
+### Intervención 17
+* **Fecha / Hora:** 2026-10-28 ~15:29 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> ok procede entonces
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Implementación del forzado de sincronización en `webapp/src/admin.js`:
+> 1. Se modificó `loadEstadisticas(forzarSync = false)` para ignorar cachés y memoria viva cuando `forzarSync === true`.
+> 2. Se actualizó el botón `#btn-sync-matricula-mun` para vaciar `currentPlanteles = []`, limpiar cachés de sesión y ejecutar `loadEstadisticas(true)`.
+> 3. Compilación limpia ejecutada con Vite en `webapp` (751ms).
+
+
 
 
 
