@@ -709,7 +709,9 @@
             </select>
           </div>
           <div><label class="form-label">Cédula</label><input type="number" id="wp-cedula" class="form-input"
-              placeholder="Ej: 10012819" required oninput="if(window.validarCedulaUI) window.validarCedulaUI()"></div>
+              placeholder="Ej: 10012819" required oninput="if(window.validarCedulaUI) window.validarCedulaUI()"
+              onblur="if(window.validarHorasDocenteUI) window.validarHorasDocenteUI(true)"
+              onchange="if(window.validarHorasDocenteUI) window.validarHorasDocenteUI(true)"></div>
           <div style="grid-column: span 2;"><label class="form-label">Nombres y Apellidos</label><input type="text"
               id="wp-nombres" class="form-input" required></div>
           <div style="grid-column: span 2;"><label class="form-label">Lugar de Nacimiento</label><input type="text"
@@ -833,10 +835,15 @@
               <option value="Interino">Interino</option>
             </select>
           </div>
-          <div><label class="form-label">Horas Académicas</label><input type="number" id="wp-horas-academicas"
-              class="form-input" min="0"></div>
+          <div>
+            <label class="form-label">Horas Académicas</label>
+            <input type="number" id="wp-horas-academicas" class="form-input" min="0" step="any"
+              oninput="if(window.validarHorasDocenteUI) window.validarHorasDocenteUI()"
+              onchange="if(window.validarHorasDocenteUI) window.validarHorasDocenteUI()">
+            <div id="wp-horas-academicas-help" style="font-size: 0.78rem; margin-top: 5px; display: none; line-height: 1.35; padding: 4px 8px; border-radius: 6px; background: #f8fafc; border: 1px solid #e2e8f0;"></div>
+          </div>
           <div><label class="form-label">Horas Administrativas</label><input type="number" id="wp-horas-administrativas"
-              class="form-input" min="0"></div>
+              class="form-input" min="0" step="any"></div>
           <div><label class="form-label">Fecha de Ingreso</label><input type="date" id="wp-fecha-ingreso"
               class="form-input" onchange="if(window.calcularAntiguedadUI) window.calcularAntiguedadUI()"></div>
           <div><label class="form-label">Antigüedad (Años)</label><input type="text" id="wp-antiguedad"
@@ -855,7 +862,8 @@
           </div>
           <div id="container-nivel-modalidad" style="display: none;">
             <label class="form-label">Nivel / Modalidad</label>
-            <select id="wp-nivel-modalidad" class="form-input">
+            <select id="wp-nivel-modalidad" class="form-input"
+              onchange="if(window.validarHorasDocenteUI) window.validarHorasDocenteUI()">
               <option value="">Seleccione Nivel / Modalidad...</option>
             </select>
           </div>

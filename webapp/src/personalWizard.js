@@ -422,7 +422,10 @@ export async function initCascadaPersonal() {
         }
     }
 
-    selTipo.onchange = () => actualizarCascada();
+    selTipo.onchange = () => {
+        actualizarCascada();
+        if (window.validarHorasDocenteUI) window.validarHorasDocenteUI();
+    };
     selDep.onchange = () => actualizarCascada();
     actualizarCascada();
 }
@@ -510,6 +513,7 @@ export function limpiarFormularioPersonal() {
         'wp-cedula', 'wp-nombres', 'wp-nacimiento', 'wp-edad', 'wp-genero', 'wp-nacionalidad',
         'wp-ubicacion-administrativa', 'wp-tipo-personal', 'wp-dependencia', 'wp-subcategoria',
         'wp-cargo', 'wp-codigo-rac', 'wp-situacion-laboral', 'wp-descripcion-situacion', 'wp-especialidad-imparte',
+        'wp-horas-academicas', 'wp-horas-administrativas',
         'wp-fecha-ingreso', 'wp-antiguedad', 'wp-instruccion', 'wp-titulo', 'wp-turnos-atiende',
         'wp-talla-camisa', 'wp-talla-pantalon', 'wp-talla-zapato', 'wp-atiende-matricula',
         'wp-nivel-modalidad', 'wp-tipo-vivienda', 'wp-condicion-vivienda', 'wp-tipo-material',
@@ -524,6 +528,15 @@ export function limpiarFormularioPersonal() {
             else el.value = '';
         }
     });
+
+    const helpHoras = document.getElementById('wp-horas-academicas-help');
+    if (helpHoras) {
+        helpHoras.style.display = 'none';
+        helpHoras.innerHTML = '';
+    }
+    const inpHoras = document.getElementById('wp-horas-academicas');
+    if (inpHoras) inpHoras.style.borderColor = '';
+    window._cacheCargosPorCedula = {};
 
     const containerRango = document.getElementById('container-rango-obrero');
     if (containerRango) containerRango.style.display = 'none';
@@ -811,6 +824,9 @@ export function cargarEmpleadoEnFormulario(data, docId) {
     }
 
     showToast(`Datos de ${nom} cargados para edición.`, "info");
+    if (window.validarHorasDocenteUI) {
+        setTimeout(() => window.validarHorasDocenteUI(true), 120);
+    }
 }
 
 /**
@@ -1137,6 +1153,55 @@ export async function guardarPersonalInline() {
 
     const cedula = document.getElementById('wp-cedula')?.value || '';
     const nombres = document.getElementById('wp-nombres')?.value || '';
+    const tipoPersonal = (document.getElementById('wp-tipo-personal')?.value || '').toUpperCase();
+
+    // --- Candado de Carga Horaria Acumulada por Nivel (Media: 56 hrs / Inicial-Primaria: 53.33 hrs) ---
+    if (tipoPersonal === 'DOCENTE') {
+        const resHoras = await verificarTopeHorasDocente(true);
+        if (resHoras && resHoras.excede) {
+            const exceso = (resHoras.total - resHoras.tope).toFixed(2);
+            const desgloseHtml = resHoras.desglose.length > 0 
+                ? `<div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px; margin: 12px 0;">
+                    <strong style="color: #334155; display: block; margin-bottom: 6px; font-size: 0.88rem;">Horas comprometidas en otros planteles:</strong>
+                    <ul style="margin: 0; padding-left: 18px; color: #475569; font-size: 0.85rem; line-height: 1.5;">
+                        ${resHoras.desglose.map(d => `<li><strong>${d.plantel}</strong>: ${d.horas} hrs (${d.cargo})</li>`).join('')}
+                    </ul>
+                    <div style="margin-top: 8px; font-weight: 700; color: #1e293b; font-size: 0.85rem;">Total en otros planteles: ${resHoras.horasOtros} hrs</div>
+                   </div>`
+                : '';
+
+            await showAlert(
+                "⛔ Tope de Carga Horaria Excedido",
+                `<div style="text-align: left; font-size: 0.9rem; line-height: 1.5;">
+                    <p style="margin: 0 0 10px; color: #1e293b;">
+                        El funcionario docente <strong>${nombres || 'DOCENTE'}</strong> (C.I. ${cedula}) supera el límite máximo legal de dedicación permitido para <strong>${resHoras.etiqueta}</strong>.
+                    </p>
+                    ${desgloseHtml}
+                    <div style="margin: 8px 0; font-size: 0.88rem; background: #fff7ed; border: 1px solid #ffedd5; padding: 10px; border-radius: 6px;">
+                        <div>• <strong>Horas a asignar en este plantel:</strong> ${resHoras.horasInp} hrs</div>
+                        <div style="color: #c2410c; font-weight: 700; margin-top: 3px;">• <strong>Total resultante acumulado:</strong> ${resHoras.total} hrs (Exceso: ${exceso} hrs)</div>
+                    </div>
+                    <div style="margin-top: 12px; padding: 10px 12px; background: #fef2f2; border-left: 4px solid #ef4444; color: #991b1b; font-size: 0.84rem; border-radius: 4px;">
+                        📌 <strong>Instrucción:</strong> Ajuste las horas académicas en este plantel a un máximo de <strong>${resHoras.disp > 0 ? resHoras.disp.toFixed(2) : '0'} horas</strong> para cumplir con la normativa y permitir el guardado.
+                    </div>
+                </div>`,
+                "danger"
+            );
+
+            const btn = document.getElementById('btn-guardar-empleado-inline');
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = window._esTraslado ? "INCORPORAR AL PLANTEL" : (window._docIdEnEdicion ? "Actualizar Empleado" : "Guardar Empleado");
+            }
+            const inpHoras = document.getElementById('wp-horas-academicas');
+            if (inpHoras) {
+                inpHoras.focus();
+                inpHoras.style.borderColor = '#dc2626';
+                inpHoras.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            return;
+        }
+    }
 
     const telHabNum = document.getElementById('wp-tel-habitacion')?.value || '';
     const telHabPref = document.getElementById('wp-prefijo-hab')?.value || '';
@@ -1181,8 +1246,8 @@ export async function guardarPersonalInline() {
         'codigo-cargo': document.getElementById('wp-codigo-rac')?.value || '',
         'codigo-rac': document.getElementById('wp-codigo-rac')?.value || '',
         titular: document.getElementById('wp-titular')?.value || '',
-        'horas-academicas': parseInt(document.getElementById('wp-horas-academicas')?.value) || 0,
-        'horas-administrativas': parseInt(document.getElementById('wp-horas-administrativas')?.value) || 0,
+        'horas-academicas': parseFloat(document.getElementById('wp-horas-academicas')?.value) || 0,
+        'horas-administrativas': parseFloat(document.getElementById('wp-horas-administrativas')?.value) || 0,
         'fecha-ingreso': document.getElementById('wp-fecha-ingreso')?.value || '',
         antiguedad: parseInt(document.getElementById('wp-antiguedad')?.value) || 0,
         'turnos-atiende': document.getElementById('wp-turnos-atiende')?.value || '',
@@ -1502,6 +1567,135 @@ document.addEventListener('DOMContentLoaded', () => {
     poblarCatalogosGenerales();
     initCascadaPersonal();
 });
+
+// --- Escudo de Carga Horaria Acumulada Docente (Media: 56 hrs / Inicial-Primaria: 53.33 hrs) ---
+export async function verificarTopeHorasDocente(forzarConsulta = false) {
+    const tipo = (document.getElementById('wp-tipo-personal')?.value || '').toUpperCase();
+    const helpEl = document.getElementById('wp-horas-academicas-help');
+    const inpHoras = document.getElementById('wp-horas-academicas');
+
+    if (tipo !== 'DOCENTE') {
+        if (helpEl) {
+            helpEl.style.display = 'none';
+            helpEl.innerHTML = '';
+        }
+        if (inpHoras) inpHoras.style.borderColor = '';
+        return null;
+    }
+
+    const cedulaRaw = document.getElementById('wp-cedula')?.value || '';
+    const cleanCed = String(cedulaRaw).trim().replace(/^[VEve]-?/, '');
+    const horasInp = parseFloat(inpHoras?.value) || 0;
+
+    // Obtener nivel del docente o del plantel
+    const nivelDoc = (document.getElementById('wp-nivel-modalidad')?.value || '').toUpperCase();
+    let infoPlantel = window.currentPlantelInfo || {};
+    const nivelPlantel = (document.getElementById('inp-niveles-modalidades')?.value || infoPlantel.nivel || '').toUpperCase();
+    let esMedia = nivelDoc.includes('MEDIA') || (!nivelDoc && nivelPlantel.includes('MEDIA'));
+
+    // Dea del plantel activo actual
+    let deaActual = window.currentPlantelDEA || '';
+    if (!deaActual && window.sgh_user_data?.jerarquia?.plantel_codigo) {
+        deaActual = window.sgh_user_data.jerarquia.plantel_codigo;
+    }
+    if (!deaActual) {
+        const stPlantel = localStorage.getItem('plantelSeleccionado');
+        if (stPlantel) {
+            try { deaActual = JSON.parse(stPlantel).codigoDEA; } catch(e) {}
+        }
+    }
+
+    window._cacheCargosPorCedula = window._cacheCargosPorCedula || {};
+
+    // Si tiene cédula válida, consultar o leer de caché (Zero-Cost Shield)
+    if (cleanCed && cleanCed.length >= 5) {
+        if (forzarConsulta || !window._cacheCargosPorCedula[cleanCed]) {
+            const posibles = [cleanCed, `V-${cleanCed}`, `E-${cleanCed}`, `V${cleanCed}`, `E${cleanCed}`];
+            try {
+                const snap = await getDocs(query(collection(db, "cargos_personal"), where("cedula", "in", posibles)));
+                window._cacheCargosPorCedula[cleanCed] = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            } catch (err) {
+                console.warn("[SGH-Horas] Error al consultar cargos cruzados de cédula:", err);
+            }
+        }
+    }
+
+    let horasOtros = 0;
+    const desglose = [];
+    const cargosList = (cleanCed && window._cacheCargosPorCedula[cleanCed]) ? window._cacheCargosPorCedula[cleanCed] : [];
+
+    cargosList.forEach(c => {
+        // Ignorar si es el mismo documento que se está editando
+        if (window._docIdEnEdicion && c.id === window._docIdEnEdicion) return;
+
+        const cDea = c['codigo-plantel'] || c.codigoDEA || '';
+        // Si es una creación sin _docIdEnEdicion y ya existe un registro con el ID proyectado en este mismo plantel
+        if (!window._docIdEnEdicion && cDea === deaActual && c.id === `${deaActual}_${cleanCed}`) return;
+
+        const h = parseFloat(c['horas-academicas'] || c['HORAS ACADEMICAS']) || 0;
+        if (h > 0) {
+            const nMod = (c['nivel-modalidad'] || '').toUpperCase();
+            if (nMod.includes('MEDIA')) {
+                esMedia = true; // Si imparte Media en cualquier plantel, se acoge al tope superior de Media
+            }
+            horasOtros += h;
+            desglose.push({
+                plantel: cDea || 'OTRO PLANTEL',
+                horas: h,
+                cargo: c.cargo || c['codigo-cargo'] || 'DOCENTE'
+            });
+        }
+    });
+
+    const tope = esMedia ? 56 : 53.33;
+    const etiqueta = esMedia ? 'Nivel Media (Tope: 56 Horas)' : 'Nivel Inicial / Primaria (Tope: 53.33 Horas)';
+    const total = horasOtros + horasInp;
+    const disp = Math.max(0, tope - horasOtros);
+    const excede = total > (tope + 0.01);
+
+    if (helpEl) {
+        helpEl.style.display = 'block';
+        if (horasOtros > 0) {
+            if (excede) {
+                const exceso = (total - tope).toFixed(2);
+                helpEl.style.color = '#dc2626';
+                helpEl.innerHTML = `⚠️ <strong>Exceso detectado:</strong> ${total} hrs en total (${horasOtros} hrs en otro plantel + ${horasInp} hrs aquí). Excede el tope de ${tope} hrs por ${exceso} hrs.`;
+                if (inpHoras) inpHoras.style.borderColor = '#dc2626';
+            } else {
+                helpEl.style.color = '#0284c7';
+                helpEl.innerHTML = `ℹ️ <strong>Carga compartida:</strong> ${horasOtros} hrs activas en otro(s) plantel(es). Disponibles para este plantel: <strong>${disp.toFixed(2)} hrs</strong> (Tope: ${tope} hrs en ${etiqueta}).`;
+                if (inpHoras) inpHoras.style.borderColor = '';
+            }
+        } else {
+            if (excede) {
+                const exceso = (horasInp - tope).toFixed(2);
+                helpEl.style.color = '#dc2626';
+                helpEl.innerHTML = `⚠️ <strong>Exceso detectado:</strong> ${horasInp} hrs excede el tope legal de ${tope} hrs (${etiqueta}) por ${exceso} hrs.`;
+                if (inpHoras) inpHoras.style.borderColor = '#dc2626';
+            } else {
+                helpEl.style.color = '#64748b';
+                helpEl.innerHTML = `ℹ️ Tope legal de carga horaria: <strong>${tope} hrs</strong> (${etiqueta}).`;
+                if (inpHoras) inpHoras.style.borderColor = '';
+            }
+        }
+    }
+
+    return {
+        tope,
+        esMedia,
+        etiqueta,
+        horasOtros,
+        horasInp,
+        total,
+        disp,
+        desglose,
+        excede
+    };
+}
+
+window.validarHorasDocenteUI = function(forzar = false) {
+    verificarTopeHorasDocente(forzar);
+};
 
 // Helpers de validación y cálculo en UI
 window.validarCedulaUI = function() {

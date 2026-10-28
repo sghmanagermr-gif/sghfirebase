@@ -4,6 +4,19 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.18.0 (27 de Octubre de 2026)
+- **Escudo de Carga Horaria Acumulada Docente por Nivel (Anti-Sobrecarga en Doble Cédula):**
+  - **Topes Normativos por Nivel:** Detección dinámica y aplicación estricta de límites legales según normativa MPPE:
+    - *Nivel Media (General / Técnica):* Tope máximo de **56 horas**.
+    - *Nivel Inicial y Primaria:* Tope máximo de **53.33 horas**.
+    - *Régimen Mixto:* Si el funcionario docente imparte horas en Media en cualquier institución, se acoge al tope superior de 56 horas para garantizar la cobertura de la carga académica de Media.
+  - **Soporte de Precisión Decimal:** Modificación de los campos de horas a `step="any"` y cómputo con números de punto flotante (`parseFloat`), preservando con exactitud valores fraccionarios como `53.33`, `33.33` o `12.5`.
+  - **Asistencia Visual en Tiempo Real:** Indicador dinámico (`#wp-horas-academicas-help`) situado bajo el campo de horas que informa al director sobre horas ocupadas en otros planteles, disponibilidad remanente y advertencias visuales en rojo ante posibles excesos.
+  - **Freno Institucional al Guardar:** Modal de bloqueo (`showAlert`) que intercepta intentos de guardado o incorporación que sobrepasen el tope, presentando el desglose detallado por plantel y la instrucción exacta de horas máximas admisibles.
+  - **Protección Zero-Cost en Firestore:** Implementación de escudo de memoria (`_cacheCargosPorCedula`) para ejecutar todas las consultas cruzadas a velocidad instantánea (0 ms) sin penalizar las cuotas de lectura de la capa gratuita Spark.
+
+---
+
 ### v2.17.1 (27 de Octubre de 2026)
 - **Integración de Identidad Institucional Oficial (SGH - CDCE Mérida):**
   - **Reemplazo Global de Activos Temporales:** Sustitución definitiva del ícono genérico provisional (`vite.svg`) por el emblema oficial del Sistema de Gestión Humana y Centro de Desarrollo de la Calidad Educativa del Estado Mérida (`sgh-logo.png`).

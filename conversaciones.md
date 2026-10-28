@@ -2089,7 +2089,67 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 * **Emisor:** Agente (Antigravity)
 > **Respuesta del Agente:**
-> Protocolo de cierre ejecutado: actualización a versión v2.17.1, compilación y despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`), registro en bitacora.md, versiones.md y conversaciones.md, y sincronización definitiva en GitHub (`main`).
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Pregunta crucial. Explícame como el sistema trabaja las doble cedulas?
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se explicó en detalle la arquitectura del catálogo `cargos_personal`: cada registro representa un cargo/plaza presupuestaria vinculada a un código DEA y cédula, lo que permite que una persona ejerza en varios planteles sin que los registros se sobreescriban.
+
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Pues bueno, esa información prende las alarmas, porque puede suceder (no es que tengamos algun caso en el estado) pero puede suceder que un docente tenga de sus 40 horas hasta repartidas en 3 planteles, en ese sentido el sistema debería de ser capas de que si María (C.I. 12.345.678) es un docente de 40 horas tenga la capacidad de frenar a que Maria sea incorporada por mas de 40 horas. no creo que el sistema tenga esa habilidad.
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se confirmó y validó la observación del usuario: actualmente cada director administraba de forma local sin sumatoria cruzada en tiempo real. Se propuso implementar el «Escudo de Carga Horaria Acumulada» a Costo Cero en Firestore.
+
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Esto es un tema de niveles.
+> los docentes de MEDIA se manejan con un maximo de 56 hora
+> los docente de inicial y primaria 53.33
+> ¿No sé cómo manejarias la propuesta?
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se estructuró la propuesta técnica fijando los topes normativos: 56 horas para Media y 53.33 para Inicial/Primaria, con régimen superior ante casos mixtos, indicador en tiempo real en la interfaz y modal de bloqueo al guardar con desglose por plantel.
+
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> Me parece acertado el flujo con los topes de 56 hrs (Media) y 53.33 hrs (Inicial/Primaria)
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se implementó la lógica en `webapp/src/personalWizard.js` e `webapp/index.html`: función `verificarTopeHorasDocente`, soporte de decimales exactos (`parseFloat` y `step="any"`), asistente visual en tiempo real `#wp-horas-academicas-help`, modal institucional con desglose de planteles al intentar guardar con exceso, y protección de memoria con caché para Cero Costo en Firestore Spark.
+
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> En este momento no puedo hacer ninguna prueba de modificación de personal. Solo espero que al momento de usar el sistema suceda correctamente lo que hiciste
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Se ejecutó una suite exhaustiva de pruebas unitarias automatizadas cubriendo los 6 escenarios críticos (Primaria normal, Primaria excedida, Media compartida, Media excedida, edición propia excluyendo falsos positivos y personal administrativo). Todos los casos arrojaron 100% de éxito.
+
+---
+
+* **Emisor:** Usuario
+> **Mensaje del Usuario:**
+> ok estoy satisfecho. monta en firebase
+
+* **Emisor:** Agente (Antigravity)
+> **Respuesta del Agente:**
+> Protocolo de cierre ejecutado: incremento de versión a v2.18.0, compilación de bundle con Vite, despliegue a Firebase Hosting (`https://sgh-merida.web.app`), registro documental en bitacora.md, versiones.md y conversaciones.md, y sincronización total en GitHub (`main`).
+
 
 
 

@@ -1729,6 +1729,48 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `bitacora.md`
 - `conversaciones.md`
 
+---
+### Ciclo v2.18.0: Escudo de Carga Horaria Acumulada Docente por Nivel (Anti-Sobrecarga en Doble Cédula)
+
+**1. Objetivos:**
+- Resolver la vulnerabilidad administrativa donde un funcionario docente con doble cédula o pluriempleo podía ser cargado en múltiples planteles con horas que superaran la dedicación máxima legal permitida.
+- Implementar los topes reglamentarios fijados por el MPPE:
+  * **Nivel MEDIA (General / Técnica):** 56 horas académicas máximas.
+  * **Nivel INICIAL y PRIMARIA:** 53.33 horas académicas máximas.
+  * **Régimen Mixto:** Si el docente labora en Media en cualquier institución, se acoge al tope superior de 56 horas.
+- Brindar asistencia visual en tiempo real en la interfaz del formulario y un freno estricto (bloqueo) antes de persistir datos en Firestore.
+
+**2. Solución Técnica y Arquitectura:**
+- **Motor de Validación (`webapp/src/personalWizard.js`):**
+  - Función `verificarTopeHorasDocente(forzarConsulta)`:
+    * Discrimina si `tipo === 'DOCENTE'`.
+    * Sanitiza la cédula y consulta en Firestore (`cargos_personal`) todos los cargos activos del docente a nivel estatal mediante `where("cedula", "in", posiblesCedulas)`.
+    * Implementa escudo de memoria `_cacheCargosPorCedula` (Zero-Cost Spark Tier) para no saturar lecturas en cada pulsación.
+    * Excluye inteligentemente el documento propio en edición (`window._docIdEnEdicion`) o el ID proyectado en el mismo plantel para evitar falsos positivos de auto-duplicación.
+    * Suma las horas académicas activas en otros planteles y evalúa el nivel (si cualquiera es MEDIA, eleva el tope a 56 hrs; si solo es Inicial/Primaria, fija 53.33 hrs).
+    * Retorna estado, tope, horas ocupadas, disponibilidad restante y desglose por plantel.
+  - Soporte de precisión decimal con `parseFloat` en lugar de `parseInt` para `'horas-academicas'` y `'horas-administrativas'`.
+  - Inyección en `guardarPersonalInline()`: intercepta el guardado si `excede` es true, despliega `showAlert` con desglose institucional y enfoca el campo en rojo.
+- **Interfaz y Feedback Visual (`webapp/index.html`):**
+  - Inyección de `#wp-horas-academicas-help` bajo el input de Horas Académicas.
+  - Atributos `step="any"` en inputs numéricos de horas.
+  - Disparadores de eventos `oninput`, `onchange` y `onblur` en `#wp-horas-academicas`, `#wp-cedula` y `#wp-nivel-modalidad` conectados a `window.validarHorasDocenteUI`.
+- **Pruebas Automatizadas:**
+  - Ejecución de suite de pruebas unitarias sobre todos los casos de borde (Primaria normal, Primaria excedida > 53.33, Media normal, Media compartida, Media excedida > 56, edición propia y personal administrativo).
+- **Control SemVer y Despliegue:**
+  - Incremento de versión Menor a **v2.18.0** en `webapp/package.json` e `webapp/index.html`.
+  - Compilación limpia con Vite (`npm run build`).
+  - Despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+
+**3. Archivos Involucrados:**
+- `webapp/src/personalWizard.js`
+- `webapp/index.html`
+- `webapp/package.json`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
+
+
 
 
 
