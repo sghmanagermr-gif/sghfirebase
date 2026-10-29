@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SGH - v2.19.7</title>
+  <title>SGH - v2.20.0</title>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
@@ -94,7 +94,7 @@
           style="width: 110px; height: 110px; border-radius: 20px; object-fit: cover; box-shadow: 0 10px 25px rgba(0,0,0,0.2); margin-bottom: 18px;" />
         <h1
           style="color: var(--primary-color); margin-bottom: 5px; display: flex; align-items: baseline; justify-content: center; gap: 8px;">
-          SGH <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">v2.19.7</span></h1>
+          SGH <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">v2.20.0</span></h1>
         <p>Sistema de Gestión Humana - Estado Mérida</p>
         <form id="login-form">
           <input type="email" id="login-email" placeholder="Correo Electrónico" required autocomplete="email" />
@@ -193,7 +193,7 @@
     <section id="dashboard-view" class="view">
       <nav class="navbar">
         <div class="nav-brand">
-          <span style="color: var(--primary-color);">SGH</span> v2.19.7
+          <span style="color: var(--primary-color);">SGH</span> v2.20.0
         </div>
         <div class="nav-user">
           <span id="user-display-name" style="font-weight: 500;">Cargando...</span>
@@ -253,7 +253,7 @@
         <img src="/sgh-logo.png" alt="SGH Logo"
           style="width: 32px; height: 32px; border-radius: 6px; object-fit: cover; box-shadow: 0 2px 6px rgba(0,0,0,0.15);" />
         <span style="color: var(--primary-color); font-weight: 700;">SGH</span> <span
-          style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">v2.19.7</span>
+          style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">v2.20.0</span>
       </div>
       <div class="nav-user" style="display: flex; gap: 15px; align-items: center;">
 
@@ -265,6 +265,18 @@
 
 
       <form id="plantel-form" style="padding: 30px; background: rgba(255,255,255,0.3);">
+
+        <!-- BANNER DE ORIENTACIÓN: PASO 1 OBLIGATORIO (MATRÍCULA PREVIA A PERSONAL) -->
+        <div id="banner-alerta-paso1-top"
+          style="display: none; background: #eff6ff; border: 1.5px solid #bfdbfe; border-left: 5px solid #2563eb; border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; align-items: center; gap: 14px; box-shadow: 0 2px 8px rgba(37,99,235,0.06);">
+          <span style="font-size: 1.8rem; flex-shrink: 0;">🔒</span>
+          <div>
+            <h4 style="margin: 0 0 3px; color: #1e40af; font-size: 0.98rem; font-weight: 700;">Jornada de Actualización: Paso 1 - Matrícula Escolar Obligatoria</h4>
+            <p style="margin: 0; color: #1e3a8a; font-size: 0.84rem; line-height: 1.4;">
+              La nómina del personal del plantel se habilitará automáticamente una vez que registre y guarde la matrícula estudiantil de su institución.
+            </p>
+          </div>
+        </div>
 
         <!-- Bloque: Datos Institucionales del Plantel (Modificable por Dirección) -->
         <div
@@ -670,6 +682,15 @@
             <div style="display: flex; gap: 10px;" id="toggle-vacantes">
               <button type="button" data-val="NO" class="btn-secondary" style="padding: 8px 20px;">NO</button>
               <button type="button" data-val="SI" class="btn-secondary" style="padding: 8px 20px;">SÍ</button>
+            </div>
+          </div>
+
+          <!-- AVISO DE CANDADO SECUENCIAL: PASO 1 REQUERIDO -->
+          <div id="banner-candado-paso1"
+            style="display: none; background: #eff6ff; border: 1.5px solid #bfdbfe; border-left: 5px solid #2563eb; border-radius: 8px; padding: 12px 16px; align-items: center; gap: 12px;">
+            <span style="font-size: 1.5rem; flex-shrink: 0;">🔒</span>
+            <div style="font-size: 0.85rem; color: #1e3a8a; line-height: 1.4;">
+              <strong>Paso 1 Requerido:</strong> Guarde la matrícula estudiantil para desbloquear el acceso a la nómina de personal de su plantel.
             </div>
           </div>
 
@@ -1666,7 +1687,7 @@
             <h1
               style="color: var(--primary-color); font-size: 1.2rem; margin: 0; display: flex; align-items: center; gap: 8px;">
               SGH Panel <span
-                style="font-size: 0.75rem; font-weight: 600; color: var(--primary-color); background: rgba(37,99,235,0.1); padding: 2px 8px; border-radius: 12px;">v2.19.7</span>
+                style="font-size: 0.75rem; font-weight: 600; color: var(--primary-color); background: rgba(37,99,235,0.1); padding: 2px 8px; border-radius: 12px;">v2.20.0</span>
             </h1>
           </div>
         </div>
@@ -2193,8 +2214,7 @@
               <option value="SOLO_MATRICULA">Solo Modificar Matrícula (Bloquea Personal)</option>
               <option value="SOLO_AGREGAR_PERSONAL">Solo Cargar Nuevo Personal (Bloquea Editar y Matrícula)</option>
               <option value="SOLO_EDITAR_PERSONAL">Solo Editar Personal Existente (Bloquea Nuevo y Matrícula)</option>
-              <option value="SOLO_EDITAR_PERSONAL_Y_MATRICULA">Solo Editar Personal Existente y Modificar Matrícula
-                (Bloquea Nuevo)</option>
+              <option value="SOLO_EDITAR_PERSONAL_Y_MATRICULA">Actualización de Personal con Matrícula Obligatoria (Paso 1: Matrícula ➡️ Paso 2: Personal)</option>
               <option value="PERSONAL_COMPLETO">Personal Completo (Agrega y Edita, Bloquea Matrícula)</option>
             </select>
             <p style="margin: 5px 0 0 0; font-size: 0.8rem; color: var(--text-muted);">Esta configuración limita

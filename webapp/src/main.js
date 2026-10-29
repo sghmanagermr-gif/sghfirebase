@@ -1828,6 +1828,25 @@ async function mostrarCandado(codigoDEA, dataParcial) {
     }
 
     const tienePlanes = esEspecial || esAdulto || (window._planesSeleccionadosDirector && Object.keys(window._planesSeleccionadosDirector).length > 0);
+    const esModoSecuencial = (modoDespliegue === 'SOLO_EDITAR_PERSONAL_Y_MATRICULA' || modoDespliegue === 'TOTAL');
+    const requierePaso1 = (!window._modoSupervision && esModoSecuencial && !hasData);
+
+    // Actualizar Banners de Orientación y Botón del Paso 1
+    const bannerPaso1Top = document.getElementById('banner-alerta-paso1-top');
+    const bannerPaso1Bot = document.getElementById('banner-candado-paso1');
+    const btnGuardarMat = document.getElementById('btn-guardar-matricula');
+
+    if (bannerPaso1Top) bannerPaso1Top.style.display = requierePaso1 ? 'flex' : 'none';
+    if (bannerPaso1Bot) bannerPaso1Bot.style.display = requierePaso1 ? 'flex' : 'none';
+    if (btnGuardarMat) {
+        if (requierePaso1) {
+            btnGuardarMat.textContent = "💾 Guardar Matrícula y Habilitar Personal (Paso 1)";
+            btnGuardarMat.style.background = "#0284c7";
+        } else {
+            btnGuardarMat.textContent = "💾 Guardar Datos del Plantel";
+            btnGuardarMat.style.background = "#003399";
+        }
+    }
 
     if (modoDespliegue === 'SOLO_MATRICULA') {
         const secPersonal = document.getElementById('seccion-personal-existente');
@@ -1842,7 +1861,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
         } else if (typeof window.mostrarFormularioPersonal === "function") {
             window.mostrarFormularioPersonal(false);
         }
-    } else if (modoDespliegue === 'SOLO_EDITAR_PERSONAL_Y_MATRICULA') {
+    } else if (esModoSecuencial) {
         if (hasData) {
             const secPersonal = document.getElementById('seccion-personal-existente');
             if (secPersonal) secPersonal.style.display = 'block';
@@ -2341,9 +2360,6 @@ async function mostrarCandado(codigoDEA, dataParcial) {
 
           // ── 7. ESCOBA DIGITAL + GUARDAR ───────────────────────────────────
           try {
-              sweepZeros(matricula);
-              sweepZeros(seccionesPlanes);
-
               // Recolectar datos institucionales modificados por el Director (rol plaadmin)
               const denominacionVal = document.getElementById('inp-denominacion')?.value?.trim()?.toUpperCase() || '';
               const nominalVal = document.getElementById('inp-nombre-nominal')?.value?.trim()?.toUpperCase() || '';
@@ -2355,6 +2371,24 @@ async function mostrarCandado(codigoDEA, dataParcial) {
               const m2Raw = document.getElementById('inp-metros-cuadrados')?.value;
               const metros2Val = (m2Raw !== '' && m2Raw !== undefined && m2Raw !== null) ? (parseFloat(m2Raw) || 0) : null;
               const obsPlantelVal = document.getElementById('inp-observaciones-plantel')?.value?.trim() || '';
+
+              const totalCalculado = sumFem + sumMas;
+              const esEspecialOAdulto = nivelModVal.includes('ESPECIAL') || nivelModVal.includes('ADULTO');
+
+              // Validación de Matrícula Obligatoria (Paso 1)
+              if (!hasData && totalCalculado === 0 && !esEspecialOAdulto) {
+                  if (window.showAlert) {
+                      window.showAlert("Matrícula Obligatoria (Paso 1)", "Para habilitar el acceso y actualización de la nómina de personal, debe registrar al menos un alumno en la matrícula estudiantil de su institución.", "warning");
+                  } else {
+                      showToast("Debe registrar al menos un estudiante en la matrícula para habilitar el personal.", "warning");
+                  }
+                  btn.textContent = "💾 Guardar Matrícula y Habilitar Personal (Paso 1)";
+                  btn.disabled = false;
+                  return;
+              }
+
+              sweepZeros(matricula);
+              sweepZeros(seccionesPlanes);
 
               const docRef = doc(db, "planteles", codigoDEA);
               const payload = {
@@ -2474,7 +2508,21 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                   userDisplayName.textContent = `${codigoDEA} - ${nominalVal || eponimoVal}`;
               }
 
-              showToast("¡Datos del plantel actualizados con éxito!", "success");
+              const previaSinMatricula = !hasData;
+              hasData = true;
+
+              // Ocultar banners de aviso de Paso 1
+              const bannerPaso1TopEl = document.getElementById('banner-alerta-paso1-top');
+              const bannerPaso1BotEl = document.getElementById('banner-candado-paso1');
+              if (bannerPaso1TopEl) bannerPaso1TopEl.style.display = 'none';
+              if (bannerPaso1BotEl) bannerPaso1BotEl.style.display = 'none';
+
+              // Actualizar texto del botón para futuras modificaciones
+              const btnGuardarMat = document.getElementById('btn-guardar-matricula');
+              if (btnGuardarMat) {
+                  btnGuardarMat.textContent = "💾 Guardar Cambios de Matrícula";
+                  btnGuardarMat.style.background = "#003399";
+              }
 
               // Desplegar Formulario de Personal y Tabla de Personal automáticamente al guardar (si el modo lo permite)
               let sessionConfigActual = sessionStorage.getItem('sgh_despliegue_config');
@@ -2485,8 +2533,28 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                   } catch(e) {}
               }
 
-              if (modoDespliegue !== 'SOLO_MATRICULA' && typeof window.mostrarFormularioPersonal === "function") {
-                   window.mostrarFormularioPersonal(true);
+              if (modoDespliegue !== 'SOLO_MATRICULA') {
+                  const secPersonal = document.getElementById('seccion-personal-existente');
+                  if (secPersonal) {
+                      secPersonal.style.display = 'block';
+                      if (typeof window.cargarPersonalExistente === "function") {
+                          window.cargarPersonalExistente(codigoDEA);
+                      }
+                      setTimeout(() => {
+                          secPersonal.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }, 350);
+                  }
+                  if (previaSinMatricula) {
+                      if (window.showAlert) {
+                          window.showAlert("¡Paso 1 Completado!", "La matrícula estudiantil ha sido registrada con éxito. La nómina del personal ha sido habilitada para su revisión y actualización.", "success");
+                      } else {
+                          showToast("¡Matrícula registrada! Gestión de personal habilitada.", "success");
+                      }
+                  } else {
+                      showToast("¡Datos del plantel y matrícula actualizados con éxito!", "success");
+                  }
+              } else {
+                  showToast("¡Datos de matrícula actualizados con éxito!", "success");
               }
 
           } catch (error) {
@@ -2494,7 +2562,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
               showToast("Ocurrió un error al guardar los datos.", "error");
           } finally {
               if (btn) {
-                  btn.textContent = "Guardar Datos y Continuar";
+                  btn.textContent = hasData ? "💾 Guardar Cambios de Matrícula" : "💾 Guardar Matrícula y Habilitar Personal (Paso 1)";
                   btn.disabled = false;
               }
           }

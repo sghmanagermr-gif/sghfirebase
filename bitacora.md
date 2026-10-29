@@ -2042,3 +2042,31 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `versiones.md`
 - `bitacora.md`
 - `conversaciones.md`
+
+---
+
+### v2.20.0 - 2026-10-29 (Candado Secuencial Obligatorio: Matrícula Previa a Personal)
+
+**1. Objetivos del Ciclo:**
+- Atender la necesidad estratégica de la jefatura de Gestión Humana: el 97% del personal ya se encuentra en la base de datos, pero muchos planteles carecen de matrícula estudiantil. Para la reapertura del sistema, se requería forzar a los directores a registrar su matrícula antes de poder revisar y actualizar al personal.
+- Implementar la solución acordada: combinación de Candado Secuencial (Paso 1 ➡️ Paso 2) y ajuste en el selector del módulo de Despliegue.
+
+**2. Solución Técnica y Arquitectura:**
+- **Lógica de Coacción y Navegación en `main.js`:**
+  - En `checkPlantelData()`: Detección precisa de `hasData` (matrícula > 0). Si el plantel no tiene matrícula, se activan los banners de aviso, el botón se adapta a *«Guardar Matrícula y Habilitar Personal (Paso 1)»* y se mantiene oculta la tabla de personal.
+  - En `form.onsubmit`: Guard de validación que exige `totalCalculado > 0` para planteles regulares, bloqueando intentos de guardar con 0 alumnos.
+  - Post-guardado: Transición atómica donde se ocultan los banners del Paso 1, se habilita `#seccion-personal-existente`, se dispara la carga de personal, se realiza un scroll suave y se notifica con modal o toast de éxito.
+- **Interfaz y Despliegue en `index.html`:**
+  - Incorporación de `#banner-alerta-paso1-top` y `#banner-candado-paso1`.
+  - Actualización de la opción `SOLO_EDITAR_PERSONAL_Y_MATRICULA` en el menú desplegable del módulo administrativo de Despliegue.
+- **Control SemVer y Despliegue:**
+  - Incremento a versión MENOR `v2.20.0` en `package.json` e `index.html`.
+  - Compilación de producción con Vite (`dist/`) y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+
+**3. Archivos Involucrados:**
+- `webapp/package.json` (v2.20.0)
+- `webapp/index.html` (v2.20.0)
+- `webapp/src/main.js`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`

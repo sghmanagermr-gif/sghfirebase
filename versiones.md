@@ -4,6 +4,23 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.20.0 (29 de Octubre de 2026)
+
+- **Implementación del Candado Secuencial Obligatorio (Paso 1: Matrícula ➡️ Paso 2: Personal):**
+  - **Bloqueo Preventivo de Acceso a Nómina para Planteles sin Matrícula:**
+    - Si una institución educativa no posee matrícula estudiantil registrada (o su total es 0), la sección de personal existente y registro permanece oculta y bloqueada.
+    - Se incorporaron dos banners institucionales de orientación en la pantalla del director (`#banner-alerta-paso1-top` y `#banner-candado-paso1`) indicando formalmente que debe declarar la matrícula de sus alumnos para desbloquear a su talento humano.
+    - El botón de guardado se transforma dinámicamente: `💾 Guardar Matrícula y Habilitar Personal (Paso 1)`.
+  - **Filtro Anti-Elusión (Validación de 0 Estudiantes):**
+    - Se agregó una validación estricta que impide guardar la matrícula si el total de estudiantes declarados es 0, impidiendo que el director intente eludir el requisito guardando formularios vacíos.
+  - **Desbloqueo Automatizado y Fluido (Paso 2):**
+    - Al guardar una matrícula válida, el sistema oculta los banners del Paso 1, desbloquea la tabla de personal, carga a los trabajadores existentes, efectúa un scroll suave a la nómina y notifica al usuario con un mensaje de confirmación institucional.
+  - **Alineación en Módulo de Despliegue del Panel Administrativo:**
+    - Se renombró la opción en el selector global: *«Actualización de Personal con Matrícula Obligatoria (Paso 1: Matrícula ➡️ Paso 2: Personal)»*.
+  - **Despliegue Inmediato:** Compilado limpio en Vite y desplegado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.19.7 (29 de Octubre de 2026)
 
 - **Blindaje Total de Seguridad y Solo Lectura en «Planes de Estudio del Plantel» para Modo Supervisión:**

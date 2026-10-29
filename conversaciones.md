@@ -3075,3 +3075,30 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 * **Confirmación del Usuario:**
 > Sï estoy satisfecho
+
+---
+
+### Intervención 29
+
+* **Fecha / Hora:** 2026-10-29 ~10:35 - 11:15 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+> Ayudame con esto. el 97% del personal de los planteles tiene su data completa en firebase, en unos días aparturaremos el sistema para actualizar al personal, sin embargo muchos de los planteles no tienen la matricula. ¿Cómo puedo hacer para que el director esté obligado a modificar la matricula y después pueda actualizar al personal?  
+> Atento a tu analisis y propuestas  
+> Me gusta la propuesta 1 combinada con la propuesta 2
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Implementación del Candado Secuencial Obligatorio (Paso 1: Matrícula ➡️ Paso 2: Personal) y Modo Despliegue Coactivo (v2.20.0):  
+>
+> 1. Diagnóstico pedagógico y administrativo: Para evitar que los directores ignoren la matrícula escolar y salten directo a la nómina de personal, se diseñó un túnel secuencial estricto.  
+> 2. Solución técnica integral:  
+>    * **Paso 1 Obligatorio:** Si un plantel no tiene matrícula (o está en 0), la tabla de personal permanece completamente invisible. El director visualiza un banner superior y uno inferior de alerta institucional, y el botón indica: `💾 Guardar Matrícula y Habilitar Personal (Paso 1)`.  
+>    * **Filtro Anti-Elusión:** Si el director intenta guardar con 0 alumnos, el sistema no lo permite y le exige ingresar al menos un estudiante.  
+>    * **Paso 2 Automatizado:** Al guardar la matrícula válida, el sistema desbloquea automáticamente la nómina de personal, carga a los trabajadores existentes, realiza un desplazamiento suave en pantalla y notifica con una felicitación institucional.  
+>    * **Panel de Despliegue:** Se sincronizó la opción en el panel administrativo bajo el nombre formal: *«Actualización de Personal con Matrícula Obligatoria (Paso 1: Matrícula ➡️ Paso 2: Personal)»*.  
+> 3. Compilación limpia con Vite y despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión menor `v2.20.0`.  
+> 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
