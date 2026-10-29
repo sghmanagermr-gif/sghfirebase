@@ -2945,3 +2945,26 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 5. Formularios a una sola columna en teléfonos: Todos los campos del plantel, los datos del trabajador y la tarjeta de carga horaria se organizan de forma vertical, clara y ordenada en pantallas móviles.  
 > 6. Compilación y despliegue exitoso en Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión `v2.19.3`.  
 > 7. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 24
+
+* **Fecha / Hora:** 2026-10-28 ~22:50 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Boton buscar en Incorporar Funcionario por Traslado @[c:\Users\usuario\Downloads\WhatsApp Video 2026-10-28 at 22.47.28.mp4]
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Optimización Ergonómica del Botón de Búsqueda en Traslados para Celulares (v2.19.4):  
+>
+> 1. Análisis del video: Se identificó que al abrir la ventana «Incorporar Funcionario por Traslado» en el celular, el botón «Buscar» se encontraba comprimido en la misma fila que el selector de nacionalidad y el número de cédula, lo que provocaba que se cortara en el borde derecho mostrando solo `🔍 Bus`.  
+> 2. Reorganización visual para celular:  
+>    * El selector de nacionalidad y el campo de cédula ahora ocupan cómodamente la primera fila.  
+>    * El botón **🔍 Buscar** pasa a ocupar un renglón completo debajo de la cédula, visible al 100%, con texto completo y un tamaño amplio y cómodo para tocar con el pulgar.  
+> 3. Ajuste de márgenes del modal: Se optimizaron los bordes internos de la ventana en celulares para que los datos del funcionario encontrado (nombre, cargo, RAC, plantel de origen) se lean con total claridad y sin apretujarse.  
+> 4. Compilación con Vite y despliegue exitoso en Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión `v2.19.4`.  
+> 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?

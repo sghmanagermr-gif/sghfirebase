@@ -4,6 +4,19 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.19.4 (28 de Octubre de 2026)
+
+- **Optimización de Usabilidad y Adaptabilidad Móvil en Ventana de Traslado (Ficha Viajera):**
+  - **Reorganización Ergonómica del Buscador de Cédula:**
+    - Se transformó el grupo de búsqueda de cédula en la ventana *Incorporar Funcionario por Traslado* (`#modal-incorporar-traslado`). En teléfonos inteligentes, la fila ahora distribuye la selección de nacionalidad (`V-` / `E-`) y el campo numérico en el primer renglón, ubicando el botón **🔍 Buscar** en un renglón propio a ancho completo (100% width).
+    - Se eliminó el truncamiento visual observado en grabaciones de pantalla móvil donde el botón quedaba cortado (`🔍 Bus...`) debido al límite del marco.
+  - **Optimización de Espaciados en Modales para Celulares:**
+    - Ajuste de márgenes interiores (padding) en ventanas emergentes de 24px a 14px en dispositivos móviles, ampliando el área visible de la información y previniendo cortes en textos y resultados.
+    - Cuadrícula de detalles del funcionario en Ficha Viajera adaptada a una columna en pantallas estrechas.
+  - **Despliegue Inmediato:** Compilado limpio en Vite y desplegado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.19.3 (28 de Octubre de 2026)
 
 - **Optimización Integral de Diseño Responsivo y Eliminación de Desbordamiento Horizontal en Celulares:**

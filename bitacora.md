@@ -1940,3 +1940,30 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `versiones.md`
 - `bitacora.md`
 - `conversaciones.md`
+
+---
+
+### v2.19.4 - 2026-10-28 (Adaptabilidad Móvil en Ventana de Traslado y Botón de Búsqueda)
+
+**1. Objetivos del Ciclo:**
+- Resolver el truncamiento del botón «🔍 Buscar» dentro de la ventana modal «Incorporar Funcionario por Traslado» en pantallas móviles (observado en video WhatsApp Video 2026-10-28 at 22.47.28.mp4 donde se leía únicamente `🔍 Bus`).
+- Proporcionar una zona táctil cómoda y amplia para la búsqueda e incorporación de personal por traslado en celulares.
+
+**2. Solución Técnica y Arquitectura:**
+- **Reorganización Responsiva (`.traslado-input-row`):**
+  - Desacople de la fila fija con ancho rígido. En pantallas móviles ($\le 600\text{px}$), se distribuye en dos niveles:
+    - Nivel 1: Nacionalidad (`V-` / `E-`) + Cédula de Identidad (`.traslado-cedula-inputs`) aprovechando todo el ancho horizontal.
+    - Nivel 2: Botón **🔍 Buscar** (`#btn-buscar-ficha-traslado`) a ancho completo (100%) con altura táctil ergonómica de 44px.
+- **Calibración de Padding en Modales:**
+  - Reducción de relleno en modales en móviles (`#modal-incorporar-traslado` y `#modal-eliminar-personal`) de 24px a 14px para garantizar amplitud a la tarjeta de Ficha Viajera.
+  - Cuadrícula de datos de la ficha viajera (`.ficha-datos-grid`) ajustada a columna única en smartphones.
+
+**3. Archivos Involucrados:**
+- `webapp/index.html`
+- `webapp/package.json`
+- `webapp/src/personalWizard.js`
+- `webapp/src/style.css`
+- `webapp/styles.css`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`

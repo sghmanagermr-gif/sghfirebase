@@ -722,3 +722,61 @@ html, body {
     padding: 14px !important;
   }
 }
+
+
+/* Optimizaciones Responsivas para Modales en Celulares */
+@media (max-width: 600px) {
+  #modal-incorporar-traslado,
+  #modal-eliminar-personal {
+    padding: 12px !important;
+  }
+
+  #modal-incorporar-traslado > div,
+  #modal-eliminar-personal > div {
+    max-width: 100% !important;
+    width: 100% !important;
+    border-radius: 12px !important;
+  }
+
+  .traslado-modal-header,
+  #modal-eliminar-personal > div > div:first-child {
+    padding: 14px 16px !important;
+  }
+
+  .traslado-modal-body,
+  #modal-eliminar-personal > div > div:nth-child(2) {
+    padding: 16px 14px !important;
+  }
+
+  .traslado-input-row {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .traslado-cedula-inputs {
+    width: 100% !important;
+    flex: 1 1 100% !important;
+  }
+
+  #btn-buscar-ficha-traslado {
+    width: 100% !important;
+    height: 44px !important;
+    justify-content: center !important;
+    font-size: 0.95rem !important;
+  }
+
+  .ficha-datos-grid {
+    grid-template-columns: 1fr !important;
+    gap: 6px !important;
+  }
+
+  #btn-confirmar-incorporar-traslado {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 12px 16px !important;
+  }
+
+  #modal-eliminar-personal button {
+    width: 100% !important;
+  }
+}

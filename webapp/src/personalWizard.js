@@ -2214,7 +2214,7 @@ export async function buscarFichaTraslado(cedulaInput, nac = 'V') {
                         <span style="font-size: 1.25rem;">✅</span>
                         <strong style="color: #166534; font-size: 0.95rem;">Ficha Viajera Encontrada</strong>
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.88rem; color: #1e293b; background: white; padding: 12px; border-radius: 8px; border: 1px solid #bbf7d0;">
+                    <div class="ficha-datos-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.88rem; color: #1e293b; background: white; padding: 12px; border-radius: 8px; border: 1px solid #bbf7d0;">
                         <div><strong>Funcionario:</strong> ${nombre}</div>
                         <div><strong>C.I.:</strong> ${cedula}</div>
                         <div><strong>Cargo:</strong> ${cargo}</div>
