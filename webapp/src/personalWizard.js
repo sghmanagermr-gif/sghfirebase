@@ -26,13 +26,13 @@ const CATALOGOS_FALLBACK = {
         tipo_vivienda: ["CASA", "APARTAMENTO", "QUINTA", "RANCHO", "HABITACION", "OTRO"],
         condicion_vivienda: ["PROPIA", "ALQUILADA", "DE UN FAMILIAR", "PAGÁNDOSE", "OTRO"],
         dependencia: ["NACIONAL", "ESTADAL", "MUNICIPAL", "SUBVENCIONADA", "PRIVADO", "AUTONOMA"],
-        niveles_educativos: ["INICIAL","INICIAL - PRIMARIA","INICIAL-PRIMARIA-MEDIA GENERAL","INICIAL-PRIMARIA-MEDIA TECNICA","PRIMARIA","PRIMARIA - MEDIA GENERAL","PRIMARIA - MEDIA TECNICA","MEDIA GENERAL","MEDIA GENERAL - MEDIA TECNICA","MEDIA TECNICA"],
-        modalidades: ["ADULTO","ESPECIAL"]
+        niveles_educativos: ["INICIAL", "INICIAL - PRIMARIA", "INICIAL-PRIMARIA-MEDIA GENERAL", "INICIAL-PRIMARIA-MEDIA TECNICA", "PRIMARIA", "PRIMARIA - MEDIA GENERAL", "PRIMARIA - MEDIA TECNICA", "MEDIA GENERAL", "MEDIA GENERAL - MEDIA TECNICA", "MEDIA TECNICA"],
+        modalidades: ["ADULTO", "ESPECIAL"]
     },
-    situacion_laboral: {"PERMISO POR CUIDO":"SEGÚN CLAUSULAS DE LA CONTRATACION COLECTIVA","APOYO INSTITUCIONAL":"CORRESPONDE AL PERSONAL QUE TRABAJA EN LA ESTRUCTURA DE LOS CDCE, EN OTRO ENTE PUBLICO QUE NO ES EL MPPE, ESO INCLUYE AL PERSONAL QUE TRABAJA EN PLANTELES ESTADALES, PRIVADOS, SUBVENCIONADAS Y MUNICIPALES, AL IGUAL QUE ESTÁN COMO ENLACES Y EQUIPOS DE APOYOS EN OTROS ENTES PÚBLICOS","EN PROCESO DE INCAPACIDAD":"SEGÚN PLANILLA 14-08 RECIBIDA POR ZONA EDUCATIVA Y PLANTEL, EN ESPERA DE EVALUACION MEDICA DE NIVEL CENTRAL","TRASLADO INTERZONAL":"PERSONAL QUE SE TRASLADO A OTRO ESTADO DEL PAIS PERO AUN SIGUE EN NOMINA DEL PLANTEL","ACTIVO":"PERSONAL QUE CUMPLE FUNCIONES EN EL PLANTEL","INCAPACIDAD TEMPORAL":"CORRESPONDE A LOS PERMISOS MEDICOS OTORGADOS POR SEGURO SOCIAL DONDE DAN UNA INCAPACIDAD TEMPORAL QUE VA DESDE LOS SEIS MESES, NO CORRESPONDE A INCAPACIDADES TOTALES O PROCESOS DE INCAPACIDAD","INCAPACIDAD TOTAL POR IPASME":"SEGÚN INFORME O RESOLUCIÓN OTORGADA POR LA JUNTA MÉDICA DEL IPASME QUE OTORGA LA INCAPACIDAD TOTAL","VACACIONES":"PERSONAL DE VACACIONES AUTORIZADAS POR ZONA EDUCATIVA","INCUMPLIMIENTO DE FUNCIONES":"PERSONAL QUE NO CUMPLE A CABALIDAD LAS FUNCIONES ASIGNADAS (CORRESPONDE AL PERSONAL QUE NO ASISTE A SUS FUNCIONES REGULARES DENTRO DEL PLANTEL, INCLUYENDO A LOS QUE NO ASISTEN LOS CINCO DÍAS)","REPOSO MEDICO":"SEGÚN JUSTIFICATIVO RECIBIDO POR EL PLANTEL (NO CORRESPONDE A LOS PROCESOS DE INCAPACIDAD CON 1408)","SINCERACIÓN DE NÓMINA":"PERSONAL CON TRALADO INTERNO PERO AUN NO SE HA SINCERADO","ADECUACIÓN LABORAL":"SEGÚN PLANILLA OTORGADA POR INPSASEL","PRIVADO DE LIBERTAD":"APLICA SOLO PARA EL PERSONAL QUE ESTÁ EN ESPERA DE SENTENCIA O CON UNA SENTENCIA JUDICIAL","ABANDONO DE CARGO":"PERSONAL QUE SEGÚN LEY NO SE PRESENTA A SU PUESTO DE TRABAJO Y NO HA JUSTIFICADO INASISTENCIA, INCLUYE TAMBIEN QUIENES TIENE PROCEDIMIENTO ADMINISTRATIVO ABIERTO POR ZONA EDUCATIVA","INCAPACIDAD TOTAL Y DEFINITIVA POR IVSS":"SEGÚN PLANILLA 14-08 CON PORCENTAJE 67% (CORRESPONDE AL PERSONAL INCAPACITADO CON EL 67% Y QUE AUN APARECE ACTIVO EN NÓMINA)","COMISION DE SERVICIO":"APROBADA MEDIANTE PROVIDENCIA ADMINISTRATIVA FIRMADA POR EL MINISTRO DEL MPPE, ESTA PUEDE SER REMUNERADA O NO","LICENCIA SINDICAL":"APROBADA POR LA DIRECCION GENERAL DE GESTION HUMANA DEL MPPE, NO POR EL PRESIDENTE DEL SINDICATO","DEFUNCIONES":"SEGÚN ACTA","EN PROCESO DE JUBILACIÓN":"SEGÚN PLANILLA RECIBIDA POR ZONA EDUCATIVA, NO INCLUYE AL PERSONAL QUE CUMPLIO AÑOS DE SERVICIO Y NO A SOLICITADO JUBILACION POR ZONA EDUCATIVA","PERMISO PRE Y POST NATAL":"SEGÚN CLAUSULAS DE LA CONTRATACION COLECTIVA","RENUNCIA":"SEGÚN OFICIO RECIBIDO POR ZONA EDUCATIVA","PERMISO POR FALLECIMIENTO":"SEGÚN CLAUSULAS DE LA CONTRATACION COLECTIVA"}
+    situacion_laboral: { "PERMISO POR CUIDO": "SEGÚN CLAUSULAS DE LA CONTRATACION COLECTIVA", "APOYO INSTITUCIONAL": "CORRESPONDE AL PERSONAL QUE TRABAJA EN LA ESTRUCTURA DE LOS CDCE, EN OTRO ENTE PUBLICO QUE NO ES EL MPPE, ESO INCLUYE AL PERSONAL QUE TRABAJA EN PLANTELES ESTADALES, PRIVADOS, SUBVENCIONADAS Y MUNICIPALES, AL IGUAL QUE ESTÁN COMO ENLACES Y EQUIPOS DE APOYOS EN OTROS ENTES PÚBLICOS", "EN PROCESO DE INCAPACIDAD": "SEGÚN PLANILLA 14-08 RECIBIDA POR ZONA EDUCATIVA Y PLANTEL, EN ESPERA DE EVALUACION MEDICA DE NIVEL CENTRAL", "TRASLADO INTERZONAL": "PERSONAL QUE SE TRASLADO A OTRO ESTADO DEL PAIS PERO AUN SIGUE EN NOMINA DEL PLANTEL", "ACTIVO": "PERSONAL QUE CUMPLE FUNCIONES EN EL PLANTEL", "INCAPACIDAD TEMPORAL": "CORRESPONDE A LOS PERMISOS MEDICOS OTORGADOS POR SEGURO SOCIAL DONDE DAN UNA INCAPACIDAD TEMPORAL QUE VA DESDE LOS SEIS MESES, NO CORRESPONDE A INCAPACIDADES TOTALES O PROCESOS DE INCAPACIDAD", "INCAPACIDAD TOTAL POR IPASME": "SEGÚN INFORME O RESOLUCIÓN OTORGADA POR LA JUNTA MÉDICA DEL IPASME QUE OTORGA LA INCAPACIDAD TOTAL", "VACACIONES": "PERSONAL DE VACACIONES AUTORIZADAS POR ZONA EDUCATIVA", "INCUMPLIMIENTO DE FUNCIONES": "PERSONAL QUE NO CUMPLE A CABALIDAD LAS FUNCIONES ASIGNADAS (CORRESPONDE AL PERSONAL QUE NO ASISTE A SUS FUNCIONES REGULARES DENTRO DEL PLANTEL, INCLUYENDO A LOS QUE NO ASISTEN LOS CINCO DÍAS)", "REPOSO MEDICO": "SEGÚN JUSTIFICATIVO RECIBIDO POR EL PLANTEL (NO CORRESPONDE A LOS PROCESOS DE INCAPACIDAD CON 1408)", "SINCERACIÓN DE NÓMINA": "PERSONAL CON TRALADO INTERNO PERO AUN NO SE HA SINCERADO", "ADECUACIÓN LABORAL": "SEGÚN PLANILLA OTORGADA POR INPSASEL", "PRIVADO DE LIBERTAD": "APLICA SOLO PARA EL PERSONAL QUE ESTÁ EN ESPERA DE SENTENCIA O CON UNA SENTENCIA JUDICIAL", "ABANDONO DE CARGO": "PERSONAL QUE SEGÚN LEY NO SE PRESENTA A SU PUESTO DE TRABAJO Y NO HA JUSTIFICADO INASISTENCIA, INCLUYE TAMBIEN QUIENES TIENE PROCEDIMIENTO ADMINISTRATIVO ABIERTO POR ZONA EDUCATIVA", "INCAPACIDAD TOTAL Y DEFINITIVA POR IVSS": "SEGÚN PLANILLA 14-08 CON PORCENTAJE 67% (CORRESPONDE AL PERSONAL INCAPACITADO CON EL 67% Y QUE AUN APARECE ACTIVO EN NÓMINA)", "COMISION DE SERVICIO": "APROBADA MEDIANTE PROVIDENCIA ADMINISTRATIVA FIRMADA POR EL MINISTRO DEL MPPE, ESTA PUEDE SER REMUNERADA O NO", "LICENCIA SINDICAL": "APROBADA POR LA DIRECCION GENERAL DE GESTION HUMANA DEL MPPE, NO POR EL PRESIDENTE DEL SINDICATO", "DEFUNCIONES": "SEGÚN ACTA", "EN PROCESO DE JUBILACIÓN": "SEGÚN PLANILLA RECIBIDA POR ZONA EDUCATIVA, NO INCLUYE AL PERSONAL QUE CUMPLIO AÑOS DE SERVICIO Y NO A SOLICITADO JUBILACION POR ZONA EDUCATIVA", "PERMISO PRE Y POST NATAL": "SEGÚN CLAUSULAS DE LA CONTRATACION COLECTIVA", "RENUNCIA": "SEGÚN OFICIO RECIBIDO POR ZONA EDUCATIVA", "PERMISO POR FALLECIMIENTO": "SEGÚN CLAUSULAS DE LA CONTRATACION COLECTIVA" }
 };
 
-const PERSONAL_DATA_MASTER = {"AUTONOMA":{},"MUNICIPAL":{},"SUBVENCIONADA":{},"PRIVADO":{},"ESTADAL":{"obrero":{},"docente":{"D/U":"DOCENTE UNICO"},"administrativo":{}},"NACIONAL":{"obrero":{"8992N":{"cargos":["COCINERO III"],"rango":"COCINERO III"},"8627N":{"cargos":["AYUDANTE AGROPECUARIO III"],"rango":"AYUDANTE AGROPECUARIO III"},"8037N":{"cargos":["OPERADOR DE PRENSA","ENCUADERNADOR"],"rango":"OBRERO CERTIFICADO III (CALIFICADO) GRADO 7"},"8690N":{"cargos":["PORTERO"],"rango":"PORTERO"},"8035N":{"cargos":["CHOFER DE TRANSPORTE","TIMONEL DE EMBARCACIÓN","AYUDANTE DE ALMACEN","PLOMERO","ELECTRICISTA","TAPICERO","COCINERO","OPERADOR DE MÁQUINA LIVIANA"],"rango":"OBRERO CERTIFICADO I (CALIFICADO) GRADO 5"},"8040N":{"cargos":["SUPERVISOR DE MANTENIMIENTO","SUPERVISOR DE SERVICIOS ESPECIALES","SUPERVISOR DE SERVICIOS DE REPRODUCCIÓN","MADRE SENIFA"],"rango":"OBRERO SUPERVISOR II GRADO 10"},"8038N":{"cargos":["ELECTROMECÁNICO","MECANICO AUTOMOTRIZ"],"rango":"OBRERO CERTIFICADO IV (CALIFICADO) GRADO 8"},"8626N":{"cargos":["AYUDANTE AGROPECUARIO II"],"rango":"AYUDANTE AGROPECUARIO II"},"8034N":{"cargos":["LATONERO PINTOR","PINTOR","DESPENSERO","RECEPTOR INFORMADOR"],"rango":"OBRERO GENERAL IV (NO CALIFICADO) GRADO 4"},"8260C":{"cargos":["CHOFER"],"rango":"CHOFER CONTRATADO"},"8986N":{"cargos":["VIGILANTE II"],"rango":"OBRERO VIGILANTE II GRADO 6"},"8625N":{"cargos":["AYUDANTE AGROPECUARIO I"],"rango":"AYUDANTE AGROPECUARIO I"},"8987N":{"cargos":["VIGILANTE III"],"rango":"OBRERO VIGILANTE III GRADO 7"},"8032N":{"cargos":["AYUDANTE DE SERVICIOS DE COCINA","ASEADOR II","ASCENSORISTA","LAVANDERO","PLANCHADOR","MENSAJERO GRADO","PORTERO"],"rango":"OBRERO GENERAL II (NO CALIFICADO) GRADO 2"},"8991N":{"cargos":["COCINERO II"],"rango":"COCINERO II"},"8990N":{"cargos":["COCINERO"],"rango":"COCINERO I"},"8989N":{"cargos":["SUPERVISOR GENERAL DE SEGURIDAD"],"rango":"OBRERO SUPERVISOR GENERAL DE SEGURIDAD GRADO 10"},"8985C":{"cargos":["VIGILANTE"],"rango":"VIGILANTE CONTRATADO"},"8031N":{"cargos":["ASEADOR I"],"rango":"OBRERO GENERAL I (NO CALIFICADO) GRADO 1"},"8039N":{"cargos":["SUPERVISOR DE SERVICIOS INTERNOS","SUPERVISOR AUXILIAR DE MANTENIMIENTO","MADRE SENIFA"],"rango":"OBRERO SUPERVISOR I GRADO 9"},"8988N":{"cargos":["SUPERVISOR DE ÁREA DE SEGURIDAD"],"rango":"OBRERO SUPERVISOR DE AREA DE SEGURIDAD GRADO 9"},"8985N":{"cargos":["VIGILANTE I"],"rango":"OBRERO VIGILANTE I GRADO 5"},"8033N":{"cargos":["JARDINERO","ASEADOR III","AYUDANTE DE SERVICIOS","AYUDANTE DE ARTES","MENSAJERO MOTORIZADO","OPERADOR DE MAQUINA FOTOCOPIADORA","CONSERJE","FUMIGADOR","AYUDANTE DE CARGA"],"rango":"OBRERO GENERAL III (NO CALIFICADO) GRADO 3"},"8036N":{"cargos":["ALBAÑIL","AUXILIAR DE LABORATORIO","CARPINTERO","HERRERO SOLDADOR","FOTOGRABADOR PLANCHISTA","MARINO AUXILIAR","OPERADOR DE MÁQUINA PESADA"],"rango":"OBRERO CERTIFICADO II (CALIFICADO) GRADO 6"}},"administrativo":{"100000":"BACHILLER I","110000":"BACHILLER II","110100":"BACHILLER III","200000":"TSU I","210000":"TSU II","210100":"TSU III","300000":"PROFESIONAL UNIV. I","310000":"PROFESIONAL UNIV. II","310100":"PROFESIONAL UNIV. III","340201":"PROFESIONAL UNIV. MEDICO I","340202":"PROFESIONAL UNIV. MEDICO II","340203":"PROFESIONAL UNIV. MEDICO III","340601":"PROFESIONAL UNIV. ODONTOLOGO I","340603":"PROFESIONAL UNIV. ODONTOLOGO III"},"docente":{"1143NH":"DOC. III / AULA","4160DH":"DOC. (NG) / AULA","6120DI":"TSU PROF. NO DOC.","1124DH":"DOC. IV / AULA","1125DI":"DOC. V / AULA","1122DH":"DOC. II / AULA","1172DH":"DOC. II / AULA","2157DH":"TSU EN EDUCACION","1113DB":"DOC. III / AULA BOLIV.","1123DI":"DOC. III / AULA","1164DH":"DOC. IV / AULA","1115DB":"DOC. V / AULA BOLIV.","1113DI":"DOC. III / AULA","5120DI":"LIC. PROFESIONAL NO DOC.","7140DH":"TM / PERITO PROF. NO DOC.","1132DH":"DOC. II / AULA","1194NH":"DOC. IV / AULA","1155DH":"DOC. V / AULA","2167DB":"TSU EN EDUCACION BOLIV.","1186NH":"DOC. VI / AULA","1176DH":"DOC. VI / AULA","1124DI":"DOC. IV / AULA","3128DB":"MAESTRO NORMAL. EN EDU BO","1135DH":"DOC. V / AULA","6140DH":"TSU PROF. NO DOC.","1145DH":"DOC. V / AULA","1174NH":"DOC. IV / AULA","1126DI":"DOC. VI / AULA","1183DH":"DOC. III / AULA","1152DH":"DOC. II / AULA","1124DB":"DOC. IV / AULA BOLIV.","1193DH":"DOC. III / AULA","4160DI":"DOC. (NG) / AULA","1172NH":"DOC. II / AULA","1174DH":"DOC. IV / AULA","4A50WH":"RESIDENTE / AGRO. (NG)","1121DB":"DOC. I / AULA BOLIV.","1161DB":"DOC. I / AULA BOLIV.","1164DI":"DOC. IV / AULA","1A53DH":"RESIDENTE / AGRO. III","4170NH":"DOC. (NG) / AULA","1195DH":"DOC. V / AULA","4140DH":"DOC. (NG) / AULA","1122DI":"DOC. II / AULA","1165DI":"DOC. V / AULA","1134DH":"DOC. IV / AULA","1116DB":"DOC. VI / AULA BOLIV.","1112DI":"DOC. II / AULA","1A55DH":"RESIDENTE / AGRO. V","1156DH":"DOC. VI / AULA","5180NH":"LIC. PROFESIONAL NO DOC.","6120DB":"TSU PROF. NO DOC. BOLIV.","1191NH":"DOC. I / AULA","4150DH":"DOC. (NG) / AULA","1162DI":"DOC. II / AULA","1146DH":"DOC. VI / AULA","3198NH":"MAESTRO NORMALISTA EN EDU","1115DI":"DOC. V / AULA","2127DH":"TSU EN EDUCACION","1163DI":"DOC. III / AULA","2127DI":"TSU EN EDUCACION","1A54DH":"RESIDENTE / AGRO. IV","1121DH":"DOC. I / AULA","1141DH":"DOC. I / AULA","5120DB":"LIC. PROFES. NO DOC. BOLI","1116DI":"DOC. VI / AULA","4120DI":"DOC. (NG) / AULA","4160DB":"DOC. (NG) / AULA BOLIV.","1151DH":"DOC. I / AULA","1121DI":"DOC. I / AULA","2A57DH":"RESIDENTE / AGRO. TSU","3128DI":"MAESTRO NORMALISTA EN EDU","1153DH":"DOC. III / AULA","1165DH":"DOC. V / AULA","1196NH":"DOC. VI / AULA","4180DH":"DOC. (NG) / AULA","1111DI":"DOC. I / AULA","1126DH":"DOC. VI / AULA","1111DH":"DOC. I / AULA","4110DI":"DOC. (NG) / AULA","1195NH":"DOC. V / AULA","4110DB":"DOC. (NG) / AULA BOLIV.","2147DH":"TSU EN EDUCACION","2137DH":"TSU EN EDUCACION","1183NH":"DOC. III / AULA","1173DH":"DOC. III / AULA","1166DI":"DOC. VI / AULA","2127DB":"TSU EN EDUCACION BOLIV.","3128DH":"MAESTRO NORMALISTA EN EDU","3198DH":"MAESTRO NORMALISTA EN EDU","1185NH":"DOC. V / AULA","1131DH":"DOC. I / AULA","1123DH":"DOC. III / AULA","1192NH":"DOC. II / AULA","1162DB":"DOC. II / AULA BOLIV.","2167DI":"TSU EN EDUCACION","1182NH":"DOC. II / AULA","1166DH":"DOC. VI / AULA","5140DH":"LIC. PROFESIONAL NO DOC.","1181ZH":"DOC. I / AULA","210LNR":"JEFE DE DIVISION","4120DH":"DOC. (NG) / AULA","2117DB":"TSU EN EDUCACION BOLIV.","1114DI":"DOC. IV / AULA","1133DH":"DOC. III / AULA","2117DI":"TSU EN EDUCACION","1126DB":"DOC. VI / AULA BOLIV.","1176NH":"DOC. VI / AULA","6180NH":"TSU PROF. NO DOC.","1164DB":"DOC. IV / AULA BOLIV.","1142DH":"DOC. II / AULA","6150DH":"TSU PROF. NO DOC.","4190DH":"DOC. (NG) / AULA","1194DH":"DOC. IV / AULA","2187NH":"TSU EN EDUCACION","1114DB":"DOC. IV / AULA BOLIV.","4170DH":"DOC. (NG) / AULA","4120DB":"DOC. (NG) / AULA BOLIV.","1122DB":"DOC. II / AULA BOLIV.","1143DH":"DOC. III / AULA","4130DH":"DOC. (NG) / AULA","1154DH":"DOC. IV / AULA","1161DI":"DOC. I / AULA","1125DB":"DOC. V / AULA BOLIV.","1181NH":"DOC. I / AULA","1184NH":"DOC. IV / AULA","1175NH":"DOC. V / AULA","1173NH":"DOC. III / AULA","1112DB":"DOC. II / AULA BOLIV.","1171NH":"DOC. I / AULA","1165DB":"DOC. V / AULA BOLIV.","1144DH":"DOC. IV / AULA","1163DB":"DOC. III / AULA BOLIV.","1111DB":"DOC. I / AULA BOLIV.","1123DB":"DOC. III / AULA BOLIV.","1184DH":"DOC. IV / AULA","6130DH":"TSU PROF. NO DOC.","4190NH":"DOC. (NG) / AULA","1161DH":"DOC. I / AULA","1196DH":"DOC. VI / AULA","1136DH":"DOC. VI / AULA","4180NH":"DOC. (NG) / AULA","1166DB":"DOC. VI / AULA BOLIV.","1141NH":"DOC. I / AULA","5130DH":"LIC. PROFESIONAL NO DOC.","1182DH":"DOC. II / AULA","1125DH":"DOC. V / AULA"}}};
+const PERSONAL_DATA_MASTER = { "AUTONOMA": {}, "MUNICIPAL": {}, "SUBVENCIONADA": {}, "PRIVADO": {}, "ESTADAL": { "obrero": {}, "docente": { "D/U": "DOCENTE UNICO" }, "administrativo": {} }, "NACIONAL": { "obrero": { "8992N": { "cargos": ["COCINERO III"], "rango": "COCINERO III" }, "8627N": { "cargos": ["AYUDANTE AGROPECUARIO III"], "rango": "AYUDANTE AGROPECUARIO III" }, "8037N": { "cargos": ["OPERADOR DE PRENSA", "ENCUADERNADOR"], "rango": "OBRERO CERTIFICADO III (CALIFICADO) GRADO 7" }, "8690N": { "cargos": ["PORTERO"], "rango": "PORTERO" }, "8035N": { "cargos": ["CHOFER DE TRANSPORTE", "TIMONEL DE EMBARCACIÓN", "AYUDANTE DE ALMACEN", "PLOMERO", "ELECTRICISTA", "TAPICERO", "COCINERO", "OPERADOR DE MÁQUINA LIVIANA"], "rango": "OBRERO CERTIFICADO I (CALIFICADO) GRADO 5" }, "8040N": { "cargos": ["SUPERVISOR DE MANTENIMIENTO", "SUPERVISOR DE SERVICIOS ESPECIALES", "SUPERVISOR DE SERVICIOS DE REPRODUCCIÓN", "MADRE SENIFA"], "rango": "OBRERO SUPERVISOR II GRADO 10" }, "8038N": { "cargos": ["ELECTROMECÁNICO", "MECANICO AUTOMOTRIZ"], "rango": "OBRERO CERTIFICADO IV (CALIFICADO) GRADO 8" }, "8626N": { "cargos": ["AYUDANTE AGROPECUARIO II"], "rango": "AYUDANTE AGROPECUARIO II" }, "8034N": { "cargos": ["LATONERO PINTOR", "PINTOR", "DESPENSERO", "RECEPTOR INFORMADOR"], "rango": "OBRERO GENERAL IV (NO CALIFICADO) GRADO 4" }, "8260C": { "cargos": ["CHOFER"], "rango": "CHOFER CONTRATADO" }, "8986N": { "cargos": ["VIGILANTE II"], "rango": "OBRERO VIGILANTE II GRADO 6" }, "8625N": { "cargos": ["AYUDANTE AGROPECUARIO I"], "rango": "AYUDANTE AGROPECUARIO I" }, "8987N": { "cargos": ["VIGILANTE III"], "rango": "OBRERO VIGILANTE III GRADO 7" }, "8032N": { "cargos": ["AYUDANTE DE SERVICIOS DE COCINA", "ASEADOR II", "ASCENSORISTA", "LAVANDERO", "PLANCHADOR", "MENSAJERO GRADO", "PORTERO"], "rango": "OBRERO GENERAL II (NO CALIFICADO) GRADO 2" }, "8991N": { "cargos": ["COCINERO II"], "rango": "COCINERO II" }, "8990N": { "cargos": ["COCINERO"], "rango": "COCINERO I" }, "8989N": { "cargos": ["SUPERVISOR GENERAL DE SEGURIDAD"], "rango": "OBRERO SUPERVISOR GENERAL DE SEGURIDAD GRADO 10" }, "8985C": { "cargos": ["VIGILANTE"], "rango": "VIGILANTE CONTRATADO" }, "8031N": { "cargos": ["ASEADOR I"], "rango": "OBRERO GENERAL I (NO CALIFICADO) GRADO 1" }, "8039N": { "cargos": ["SUPERVISOR DE SERVICIOS INTERNOS", "SUPERVISOR AUXILIAR DE MANTENIMIENTO", "MADRE SENIFA"], "rango": "OBRERO SUPERVISOR I GRADO 9" }, "8988N": { "cargos": ["SUPERVISOR DE ÁREA DE SEGURIDAD"], "rango": "OBRERO SUPERVISOR DE AREA DE SEGURIDAD GRADO 9" }, "8985N": { "cargos": ["VIGILANTE I"], "rango": "OBRERO VIGILANTE I GRADO 5" }, "8033N": { "cargos": ["JARDINERO", "ASEADOR III", "AYUDANTE DE SERVICIOS", "AYUDANTE DE ARTES", "MENSAJERO MOTORIZADO", "OPERADOR DE MAQUINA FOTOCOPIADORA", "CONSERJE", "FUMIGADOR", "AYUDANTE DE CARGA"], "rango": "OBRERO GENERAL III (NO CALIFICADO) GRADO 3" }, "8036N": { "cargos": ["ALBAÑIL", "AUXILIAR DE LABORATORIO", "CARPINTERO", "HERRERO SOLDADOR", "FOTOGRABADOR PLANCHISTA", "MARINO AUXILIAR", "OPERADOR DE MÁQUINA PESADA"], "rango": "OBRERO CERTIFICADO II (CALIFICADO) GRADO 6" } }, "administrativo": { "100000": "BACHILLER I", "110000": "BACHILLER II", "110100": "BACHILLER III", "200000": "TSU I", "210000": "TSU II", "210100": "TSU III", "300000": "PROFESIONAL UNIV. I", "310000": "PROFESIONAL UNIV. II", "310100": "PROFESIONAL UNIV. III", "340201": "PROFESIONAL UNIV. MEDICO I", "340202": "PROFESIONAL UNIV. MEDICO II", "340203": "PROFESIONAL UNIV. MEDICO III", "340601": "PROFESIONAL UNIV. ODONTOLOGO I", "340603": "PROFESIONAL UNIV. ODONTOLOGO III" }, "docente": { "1143NH": "DOC. III / AULA", "4160DH": "DOC. (NG) / AULA", "6120DI": "TSU PROF. NO DOC.", "1124DH": "DOC. IV / AULA", "1125DI": "DOC. V / AULA", "1122DH": "DOC. II / AULA", "1172DH": "DOC. II / AULA", "2157DH": "TSU EN EDUCACION", "1113DB": "DOC. III / AULA BOLIV.", "1123DI": "DOC. III / AULA", "1164DH": "DOC. IV / AULA", "1115DB": "DOC. V / AULA BOLIV.", "1113DI": "DOC. III / AULA", "5120DI": "LIC. PROFESIONAL NO DOC.", "7140DH": "TM / PERITO PROF. NO DOC.", "1132DH": "DOC. II / AULA", "1194NH": "DOC. IV / AULA", "1155DH": "DOC. V / AULA", "2167DB": "TSU EN EDUCACION BOLIV.", "1186NH": "DOC. VI / AULA", "1176DH": "DOC. VI / AULA", "1124DI": "DOC. IV / AULA", "3128DB": "MAESTRO NORMAL. EN EDU BO", "1135DH": "DOC. V / AULA", "6140DH": "TSU PROF. NO DOC.", "1145DH": "DOC. V / AULA", "1174NH": "DOC. IV / AULA", "1126DI": "DOC. VI / AULA", "1183DH": "DOC. III / AULA", "1152DH": "DOC. II / AULA", "1124DB": "DOC. IV / AULA BOLIV.", "1193DH": "DOC. III / AULA", "4160DI": "DOC. (NG) / AULA", "1172NH": "DOC. II / AULA", "1174DH": "DOC. IV / AULA", "4A50WH": "RESIDENTE / AGRO. (NG)", "1121DB": "DOC. I / AULA BOLIV.", "1161DB": "DOC. I / AULA BOLIV.", "1164DI": "DOC. IV / AULA", "1A53DH": "RESIDENTE / AGRO. III", "4170NH": "DOC. (NG) / AULA", "1195DH": "DOC. V / AULA", "4140DH": "DOC. (NG) / AULA", "1122DI": "DOC. II / AULA", "1165DI": "DOC. V / AULA", "1134DH": "DOC. IV / AULA", "1116DB": "DOC. VI / AULA BOLIV.", "1112DI": "DOC. II / AULA", "1A55DH": "RESIDENTE / AGRO. V", "1156DH": "DOC. VI / AULA", "5180NH": "LIC. PROFESIONAL NO DOC.", "6120DB": "TSU PROF. NO DOC. BOLIV.", "1191NH": "DOC. I / AULA", "4150DH": "DOC. (NG) / AULA", "1162DI": "DOC. II / AULA", "1146DH": "DOC. VI / AULA", "3198NH": "MAESTRO NORMALISTA EN EDU", "1115DI": "DOC. V / AULA", "2127DH": "TSU EN EDUCACION", "1163DI": "DOC. III / AULA", "2127DI": "TSU EN EDUCACION", "1A54DH": "RESIDENTE / AGRO. IV", "1121DH": "DOC. I / AULA", "1141DH": "DOC. I / AULA", "5120DB": "LIC. PROFES. NO DOC. BOLI", "1116DI": "DOC. VI / AULA", "4120DI": "DOC. (NG) / AULA", "4160DB": "DOC. (NG) / AULA BOLIV.", "1151DH": "DOC. I / AULA", "1121DI": "DOC. I / AULA", "2A57DH": "RESIDENTE / AGRO. TSU", "3128DI": "MAESTRO NORMALISTA EN EDU", "1153DH": "DOC. III / AULA", "1165DH": "DOC. V / AULA", "1196NH": "DOC. VI / AULA", "4180DH": "DOC. (NG) / AULA", "1111DI": "DOC. I / AULA", "1126DH": "DOC. VI / AULA", "1111DH": "DOC. I / AULA", "4110DI": "DOC. (NG) / AULA", "1195NH": "DOC. V / AULA", "4110DB": "DOC. (NG) / AULA BOLIV.", "2147DH": "TSU EN EDUCACION", "2137DH": "TSU EN EDUCACION", "1183NH": "DOC. III / AULA", "1173DH": "DOC. III / AULA", "1166DI": "DOC. VI / AULA", "2127DB": "TSU EN EDUCACION BOLIV.", "3128DH": "MAESTRO NORMALISTA EN EDU", "3198DH": "MAESTRO NORMALISTA EN EDU", "1185NH": "DOC. V / AULA", "1131DH": "DOC. I / AULA", "1123DH": "DOC. III / AULA", "1192NH": "DOC. II / AULA", "1162DB": "DOC. II / AULA BOLIV.", "2167DI": "TSU EN EDUCACION", "1182NH": "DOC. II / AULA", "1166DH": "DOC. VI / AULA", "5140DH": "LIC. PROFESIONAL NO DOC.", "1181ZH": "DOC. I / AULA", "210LNR": "JEFE DE DIVISION", "4120DH": "DOC. (NG) / AULA", "2117DB": "TSU EN EDUCACION BOLIV.", "1114DI": "DOC. IV / AULA", "1133DH": "DOC. III / AULA", "2117DI": "TSU EN EDUCACION", "1126DB": "DOC. VI / AULA BOLIV.", "1176NH": "DOC. VI / AULA", "6180NH": "TSU PROF. NO DOC.", "1164DB": "DOC. IV / AULA BOLIV.", "1142DH": "DOC. II / AULA", "6150DH": "TSU PROF. NO DOC.", "4190DH": "DOC. (NG) / AULA", "1194DH": "DOC. IV / AULA", "2187NH": "TSU EN EDUCACION", "1114DB": "DOC. IV / AULA BOLIV.", "4170DH": "DOC. (NG) / AULA", "4120DB": "DOC. (NG) / AULA BOLIV.", "1122DB": "DOC. II / AULA BOLIV.", "1143DH": "DOC. III / AULA", "4130DH": "DOC. (NG) / AULA", "1154DH": "DOC. IV / AULA", "1161DI": "DOC. I / AULA", "1125DB": "DOC. V / AULA BOLIV.", "1181NH": "DOC. I / AULA", "1184NH": "DOC. IV / AULA", "1175NH": "DOC. V / AULA", "1173NH": "DOC. III / AULA", "1112DB": "DOC. II / AULA BOLIV.", "1171NH": "DOC. I / AULA", "1165DB": "DOC. V / AULA BOLIV.", "1144DH": "DOC. IV / AULA", "1163DB": "DOC. III / AULA BOLIV.", "1111DB": "DOC. I / AULA BOLIV.", "1123DB": "DOC. III / AULA BOLIV.", "1184DH": "DOC. IV / AULA", "6130DH": "TSU PROF. NO DOC.", "4190NH": "DOC. (NG) / AULA", "1161DH": "DOC. I / AULA", "1196DH": "DOC. VI / AULA", "1136DH": "DOC. VI / AULA", "4180NH": "DOC. (NG) / AULA", "1166DB": "DOC. VI / AULA BOLIV.", "1141NH": "DOC. I / AULA", "5130DH": "LIC. PROFESIONAL NO DOC.", "1182DH": "DOC. II / AULA", "1125DH": "DOC. V / AULA" } } };
 
 let _CATALOGOS_CACHE = null;
 
@@ -54,7 +54,7 @@ export async function obtenerCatalogosMaestros() {
                 return _CATALOGOS_CACHE;
             }
         }
-    } catch(e) {
+    } catch (e) {
         console.warn("Aviso leyendo sgh_catalogos de localStorage:", e);
     }
 
@@ -66,7 +66,7 @@ export async function obtenerCatalogosMaestros() {
             _CATALOGOS_CACHE = data;
             return _CATALOGOS_CACHE;
         }
-    } catch(e) {
+    } catch (e) {
         console.warn("Aviso consultando catalogos_maestros en Firestore:", e);
     }
 
@@ -182,8 +182,8 @@ export async function initCascadaPersonal() {
 
     const depActual = selDep.value;
     selDep.innerHTML = '<option value="">Seleccione Dependencia...</option>' +
-                       '<option value="NACIONAL">NACIONAL</option>' +
-                       '<option value="ESTADAL">ESTADAL</option>';
+        '<option value="NACIONAL">NACIONAL</option>' +
+        '<option value="ESTADAL">ESTADAL</option>';
     if (depActual) selDep.value = depActual;
 
     const catalogos = await obtenerCatalogosMaestros();
@@ -344,7 +344,7 @@ export async function initCascadaPersonal() {
     function poblarOficiosObrero() {
         if (!selRango) return;
         const obreroMap = (personalData.NACIONAL && personalData.NACIONAL.obrero) || (PERSONAL_DATA_MASTER.NACIONAL && PERSONAL_DATA_MASTER.NACIONAL.obrero) || {};
-        
+
         selRango.onchange = () => {
             const racCode = selRango.value;
             if (!racCode || !obreroMap[racCode]) {
@@ -434,7 +434,7 @@ export async function initCascadaPersonal() {
         if (tipoVal === 'DOCENTE') {
             if (lblRecibo) lblRecibo.innerHTML = 'Horas según Recibo (H.DOC) <span style="color: #dc2626;">*</span>';
             if (inpHRecibo) inpHRecibo.placeholder = 'Ej. 53.33 o 40';
-            if (lblAdmin) lblAdmin.innerHTML = (atiendeMatSel?.value === 'SI') ? 'Horas Administrativas (Coordinación / Oficina)' : 'Horas Administrativas (en este Plantel) <span style="color: #dc2626;">*</span>';
+            if (lblAdmin) lblAdmin.innerHTML = (atiendeMatSel?.value === 'SI') ? 'Horas Administrativas' : 'Horas Administrativas (en este Plantel) <span style="color: #dc2626;">*</span>';
             if (inpAdmin) inpAdmin.placeholder = 'Ej. 0 o 20 (Coordinación)';
             if (atiendeMatSel && !atiendeMatSel.dataset.manualChanged) {
                 atiendeMatSel.value = 'SI';
@@ -464,7 +464,7 @@ export function mostrarFormularioPersonal(autoScroll = true) {
 
     const contenedor = document.getElementById('seccion-registro-personal');
     const contenedorTabla = document.getElementById('seccion-personal-existente');
-    
+
     if (contenedorTabla) contenedorTabla.style.display = 'block';
     if (contenedor) {
         contenedor.style.display = 'block';
@@ -476,7 +476,7 @@ export function mostrarFormularioPersonal(autoScroll = true) {
             }
         }
     }
-    
+
     let dea = '';
     if (window.currentPlantelDEA) {
         dea = window.currentPlantelDEA;
@@ -761,7 +761,7 @@ export function cargarEmpleadoEnFormulario(data, docId) {
 
     // 2. Datos Laborales
     setVal('wp-ubicacion-administrativa', data['ubicacion-administrativa'] || '');
-    
+
     const tipo = (data['tipo-personal'] || '').toUpperCase();
     const dep = (data.dependencia || '').toUpperCase();
     const selTipo = document.getElementById('wp-tipo-personal');
@@ -1047,7 +1047,7 @@ export function mostrarModalEliminarPersonal(data, docId, codigoDEA) {
             } else {
                 try {
                     await deleteDoc(doc(db, "personal_traslados", cedula));
-                } catch(e) {}
+                } catch (e) { }
             }
 
             // 2. Eliminar de cargos_personal
@@ -1063,7 +1063,7 @@ export function mostrarModalEliminarPersonal(data, docId, codigoDEA) {
                         const nuevoResumen = (pData.personal_resumen || []).filter(item => item.cedula !== cedula);
                         await updateDoc(pRef, { personal_resumen: nuevoResumen });
                     }
-                } catch(e) {
+                } catch (e) {
                     console.warn("Aviso actualizando personal_resumen tras desincorporación:", e);
                 }
             }
@@ -1081,7 +1081,7 @@ export function mostrarModalEliminarPersonal(data, docId, codigoDEA) {
 
             cargarPersonalExistente(codigoDEA);
 
-        } catch(err) {
+        } catch (err) {
             console.error("Error al desincorporar funcionario:", err);
             btnConfirm.disabled = false;
             btnConfirm.textContent = "Confirmar Eliminación";
@@ -1124,7 +1124,7 @@ export function validarFormularioPersonal() {
         { id: 'wp-dependencia', nombre: 'Dependencia' },
         { id: 'wp-cargo', nombre: 'Cargo' },
         { id: 'wp-titular', nombre: 'Condición de Titular' },
-// Horas se validan condicionalmente según tipo de personal
+        // Horas se validan condicionalmente según tipo de personal
         { id: 'wp-fecha-ingreso', nombre: 'Fecha de Ingreso' },
         { id: 'wp-turnos-atiende', nombre: 'Turnos que Atiende' },
         { id: 'wp-atiende-matricula', nombre: '¿Atiende Matrícula?' },
@@ -1163,7 +1163,7 @@ export function validarFormularioPersonal() {
         campos.push({ id: 'wp-nivel-modalidad', nombre: 'Nivel / Modalidad' });
         campos.push({ id: 'wp-especialidad-imparte', nombre: 'Especialidad Imparte' });
         campos.push({ id: 'wp-horas-recibo', nombre: 'Horas según Recibo de Pago' });
-        campos.push({ id: 'wp-horas-academicas', nombre: 'Horas Académicas (en este Plantel)' });
+        campos.push({ id: 'wp-horas-academicas', nombre: 'Horas Académicas' });
     } else {
         // Para personal administrativo, obrero o docente en comisión sin aula
         campos.push({ id: 'wp-horas-administrativas', nombre: 'Horas Administrativas' });
@@ -1174,7 +1174,7 @@ export function validarFormularioPersonal() {
         const el = document.getElementById(c.id);
         if (!el) continue;
         const val = (el.value !== undefined && el.value !== null) ? String(el.value).trim() : '';
-        
+
         if (!val) {
             el.style.borderColor = '#dc2626';
             el.focus();
@@ -1330,7 +1330,7 @@ export async function guardarPersonalInline() {
         instruccion: document.getElementById('wp-instruccion')?.value || '',
         'nivel-instruccion': document.getElementById('wp-instruccion')?.value || '',
         profesion: document.getElementById('wp-profesion')?.value || '',
-        
+
         'ubicacion-administrativa': document.getElementById('wp-ubicacion-administrativa')?.value || '',
         dependencia: document.getElementById('wp-dependencia')?.value || '',
         'tipo-personal': document.getElementById('wp-tipo-personal')?.value || '',
@@ -1353,11 +1353,11 @@ export async function guardarPersonalInline() {
         'atiende-matricula': document.getElementById('wp-atiende-matricula')?.value || '',
         'nivel-modalidad': document.getElementById('wp-nivel-modalidad')?.value || '',
         'especialidad-imparte': document.getElementById('wp-especialidad-imparte')?.value || '',
-        
+
         'situacion-laboral': document.getElementById('wp-situacion-laboral')?.value || '',
         'descripcion-situacion': document.getElementById('wp-descripcion-situacion')?.value || '',
         observaciones: document.getElementById('wp-observaciones')?.value || '',
-        
+
         'talla-camisa': document.getElementById('wp-talla-camisa')?.value || '',
         'talla-pantalon': document.getElementById('wp-talla-pantalon')?.value || '',
         'talla-zapato': document.getElementById('wp-talla-zapato')?.value || '',
@@ -1369,7 +1369,7 @@ export async function guardarPersonalInline() {
         'tipo-enfermedad': document.getElementById('wp-tipo-enfermedad')?.value || '',
         medicamento: document.getElementById('wp-medicamento')?.value || '',
         discapacidad: document.getElementById('wp-discapacidad')?.value || '',
-        
+
         ubch: document.getElementById('wp-ubch')?.value || '',
         'circuito-comunal': document.getElementById('wp-circuito-comunal')?.value || '',
         'centro-votacion': document.getElementById('wp-centro-votacion')?.value || ''
@@ -1382,7 +1382,7 @@ export async function guardarPersonalInline() {
     if (!dea) {
         const stPlantel = localStorage.getItem('plantelSeleccionado');
         if (stPlantel) {
-            try { dea = JSON.parse(stPlantel).codigoDEA; } catch(e) {}
+            try { dea = JSON.parse(stPlantel).codigoDEA; } catch (e) { }
         }
     }
 
@@ -1417,7 +1417,7 @@ export async function guardarPersonalInline() {
 
         const ref = doc(db, "cargos_personal", docId);
         await setDoc(ref, payload, { merge: true });
-        
+
         // Si era un traslado, eliminar la ficha viajera de personal_traslados y registrar en auditoría de traslados
         if (isTraslado) {
             try {
@@ -1433,7 +1433,7 @@ export async function guardarPersonalInline() {
                     fecha_incorporacion: new Date().toISOString(),
                     usuario_responsable: window.sgh_user_data?.email || 'DIRECTOR_PLANTEL'
                 });
-            } catch(eTraslado) {
+            } catch (eTraslado) {
                 console.warn("Aviso procesando cierre de ficha viajera:", eTraslado);
             }
         }
@@ -1453,13 +1453,13 @@ export async function guardarPersonalInline() {
                     });
                     await updateDoc(plantelRef, { personal_resumen: resumenLimpio });
                 }
-            } catch(e) {
+            } catch (e) {
                 console.warn("Aviso actualizando personal_resumen en plantel:", e);
             }
         }
 
-        const mensajeExito = isTraslado 
-            ? "¡Funcionario incorporado al plantel exitosamente por traslado!" 
+        const mensajeExito = isTraslado
+            ? "¡Funcionario incorporado al plantel exitosamente por traslado!"
             : (isEditing ? "¡Empleado actualizado exitosamente!" : "¡Empleado guardado exitosamente!");
         showToast(mensajeExito, "success");
         limpiarFormularioPersonal();
@@ -1521,16 +1521,16 @@ export async function guardarPersonalInline() {
 async function cargarPersonalExistente(codigoDEA) {
     const tbody = document.getElementById('tbody-personal-existente');
     if (!tbody) return;
-    
+
     tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px; color: #64748b;">Cargando personal...</td></tr>';
-    
+
     try {
         const dbInstance = getFirestore();
         const q = query(collection(dbInstance, 'cargos_personal'), where('codigo-plantel', '==', codigoDEA));
         const querySnapshot = await getDocs(q);
-        
-        tbody.innerHTML = ''; 
-        
+
+        tbody.innerHTML = '';
+
         if (querySnapshot.empty) {
             window._personalPlantelData = [];
             tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px; color: #64748b;">No hay personal registrado en este plantel.</td></tr>';
@@ -1544,34 +1544,34 @@ async function cargarPersonalExistente(codigoDEA) {
             window._personalPlantelData.push({ ...data, _docId: docId });
             const tr = document.createElement('tr');
             tr.style.borderBottom = '1px solid #e2e8f0';
-            
+
             const tdCed = document.createElement('td');
             tdCed.style.padding = '12px';
             tdCed.textContent = data['cedula-identidad'] || data.cedula || 'N/A';
-            
+
             const tdNom = document.createElement('td');
             tdNom.style.padding = '12px';
             tdNom.textContent = (data['nombre-apellido'] || data['apellidos-nombres'] || data.nombre || data.nombres || 'N/A').toUpperCase();
-            
+
             const tdTipo = document.createElement('td');
             tdTipo.style.padding = '12px';
             tdTipo.textContent = data['tipo-personal'] || 'N/A';
-            
+
             const tdSit = document.createElement('td');
             tdSit.style.padding = '12px';
             tdSit.textContent = data['situacion-laboral'] || 'N/A';
-            
+
             const tdAcc = document.createElement('td');
             tdAcc.style.padding = '12px';
             tdAcc.style.textAlign = 'center';
             tdAcc.style.verticalAlign = 'middle';
-            
+
             if (window._modoSupervision) {
                 tdAcc.innerHTML = `<span style="color: #64748b; font-size: 0.8rem; background: #f1f5f9; padding: 4px 8px; border-radius: 4px; font-weight: 500;">👁️ Solo Lectura</span>`;
             } else {
                 const btnEditStyle = "width: 32px; height: 32px; padding: 0; border-radius: 6px; border: 1px solid #bfdbfe; background: #eff6ff; color: #2563eb; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;";
                 const btnDelStyle = "width: 32px; height: 32px; padding: 0; border-radius: 6px; border: 1px solid #fecaca; background: #fef2f2; color: #dc2626; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;";
-                
+
                 tdAcc.innerHTML = `
                     <div style="display: flex; flex-direction: row; flex-wrap: nowrap; gap: 8px; justify-content: center; align-items: center; width: 100%;">
                         <button class="btn-editar" style="${btnEditStyle}" onmouseover="this.style.background='#dbeafe';" onmouseout="this.style.background='#eff6ff';" title="Editar datos del funcionario">
@@ -1582,7 +1582,7 @@ async function cargarPersonalExistente(codigoDEA) {
                         </button>
                     </div>
                 `;
-                
+
                 // Conectar eventos click
                 const btnEditar = tdAcc.querySelector('.btn-editar');
                 if (btnEditar) {
@@ -1614,7 +1614,7 @@ async function cargarPersonalExistente(codigoDEA) {
         // Guardar en caché en memoria para Zero-Cost en expedientes y fichas rápidas
         window._cacheStaffSupervision = window._cacheStaffSupervision || {};
         window._cacheStaffSupervision[codigoDEA] = [...window._personalPlantelData];
-        
+
     } catch (error) {
         console.error("Error cargando personal:", error);
         tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px; color: #ef4444;">Error cargando registros.</td></tr>';
@@ -1629,15 +1629,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const searchTerm = e.target.value.toLowerCase().trim();
             const tbody = document.getElementById('tbody-personal-existente');
             if (!tbody) return;
-            
+
             const rows = tbody.querySelectorAll('tr');
             let matchCount = 0;
-            
+
             rows.forEach(row => {
                 if (row.cells.length === 1) return;
                 const cedula = row.cells[0]?.textContent.toLowerCase() || '';
                 const nombre = row.cells[1]?.textContent.toLowerCase() || '';
-                
+
                 if (cedula.includes(searchTerm) || nombre.includes(searchTerm)) {
                     row.style.display = '';
                     matchCount++;
@@ -1645,7 +1645,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     row.style.display = 'none';
                 }
             });
-            
+
             let noMatchRow = document.getElementById('row-no-matches');
             if (matchCount === 0 && searchTerm !== '' && rows.length > 0 && rows[0].cells.length > 1) {
                 if (!noMatchRow) {
@@ -1744,7 +1744,7 @@ export async function verificarTopeHorasDocente(forzarConsulta = false) {
     if (!deaActual) {
         const stPlantel = localStorage.getItem('plantelSeleccionado');
         if (stPlantel) {
-            try { deaActual = JSON.parse(stPlantel).codigoDEA; } catch(e) {}
+            try { deaActual = JSON.parse(stPlantel).codigoDEA; } catch (e) { }
         }
     }
 
@@ -1796,7 +1796,7 @@ export async function verificarTopeHorasDocente(forzarConsulta = false) {
     const etiqueta = esMedia ? 'Educación Media (Tope: 56 Horas)' : 'Educación Básica (Inicial/Primaria: 53.33 Horas)';
     const total = horasOtros + horasInp;
     const disp = Math.max(0, tope - horasOtros);
-    
+
     let excede = false;
     let mensajeError = '';
     let motivoBloqueo = '';
@@ -2008,7 +2008,7 @@ export function toggleMatriculaUI() {
                 : 'Horas según Recibo (H.ADM) <span style="color: #dc2626;">*</span>';
         }
         if (lblAdmin) {
-            lblAdmin.innerHTML = 'Horas Administrativas (Coordinación / Oficina)';
+            lblAdmin.innerHTML = 'Horas Administrativas';
         }
 
         if (cnivel) cnivel.style.display = 'block';
@@ -2021,7 +2021,7 @@ export function toggleMatriculaUI() {
         if (selNivel && !selNivel.value) {
             let infoPlantel = window.currentPlantelInfo || {};
             const nivelPlantel = (document.getElementById('inp-niveles-modalidades')?.value || infoPlantel.nivel || '').toUpperCase();
-            
+
             for (let i = 0; i < selNivel.options.length; i++) {
                 const optText = (selNivel.options[i].value || '').toUpperCase();
                 if (optText && (nivelPlantel.includes(optText) || optText.includes(nivelPlantel))) {
@@ -2110,18 +2110,18 @@ window.calcularHorasUI = calcularHorasUI;
 window.onNivelModalidadChangeUI = onNivelModalidadChangeUI;
 window.onAtiendeMatriculaChangeUI = onAtiendeMatriculaChangeUI;
 window.toggleMatriculaUI = toggleMatriculaUI;
-window.validarHorasDocenteUI = function(forzar = false) {
+window.validarHorasDocenteUI = function (forzar = false) {
     verificarTopeHorasDocente(forzar);
 };
 
 // Helpers de validación y cálculo en UI
-window.validarCedulaUI = function() {
+window.validarCedulaUI = function () {
     const nac = document.getElementById('wp-nacionalidad')?.value;
     const cedInp = document.getElementById('wp-cedula');
     if (!cedInp) return;
     let val = parseInt(cedInp.value);
     if (isNaN(val)) return;
-    
+
     if (nac === 'V') {
         if (val < 1000000) cedInp.setCustomValidity("Cédula V mínima es 1000000");
         else if (val > 38000000) cedInp.setCustomValidity("Cédula V máxima es 38000000");
@@ -2134,7 +2134,7 @@ window.validarCedulaUI = function() {
     cedInp.reportValidity();
 };
 
-window.calcularEdadUI = function() {
+window.calcularEdadUI = function () {
     const fecha = document.getElementById('wp-nacimiento')?.value;
     if (!fecha) return;
     const nacimiento = new Date(fecha);
@@ -2146,7 +2146,7 @@ window.calcularEdadUI = function() {
     if (el) el.value = edad > 0 ? edad : 0;
 };
 
-window.calcularAntiguedadUI = function() {
+window.calcularAntiguedadUI = function () {
     const fecha = document.getElementById('wp-fecha-ingreso')?.value;
     if (!fecha) return;
     const ingreso = new Date(fecha);
@@ -2181,10 +2181,10 @@ export async function buscarFichaTraslado(cedulaInput, nac = 'V') {
         showToast("Por favor, ingrese un número de cédula válido.", "warning");
         return;
     }
-    
+
     const contenedor = document.getElementById('contenedor-resultado-traslado');
     if (!contenedor) return;
-    
+
     contenedor.innerHTML = `
         <div style="display: flex; align-items: center; justify-content: center; gap: 10px; padding: 25px; color: #475569;">
             <div class="spinner" style="width: 24px; height: 24px; border: 3px solid #cbd5e1; border-top-color: #0284c7; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
@@ -2235,7 +2235,7 @@ export async function buscarFichaTraslado(cedulaInput, nac = 'V') {
             document.getElementById('btn-confirmar-incorporar-traslado').onclick = () => {
                 cerrarModalTraslado();
                 cargarEmpleadoEnFormulario(funcionario, null);
-                
+
                 window._esTraslado = true;
                 window._datosTraslado = ficha;
                 window._docIdEnEdicion = null;
@@ -2288,7 +2288,7 @@ export async function buscarFichaTraslado(cedulaInput, nac = 'V') {
             const dataActivo = snapActivo.docs[0].data();
             const deaActivo = dataActivo['codigo-plantel'] || dataActivo.codigoDEA || 'OTRO PLANTEL';
             const nomActivo = (dataActivo.nombres || dataActivo['nombre-apellido'] || '').toUpperCase();
-            
+
             let deaActual = window.currentPlantelDEA || '';
             if (!deaActual && window.sgh_user_data?.jerarquia?.plantel_codigo) {
                 deaActual = window.sgh_user_data.jerarquia.plantel_codigo;
@@ -2351,7 +2351,7 @@ export async function buscarFichaTraslado(cedulaInput, nac = 'V') {
     }
 }
 
-window.buscarFichaTrasladoUI = function() {
+window.buscarFichaTrasladoUI = function () {
     const nac = document.getElementById('sel-nac-traslado')?.value || 'V';
     const numRaw = document.getElementById('inp-cedula-traslado')?.value?.trim() || '';
     if (!numRaw) {
@@ -2411,7 +2411,7 @@ export async function exportarNominaExcel() {
     if (!dea) {
         const stPlantel = localStorage.getItem('plantelSeleccionado');
         if (stPlantel) {
-            try { dea = JSON.parse(stPlantel).codigoDEA; } catch(e) {}
+            try { dea = JSON.parse(stPlantel).codigoDEA; } catch (e) { }
         }
     }
 
@@ -2481,107 +2481,107 @@ export async function exportarNominaExcel() {
             return !!(ced || nom);
         })
         .map((emp, index) => {
-        const cedulaNum = emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÉDULA'] || '';
-        const nacionalidad = emp['nacionalidad'] || (String(cedulaNum).startsWith('E') ? 'E' : 'V');
-        const cedulaCompleta = emp['cedula_completa'] || (cedulaNum ? `${nacionalidad}-${cedulaNum}` : '');
+            const cedulaNum = emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÉDULA'] || '';
+            const nacionalidad = emp['nacionalidad'] || (String(cedulaNum).startsWith('E') ? 'E' : 'V');
+            const cedulaCompleta = emp['cedula_completa'] || (cedulaNum ? `${nacionalidad}-${cedulaNum}` : '');
 
-        const priNombre = emp['primer-nombre'] || emp.primer_nombre || '';
-        const segNombre = emp['segundo-nombre'] || emp.segundo_nombre || '';
-        const priApellido = emp['primer-apellido'] || emp.primer_apellido || '';
-        const segApellido = emp['segundo-apellido'] || emp.segundo_apellido || '';
-        
-        let nombreCompleto = emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || emp['APELLIDOS Y NOMBRES'] || emp['NOMBRE Y APELLIDO'] || '';
-        if (!nombreCompleto) {
-            nombreCompleto = `${priApellido} ${segApellido} ${priNombre} ${segNombre}`.trim().replace(/\s+/g, ' ');
-        }
+            const priNombre = emp['primer-nombre'] || emp.primer_nombre || '';
+            const segNombre = emp['segundo-nombre'] || emp.segundo_nombre || '';
+            const priApellido = emp['primer-apellido'] || emp.primer_apellido || '';
+            const segApellido = emp['segundo-apellido'] || emp.segundo_apellido || '';
 
-        const horasAcad = Number(emp['horas-academicas']) || 0;
-        const horasAdmin = Number(emp['horas-administrativas']) || 0;
-        const totalHoras = horasAcad + horasAdmin;
+            let nombreCompleto = emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || emp['APELLIDOS Y NOMBRES'] || emp['NOMBRE Y APELLIDO'] || '';
+            if (!nombreCompleto) {
+                nombreCompleto = `${priApellido} ${segApellido} ${priNombre} ${segNombre}`.trim().replace(/\s+/g, ' ');
+            }
 
-        return {
-            'N°': index + 1,
-            // 1. Identificación y Datos Personales
-            'Nacionalidad': nacionalidad,
-            'Cédula': cedulaNum,
-            'Apellidos y Nombres': nombreCompleto.toUpperCase(),
-            'Género': emp['genero'] || emp['GENERO'] || '',
-            'Fecha de Nacimiento': emp['fecha-nacimiento'] || emp['FECHA DE NACIMIENTO'] || '',
-            'Edad': emp['edad'] || emp['EDAD'] || '',
-            'Estado Civil': emp['estado-civil'] || emp['ESTADO CIVIL'] || '',
-            'Lugar de Nacimiento': emp['lugar-nacimiento'] || emp['LUGAR DE NACIMIENTO'] || '',
+            const horasAcad = Number(emp['horas-academicas']) || 0;
+            const horasAdmin = Number(emp['horas-administrativas']) || 0;
+            const totalHoras = horasAcad + horasAdmin;
 
-            // 2. Ubicación y Contacto
-            'Teléfono Habitación': emp['tel-habitacion'] || emp['TELEFONO HABITACION'] || '',
-            'Teléfono Celular': emp['tel-celular'] || emp['TELEFONO CELULAR'] || '',
-            'Teléfono Oficina': emp['tel-oficina'] || emp['TELEFONO OFICINA'] || '',
-            'Correo Electrónico': emp['correo'] || emp['CORREO ELECTRONICO'] || '',
-            'Dirección de Habitación': emp['direccion'] || emp['DIRECCION'] || '',
+            return {
+                'N°': index + 1,
+                // 1. Identificación y Datos Personales
+                'Nacionalidad': nacionalidad,
+                'Cédula': cedulaNum,
+                'Apellidos y Nombres': nombreCompleto.toUpperCase(),
+                'Género': emp['genero'] || emp['GENERO'] || '',
+                'Fecha de Nacimiento': emp['fecha-nacimiento'] || emp['FECHA DE NACIMIENTO'] || '',
+                'Edad': emp['edad'] || emp['EDAD'] || '',
+                'Estado Civil': emp['estado-civil'] || emp['ESTADO CIVIL'] || '',
+                'Lugar de Nacimiento': emp['lugar-nacimiento'] || emp['LUGAR DE NACIMIENTO'] || '',
 
-            // 3. Formación Académica
-            'Nivel de Instrucción': emp['nivel-instruccion'] || emp['instruccion'] || emp['NIVEL DE INSTRUCCIÓN'] || '',
-            'Profesión / Título': emp['profesion'] || emp['PROFESIÓN'] || emp['PROFESION'] || '',
-            'Estado': pEstado || emp['estado'] || emp['ESTADO'] || 'MÉRIDA',
-            'Municipio': pMunicipio || emp['municipio'] || emp['MUNICIPIO'] || '',
-            'Parroquia': pParroquia || emp['parroquia'] || emp['PARROQUIA'] || '',
-            'Denominación': pDenominacion,
-            'Nombre Nominal': pNombreNominal,
-            'Nuevo Epónimo': pNuevoEponimo,
+                // 2. Ubicación y Contacto
+                'Teléfono Habitación': emp['tel-habitacion'] || emp['TELEFONO HABITACION'] || '',
+                'Teléfono Celular': emp['tel-celular'] || emp['TELEFONO CELULAR'] || '',
+                'Teléfono Oficina': emp['tel-oficina'] || emp['TELEFONO OFICINA'] || '',
+                'Correo Electrónico': emp['correo'] || emp['CORREO ELECTRONICO'] || '',
+                'Dirección de Habitación': emp['direccion'] || emp['DIRECCION'] || '',
 
-            // 4. Ubicación Administrativa y Cargo
-            'Código Plantel (DEA)': emp['codigo-plantel'] || emp.codigoDEA || dea,
-            'Cód. Dependencia': pCodDependencia || emp['CODIGO DEPENDENCIA 1'] || '',
-            'Cód. Estadístico': pCodEstadistico || emp['CODIGO ESTADISTICO'] || '',
-            'Dependencia': pDependencia || emp['dependencia'] || emp['DEPENDENCIA'] || '',
-            'Niveles-Modalidades': pNivelesMod || emp['NIVEL O MODALIDAD'] || '',
-            'Turno(s)': pTurnos || emp['TURNOS DEL PLANTEL'] || '',
-            'Ubicación Geográfica': pUbicacion || emp['UBICACIÓN GEOGRAFICA'] || '',
-            'Ubicación Administrativa': emp['ubicacion-administrativa'] || emp['UBICACIÓN ADMINISTRATIVA'] || '',
-            'Tipo de Personal': emp['tipo-personal'] || emp['TIPO PERSONAL'] || '',
-            'Subcategoría': emp['subcategoria'] || emp['SUB CATEGORIA 1 TP'] || '',
-            'Cargo': emp['cargo'] || emp['CARGO'] || '',
-            'Código RAC': emp['codigo-rac'] || emp['codigo-cargo'] || emp['CODIGO RAC'] || '',
-            'Condición': emp['titular'] || emp['TITULAR'] || '',
-            'Fecha de Ingreso': emp['fecha-ingreso'] || emp['FECHA DE INGRESO'] || '',
-            'Años de Antigüedad': emp['antiguedad'] || emp['ANTIGUEDAD'] || '',
-            'Turnos que Atiende': emp['turnos-atiende'] || emp['TURNOS QUE ATIENDE'] || '',
+                // 3. Formación Académica
+                'Nivel de Instrucción': emp['nivel-instruccion'] || emp['instruccion'] || emp['NIVEL DE INSTRUCCIÓN'] || '',
+                'Profesión / Título': emp['profesion'] || emp['PROFESIÓN'] || emp['PROFESION'] || '',
+                'Estado': pEstado || emp['estado'] || emp['ESTADO'] || 'MÉRIDA',
+                'Municipio': pMunicipio || emp['municipio'] || emp['MUNICIPIO'] || '',
+                'Parroquia': pParroquia || emp['parroquia'] || emp['PARROQUIA'] || '',
+                'Denominación': pDenominacion,
+                'Nombre Nominal': pNombreNominal,
+                'Nuevo Epónimo': pNuevoEponimo,
 
-            // 5. Carga Horaria y Pedagógica
-            'Horas Recibo de Pago': Number(emp['horas-recibo']) || (Number(emp['horas-academicas'] || 0) + Number(emp['horas-administrativas'] || 0)),
-            'Horas Académicas': horasAcad || Number(emp['HORAS ACADEMICAS']) || 0,
-            'Horas Administrativas': horasAdmin || Number(emp['HORAS ADMINISTRATIVAS']) || 0,
-            'Horas por Programar': Number(emp['horas-por-programar']) || Math.max(0, (Number(emp['horas-recibo']) || (Number(emp['horas-academicas'] || 0) + Number(emp['horas-administrativas'] || 0))) - ((horasAcad || Number(emp['HORAS ACADEMICAS']) || 0) + (horasAdmin || Number(emp['HORAS ADMINISTRATIVAS']) || 0))),
-            'Atiende Matrícula': emp['atiende-matricula'] || emp['ATIENDE MATRICUAL'] || '',
-            'Nivel / Modalidad': emp['nivel-modalidad'] || emp['NIVEL O MODALIDAD'] || '',
-            'Especialidad que Imparte': emp['especialidad-imparte'] || emp['ESPECIALIDAD QUE IMPARTE EL DOCENTE'] || '',
+                // 4. Ubicación Administrativa y Cargo
+                'Código Plantel (DEA)': emp['codigo-plantel'] || emp.codigoDEA || dea,
+                'Cód. Dependencia': pCodDependencia || emp['CODIGO DEPENDENCIA 1'] || '',
+                'Cód. Estadístico': pCodEstadistico || emp['CODIGO ESTADISTICO'] || '',
+                'Dependencia': pDependencia || emp['dependencia'] || emp['DEPENDENCIA'] || '',
+                'Niveles-Modalidades': pNivelesMod || emp['NIVEL O MODALIDAD'] || '',
+                'Turno(s)': pTurnos || emp['TURNOS DEL PLANTEL'] || '',
+                'Ubicación Geográfica': pUbicacion || emp['UBICACIÓN GEOGRAFICA'] || '',
+                'Ubicación Administrativa': emp['ubicacion-administrativa'] || emp['UBICACIÓN ADMINISTRATIVA'] || '',
+                'Tipo de Personal': emp['tipo-personal'] || emp['TIPO PERSONAL'] || '',
+                'Subcategoría': emp['subcategoria'] || emp['SUB CATEGORIA 1 TP'] || '',
+                'Cargo': emp['cargo'] || emp['CARGO'] || '',
+                'Código RAC': emp['codigo-rac'] || emp['codigo-cargo'] || emp['CODIGO RAC'] || '',
+                'Condición': emp['titular'] || emp['TITULAR'] || '',
+                'Fecha de Ingreso': emp['fecha-ingreso'] || emp['FECHA DE INGRESO'] || '',
+                'Años de Antigüedad': emp['antiguedad'] || emp['ANTIGUEDAD'] || '',
+                'Turnos que Atiende': emp['turnos-atiende'] || emp['TURNOS QUE ATIENDE'] || '',
 
-            // 6. Situación Laboral
-            'Situación Laboral': emp['situacion-laboral'] || emp['SITUACIÓN DEL TRABAJADOR'] || '',
-            'Observaciones': emp['observaciones'] || emp['OBSERVACIÓN'] || emp['OBSERVACION'] || '',
+                // 5. Carga Horaria y Pedagógica
+                'Horas Recibo de Pago': Number(emp['horas-recibo']) || (Number(emp['horas-academicas'] || 0) + Number(emp['horas-administrativas'] || 0)),
+                'Horas Académicas': horasAcad || Number(emp['HORAS ACADEMICAS']) || 0,
+                'Horas Administrativas': horasAdmin || Number(emp['HORAS ADMINISTRATIVAS']) || 0,
+                'Horas por Programar': Number(emp['horas-por-programar']) || Math.max(0, (Number(emp['horas-recibo']) || (Number(emp['horas-academicas'] || 0) + Number(emp['horas-administrativas'] || 0))) - ((horasAcad || Number(emp['HORAS ACADEMICAS']) || 0) + (horasAdmin || Number(emp['HORAS ADMINISTRATIVAS']) || 0))),
+                'Atiende Matrícula': emp['atiende-matricula'] || emp['ATIENDE MATRICUAL'] || '',
+                'Nivel / Modalidad': emp['nivel-modalidad'] || emp['NIVEL O MODALIDAD'] || '',
+                'Especialidad que Imparte': emp['especialidad-imparte'] || emp['ESPECIALIDAD QUE IMPARTE EL DOCENTE'] || '',
 
-            // 7. Dotación y Bienestar Social
-            'Talla Camisa': emp['talla-camisa'] || emp['TALLA DE CAMISA'] || '',
-            'Talla Pantalón': emp['talla-pantalon'] || emp['TALLA DE PANTALÓN'] || '',
-            'Talla Zapato': emp['talla-zapato'] || emp['TALLA DE ZAPATO'] || '',
-            'Actividad Deportiva': emp['actividad-deportiva'] || emp['ACTIVIDAD DEPORTIVA'] || '',
-            'Actividad Cultural': emp['actividad-cultural'] || emp['ACTIVIDAD CULTURAL'] || '',
-            'Posee Alguna Enfermedad': emp['posee-enfermedad'] || emp['TIPO DE ENFERMEDAD'] || '',
-            'Requiere Medicamento': emp['requiere-medicamento'] || emp['MEDICAMENTO'] || '',
-            'Discapacidad': emp['discapacidad'] || emp['POSEE DISCAPACIDAD'] || '',
+                // 6. Situación Laboral
+                'Situación Laboral': emp['situacion-laboral'] || emp['SITUACIÓN DEL TRABAJADOR'] || '',
+                'Observaciones': emp['observaciones'] || emp['OBSERVACIÓN'] || emp['OBSERVACION'] || '',
 
-            // 8. Organización Comunitaria y Electoral
-            'UBCH': emp['ubch'] || emp['UBCH'] || '',
-            'Circuito Comunal': emp['circuito-comunal'] || emp['CIRCUITO COMUNAL'] || '',
-            'Centro de Votación': emp['centro-votacion'] || emp['CENTRO DE VOTACION'] || '',
-            'Tipo de Vivienda': emp['tipo-vivienda'] || emp['TIPO DE VIVIENDA'] || '',
-            'Material de Vivienda': emp['material-vivienda'] || emp['TIPO DE MATERIAL'] || '',
-            'Condición de Vivienda': emp['condicion-vivienda'] || emp['CONDICIÓN DE VIVIENDA'] || ''
-        };
-    });
+                // 7. Dotación y Bienestar Social
+                'Talla Camisa': emp['talla-camisa'] || emp['TALLA DE CAMISA'] || '',
+                'Talla Pantalón': emp['talla-pantalon'] || emp['TALLA DE PANTALÓN'] || '',
+                'Talla Zapato': emp['talla-zapato'] || emp['TALLA DE ZAPATO'] || '',
+                'Actividad Deportiva': emp['actividad-deportiva'] || emp['ACTIVIDAD DEPORTIVA'] || '',
+                'Actividad Cultural': emp['actividad-cultural'] || emp['ACTIVIDAD CULTURAL'] || '',
+                'Posee Alguna Enfermedad': emp['posee-enfermedad'] || emp['TIPO DE ENFERMEDAD'] || '',
+                'Requiere Medicamento': emp['requiere-medicamento'] || emp['MEDICAMENTO'] || '',
+                'Discapacidad': emp['discapacidad'] || emp['POSEE DISCAPACIDAD'] || '',
+
+                // 8. Organización Comunitaria y Electoral
+                'UBCH': emp['ubch'] || emp['UBCH'] || '',
+                'Circuito Comunal': emp['circuito-comunal'] || emp['CIRCUITO COMUNAL'] || '',
+                'Centro de Votación': emp['centro-votacion'] || emp['CENTRO DE VOTACION'] || '',
+                'Tipo de Vivienda': emp['tipo-vivienda'] || emp['TIPO DE VIVIENDA'] || '',
+                'Material de Vivienda': emp['material-vivienda'] || emp['TIPO DE MATERIAL'] || '',
+                'Condición de Vivienda': emp['condicion-vivienda'] || emp['CONDICIÓN DE VIVIENDA'] || ''
+            };
+        });
 
     try {
         const ws = XLSX.utils.json_to_sheet(filasExcel);
-        
+
         // Ajuste automático de anchos de columna
         const colWidths = Object.keys(filasExcel[0] || {}).map(key => {
             const maxLen = Math.max(
