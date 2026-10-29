@@ -2070,3 +2070,38 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `versiones.md`
 - `bitacora.md`
 - `conversaciones.md`
+
+---
+
+### v2.20.1 - 2026-10-29 (Corrección Crítica de Detección de Matrícula y Blindaje del Candado de Personal)
+
+**1. Objetivos del Ciclo:**
+- Corregir el fallo reportado en video (`WhatsApp_Video_2026-10-29_at_11.56.57.mp4`) donde un usuario con rol de director (`plaadmin`) para el plantel `OD14311419` (`ESCUELA ESTADO APURE` en Santos Marquina) ingresó al sistema con matrícula vacía/cero y, sin embargo, la sección de personal existente figuraba visible y permitía la edición de empleados mediante el botón de lápiz (✏️).
+- Garantizar que ningún plantel con 0 estudiantes pueda burlar el candado de coacción del Paso 1, eliminando cualquier falso positivo en la detección de matrícula previa.
+
+**2. Solución Técnica y Arquitectura:**
+- **Depuración de la Causa Raíz:**
+  - El documento del plantel en Firestore contenía `datos_completados: true` (un indicador legacy referente al guardado de datos administrativos/contacto institucionales) a pesar de tener `matricula-total: 0` y `matricula: {}`.
+  - La condición anterior en `main.js` evaluaba erróneamente: `if (dataParcial.datos_completados) hasData = true;`, lo que hacía creer al sistema que el plantel poseía matrícula cuando en realidad tenía cero alumnos.
+  - Adicionalmente, la presencia de secciones configuradas sin alumnos también podía inducir a falsos positivos.
+- **Refactorización Estricta de `hasData` en `main.js`:**
+  - Se suprimió de forma definitiva la consideración de `datos_completados`, `secciones` y `secciones-planes` como criterios de existencia de matrícula.
+  - Se implementó un algoritmo estricto que verifica que exista una cifra positiva de alumnos (`> 0`) en: `matricula-total`, `matricula['total-gen']`, `matricula.modalidades.especial['total-especial']`, `matricula.modalidades.adulto['total-adulto']`, o en el escaneo recursivo de objetos numéricos de matrícula (`checkObjHasPositiveNumbers`).
+  - Si el total de estudiantes es cero o inexistente, `hasData` es estrictamente `false`.
+- **Blindaje de Interfaz con `!important` y Guards en Personal:**
+  - En `main.js`: Cuando `requierePaso1` es verdadero, `#seccion-personal-existente` y `#seccion-registro-personal` se fuerzan a ocultamiento absoluto mediante `.style.setProperty('display', 'none', 'important')`.
+  - En `personalWizard.js`: Se inyectaron barreras (`guards`) en `mostrarFormularioPersonal()`, `cargarPersonalExistente()` y `cargarEmpleadoEnFormulario()` que verifican `window._requierePaso1` y abortan de inmediato cualquier renderizado o edición si no se ha completado la matrícula.
+  - En `form.onsubmit`: Validación universal que exige `totalCalculado > 0` sin excepciones, desbloqueando la nómina de personal de forma atómica y limpia al completar el guardado institucional.
+- **Control SemVer y Despliegue:**
+  - Incremento a versión PARCHE `v2.20.1` en `package.json` e `index.html`.
+  - Compilación de producción con Vite (`dist/`) y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+
+**3. Archivos Involucrados:**
+- `webapp/package.json` (v2.20.1)
+- `webapp/index.html` (v2.20.1)
+- `webapp/src/main.js`
+- `webapp/src/personalWizard.js`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
+

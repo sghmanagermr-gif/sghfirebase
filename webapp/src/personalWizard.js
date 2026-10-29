@@ -458,6 +458,10 @@ export async function initCascadaPersonal() {
 }
 
 export function mostrarFormularioPersonal(autoScroll = true) {
+    if (window._requierePaso1) {
+        console.warn("🔒 [SGH] Paso 1 obligatorio pendiente: La gestión de personal está bloqueada hasta declarar matrícula.");
+        return;
+    }
     poblarCatalogosGenerales();
     initCascadaPersonal();
     limpiarFormularioPersonal();
@@ -691,6 +695,12 @@ function setSelectSmart(selectId, val) {
 }
 
 export function cargarEmpleadoEnFormulario(data, docId) {
+    if (window._requierePaso1) {
+        if (window.showAlert) {
+            window.showAlert("Paso 1 Obligatorio", "Debe registrar y guardar la matrícula del plantel antes de editar o registrar personal.", "warning");
+        }
+        return;
+    }
     window._docIdEnEdicion = docId;
 
     const contenedor = document.getElementById('seccion-registro-personal');
@@ -1519,6 +1529,13 @@ export async function guardarPersonalInline() {
 }
 
 async function cargarPersonalExistente(codigoDEA) {
+    if (window._requierePaso1) {
+        console.warn("🔒 [SGH] Plantel requiere completar Paso 1 (Matrícula) antes de listar personal.");
+        const secPersonal = document.getElementById('seccion-personal-existente');
+        if (secPersonal) secPersonal.style.setProperty('display', 'none', 'important');
+        return;
+    }
+
     const tbody = document.getElementById('tbody-personal-existente');
     if (!tbody) return;
 

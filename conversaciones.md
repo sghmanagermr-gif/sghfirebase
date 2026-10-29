@@ -3102,3 +3102,31 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    * **Panel de Despliegue:** Se sincronizó la opción en el panel administrativo bajo el nombre formal: *«Actualización de Personal con Matrícula Obligatoria (Paso 1: Matrícula ➡️ Paso 2: Personal)»*.  
 > 3. Compilación limpia con Vite y despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión menor `v2.20.0`.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 30
+
+* **Fecha / Hora:** 2026-10-29 ~12:00 - 12:15 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Estoy entrando con un usuario plaadmin que no tiene matricula y sin embargo puedo editar al personal  
+> [Video adjunto: WhatsApp_Video_2026-10-29_at_11.56.57.mp4 mostrando al director del plantel OD14311419 ("ESCUELA ESTADO APURE" en Santos Marquina) ingresando a la plataforma con matrícula en cero o vacía y visualizando la tabla de personal existente con capacidad de pulsar el botón de lápiz (✏️) en el funcionario Luis Humberto Angel Valero para abrir el formulario en modo de edición]
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Corrección Crítica de Detección de Matrícula y Refuerzo Absoluto del Candado de Personal (v2.20.1):  
+>
+> 1. Diagnóstico de la Causa Raíz (Falso Positivo por Datos Históricos):  
+>    * Al analizar el documento del colegio `OD14311419` en la base de datos, se detectó que contenía la propiedad `datos_completados: true` (un indicador administrativo antiguo que marcaba que el colegio había guardado sus datos de contacto o epónimo en jornadas pasadas).  
+>    * El código anterior evaluaba erróneamente: `if (dataParcial.datos_completados) hasData = true;`. Esto engañaba al sistema haciéndole creer que el colegio ya poseía matrícula escolar, desactivando el candado del Paso 1 a pesar de que el número de alumnos registrados era estrictamente 0.  
+> 2. Solución y Blindaje Aplicado:  
+>    * **Detección Estricta de Matrícula Real:** Se eliminaron las referencias a `datos_completados` y a conteo de secciones. A partir de ahora, el sistema exige de forma ineludible que la suma de estudiantes sea estrictamente mayor a cero (`matricula-total > 0`, `total-gen > 0` o conteos positivos reales). Si un colegio tiene 0 alumnos, el sistema reconoce sin dudar que no tiene matrícula.  
+>    * **Ocultamiento Forzado con `!important`:** Cuando el plantel está en el Paso 1, tanto la tabla de personal existente como el formulario de registro se ocultan de raíz en el navegador con la regla CSS obligatoria `display: none !important;`.  
+>    * **Barreras Internas en el Asistente de Personal:** Se añadieron candados de seguridad en las funciones de carga y edición (`cargarPersonalExistente`, `mostrarFormularioPersonal` y `cargarEmpleadoEnFormulario`) que detienen de inmediato cualquier intento de apertura de la nómina si el colegio no ha registrado su matrícula.  
+>    * **Desbloqueo Automático y Limpio:** Al declarar y guardar una matrícula válida (> 0), el candado se libera al instante, se muestra la nómina y se acompaña al director con un mensaje de éxito.  
+> 3. Compilación limpia con Vite (`npm run build`) y despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión parche `v2.20.1`.  
+> 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+

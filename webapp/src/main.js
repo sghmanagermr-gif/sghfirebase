@@ -1786,39 +1786,46 @@ async function mostrarCandado(codigoDEA, dataParcial) {
     // Forzar recálculo
     document.getElementById('contenedor-matricula')?.dispatchEvent(new Event('input', { bubbles: true }));
 
-    // Mostrar Formulario Personal si el plantel YA tiene matrícula o secciones cargadas (Carga inicial)
+    // Verificación estricta de Matrícula Real: ¿El plantel tiene estudiantes registrados (> 0)?
     let hasData = false;
-    const checkObjHasNumbers = (obj) => {
+    const checkObjHasPositiveNumbers = (obj) => {
         if (!obj || typeof obj !== 'object') return false;
         for (let key in obj) {
-            if (typeof obj[key] === 'number' && obj[key] > 0) return true;
-            if (typeof obj[key] === 'object' && obj[key] !== null) {
-                if (checkObjHasNumbers(obj[key])) return true;
+            const val = obj[key];
+            if (typeof val === 'number' && val > 0) return true;
+            if (typeof val === 'string' && val.trim() !== '' && !isNaN(val) && Number(val) > 0) return true;
+            if (typeof val === 'object' && val !== null) {
+                if (checkObjHasPositiveNumbers(val)) return true;
             }
         }
         return false;
     };
 
-    if (dataParcial) {
-        if (dataParcial.datos_completados) hasData = true;
-        if (dataParcial.matricula?.modalidades?.especial && checkObjHasNumbers(dataParcial.matricula.modalidades.especial)) hasData = true;
-        if (dataParcial.matricula && (checkObjHasNumbers(dataParcial.matricula) || (dataParcial.matricula['total-gen'] > 0))) hasData = true;
-        if (dataParcial['matricula-total'] && parseInt(dataParcial['matricula-total']) > 0) hasData = true;
-        if (dataParcial['secciones-planes'] && checkObjHasNumbers(dataParcial['secciones-planes'])) hasData = true;
-        if (dataParcial.secciones && parseInt(dataParcial.secciones) > 0) hasData = true;
-        if (dataParcial.matricula_detalle) hasData = true;
+    const matTotalData = Number(dataParcial?.["matricula-total"] ?? 0);
+    const matTotalGen = Number(dataParcial?.matricula?.["total-gen"] ?? 0);
+    const matTotalEsp = Number(dataParcial?.matricula?.modalidades?.especial?.["total-especial"] ?? 0);
+    const matTotalAdu = Number(dataParcial?.matricula?.modalidades?.adulto?.["total-adulto"] ?? 0);
+
+    const matTotalDp = Number(dp?.["matricula-total"] ?? 0);
+    const matTotalGenDp = Number(dp?.matricula?.["total-gen"] ?? 0);
+    const matTotalEspDp = Number(dp?.matricula?.modalidades?.especial?.["total-especial"] ?? 0);
+    const matTotalAduDp = Number(dp?.matricula?.modalidades?.adulto?.["total-adulto"] ?? 0);
+
+    const matTotalInput = parseInt(document.getElementById('inp-matricula-total')?.value || 0);
+
+    if (matTotalData > 0 || matTotalGen > 0 || matTotalEsp > 0 || matTotalAdu > 0 ||
+        matTotalDp > 0 || matTotalGenDp > 0 || matTotalEspDp > 0 || matTotalAduDp > 0 ||
+        matTotalInput > 0) {
+        hasData = true;
+    } else {
+        if (dataParcial?.matricula && checkObjHasPositiveNumbers(dataParcial.matricula)) {
+            hasData = true;
+        } else if (dp?.matricula && checkObjHasPositiveNumbers(dp.matricula)) {
+            hasData = true;
+        }
     }
 
-    if (!hasData && dp) {
-        if (dp.matricula && (checkObjHasNumbers(dp.matricula) || (dp.matricula['total-gen'] > 0))) hasData = true;
-        if (dp['matricula-total'] && parseInt(dp['matricula-total']) > 0) hasData = true;
-        if (dp['secciones-planes'] && checkObjHasNumbers(dp['secciones-planes'])) hasData = true;
-    }
-
-    const currentInpTotal = parseInt(document.getElementById('inp-matricula-total')?.value || 0);
-    if (currentInpTotal > 0) hasData = true;
-
-    console.log("🏫 [SGH] ¿Plantel posee matrícula/secciones previas?:", hasData);
+    console.log("🏫 [SGH] ¿Plantel posee matrícula estudiantil verificada (> 0)?:", hasData);
     let sessionConfigActual = sessionStorage.getItem('sgh_despliegue_config');
     let modoDespliegue = 'TOTAL';
     if (sessionConfigActual) {
@@ -1830,6 +1837,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
     const tienePlanes = esEspecial || esAdulto || (window._planesSeleccionadosDirector && Object.keys(window._planesSeleccionadosDirector).length > 0);
     const esModoSecuencial = (modoDespliegue === 'SOLO_EDITAR_PERSONAL_Y_MATRICULA' || modoDespliegue === 'TOTAL');
     const requierePaso1 = (!window._modoSupervision && esModoSecuencial && !hasData);
+    window._requierePaso1 = requierePaso1;
 
     // Actualizar Banners de Orientación y Botón del Paso 1
     const bannerPaso1Top = document.getElementById('banner-alerta-paso1-top');
@@ -1864,7 +1872,10 @@ async function mostrarCandado(codigoDEA, dataParcial) {
     } else if (esModoSecuencial) {
         if (hasData) {
             const secPersonal = document.getElementById('seccion-personal-existente');
-            if (secPersonal) secPersonal.style.display = 'block';
+            if (secPersonal) {
+                secPersonal.style.removeProperty('display');
+                secPersonal.style.display = 'block';
+            }
             if (typeof window.cargarPersonalExistente === "function") {
                 window.cargarPersonalExistente(codigoDEA);
             } else if (typeof window.mostrarFormularioPersonal === "function") {
@@ -1873,9 +1884,9 @@ async function mostrarCandado(codigoDEA, dataParcial) {
         } else {
             // El plantel aún no posee matrícula: se mantiene oculta la tabla de personal hasta que guarde matrícula
             const secPersonal = document.getElementById('seccion-personal-existente');
-            if (secPersonal) secPersonal.style.display = 'none';
+            if (secPersonal) secPersonal.style.setProperty('display', 'none', 'important');
             const secReg = document.getElementById('seccion-registro-personal');
-            if (secReg) secReg.style.display = 'none';
+            if (secReg) secReg.style.setProperty('display', 'none', 'important');
         }
     } else if (tienePlanes && hasData && typeof window.mostrarFormularioPersonal === "function") {
         window.mostrarFormularioPersonal(false);
@@ -2376,7 +2387,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
               const esEspecialOAdulto = nivelModVal.includes('ESPECIAL') || nivelModVal.includes('ADULTO');
 
               // Validación de Matrícula Obligatoria (Paso 1)
-              if (!hasData && totalCalculado === 0 && !esEspecialOAdulto) {
+              if (!hasData && totalCalculado === 0) {
                   if (window.showAlert) {
                       window.showAlert("Matrícula Obligatoria (Paso 1)", "Para habilitar el acceso y actualización de la nómina de personal, debe registrar al menos un alumno en la matrícula estudiantil de su institución.", "warning");
                   } else {
@@ -2510,6 +2521,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
 
               const previaSinMatricula = !hasData;
               hasData = true;
+              window._requierePaso1 = false;
 
               // Ocultar banners de aviso de Paso 1
               const bannerPaso1TopEl = document.getElementById('banner-alerta-paso1-top');
@@ -2536,6 +2548,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
               if (modoDespliegue !== 'SOLO_MATRICULA') {
                   const secPersonal = document.getElementById('seccion-personal-existente');
                   if (secPersonal) {
+                      secPersonal.style.removeProperty('display');
                       secPersonal.style.display = 'block';
                       if (typeof window.cargarPersonalExistente === "function") {
                           window.cargarPersonalExistente(codigoDEA);

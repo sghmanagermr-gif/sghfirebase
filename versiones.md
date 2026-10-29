@@ -4,6 +4,21 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.20.1 (29 de Octubre de 2026)
+
+- **Corrección Crítica de Detección de Matrícula y Refuerzo Absoluto del Candado de Personal:**
+  - **Detección Estricta Basada en Matrícula Real (> 0 Estudiantes):**
+    - Se eliminó el falso positivo provocado por la bandera institucional legacy `datos_completados: true` y por el conteo de secciones, los cuales permitían que colegios sin alumnos inscritos (`matricula-total: 0`, `matricula: {}`) eludieran el bloqueo.
+    - El evaluador de `hasData` ahora examina exclusivamente la existencia de una cifra real y positiva de estudiantes (`matricula-total > 0`, `total-gen > 0`, totales de modalidad Adulto/Especial o subcampos numéricos estrictamente mayores a cero dentro del objeto `matricula`).
+  - **Bloqueo Profundo y Forzado con `!important`:**
+    - Al detectar que una institución carece de matrícula, `#seccion-personal-existente` y `#seccion-registro-personal` son forzadas a `display: none !important;`.
+    - Se establecieron barreras de seguridad (`guards`) en `cargarPersonalExistente`, `mostrarFormularioPersonal` y `cargarEmpleadoEnFormulario` mediante la bandera global `window._requierePaso1`, impidiendo la renderización y edición de funcionarios bajo cualquier circunstancia hasta completar el Paso 1.
+  - **Desbloqueo Limpio tras Registro:**
+    - Al guardar una matrícula válida, se retira la propiedad `!important`, se restablece la vista de la nómina y se sincroniza la sesión sin recargar.
+  - **Despliegue Inmediato:** Compilado limpio en Vite y desplegado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.20.0 (29 de Octubre de 2026)
 
 - **Implementación del Candado Secuencial Obligatorio (Paso 1: Matrícula ➡️ Paso 2: Personal):**
