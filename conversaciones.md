@@ -3072,3 +3072,6 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    * Se blindó también el botón y modal de «Incorporar Traslado» para que ningún supervisor pueda iniciar incorporaciones en colegios ajenos.  
 > 3. Compilación limpia con Vite (`npm run build`) y despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión `v2.19.7`.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+* **Confirmación del Usuario:**
+> Sï estoy satisfecho
