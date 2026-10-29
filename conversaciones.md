@@ -3130,3 +3130,6 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 3. Compilación limpia con Vite (`npm run build`) y despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión parche `v2.20.1`.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
 
+* **Confirmación del Usuario:**
+> Perfecto, ahora si estoy satisfecho
+
