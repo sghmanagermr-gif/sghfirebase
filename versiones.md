@@ -4,6 +4,20 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.19.5 (28 de Octubre de 2026)
+
+- **Corrección en Desactivación y Persistencia de Planes de Estudio en Ficha de Plantel:**
+  - **Eliminación Definitiva de Fusión Acumulativa (`merge: true`):**
+    - Se reemplazó el guardado con fusión acumulativa en `main.js` por actualización directa (`safeUpdateDoc`).
+    - Al desmarcar un plan de estudio en la ficha de un colegio específico, Firebase sobrescribe y reemplaza el mapa de planes del plantel en lugar de fusionarlo, asegurando que el plan desmarcado no reaparezca al recargar (`F5`).
+  - **Protección del Catálogo Maestro Estatal:**
+    - Se garantiza que el Catálogo Maestro Oficial (`sistema/catalogos_maestros`) se mantenga intacto y universal para todo el estado, afectando única y exclusivamente la asignación del colegio que el director está configurando.
+  - **Bloqueo de Auto-Reactivación por Defecto en Planteles Ya Configurados:**
+    - Se ajustó la condición de carga inicial en `mostrarCandado()` para evitar que planteles previamente guardados o configurados reactiven planes por defecto si el usuario los desmarcó voluntariamente.
+  - **Despliegue Inmediato:** Compilado limpio en Vite y desplegado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.19.4 (28 de Octubre de 2026)
 
 - **Optimización de Usabilidad y Adaptabilidad Móvil en Ventana de Traslado (Ficha Viajera):**

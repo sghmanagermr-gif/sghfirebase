@@ -2992,3 +2992,28 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    * Ajuste visual del modal de traslados con botón de búsqueda de cédula al 100% de visibilidad táctil.  
 > 3. Sistema activo y en producción en Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión `v2.19.4`.  
 > 4. Registro final y sincronización completa con el repositorio GitHub (`git push origin main`).
+
+---
+
+### Intervención 26
+
+* **Fecha / Hora:** 2026-10-28 ~23:28 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> ok, pasemos a otro detalle que me estoy dando cuenta en este momento. intento desactivar un plan de estudio, doy guardar, recargo, y el plan de estudio sigue apareciendo. ¿Qué crees que suceda?  
+> Pero ojo, no quiero eliminar el plan de estudio de la base de datos. solo desmarcarlo del plantel especifico. No sé si me doy a entender!  
+> ah! ok. entonces, procede
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Corrección de Persistencia en Desactivación de Planes de Estudio por Plantel (v2.19.5):  
+>
+> 1. Diagnóstico del problema: Se identificó que al guardar los datos institucionales del colegio, el sistema utilizaba `merge: true` (fusión de datos en Firestore). Al desmarcar un plan, Firebase fusionaba la lista nueva con la anterior y mantenía el plan viejo guardado en la ficha del colegio. Al recargar la página, el sistema volvía a leerlo y lo marcaba como activo.  
+> 2. Solución aplicada en la ficha del plantel:  
+>    * Se modificó el guardado para que utilice actualización directa (`safeUpdateDoc`), sobrescribiendo limpiamente la lista de planes asignados a esta institución. Al desmarcar un plan y guardar, este se retira de la ficha de este plantel específico.  
+>    * El Catálogo Maestro Oficial (`sistema/catalogos_maestros`) se mantiene 100% intacto y disponible para todo el estado Mérida.  
+>    * Se blindó la carga inicial para evitar que el sistema reactive planes por defecto en colegios que ya hayan sido configurados.  
+> 3. Compilación con Vite y despliegue exitoso en Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión `v2.19.5`.  
+> 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?

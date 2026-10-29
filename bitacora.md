@@ -1967,3 +1967,28 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `versiones.md`
 - `bitacora.md`
 - `conversaciones.md`
+
+---
+
+### v2.19.5 - 2026-10-28 (Persistencia Precisa en Desactivación de Planes de Estudio por Plantel)
+
+**1. Objetivos del Ciclo:**
+- Corregir el comportamiento donde un director desmarcaba un plan de estudio de su institución, guardaba los datos con éxito, pero al recargar el navegador (`F5`) el plan desmarcado volvía a figurar como activo.
+- Asegurar que la modificación sea estrictamente a nivel de la ficha del plantel (`planteles/{codigoDEA}`), sin alterar jamás el catálogo maestro estatal (`sistema/catalogos_maestros`).
+
+**2. Solución Técnica y Arquitectura:**
+- **Reemplazo de `safeSetDoc(..., { merge: true })` por `safeUpdateDoc`:**
+  - La opción `merge: true` en Firestore realiza una fusión recursiva de mapas. Si un sub-campo (código de plan) se omitía en el payload actualizado, Firestore preservaba el campo preexistente en la base de datos.
+  - Con `safeUpdateDoc(docRef, payload)`, el campo `planes-estudio` se sobrescribe y actualiza con la colección exacta seleccionada por el director en su plantel.
+- **Limpieza de Campos Legacy:**
+  - Eliminación explícita mediante `deleteField()` de posibles claves antiguas `planes_estudio` (con guion bajo).
+- **Aislamiento de Carga en `mostrarCandado()`:**
+  - Validación con `tieneConfigPrevias` para prevenir que la lógica de fallback reactive planes automáticamente en colegios que ya completaron su configuración.
+
+**3. Archivos Involucrados:**
+- `webapp/index.html`
+- `webapp/package.json`
+- `webapp/src/main.js`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`

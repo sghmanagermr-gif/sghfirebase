@@ -1572,7 +1572,12 @@ async function mostrarCandado(codigoDEA, dataParcial) {
     const esEspecial = modPlantel.includes('ESPECIAL');
     const esAdulto = modPlantel.includes('ADULTO');
 
-    if (!esEspecial && !esAdulto && Object.keys(window._planesSeleccionadosDirector).length === 0) {
+    const tieneConfigPrevias = Boolean(
+        (dataParcial && (dataParcial.datos_completados || dataParcial["planes-estudio"] !== undefined || dataParcial.planes_estudio !== undefined)) ||
+        (dp && (dp.datos_completados || dp["planes-estudio"] !== undefined || dp.planes_estudio !== undefined))
+    );
+
+    if (!esEspecial && !esAdulto && Object.keys(window._planesSeleccionadosDirector).length === 0 && !tieneConfigPrevias) {
         const allPlanes = obtenerCatalogoPlanesCompleto();
         const niv = (dataParcial?.nivel || dp?.nivel || '').toUpperCase();
         if (niv.includes('INICIAL') && allPlanes['20000']) window._planesSeleccionadosDirector['20000'] = allPlanes['20000'];
@@ -2355,16 +2360,23 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                   payload["observaciones"] = obsPlantelVal;
               }
 
-              // Incorporar planes de estudio actualizados por el director
+              // Incorporar planes de estudio actualizados por el director para este plantel
               if (!nivelModVal.includes('ESPECIAL') && !nivelModVal.includes('ADULTO')) {
                   payload["planes-estudio"] = window._planesSeleccionadosDirector || {};
+                  payload["planes_estudio"] = deleteField();
               }
 
               // Huella de trazabilidad de modificación institucional
               payload["modificado_por"] = window.sgh_user_data?.email || window.sgh_user_data?.nombre || "DIRECTOR";
               payload["fecha_modificacion_datos"] = new Date().toISOString();
 
-              await safeSetDoc(docRef, payload, { merge: true });
+              // Usar safeUpdateDoc para reemplazar completamente el objeto de planes de este plantel y no fusionar subcampos anteriores
+              try {
+                  await safeUpdateDoc(docRef, payload);
+              } catch (errUpdate) {
+                  console.warn("safeUpdateDoc falló, intentando safeSetDoc:", errUpdate);
+                  await safeSetDoc(docRef, payload, { merge: true });
+              }
 
               // Sincronizar memoria activa
               if (window.currentPlantelInfo) {
@@ -2382,7 +2394,8 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                       }
                   }
                   if (!nivelModVal.includes('ESPECIAL') && !nivelModVal.includes('ADULTO') && window._planesSeleccionadosDirector) {
-                      window.currentPlantelInfo['planes-estudio'] = window._planesSeleccionadosDirector;
+                      window.currentPlantelInfo['planes-estudio'] = { ...window._planesSeleccionadosDirector };
+                      delete window.currentPlantelInfo['planes_estudio'];
                   }
                   if (turnoVal) window.currentPlantelInfo['turno-plantel'] = turnoVal;
                   if (ubicacionVal) window.currentPlantelInfo['ubicacion-geografica'] = ubicacionVal;
@@ -2404,7 +2417,8 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                       }
                   }
                   if (!nivelModVal.includes('ESPECIAL') && !nivelModVal.includes('ADULTO') && window._planesSeleccionadosDirector) {
-                      currentPlantel['planes-estudio'] = window._planesSeleccionadosDirector;
+                      currentPlantel['planes-estudio'] = { ...window._planesSeleccionadosDirector };
+                      delete currentPlantel['planes_estudio'];
                   }
                   if (turnoVal) currentPlantel['turno-plantel'] = turnoVal;
                   if (ubicacionVal) currentPlantel['ubicacion-geografica'] = ubicacionVal;
