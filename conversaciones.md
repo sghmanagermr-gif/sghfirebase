@@ -2968,3 +2968,27 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 3. Ajuste de márgenes del modal: Se optimizaron los bordes internos de la ventana en celulares para que los datos del funcionario encontrado (nombre, cargo, RAC, plantel de origen) se lean con total claridad y sin apretujarse.  
 > 4. Compilación con Vite y despliegue exitoso en Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión `v2.19.4`.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 25
+
+* **Fecha / Hora:** 2026-10-28 ~23:03 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Sí estoy satisfecho
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Cierre de Ciclo Exitoso y Consolidación de Versión Estable v2.19.4:  
+>
+> 1. Recepción y confirmación de conformidad total del usuario.  
+> 2. Se consolida el hito de optimización móvil integral para teléfonos inteligentes:  
+>    * Eliminación definitiva de cualquier desbordamiento o desplazamiento horizontal fantasma en la pantalla del celular.  
+>    * Reorganización ergonómica de la barra de búsqueda y botones de nómina/traslado a anchos adaptables.  
+>    * Desplazamiento táctil fluido interno en la tabla de personal registrado.  
+>    * Ajuste visual del modal de traslados con botón de búsqueda de cédula al 100% de visibilidad táctil.  
+> 3. Sistema activo y en producción en Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión `v2.19.4`.  
+> 4. Registro final y sincronización completa con el repositorio GitHub (`git push origin main`).
