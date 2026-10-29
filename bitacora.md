@@ -2015,3 +2015,30 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `versiones.md`
 - `bitacora.md`
 - `conversaciones.md`
+
+---
+
+### v2.19.7 - 2026-10-29 (Blindaje Total de Modo Supervisión en Planes de Estudio y Traslados)
+
+**1. Objetivos del Ciclo:**
+- Corregir la vulnerabilidad de interfaz evidenciada en grabación de video (`WhatsApp_Video_2026-10-29_at_08.25.55.mp4`) donde un usuario con rol `munadmin` (Municipio Santos Marquina) lograba marcar y desmarcar casillas interactivas en la sección «Planes de Estudio del Plantel» al acceder en Modo Supervisión Institucional.
+- Asegurar que la pantalla del director sea 100% de Solo Lectura para los roles de supervisión (`munadmin`, `zonadmin`, `superadmin`), garantizando que ningún control de planes ni de incorporación por traslado sea clickeable.
+
+**2. Solución Técnica y Arquitectura:**
+- **Inmovilización en `main.js` (`renderizarSelectorPlanesDirector` y `actualizarUIPlanesDirector`):**
+  - Detección de `window._modoSupervision` para inyectar `disabled` y `pointer-events: none` en todos los inputs y tarjetas `.card-plan-selector`.
+  - Supresión condicional del menú desplegable `#sel-agregar-mencion-tecnica` y de los botones `.btn-quitar-plan-mt`.
+  - Inyección del banner institucional de bloqueo y estilización semántica del badge: `🔒 [N] planes activos (Modo Supervisión)`.
+  - Reglas reforzadas en `style-coaccion` para anular clics en todo el árbol de `#contenedor-seleccion-planes`.
+- **Protección de Traslados en `personalWizard.js`:**
+  - Guard en `abrirModalTraslado()` que bloquea de raíz la apertura de la ventana modal si `window._modoSupervision` está activo.
+  - Ocultamiento de `#btn-incorporar-traslado` mediante CSS con `!important`.
+
+**3. Archivos Involucrados:**
+- `webapp/package.json` (v2.19.7)
+- `webapp/index.html` (v2.19.7)
+- `webapp/src/main.js`
+- `webapp/src/personalWizard.js`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`

@@ -2160,6 +2160,10 @@ window.calcularAntiguedadUI = function () {
 
 // --- MODAL Y CONTROL DE TRASLADOS (FICHA VIAJERA) ---
 export function abrirModalTraslado() {
+    if (window._modoSupervision) {
+        if (window.showAlert) window.showAlert("Modo Supervisión", "Está en modo de supervisión (solo lectura). No se pueden realizar traslados ni incorporaciones.", "info");
+        return;
+    }
     const modal = document.getElementById('modal-incorporar-traslado');
     if (!modal) return;
     const inpCed = document.getElementById('inp-cedula-traslado');

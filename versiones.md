@@ -4,6 +4,22 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.19.7 (29 de Octubre de 2026)
+
+- **Blindaje Total de Seguridad y Solo Lectura en «Planes de Estudio del Plantel» para Modo Supervisión:**
+  - **Inmovilización Completa del Selector Interactivo de Planes de Estudio:**
+    - Se selló el contenedor interactivo `#contenedor-seleccion-planes` ante accesos de Coordinadores Municipales (`munadmin`) y Zonales (`zonadmin`) en Modo Supervisión.
+    - Las casillas de verificación (`.chk-plan-director`) y las tarjetas clicables (`.card-plan-selector`) se configuran automáticamente en modo deshabilitado (`disabled = true`) con anulación de eventos de puntero (`pointer-events: none`), impidiendo que el supervisor marque o desmarque planes y altere los formularios de matrícula en pantalla.
+    - Se ocultó el desplegable de asignación de menciones técnicas (`#sel-agregar-mencion-tecnica`) y se suprimieron los botones de eliminación (`.btn-quitar-plan-mt`).
+  - **Distintivos Visuales de Bloqueo Institucional:**
+    - El contador dinámico refleja ahora el estado de supervisión: `🔒 [N] planes activos (Modo Supervisión)` con fondo rojo tenue y borde de advertencia.
+    - Se incorporó un cintillo informativo en la cabecera de la sección indicando que la selección de planes se encuentra protegida para el supervisor.
+  - **Blindaje del Módulo de Traslados:**
+    - Se ocultó el botón `#btn-incorporar-traslado` y se agregó un candado de seguridad en `abrirModalTraslado()` para bloquear incorporaciones en modo supervisión.
+  - **Despliegue Inmediato:** Compilado limpio en Vite y desplegado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.19.6 (28 de Octubre de 2026)
 
 - **Rediseño Corporativo de la Lista de Excepciones por Plantel en Módulo de Despliegue:**

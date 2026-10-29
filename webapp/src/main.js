@@ -920,7 +920,17 @@ function actualizarUIPlanesDirector() {
 
     const badge = document.getElementById('badge-contador-planes');
     if (badge) {
-        badge.textContent = `${count} plan${count === 1 ? '' : 'es'} activo${count === 1 ? '' : 's'}`;
+        if (window._modoSupervision) {
+            badge.textContent = `🔒 ${count} plan${count === 1 ? '' : 'es'} activo${count === 1 ? '' : 's'} (Modo Supervisión)`;
+            badge.style.background = '#fef2f2';
+            badge.style.color = '#dc2626';
+            badge.style.border = '1px solid #fecaca';
+        } else {
+            badge.textContent = `${count} plan${count === 1 ? '' : 'es'} activo${count === 1 ? '' : 's'}`;
+            badge.style.background = 'rgba(37,99,235,0.1)';
+            badge.style.color = 'var(--primary-color)';
+            badge.style.border = 'none';
+        }
     }
 
     const tieneInicial = "20000" in planes;
@@ -974,6 +984,19 @@ function renderizarSelectorPlanesDirector(planesActivos = {}) {
 
     window._planesSeleccionadosDirector = { ...planesActivos };
     const allPlanes = obtenerCatalogoPlanesCompleto();
+    const isSupervision = Boolean(window._modoSupervision);
+
+    if (isSupervision) {
+      const bannerLock = document.createElement('div');
+      bannerLock.style.cssText = "background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; font-size: 0.82rem; color: #475569; display: flex; align-items: center; gap: 8px;";
+      bannerLock.innerHTML = `<span>🔒</span><span><strong>Planes en Modo Supervisión:</strong> La selección de planes de estudio está protegida en modo solo lectura para la coordinación municipal/zonal.</span>`;
+      grid.appendChild(bannerLock);
+    }
+
+    const curStyle = isSupervision ? 'default' : 'pointer';
+    const peStyle = isSupervision ? 'none' : 'auto';
+    const disAttr = isSupervision ? 'disabled' : '';
+    const chkOpacity = isSupervision ? '0.75' : '1';
 
     // 1. Grupo Educación Básica
     const divBasica = document.createElement('div');
@@ -982,15 +1005,15 @@ function renderizarSelectorPlanesDirector(planesActivos = {}) {
         <span>🌱</span> Educación Básica (Inicial y Primaria)
       </div>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px;">
-        <label class="card-plan-selector" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1.5px solid ${planesActivos['20000'] ? '#2563eb' : '#cbd5e1'}; background: ${planesActivos['20000'] ? '#eff6ff' : '#ffffff'}; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
-          <input type="checkbox" class="chk-plan-director" value="20000" ${planesActivos['20000'] ? 'checked' : ''} style="width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer;">
+        <label class="card-plan-selector" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1.5px solid ${planesActivos['20000'] ? '#2563eb' : '#cbd5e1'}; background: ${planesActivos['20000'] ? '#eff6ff' : '#ffffff'}; border-radius: 8px; cursor: ${curStyle}; pointer-events: ${peStyle}; opacity: ${chkOpacity}; transition: all 0.2s;">
+          <input type="checkbox" class="chk-plan-director" value="20000" ${planesActivos['20000'] ? 'checked' : ''} ${disAttr} style="width: 18px; height: 18px; accent-color: #2563eb; cursor: ${curStyle}; pointer-events: ${peStyle};">
           <div>
             <div style="font-weight: 700; font-size: 0.88rem; color: #0f172a;">Plan 20000</div>
             <div style="font-size: 0.75rem; color: #64748b;">EDUCACIÓN INICIAL (Maternal y Preescolar)</div>
           </div>
         </label>
-        <label class="card-plan-selector" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1.5px solid ${planesActivos['21000'] ? '#2563eb' : '#cbd5e1'}; background: ${planesActivos['21000'] ? '#eff6ff' : '#ffffff'}; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
-          <input type="checkbox" class="chk-plan-director" value="21000" ${planesActivos['21000'] ? 'checked' : ''} style="width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer;">
+        <label class="card-plan-selector" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1.5px solid ${planesActivos['21000'] ? '#2563eb' : '#cbd5e1'}; background: ${planesActivos['21000'] ? '#eff6ff' : '#ffffff'}; border-radius: 8px; cursor: ${curStyle}; pointer-events: ${peStyle}; opacity: ${chkOpacity}; transition: all 0.2s;">
+          <input type="checkbox" class="chk-plan-director" value="21000" ${planesActivos['21000'] ? 'checked' : ''} ${disAttr} style="width: 18px; height: 18px; accent-color: #2563eb; cursor: ${curStyle}; pointer-events: ${peStyle};">
           <div>
             <div style="font-weight: 700; font-size: 0.88rem; color: #0f172a;">Plan 21000</div>
             <div style="font-size: 0.75rem; color: #64748b;">EDUCACIÓN PRIMARIA (1ero a 6to Grado)</div>
@@ -1007,15 +1030,15 @@ function renderizarSelectorPlanesDirector(planesActivos = {}) {
         <span>📚</span> Media General
       </div>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px;">
-        <label class="card-plan-selector" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1.5px solid ${planesActivos['31059'] ? '#2563eb' : '#cbd5e1'}; background: ${planesActivos['31059'] ? '#eff6ff' : '#ffffff'}; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
-          <input type="checkbox" class="chk-plan-director" value="31059" ${planesActivos['31059'] ? 'checked' : ''} style="width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer;">
+        <label class="card-plan-selector" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1.5px solid ${planesActivos['31059'] ? '#2563eb' : '#cbd5e1'}; background: ${planesActivos['31059'] ? '#eff6ff' : '#ffffff'}; border-radius: 8px; cursor: ${curStyle}; pointer-events: ${peStyle}; opacity: ${chkOpacity}; transition: all 0.2s;">
+          <input type="checkbox" class="chk-plan-director" value="31059" ${planesActivos['31059'] ? 'checked' : ''} ${disAttr} style="width: 18px; height: 18px; accent-color: #2563eb; cursor: ${curStyle}; pointer-events: ${peStyle};">
           <div>
             <div style="font-weight: 700; font-size: 0.88rem; color: #0f172a;">Plan 31059</div>
             <div style="font-size: 0.75rem; color: #64748b;">CIENCIAS (Media General)</div>
           </div>
         </label>
-        <label class="card-plan-selector" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1.5px solid ${planesActivos['31060'] ? '#2563eb' : '#cbd5e1'}; background: ${planesActivos['31060'] ? '#eff6ff' : '#ffffff'}; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
-          <input type="checkbox" class="chk-plan-director" value="31060" ${planesActivos['31060'] ? 'checked' : ''} style="width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer;">
+        <label class="card-plan-selector" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1.5px solid ${planesActivos['31060'] ? '#2563eb' : '#cbd5e1'}; background: ${planesActivos['31060'] ? '#eff6ff' : '#ffffff'}; border-radius: 8px; cursor: ${curStyle}; pointer-events: ${peStyle}; opacity: ${chkOpacity}; transition: all 0.2s;">
+          <input type="checkbox" class="chk-plan-director" value="31060" ${planesActivos['31060'] ? 'checked' : ''} ${disAttr} style="width: 18px; height: 18px; accent-color: #2563eb; cursor: ${curStyle}; pointer-events: ${peStyle};">
           <div>
             <div style="font-weight: 700; font-size: 0.88rem; color: #0f172a;">Plan 31060</div>
             <div style="font-size: 0.75rem; color: #64748b;">CIENCIAS Y TECNOLOGÍA (Media General)</div>
@@ -1041,8 +1064,8 @@ function renderizarSelectorPlanesDirector(planesActivos = {}) {
       </div>
       <div id="lista-menciones-tecnicas-activas" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; margin-bottom: 10px;">
       </div>
-      <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-        <select id="sel-agregar-mencion-tecnica" style="flex: 1; max-width: 500px; height: 40px; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 0 12px; font-size: 0.86rem; background: white; font-weight: 500; color: #1e293b; cursor: pointer;">
+      <div style="display: ${isSupervision ? 'none' : 'flex'}; gap: 10px; align-items: center; flex-wrap: wrap;">
+        <select id="sel-agregar-mencion-tecnica" ${disAttr} style="flex: 1; max-width: 500px; height: 40px; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 0 12px; font-size: 0.86rem; background: white; font-weight: 500; color: #1e293b; cursor: ${curStyle};">
           ${opcionesSelectMT}
         </select>
       </div>
@@ -1063,41 +1086,50 @@ function renderizarSelectorPlanesDirector(planesActivos = {}) {
         const desc = p.mencion ? `${p.especialidad || 'TÉCNICA'} - ${p.mencion}` : (p.nombre || cod);
         const card = document.createElement('div');
         card.style.cssText = "display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 12px; border: 1.5px solid #2563eb; background: #eff6ff; border-radius: 8px;";
+        const btnHtml = isSupervision ? '' : `<button type="button" class="btn-quitar-plan-mt" data-plan="${cod}" style="background: #ef4444; color: white; border: none; width: 26px; height: 26px; border-radius: 50%; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center;" title="Quitar mención">✕</button>`;
         card.innerHTML = `
           <div>
             <div style="font-weight: 700; font-size: 0.85rem; color: #0f172a;">Plan ${cod}</div>
             <div style="font-size: 0.74rem; color: #475569;">${desc}</div>
           </div>
-          <button type="button" class="btn-quitar-plan-mt" data-plan="${cod}" style="background: #ef4444; color: white; border: none; width: 26px; height: 26px; border-radius: 50%; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center;" title="Quitar mención">✕</button>
+          ${btnHtml}
         `;
         contMT.appendChild(card);
       });
 
-      contMT.querySelectorAll('.btn-quitar-plan-mt').forEach(btn => {
-        btn.onclick = () => {
-          const cod = btn.dataset.plan;
-          delete window._planesSeleccionadosDirector[cod];
-          renderMencionesTecnicas();
-          actualizarUIPlanesDirector();
-        };
-      });
+      if (!isSupervision) {
+        contMT.querySelectorAll('.btn-quitar-plan-mt').forEach(btn => {
+          btn.onclick = () => {
+            const cod = btn.dataset.plan;
+            delete window._planesSeleccionadosDirector[cod];
+            renderMencionesTecnicas();
+            actualizarUIPlanesDirector();
+          };
+        });
+      }
     };
 
     renderMencionesTecnicas();
 
-    const selAddMt = divMT.querySelector('#sel-agregar-mencion-tecnica');
-    if (selAddMt) {
-      selAddMt.onchange = () => {
-        const val = selAddMt.value;
-        if (!val) return;
-        window._planesSeleccionadosDirector[val] = allPlanes[val] || { codigo: val, mencion: val };
-        selAddMt.value = '';
-        renderMencionesTecnicas();
-        actualizarUIPlanesDirector();
-      };
+    if (!isSupervision) {
+      const selAddMt = divMT.querySelector('#sel-agregar-mencion-tecnica');
+      if (selAddMt) {
+        selAddMt.onchange = () => {
+          const val = selAddMt.value;
+          if (!val) return;
+          window._planesSeleccionadosDirector[val] = allPlanes[val] || { codigo: val, mencion: val };
+          selAddMt.value = '';
+          renderMencionesTecnicas();
+          actualizarUIPlanesDirector();
+        };
+      }
     }
 
     grid.querySelectorAll('.chk-plan-director').forEach(chk => {
+      if (isSupervision) {
+        chk.disabled = true;
+        return;
+      }
       chk.onchange = () => {
         const cod = chk.value;
         const parentLabel = chk.closest('.card-plan-selector');
@@ -1372,11 +1404,24 @@ async function mostrarCandado(codigoDEA, dataParcial) {
             #plantel-form input:not([readonly]), #plantel-form select { pointer-events: none !important; opacity: 0.7 !important; }
             #seccion-registro-personal { display: none !important; }
             #seccion-personal-existente { display: block !important; }
+            #contenedor-seleccion-planes { pointer-events: none !important; }
+            #contenedor-seleccion-planes input, 
+            #contenedor-seleccion-planes select, 
+            #contenedor-seleccion-planes button,
+            #contenedor-seleccion-planes label,
+            .card-plan-selector { pointer-events: none !important; cursor: default !important; }
+            #sel-agregar-mencion-tecnica { display: none !important; }
+            .btn-quitar-plan-mt { display: none !important; }
+            #btn-incorporar-traslado { display: none !important; }
         `;
         const secMatriculaForm = document.getElementById('plantel-form');
         if (secMatriculaForm) {
             const inputs = secMatriculaForm.querySelectorAll('input:not([readonly]), select');
             inputs.forEach(i => i.disabled = true);
+        }
+        const contPlanes = document.getElementById('contenedor-seleccion-planes');
+        if (contPlanes) {
+            contPlanes.querySelectorAll('input, select, button').forEach(i => i.disabled = true);
         }
     } else {
         let sessionConfig = sessionStorage.getItem('sgh_despliegue_config');

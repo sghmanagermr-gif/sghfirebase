@@ -3044,3 +3044,31 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 * **Confirmación del Usuario:**
 > sí, estoy satisfecho
+
+---
+
+### Intervención 28
+
+* **Fecha / Hora:** 2026-10-29 ~08:10 - 09:00 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+> ¿El usuario munadmin no puede hacer modificaciónes en la pantalla del director?  
+> Te hice esa pregunta capciosa para ver que tan eficiente eres para el desarrollo de proyectos. la sección Planes de Estudio del Plantel puede ser manipulada por el usuario munadmin: ¿Sí o No?  
+> Te lo muestro en un video logueado con el usuario munadmin responsable del municipio Santos Marquina.  
+> [Video adjunto: Grabación en pantalla móvil donde el usuario con rol munadmin en Santos Marquina accede a supervisión del plantel NER 022 y logra marcar y desmarcar las casillas del selector interactivo de planes de estudio alterando el contador en pantalla]  
+> Sí, procede
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Blindaje Total de Modo Supervisión en Planes de Estudio del Plantel e Incorporación de Traslados (v2.19.7):  
+>
+> 1. Diagnóstico preciso: Al revisar el video, se confirmó que si bien los datos no podían persistirse en la base de datos por la ausencia del botón de guardado, las tarjetas y casillas del nuevo Selector Interactivo de Planes de Estudio (`#contenedor-seleccion-planes`) permanecían respondiendo a eventos táctiles y de clic en la interfaz, permitiendo al `munadmin` marcar o desmarcar planes y alterar visualmente los bloques de matrícula en pantalla.  
+> 2. Solución y Blindaje Aplicado:  
+>    * Se congeló por completo la sección de planes en Modo Supervisión: las casillas quedan desactivadas (`disabled`), las tarjetas deshabilitadas (`pointer-events: none`), el selector de menciones técnicas oculto y se eliminaron los botones para retirar menciones.  
+>    * Se agregó un cintillo formal de bloqueo: *«🔒 Planes en Modo Supervisión: La selección de planes de estudio está protegida en modo solo lectura»* y el badge ahora indica claramente *«🔒 [N] planes activos (Modo Supervisión)»*.  
+>    * Se blindó también el botón y modal de «Incorporar Traslado» para que ningún supervisor pueda iniciar incorporaciones en colegios ajenos.  
+> 3. Compilación limpia con Vite (`npm run build`) y despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión `v2.19.7`.  
+> 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
