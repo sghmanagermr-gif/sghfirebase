@@ -1660,21 +1660,48 @@ export function initAdminDashboard(dbInstance, user) {
       expList.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem;">No hay excepciones registradas.</p>';
       return;
     }
-    expList.innerHTML = configActual.excepciones.map(cod => `
-      <div style="background:white; padding:10px 15px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; border:1px solid #e2e8f0;">
-        <span>${cod}</span>
-        <button class="btn-remove-exp" data-cod="${cod}" style="background:transparent; border:none; color:#dc3545; cursor:pointer; font-weight:bold;">X</button>
-      </div>
-    `).join('');
+    expList.innerHTML = configActual.excepciones.map(cod => {
+      let nombrePlantel = '';
+      if (Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
+        const p = currentPlanteles.find(x => x.id === cod || x.codigos?.plantel === cod);
+        if (p) {
+          const ep = obtenerEponimoLimpioPlantel(p) || p['nombre-plantel']?.nominal || p.denominacion || '';
+          if (ep) nombrePlantel = ` <span style="color:#64748b; font-weight:normal; font-size:0.88rem;">&bull; ${ep}</span>`;
+        }
+      }
 
-    document.querySelectorAll('.btn-remove-exp').forEach(btn => {
-      btn.onclick = (e) => {
-        const cod = e.target.dataset.cod;
+      return `
+      <div style="background:white; padding:12px 18px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; border:1px solid #e2e8f0; box-shadow:0 1px 3px rgba(0,0,0,0.04); gap:12px;">
+        <div style="display:flex; align-items:center; gap:10px; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+          <span style="font-size:1.15rem; flex-shrink:0;">🏫</span>
+          <span style="font-weight:700; color:#1e293b; font-size:0.95rem; letter-spacing:0.3px;">${cod}</span>
+          ${nombrePlantel}
+        </div>
+        <button type="button" class="btn-remove-exp" data-cod="${cod}" 
+          style="width:auto !important; min-width:auto !important; flex-shrink:0 !important; margin:0 !important; background:#fee2e2; border:1px solid #fecaca; color:#dc2626; padding:6px 14px !important; border-radius:6px !important; font-weight:600; font-size:0.85rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:none !important; transition:all 0.2s;"
+          title="Eliminar excepción para este plantel">
+          <span>🗑️</span>
+          <span>Eliminar</span>
+        </button>
+      </div>
+      `;
+    }).join('');
+
+    expList.querySelectorAll('.btn-remove-exp').forEach(btn => {
+      btn.onclick = () => {
+        const cod = btn.getAttribute('data-cod');
         configActual.excepciones = configActual.excepciones.filter(c => c !== cod);
         renderExcepciones();
       };
     });
   }
+
+  inpNewExp.onkeydown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      btnAddExp.click();
+    }
+  };
 
   btnAddExp.onclick = () => {
     const val = inpNewExp.value.trim().toUpperCase();

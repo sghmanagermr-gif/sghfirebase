@@ -1992,3 +1992,26 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `versiones.md`
 - `bitacora.md`
 - `conversaciones.md`
+
+---
+
+### v2.19.6 - 2026-10-28 (Rediseño de Botón de Excepciones y Enriquecimiento Visual de Despliegue)
+
+**1. Objetivos del Ciclo:**
+- Corregir el aspecto antiestético reportado en captura de pantalla (`Captura0004.PNG`) en la sección de Despliegue -> Excepciones Individuales por Plantel, donde el botón de eliminación figuraba como una simple letra roja «X» desalineada en el centro de la tarjeta.
+- Elevar el componente al estándar de diseño corporativo del panel administrativo.
+
+**2. Solución Técnica y Arquitectura:**
+- **Refactorización de `renderExcepciones()` en `admin.js`:**
+  - Incorporación de botón institucional explícito `🗑️ Eliminar` con aislamiento de dimensiones (`width: auto !important`, `flex-shrink: 0`), cancelando la herencia de estilos de botón global de ancho completo.
+  - Búsqueda asociativa en `currentPlanteles` para enriquecer la tarjeta con el epónimo del colegio junto al código DEA.
+  - Event handler robusto enlazado mediante `btn.getAttribute('data-cod')`.
+  - Soporte de evento `keydown` (`Enter`) en el input `#inp-new-excepcion`.
+
+**3. Archivos Involucrados:**
+- `webapp/index.html`
+- `webapp/package.json`
+- `webapp/src/admin.js`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`

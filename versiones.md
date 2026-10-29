@@ -4,6 +4,18 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.19.6 (28 de Octubre de 2026)
+
+- **Rediseño Corporativo de la Lista de Excepciones por Plantel en Módulo de Despliegue:**
+  - **Sustitución de Botón «X» sin Estilos por Botón Institucional de Eliminación:**
+    - Se reemplazó la letra «X» roja plana que flotaba de forma desalineada en la tarjeta de excepciones por un botón corporativo tipo Pill (`🗑️ Eliminar`), con fondo suave (`#fee2e2`), borde sutil (`#fecaca`), texto semántico rojo y micro-interacción en hover.
+  - **Enriquecimiento Visual con Epónimo del Plantel:**
+    - La tarjeta de excepción individual ahora muestra el icono representativo (`🏫`), el código DEA en negrita y, si está cargado en memoria, el nombre nominal o nuevo epónimo del colegio, brindando identificación instantánea al administrador.
+  - **Atajo de Teclado:** Se añadió soporte para ingresar excepciones pulsando la tecla `Enter` en el campo del código DEA.
+  - **Despliegue Inmediato:** Compilado limpio en Vite y desplegado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.19.5 (28 de Octubre de 2026)
 
 - **Corrección en Desactivación y Persistencia de Planes de Estudio en Ficha de Plantel:**

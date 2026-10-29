@@ -3017,3 +3017,27 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    * Se blindó la carga inicial para evitar que el sistema reactive planes por defecto en colegios que ya hayan sido configurados.  
 > 3. Compilación con Vite y despliegue exitoso en Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión `v2.19.5`.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 27
+
+* **Fecha / Hora:** 2026-10-28 ~23:40 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Estoy satisfecho. otra cosa, mira como se ve el boton eliminar en la seccion de despliegue Captura0004.PNG
+> [Captura de pantalla: Botón "X" rojo plano desalineado en el centro de la fila de excepciones del módulo de despliegue]
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Rediseño Corporativo de Excepciones en Despliegue (v2.19.6):  
+>
+> 1. Diagnóstico visual: La letra "X" roja se mostraba plana y desalineada en el medio de la fila debido a la herencia del estilo general de los botones (`width: 100%`), careciendo de un contenedor propio de acción.  
+> 2. Solución visual implementada:  
+>    * Se sustituyó la "X" por un botón formal estilizado: **🗑️ Eliminar** con fondo rojo suave, borde delicado y alineado a la derecha.  
+>    * Se enriqueció la tarjeta de la excepción: ahora muestra el icono escolar (`🏫`), el código DEA en negrita y el nombre del plantel asociado para una lectura rápida.  
+>    * Se añadió la posibilidad de pulsar la tecla `Enter` tras escribir el código DEA para añadir la excepción al instante.  
+> 3. Compilación con Vite y despliegue exitoso en Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión `v2.19.6`.  
+> 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
