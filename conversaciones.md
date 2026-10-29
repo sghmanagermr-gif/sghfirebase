@@ -3041,3 +3041,6 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    * Se añadió la posibilidad de pulsar la tecla `Enter` tras escribir el código DEA para añadir la excepción al instante.  
 > 3. Compilación con Vite y despliegue exitoso en Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión `v2.19.6`.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+* **Confirmación del Usuario:**
+> sí, estoy satisfecho
