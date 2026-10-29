@@ -2921,3 +2921,27 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 2. Compilación de producción con Vite (`npm run build`) completada en 678ms sin advertencias.
 > 3. Despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión estable `v2.19.2`.
 > 4. Registro final y sincronización completa con el repositorio GitHub (`git push origin main`).
+
+---
+
+### Intervención 23
+
+* **Fecha / Hora:** 2026-10-28 ~22:25 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> 😭 ¿cómo puedo mostrarte un video para que veas y entiendas como se ve la pagina en los celulares?
+> @[c:\Users\usuario\Downloads\WhatsApp Video 2026-10-28 at 22.20.27.mp4]
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Solución Integral de Adaptabilidad Móvil y Eliminación de Desbordamiento Lateral (v2.19.3):  
+>
+> 1. Análisis visual minucioso del video compartido: Se identificó que la barra de búsqueda y descarga de nómina, junto con la tabla de personal y las cuadrículas de 2 y 3 columnas, sobrepasaban el ancho del teléfono (360px–412px), forzando un ancho total de más de 650px y provocando un desplazamiento lateral con un gran espacio en blanco a la derecha.  
+> 2. Blindaje de pantalla completa: Se configuró la contención de pantalla (`overflow-x: hidden` y ancho máximo de 100vw) en todo el sistema para evitar cualquier fuga o deslizamiento hacia los lados.  
+> 3. Barra de búsqueda y botones optimizados para celular: El buscador ahora ocupa todo el ancho disponible para facilitar la escritura, y los botones de Excel e Incorporar Traslado se ajustan automáticamente sin salirse de la pantalla.  
+> 4. Tabla de personal con deslizamiento táctil interno: La tabla ahora se encuentra contenida dentro de su tarjeta y permite deslizarse cómodamente con el dedo hacia los lados sin deformar el resto de la página.  
+> 5. Formularios a una sola columna en teléfonos: Todos los campos del plantel, los datos del trabajador y la tarjeta de carga horaria se organizan de forma vertical, clara y ordenada en pantallas móviles.  
+> 6. Compilación y despliegue exitoso en Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión `v2.19.3`.  
+> 7. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?

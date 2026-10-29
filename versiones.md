@@ -4,6 +4,24 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.19.3 (28 de Octubre de 2026)
+
+- **Optimización Integral de Diseño Responsivo y Eliminación de Desbordamiento Horizontal en Celulares:**
+  - **Blindaje Estricto de Viewport (Anti-Blowout):**
+    - Se aplicó contención global `overflow-x: hidden !important; max-width: 100vw !important;` en `html`, `body` y `#app` con `box-sizing: border-box;` universal.
+    - Se eliminó el espacio blanco/vacío a la derecha en navegadores móviles (Chrome Android / iOS Safari), garantizando que el diseño no se desplace lateralmente.
+  - **Barra de Acciones Responsiva en Personal Registrado:**
+    - Transformación de la barra superior de personal (Buscador, Descargar Nómina Excel, Incorporar Traslado) con flexbox responsivo (`flex-wrap: wrap`), adaptando el buscador y botones al 100% del ancho en pantallas móviles sin desbordar el contenedor.
+  - **Contenedor Desplazable Táctil para Tabla de Personal (`table-responsive-wrapper`):**
+    - Se encapsuló la tabla de 5 columnas en un contenedor con desplazamiento horizontal táctil interno (`overflow-x: auto; -webkit-overflow-scrolling: touch;`), manteniendo las columnas legibles y compactas sin forzar la dilatación de la pantalla completa.
+  - **Colapso Inteligente a Una Columna en Formularios para Móviles:**
+    - Se reestructuraron las cuadrículas de datos institucionales del plantel, datos personales, carga horaria (`#container-carga-horaria`) y bienestar social para adoptar automáticamente una sola columna vertical limpia (`grid-template-columns: 1fr`) en pantallas $\le 768\text{px}$.
+  - **Ajuste de Relleno (Padding) Ergonómico:**
+    - Reducción del padding en tarjetas y formularios en móviles de 30px/24px a 14px/10px para maximizar el área útil de lectura en teléfonos de 360px a 412px de ancho.
+  - **Despliegue Inmediato:** Compilado limpio en Vite y desplegado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.19.2 (28 de Octubre de 2026)
 
 - **Refinamiento Estético y Distribución Armónica 3x2 en Carga Horaria y Pedagógica:**

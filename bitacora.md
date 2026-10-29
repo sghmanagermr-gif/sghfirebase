@@ -1911,3 +1911,32 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `versiones.md`
 - `bitacora.md`
 - `conversaciones.md`
+
+---
+
+### v2.19.3 - 2026-10-28 (Eliminación de Desbordamiento Horizontal y Optimización Móvil Integral)
+
+**1. Objetivos del Ciclo:**
+- Resolver el desbordamiento horizontal severo observado en grabaciones de pantalla de teléfonos móviles (Chrome Android).
+- Eliminar el desplazamiento lateral fantasma y el espacio en blanco exterior a la derecha.
+- Garantizar que la vista de Director, la tabla de personal y los formularios de carga horaria sean 100% fluidos y ergonómicos en celulares.
+
+**2. Solución Técnica y Arquitectura:**
+- **Contención de Viewport Universal:**
+  - Reglas `overflow-x: hidden !important` y `max-width: 100vw !important` en `html, body, #app`.
+- **Adaptabilidad de Barra de Acciones (`.personal-toolbar`):**
+  - Desacople de la fila rígida (`flex-wrap: nowrap`) que exigía $>630\text{px}$ a una disposición adaptable que apila buscador e incentiva botones táctiles fluidos al 100% del ancho en smartphones.
+- **Scroll Táctil Interno en Tabla (`.table-responsive-wrapper`):**
+  - Incorporación de `overflow-x: auto; -webkit-overflow-scrolling: touch` y `max-width: 100%` en el contenedor de la tabla de funcionarios, asegurando scroll táctil interno con ancho mínimo garantizado de columnas.
+- **Reorganización a Columna Única en Celulares:**
+  - Sobrescritura en media query ($\le 768\text{px}$) para `grid-template-columns: 1fr !important` en datos institucionales, datos de empleado y en la tarjeta de Carga Horaria y Dedicación.
+  - Normalización de elementos con `grid-column: span X` para colapsar a ancho completo (`1 / -1`) evitando columnas implícitas que forzaban dilatación horizontal.
+
+**3. Archivos Involucrados:**
+- `webapp/index.html`
+- `webapp/package.json`
+- `webapp/src/style.css`
+- `webapp/styles.css`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
