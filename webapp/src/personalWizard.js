@@ -424,7 +424,34 @@ export async function initCascadaPersonal() {
 
     selTipo.onchange = () => {
         actualizarCascada();
-        if (window.validarHorasDocenteUI) window.validarHorasDocenteUI();
+        const tipoVal = (selTipo.value || '').toUpperCase();
+        const atiendeMatSel = document.getElementById('wp-atiende-matricula');
+        const lblRecibo = document.getElementById('lbl-horas-recibo');
+        const inpHRecibo = document.getElementById('wp-horas-recibo');
+        const lblAdmin = document.getElementById('lbl-horas-admin');
+        const inpAdmin = document.getElementById('wp-horas-administrativas');
+
+        if (tipoVal === 'DOCENTE') {
+            if (lblRecibo) lblRecibo.innerHTML = 'Horas según Recibo (H.DOC) <span style="color: #dc2626;">*</span>';
+            if (inpHRecibo) inpHRecibo.placeholder = 'Ej. 53.33 o 40';
+            if (lblAdmin) lblAdmin.innerHTML = (atiendeMatSel?.value === 'SI') ? 'Horas Administrativas (Coordinación / Oficina)' : 'Horas Administrativas (en este Plantel) <span style="color: #dc2626;">*</span>';
+            if (inpAdmin) inpAdmin.placeholder = 'Ej. 0 o 20 (Coordinación)';
+            if (atiendeMatSel && !atiendeMatSel.dataset.manualChanged) {
+                atiendeMatSel.value = 'SI';
+            }
+        } else if (tipoVal === 'ADMINISTRATIVO' || tipoVal === 'OBRERO') {
+            if (lblRecibo) lblRecibo.innerHTML = 'Horas según Recibo (H.ADM) <span style="color: #dc2626;">*</span>';
+            if (inpHRecibo) inpHRecibo.placeholder = '40';
+            if (lblAdmin) lblAdmin.innerHTML = 'Horas Administrativas (en este Plantel) <span style="color: #dc2626;">*</span>';
+            if (inpAdmin) inpAdmin.placeholder = '40';
+            if (inpHRecibo && !inpHRecibo.value) inpHRecibo.value = '40';
+            if (inpAdmin && !inpAdmin.value) inpAdmin.value = '40';
+            if (atiendeMatSel && !atiendeMatSel.dataset.manualChanged) {
+                atiendeMatSel.value = 'NO';
+            }
+        }
+        if (window.toggleMatriculaUI) window.toggleMatriculaUI();
+        if (window.calcularHorasUI) window.calcularHorasUI();
     };
     selDep.onchange = () => actualizarCascada();
     actualizarCascada();
@@ -513,7 +540,7 @@ export function limpiarFormularioPersonal() {
         'wp-cedula', 'wp-nombres', 'wp-nacimiento', 'wp-edad', 'wp-genero', 'wp-nacionalidad',
         'wp-ubicacion-administrativa', 'wp-tipo-personal', 'wp-dependencia', 'wp-subcategoria',
         'wp-cargo', 'wp-codigo-rac', 'wp-situacion-laboral', 'wp-descripcion-situacion', 'wp-especialidad-imparte',
-        'wp-horas-academicas', 'wp-horas-administrativas',
+        'wp-horas-recibo', 'wp-horas-academicas', 'wp-horas-por-programar', 'wp-horas-administrativas',
         'wp-fecha-ingreso', 'wp-antiguedad', 'wp-instruccion', 'wp-titulo', 'wp-turnos-atiende',
         'wp-talla-camisa', 'wp-talla-pantalon', 'wp-talla-zapato', 'wp-atiende-matricula',
         'wp-nivel-modalidad', 'wp-tipo-vivienda', 'wp-condicion-vivienda', 'wp-tipo-material',
@@ -536,13 +563,21 @@ export function limpiarFormularioPersonal() {
     }
     const inpHoras = document.getElementById('wp-horas-academicas');
     if (inpHoras) inpHoras.style.borderColor = '';
+    const inpHRecibo = document.getElementById('wp-horas-recibo');
+    if (inpHRecibo) inpHRecibo.style.borderColor = '';
+    const inpProg = document.getElementById('wp-horas-por-programar');
+    if (inpProg) inpProg.value = '0';
+    const atiendeMatSel = document.getElementById('wp-atiende-matricula');
+    if (atiendeMatSel) delete atiendeMatSel.dataset.manualChanged;
     window._cacheCargosPorCedula = {};
 
     const containerRango = document.getElementById('container-rango-obrero');
     if (containerRango) containerRango.style.display = 'none';
 
+    const containerCarga = document.getElementById('container-carga-horaria');
     const containerNivel = document.getElementById('container-nivel-modalidad');
     if (containerNivel) containerNivel.style.display = 'none';
+    if (window.toggleMatriculaUI) window.toggleMatriculaUI();
 
     const containerEsp = document.getElementById('container-especialidad');
     if (containerEsp) containerEsp.style.display = 'none';
@@ -775,7 +810,6 @@ export function cargarEmpleadoEnFormulario(data, docId) {
         }
 
         setVal('wp-titular', data.titular || '');
-        setVal('wp-horas-academicas', data['horas-academicas'] || '');
         setVal('wp-horas-administrativas', data['horas-administrativas'] || '');
         setVal('wp-fecha-ingreso', data['fecha-ingreso'] || '');
         setVal('wp-antiguedad', data.antiguedad || '');
@@ -784,12 +818,35 @@ export function cargarEmpleadoEnFormulario(data, docId) {
         }
         setVal('wp-turnos-atiende', data['turnos-atiende'] || '');
 
-        const atiendeMat = data['atiende-matricula'] || (data['nivel-modalidad'] ? 'SI' : 'NO');
+        const atiendeMat = data['atiende-matricula'] || (data['nivel-modalidad'] || (parseFloat(data['horas-academicas']) > 0) ? 'SI' : 'NO');
         setVal('wp-atiende-matricula', atiendeMat);
+        const atiendeEl = document.getElementById('wp-atiende-matricula');
+        if (atiendeEl) atiendeEl.dataset.manualChanged = 'true';
         if (window.toggleMatriculaUI) window.toggleMatriculaUI();
 
         setVal('wp-nivel-modalidad', data['nivel-modalidad'] || '');
         setVal('wp-especialidad-imparte', data['especialidad-imparte'] || '');
+
+        const hAdminVal = (data['horas-administrativas'] !== undefined && data['horas-administrativas'] !== null && data['horas-administrativas'] !== '')
+            ? data['horas-administrativas']
+            : (atiendeMat === 'NO' ? (data['horas-recibo'] || 40) : 0);
+        setVal('wp-horas-administrativas', hAdminVal);
+
+        const hAcadVal = (data['horas-academicas'] !== undefined && data['horas-academicas'] !== null && data['horas-academicas'] !== '')
+            ? data['horas-academicas']
+            : (atiendeMat === 'SI' ? 53.33 : 0);
+        setVal('wp-horas-academicas', hAcadVal);
+
+        const hReciboVal = (data['horas-recibo'] !== undefined && data['horas-recibo'] !== null && data['horas-recibo'] !== '')
+            ? data['horas-recibo']
+            : (atiendeMat === 'SI' ? (parseFloat(hAcadVal || 0) + parseFloat(hAdminVal || 0)) : (hAdminVal || 40));
+        setVal('wp-horas-recibo', hReciboVal);
+
+        const totalAsigVal = (parseFloat(hAcadVal) || 0) + (parseFloat(hAdminVal) || 0);
+        const hProgVal = (data['horas-por-programar'] !== undefined && data['horas-por-programar'] !== null && data['horas-por-programar'] !== '')
+            ? data['horas-por-programar']
+            : (atiendeMat === 'SI' ? Math.max(0, (parseFloat(hReciboVal) || 0) - totalAsigVal) : 0);
+        setVal('wp-horas-por-programar', hProgVal);
 
         // 3. Situación del Trabajador
         const selSit = document.getElementById('wp-situacion-laboral');
@@ -1095,21 +1152,21 @@ export function validarFormularioPersonal() {
     // Validaciones condicionales dinámicas
     const tipo = (document.getElementById('wp-tipo-personal')?.value || '').toUpperCase();
     const dep = (document.getElementById('wp-dependencia')?.value || '').toUpperCase();
+    const atiendeMat = (document.getElementById('wp-atiende-matricula')?.value || 'NO').toUpperCase();
 
-    // Horas condicionales: Académicas para DOCENTE, Administrativas para ADMINISTRATIVO y OBRERO
-    if (tipo === 'DOCENTE') {
-        campos.push({ id: 'wp-horas-academicas', nombre: 'Horas Académicas' });
-    } else if (tipo === 'ADMINISTRATIVO' || tipo === 'OBRERO') {
-        campos.push({ id: 'wp-horas-administrativas', nombre: 'Horas Administrativas' });
-    }
     if (tipo === 'OBRERO' && dep === 'NACIONAL') {
         campos.push({ id: 'wp-subcategoria', nombre: 'Rango de Obrero' });
     }
 
-    const atiendeMat = document.getElementById('wp-atiende-matricula')?.value;
+    // Si atiende matrícula (sea docente, administrativo u obrero), se audita el bloque pedagógico
     if (atiendeMat === 'SI') {
         campos.push({ id: 'wp-nivel-modalidad', nombre: 'Nivel / Modalidad' });
         campos.push({ id: 'wp-especialidad-imparte', nombre: 'Especialidad Imparte' });
+        campos.push({ id: 'wp-horas-recibo', nombre: 'Horas según Recibo de Pago' });
+        campos.push({ id: 'wp-horas-academicas', nombre: 'Horas Académicas (en este Plantel)' });
+    } else {
+        // Para personal administrativo, obrero o docente en comisión sin aula
+        campos.push({ id: 'wp-horas-administrativas', nombre: 'Horas Administrativas' });
     }
 
     // Revisión secuencial de cada campo
@@ -1143,6 +1200,47 @@ export function validarFormularioPersonal() {
         }
     }
 
+    // Validación numérica estricta de Carga vs Recibo de Pago (MPPE)
+    const hRecibo = parseFloat(document.getElementById('wp-horas-recibo')?.value) || 0;
+    const hAcad = parseFloat(document.getElementById('wp-horas-academicas')?.value) || 0;
+    const hAdmin = parseFloat(document.getElementById('wp-horas-administrativas')?.value) || 0;
+
+    if (hRecibo <= 0) {
+        const elR = document.getElementById('wp-horas-recibo');
+        if (elR) { elR.style.borderColor = '#dc2626'; elR.focus(); }
+        showToast('Por favor, indique las Horas según Recibo de Pago (debe ser mayor a 0).', "warning");
+        return false;
+    }
+
+    if (atiendeMat === 'SI') {
+        if (hAcad <= 0) {
+            const elA = document.getElementById('wp-horas-academicas');
+            if (elA) { elA.style.borderColor = '#dc2626'; elA.focus(); }
+            showToast('Por favor, indique las Horas Académicas en este Plantel (debe ser mayor a 0).', "warning");
+            return false;
+        }
+        const totalAsig = parseFloat((hAcad + hAdmin).toFixed(2));
+        if (totalAsig > (hRecibo + 0.01)) {
+            const elA = document.getElementById('wp-horas-academicas');
+            if (elA) { elA.style.borderColor = '#dc2626'; elA.focus(); }
+            showToast(`La suma de Horas Académicas (${hAcad} hrs) y Administrativas (${hAdmin} hrs) en este plantel no puede exceder las Horas según Recibo (${hRecibo} hrs).`, "warning");
+            return false;
+        }
+    } else {
+        if (hAdmin <= 0) {
+            const elAdmin = document.getElementById('wp-horas-administrativas');
+            if (elAdmin) { elAdmin.style.borderColor = '#dc2626'; elAdmin.focus(); }
+            showToast('Por favor, indique las Horas Administrativas (debe ser mayor a 0).', "warning");
+            return false;
+        }
+        if (hAdmin > (hRecibo + 0.01)) {
+            const elAdmin = document.getElementById('wp-horas-administrativas');
+            if (elAdmin) { elAdmin.style.borderColor = '#dc2626'; elAdmin.focus(); }
+            showToast(`Las Horas Administrativas (${hAdmin} hrs) no pueden superar las Horas según Recibo (${hRecibo} hrs).`, "warning");
+            return false;
+        }
+    }
+
     return true;
 }
 
@@ -1155,34 +1253,33 @@ export async function guardarPersonalInline() {
     const nombres = document.getElementById('wp-nombres')?.value || '';
     const tipoPersonal = (document.getElementById('wp-tipo-personal')?.value || '').toUpperCase();
 
-    // --- Candado de Carga Horaria Acumulada por Nivel (Media: 56 hrs / Inicial-Primaria: 53.33 hrs) ---
-    if (tipoPersonal === 'DOCENTE') {
+    // --- Candado de Carga Horaria Acumulada y Validación de Recibo ---
+    const atiendeMat = (document.getElementById('wp-atiende-matricula')?.value || 'NO').toUpperCase();
+    if (atiendeMat === 'SI') {
         const resHoras = await verificarTopeHorasDocente(true);
         if (resHoras && resHoras.excede) {
-            const exceso = (resHoras.total - resHoras.tope).toFixed(2);
-            const desgloseHtml = resHoras.desglose.length > 0 
+            const desgloseHtml = (resHoras.desglose && resHoras.desglose.length > 0)
                 ? `<div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px; margin: 12px 0;">
                     <strong style="color: #334155; display: block; margin-bottom: 6px; font-size: 0.88rem;">Horas comprometidas en otros planteles:</strong>
                     <ul style="margin: 0; padding-left: 18px; color: #475569; font-size: 0.85rem; line-height: 1.5;">
-                        ${resHoras.desglose.map(d => `<li><strong>${d.plantel}</strong>: ${d.horas} hrs (${d.cargo})</li>`).join('')}
+                        ${resHoras.desglose.map(d => `<li><strong>${d.plantel}</strong>: ${d.horas} hrs (${d.cargo} - ${d.nivel || 'N/A'})</li>`).join('')}
                     </ul>
                     <div style="margin-top: 8px; font-weight: 700; color: #1e293b; font-size: 0.85rem;">Total en otros planteles: ${resHoras.horasOtros} hrs</div>
                    </div>`
                 : '';
 
             await showAlert(
-                "⛔ Tope de Carga Horaria Excedido",
-                `<div style="text-align: left; font-size: 0.9rem; line-height: 1.5;">
+                "⛔ Validación de Carga Horaria",
+                `<div style="text-align: left; font-size: 0.92rem; line-height: 1.5;">
                     <p style="margin: 0 0 10px; color: #1e293b;">
-                        El funcionario docente <strong>${nombres || 'DOCENTE'}</strong> (C.I. ${cedula}) supera el límite máximo legal de dedicación permitido para <strong>${resHoras.etiqueta}</strong>.
+                        No es posible guardar el registro de <strong>${nombres || 'FUNCIONARIO'}</strong> (C.I. ${cedula}) debido a la siguiente observación institucional:
                     </p>
-                    ${desgloseHtml}
-                    <div style="margin: 8px 0; font-size: 0.88rem; background: #fff7ed; border: 1px solid #ffedd5; padding: 10px; border-radius: 6px;">
-                        <div>• <strong>Horas a asignar en este plantel:</strong> ${resHoras.horasInp} hrs</div>
-                        <div style="color: #c2410c; font-weight: 700; margin-top: 3px;">• <strong>Total resultante acumulado:</strong> ${resHoras.total} hrs (Exceso: ${exceso} hrs)</div>
+                    <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 12px; margin: 10px 0; color: #991b1b; font-size: 0.88rem; border-radius: 4px;">
+                        ${resHoras.mensajeError}
                     </div>
-                    <div style="margin-top: 12px; padding: 10px 12px; background: #fef2f2; border-left: 4px solid #ef4444; color: #991b1b; font-size: 0.84rem; border-radius: 4px;">
-                        📌 <strong>Instrucción:</strong> Ajuste las horas académicas en este plantel a un máximo de <strong>${resHoras.disp > 0 ? resHoras.disp.toFixed(2) : '0'} horas</strong> para cumplir con la normativa y permitir el guardado.
+                    ${desgloseHtml}
+                    <div style="margin-top: 12px; padding: 10px 12px; background: #fff7ed; border: 1px solid #ffedd5; color: #9a3412; font-size: 0.84rem; border-radius: 6px;">
+                        📌 <strong>Instrucción:</strong> Revise las Horas según Recibo de Pago y las Horas Académicas asignadas en este plantel para dar cumplimiento a la normativa de nómina.
                     </div>
                 </div>`,
                 "danger"
@@ -1246,7 +1343,9 @@ export async function guardarPersonalInline() {
         'codigo-cargo': document.getElementById('wp-codigo-rac')?.value || '',
         'codigo-rac': document.getElementById('wp-codigo-rac')?.value || '',
         titular: document.getElementById('wp-titular')?.value || '',
+        'horas-recibo': parseFloat(document.getElementById('wp-horas-recibo')?.value) || 0,
         'horas-academicas': parseFloat(document.getElementById('wp-horas-academicas')?.value) || 0,
+        'horas-por-programar': parseFloat(String(document.getElementById('wp-horas-por-programar')?.value || '').replace(/[^0-9.]/g, '')) || 0,
         'horas-administrativas': parseFloat(document.getElementById('wp-horas-administrativas')?.value) || 0,
         'fecha-ingreso': document.getElementById('wp-fecha-ingreso')?.value || '',
         antiguedad: parseInt(document.getElementById('wp-antiguedad')?.value) || 0,
@@ -1568,34 +1667,78 @@ document.addEventListener('DOMContentLoaded', () => {
     initCascadaPersonal();
 });
 
-// --- Escudo de Carga Horaria Acumulada Docente (Media: 56 hrs / Inicial-Primaria: 53.33 hrs) ---
+// --- Escudo de Carga Horaria Acumulada, Validación de Recibo y Topes Institucionales ---
 export async function verificarTopeHorasDocente(forzarConsulta = false) {
-    const tipo = (document.getElementById('wp-tipo-personal')?.value || '').toUpperCase();
-    const helpEl = document.getElementById('wp-horas-academicas-help');
+    const atiendeMat = (document.getElementById('wp-atiende-matricula')?.value || 'NO').toUpperCase();
+    const tipoPersonal = (document.getElementById('wp-tipo-personal')?.value || '').toUpperCase();
+    const nivelSel = (document.getElementById('wp-nivel-modalidad')?.value || '').toUpperCase();
     const inpHoras = document.getElementById('wp-horas-academicas');
+    const inpHRecibo = document.getElementById('wp-horas-recibo');
+    const inpAdmin = document.getElementById('wp-horas-administrativas');
+    const helpEl = document.getElementById('wp-horas-academicas-help');
 
-    if (tipo !== 'DOCENTE') {
-        if (helpEl) {
-            helpEl.style.display = 'none';
-            helpEl.innerHTML = '';
+    const horasRecibo = parseFloat(inpHRecibo?.value) || 0;
+    const horasInp = parseFloat(inpHoras?.value) || 0;
+    const horasAdmin = parseFloat(inpAdmin?.value) || 0;
+    const totalAsignadasPlantel = parseFloat((horasInp + horasAdmin).toFixed(2));
+    const horasPorProg = (atiendeMat === 'SI') ? Math.max(0, parseFloat((horasRecibo - totalAsignadasPlantel).toFixed(2))) : 0;
+
+    const esBasica = (nivelSel.includes('INICIAL') || nivelSel.includes('PRIMARIA')) && !nivelSel.includes('MEDIA');
+    const esMedia = nivelSel.includes('MEDIA');
+
+    // Si no atiende matrícula, validación sencilla administrativa
+    if (atiendeMat === 'NO') {
+        const totalAdmin = horasAdmin || horasRecibo || 0;
+        let excedeAdmin = false;
+        let msgAdmin = '';
+
+        if (horasRecibo > 0 && horasAdmin > (horasRecibo + 0.01)) {
+            excedeAdmin = true;
+            msgAdmin = `⚠️ <strong>Incoherencia horaria:</strong> Las Horas Administrativas asignadas (<strong>${horasAdmin} hrs</strong>) no pueden superar las Horas según Recibo de Pago (<strong>${horasRecibo} hrs</strong>).`;
         }
-        if (inpHoras) inpHoras.style.borderColor = '';
-        return null;
+
+        if (helpEl) {
+            helpEl.style.display = 'block';
+            if (excedeAdmin) {
+                helpEl.style.color = '#dc2626';
+                helpEl.style.background = '#fef2f2';
+                helpEl.style.borderColor = '#fca5a5';
+                helpEl.innerHTML = msgAdmin;
+                if (inpAdmin) inpAdmin.style.borderColor = '#dc2626';
+            } else {
+                if (inpAdmin) inpAdmin.style.borderColor = '';
+                if (inpHRecibo) inpHRecibo.style.borderColor = '';
+                helpEl.style.color = '#334155';
+                helpEl.style.background = '#f8fafc';
+                helpEl.style.borderColor = '#cbd5e1';
+                helpEl.innerHTML = `✅ <strong>Dedicación Administrativa / Servicio:</strong> <strong>${totalAdmin} hrs</strong> asignadas según recibo de pago (${tipoPersonal === 'DOCENTE' ? 'H.DOC' : 'H.ADM'}).`;
+            }
+        }
+
+        return {
+            tope: 40,
+            esMedia: false,
+            esBasica: false,
+            etiqueta: 'Personal Administrativo / Servicio',
+            horasOtros: 0,
+            horasInp: 0,
+            horasRecibo,
+            horasPorProg: 0,
+            total: totalAdmin,
+            disp: 0,
+            desglose: [],
+            excede: excedeAdmin,
+            motivoBloqueo: excedeAdmin ? 'EXCEDE_RECIBO' : '',
+            mensajeError: msgAdmin
+        };
     }
 
-    const cedulaRaw = document.getElementById('wp-cedula')?.value || '';
-    const cleanCed = String(cedulaRaw).trim().replace(/^[VEve]-?/, '');
-    const horasInp = parseFloat(inpHoras?.value) || 0;
+    // --- Si atiende matrícula: auditoría pedagógica estricta ---
+    const cedulaInp = document.getElementById('wp-cedula')?.value || '';
+    const cleanCed = cedulaInp.replace(/[^0-9]/g, '');
 
-    // Obtener nivel del docente o del plantel
-    const nivelDoc = (document.getElementById('wp-nivel-modalidad')?.value || '').toUpperCase();
-    let infoPlantel = window.currentPlantelInfo || {};
-    const nivelPlantel = (document.getElementById('inp-niveles-modalidades')?.value || infoPlantel.nivel || '').toUpperCase();
-    let esMedia = nivelDoc.includes('MEDIA') || (!nivelDoc && nivelPlantel.includes('MEDIA'));
-
-    // Dea del plantel activo actual
     let deaActual = window.currentPlantelDEA || '';
-    if (!deaActual && window.sgh_user_data?.jerarquia?.plantel_codigo) {
+    if (!deaActual && window.sgh_user_data && window.sgh_user_data.jerarquia) {
         deaActual = window.sgh_user_data.jerarquia.plantel_codigo;
     }
     if (!deaActual) {
@@ -1607,7 +1750,6 @@ export async function verificarTopeHorasDocente(forzarConsulta = false) {
 
     window._cacheCargosPorCedula = window._cacheCargosPorCedula || {};
 
-    // Si tiene cédula válida, consultar o leer de caché (Zero-Cost Shield)
     if (cleanCed && cleanCed.length >= 5) {
         if (forzarConsulta || !window._cacheCargosPorCedula[cleanCed]) {
             const posibles = [cleanCed, `V-${cleanCed}`, `E-${cleanCed}`, `V${cleanCed}`, `E${cleanCed}`];
@@ -1621,61 +1763,106 @@ export async function verificarTopeHorasDocente(forzarConsulta = false) {
     }
 
     let horasOtros = 0;
+    let tieneBasicaOtro = false;
+    let tieneMediaOtro = false;
     const desglose = [];
     const cargosList = (cleanCed && window._cacheCargosPorCedula[cleanCed]) ? window._cacheCargosPorCedula[cleanCed] : [];
 
     cargosList.forEach(c => {
-        // Ignorar si es el mismo documento que se está editando
         if (window._docIdEnEdicion && c.id === window._docIdEnEdicion) return;
 
         const cDea = c['codigo-plantel'] || c.codigoDEA || '';
-        // Si es una creación sin _docIdEnEdicion y ya existe un registro con el ID proyectado en este mismo plantel
         if (!window._docIdEnEdicion && cDea === deaActual && c.id === `${deaActual}_${cleanCed}`) return;
 
         const h = parseFloat(c['horas-academicas'] || c['HORAS ACADEMICAS']) || 0;
         if (h > 0) {
             const nMod = (c['nivel-modalidad'] || '').toUpperCase();
             if (nMod.includes('MEDIA')) {
-                esMedia = true; // Si imparte Media en cualquier plantel, se acoge al tope superior de Media
+                tieneMediaOtro = true;
+            } else if (nMod.includes('INICIAL') || nMod.includes('PRIMARIA')) {
+                tieneBasicaOtro = true;
             }
             horasOtros += h;
             desglose.push({
                 plantel: cDea || 'OTRO PLANTEL',
                 horas: h,
-                cargo: c.cargo || c['codigo-cargo'] || 'DOCENTE'
+                cargo: c.cargo || c['codigo-cargo'] || 'DOCENTE',
+                nivel: nMod
             });
         }
     });
 
     const tope = esMedia ? 56 : 53.33;
-    const etiqueta = esMedia ? 'Nivel Media (Tope: 56 Horas)' : 'Nivel Inicial / Primaria (Tope: 53.33 Horas)';
+    const etiqueta = esMedia ? 'Educación Media (Tope: 56 Horas)' : 'Educación Básica (Inicial/Primaria: 53.33 Horas)';
     const total = horasOtros + horasInp;
     const disp = Math.max(0, tope - horasOtros);
-    const excede = total > (tope + 0.01);
+    
+    let excede = false;
+    let mensajeError = '';
+    let motivoBloqueo = '';
+
+    if (esMedia && tieneBasicaOtro) {
+        excede = true;
+        motivoBloqueo = 'INCOMPATIBILIDAD_REGIMEN';
+        mensajeError = `⚠️ <strong>Incompatibilidad de régimen:</strong> El funcionario ya tiene horas asignadas en Educación Básica en otro plantel. La normativa del MPPE no permite que un docente imparta simultáneamente en Básica y Media.`;
+    } else if (esBasica && tieneMediaOtro) {
+        excede = true;
+        motivoBloqueo = 'INCOMPATIBILIDAD_REGIMEN';
+        mensajeError = `⚠️ <strong>Incompatibilidad de régimen:</strong> El funcionario ya tiene horas asignadas en Educación Media en otro plantel. La normativa del MPPE no permite que un docente de Media imparta simultáneamente en Básica.`;
+    } else if (esBasica && horasOtros > 0) {
+        excede = true;
+        motivoBloqueo = 'BASICA_CONCENTRADA';
+        mensajeError = `⚠️ <strong>Doble plantel en Educación Básica:</strong> El docente de Básica (Inicial/Primaria) debe estar concentrado en un solo plantel con 53.33 horas. Actualmente ya tiene ${horasOtros} hrs asignadas en otro plantel.`;
+    } else if (horasRecibo > 0 && totalAsignadasPlantel > (horasRecibo + 0.01)) {
+        excede = true;
+        motivoBloqueo = 'EXCEDE_RECIBO';
+        mensajeError = `⚠️ <strong>Incoherencia horaria:</strong> La suma de Horas Académicas (<strong>${horasInp} hrs</strong>) y Horas Administrativas (<strong>${horasAdmin} hrs</strong>) en este plantel (<strong>${totalAsignadasPlantel} hrs</strong>) supera las Horas según Recibo de Pago (<strong>${horasRecibo} hrs</strong>).`;
+    } else if (horasRecibo > (tope + 0.01)) {
+        excede = true;
+        motivoBloqueo = 'RECIBO_SUPERA_TOPE';
+        mensajeError = `⚠️ <strong>Tope legal excedido:</strong> El recibo de pago (<strong>${horasRecibo} hrs</strong>) excede el tope máximo legal de <strong>${tope} hrs</strong> para ${etiqueta}.`;
+    } else if (total > (tope + 0.01)) {
+        excede = true;
+        motivoBloqueo = 'TOTAL_SUPERA_TOPE';
+        const exceso = (total - tope).toFixed(2);
+        mensajeError = `⚠️ <strong>Exceso de carga acumulada:</strong> Total ${total} hrs (${horasOtros} hrs en otro plantel + ${horasInp} hrs aquí). Excede el tope legal de ${tope} hrs por ${exceso} hrs.`;
+    }
 
     if (helpEl) {
         helpEl.style.display = 'block';
-        if (horasOtros > 0) {
-            if (excede) {
-                const exceso = (total - tope).toFixed(2);
-                helpEl.style.color = '#dc2626';
-                helpEl.innerHTML = `⚠️ <strong>Exceso detectado:</strong> ${total} hrs en total (${horasOtros} hrs en otro plantel + ${horasInp} hrs aquí). Excede el tope de ${tope} hrs por ${exceso} hrs.`;
-                if (inpHoras) inpHoras.style.borderColor = '#dc2626';
-            } else {
-                helpEl.style.color = '#0284c7';
-                helpEl.innerHTML = `ℹ️ <strong>Carga compartida:</strong> ${horasOtros} hrs activas en otro(s) plantel(es). Disponibles para este plantel: <strong>${disp.toFixed(2)} hrs</strong> (Tope: ${tope} hrs en ${etiqueta}).`;
-                if (inpHoras) inpHoras.style.borderColor = '';
-            }
+        if (excede) {
+            helpEl.style.color = '#dc2626';
+            helpEl.style.background = '#fef2f2';
+            helpEl.style.borderColor = '#fca5a5';
+            helpEl.innerHTML = mensajeError;
+            if (inpHoras) inpHoras.style.borderColor = '#dc2626';
+            if (motivoBloqueo === 'RECIBO_SUPERA_TOPE' && inpHRecibo) inpHRecibo.style.borderColor = '#dc2626';
         } else {
-            if (excede) {
-                const exceso = (horasInp - tope).toFixed(2);
-                helpEl.style.color = '#dc2626';
-                helpEl.innerHTML = `⚠️ <strong>Exceso detectado:</strong> ${horasInp} hrs excede el tope legal de ${tope} hrs (${etiqueta}) por ${exceso} hrs.`;
-                if (inpHoras) inpHoras.style.borderColor = '#dc2626';
+            if (inpHoras) inpHoras.style.borderColor = '';
+            if (inpHRecibo) inpHRecibo.style.borderColor = '';
+            if (inpAdmin) inpAdmin.style.borderColor = '';
+
+            if (esBasica) {
+                helpEl.style.color = '#15803d';
+                helpEl.style.background = '#f0fdf4';
+                helpEl.style.borderColor = '#bbf7d0';
+                helpEl.innerHTML = `✅ <strong>Educación Básica (Inicial / Primaria):</strong> Carga horaria única de <strong>53.33 hrs</strong> según nómina ministerial (un solo plantel). Horas por programar: <strong>0</strong>.`;
+            } else if (esMedia) {
+                helpEl.style.color = '#0369a1';
+                helpEl.style.background = '#f0f9ff';
+                helpEl.style.borderColor = '#bae6fd';
+                const textoOtros = horasOtros > 0 ? ` (+ ${horasOtros} hrs en otro plantel)` : '';
+                const tagRecibo = (tipoPersonal === 'DOCENTE') ? 'H.DOC' : 'H.ADM';
+                if (horasAdmin > 0) {
+                    helpEl.innerHTML = `✅ <strong>Educación Media (Dedicación Mixta):</strong> Recibo: <strong>${horasRecibo || 0} hrs</strong> (${tagRecibo}) | Académicas: <strong>${horasInp} hrs</strong> + Administrativas: <strong>${horasAdmin} hrs</strong> = <strong>${totalAsignadasPlantel} hrs</strong> asignadas | <strong>Por Programar: ${horasPorProg} hrs</strong>${textoOtros}. Tope legal: ${tope} hrs.`;
+                } else {
+                    helpEl.innerHTML = `ℹ️ <strong>Educación Media:</strong> Recibo: <strong>${horasRecibo || 0} hrs</strong> (${tagRecibo}) | En este Plantel: <strong>${horasInp} hrs</strong> | <strong>Por Programar: ${horasPorProg} hrs</strong>${textoOtros}. Tope legal: ${tope} hrs.`;
+                }
             } else {
-                helpEl.style.color = '#64748b';
-                helpEl.innerHTML = `ℹ️ Tope legal de carga horaria: <strong>${tope} hrs</strong> (${etiqueta}).`;
-                if (inpHoras) inpHoras.style.borderColor = '';
+                helpEl.style.color = '#475569';
+                helpEl.style.background = '#f8fafc';
+                helpEl.style.borderColor = '#e2e8f0';
+                helpEl.innerHTML = `ℹ️ Asignación pedagógica activa. Tope de carga: <strong>${tope} hrs</strong>.`;
             }
         }
     }
@@ -1683,16 +1870,246 @@ export async function verificarTopeHorasDocente(forzarConsulta = false) {
     return {
         tope,
         esMedia,
+        esBasica,
         etiqueta,
         horasOtros,
         horasInp,
+        horasRecibo,
+        horasPorProg,
         total,
         disp,
         desglose,
-        excede
+        excede,
+        motivoBloqueo,
+        mensajeError
     };
 }
 
+export function calcularHorasUI(forzarConsulta = false) {
+    const hReciboInput = document.getElementById('wp-horas-recibo');
+    const hAcadInput = document.getElementById('wp-horas-academicas');
+    const hAdminInput = document.getElementById('wp-horas-administrativas');
+    const hProgInput = document.getElementById('wp-horas-por-programar');
+    const atiende = (document.getElementById('wp-atiende-matricula')?.value || 'NO').toUpperCase();
+
+    const hRecibo = parseFloat(hReciboInput?.value) || 0;
+    const hAcad = parseFloat(hAcadInput?.value) || 0;
+    const hAdmin = parseFloat(hAdminInput?.value) || 0;
+
+    if (atiende === 'NO') {
+        if (hProgInput) {
+            hProgInput.value = '0 hrs';
+            hProgInput.style.color = '#334155';
+            hProgInput.style.borderColor = '#cbd5e1';
+            hProgInput.style.background = '#f8fafc';
+        }
+        if (hAcadInput) hAcadInput.value = '0';
+    } else {
+        const totalAsignadas = parseFloat((hAcad + hAdmin).toFixed(2));
+        const porProgramar = Math.max(0, parseFloat((hRecibo - totalAsignadas).toFixed(2)));
+        if (hProgInput) {
+            if (hRecibo > 0) {
+                if (porProgramar === 0) {
+                    hProgInput.value = '0 hrs (Completo)';
+                    hProgInput.style.color = '#15803d';
+                    hProgInput.style.borderColor = '#86efac';
+                    hProgInput.style.background = '#f0fdf4';
+                } else {
+                    hProgInput.value = `${porProgramar} hrs (Por Asignar)`;
+                    hProgInput.style.color = '#0369a1';
+                    hProgInput.style.borderColor = '#7dd3fc';
+                    hProgInput.style.background = '#f0f9ff';
+                }
+            } else {
+                hProgInput.value = '0 hrs';
+                hProgInput.style.color = '#334155';
+                hProgInput.style.borderColor = '#cbd5e1';
+                hProgInput.style.background = '#f8fafc';
+            }
+        }
+    }
+
+    verificarTopeHorasDocente(forzarConsulta);
+}
+
+export function onNivelModalidadChangeUI() {
+    const nivelSel = (document.getElementById('wp-nivel-modalidad')?.value || '').toUpperCase();
+    const hReciboInput = document.getElementById('wp-horas-recibo');
+    const hAcadInput = document.getElementById('wp-horas-academicas');
+    const hAdminInput = document.getElementById('wp-horas-administrativas');
+    const espInput = document.getElementById('wp-especialidad-imparte');
+
+    const esBasica = (nivelSel.includes('INICIAL') || nivelSel.includes('PRIMARIA')) && !nivelSel.includes('MEDIA');
+    const esMedia = nivelSel.includes('MEDIA');
+
+    if (esBasica) {
+        if (hReciboInput) hReciboInput.value = '53.33';
+        if (hAcadInput) hAcadInput.value = '53.33';
+        if (hAdminInput) hAdminInput.value = '0';
+        if (espInput && !espInput.value) espInput.value = 'AULA INTEGRAL';
+    } else if (esMedia) {
+        if (hReciboInput && (!hReciboInput.value || hReciboInput.value === '53.33')) {
+            hReciboInput.value = '';
+            hReciboInput.placeholder = 'Ej. 40 o 54';
+        }
+        if (hAcadInput && hAcadInput.value === '53.33') {
+            hAcadInput.value = '';
+            hAcadInput.placeholder = 'Ej. 20 o 32';
+        }
+        if (espInput && espInput.value === 'AULA INTEGRAL') {
+            espInput.value = '';
+        }
+    }
+
+    calcularHorasUI(false);
+}
+
+export function onAtiendeMatriculaChangeUI() {
+    const atiendeEl = document.getElementById('wp-atiende-matricula');
+    if (atiendeEl) atiendeEl.dataset.manualChanged = 'true';
+    toggleMatriculaUI();
+}
+
+export function toggleMatriculaUI() {
+    const atiende = (document.getElementById('wp-atiende-matricula')?.value || 'NO').toUpperCase();
+    const card = document.getElementById('container-carga-horaria');
+    const cnivel = document.getElementById('container-nivel-modalidad');
+    const cesp = document.getElementById('container-especialidad');
+    const cacad = document.getElementById('container-horas-academicas');
+    const cprog = document.getElementById('container-horas-por-programar');
+    const ccuad = document.getElementById('container-btn-cuadratura');
+
+    const headerIcon = document.getElementById('header-carga-icon');
+    const headerText = document.getElementById('header-carga-text');
+    const headerBadge = document.getElementById('header-carga-badge');
+    const lblRecibo = document.getElementById('lbl-horas-recibo');
+    const lblAdmin = document.getElementById('lbl-horas-admin');
+    const tipoVal = (document.getElementById('wp-tipo-personal')?.value || '').toUpperCase();
+
+    if (atiende === 'SI') {
+        if (card) {
+            card.style.background = '#f0fdf4';
+            card.style.borderColor = '#86efac';
+        }
+        if (headerIcon) headerIcon.textContent = '🎓';
+        if (headerText) {
+            headerText.textContent = 'Asignación Pedagógica y Carga Horaria (Frente a Alumnos)';
+            headerText.parentElement.style.color = '#166534';
+        }
+        if (headerBadge) {
+            headerBadge.textContent = 'Atención Directa de Matrícula';
+            headerBadge.style.background = '#dcfce7';
+            headerBadge.style.color = '#15803d';
+            headerBadge.style.borderColor = '#bbf7d0';
+        }
+        if (lblRecibo) {
+            lblRecibo.innerHTML = (tipoVal === 'DOCENTE')
+                ? 'Horas según Recibo (H.DOC) <span style="color: #dc2626;">*</span>'
+                : 'Horas según Recibo (H.ADM) <span style="color: #dc2626;">*</span>';
+        }
+        if (lblAdmin) {
+            lblAdmin.innerHTML = 'Horas Administrativas (Coordinación / Oficina)';
+        }
+
+        if (cnivel) cnivel.style.display = 'block';
+        if (cesp) cesp.style.display = 'block';
+        if (cacad) cacad.style.display = 'block';
+        if (cprog) cprog.style.display = 'block';
+        if (ccuad) ccuad.style.display = 'none';
+
+        const selNivel = document.getElementById('wp-nivel-modalidad');
+        if (selNivel && !selNivel.value) {
+            let infoPlantel = window.currentPlantelInfo || {};
+            const nivelPlantel = (document.getElementById('inp-niveles-modalidades')?.value || infoPlantel.nivel || '').toUpperCase();
+            
+            for (let i = 0; i < selNivel.options.length; i++) {
+                const optText = (selNivel.options[i].value || '').toUpperCase();
+                if (optText && (nivelPlantel.includes(optText) || optText.includes(nivelPlantel))) {
+                    selNivel.selectedIndex = i;
+                    break;
+                }
+            }
+            if (!selNivel.value) {
+                if (nivelPlantel.includes('PRIMARIA')) {
+                    for (let i = 0; i < selNivel.options.length; i++) {
+                        if (selNivel.options[i].value === 'PRIMARIA') { selNivel.selectedIndex = i; break; }
+                    }
+                } else if (nivelPlantel.includes('INICIAL')) {
+                    for (let i = 0; i < selNivel.options.length; i++) {
+                        if (selNivel.options[i].value === 'INICIAL') { selNivel.selectedIndex = i; break; }
+                    }
+                } else if (nivelPlantel.includes('MEDIA TECNICA')) {
+                    for (let i = 0; i < selNivel.options.length; i++) {
+                        if (selNivel.options[i].value === 'MEDIA TECNICA') { selNivel.selectedIndex = i; break; }
+                    }
+                } else if (nivelPlantel.includes('MEDIA')) {
+                    for (let i = 0; i < selNivel.options.length; i++) {
+                        if (selNivel.options[i].value === 'MEDIA GENERAL') { selNivel.selectedIndex = i; break; }
+                    }
+                }
+            }
+            if (selNivel.value) {
+                onNivelModalidadChangeUI();
+            }
+        }
+        calcularHorasUI(false);
+    } else {
+        if (card) {
+            card.style.background = '#f8fafc';
+            card.style.borderColor = '#cbd5e1';
+        }
+        if (headerIcon) headerIcon.textContent = '⏱️';
+        if (headerText) {
+            headerText.textContent = 'Carga Horaria y Dedicación Laboral (Recibo de Pago MPPE)';
+            headerText.parentElement.style.color = '#1e293b';
+        }
+        if (headerBadge) {
+            headerBadge.textContent = 'Dedicación Administrativa / Servicio';
+            headerBadge.style.background = '#e2e8f0';
+            headerBadge.style.color = '#334155';
+            headerBadge.style.borderColor = '#cbd5e1';
+        }
+        if (lblRecibo) {
+            lblRecibo.innerHTML = (tipoVal === 'DOCENTE')
+                ? 'Horas según Recibo (H.DOC) <span style="color: #dc2626;">*</span>'
+                : 'Horas según Recibo (H.ADM) <span style="color: #dc2626;">*</span>';
+        }
+        if (lblAdmin) {
+            lblAdmin.innerHTML = 'Horas Administrativas (en este Plantel) <span style="color: #dc2626;">*</span>';
+        }
+
+        if (cnivel) cnivel.style.display = 'none';
+        if (cesp) cesp.style.display = 'none';
+        if (cacad) cacad.style.display = 'none';
+        if (cprog) cprog.style.display = 'none';
+        if (ccuad) ccuad.style.display = 'none';
+
+        const inNivel = document.getElementById('wp-nivel-modalidad');
+        if (inNivel) inNivel.value = '';
+        const inEsp = document.getElementById('wp-especialidad-imparte');
+        if (inEsp) inEsp.value = '';
+        const hAcad = document.getElementById('wp-horas-academicas');
+        if (hAcad) hAcad.value = '0';
+        const hProg = document.getElementById('wp-horas-por-programar');
+        if (hProg) hProg.value = '0';
+
+        const hRecibo = document.getElementById('wp-horas-recibo');
+        const hAdmin = document.getElementById('wp-horas-administrativas');
+        if (hAdmin && !hAdmin.value) {
+            hAdmin.value = hRecibo?.value || '40';
+        }
+        if (hRecibo && !hRecibo.value) {
+            hRecibo.value = hAdmin?.value || '40';
+        }
+
+        calcularHorasUI(false);
+    }
+}
+
+window.calcularHorasUI = calcularHorasUI;
+window.onNivelModalidadChangeUI = onNivelModalidadChangeUI;
+window.onAtiendeMatriculaChangeUI = onAtiendeMatriculaChangeUI;
+window.toggleMatriculaUI = toggleMatriculaUI;
 window.validarHorasDocenteUI = function(forzar = false) {
     verificarTopeHorasDocente(forzar);
 };
@@ -1739,28 +2156,6 @@ window.calcularAntiguedadUI = function() {
     if (m < 0 || (m === 0 && hoy.getDate() < ingreso.getDate())) ant--;
     const el = document.getElementById('wp-antiguedad');
     if (el) el.value = ant > 0 ? ant : 0;
-};
-
-window.toggleMatriculaUI = function() {
-    const atiende = document.getElementById('wp-atiende-matricula')?.value;
-    const cnivel = document.getElementById('container-nivel-modalidad');
-    const cesp = document.getElementById('container-especialidad');
-    const ccuad = document.getElementById('container-btn-cuadratura');
-
-    if (atiende === 'SI') {
-        if (cnivel) cnivel.style.display = 'block';
-        if (cesp) cesp.style.display = 'block';
-        // Botón de cuadratura invisibilizado temporalmente por indicación institucional
-        if (ccuad) ccuad.style.display = 'none';
-    } else {
-        if (cnivel) cnivel.style.display = 'none';
-        if (cesp) cesp.style.display = 'none';
-        if (ccuad) ccuad.style.display = 'none';
-        const inNivel = document.getElementById('wp-nivel-modalidad');
-        if (inNivel) inNivel.value = '';
-        const inEsp = document.getElementById('wp-especialidad-imparte');
-        if (inEsp) inEsp.value = '';
-    }
 };
 
 // --- MODAL Y CONTROL DE TRASLADOS (FICHA VIAJERA) ---
@@ -2152,8 +2547,10 @@ export async function exportarNominaExcel() {
             'Turnos que Atiende': emp['turnos-atiende'] || emp['TURNOS QUE ATIENDE'] || '',
 
             // 5. Carga Horaria y Pedagógica
+            'Horas Recibo de Pago': Number(emp['horas-recibo']) || (Number(emp['horas-academicas'] || 0) + Number(emp['horas-administrativas'] || 0)),
             'Horas Académicas': horasAcad || Number(emp['HORAS ACADEMICAS']) || 0,
             'Horas Administrativas': horasAdmin || Number(emp['HORAS ADMINISTRATIVAS']) || 0,
+            'Horas por Programar': Number(emp['horas-por-programar']) || Math.max(0, (Number(emp['horas-recibo']) || (Number(emp['horas-academicas'] || 0) + Number(emp['horas-administrativas'] || 0))) - ((horasAcad || Number(emp['HORAS ACADEMICAS']) || 0) + (horasAdmin || Number(emp['HORAS ADMINISTRATIVAS']) || 0))),
             'Atiende Matrícula': emp['atiende-matricula'] || emp['ATIENDE MATRICUAL'] || '',
             'Nivel / Modalidad': emp['nivel-modalidad'] || emp['NIVEL O MODALIDAD'] || '',
             'Especialidad que Imparte': emp['especialidad-imparte'] || emp['ESPECIALIDAD QUE IMPARTE EL DOCENTE'] || '',

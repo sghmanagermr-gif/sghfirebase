@@ -1836,11 +1836,78 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `bitacora.md`
 - `conversaciones.md`
 
+---
 
+### v2.19.0 - 2026-10-28 (Horas según Recibo de Pago, Horas por Programar y Desacople de Atiende Matrícula)
 
+**1. Objetivos del Ciclo:**
+- Atender la solicitud de la Oficina de Nómina y CDCE Mérida sobre la declaración explícita de «Horas según Recibo de Pago» y el cálculo en vivo de «Horas por Programar».
+- Aplicar las reglas institucionales MPPE: Educación Básica con carga fija e indivisible de 53.33 horas concentrada en una sola escuela, y Educación Media con carga por cátedra a partir de 40 horas hasta el tope estatutario de 56 horas acumuladas entre dependencias.
+- Desacoplar la carga académica del tipo de personal: en la realidad educativa venezolana, obreros y administrativos convalidables atienden matrícula, por lo que el selector maestro es estrictamente `¿Atiende Matrícula? === 'SI'`.
 
+**2. Solución Técnica y Arquitectura:**
+- **Modelo de Datos en Firestore (`cargos_personal`):**
+  - Incorporación de `horas-recibo`, `horas-academicas`, `horas-por-programar` y `horas-administrativas`.
+- **Motor de Verificación en Memoria (`verificarTopeHorasDocente`):**
+  - Validación del tope legal por nivel (53.33 para Básica, 56 para Media).
+  - Escudo contra sobrecarga y detección de incompatibilidad estricta de régimen (bloqueo automático si un docente de Básica pretende inscribirse en Media o viceversa).
+  - Consulta cruzada Zero-Cost protegida mediante caché en memoria (`_cacheCargosPorCedula`).
+- **Exportaciones Excel:**
+  - Actualización de `exportarNominaExcel` en `webapp/src/admin.js` y `webapp/src/personalWizard.js`.
 
+**3. Archivos Involucrados:**
+- `webapp/index.html`
+- `webapp/package.json`
+- `webapp/src/admin.js`
+- `webapp/src/personalWizard.js`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
 
+---
 
+### v2.19.1 - 2026-10-28 (Soporte Oficial MPPE H.DOC / H.ADM y Dedicación Mixta de Coordinación)
 
+**1. Objetivos del Ciclo:**
+- Modelar con exactitud el comprobante de pago oficial del MPPE, donde la dedicación distingue explícitamente entre `H.DOC` (docente) y `H.ADM` (administrativo y obrero, estándar 40.00 hrs).
+- Dar soporte a funcionarios con asignación compartida (ej. docente con 40 horas en recibo que ejerce como Coordinador de Seccional, atendiendo 20 horas de aula y 20 horas de coordinación en oficina).
 
+**2. Solución Técnica y Arquitectura:**
+- **Unificación de la Tarjeta de Dedicación (`#container-carga-horaria`):**
+  - Un único contenedor adaptable que conmuta suavemente entre el modo administrativo/servicio y el modo pedagógico.
+  - Rotulación dinámica: `Horas según Recibo (H.DOC)` o `Horas según Recibo (H.ADM)`.
+- **Ecuación Institucional de Horas por Programar:**
+  - $\text{Horas por Programar} = \text{Recibo} - (\text{Horas Académicas} + \text{Horas Administrativas})$.
+  - Si un coordinador tiene 20 hrs académicas y 20 hrs administrativas, el sistema reconoce el cumplimiento de sus 40 hrs con 0 pendientes.
+
+**3. Archivos Involucrados:**
+- `webapp/index.html`
+- `webapp/package.json`
+- `webapp/src/admin.js`
+- `webapp/src/personalWizard.js`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
+
+---
+
+### v2.19.2 - 2026-10-28 (Refinamiento Estético y Distribución Armónica 3x2 en Tarjeta Pedagógica)
+
+**1. Objetivos del Ciclo:**
+- Resolver el desbalance visual de la tarjeta pedagógica donde 5 campos ocupaban la primera fila y el campo «Horas por Programar» quedaba aislado en una segunda fila.
+- Establecer una arquitectura de cuadrícula simétrica 3x2 altamente legible y agradable a la vista.
+
+**2. Solución Técnica y Arquitectura:**
+- **Reorganización Simétrica (3x2):**
+  - Fila 1 (Perfil y Contratación): Nivel/Modalidad, Especialidad Imparte, Horas según Recibo de Pago.
+  - Fila 2 (Dedicación en este Plantel): Horas Académicas, Horas Administrativas, Horas por Programar.
+- **Micro-interacciones y UI Feedback:**
+  - Indicador tipo Badge en «Horas por Programar» con etiquetas contextuales `0 hrs (Completo)` o `X hrs (Por Asignar)` y colorimetría dinámica.
+
+**3. Archivos Involucrados:**
+- `webapp/index.html`
+- `webapp/package.json`
+- `webapp/src/personalWizard.js`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`

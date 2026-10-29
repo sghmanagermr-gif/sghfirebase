@@ -2457,25 +2457,93 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 2. Se actualizó el botón `#btn-sync-matricula-mun` para vaciar `currentPlanteles = []`, limpiar cachés de sesión y ejecutar `loadEstadisticas(true)`.
 > 3. Compilación limpia ejecutada con Vite en `webapp` (751ms).
 
+---
 
+### Intervención 18
+* **Fecha / Hora:** 2026-10-28 ~16:00 (Hora Local)
+* **Emisor:** Usuario (Administrador)
 
+> **Mensaje del Usuario:**  
+> Perfecto. pasemos al tema de las horas docentes. ¿Recuerdas ese tema?  
+> El docente de media nunca estará dando primaria o inicial y viceversa  
+> Lo que si me dijo el jefe de nomina es que el docente de basica=inicial-primara es de solo 53.33. el docente de media es a partir de 40 horas. ahora bien, me hacen la siguiente pregunta desde la oficina de nomina: "¿es posible que al registrar a un funcionario que este atendiendo matricula, haya un campo que diga HORAS SEGÚN RECIBO DE PAGO?". Con la finalidad de que al funcionario Josefina Gomez de educación basica (inicial o primaria) en su recibo de pago dice 53.33 y en el campo horas academicas el director coloca la cantidad de horas (en este ejemplo lo logico es que coloque 53.33) ya que el docente de inicial-primaria está concentrado en un solo plantel.  
+> En el caso de Media es distinto.  
+> FUNCIONARIO | HORAS RECIBO DE PAGO | PLANTEL | CANTIDAD | POR PROGRAMAR  
+> FULANO DETAL | 40 | NACIONAL | 32 | 8  
+> FULANO DETAL | 16 | ESTADAL | 16 | 0  
+> SUTANO PEREZ | 54 | NACIONAL | 40 | 14  
+> ¿Cuál es tú analisis, partiendo de lo que hace el sistema, y la(s) posible(s) solucion(es)?
 
+* **Emisor:** Agente (Antigravity)
 
+> **Respuesta del Agente:**  
+> Análisis estructural y diseño de solución institucional para nómina:  
+> 1. Diagnóstico de la Normativa MPPE:  
+>    - En Básica (Inicial/Primaria) rige el principio de aula integral concentrada en un único plantel con 53.33 horas.  
+>    - En Media (General/Técnica) rige la contratación por cátedra (a partir de 40 horas hasta el tope legal de 56 horas multi-plantel).  
+> 2. Propuesta Arquitectónica (Alternativa 2):  
+>    - Incorporación del campo «Horas según Recibo de Pago» (`horas-recibo`).  
+>    - Cálculo automático en tiempo real de «Horas por Programar» (`horas-recibo - horas-academicas`).  
+>    - Bloqueo institucional para evitar cruces incompatibles entre Básica y Media.
 
+---
 
+### Intervención 19
+* **Fecha / Hora:** 2026-10-28 ~16:45 (Hora Local)
+* **Emisor:** Usuario (Administrador)
 
+> **Mensaje del Usuario:**  
+> Tu alternativa 2 nos gusta, pero fíjate, actualmente el formulario de los funcionarios aparece asi imagen captura0001.png; y para saber si atiende matricula hay que darle clic en atiende matricula captura0002.png, este selector está después de que se han cargado las horas.  
+> ¿Qué opinas?  
+> Ojo, en estos tiempos y con la convalidación correcta un OBRERO o ADMINISTRATIVO pueden atender matricula  
+> ¿Qué me dices a eso?  
+> Mientras estabas ejecutando un proceso, se interrumpió el servicio electrico por cuatro horas y media. Así que, Ahora sí se ve mejor. procede
 
+* **Emisor:** Agente (Antigravity)
 
+> **Respuesta del Agente:**  
+> Implementación de v2.19.0 y Desacople de Atiende Matrícula:  
+> 1. Se estableció el selector «¿Atiende Matrícula?» como llave maestra independiente del tipo de personal (aplicable a Docentes, Administrativos u Obreros convalidados).  
+> 2. Si atiende matrícula = SI, despliegue de la tarjeta pedagógica con Nivel, Especialidad, Horas de Recibo, Horas Académicas y Horas por Programar.  
+> 3. Integración en exportación a Excel y despliegue a Firebase Hosting (v2.19.0).  
+> 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
 
+---
 
+### Intervención 20
+* **Fecha / Hora:** 2026-10-28 ~21:33 (Hora Local)
+* **Emisor:** Usuario (Administrador)
 
+> **Mensaje del Usuario:**  
+> Vamos bien, pero entiende algo si el personal es administrativo u obrero si o si en su recibo de pago aparece horas administrativas. te voy a mostrar como se ve un recibo de pago de MPPE, en este caso de un personal obrero; verás que hay dos casillas una dice H.DOC exclusivamente para el personal docente, y otra casilla que dice H.ADM que corresponde al personal administrativo y obrero. entonces en el formulario hay que declarar la cantidad de horas dependiendo del personal en el campo correspondiente. porque hay otro detalle, un docente que en su recibo dica 40 horas pero en este caso es un coordinador de seccional tanto atenderá matricula 20 horas academicas como atenderá la oficina 20 horas administrativas
 
+* **Emisor:** Agente (Antigravity)
 
+> **Respuesta del Agente:**  
+> Implementación de v2.19.1 - Soporte de Recibo Ministerial MPPE (H.DOC / H.ADM) y Dedicación Mixta:  
+> 1. Rotulado dinámico del recibo: Horas según Recibo (H.DOC) para Docentes y Horas según Recibo (H.ADM) para Administrativos y Obreros (prellenado en 40).  
+> 2. Dedicación Mixta de Coordinación: Permite declarar simultáneamente Horas Académicas de aula (20) y Horas Administrativas de coordinación (20), totalizando 40 horas y arrojando 0 Horas por Programar.  
+> 3. Tarjeta unificada de Dedicación y Carga Horaria adaptable.  
+> 4. Despliegue en producción en Firebase Hosting (v2.19.1).  
+> 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
 
+---
 
+### Intervención 21
+* **Fecha / Hora:** 2026-10-28 ~21:52 (Hora Local)
+* **Emisor:** Usuario (Administrador)
 
+> **Mensaje del Usuario:**  
+> Estoy satisfecho, pero acomodemos un poco la estetica del campo Asignación Pedagógica y Carga Horaria (Frente a Alumnos)
 
+* **Emisor:** Agente (Antigravity)
 
-
-
-
+> **Respuesta del Agente:**  
+> Implementación de v2.19.2 - Refinamiento Estético y Distribución Armónica 3x2:  
+> 1. Reorganización visual en dos filas perfectamente equilibradas de 3 columnas:  
+>    - Fila 1: Nivel / Modalidad, Especialidad Imparte, Horas según Recibo (H.DOC / H.ADM).  
+>    - Fila 2: Horas Académicas (en este Plantel), Horas Administrativas (Coordinación / Oficina), Horas por Programar.  
+> 2. Se eliminó el campo aislado en la segunda fila, logrando simetría total.  
+> 3. Estilización de «Horas por Programar» como insignia inteligente (Badge) con estado en tiempo real (0 hrs Completo / X hrs Por Asignar).  
+> 4. Compilación limpia y despliegue a Firebase Hosting (v2.19.2).  
+> 5. Actualización protocolar de versiones.md, bitacora.md, conversaciones.md y sincronización con repositorio Git.

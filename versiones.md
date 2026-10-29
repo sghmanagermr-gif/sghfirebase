@@ -4,6 +4,42 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.19.2 (28 de Octubre de 2026)
+- **Refinamiento Estético y Distribución Armónica 3x2 en Carga Horaria y Pedagógica:**
+  - **Reorganización Geométrica Equilibrada (3x2):**
+    - Se transformó la cuadrícula de captura de la tarjeta pedagógica a una distribución simétrica de 2 filas con 3 columnas cada una:
+      - *Fila 1 (Perfil y Contrato):* Nivel / Modalidad, Especialidad Imparte y Horas según Recibo de Pago (`H.DOC` / `H.ADM`).
+      - *Fila 2 (Dedicación en este Plantel):* Horas Académicas (en Aula), Horas Administrativas (Coordinación / Oficina) y Horas por Programar.
+    - Se eliminó el desbalance visual donde el campo «Horas por Programar» quedaba aislado en una segunda fila.
+  - **Diseño Mejorado del Indicador «Horas por Programar»:**
+    - Indicador visual dinámico con formato tipo insignia (Badge): muestra `0 hrs (Completo)` con resalte verde esmeralda suave cuando la carga está 100% asignada, o `X hrs (Por Asignar)` en azul celeste cuando restan horas por distribuir.
+  - **Despliegue Inmediato:** Compilado limpio en Vite y desplegado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
+### v2.19.1 (28 de Octubre de 2026)
+- **Soporte Oficial de Recibo de Pago MPPE (`H.DOC` / `H.ADM`) y Dedicación Mixta para Coordinadores:**
+  - **Fidelidad al Recibo Ministerial:**
+    - Identificación y rotulado dinámico de la casilla de nómina según el tipo de trabajador: **Horas según Recibo (H.DOC)** para Docentes, y **Horas según Recibo (H.ADM)** para Personal Administrativo y Obrero (con prellenado estándar de 40 horas).
+  - **Soporte de Dedicación Mixta (Docente Coordinador de Seccional):**
+    - Permite declarar en simultáneo horas académicas de aula (ej. 20 hrs) y horas administrativas de coordinación/oficina (ej. 20 hrs).
+    - Cómputo inteligente de saldo pendiente: $\text{Horas por Programar} = \text{Recibo} - (\text{Horas Académicas} + \text{Horas Administrativas})$, reconociendo el cumplimiento total del contrato laboral.
+  - **Unificación de la Tarjeta de Dedicación y Carga Horaria:**
+    - Tarjeta adaptable única (`#container-carga-horaria`) que conmuta entre modo Administrativo/Servicio y modo Pedagógico frente a alumnos.
+
+---
+
+### v2.19.0 (28 de Octubre de 2026)
+- **Incorporación de Horas según Recibo de Pago y Desacople de «¿Atiende Matrícula?»:**
+  - **Desacople Institucional:** Se fijó el selector «¿Atiende Matrícula?» como único gatillo de la carga académica, permitiendo que Personal Obrero o Administrativo debidamente convalidado atienda matrícula.
+  - **Reglas Normativas del MPPE:**
+    - Básica (Inicial/Primaria): Carga horaria única e indivisible de 53.33 horas concentrada en un solo plantel.
+    - Media (General/Técnica): Asignación a partir de 40 horas hasta el tope legal de 56 horas multi-plantel.
+    - Incompatibilidad estricta: Bloqueo de cruces de horas entre Básica y Media.
+  - **Actualización de Reportes:** Inclusión de las columnas *Horas Recibo de Pago* y *Horas por Programar* en las exportaciones a Excel.
+
+---
+
 ### v2.18.2 (28 de Octubre de 2026)
 - **Hotfix: Restauración del Enlace de Guardado de Matrícula y Corrección de Alcance de Planes:**
   - **Corrección de Excepción Crítica en Carga (`ReferenceError`):**

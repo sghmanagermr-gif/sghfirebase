@@ -3572,8 +3572,10 @@ export function initAdminDashboard(dbInstance, user) {
           'Turnos que Atiende': emp['turnos-atiende'] || emp['TURNOS QUE ATIENDE'] || '',
 
           // 5. Carga Horaria y Pedagógica
+          'Horas Recibo de Pago': Number(emp['horas-recibo']) || (Number(emp['horas-academicas'] || 0) + Number(emp['horas-administrativas'] || 0)),
           'Horas Académicas': horasAcad,
           'Horas Administrativas': horasAdmin,
+          'Horas por Programar': Number(emp['horas-por-programar']) || Math.max(0, (Number(emp['horas-recibo']) || (Number(emp['horas-academicas'] || 0) + Number(emp['horas-administrativas'] || 0))) - (horasAcad + horasAdmin)),
           'Atiende Matrícula': emp['atiende-matricula'] || emp['ATIENDE MATRICUAL'] || '',
           'Nivel / Modalidad': emp['nivel-modalidad'] || emp['NIVEL O MODALIDAD'] || '',
           'Especialidad que Imparte': emp['especialidad-imparte'] || emp['ESPECIALIDAD QUE IMPARTE EL DOCENTE'] || '',
