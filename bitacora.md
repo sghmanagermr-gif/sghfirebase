@@ -2105,3 +2105,31 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `bitacora.md`
 - `conversaciones.md`
 
+---
+
+### [Documentación e Inducción] - 2026-10-30 (Elaboración de Manual Práctico y Minuta Institucional en Formato DOCX)
+
+**1. Objetivos del Ciclo:**
+- Atender la necesidad pedagógica e institucional de formular una guía práctica paso a paso en lenguaje llano ("desde cero") para directores de planteles y nuevos usuarios del sistema SGH, cubriendo desde la solicitud de acceso hasta la gestión completa de personal.
+- Procesar, analizar y sintetizar la grabación audiovisual de la videoconferencia institucional (`Video\2026-10-30 11-49-30.mp4`, 5.06 GB, 1h 57m 46s) realizada por el Lic. Luis Alfonso Pérez con directores del Municipio Santos Marquina sobre la versión `v2.20.1`.
+- Generar un documento formal en formato Microsoft Word (`.docx`) con diseño corporativo oficial (membrete del MPPE / CDCE Mérida, ficha técnica, desglose cronológico de 6 fases, acuerdos institucionales y bloque de firmas).
+
+**2. Solución Técnica y Metodología:**
+- **Inspección Multimedia y Extracción de Metadatos:**
+  - Se utilizó la biblioteca binaria de FFmpeg y el paquete `docx` en entorno aislado de Node.js (`scratch/`).
+  - Se muestrearon fotogramas clave en intervalos regulares a lo largo de las 2 horas de video, cruzándolos con la presentación `Manual Práctico.pptx` (19 diapositivas) proyectada durante la videollamada.
+  - Se identificaron todas las etapas de la reunión: exposición de diapositivas, demostración de solicitud de acceso, validación de candado de matrícula, sesión interactiva de preguntas, prueba real con el plantel `OD14311419` (*Escuela Estado Apure / Ana Romelia Vela*) y balance de la Pizarra Municipal en tiempo real (18 planteles, 374 cargos y 2.008 alumnos censados).
+- **Generación del Documento Word Institucional:**
+  - Se estructuró el archivo `Minuta_Taller_Induccion_SGH_Santos_Marquina_2026-10-30.docx` en la raíz del proyecto y una copia idéntica en `Video\Minuta_2026-10-30_11-49-30.docx`.
+  - Se aplicaron estilos visuales de alto contraste: paleta azul marino (`#003399`), gris pizarra (`#0F172A`), bordes definidos, tablas estructuradas con sombreados suaves y márgenes estándar de 1 pulgada.
+- **Protección del Repositorio:**
+  - Se actualizó `.gitignore` incorporando reglas de exclusión para archivos de video pesados (`*.mp4`, `Video/*.mp4`) y directorios de soporte efímero (`scratch/`), previniendo desbordamientos de cuota en Git y GitHub.
+
+**3. Archivos Involucrados:**
+- `Minuta_Taller_Induccion_SGH_Santos_Marquina_2026-10-30.docx`
+- `Video/Minuta_2026-10-30_11-49-30.docx`
+- `.gitignore`
+- `bitacora.md`
+- `conversaciones.md`
+
+

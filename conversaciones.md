@@ -3133,3 +3133,61 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Confirmación del Usuario:**
 > Perfecto, ahora si estoy satisfecho
 
+---
+
+### Intervención 31
+
+* **Fecha / Hora:** 2026-10-30 ~11:07 - 11:35 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+> Necesito un paso a paso de como utilizar el sistema desde cero, en palabras sencillas  
+> Estoy satisfechos, pero: no hiciste comentario de como registrarse
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Guía Didáctica Integral de Uso y Registro en el Sistema SGH desde Cero:  
+> 1. Cumplimiento estricto de lectura de `SKILL_sgh_firebase.md`.  
+> 2. Elaboración del Manual Práctico paso a paso en lenguaje llano:  
+>    * **Paso 0:** Acceso a `https://sgh-merida.web.app` e inicio de sesión.  
+>    * **Paso 1 Obligatorio (El Candado):** Actualización de epónimo, turno, planes de estudio y matrícula real (> 0 alumnos) para desbloquear la nómina.  
+>    * **Paso 2:** Gestión de personal (Acción A: Modificar con ✏️, Acción B: Registrar nuevo, Acción C: Traslado con Ficha Viajera, Acción D: Desincorporar con 🗑️).  
+>    * **Paso 3:** Cierre de sesión seguro.  
+> 3. Ampliación detallada del proceso de **Solicitud de Acceso y Registro desde Cero**:  
+>    * Ubicación del enlace en la pantalla inicial: *«¿Nuevo en el sistema? Solicitar Acceso»*.  
+>    * Formulario de datos personales y asignación de rol (`Director de plantel` con Código DEA verificado en base de datos o `Responsable Municipal`).  
+>    * Doble filtro de seguridad: verificación de correo electrónico y aprobación de la cuenta en estado `PENDIENTE` por el Coordinador Municipal antes de habilitar el ingreso.  
+>    * Instrucciones para recuperación de contraseña olvidada.  
+> 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+* **Confirmación del Usuario:**
+> Sí, los resultados son satisfactorios
+
+---
+
+### Intervención 32
+
+* **Fecha / Hora:** 2026-10-30 ~14:12 - 15:21 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> ¿Dame una minuta del video? Video\2026-10-30 11-49-30.mp4  
+> Muy buen trabajo. Compartelo en un documento docx
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Análisis Integral de Grabación y Generación de Minuta Institucional en Documento Word (.docx):  
+> 1. Inspección y análisis del archivo `Video\2026-10-30 11-49-30.mp4` (duración: 1 hora, 57 minutos y 46 segundos), correspondiente al taller de inducción municipal impartido por el Lic. Luis Alfonso Pérez (`sghcdcez14019@gmail.com`) mediante videollamada de WhatsApp Desktop para directores del Municipio Santos Marquina sobre la versión `v2.20.1` en producción.  
+> 2. Estructuración formal de la minuta: Membrete oficial MPPE / CDCE Mérida, ficha técnica completa, objetivo general, desarrollo cronológico en 6 fases (Apertura con diapositivas de `Manual Práctico.pptx`, Solicitud de acceso y aprobación, Demostración del candado de matrícula y traslados, Sesión interactiva de preguntas y notas de planteles sin director, Prueba real en vivo con la Escuela Estado Apure OD14311419 y Pizarra Municipal en tiempo real), acuerdos y bloque de firmas.  
+> 3. Generación del documento Word estilizado y corporativo:  
+>    * `Minuta_Taller_Induccion_SGH_Santos_Marquina_2026-10-30.docx` (en la raíz).  
+>    * `Video\Minuta_2026-10-30_11-49-30.docx` (en la carpeta Video).  
+> 4. Configuración de `.gitignore` para blindar el repositorio contra la subida de archivos pesados multimedia (`*.mp4`).  
+> 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+* **Confirmación del Usuario:**
+> Sí, los resultados son satisfactorios
+

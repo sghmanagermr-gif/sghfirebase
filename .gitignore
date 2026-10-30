@@ -26,3 +26,11 @@ pnpm-debug.log*
 .idea/
 .DS_Store
 Thumbs.db
+
+# Media & Heavy Files
+*.mp4
+*.avi
+*.mkv
+Video/*.mp4
+scratch/
+~$*
