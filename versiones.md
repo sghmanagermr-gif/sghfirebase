@@ -4,6 +4,20 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.20.2 (30 de Octubre de 2026)
+
+- **Obligatoriedad del Campo «Observaciones» en el Asistente de Registro de Personal:**
+  - **Inclusión en el Esquema de Validación Obligatoria:**
+    - El campo de Observaciones de la Situación Laboral (`#wp-observaciones`) pasa de ser voluntario a **estrictamente obligatorio**.
+    - Se incorporó en la lista de campos auditados por `validarFormularioPersonal()` en `personalWizard.js`. Si el usuario deja la casilla en blanco, el sistema detiene el envío, aplica el borde en rojo (`#dc2626`), enfoca el elemento y muestra la alerta: *«Por favor, complete el campo requerido: Observaciones»*.
+  - **Identificación Visual Semántica:**
+    - Se añadió el asterisco rojo institucional en la etiqueta del formulario: `Observaciones *` junto con un placeholder orientativo para guiar al director.
+  - **Saneamiento de Espacios:**
+    - Se aplica saneamiento de espacios en blanco (`trim()`) al capturar y guardar el valor en Firestore.
+  - **Despliegue Inmediato:** Compilado limpio en Vite y desplegado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.20.1 (29 de Octubre de 2026)
 
 - **Corrección Crítica de Detección de Matrícula y Refuerzo Absoluto del Candado de Personal:**

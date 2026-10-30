@@ -2132,4 +2132,33 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `bitacora.md`
 - `conversaciones.md`
 
+---
+
+### v2.20.2 - 2026-10-30 (Obligatoriedad del Campo «Observaciones» en Registro y Actualización de Personal)
+
+**1. Objetivos del Ciclo:**
+- Atender la instrucción administrativa formulada por el usuario respecto a que el campo de texto de observaciones (`#wp-observaciones`) en el formulario de talento humano no estaba siendo exigido y debía ser estrictamente obligatorio.
+- Blindar el flujo de guardado y edición de personal para que ningún empleado pueda registrarse o modificarse con el campo de observaciones vacío.
+
+**2. Solución Técnica y Arquitectura:**
+- **Refactorización del Validador en `personalWizard.js` (`validarFormularioPersonal`):**
+  - Se incorporó `{ id: 'wp-observaciones', nombre: 'Observaciones' }` en la matriz de campos requeridos bajo la sección de Situación Laboral.
+  - Se actualizó el encabezado documental de la función excluyendo a `Observaciones` de la lista de campos no requeridos.
+  - En `guardarPersonalInline()`, se aplicó `.trim()` al capturar el valor del textarea para evitar que se guarde texto compuesto únicamente por espacios en blanco.
+- **Ajustes de Interfaz en `index.html`:**
+  - Se inyectó el distintivo visual obligatorio `<span style="color: #dc2626; font-weight: bold;">*</span>` en el label de Observaciones.
+  - Se incorporó un placeholder orientativo para el director: *«Ingrese observaciones pertinentes del trabajador...»*.
+- **Control SemVer y Despliegue:**
+  - Incremento de versión PARCHE a `v2.20.2` en `package.json` y en las 5 ocurrencias de `index.html`.
+  - Compilación de producción limpia con Vite (`dist/` en 1.24s) y despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`).
+
+**3. Archivos Involucrados:**
+- `webapp/package.json` (v2.20.2)
+- `webapp/index.html` (v2.20.2)
+- `webapp/src/personalWizard.js`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
+
+
 

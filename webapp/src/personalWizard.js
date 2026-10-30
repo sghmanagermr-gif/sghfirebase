@@ -1104,7 +1104,7 @@ export function mostrarModalEliminarPersonal(data, docId, codigoDEA) {
 /**
  * Valida todos los campos requeridos del formulario de personal.
  * Aplica idénticamente tanto al GUARDAR un nuevo empleado como al ACTUALIZAR uno existente.
- * Campos NO requeridos: Teléfono Habitación, Teléfono Oficina, Tipo de Enfermedad, Medicamento, Observaciones y Ubicación Administrativa.
+ * Campos NO requeridos: Teléfono Habitación, Teléfono Oficina, Tipo de Enfermedad, Medicamento y Ubicación Administrativa.
  */
 export function validarFormularioPersonal() {
     // Restablecer estilos de error previos
@@ -1141,6 +1141,7 @@ export function validarFormularioPersonal() {
 
         // 3. Situación Laboral
         { id: 'wp-situacion-laboral', nombre: 'Situación Laboral' },
+        { id: 'wp-observaciones', nombre: 'Observaciones' },
 
         // 4. Bienestar Social
         { id: 'wp-talla-camisa', nombre: 'Talla de Camisa' },
@@ -1366,7 +1367,7 @@ export async function guardarPersonalInline() {
 
         'situacion-laboral': document.getElementById('wp-situacion-laboral')?.value || '',
         'descripcion-situacion': document.getElementById('wp-descripcion-situacion')?.value || '',
-        observaciones: document.getElementById('wp-observaciones')?.value || '',
+        observaciones: document.getElementById('wp-observaciones')?.value?.trim() || '',
 
         'talla-camisa': document.getElementById('wp-talla-camisa')?.value || '',
         'talla-pantalon': document.getElementById('wp-talla-pantalon')?.value || '',

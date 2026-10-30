@@ -3191,3 +3191,27 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Confirmación del Usuario:**
 > Sí, los resultados son satisfactorios
 
+---
+
+### Intervención 33
+
+* **Fecha / Hora:** 2026-10-30 ~15:27 - 15:37 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> por favor revisa, porque creo que las observaciones id="wp-observaciones" no son requeridas y SI deben ser requeridas. Me avisas por favor  
+> Sí, procede
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Configuración Obligatoria del Campo «Observaciones» en Registro y Edición de Personal (v2.20.2):  
+>
+> 1. Diagnóstico preciso: Se verificó el código y se constató que efectivamente `#wp-observaciones` estaba configurado como un campo voluntario en la interfaz y estaba expresamente excluido de la lista de validación obligatoria en `personalWizard.js`.  
+> 2. Solución e Implementación:  
+>    * **Validación Obligatoria:** Se incorporó `#wp-observaciones` en la lista formal de campos auditados por `validarFormularioPersonal()`. Si el director intenta guardar o actualizar a un empleado dejando la casilla vacía, el sistema bloquea el guardado, resalta el campo con borde rojo (`#dc2626`), hace foco automático y muestra la advertencia: *«Por favor, complete el campo requerido: Observaciones»*.  
+>    * **Distintivo Visual:** Se añadió el asterisco rojo obligatorio `Observaciones *` y un texto orientativo en el campo (`placeholder`).  
+>    * **Saneamiento de Texto:** Se agregó el método `.trim()` al capturar el texto para evitar que se burlen validaciones con espacios en blanco.  
+> 3. Compilación limpia con Vite (`npm run build`) y despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión parche `v2.20.2`.  
+> 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
