@@ -4,6 +4,23 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.21.3 (31 de Octubre de 2026)
+
+- **Auto-Completado de Ficha Institucional y Blindaje contra Cuentas Huérfanas:**
+  - **Diagnóstico del Inconveniente (Causa Raíz):**
+    - Un usuario institucional (`liceopedrojosegonzalez2026@gmail.com`, Director del Liceo Pedro José González, Municipio Pueblo Llano) ingresó reiteradas veces desde su teléfono celular y quedó detenido en la pantalla: *«Cuenta en Revisión: Tu cuenta fue creada pero falta el perfil. Contacta soporte.»*.
+    - Al auditar el backend de Firebase, se constató que la cuenta de acceso existía en Firebase Authentication, pero **NO existía ningún documento en la colección `usuarios` de Cloud Firestore**.
+    - La causa raíz: durante el registro inicial desde conexiones móviles inestables (ej. 3G rural con baja tasa de transferencia), si el proceso se interrumpía tras crear las credenciales en Authentication (o si la cuenta era creada directamente en Authentication sin pasar por la base de datos), la ficha en Firestore nunca se guardaba. Además, si el usuario intentaba registrarse de nuevo, el sistema le arrojaba *"El correo ya está en uso"*, dejándolo en un callejón sin salida.
+    - Asimismo, en la consola de Firestore, los documentos se listan por códigos alfanuméricos encriptados (IDs internos), por lo que buscar por correo mediante el buscador web de la consola (`Ctrl + F`) resulta ineficaz y tedioso.
+  - **Soluciones y Mejoras Implementadas:**
+    - **Creación y Activación Inmediata de Ficha:** Se creó directamente el documento de usuario en Firestore para `liceopedrojosegonzalez2026@gmail.com` vinculado a su UID oficial (`s2AoGlhA0QekD7mkIAeQ7Bzby8y2`), adscrito al código DEA `OD16551416` (Liceo Pedro José González, Pueblo Llano), con rol `plaadmin`, estatus `APROBADO`, y se incorporó dicho plantel a las excepciones activas de despliegue institucional para permitir su acceso directo.
+    - **Formulario Inteligente de Auto-Completado de Ficha (`#box-completar-perfil`):** Se integró en la pantalla de espera (`espera-view`) una tarjeta interactiva reactiva. Si cualquier usuario en el futuro inicia sesión con credenciales válidas pero sin ficha en Firestore, el sistema ya no lo deja bloqueado: le permite ingresar su Nombre, Cédula, Teléfono, Rol y Código DEA o Municipio, guardando su perfil en Firestore al instante y enviándolo a aprobación.
+    - **Auto-Recuperación en el Registro:** Si un usuario con cuenta huérfana intenta volver a registrarse, el sistema captura el aviso `auth/email-already-in-use`, valida sus credenciales y crea automáticamente su ficha en Firestore con los datos ingresados en el formulario, eliminando la necesidad de soporte técnico manual.
+    - **Orden de Persistencia Blindado:** Se reordenó la rutina de registro para asegurar que el documento de Firestore se escriba inmediatamente después de crear la cuenta en Authentication, garantizando que fallos o límites en el envío de correos de verificación nunca dejen cuentas sin perfil.
+  - **Despliegue Inmediato:** Compilado limpio en Vite y desplegado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.21.2 (31 de Octubre de 2026)
 
 - **Adaptabilidad Tipográfica Proporcional del Perfil y Blindaje Anti-Desborde en Móviles:**

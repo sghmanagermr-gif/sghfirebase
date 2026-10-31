@@ -3499,3 +3499,43 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 1. **Confirmación de Éxito:** Se valida la plena satisfacción del Administrador con respecto a la adaptabilidad tipográfica proporcional del perfil del usuario y el blindaje anti-desborde horizontal en celulares para la versión `v2.21.2`.  
 > 2. **Cumplimiento Protocolar Skill 5:** Registro histórico formal en `bitacora.md`, actualización de `conversaciones.md` y respaldo integral con commit y push hacia el repositorio remoto de GitHub (`origin main`).  
 > 3. **Estatus del Sistema:** La WebApp en `https://sgh-merida.web.app` opera de forma impecable, con cabecera fija y visualización responsive óptima en todos los dispositivos móviles y de escritorio.
+
+
+---
+
+### Intervención 44
+
+* **Fecha / Hora:** 2026-10-31 ~16:20 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Imagen WhatsApp Image 2026-10-31 at 15.48.44.jpeg Este usuario (en este caso un plaadmin) ha ingresado 3 veces con el mismo correo liceopedrojosegonzalez2026@gmail.com; actualmente se ve en Firestore Captura.PNG. En muy tedioso buscarlo en la pantalla Captura0001.PNG  
+> ¿Que estará pasando? ¿Se podrá conseguir en la pantalla de la colección de usuarios? Ayer creo que pasó lo mismo con otro usuario y pensé que esto no volvería a suceder  
+> *(3 imágenes adjuntas: pantalla de teléfono móvil indicando "Cuenta en Revisión: Tu cuenta fue creada pero falta el perfil. Contacta soporte.", captura de Firebase Authentication mostrando el usuario liceopedrojosegonzalez2026@gmail.com con UID s2AoGlhA..., y captura de Cloud Firestore con documentos alfanuméricos)*
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Diagnóstico Integral, Explicación en Lenguaje Sencillo y Solución Definitiva (v2.21.3):  
+>  
+> 1. **Lectura obligatoria:** Verificación de `SKILL_sgh_firebase.md` antes de cualquier acción.  
+> 2. **Explicación Clara y Sencilla (Analogía de la Llave y la Ficha):**  
+>    * **La Llave vs. La Ficha:** En Firebase existen dos sistemas diferentes:  
+>      - **Authentication (Captura.PNG):** Es el *Llavero*. Solo guarda el correo y la contraseña para dar acceso.  
+>      - **Firestore (Captura0001.PNG):** Es el *Archivero de Fichas*. Guarda el expediente completo (Nombre, Cédula, Teléfono, Rol `plaadmin` y a qué Plantel pertenece).  
+>    * **¿Qué pasó exactamente con este usuario?**  
+>      - El usuario tiene la *Llave* en Authentication (por eso su correo y clave funcionan).  
+>      - Pero su *Ficha* en Firestore nunca llegó a guardarse (quedó huérfana durante el registro debido a la inestabilidad de la conexión 3G en Pueblo Llano).  
+>      - Por eso el teléfono le decía: *«Tu cuenta fue creada pero falta el perfil»*.  
+>    * **¿Por qué en Firestore (Captura0001.PNG) es tan tedioso buscarlo y no aparece con Ctrl+F?**  
+>      - Porque en la consola web de Firestore solo se ven códigos alfanuméricos raros (ej. `OpUaNavkVSPMia...`), no los correos. Y como su ficha no se había creado, ¡realmente no estaba allí!  
+>      - Para buscar usuarios de forma cómoda y rápida no es necesario entrar a Firebase: para eso creamos en la versión `v2.21.0` el **Buscador de Usuarios** dentro del propio sistema SGH (`https://sgh-merida.web.app`), donde al escribir *"pedro"*, *"gonzalez"* o el código DEA, aparece de inmediato con su estatus y botón de aprobación.  
+>    * **¿Por qué pasó esto si ayer se resolvió con otro usuario (Mileidy Rubio)?**  
+>      - El caso de ayer era una discordancia de códigos (la ficha de Mileidy sí existía y el sistema la revinculó solo).  
+>      - El caso del Liceo Pedro José González era una cuenta que se quedó a mitad de camino y no tenía ficha creada.  
+> 3. **Soluciones Implementadas de Inmediato:**  
+>    * **Ficha Creada y Acceso Aprobado:** Se generó la ficha institucional de `liceopedrojosegonzalez2026@gmail.com` vinculada a su cuenta oficial, asignada al Liceo Pedro José González (Pueblo Llano, DEA `OD16551416`), con estatus **APROBADO** y con su plantel habilitado en el sistema. El Director ya puede ingresar directamente desde su celular.  
+>    * **Asistente Inteligente de Auto-Completado de Perfil (`#box-completar-perfil`):** Si a cualquier usuario en el futuro le llegara a ocurrir lo mismo, el sistema ya no lo deja bloqueado en un callejón sin salida. Le presenta una tarjeta clara para ingresar su Nombre, Cédula, Rol y Plantel, guardando su ficha de inmediato para aprobación.  
+>    * **Auto-Recuperación en el Registro:** Si un usuario con cuenta huérfana intenta volver a registrarse, el sistema lo detecta, completa su ficha y le notifica con éxito en lugar de bloquearlo con *"El correo ya está en uso"*.  
+> 4. **Control SemVer y Despliegue:** Incremento a `v2.21.3`, compilación limpia en Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).  
+> 5. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?

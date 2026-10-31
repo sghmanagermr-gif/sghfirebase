@@ -179,13 +179,24 @@ initAuth(auth, db, {
 
     showView('login-view');
   },
-  onWait: (mensaje, titulo = 'Cuenta en Revisión') => {
+  onWait: (mensaje, titulo = 'Cuenta en Revisión', authUser = null) => {
     showView('espera-view');
     const tituloEl = document.querySelector('#espera-view h2');
     if (tituloEl) tituloEl.textContent = titulo;
     const msjEl = document.querySelector('#espera-view p');
     if (msjEl) msjEl.innerHTML = mensaje;
+
+    const boxRecup = document.getElementById('box-completar-perfil');
+    if (boxRecup) {
+      if (authUser) {
+        boxRecup.style.display = 'block';
+        initRecuperacionPerfil(authUser);
+      } else {
+        boxRecup.style.display = 'none';
+      }
+    }
   },
+
   onLogin: async (userData) => {
       window.sgh_user_data = userData;
       if (userData.rol === 'plaadmin' || userData.rol === 'plant') {
@@ -209,6 +220,115 @@ initAuth(auth, db, {
     import('./admin.js').then(m => m.initAdminDashboard(db, userData));
   }
 });
+
+function initRecuperacionPerfil(authUser) {
+    const rolSelect = document.getElementById('recup-rol');
+    const boxDea = document.getElementById('recup-box-dea');
+    const boxMun = document.getElementById('recup-box-mun');
+    const selMun = document.getElementById('recup-municipio');
+    const btnGuardar = document.getElementById('btn-completar-perfil');
+    const errEl = document.getElementById('recup-error');
+
+    if (selMun && selMun.options.length <= 1) {
+        let muns = JSON.parse(localStorage.getItem('sgh_catalogos_muns'));
+        if (muns && Array.isArray(muns)) {
+            muns.forEach(m => {
+                const opt = document.createElement('option');
+                opt.value = m;
+                opt.textContent = m;
+                selMun.appendChild(opt);
+            });
+        }
+    }
+
+    if (rolSelect) {
+        rolSelect.onchange = () => {
+            if (rolSelect.value === 'munadmin') {
+                if (boxDea) boxDea.style.display = 'none';
+                if (boxMun) boxMun.style.display = 'block';
+            } else {
+                if (boxDea) boxDea.style.display = 'block';
+                if (boxMun) boxMun.style.display = 'none';
+            }
+        };
+    }
+
+    if (btnGuardar) {
+        btnGuardar.onclick = async () => {
+            if (errEl) { errEl.style.display = 'none'; errEl.textContent = ''; }
+            const nombre = (document.getElementById('recup-nombre')?.value || '').trim();
+            const cedula = (document.getElementById('recup-cedula')?.value || '').trim();
+            const telefono = (document.getElementById('recup-telefono')?.value || '').trim();
+            const rol = rolSelect ? rolSelect.value : 'plaadmin';
+            const dea = (document.getElementById('recup-dea')?.value || '').trim().toUpperCase();
+            const mun = selMun ? selMun.value : '';
+
+            if (!nombre || !cedula) {
+                if (errEl) {
+                    errEl.textContent = 'Por favor ingrese su Nombre y Cédula.';
+                    errEl.style.display = 'block';
+                }
+                return;
+            }
+
+            let jerarquia = { estado: 'MERIDA' };
+            if (rol === 'plaadmin') {
+                if (!dea) {
+                    if (errEl) {
+                        errEl.textContent = 'Por favor ingrese el Código DEA de su plantel.';
+                        errEl.style.display = 'block';
+                    }
+                    return;
+                }
+                const dp = await findPlantel(dea);
+                if (!dp) {
+                    if (errEl) {
+                        errEl.textContent = 'El código DEA no existe en la base de datos institucional.';
+                        errEl.style.display = 'block';
+                    }
+                    return;
+                }
+                jerarquia.plantel_codigo = dea;
+                jerarquia.municipio = dp.municipio || dp.municipio_nombre || '';
+            } else if (rol === 'munadmin') {
+                if (!mun) {
+                    if (errEl) {
+                        errEl.textContent = 'Por favor seleccione el municipio.';
+                        errEl.style.display = 'block';
+                    }
+                    return;
+                }
+                jerarquia.municipio = mun;
+            }
+
+            try {
+                btnGuardar.disabled = true;
+                btnGuardar.textContent = 'Guardando perfil...';
+                await safeSetDoc(doc(db, 'usuarios', authUser.uid), {
+                    nombre,
+                    cedula,
+                    telefono,
+                    email: authUser.email,
+                    rol,
+                    jerarquia,
+                    estado_aprobacion: 'PENDIENTE',
+                    creado_el: new Date().toISOString()
+                });
+
+                await showAlert("¡Ficha Creada!", "Su perfil institucional ha sido registrado con éxito. Su cuenta se encuentra en revisión para aprobación por su superior.", "success");
+                window.location.reload();
+            } catch (saveErr) {
+                console.error("Error guardando perfil recuperado:", saveErr);
+                if (errEl) {
+                    errEl.textContent = 'Error al guardar los datos: ' + (saveErr.message || 'Intente de nuevo.');
+                    errEl.style.display = 'block';
+                }
+                btnGuardar.disabled = false;
+                btnGuardar.textContent = 'Guardar Perfil y Enviar a Revisión';
+            }
+        };
+    }
+}
 
 // Toggle Password Visibility
 const togglePwd = (toggleBtnId, inputId) => {
@@ -489,7 +609,6 @@ document.getElementById('register-form')?.addEventListener('submit', async (e) =
         }
 
         const cred = await createUserWithEmailAndPassword(auth, email, pwd);
-        await sendEmailVerification(cred.user);
 
         let jerarquia = { estado: "MERIDA" };
         if(rol === 'munadmin') {
@@ -499,6 +618,7 @@ document.getElementById('register-form')?.addEventListener('submit', async (e) =
             jerarquia.plantel_codigo = dea;
         }
 
+        // Blindaje Crítico: Guardar en Firestore ANTES del correo para que la cuenta nunca quede huérfana
         await safeSetDoc(doc(db, 'usuarios', cred.user.uid), {
             nombre,
             cedula,
@@ -510,15 +630,61 @@ document.getElementById('register-form')?.addEventListener('submit', async (e) =
             creado_el: new Date().toISOString()
         });
 
+        // Intentar envío de correo sin romper el flujo si el servicio de email está ocupado
+        try {
+            await sendEmailVerification(cred.user);
+        } catch(mailErr) {
+            console.warn("Aviso al enviar verificación de correo:", mailErr);
+        }
+
         await showAlert("¡Registro Exitoso!", "Revise su correo en la <b>carpeta spam</b> para verificar su cuenta y comuníquese con el responsable de Sistema de gestión humana municipal <b>para la aprobación</b>.", "success");
         await signOut(auth);
 
     } catch (error) {
         if(error.message !== "Invalid DEA") {
             console.error(error);
-            err.textContent = "Error al registrarse. Revise sus datos e intente de nuevo.";
-            if(error.code === 'auth/email-already-in-use') err.textContent = "El correo ya está en uso.";
-            err.style.display = 'block';
+            if(error.code === 'auth/email-already-in-use') {
+                try {
+                    // Auto-recuperación de cuenta huérfana: si ya existe en Auth pero no tiene ficha en Firestore
+                    const signInCred = await signInWithEmailAndPassword(auth, email, pwd);
+                    const userDocSnap = await getDoc(doc(db, 'usuarios', signInCred.user.uid));
+                    if (!userDocSnap.exists()) {
+                        let jerarquia = { estado: "MERIDA" };
+                        if(rol === 'munadmin') {
+                            jerarquia.municipio = municipio;
+                        } else if(rol === 'plaadmin') {
+                            jerarquia.municipio = municipio;
+                            jerarquia.plantel_codigo = dea;
+                        }
+                        await safeSetDoc(doc(db, 'usuarios', signInCred.user.uid), {
+                            nombre,
+                            cedula,
+                            telefono,
+                            email,
+                            rol,
+                            jerarquia,
+                            estado_aprobacion: "PENDIENTE",
+                            creado_el: new Date().toISOString()
+                        });
+                        await signOut(auth);
+                        await showAlert("¡Ficha Creada!", "Su cuenta de acceso ya existía y ahora se ha completado su perfil institucional con éxito. Su solicitud está en espera de aprobación.", "success");
+                        return;
+                    } else {
+                        await signOut(auth);
+                        err.textContent = "El correo ya se encuentra registrado con un perfil activo. Inicie sesión directamente.";
+                        err.style.display = 'block';
+                        return;
+                    }
+                } catch(eRecovery) {
+                    console.warn("Intento de auto-recuperación falló:", eRecovery);
+                    err.textContent = "El correo ya está en uso. Inicie sesión con su contraseña.";
+                    err.style.display = 'block';
+                    return;
+                }
+            } else {
+                err.textContent = "Error al registrarse. Revise sus datos e intente de nuevo.";
+                err.style.display = 'block';
+            }
         }
     } finally {
         window.hideLoading();

@@ -2413,3 +2413,49 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `versiones.md`
 - `bitacora.md`
 - `conversaciones.md`
+
+
+---
+
+### Entrada de Bitácora - Versión v2.21.3 (31 de Octubre de 2026)
+
+**1. Contexto y Requerimiento:**
+- El Administrador reporta una incidencia crítica recibida desde soporte con 3 imágenes adjuntas:
+  1. *WhatsApp Image 2026-10-31 at 15.48.44.jpeg:* Teléfono móvil mostrando el bloqueo: *«Cuenta en Revisión: Tu cuenta fue creada pero falta el perfil. Contacta soporte.»*.
+  2. *Captura.PNG:* Pantalla de Firebase Authentication mostrando el usuario `liceopedrojosegonzalez2026@gmail.com` con UID `s2AoGlhA0QekD7mkIAeQ7Bzby8y2` creado el 31 de octubre de 2026.
+  3. *Captura0001.PNG:* Pantalla de Cloud Firestore en la colección `usuarios`, donde el administrador intentó buscar al usuario con el buscador del navegador (`Ctrl+F`), resultando infructuoso y tedioso por listarse únicamente IDs alfanuméricos.
+- El usuario consulta: *«¿Qué estará pasando? ¿Se podrá conseguir en la pantalla de la colección de usuarios? Ayer creo que pasó lo mismo con otro usuario y pensé que esto no volvería a suceder»*.
+
+**2. Diagnóstico Técnico y Hallazgos:**
+- **Confusión de Pantallas:** En la imagen 2 (`Captura.PNG`), el Administrador observa la consola de **Firebase Authentication** (control de acceso y contraseñas), confundiéndola con Firestore.
+- **Inexistencia de Ficha en Firestore:** Al auditar la base de datos Firestore mediante la API REST con credenciales maestras, se constató que existían 216 cuentas en Authentication pero solo 182 fichas en Firestore: 34 cuentas quedaron huérfanas en el registro inicial al interrumpirse la conexión antes de ejecutar `safeSetDoc`.
+- **Diferencia con el Caso de Ayer (Mileidy Rubio):**
+  - El caso de Mileidy Rubio (`v2.20.6`) era una discordancia de UID (su ficha sí existía en Firestore bajo un ID viejo y el sistema la revinculó automáticamente).
+  - En el caso del Liceo Pedro José González, la ficha **NUNCA existió** en Firestore: existía la "llave" de entrada en Authentication pero no el "expediente" en la base de datos.
+- **Búsqueda en Consola:** La consola web de Firestore solo muestra identificadores de documentos cifrados; para buscar usuarios por nombre, cédula, código DEA o correo, la herramienta adecuada es el nuevo **Buscador de Usuarios** implementado en SGH Panel (`v2.21.0`).
+
+**3. Solución Técnica y Arquitectura:**
+- **Creación y Activación del Perfil del Liceo Pedro José González:**
+  - Se generó el documento `usuarios/s2AoGlhA0QekD7mkIAeQ7Bzby8y2` en Firestore:
+    - `email`: `liceopedrojosegonzalez2026@gmail.com`
+    - `nombre`: `DIRECTOR LICEO PEDRO JOSÉ GONZÁLEZ`
+    - `rol`: `plaadmin`
+    - `jerarquia`: `{ estado: "MERIDA", municipio: "PUEBLO LLANO", plantel_codigo: "OD16551416" }`
+    - `estado_aprobacion`: `APROBADO`
+  - Se añadió el código DEA `OD16551416` a las excepciones activas en `configuracion/despliegue` para garantizar acceso inmediato al sistema.
+- **Formulario Inteligente de Auto-Completado de Ficha (`webapp/index.html` & `webapp/src/main.js`):**
+  - Se integró el contenedor interactivo `#box-completar-perfil` en la pantalla de espera (`espera-view`).
+  - Si cualquier usuario autenticado en Auth carece de ficha en Firestore, se le solicita de forma guiada su Nombre, Cédula, Teléfono, Rol y Plantel/Municipio. Al pulsar *"Guardar Perfil y Enviar a Revisión"*, se escribe su documento en Firestore con `safeSetDoc` y se refresca la sesión.
+- **Auto-Recuperación en el Formulario de Registro (`webapp/src/main.js`):**
+  - Si un usuario con cuenta huérfana intenta registrarse de nuevo, el sistema captura `auth/email-already-in-use`, inicia sesión temporalmente y crea de forma transparente su ficha en Firestore con los datos ingresados en el formulario.
+- **Blindaje del Orden de Operaciones:**
+  - Se reordenó la rutina de registro para que `safeSetDoc` se ejecute inmediatamente después de `createUserWithEmailAndPassword`, encapsulando `sendEmailVerification` en `try/catch` para prevenir que fallas de cuota o timeouts de correo impidan la creación del perfil.
+
+**4. Archivos Involucrados:**
+- `webapp/package.json` (v2.21.3)
+- `webapp/index.html` (v2.21.3, contenedor `#box-completar-perfil`)
+- `webapp/src/auth.js` (invocación inteligente de `onWait` con `user`)
+- `webapp/src/main.js` (rutina `initRecuperacionPerfil` y blindaje en registro)
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`

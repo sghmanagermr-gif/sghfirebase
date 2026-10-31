@@ -80,7 +80,7 @@ export function initAuth(auth, db, callbacks) {
 
       if (!userData) {
          console.warn("Usuario autenticado pero sin documento en Firestore");
-         onWait("Tu cuenta fue creada pero falta el perfil. Contacta soporte.");
+         onWait("Tu cuenta de acceso fue creada, pero aún no se registran los datos de tu institución. Por favor completa tu ficha a continuación:", "Completar Perfil Institucional", user);
          return;
       }
       // Asignamos el uid para fácil acceso luego
