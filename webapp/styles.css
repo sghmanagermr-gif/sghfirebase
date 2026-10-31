@@ -883,3 +883,30 @@ html, body {
     width: 100% !important;
   }
 }
+
+
+/* Botón Limpiar Buscador de Usuarios */
+#btn-limpiar-buscar-usuario {
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  max-width: 22px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 50% !important;
+  background: #e2e8f0 !important;
+  color: #64748b !important;
+  border: none !important;
+  font-size: 12px !important;
+  font-weight: bold !important;
+  box-shadow: none !important;
+  transition: all 0.2s ease !important;
+  transform: translateY(-50%) !important;
+}
+
+#btn-limpiar-buscar-usuario:hover {
+  background: #cbd5e1 !important;
+  color: #0f172a !important;
+  transform: translateY(-50%) scale(1.1) !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15) !important;
+}

@@ -1967,7 +1967,7 @@ export function initAdminDashboard(dbInstance, user) {
   if (inpBuscarUsuario) {
     inpBuscarUsuario.addEventListener('input', () => {
       if (btnLimpiarBuscarUsuario) {
-        btnLimpiarBuscarUsuario.style.display = inpBuscarUsuario.value ? 'block' : 'none';
+        btnLimpiarBuscarUsuario.style.display = inpBuscarUsuario.value ? 'inline-flex' : 'none';
       }
       renderUsuariosList();
     });

@@ -2528,3 +2528,35 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `versiones.md`
 - `bitacora.md`
 - `conversaciones.md`
+
+
+---
+
+### Entrada de Bitácora - Versión v2.22.2 (31 de Octubre de 2026)
+
+**1. Contexto y Requerimiento:**
+- El Administrador reporta una inconformidad visual con soporte de imagen (`media_1793482136492_ad1cbdb8.png`): *«Cuando se usa buscar usuario el boton de la X queda muy feo encima del campo, en la pc y movil»*.
+- En la captura se evidenció que al escribir en el campo de búsqueda de usuarios, la `✕` de borrado rápido se renderizaba en el centro del input, sobre el texto escrito.
+
+**2. Diagnóstico Técnico:**
+- La regla general de `button` en `webapp/src/style.css` forzaba `width: 100%` y padding amplio con `text-align: center`.
+- Al alternar `btnLimpiarBuscarUsuario.style.display = 'block'` en `admin.js`, el botón se expandía a lo largo de todo el ancho del contenedor padre y centraba la `✕` en el punto medio del input, desbordando el área de entrada de texto.
+
+**3. Solución Técnica y Arquitectura:**
+- **Encapsulación y Restricción Estricta de Dimensiones (`webapp/styles.css` & `webapp/index.html`):**
+  - Se configuró `#btn-limpiar-buscar-usuario` con `width: 22px !important; height: 22px !important; min-width: 22px !important; max-width: 22px !important; padding: 0 !important; margin: 0 !important;`.
+  - Se le dio acabado de botón moderno tipo píldora/círculo (`border-radius: 50% !important; background: #e2e8f0; color: #64748b;`).
+  - Se posicionó con anclaje firme a la derecha: `position: absolute; right: 10px; top: 50%; transform: translateY(-50%)` y se amplió el padding derecho del input a `38px` para que ningún texto colisione con el botón.
+  - En `webapp/src/admin.js`, se cambió la activación a `inline-flex` para mantener el centrado interno del glifo `✕` con flexbox.
+- **Control SemVer y Despliegue:**
+  - Incremento de versión PARCHE a `v2.22.2`.
+  - Compilación limpia en Vite (708 ms) y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+
+**4. Archivos Involucrados:**
+- `webapp/package.json` (v2.22.2)
+- `webapp/index.html` (v2.22.2)
+- `webapp/styles.css` (reglas para `#btn-limpiar-buscar-usuario`)
+- `webapp/src/admin.js` (activación con `inline-flex`)
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`

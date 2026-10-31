@@ -4,6 +4,20 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.22.2 (31 de Octubre de 2026)
+
+- **Optimización Estética y Alineación Milimétrica del Botón de Limpieza (`✕`) en el Buscador de Usuarios:**
+  - **Diagnóstico del Inconveniente (Causa Raíz):**
+    - El Administrador reportó con captura de pantalla que al escribir en el campo *Buscar Usuario* (`#inp-buscar-usuario`), el botón con la `✕` quedaba desalineado y antiestético en medio del campo de texto, interfiriendo visualmente con la lectura de los caracteres escritos tanto en PC como en dispositivos móviles.
+    - La causa raíz: las reglas globales de CSS aplicaban `width: 100%`, `padding: 14px 24px` y centrado de texto a los elementos `<button>`, lo que ocasionaba que al desplegarse con `display: block`, el botón abarcara todo el ancho del contenedor y la `✕` quedara flotando en el centro geométrico del input en lugar de ubicarse en el extremo derecho.
+  - **Soluciones y Mejoras Implementadas:**
+    - **Dimensionamiento Fijo y Estilo Circular Moderno:** Se blindó el botón `#btn-limpiar-buscar-usuario` con dimensiones estrictas (`22px × 22px`), forma circular (`border-radius: 50%`), fondo sutil gris suave (`#e2e8f0`), icono gris carbón y centrado flexbox (`display: inline-flex`).
+    - **Posicionamiento Absoluto al Extremo Derecho:** Se ancló a `right: 10px; top: 50%; transform: translateY(-50%)` con holgura de relleno en el input (`padding-right: 38px`), asegurando que jamás se superponga sobre el texto escrito sin importar qué tan largo sea el término de búsqueda.
+    - **Efecto Hover Dinámico:** Al pasar el cursor o presionar el botón, se amplía sutilmente con una sombra discreta y fondo contrastante (`#cbd5e1`).
+  - **Despliegue Inmediato:** Compilado limpio en Vite (708 ms) y desplegado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.22.1 (31 de Octubre de 2026)
 
 - **Barrera Institucional Anti-Duplicados para Coordinadores Municipales (`munadmin`):**
