@@ -325,14 +325,18 @@ export function initAdminDashboard(dbInstance, user) {
     // 2.2. Control de visibilidad del selector de roles en Validación de Usuarios
     const containerFilterRol = document.getElementById('container-filter-rol-usuario');
     if (containerFilterRol) {
-      containerFilterRol.style.display = isSuperAdmin ? 'block' : 'none';
+      containerFilterRol.style.display = (isSuperAdmin || isZonAdmin) ? 'block' : 'none';
+      if (isZonAdmin) {
+        const optZon = filterRolUsuario?.querySelector('option[value="zonadmin"]');
+        if (optZon) optZon.style.display = 'none';
+      }
     }
     const valDescEl = document.getElementById('admin-validacion-desc');
     if (valDescEl) {
       if (isMunAdmin) {
         valDescEl.textContent = `Gestiona los accesos de los directores de planteles del municipio ${mun}.`;
       } else if (isZonAdmin) {
-        valDescEl.textContent = 'Gestiona los accesos de los coordinadores municipales.';
+        valDescEl.textContent = 'Gestiona los accesos de coordinadores municipales y directores de planteles.';
       } else {
         valDescEl.textContent = 'Gestiona y clasifica accesos de coordinadores zonales, municipales y directores.';
       }
@@ -1166,6 +1170,8 @@ export function initAdminDashboard(dbInstance, user) {
   const tbodyUsuarios = document.getElementById('tbody-usuarios');
   const filterEstado = document.getElementById('filter-estado');
   const filterRolUsuario = document.getElementById('filter-rol-usuario');
+  const inpBuscarUsuario = document.getElementById('inp-buscar-usuario');
+  const btnLimpiarBuscarUsuario = document.getElementById('btn-limpiar-buscar-usuario');
   let usuariosLocales = []; // Cache local para filtrar
   let unsubscribeUsuarios = null;
 
@@ -1196,8 +1202,8 @@ export function initAdminDashboard(dbInstance, user) {
             const miMun = normalizarMunicipio(userData.jerarquia?.municipio || userData.municipio || '');
             if (u.rol !== 'plaadmin' || uMun !== miMun) return;
         } else if (userData.rol === 'zonadmin') {
-            // zonadmin solo ve coordinadores municipales (munadmin)
-            if (u.rol !== 'munadmin') return;
+            // zonadmin visualiza coordinadores municipales (munadmin) y directores de planteles (plaadmin)
+            if (u.rol !== 'munadmin' && u.rol !== 'plaadmin') return;
         }
 
         // Evitar que un superadmin se borre a sí mismo accidentalmente o a otros admins
@@ -1209,7 +1215,10 @@ export function initAdminDashboard(dbInstance, user) {
       renderUsuariosList();
       const elStatUsuarios = document.getElementById('stat-usuarios');
       if (elStatUsuarios) {
-        renderStatValue(elStatUsuarios, usuariosLocales.length);
+        const countUsuarios = (userData.rol === 'zonadmin')
+          ? usuariosLocales.filter(x => x.rol === 'munadmin').length
+          : usuariosLocales.length;
+        renderStatValue(elStatUsuarios, countUsuarios);
       }
     }, (err) => {
       console.error("Error cargando lista de usuarios", err);
@@ -1322,15 +1331,53 @@ export function initAdminDashboard(dbInstance, user) {
     const filtro = filterEstado ? filterEstado.value : 'TODOS'; // "TODOS", "PENDIENTE", "APROBADO"
     const containerFilterRol = document.getElementById('container-filter-rol-usuario');
     const filtroRol = (filterRolUsuario && containerFilterRol && containerFilterRol.style.display !== 'none') ? filterRolUsuario.value : 'TODOS';
+    const searchTerm = (inpBuscarUsuario ? inpBuscarUsuario.value : '').trim().toLowerCase();
 
     let filtrados = usuariosLocales.filter(u => {
-      const matchEstado = (filtro === 'TODOS') ? true : (u.estado_aprobacion === filtro);
+      // 1. Filtro por Rol
       const matchRol = (filtroRol === 'TODOS') ? true : (u.rol === filtroRol);
-      return matchEstado && matchRol;
+      if (!matchRol) return false;
+
+      // 2. Filtro por Estado de Aprobación
+      const matchEstado = (filtro === 'TODOS') ? true : (u.estado_aprobacion === filtro);
+      if (!matchEstado) return false;
+
+      // 3. Filtro por Buscador Integral (nombre, cédula, código plantel, correo)
+      if (searchTerm) {
+        const nom = (u.nombre || '').toLowerCase();
+        const email = (u.email || '').toLowerCase();
+        const ciRaw = String(u.cedula || '').toLowerCase();
+        const ciDigits = ciRaw.replace(/\D/g, '');
+        const searchDigits = searchTerm.replace(/\D/g, '');
+
+        const dea = String(
+          u.jerarquia?.plantel_codigo || 
+          u.codigo_plantel || 
+          u.plantel_codigo || 
+          u.dea || 
+          u.codigoPlantel || 
+          u.codigoDEA || ''
+        ).toLowerCase();
+
+        const mun = String(u.jerarquia?.municipio || u.municipio || '').toLowerCase();
+
+        const matchNombre = nom.includes(searchTerm);
+        const matchEmail = email.includes(searchTerm);
+        const matchDea = dea.includes(searchTerm);
+        const matchMun = mun.includes(searchTerm);
+        const matchCi = ciRaw.includes(searchTerm) || (searchDigits.length >= 3 && ciDigits.includes(searchDigits));
+
+        return matchNombre || matchEmail || matchDea || matchCi || matchMun;
+      }
+
+      return true;
     });
 
     if (filtrados.length === 0) {
-      tbodyUsuarios.innerHTML = '<tr><td colspan="4" style="padding: 30px; text-align: center; color: var(--text-muted);">No se encontraron usuarios</td></tr>';
+      const msg = searchTerm 
+        ? `No se encontraron usuarios coincidentes con "${searchTerm.replace(/</g, '&lt;')}"` 
+        : 'No se encontraron usuarios';
+      tbodyUsuarios.innerHTML = `<tr><td colspan="4" style="padding: 30px; text-align: center; color: var(--text-muted);">${msg}</td></tr>`;
       return;
     }
 
@@ -1421,12 +1468,18 @@ export function initAdminDashboard(dbInstance, user) {
         `;
       }
 
-      // Determinar ubicación
+      // Determinar ubicación enriquecida
       let ubicacion = 'N/A';
       if (u.jerarquia) {
-        if (u.rol === 'plaadmin' && u.jerarquia.plantel_codigo) ubicacion = `Plantel: ${u.jerarquia.plantel_codigo}`;
-        else if (u.jerarquia.municipio) ubicacion = `Municipio: ${u.jerarquia.municipio}`;
-        else ubicacion = `Estado: ${u.jerarquia.estado || 'MERIDA'}`;
+        if (u.rol === 'plaadmin') {
+          const codDea = u.jerarquia.plantel_codigo || u.codigo_plantel || 'S/D';
+          const munPla = u.jerarquia.municipio || u.municipio || '';
+          ubicacion = `Plantel: ${codDea}${munPla ? ' • ' + munPla : ''}`;
+        } else if (u.jerarquia.municipio) {
+          ubicacion = `Municipio: ${u.jerarquia.municipio}`;
+        } else {
+          ubicacion = `Estado: ${u.jerarquia.estado || 'MERIDA'}`;
+        }
       }
 
       const isAprobado = u.estado_aprobacion === 'APROBADO';
@@ -1824,6 +1877,24 @@ export function initAdminDashboard(dbInstance, user) {
   }
   if (filterRolUsuario) {
     filterRolUsuario.addEventListener('change', renderUsuariosList);
+  }
+  if (inpBuscarUsuario) {
+    inpBuscarUsuario.addEventListener('input', () => {
+      if (btnLimpiarBuscarUsuario) {
+        btnLimpiarBuscarUsuario.style.display = inpBuscarUsuario.value ? 'block' : 'none';
+      }
+      renderUsuariosList();
+    });
+  }
+  if (btnLimpiarBuscarUsuario) {
+    btnLimpiarBuscarUsuario.addEventListener('click', () => {
+      if (inpBuscarUsuario) {
+        inpBuscarUsuario.value = '';
+        btnLimpiarBuscarUsuario.style.display = 'none';
+        inpBuscarUsuario.focus();
+      }
+      renderUsuariosList();
+    });
   }
 
   // ----------------------------------------

@@ -3391,3 +3391,37 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 
 
+
+
+---
+
+### Intervención 40
+
+* **Fecha / Hora:** 2026-10-31 ~15:01 - 15:15 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+>  
+> necesito un buscador de usuarios en los roles superadmin, zonadmin y munadmin; por nombre, cedula, codigo plantel, correo
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Implementación del Buscador Integral de Usuarios Multi-Criterio (v2.21.0):  
+>  
+> 1. **Lectura obligatoria:** Verificación de `SKILL_sgh_firebase.md`.  
+> 2. **Solución Implementada (Explicación llana):**  
+>    * **Buscador en Tiempo Real:** En el apartado de *Usuarios del Sistema*, se integró una barra de búsqueda inteligente (`#inp-buscar-usuario`) disponible para los roles **Superadmin**, **Zonadmin** y **Munadmin**.  
+>    * **Búsqueda Cruzada Instantánea:** Permite escribir y encontrar de inmediato a cualquier usuario filtrando simultáneamente por:  
+>      - **Nombre** o apellido del funcionario.  
+>      - **Cédula de Identidad** (escribiendo el número con o sin puntos).  
+>      - **Código de Plantel (DEA)** para ubicar de inmediato al director de una escuela específica.  
+>      - **Correo electrónico**.  
+>      - **Municipio**.  
+>    * **Botón de Limpieza (`✕`):** Al escribir aparece una cruz que permite borrar la búsqueda y volver a ver la lista completa con un solo clic.  
+>    * **Ampliación para Coordinadores Zonales (`zonadmin`):** Ahora los directivos zonales pueden supervisar tanto a coordinadores municipales como a directores de planteles de todo el estado, permitiéndoles buscar escuelas por código DEA.  
+>    * **Ubicación Enriquecida:** En la tabla, los planteles muestran su código DEA acompañado del nombre del municipio para una rápida identificación visual.  
+>    * **Cero Costo y Máxima Velocidad:** El filtrado opera directamente en la memoria del navegador (0 segundos de espera y 0 lecturas adicionales a la base de datos).  
+> 3. **Control SemVer y Despliegue:** Incremento a `v2.21.0`, compilado limpio con Vite y desplegado en producción en Firebase Hosting (`https://sgh-merida.web.app`).  
+> 4. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?

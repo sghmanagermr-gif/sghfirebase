@@ -2306,3 +2306,43 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 
 
 
+
+
+---
+
+### v2.21.0 - 2026-10-31 (Buscador Integral de Usuarios Multi-Criterio para Superadmin, Zonadmin y Munadmin)
+
+**1. Objetivos del Ciclo:**
+- Atender el requerimiento formulado por el Administrador: *"necesito un buscador de usuarios en los roles superadmin, zonadmin y munadmin; por nombre, cedula, codigo plantel, correo"*.
+- Dotar al panel de gestión de *Usuarios del Sistema* de una herramienta de búsqueda reactiva en tiempo real con latencia de 0 ms y costo cero de lecturas a Firestore (*Zero-Cost Optimization*).
+- Permitir que las autoridades zonales (`zonadmin`) puedan supervisar y localizar tanto a coordinadores municipales como a directores de plantel por su código DEA en todo el estado.
+
+**2. Solución Técnica y Arquitectura:**
+- **Inyección de Componentes DOM (`webapp/index.html`):**
+  - Se agregó el campo de texto reactivo `#inp-buscar-usuario` con placeholder: `🔍 Buscar por nombre, cédula, DEA o correo...` junto al botón de limpieza rápida `#btn-limpiar-buscar-usuario` (cruz interactiva).
+  - Se rediseñó la barra de filtros con alineación flexible (`flex-wrap: wrap; gap: 10px`) para garantizar visualización y usabilidad óptima tanto en monitores de escritorio como en dispositivos móviles.
+  - Se ajustó el valor por defecto de `#filter-estado` a `TODOS` para evitar que la lista oculte usuarios aprobados al realizar búsquedas específicas.
+- **Motor de Filtrado Client-Side Multi-Criterio (`webapp/src/admin.js`):**
+  - En `renderUsuariosList()`, se implementó una evaluación que contrasta el término de búsqueda normalizado (`toLowerCase()`) contra:
+    1. **Nombre completo:** `(u.nombre || '').toLowerCase()`
+    2. **Cédula de Identidad:** Coincidencia de texto directo o por extracción numérica pura (`replace(/\D/g, '')`) con soporte para cédulas con o sin puntos y formatos V- / E-.
+    3. **Código de Plantel (DEA):** Coincidencia con `u.jerarquia.plantel_codigo`, `u.codigo_plantel`, `u.plantel_codigo`, `u.dea`, etc.
+    4. **Correo Electrónico:** `(u.email || '').toLowerCase()`
+    5. **Municipio:** `(u.jerarquia.municipio || u.municipio || '').toLowerCase()`
+  - Los resultados se combinan de manera armónica con el filtro de rol (`#filter-rol-usuario`) y el filtro de estado (`#filter-estado`).
+  - Ante cero resultados, la tabla emite retroalimentación amigable: `No se encontraron usuarios coincidentes con "[término]"`.
+- **Ampliación de Ámbito para Coordinadores Zonales (`zonadmin`):**
+  - En `loadUsuariosList()`, se autorizó a `zonadmin` para cargar coordinadores municipales (`munadmin`) y directores de planteles (`plaadmin`), permitiendo buscar a cualquier director de los 23 municipios por su código DEA.
+  - El selector `#filter-rol-usuario` se habilitó para `zonadmin` con las opciones de alternancia entre coordinadores y directores.
+  - La tarjeta de métricas `#stat-usuarios` en la Pizarra de `zonadmin` se preservó con la discriminación estricta de coordinadores municipales.
+- **Control SemVer y Despliegue:**
+  - Incremento de versión MENOR a `v2.21.0` en `package.json` y en las 5 referencias de `index.html`.
+  - Compilación exitosa en Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+
+**3. Archivos Involucrados:**
+- `webapp/package.json` (v2.21.0)
+- `webapp/index.html` (v2.21.0)
+- `webapp/src/admin.js`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`

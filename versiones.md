@@ -4,6 +4,26 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.21.0 (31 de Octubre de 2026)
+
+- **Buscador Integral de Usuarios Multi-Criterio (Nombre, Cédula, Código DEA y Correo) para Superadmin, Zonadmin y Munadmin:**
+  - **Objetivo del Requerimiento:**
+    - Atender la necesidad de las autoridades de nivel central (`superadmin`), estadal (`zonadmin`) y municipal (`munadmin`) para localizar instantáneamente a cualquier usuario del sistema (coordinadores zonales, municipales o directores de plantel) mediante sus datos identificatorios clave.
+  - **Características y Mejoras Implementadas:**
+    - **Buscador Reactivo Multi-Campo (`#inp-buscar-usuario`):** Integrado en la cabecera del módulo *Usuarios del Sistema*. Filtra en tiempo real (0 ms de latencia y costo cero de lecturas) cruzando de forma simultánea:
+      - **Nombre completo** del funcionario.
+      - **Cédula de identidad** (búsqueda con o sin puntos y numérica directa).
+      - **Código de plantel / DEA** (`jerarquia.plantel_codigo`).
+      - **Correo electrónico** (`email`).
+      - **Municipio** adscrito.
+    - **Botón de Limpieza Rápida (`#btn-limpiar-buscar-usuario`):** Botón dinámico tipo `✕` que aparece al escribir y permite restablecer la lista completa con un solo clic.
+    - **Ampliación de Competencias para Coordinadores Zonales (`zonadmin`):** Se adaptó la vista para que el rol `zonadmin` pueda supervisar y consultar tanto a los Coordinadores Municipales (`munadmin`) como a los Directores de Plantel (`plaadmin`) de todo el estado, permitiéndoles buscar planteles por su código DEA.
+    - **Visualización Enriquecida de Ubicación:** En la columna *Rol y Ubicación*, los directores exhiben tanto su código DEA como su municipio de adscripción (`Plantel: OD... • MUNICIPIO`), optimizando la legibilidad para búsquedas estadales.
+    - **Filtros Armónicos:** El selector de estado ahora inicia en *Todos los estados* por defecto, garantizando que el buscador localice a cualquier usuario sin importar si su estatus es Aprobado o Pendiente.
+  - **Despliegue Inmediato:** Compilado limpio en Vite y desplegado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.20.6 (30 de Octubre de 2026)
 
 - **Puente Universal de Auto-Recuperación y Revinculación de Perfiles por Correo:**
