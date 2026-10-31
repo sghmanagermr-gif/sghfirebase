@@ -4,6 +4,22 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.20.6 (30 de Octubre de 2026)
+
+- **Puente Universal de Auto-Recuperación y Revinculación de Perfiles por Correo:**
+  - **Diagnóstico del Inconveniente (Causa Raíz):**
+    - Un usuario (Mileidy Rubio, Coordinadora Municipal de Justo Briceño, `gestionhumanajb2026@gmail.com`) reportó el bloqueo en pantalla: *«Cuenta en Revisión: Tu cuenta fue creada pero falta el perfil. Contacta soporte.»* a pesar de que su documento de datos existía y figuraba como `estado_aprobacion: "APROBADO"` en la base de datos Firestore.
+    - Se constató que en Firestore el documento fue creado con un Document ID autogenerado distinto al Identificador Único (`UID`) de Firebase Authentication.
+    - Como el sistema validaba estrictamente `doc(db, "usuarios", user.uid)`, no encontraba el documento por esa clave y asumía erróneamente que el perfil no existía.
+    - Adicionalmente, el chequeo de verificación de correo bloqueaba a usuarios aprobados si aún no habían abierto el enlace de confirmación por email.
+  - **Soluciones y Mejoras Implementadas:**
+    - **Puente de Auto-Recuperación por Correo:** Si el perfil no se localiza de forma directa por su `user.uid`, el sistema efectúa de inmediato una búsqueda de respaldo por su dirección de correo electrónico (`where("email", "==", user.email)`).
+    - **Auto-Revinculación Instantánea:** Al encontrar el perfil por correo, el sistema copia y enlaza automáticamente el perfil al `user.uid` del usuario en Firestore (`setDoc(doc(db, "usuarios", user.uid), ...)`), asegurando que todas las lecturas subsiguientes sean de costo cero y velocidad máxima O(1).
+    - **Paso Directo para Usuarios Aprobados:** Se integró la regla institucional de que si el usuario ya posee `estado_aprobacion: 'APROBADO'` en su perfil, se le concede acceso inmediato a su Pizarra Municipal sin bloquearlo por verificación de correo.
+  - **Despliegue Inmediato:** Compilado limpio en Vite y desplegado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.20.5 (30 de Octubre de 2026)
 
 - **Blindaje Anti-Desbordamiento Estadal, Resolución Multi-Alias y Soporte Universal de Municipios Compuestos:**

@@ -2265,6 +2265,41 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `bitacora.md`
 - `conversaciones.md`
 
+---
+
+### v2.20.6 - 2026-10-30 (Puente Universal de Auto-Recuperación y Revinculación de Perfiles por Correo)
+
+**1. Objetivos del Ciclo:**
+- Resolver el bloqueo de acceso presentado a usuarios registrados que tienen ficha creada y autorizada en Firestore (`estado_aprobacion: "APROBADO"`), pero reciben en pantalla el mensaje: *«Cuenta en Revisión: Tu cuenta fue creada pero falta el perfil. Contacta soporte.»* (caso reportado por la Coordinadora Municipal de Justo Briceño, Mileidy Rubio, `gestionhumanajb2026@gmail.com`).
+- Garantizar que si un documento en Firestore fue creado con una clave autogenerada o desfasada con respecto al `user.uid` de Firebase Authentication, el sistema lo auto-recupere y revincule transparentemente sin intervención manual.
+- Permitir que cualquier usuario cuyo estado en base de datos sea `APROBADO` ingrese de inmediato sin quedar bloqueado por la verificación de email.
+
+**2. Solución Técnica y Arquitectura:**
+- **Diagnóstico Profundo:**
+  - En `webapp/src/auth.js`, la verificación de perfil se hacía únicamente buscando el documento por su clave primaria: `getDoc(doc(db, "usuarios", user.uid))`.
+  - Cuando los perfiles se creaban manualmente en Firestore o existían re-registros de autenticación, el `doc.id` no coincidía con el `user.uid` de Firebase Auth.
+  - Al retornar `userSnap.exists() === false`, el sistema activaba el callback `onWait("Tu cuenta fue creada pero falta el perfil. Contacta soporte.")`.
+  - Asimismo, si el usuario no había confirmado el email recibido (`user.emailVerified === false`), se activaba una segunda pantalla de espera a pesar de que el perfil ya estuviese formalmente aprobado por las autoridades.
+- **Acciones Implementadas:**
+  - **Mecanismo de Rescate por Correo Electrónico (`auth.js`):**
+    - Si `userSnap.exists()` es falso, el observador de autenticación ejecuta una consulta secundaria en la colección `usuarios` filtrando por `where("email", "==", user.email)` (con tolerancia a mayúsculas/minúsculas).
+  - **Auto-Revinculación Persistente en Firestore:**
+    - Al encontrar el documento huérfano, el sistema escribe inmediatamente el perfil completo en `doc(db, "usuarios", user.uid)` mediante `setDoc()` preservando los datos originales y añadiendo `revinculado_el: new Date().toISOString()`. De este modo, los futuros inicios de sesión se ejecutan en tiempo O(1) directo a costo cero.
+  - **Paso Directo para Cuentas Aprobadas:**
+    - Se actualizó el "Doble Candado": si `userData.estado_aprobacion === 'APROBADO'`, el usuario accede inmediatamente a su panel sin ser frenado por `emailVerified`.
+- **Control SemVer y Despliegue:**
+  - Actualización SemVer a `v2.20.6` en `package.json` y en las 5 referencias de `index.html`.
+  - Compilación limpia con Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+
+**3. Archivos Involucrados:**
+- `webapp/package.json` (v2.20.6)
+- `webapp/index.html` (v2.20.6)
+- `webapp/src/auth.js`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
+
+
 
 
 

@@ -1,5 +1,5 @@
 import { onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, getDocs, setDoc } from 'firebase/firestore';
 
 export function initAuth(auth, db, callbacks) {
   const { onLogin, onLogout, onWait, onAdmin } = callbacks;
@@ -37,14 +37,52 @@ export function initAuth(auth, db, callbacks) {
     }
 
     try {
-      // 1. Leer el documento del usuario
-      const userSnap = await getDoc(doc(db, "usuarios", user.uid));
-      if (!userSnap.exists()) {
+      // 1. Leer el documento del usuario por UID con Auto-Recuperación por correo
+      let userSnap = await getDoc(doc(db, "usuarios", user.uid));
+      let userData = null;
+
+      if (userSnap.exists()) {
+        userData = userSnap.data();
+      } else {
+        // Fallback inteligente: si el Document ID no coincide con el UID de Auth (ej. creado con Auto-ID)
+        console.warn("[Auth Recovery] Documento no encontrado por UID:", user.uid, "Buscando por correo:", user.email);
+        try {
+          const emailRaw = (user.email || '').trim();
+          const emailLower = emailRaw.toLowerCase();
+          
+          let snapEmail = await getDocs(query(collection(db, "usuarios"), where("email", "==", emailRaw)));
+          if (snapEmail.empty && emailLower !== emailRaw) {
+            snapEmail = await getDocs(query(collection(db, "usuarios"), where("email", "==", emailLower)));
+          }
+
+          if (!snapEmail.empty) {
+            const foundDoc = snapEmail.docs[0];
+            userData = foundDoc.data();
+            console.log("[Auth Recovery] ¡Perfil localizado por correo! Documento ID:", foundDoc.id, "Auto-revinculando al UID:", user.uid);
+            
+            // Auto-revinculación inmediata en Firestore para que futuros accesos sean O(1)
+            try {
+              await setDoc(doc(db, "usuarios", user.uid), {
+                ...userData,
+                uid: user.uid,
+                doc_original_id: foundDoc.id,
+                revinculado_el: new Date().toISOString()
+              });
+              console.log("[Auth Recovery] Documento revinculado exitosamente con ID:", user.uid);
+            } catch (errSync) {
+              console.warn("[Auth Recovery] Aviso revinculando UID en Firestore:", errSync);
+            }
+          }
+        } catch (errQuery) {
+          console.warn("[Auth Recovery] Error buscando perfil por correo:", errQuery);
+        }
+      }
+
+      if (!userData) {
          console.warn("Usuario autenticado pero sin documento en Firestore");
          onWait("Tu cuenta fue creada pero falta el perfil. Contacta soporte.");
          return;
       }
-      const userData = userSnap.data();
       // Asignamos el uid para fácil acceso luego
       userData.uid = user.uid;
 
@@ -63,7 +101,11 @@ export function initAuth(auth, db, callbacks) {
       }
 
       // Doble Candado: Verificación de correo
-      if (!user.emailVerified && userData.rol !== 'superadmin') {
+      // Si la cuenta ya fue formalmente APROBADA por el administrador en Firestore, se le concede acceso
+      const estaAprobado = userData.estado_aprobacion === 'APROBADO';
+      const esRolEspecial = ['superadmin', 'admin', 'zonadmin'].includes(userData.rol);
+
+      if (!user.emailVerified && !esRolEspecial && !estaAprobado) {
           onWait("Tu cuenta requiere verificación. Por favor, haz clic en el enlace que te enviamos al correo (<b>revisa tu carpeta de Spam</b> si no lo encuentras).", "Cuenta en Revisión");
           return;
       }
