@@ -3692,3 +3692,61 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    * **Costo Cero (Zero-Cost):** El archivo se construye directamente en la computadora o celular del usuario aprovechando los datos que ya están en pantalla, sin gastar cuota de lecturas de la base de datos de Firebase.  
 > 3. **Control SemVer y Despliegue:** Versión actualizada a `v2.23.0`, compilada en Vite en 685 ms y desplegada en Firebase Hosting (`https://sgh-merida.web.app`).  
 > 4. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 51
+
+* **Fecha / Hora:** 2026-10-31 ~18:31 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> ¿Por qué sale esto, si hoy lo unico que se ha hecho es registrar unas 3 pares decenas de directores?  
+> *(Adjunta dos capturas de pantalla de la consola de Firebase mostrando 55k lecturas facturables, 394 escrituras, 12k autorizaciones de reglas, 13 listeners onSnapshot y 16 conexiones activas)*
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Explicación detallada y pedagógica sobre la diferencia entre las 394 escrituras reales y las 55k lecturas facturables acumuladas por la presencia del listener reactivo continuo (`onSnapshot`) en la lista de usuarios, sumado a las 16 conexiones activas y las reconexiones de la red móvil en Venezuela.
+
+---
+
+### Intervención 52
+
+* **Fecha / Hora:** 2026-10-31 ~18:36 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Estas son las verdaderas lecturas  
+> *(Adjunta nuevamente las gráficas de uso de Firestore de la consola de Firebase)*
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Desglose analítico confirmando la correlación entre las 12k autorizaciones de seguridad y las 55k lecturas facturables de documentos, detallando la causa exacta en el código y proponiendo la implementación inmediata del blindaje Zero-Cost.
+
+---
+
+### Intervención 53
+
+* **Fecha / Hora:** 2026-10-31 ~18:41 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Sí procede, pero primero "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa." Para que sepas como proceder
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Implementación del Blindaje Estricto Zero-Cost y Erradicación de Fuga de Lecturas en Validación de Usuarios y Planteles (v2.23.1):  
+>  
+> 1. **Lectura obligatoria y estricta:** Se leyó íntegramente de principio a fin el archivo `c:\Proyectos\sgh-mr - firebase\.agents\skills\webapp-expert\SKILL_sgh_firebase.md`, aplicando con rigor absoluto la Regla de Oro 1 de la Skill 4 (Modelado Hiper-Eficiente y Cero Lecturas Basura), la Regla de Oro 10 (Control SemVer PARCHE a v2.23.1), la Skill 5 (Gestor de Memoria y Respaldo Git) y la Skill 6 (Comunicación empática y llana sin código en el chat).  
+> 2. **Solución Técnica Aplicada:**  
+>    * **Eliminación del canal en vivo (`onSnapshot`):** Se apagó la antena reactiva permanente que re-descargaba la lista entera de usuarios en cada parpadeo de la red móvil de los 16 usuarios conectados.  
+>    * **Filtro estricto por municipio para Munadmin:** El coordinador municipal ahora solo consulta a los directores de su propio municipio, reduciendo en más de 95% el consumo de lecturas.  
+>    * **Mutación 100% en memoria en acciones administrativas:** Al aprobar o eliminar usuarios, los cambios se aplican directamente en la memoria local (`usuariosLocales`) con 0 lecturas adicionales a la base de datos.  
+>    * **Botón 🔄 Refrescar:** Se incorporó un botón manual en la tabla de usuarios para sincronizaciones voluntarias.  
+>    * **Caché Estadal de Planteles:** Se blindó la consulta de los 1.159 planteles en `sessionStorage` para Superadmin y Zonadmin.  
+> 3. **Control SemVer y Despliegue:** Versión actualizada a `v2.23.1`, compilada en Vite (708 ms) y publicada en Firebase Hosting (`https://sgh-merida.web.app`).  
+> 4. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?

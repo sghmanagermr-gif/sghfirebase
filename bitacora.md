@@ -2597,3 +2597,36 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `versiones.md`
 - `bitacora.md`
 - `conversaciones.md`
+
+
+---
+
+### Entrada de Bitácora - Versión v2.23.1 (31 de Octubre de 2026)
+
+**1. Contexto y Requerimiento:**
+- El Administrador reporta con soporte de capturas de la consola de Cloud Firestore un consumo de 55.000 operaciones de lectura en las últimas 24 horas, alcanzando el umbral diario del Plan Spark de Firebase (50k lecturas), a pesar de haberse registrado únicamente unas 3 pares de decenas de directores.
+- Tras la lectura estricta de las directrices de `SKILL_sgh_firebase.md` (Skill 4, Regla de Oro 1: "Cero Lecturas Basura"), se procedió a una auditoría forense para erradicar cualquier fuga de lecturas.
+
+**2. Diagnóstico Técnico Forense:**
+- **Antena Continua (`onSnapshot`):** En `webapp/src/admin.js` (línea 1221), la función `loadUsuariosList()` mantenía suscrita la consulta `onSnapshot(query(collection(db, 'usuarios')))`. Con picos de 16 conexiones activas y 13 listeners simultáneos, cada fluctuación de la red móvil forzaba la re-evaluación y re-descarga de la colección completa para cada cliente conectado.
+- **Sobrecarga de Ámbito:** Los coordinadores municipales (`munadmin`) descargaban todos los usuarios del estado Mérida y los filtraban en el cliente, violando el principio de consulta indexada mínima.
+- **Re-consultas Innecesarias en Acciones Administrativas:** Al aprobar o eliminar usuarios, se invocaba nuevamente `loadUsuariosList()`, provocando lecturas redundantes.
+- **Falta de Caché de Sesión en Planteles Estadales:** Los 1.159 planteles del estado se consultaban directamente a Firestore cuando un Superadmin recargaba la página.
+
+**3. Solución Técnica y Arquitectura:**
+- **Reemplazo de `onSnapshot` por `getDocs` con Memoria Volátil:** Se desactivó el listener reactivo continuo y se adoptó una arquitectura de lectura estática bajo demanda en `loadUsuariosList(forzar)`.
+- **Filtro Indexado por Jurisdicción Municipal:** Para `munadmin`, la consulta se ejecuta con `where('rol', '==', 'plaadmin')` y `where('jerarquia.municipio', 'in', getVariantesMunicipio(userMunNorm))`.
+- **Manipulación Atómica en Memoria (0 Lecturas):** Al aprobar (`estado_aprobacion = 'APROBADO'`) o eliminar registros, se muta el arreglo `usuariosLocales` en memoria y se repinta el DOM instantáneamente.
+- **Inyección de Botón de Refresco (`#btn-refrescar-usuarios`):** Se agregó un control explícito en la barra de herramientas para recargas controladas.
+- **Caché Estadal de Planteles en `sessionStorage`:** Se introdujeron `obtenerPlantelesEstadalCache` y `guardarPlantelesEstadalCache`.
+- **Control SemVer y Despliegue:**
+  - Incremento a `v2.23.1` (PARCHE de rendimiento y Zero-Cost).
+  - Compilación limpia en Vite (708 ms) y despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`).
+
+**4. Archivos Involucrados:**
+- `webapp/package.json` (v2.23.1)
+- `webapp/index.html` (v2.23.1, botón `#btn-refrescar-usuarios`)
+- `webapp/src/admin.js` (eliminación de `onSnapshot`, filtro municipal indexado, mutaciones en memoria y caché estadal)
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`

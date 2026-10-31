@@ -58,6 +58,38 @@ export function limpiarPlantelesMunCache(mun) {
   } catch (e) {}
 }
 
+export function obtenerPlantelesEstadalCache() {
+  if (window._cachePlantelesEstadal && Array.isArray(window._cachePlantelesEstadal) && window._cachePlantelesEstadal.length > 0) {
+    return window._cachePlantelesEstadal;
+  }
+  try {
+    const raw = sessionStorage.getItem('sgh_cache_planteles_ESTADAL');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        window._cachePlantelesEstadal = parsed;
+        return parsed;
+      }
+    }
+  } catch (e) {}
+  return null;
+}
+
+export function guardarPlantelesEstadalCache(list) {
+  if (!Array.isArray(list) || list.length === 0) return;
+  window._cachePlantelesEstadal = list;
+  try {
+    sessionStorage.setItem('sgh_cache_planteles_ESTADAL', JSON.stringify(list));
+  } catch (e) {}
+}
+
+export function limpiarPlantelesEstadalCache() {
+  delete window._cachePlantelesEstadal;
+  try {
+    sessionStorage.removeItem('sgh_cache_planteles_ESTADAL');
+  } catch (e) {}
+}
+
 // --- SANEAMIENTO HISTÓRICO: CORRECCIÓN DE EPÓNIMOS CON FECHAS SERIALES DE EXCEL ---
 export const CORRECCIONES_EPONIMOS_EXCEL = {
   'OD14841420': { eponimo: '24 DE JUNIO DE 1821', nominal: 'ESCUELA BOLIVARIANA 24 DE JUNIO' },
@@ -678,8 +710,15 @@ export function initAdminDashboard(dbInstance, user) {
         qUsuarios = query(collection(db, 'usuarios'), where('rol', '==', 'munadmin'));
       }
       try {
-        const snapU = await getCountFromServer(qUsuarios);
-        renderStatValue(elUsuarios, snapU.data().count);
+        if (Array.isArray(usuariosLocales) && usuariosLocales.length > 0) {
+          const countUsuarios = isZonAdmin
+            ? usuariosLocales.filter(x => x.rol === 'munadmin').length
+            : (esVistaMunicipal ? usuariosLocales.filter(x => x.rol === 'plaadmin').length : usuariosLocales.length);
+          renderStatValue(elUsuarios, countUsuarios);
+        } else {
+          const snapU = await getCountFromServer(qUsuarios);
+          renderStatValue(elUsuarios, snapU.data().count);
+        }
       } catch (eU) {
         renderStatValue(elUsuarios, usuariosLocales.length > 0 ? usuariosLocales.length : '-');
       }
@@ -1198,27 +1237,69 @@ export function initAdminDashboard(dbInstance, user) {
     }
   }
 
-  // --- LÓGICA DE VALIDACIÓN DE USUARIOS ---
+  // --- LÓGICA DE VALIDACIÓN DE USUARIOS (ZERO-COST SHIELD) ---
   const tbodyUsuarios = document.getElementById('tbody-usuarios');
   const filterEstado = document.getElementById('filter-estado');
   const filterRolUsuario = document.getElementById('filter-rol-usuario');
   const inpBuscarUsuario = document.getElementById('inp-buscar-usuario');
   const btnLimpiarBuscarUsuario = document.getElementById('btn-limpiar-buscar-usuario');
-  let usuariosLocales = []; // Cache local para filtrar
-  let unsubscribeUsuarios = null;
+  const btnRefrescarUsuarios = document.getElementById('btn-refrescar-usuarios');
+  let usuariosLocales = []; // Cache local para filtrar en memoria
+  let _usuariosCargados = false;
+
+  if (btnRefrescarUsuarios && !btnRefrescarUsuarios._hasListener) {
+    btnRefrescarUsuarios._hasListener = true;
+    btnRefrescarUsuarios.addEventListener('click', async () => {
+      btnRefrescarUsuarios.disabled = true;
+      btnRefrescarUsuarios.innerHTML = '🔄 Consultando...';
+      if (typeof showToast === 'function') showToast("Actualizando lista de usuarios...", "info", 2000);
+      await loadUsuariosList(true);
+      btnRefrescarUsuarios.disabled = false;
+      btnRefrescarUsuarios.innerHTML = '🔄 Refrescar';
+      if (typeof showToast === 'function') showToast("Lista de usuarios actualizada con éxito.", "success", 2500);
+    });
+  }
 
   configurarInterfazPorRol();
   loadUsuariosList();
   loadEstadisticas();
-  function loadUsuariosList() {
-    if(tbodyUsuarios) tbodyUsuarios.innerHTML = '<tr><td colspan="4" style="padding: 30px; text-align: center; color: var(--text-muted);">Cargando usuarios...</td></tr>';
-    
-    if (unsubscribeUsuarios) {
-       unsubscribeUsuarios();
+
+  async function loadUsuariosList(forzar = false) {
+    if (!tbodyUsuarios) return;
+
+    // Escudo Zero-Cost: si ya está en memoria y no se forzó refresco, renderizar directamente sin consumir lecturas
+    if (!forzar && _usuariosCargados && Array.isArray(usuariosLocales) && usuariosLocales.length > 0) {
+      renderUsuariosList();
+      return;
     }
 
-    const q = query(collection(db, 'usuarios')); // Traemos todos para filtrar en cliente rápido
-    unsubscribeUsuarios = onSnapshot(q, (snap) => {
+    tbodyUsuarios.innerHTML = '<tr><td colspan="4" style="padding: 30px; text-align: center; color: var(--text-muted);">Cargando usuarios...</td></tr>';
+    
+    try {
+      const isMun = (userData?.rol === 'munadmin');
+      const isZon = (userData?.rol === 'zonadmin');
+      const userMunNorm = isMun 
+        ? normalizarMunicipio(userData?.jerarquia?.municipio || userData?.municipio || '') 
+        : null;
+
+      let q;
+      if (isMun && userMunNorm) {
+        // Zero-Cost Shield: el coordinador municipal SOLO consulta a los directores de su propio municipio
+        const variantesMun = getVariantesMunicipio(userMunNorm);
+        if (variantesMun.length > 1) {
+          q = query(collection(db, 'usuarios'), where('rol', '==', 'plaadmin'), where('jerarquia.municipio', 'in', variantesMun));
+        } else {
+          q = query(collection(db, 'usuarios'), where('rol', '==', 'plaadmin'), where('jerarquia.municipio', '==', userMunNorm));
+        }
+      } else if (isZon) {
+        // zonadmin consulta coordinadores municipales y directores
+        q = query(collection(db, 'usuarios'), where('rol', 'in', ['munadmin', 'plaadmin']));
+      } else {
+        // superadmin consulta colección
+        q = collection(db, 'usuarios');
+      }
+
+      const snap = await getDocs(q);
       usuariosLocales = [];
       snap.forEach(doc => {
         const u = doc.data();
@@ -1227,15 +1308,12 @@ export function initAdminDashboard(dbInstance, user) {
         // Ocultar al propio usuario de su lista para evitar auto-eliminación
         if (u.uid === userData.uid) return;
         
-        // --- RBAC FILTER ---
-        if (userData.rol === 'munadmin') {
-            // munadmin solo ve directores (plaadmin) de su municipio con coincidencia exacta normalizada
-            const uMun = normalizarMunicipio(u.jerarquia?.municipio || u.municipio || '');
-            const miMun = normalizarMunicipio(userData.jerarquia?.municipio || userData.municipio || '');
-            if (u.rol !== 'plaadmin' || uMun !== miMun) return;
-        } else if (userData.rol === 'zonadmin') {
-            // zonadmin visualiza coordinadores municipales (munadmin) y directores de planteles (plaadmin)
-            if (u.rol !== 'munadmin' && u.rol !== 'plaadmin') return;
+        // RBAC Filter de seguridad adicional en cliente
+        if (isMun) {
+          const uMun = normalizarMunicipio(u.jerarquia?.municipio || u.municipio || '');
+          if (u.rol !== 'plaadmin' || uMun !== userMunNorm) return;
+        } else if (isZon) {
+          if (u.rol !== 'munadmin' && u.rol !== 'plaadmin') return;
         }
 
         // Evitar que un superadmin se borre a sí mismo accidentalmente o a otros admins
@@ -1244,7 +1322,9 @@ export function initAdminDashboard(dbInstance, user) {
         }
       });
       
+      _usuariosCargados = true;
       renderUsuariosList();
+
       const elStatUsuarios = document.getElementById('stat-usuarios');
       if (elStatUsuarios) {
         const countUsuarios = (userData.rol === 'zonadmin')
@@ -1252,10 +1332,10 @@ export function initAdminDashboard(dbInstance, user) {
           : usuariosLocales.length;
         renderStatValue(elStatUsuarios, countUsuarios);
       }
-    }, (err) => {
-      console.error("Error cargando lista de usuarios", err);
-      if(tbodyUsuarios) tbodyUsuarios.innerHTML = '<tr><td colspan="4" style="padding: 30px; text-align: center; color: var(--danger);">Error cargando usuarios</td></tr>';
-    });
+    } catch (err) {
+      console.error("Error cargando lista de usuarios:", err);
+      if (tbodyUsuarios) tbodyUsuarios.innerHTML = '<tr><td colspan="4" style="padding: 30px; text-align: center; color: var(--danger);">Error cargando usuarios.</td></tr>';
+    }
   }
 
   
@@ -1614,8 +1694,18 @@ export function initAdminDashboard(dbInstance, user) {
           e.target.textContent = '...';
           try {
             await safeUpdateDoc(doc(db, 'usuarios', uid), { estado_aprobacion: 'APROBADO' });
-            await loadUsuariosList();
-            loadEstadisticas(); // Actualiza contadores
+            if (userToApprove) {
+              userToApprove.estado_aprobacion = 'APROBADO';
+            }
+            renderUsuariosList();
+            const elStatUsuarios = document.getElementById('stat-usuarios');
+            if (elStatUsuarios) {
+              const countUsuarios = (userData.rol === 'zonadmin')
+                ? usuariosLocales.filter(x => x.rol === 'munadmin').length
+                : usuariosLocales.length;
+              renderStatValue(elStatUsuarios, countUsuarios);
+            }
+            loadEstadisticas();
           } catch(err) {
             console.error(err);
             showConfirm("Error", "Ocurrió un problema al aprobar el usuario.", "danger");
@@ -1633,8 +1723,16 @@ export function initAdminDashboard(dbInstance, user) {
           e.target.textContent = '...';
           try {
             await deleteDoc(doc(db, 'usuarios', uid));
-            await loadUsuariosList();
-            loadEstadisticas(); // Actualiza contadores
+            usuariosLocales = usuariosLocales.filter(x => x.uid !== uid);
+            renderUsuariosList();
+            const elStatUsuarios = document.getElementById('stat-usuarios');
+            if (elStatUsuarios) {
+              const countUsuarios = (userData.rol === 'zonadmin')
+                ? usuariosLocales.filter(x => x.rol === 'munadmin').length
+                : usuariosLocales.length;
+              renderStatValue(elStatUsuarios, countUsuarios);
+            }
+            loadEstadisticas();
           } catch(err) {
             console.error(err);
             showConfirm("Error", "Ocurrió un problema al eliminar el usuario.", "danger");
@@ -2681,7 +2779,13 @@ export function initAdminDashboard(dbInstance, user) {
           return;
         }
       } else {
-        if (Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
+        let plantelesEnCache = obtenerPlantelesEstadalCache();
+        if (!plantelesEnCache && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
+          plantelesEnCache = currentPlanteles;
+          guardarPlantelesEstadalCache(currentPlanteles);
+        }
+        if (plantelesEnCache && plantelesEnCache.length > 0) {
+          currentPlanteles = plantelesEnCache;
           poblarFiltrosGeograficosTabla();
           renderPlantelesList();
           return;

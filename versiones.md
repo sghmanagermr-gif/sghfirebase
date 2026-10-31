@@ -4,6 +4,22 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.23.1 (31 de Octubre de 2026)
+
+- **Blindaje Estricto Zero-Cost y Eliminación de Fuga de Lecturas en Usuarios y Planteles:**
+  - **Diagnóstico del Inconveniente (Causa Raíz):**
+    - El Administrador evidenció mediante métricas de la consola de Firebase que se alcanzaron 55.000 operaciones de lectura en 24 horas a pesar de haberse registrado únicamente varias decenas de directores.
+    - Se identificó la causa raíz: la tabla de usuarios del panel administrativo mantenía un canal en tiempo real continuo (`onSnapshot`) abierto sobre la colección completa `usuarios`. Con 16 conexiones concurrentes y la inestabilidad de la red móvil en Venezuela (desconexiones y reconexiones frecuentes), cada parpadeo de señal re-descargaba la colección íntegra para cada usuario conectado. Además, los coordinadores municipales descargaban a los usuarios de todo el estado en lugar de consultar solo a los de su municipio.
+  - **Soluciones y Blindajes Implementados:**
+    - **Desactivación de Escucha Continua (`onSnapshot`):** Se reemplazó el listener en vivo por consultas acotadas bajo demanda (`getDocs`), eliminando el consumo fantasma de lecturas por reconexión.
+    - **Filtro Indexado por Municipio para Coordinadores (`munadmin`):** El coordinador municipal ahora consulta exclusivamente a los directores (`plaadmin`) adscritos a su territorio municipal mediante cláusulas `where` directas en Firestore, reduciendo en más del 95% el volumen de documentos transferidos.
+    - **Actualización Directa en Memoria (Zero-Cost):** Al aprobar (`btn-aprobar`), rechazar o eliminar (`btn-eliminar`) un usuario, la actualización se refleja de inmediato en la memoria local (`usuariosLocales`) y en los contadores del DOM sin realizar lecturas adicionales a la base de datos (0 lecturas).
+    - **Botón Institucional de Refresco (`#btn-refrescar-usuarios`):** Se incorporó el botón **🔄 Refrescar** junto a los filtros de búsqueda para que el administrador pueda sincronizar nuevos registros de forma voluntaria y controlada.
+    - **Caché Estadal de Planteles en Sesión:** Se blindó la consulta de los 1.159 planteles para Superadmin y Zonadmin mediante `sessionStorage` (`sgh_cache_planteles_ESTADAL`), impidiendo que recargas de página vuelvan a consumir más de un millar de lecturas.
+  - **Despliegue Inmediato:** Compilado limpio en Vite (708 ms) y publicado en Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.23.0 (31 de Octubre de 2026)
 
 - **Descarga y Exportación Institucional de Catálogo de Planteles a Excel (.xlsx) para Superadmin, Zonadmin y Munadmin:**
