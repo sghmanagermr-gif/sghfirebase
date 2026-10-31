@@ -2459,3 +2459,33 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `versiones.md`
 - `bitacora.md`
 - `conversaciones.md`
+
+
+---
+
+### Entrada de Bitácora - Versión v2.22.0 (31 de Octubre de 2026)
+
+**1. Contexto y Requerimiento:**
+- El Administrador valida con satisfacción los cambios previos y consulta: *«Me parece bien el boton nuevo ROL. ¿se puede tambien modificar el nombre del usuario?»*.
+- Objetivo: Extender la capacidad del botón `✏️ Rol` para permitir a los administradores modificar el Nombre Completo, la Cédula y el Teléfono del funcionario, además de su rol y municipio/plantel asignado.
+
+**2. Solución Técnica y Arquitectura:**
+- **Ampliación de la Interfaz del Modal (`webapp/index.html`):**
+  - Se añadieron los campos interactivos `#inp-edit-user-nombre`, `#inp-edit-user-cedula` e `#inp-edit-user-telefono` dentro de `#modal-editar-rol-usuario`.
+  - Se adaptó el encabezado del modal a *"✏️ Modificar Datos de Usuario y Rol"*.
+- **Lógica de Carga y Persistencia (`webapp/src/admin.js`):**
+  - Al abrir el modal (`openEditarRolModal`), los inputs se precargan con los valores actuales del usuario (`u.nombre`, `u.cedula`, `u.telefono`).
+  - Al presionar *"Guardar Cambios"*, se valida que el nombre no esté vacío y se actualiza Firestore mediante `safeUpdateDoc(doc(db, 'usuarios', uid), updateData)`.
+  - Se sincroniza el objeto en memoria `usuarioEditandoRol` y se invoca `renderUsuariosList()` para reflejar los cambios instantáneamente en la interfaz.
+  - Se renombró el botón en la columna de acciones a `✏️ Rol / Datos`.
+- **Control SemVer y Despliegue:**
+  - Incremento de versión MENOR a `v2.22.0` por incorporación de nueva funcionalidad administrativa.
+  - Compilación exitosa en Vite y publicación en Firebase Hosting (`https://sgh-merida.web.app`).
+
+**3. Archivos Involucrados:**
+- `webapp/package.json` (v2.22.0)
+- `webapp/index.html` (v2.22.0)
+- `webapp/src/admin.js`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`

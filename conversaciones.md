@@ -3539,3 +3539,33 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    * **Auto-Recuperación en el Registro:** Si un usuario con cuenta huérfana intenta volver a registrarse, el sistema lo detecta, completa su ficha y le notifica con éxito en lugar de bloquearlo con *"El correo ya está en uso"*.  
 > 4. **Control SemVer y Despliegue:** Incremento a `v2.21.3`, compilación limpia en Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).  
 > 5. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 45
+
+* **Fecha / Hora:** 2026-10-31 ~16:32 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> estoy satisfecho.  
+>  
+> Me parece bien el boton nuevo ROL. ¿se puede tambien modificar el nombre del usuario?
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Incorporación de Edición de Nombre, Cédula y Teléfono en la Gestión de Usuarios (v2.22.0):  
+>  
+> 1. **Lectura obligatoria:** Verificación de `SKILL_sgh_firebase.md`.  
+> 2. **Solución Implementada (Explicación llana):**  
+>    * **¡Sí, totalmente!** Aprovechamos exactamente ese mismo botón de acción y lo convertimos en **«✏️ Rol / Datos»**.  
+>    * Ahora, al hacer clic en dicho botón frente a cualquier usuario, la ventana le permite modificar:  
+>      - **Nombre Completo del Usuario:** Para corregir errores ortográficos, nombres incompletos o actualizar funcionarios.  
+>      - **Cédula de Identidad:** Para corregir números o completar usuarios que se registraron sin cédula.  
+>      - **Teléfono de Contacto:** Para mantener actualizado el contacto del director o coordinador.  
+>      - **Rol, Municipio y Código DEA:** Toda la configuración institucional que ya tenía disponible.  
+>    * Al presionar el botón azul **«Guardar Cambios»**, los datos se guardan de inmediato en la base de datos y la lista se actualiza al instante en su pantalla sin necesidad de recargar.  
+> 3. **Control SemVer y Despliegue:** Incremento a `v2.22.0`, compilación limpia en Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).  
+> 4. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?

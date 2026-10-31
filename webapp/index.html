@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SGH - v2.21.3</title>
+  <title>SGH - v2.22.0</title>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
@@ -123,7 +123,7 @@
           style="width: 110px; height: 110px; border-radius: 20px; object-fit: cover; box-shadow: 0 10px 25px rgba(0,0,0,0.2); margin-bottom: 18px;" />
         <h1
           style="color: var(--primary-color); margin-bottom: 5px; display: flex; align-items: baseline; justify-content: center; gap: 8px;">
-          SGH <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">v2.21.3</span></h1>
+          SGH <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">v2.22.0</span></h1>
         <p>Sistema de Gestión Humana - Estado Mérida</p>
         <form id="login-form">
           <input type="email" id="login-email" placeholder="Correo Electrónico" required autocomplete="email" />
@@ -222,7 +222,7 @@
     <section id="dashboard-view" class="view">
       <nav class="navbar">
         <div class="nav-brand">
-          <span style="color: var(--primary-color);">SGH</span> v2.21.3
+          <span style="color: var(--primary-color);">SGH</span> v2.22.0
         </div>
         <div class="nav-user">
           <span id="user-display-name" style="font-weight: 500;">Cargando...</span>
@@ -285,7 +285,7 @@
         <img src="/sgh-logo.png" alt="SGH Logo"
           style="width: 32px; height: 32px; border-radius: 6px; object-fit: cover; box-shadow: 0 2px 6px rgba(0,0,0,0.15);" />
         <span style="color: var(--primary-color); font-weight: 700;">SGH</span> <span
-          style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">v2.21.3</span>
+          style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">v2.22.0</span>
       </div>
       <div class="nav-user" style="display: flex; gap: 10px; align-items: center;">
         <button id="btn-logout-lock" class="btn-icon"
@@ -1716,18 +1716,34 @@
     style="display: none; z-index: 10006;">
     <div class="lock-card glass-panel" style="max-width: 480px; width: 90%; text-align: left; padding: 24px;">
       <h3 style="margin: 0 0 10px; color: var(--primary-color); font-size: 1.25rem; display: flex; align-items: center; gap: 8px;">
-        <span>✏️</span> Modificar Rol y Adscripción
+        <span>✏️</span> Modificar Datos de Usuario y Rol
       </h3>
-      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 18px; line-height: 1.4;">
-        Actualice el rol o asigne el municipio correspondiente a este usuario en el sistema.
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px; line-height: 1.4;">
+        Actualice el nombre completo, documento, rol o asignación institucional de este usuario en el sistema.
       </p>
 
-      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 14px; margin-bottom: 16px;">
-        <div id="edit-rol-user-nombre" style="font-weight: 700; color: var(--text-main); font-size: 0.95rem;">-</div>
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px;">
+        <div id="edit-rol-user-nombre" style="font-weight: 700; color: var(--text-main); font-size: 0.92rem;">-</div>
         <div id="edit-rol-user-email" style="font-size: 0.82rem; color: #64748b; margin-top: 2px;">-</div>
       </div>
 
-      <div style="margin-bottom: 16px;">
+      <div style="margin-bottom: 14px;">
+        <label for="inp-edit-user-nombre" style="display: block; font-size: 0.82rem; font-weight: bold; margin-bottom: 6px; color: var(--text-main);">Nombre Completo del Usuario:</label>
+        <input type="text" id="inp-edit-user-nombre" placeholder="Ej. PEDRO PÉREZ" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.9rem; text-transform: uppercase;" />
+      </div>
+
+      <div style="display: flex; gap: 10px; margin-bottom: 14px;">
+        <div style="flex: 1;">
+          <label for="inp-edit-user-cedula" style="display: block; font-size: 0.82rem; font-weight: bold; margin-bottom: 6px; color: var(--text-main);">Cédula de Identidad:</label>
+          <input type="text" id="inp-edit-user-cedula" placeholder="Ej. 12345678" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.9rem;" />
+        </div>
+        <div style="flex: 1;">
+          <label for="inp-edit-user-telefono" style="display: block; font-size: 0.82rem; font-weight: bold; margin-bottom: 6px; color: var(--text-main);">Teléfono de Contacto:</label>
+          <input type="tel" id="inp-edit-user-telefono" placeholder="Ej. 04141234567" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.9rem;" />
+        </div>
+      </div>
+
+      <div style="margin-bottom: 14px;">
         <label for="sel-edit-rol" style="display: block; font-size: 0.82rem; font-weight: bold; margin-bottom: 6px; color: var(--text-main);">Rol del Usuario:</label>
         <select id="sel-edit-rol" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; font-size: 0.9rem; font-weight: 500;">
           <option value="zonadmin">Responsable SGH Zonal (Nivel Estadal Mérida)</option>
@@ -1772,7 +1788,7 @@
             <h1
               style="color: var(--primary-color); font-size: 1.05rem; margin: 0; display: flex; align-items: center; gap: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
               SGH Panel <span id="admin-header-version-badge"
-                style="font-size: 0.72rem; font-weight: 600; color: var(--primary-color); background: rgba(37,99,235,0.1); padding: 2px 6px; border-radius: 10px;">v2.21.3</span>
+                style="font-size: 0.72rem; font-weight: 600; color: var(--primary-color); background: rgba(37,99,235,0.1); padding: 2px 6px; border-radius: 10px;">v2.22.0</span>
             </h1>
           </div>
         </div>

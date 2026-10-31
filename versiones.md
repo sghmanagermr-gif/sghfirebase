@@ -4,6 +4,21 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.22.0 (31 de Octubre de 2026)
+
+- **Edición Integral de Identidad y Perfil de Usuarios (Nombre, Cédula, Teléfono, Rol y Adscripción):**
+  - **Objetivo del Requerimiento:**
+    - Permitir a los administradores del sistema (`superadmin` y `zonadmin`) modificar directamente no solo el rol o municipio de un usuario, sino también su **Nombre Completo**, su **Cédula de Identidad** y su **Teléfono de Contacto**.
+  - **Características y Mejoras Implementadas:**
+    - **Ampliación del Modal de Edición de Usuarios (`#modal-editar-rol-usuario`):**
+      - Se incorporó el campo de texto interactivo **Nombre Completo del Usuario** (`#inp-edit-user-nombre`), permitiendo corregir nombres con errores tipográficos, faltas ortográficas o nombres genéricos de auto-aprovisionamiento institucional.
+      - Se añadieron campos para **Cédula de Identidad** (`#inp-edit-user-cedula`) y **Teléfono de Contacto** (`#inp-edit-user-telefono`).
+    - **Re-etiquetado del Botón de Acción:** El botón en la tabla de usuarios se renombró a **✏️ Rol / Datos** (`btn-editar-rol`), comunicando con total claridad que permite gestionar tanto los datos personales como la jerarquía institucional.
+    - **Persistencia Segura en Firestore:** Al guardar los cambios, la rutina actualiza atómicamente el documento del usuario en la colección `usuarios` de Cloud Firestore (`safeUpdateDoc`), refrescando de forma inmediata la memoria local, la tabla y los contadores sin requerir recargar la página.
+  - **Despliegue Inmediato:** Compilado limpio en Vite (732 ms) y desplegado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.21.3 (31 de Octubre de 2026)
 
 - **Auto-Completado de Ficha Institucional y Blindaje contra Cuentas Huérfanas:**

@@ -1537,7 +1537,7 @@ export function initAdminDashboard(dbInstance, user) {
             </span>
           </td>
           <td style="padding: 15px 20px; text-align: right; display: flex; gap: 8px; justify-content: flex-end; align-items: center; flex-wrap: wrap;">
-            ${(isSuperOrZon && u.rol !== 'superadmin' && u.rol !== 'admin') ? `<button class="btn-editar-rol btn-secondary" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.82rem; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 600; border-color: #6366f1; color: #4f46e5;" title="Modificar rol o adscripción municipal">✏️ Rol</button>` : ''}
+            ${(isSuperOrZon && u.rol !== 'superadmin' && u.rol !== 'admin') ? `<button class="btn-editar-rol btn-secondary" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.82rem; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 600; border-color: #6366f1; color: #4f46e5;" title="Modificar nombre, rol o adscripción institucional">✏️ Rol / Datos</button>` : ''}
             ${(u.rol === 'zonadmin' && (userData.rol === 'superadmin' || userData.rol === 'admin')) ? `<button class="btn-competencias" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.82rem; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 600;" title="Configurar módulos y permisos del panel">🔑 Competencias</button>` : ''}
             ${!isAprobado ? `<button class="btn-aprobar" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.85rem; background: var(--success);">Aprobar</button>` : ''}
             <button class="btn-eliminar btn-secondary" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.85rem; border-color: var(--danger); color: var(--danger);">${isAprobado ? 'Eliminar' : 'Rechazar'}</button>
@@ -1621,6 +1621,9 @@ export function initAdminDashboard(dbInstance, user) {
   const btnCancelarEditRol = document.getElementById('btn-cancelar-edit-rol');
   const nameEditRolEl = document.getElementById('edit-rol-user-nombre');
   const emailEditRolEl = document.getElementById('edit-rol-user-email');
+  const inpEditUserNombre = document.getElementById('inp-edit-user-nombre');
+  const inpEditUserCedula = document.getElementById('inp-edit-user-cedula');
+  const inpEditUserTelefono = document.getElementById('inp-edit-user-telefono');
   let usuarioEditandoRol = null;
 
   if (selEditRolMun && selEditRolMun.options.length <= 1) {
@@ -1658,6 +1661,10 @@ export function initAdminDashboard(dbInstance, user) {
     if (nameEditRolEl) nameEditRolEl.textContent = u.nombre || 'Sin nombre';
     if (emailEditRolEl) emailEditRolEl.textContent = `${u.email} (C.I: ${u.cedula || 'N/A'})`;
 
+    if (inpEditUserNombre) inpEditUserNombre.value = u.nombre || '';
+    if (inpEditUserCedula) inpEditUserCedula.value = (u.cedula && u.cedula !== 'S/C') ? u.cedula : '';
+    if (inpEditUserTelefono) inpEditUserTelefono.value = u.telefono || '';
+
     if (selEditRol) {
       selEditRol.value = u.rol || 'plaadmin';
     }
@@ -1694,6 +1701,15 @@ export function initAdminDashboard(dbInstance, user) {
       e.stopPropagation();
       if (!usuarioEditandoRol) return;
 
+      const nuevoNombre = inpEditUserNombre?.value.trim().toUpperCase() || '';
+      const nuevaCedula = inpEditUserCedula?.value.trim().toUpperCase() || '';
+      const nuevoTelefono = inpEditUserTelefono?.value.trim() || '';
+
+      if (!nuevoNombre) {
+        showToast('Debe ingresar el nombre del usuario.', 'error');
+        return;
+      }
+
       const nuevoRol = selEditRol?.value;
       const nuevoMun = selEditRolMun?.value ? normalizarMunicipio(selEditRolMun.value) : '';
       const nuevoDea = inpEditRolDea?.value.trim().toUpperCase() || '';
@@ -1720,6 +1736,9 @@ export function initAdminDashboard(dbInstance, user) {
         };
 
         const updateData = {
+          nombre: nuevoNombre,
+          cedula: nuevaCedula || usuarioEditandoRol.cedula || 'S/C',
+          telefono: nuevoTelefono,
           rol: nuevoRol,
           jerarquia,
           ...(nuevoMun ? { municipio: nuevoMun } : {})
@@ -1727,11 +1746,14 @@ export function initAdminDashboard(dbInstance, user) {
 
         await safeUpdateDoc(doc(db, 'usuarios', uid), updateData);
 
+        usuarioEditandoRol.nombre = nuevoNombre;
+        usuarioEditandoRol.cedula = updateData.cedula;
+        usuarioEditandoRol.telefono = nuevoTelefono;
         usuarioEditandoRol.rol = nuevoRol;
         usuarioEditandoRol.jerarquia = jerarquia;
         if (nuevoMun) usuarioEditandoRol.municipio = nuevoMun;
 
-        showToast('Rol y adscripción actualizados exitosamente.', 'success');
+        showToast('Datos, rol y adscripción actualizados exitosamente.', 'success');
         closeEditarRolModal();
         renderUsuariosList();
         loadEstadisticas();
