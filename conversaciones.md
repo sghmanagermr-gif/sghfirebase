@@ -3425,3 +3425,29 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    * **Cero Costo y Máxima Velocidad:** El filtrado opera directamente en la memoria del navegador (0 segundos de espera y 0 lecturas adicionales a la base de datos).  
 > 3. **Control SemVer y Despliegue:** Incremento a `v2.21.0`, compilado limpio con Vite y desplegado en producción en Firebase Hosting (`https://sgh-merida.web.app`).  
 > 4. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 41
+
+* **Fecha / Hora:** 2026-10-31 ~15:30 - 15:40 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Necesitamos el header fijo, que no se esconda al despalzar hacia abajo  
+> Estoy satisfecho.
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Implementación de Cabecera Fija (Sticky Header) y Navegación Flotante (v2.21.1):  
+>  
+> 1. **Lectura obligatoria:** Verificación de `SKILL_sgh_firebase.md`.  
+> 2. **Solución Implementada (Explicación llana):**  
+>    * **Cabecera Anclada en Pantalla (Sticky):** Se fijó la barra superior del panel (`#admin-header`). Ahora, al desplazarse hacia abajo en la Pizarra o en las tablas de planteles y usuarios, la cabecera permanece siempre visible en el borde superior de la pantalla.  
+>    * **Acceso Inmediato a Controles:** El botón de menú (☰), el logo, el título del panel, el perfil y el botón de salida rápida (*Salir*) están disponibles permanentemente sin necesidad de regresar al inicio de la página.  
+>    * **Fondo Esmerilado de Alta Definición:** La cabecera cuenta con un fondo blanco translúcido esmerilado que desenfoca con elegancia el contenido que se desliza por debajo, manteniendo total nitidez en los textos y botones.  
+>    * **Menú Lateral Móvil Coordinado:** El menú hamburguesa lateral (`#admin-sidebar`) se fijó a la altura de la vista activa, permitiendo que al abrirlo desde cualquier parte del recorrido vertical, aparezca en pantalla sin desajustes.  
+> 3. **Control SemVer y Despliegue:** Incremento de versión a `v2.21.1`, compilación limpia en Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).  
+> 4. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?

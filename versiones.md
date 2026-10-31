@@ -4,6 +4,18 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.21.1 (31 de Octubre de 2026)
+
+- **Cabecera Institucional Fija (Sticky Header) y Navegación Flotante en Desplazamiento Vertical:**
+  - **Diagnóstico del Inconveniente (Causa Raíz):**
+    - Al desplazarse verticalmente hacia abajo en las vistas del panel administrativo (`admin-view`), la cabecera superior (`#admin-header`) se ocultaba fuera del área visible del monitor o teléfono móvil, obligando al usuario a volver a desplazarse hacia arriba para acceder al menú de navegación (hamburguesa `☰`) o al botón de salir del sistema (`Salir`).
+  - **Soluciones y Mejoras Implementadas:**
+    - **Header Sticky Persistente (`position: sticky; top: 0; z-index: 1000`):** Se blindó `#admin-header` en CSS y en el DOM con posicionamiento fijo/adherente, fondo translúcido esmerilado (`background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(12px)`) y sombra sutil. La cabecera permanece 100% visible y accesible en todo momento durante el desplazamiento de páginas largas (Pizarra, Planteles o Usuarios).
+    - **Sidebar y Overlay con Anclaje Fijo (`position: fixed`):** El menú lateral desplegable (`#admin-sidebar`) y su cortina de desenfoque (`#admin-sidebar-overlay`) se configuraron con posicionamiento fijo relativo a la ventana, garantizando que al presionar el menú hamburguesa desde cualquier punto del scroll, el menú se despliegue de forma impecable en la pantalla activa.
+  - **Despliegue Inmediato:** Compilado limpio en Vite y desplegado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.21.0 (31 de Octubre de 2026)
 
 - **Buscador Integral de Usuarios Multi-Criterio (Nombre, Cédula, Código DEA y Correo) para Superadmin, Zonadmin y Munadmin:**

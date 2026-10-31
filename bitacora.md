@@ -2346,3 +2346,33 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `versiones.md`
 - `bitacora.md`
 - `conversaciones.md`
+
+
+---
+
+### v2.21.1 - 2026-10-31 (Cabecera Fija Sticky Header y Navegación Flotante en Desplazamiento)
+
+**1. Objetivos del Ciclo:**
+- Atender el requerimiento de interfaz formulado por el Administrador: *"Necesitamos el header fijo, que no se esconda al despalzar hacia abajo"*.
+- Garantizar que la barra superior institucional permanezca anclada permanentemente en el borde superior de la pantalla durante el desplazamiento vertical, tanto en computadoras de escritorio como en dispositivos móviles.
+- Asegurar que el botón del menú hamburguesa (☰), el distintivo de versión, el perfil del usuario y el botón de salida rápida (*Salir*) estén accesibles sin necesidad de desplazarse de regreso al tope.
+
+**2. Solución Técnica y Arquitectura:**
+- **Inyección de Posicionamiento Sticky en CSS y DOM (`styles.css` & `index.html`):**
+  - Se configuró `#admin-header` y `.admin-header` con `position: sticky !important; top: 0 !important; z-index: 1000 !important;`.
+  - Se aplicó un acabado visual moderno con fondo blanco esmerilado de alta densidad (`background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px)`) y sombra sutil (`box-shadow: 0 2px 10px rgba(0,0,0,0.05)`), impidiendo que el contenido de las tablas o tarjetas se transparente por detrás del texto de la cabecera.
+  - Se replicó el blindaje sticky en la sección de media queries para pantallas móviles (`@media (max-width: 767px)`).
+- **Anclaje Fijo del Menú Lateral Off-Canvas (`#admin-sidebar`):**
+  - Se reestructuró `#admin-sidebar` de `position: absolute` a `position: fixed !important; top: 56px; bottom: 0; z-index: 9000; overflow-y: auto;`. De esta forma, si el usuario abre el menú lateral habiéndose desplazado cientos de píxeles hacia abajo, el menú se despliega exactamente sobre su campo visual actual sin desfases.
+  - El elemento de cortina `#admin-sidebar-overlay` se actualizó a `position: fixed !important; inset: 0; z-index: 8999;` para cubrir todo el viewport visible.
+- **Control SemVer y Despliegue:**
+  - Incremento de versión PARCHE a `v2.21.1` en `package.json` y en las 5 referencias de `index.html`.
+  - Compilación limpia con Vite (670 ms) y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+
+**3. Archivos Involucrados:**
+- `webapp/package.json` (v2.21.1)
+- `webapp/index.html` (v2.21.1)
+- `webapp/styles.css`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
