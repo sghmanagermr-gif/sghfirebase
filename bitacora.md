@@ -2403,6 +2403,7 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - **Control SemVer y Despliegue:**
   - Incremento de versión PARCHE a `v2.21.2` en `package.json` y en las 5 referencias de `index.html`.
   - Compilación limpia con Vite (713 ms) y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+  - **Validación y Cierre de Ciclo:** El Administrador validó el ajuste responsive confirmando plena satisfacción con el despliegue en producción.
 
 **3. Archivos Involucrados:**
 - `webapp/package.json` (v2.21.2)
