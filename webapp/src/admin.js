@@ -1581,13 +1581,19 @@ export function initAdminDashboard(dbInstance, user) {
   const inpNewExp = document.getElementById('inp-new-excepcion');
   const statusSpan = document.getElementById('despliegue-status');
   const btnLogout = document.getElementById('btn-logout-admin');
+  const btnSidebarLogout = document.getElementById('btn-sidebar-logout');
+
+  const executeSignOut = () => {
+     import('firebase/auth').then(({ getAuth, signOut }) => {
+         signOut(getAuth());
+     });
+  };
 
   if (btnLogout) {
-    btnLogout.onclick = () => {
-       import('firebase/auth').then(({ getAuth, signOut }) => {
-           signOut(getAuth());
-       });
-    };
+    btnLogout.onclick = executeSignOut;
+  }
+  if (btnSidebarLogout) {
+    btnSidebarLogout.onclick = executeSignOut;
   }
 
   const MUNICIPIOS_MERIDA = [

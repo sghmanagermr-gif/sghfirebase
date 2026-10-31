@@ -3215,3 +3215,33 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 3. Compilación limpia con Vite (`npm run build`) y despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión parche `v2.20.2`.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
 
+
+
+---
+
+### Intervención 34
+
+* **Fecha / Hora:** 2026-10-30 ~21:34 - 21:48 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+>  
+> En estos días hiciste un cambio para mejorar la experiencia del usuario en telefonos moviles. y ahora me estoy dando cuenta que el boton salir del sistema no está. ¿Qué habrá ocurrido?
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Diagnóstico Explicativo y Solución Definitiva para el Botón de Salida en Teléfonos Móviles (v2.20.3):  
+>  
+> 1. **Lectura obligatoria:** Cumplimiento estricto de lectura inicial de `SKILL_sgh_firebase.md`.  
+> 2. **¿Qué ocurrió con el botón Salir del Sistema en celulares? (Explicación llana):**  
+>    * Al realizar las optimizaciones para teléfonos móviles en la versión `v2.19.3` para eliminar el molesto desplazamiento lateral y las franjas blancas a la derecha, se aplicó una regla de contención estricta (`overflow-x: hidden`).  
+>    * Esta regla provocó que en pantallas pequeñas de teléfonos (anchos menores a 440 píxeles), los elementos que fuesen más anchos quedaran recortados e invisibles hacia la derecha.  
+>    * En el **Panel del Administrador**, la barra superior era rígida y ancha, por lo que empujó el botón rojo de *Cerrar/Salir* fuera de la pantalla hacia la derecha, quedando invisible y sin poder tocarlo. Además, el menú hamburguesa lateral no tenía botón de salida.  
+>    * En la **Pantalla del Director**, el botón decía simplemente "Salir" como un texto plano gris sin ícono, y al desplazarse verticalmente hacia abajo para cargar la matrícula o el personal, la barra superior se ocultaba hacia arriba.  
+> 3. **Solución y Mejoras Implementadas (v2.20.3):**  
+>    * **En el Panel Administrador:** Se ajustó el tamaño de la barra superior para teléfonos de modo que el botón rojo con ícono (`Salir`) quede 100% visible a la vista. Adicionalmente, se inyectó un botón rojo **«Salir del Sistema»** dentro del menú lateral desplegable (hamburguesa).  
+>    * **En la Pantalla del Director:** Se rediseñó el botón superior con ícono y contraste rojo (`Salir`), se fijó la barra para que permanezca visible arriba mientras navega, y se añadió un botón destacado **«Salir del Sistema»** al final de la página (después de registrar el personal) para salir con un solo toque sin tener que subir hasta el inicio.  
+> 4. **Compilación y Despliegue:** Compilación limpia con Vite y despliegue completado en Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión `v2.20.3`.  
+> 5. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?

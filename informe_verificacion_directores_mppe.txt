@@ -1,0 +1,160 @@
+====================================================================================================
+               SISTEMA DE GESTIÓN HUMANA - GOBERNACIÓN DEL ESTADO BOLIVARIANO DE MÉRIDA
+               DIRECCIÓN DE EDUCACIÓN / COORDINACIÓN DE GESTIÓN HUMANA Y NÓMINA
+====================================================================================================
+
+INFORME TÉCNICO DE AUDITORÍA Y VERIFICACIÓN DE DIRECTORES (PLANILLA MPPE)
+DOCUMENTO: RESPUESTA OFICIAL SOBRE REVISIÓN DE CÉDULAS DE IDENTIDAD
+CATÁLOGO CONSULTADO: CARGOS_PERSONAL (FIRESTORE SGH)
+FECHA DE EMISIÓN: 27 DE SEPTIEMBRE DE 2026
+
+----------------------------------------------------------------------------------------------------
+1. DICTAMEN GENERAL Y CONCLUSIÓN EJECUTIVA
+----------------------------------------------------------------------------------------------------
+
+1.1 RESULTADO DE LA AUDITORÍA:
+    LOS NÚMEROS DE CÉDULA DE IDENTIDAD DE LOS SEIS (6) DIRECTORES EVALUADOS SON 100% CORRECTOS Y
+    SE ENCUENTRAN TOTALMENTE ACTIVOS EN EL SISTEMA DE GESTIÓN HUMANA DEL ESTADO MÉRIDA.
+
+1.2 CAUSA DEL RECHAZO DEL MPPE ("CÉDULA ERRADA"):
+    El Ministerio del Poder Popular para la Educación (MPPE) realizó un cruce ciego únicamente
+    contra la nómina del personal nacional dependiente del ministerio. Al no encontrarlos en la
+    nómina nacional, el sistema ministerial concluyó erróneamente que la cédula no existía o estaba
+    errada. 
+
+    La realidad administrativa es que las seis (6) profesionales son personal docente titular y 
+    activo perteneciente a la NÓMINA DE LA GOBERNACIÓN DEL ESTADO MÉRIDA (Nómina Estadal), quienes 
+    se encuentran ejerciendo legítimamente funciones directivas en los planteles indicados.
+
+====================================================================================================
+2. DETALLE INDIVIDUAL DE VERIFICACIÓN EN BASE DE DATOS (CARGOS_PERSONAL)
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+CASO N° 1 (Fila 6 de la planilla MPPE)
+----------------------------------------------------------------------------------------------------
+* Nombres y Apellidos en MPPE:  MARISELA DALIVA (Error tipográfico en apellido: debe ser DÁVILA)
+* Cédula Reportada en MPPE:     15.074.831
+* Calificación del MPPE:        CEDULA ERRADA
+* DICTAMEN DE AUDITORÍA:        >>> CÉDULA V-15.074.831 ES TOTALMENTE CORRECTA <<<
+* Nombre Completo en SGH:       MARISELA DÁVILA MARTINEZ
+* Nacionalidad / Fecha Nac.:    V | 05/05/1979 (47 años)
+* Dependencia Nominal:          ESTADAL (Docente Activo)
+* Cargo / Código RAC:           DOCENTE UNICO (Código RAC: D/U) | Titular: SÍ
+* Plantel de Adscripción:       JOSE GONZALO MORA ARAQUE (Código DEA: OD10571403)
+* Ubicación Geográfica:         Municipio Antonio Pinto Salinas, Parroquia Santa Cruz de Mora
+* Plantel donde cumple función: ESCUELA ROGER MARQUEZ (Código DEA: OD10561403)
+* Observación en Sistema SGH:   "ACTIVO CUMPLE FUNCIONES COMO DIRECTORA"
+
+----------------------------------------------------------------------------------------------------
+CASO N° 2 (Fila 7 de la planilla MPPE)
+----------------------------------------------------------------------------------------------------
+* Nombres y Apellidos en MPPE:  YOLY TERESA PEREZ CHAVARRI
+* Cédula Reportada en MPPE:     15.621.982
+* Calificación del MPPE:        CEDULA ERRADA
+* DICTAMEN DE AUDITORÍA:        >>> CÉDULA V-15.621.982 ES TOTALMENTE CORRECTA <<<
+* Nombre Completo en SGH:       YOLY TERESA PÉREZ CHAVARRI
+* Nacionalidad / Fecha Nac.:    V | 15/12/1981 (44 años)
+* Nivel Académico:              Magíster en Gerencia Educacional
+* Dependencia Nominal:          ESTADAL (Docente Activo)
+* Cargo / Código RAC:           DOCENTE IV (Código RAC: D-0021) | Titular: SÍ
+* Plantel Nominal / Función:    ESCUELA TÉCNICA MISTAJÁ (Código DEA: T0715D1406)
+* Ubicación Geográfica:         Municipio Campo Elías, Parroquia Jají
+* Observación en Sistema SGH:   "PERSONAL QUE CUMPLE FUNCIONES EN EL PLANTEL" (Directora de Plantel)
+
+----------------------------------------------------------------------------------------------------
+CASO N° 3 (Fila 8 de la planilla MPPE)
+----------------------------------------------------------------------------------------------------
+* Nombres y Apellidos en MPPE:  MARGELY GOMEZ
+* Cédula Reportada en MPPE:     14.022.545
+* Calificación del MPPE:        CEDULA ERRADA
+* DICTAMEN DE AUDITORÍA:        >>> CÉDULA V-14.022.545 ES TOTALMENTE CORRECTA <<<
+* Nombre Completo en SGH:       MARGELY DEL CARMEN GÓMEZ FERRER
+* Nacionalidad / Fecha Nac.:    V | 04/12/1979 (46 años)
+* Nivel Académico:              Especialidad en Planificación en Educación Inicial
+* Dependencia Nominal:          ESTADAL (Docente Activo)
+* Cargo / Código RAC:           SUB-DIRECTOR V (Código RAC: D-0051)
+* Plantel Nominal / Función:    ESCUELA BOLIVARIANA PEDRO JESÚS PINO (Código DEA: OD01851414)
+* Ubicación Geográfica:         Municipio Obispo Ramos de Lora, Parroquia Eloy Paredes
+* Observación en Sistema SGH:   "ACTUALMENTE CUMPLE COMO DIRECTORA (E)"
+
+----------------------------------------------------------------------------------------------------
+CASO N° 4 (Fila 9 de la planilla MPPE)
+----------------------------------------------------------------------------------------------------
+* Nombres y Apellidos en MPPE:  YULLY ELIZABETH CIARROCHI
+* Cédula Reportada en MPPE:     8.712.471
+* Calificación del MPPE:        CEDULA ERRADA
+* DICTAMEN DE AUDITORÍA:        >>> CÉDULA V-8.712.471 ES TOTALMENTE CORRECTA <<<
+* Nombre Completo en SGH:       YULLY ELIZABETH CIARROCHI MORALES
+* Nacionalidad / Fecha Nac.:    V | 01/10/1970 (55 años)
+* Nivel Académico:              Magíster en Gerencia Educativa
+* Dependencia Nominal:          ESTADAL (Docente Activo)
+* Cargo / Código RAC:           DOCENTE UNICO (Código RAC: D/U) | Titular: SÍ
+* Plantel Nominal / Función:    EPE NOHEMI HIGUERA DE GUZMAN (Código DEA: ON14981421)
+* Ubicación Geográfica:         Municipio Tovar, Parroquia Tovar
+* Observación en Sistema SGH:   "DIRECTORA TITULAR DE LA INSTITUCIÓN SEGÚN GACETA 17/11/2021 N°4625"
+
+----------------------------------------------------------------------------------------------------
+CASO N° 5 (Fila 10 de la planilla MPPE)
+----------------------------------------------------------------------------------------------------
+* Nombres y Apellidos en MPPE:  OMAIRA JAIMES
+* Cédula Reportada en MPPE:     14.447.995
+* Calificación del MPPE:        CEDULA ERRADA
+* DICTAMEN DE AUDITORÍA:        >>> CÉDULA V-14.447.995 ES TOTALMENTE CORRECTA <<<
+* Nombre Completo en SGH:       OMAIRA COROMOTO JAIMES PERNIA
+* Nacionalidad / Fecha Nac.:    V | 28/06/1981 (45 años)
+* Nivel Académico:              Licenciada en Educación
+* Dependencia Nominal:          ESTADAL (Docente Activo)
+* Cargo / Código RAC:           DOCENTE UNICO (Código RAC: D/U)
+* Plantel Nominal / Función:    ESCUELA TOMAS LABRADOR (Código DEA: OD02201421)
+* Ubicación Geográfica:         Municipio Tovar, Parroquia Tovar
+* Observación en Sistema SGH:   "DIRECTORA ENCARGADA DE LA ESCUELA DON TOMAS LABRADOR RAMIREZ"
+
+----------------------------------------------------------------------------------------------------
+CASO N° 6 (Fila 11 de la planilla MPPE)
+----------------------------------------------------------------------------------------------------
+* Nombres y Apellidos en MPPE:  YAMILETH MEDINA
+* Cédula Reportada en MPPE:     13.790.850
+* Calificación del MPPE:        CEDULA ERRADA
+* DICTAMEN DE AUDITORÍA:        >>> CÉDULA V-13.790.850 ES TOTALMENTE CORRECTA <<<
+* Nombre Completo en SGH:       YAMILETH DEL VALLE MEDINA CASTILLO
+* Nacionalidad / Fecha Nac.:    V | 29/10/1977 (48 años)
+* Nivel Académico:              Licenciada en Educación Integral
+* Dependencia Nominal:          ESTADAL (Docente Activo)
+* Cargo / Código RAC:           DOCENTE UNICO (Código RAC: D/U) | Titular: SÍ
+* Plantel Nominal de Origen:    RAFAEL RONDON PEÑA (Código DEA: OD02101423), Municipio Zea
+* Estatus Administrativo:       APOYO INSTITUCIONAL
+* Plantel donde cumple función: EPE ISMENIA MORA (Código DEA: ON15191423)
+* Observación en Sistema SGH:   "DIRECTORA ENCARGADA EN ESCUELA PARA EL EMPRENDIMIENTO ISMENIA MORA"
+
+====================================================================================================
+3. CUADRO RESUMEN CONSOLIDADO PARA CONSIGNACIÓN ANTE EL MINISTERIO
+====================================================================================================
+
++----+--------------+----------------------------------+-----------------------+-------------------------+
+| N° | CÉDULA IDENT | APELLIDOS Y NOMBRES COMPLETOS    | CARGO / DEPENDENCIA   | INSTITUCIÓN EDUCATIVA   |
++----+--------------+----------------------------------+-----------------------+-------------------------+
+| 06 | V-15.074.831 | MARISELA DÁVILA MARTINEZ         | Docente Único/Estadal | ESC. ROGER MARQUEZ      |
+| 07 | V-15.621.982 | YOLY TERESA PÉREZ CHAVARRI       | Docente IV / Estadal  | ESC. TÉCNICA MISTAJÁ    |
+| 08 | V-14.022.545 | MARGELY DEL CARMEN GÓMEZ FERRER  | Sub-Dir. V / Estadal  | ESC. BOL. PEDRO J. PINO |
+| 09 | V-8.712.471  | YULLY ELIZABETH CIARROCHI MORALES| Docente Único/Estadal | EPE NOHEMI HIGUERA G.   |
+| 10 | V-14.447.995 | OMAIRA COROMOTO JAIMES PERNIA    | Docente Único/Estadal | ESC. TOMAS LABRADOR     |
+| 11 | V-13.790.850 | YAMILETH DEL VALLE MEDINA C.     | Docente Único/Estadal | EPE ISMENIA MORA        |
++----+--------------+----------------------------------+-----------------------+-------------------------+
+
+====================================================================================================
+4. TEXTO RECOMENDADO PARA LLENAR LA COLUMNA "C.I. - V CORRECTA" DE LA PLANILLA EXCEL
+====================================================================================================
+
+En la columna "C.I. - V CORRECTA" donde el evaluador ministerial escribió "CEDULA ERRADA",
+se debe colocar el número de cédula verificado y consignar la siguiente nota explicativa:
+
+"Cédula verificada y ratificada en el Sistema de Gestión Humana del Estado Mérida. 
+La docente es personal activo titular de la Gobernación del Estado Mérida (Nómina Estadal) y se 
+encuentra cumpliendo funciones directivas en el plantel. No figura en nómina del MPPE por pertenecer 
+exclusivamente al presupuesto y nómina estadal."
+
+====================================================================================================
+                      DIRECCIÓN DE EDUCACIÓN DEL ESTADO BOLIVARIANO DE MÉRIDA
+                            SISTEMA INTEGRAL DE GESTIÓN HUMANA (SGH)
+====================================================================================================

@@ -2584,18 +2584,19 @@ async function mostrarCandado(codigoDEA, dataParcial) {
 }
 
 // --- Cerrar Sesión ---
-document.getElementById('btn-logout')?.addEventListener('click', async () => {
-    await signOut(auth);
-});
-document.getElementById('btn-logout-lock')?.addEventListener('click', async () => {
-    await signOut(auth);
-});
-document.getElementById('btn-logout-munic')?.addEventListener('click', async () => {
-    await signOut(auth);
-});
-document.getElementById('btn-logout-admin')?.addEventListener('click', async () => {
-    await signOut(auth);
-});
+const handleLogoutAction = async () => {
+    try {
+        await signOut(auth);
+    } catch (e) {
+        console.error("Error al cerrar sesión:", e);
+    }
+};
+document.getElementById('btn-logout')?.addEventListener('click', handleLogoutAction);
+document.getElementById('btn-logout-lock')?.addEventListener('click', handleLogoutAction);
+document.getElementById('btn-logout-lock-footer')?.addEventListener('click', handleLogoutAction);
+document.getElementById('btn-sidebar-logout')?.addEventListener('click', handleLogoutAction);
+document.getElementById('btn-logout-munic')?.addEventListener('click', handleLogoutAction);
+document.getElementById('btn-logout-admin')?.addEventListener('click', handleLogoutAction);
 
 // --- HAMBURGER MENU LOGIC (GLOBAL) ---
 const btnHamburger = document.getElementById('btn-hamburger');

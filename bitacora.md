@@ -2134,6 +2134,41 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 
 ---
 
+---
+
+### v2.20.3 - 2026-10-30 (Restauración y Optimización del Botón Salir del Sistema en Celulares y Vistas Responsivas)
+
+**1. Objetivos del Ciclo:**
+- Diagnosticar y resolver la ausencia/invisibilidad del botón «Salir del Sistema / Cerrar Sesión» en teléfonos móviles tras las recientes mejoras de responsividad.
+- Garantizar que el botón de salida sea 100% visible, accesible y ergonómico en todos los roles (Directores y Administradores), sin importar la resolución del celular o el nivel de scroll.
+
+**2. Solución Técnica y Arquitectura:**
+- **Diagnóstico Integral:**
+  - Al implementar la regla `overflow-x: hidden !important` en `v2.19.3` para eliminar el espacio lateral fantasma, la cabecera del Panel Admin (`#admin-view > header`) con ancho rígido de $>440\text{px}$ provocó que el botón `#btn-logout-admin` quedara empujado más allá del borde derecho del teléfono y recortado visualmente.
+  - El menú hamburguesa lateral (`#admin-sidebar`) carecía de botón de cierre de sesión.
+  - En la vista del Director (`#lock-screen`), la barra superior dejaba de ser `sticky` en algunos navegadores móviles debido a la interacción de `overflow-x: hidden` en el ancestro `body`, y el botón de salida original era un texto plano «Salir» sin ícono ni contraste llamativo.
+- **Acciones Implementadas:**
+  - **Readecuación de Cabecera Admin en Móviles:** Se calibró el relleno de `#admin-header` a `10px 12px`, reduciendo brechas entre logotipo y título, asegurando que `#btn-logout-admin` mantenga `flex-shrink: 0` y permanezca 100% dentro del viewport en smartphones desde $320\text{px}$.
+  - **Inyección de Botón de Salida en Menú Lateral (`#btn-sidebar-logout`):** Se agregó un botón de salida al pie del menú lateral desplegable en `admin-sidebar`, permitiendo cerrar sesión con un solo toque desde el menú móvil.
+  - **Anclaje Sticky Universal y Botón de Salida Superior:** Se aplicó `overflow-x: clip` en lugar de `overflow-x: hidden` en `html, body, #app`, restituyendo el comportamiento de fijación superior (`position: sticky !important; top: 0; z-index: 1000;`) en `.navbar`. Se rediseñó `#btn-logout-lock` con acento semántico rojo e ícono `bi-box-arrow-right`.
+  - **Botón Accesible en Pie de Pantalla (`#btn-logout-lock-footer`):** Se incorporó un botón «Salir del Sistema» al finalizar la carga de funcionarios para comodidad inmediata tras registrar datos.
+- **Control SemVer y Despliegue:**
+  - Versión PARCHE actualizada a `v2.20.3` en `package.json` e `index.html` (5 etiquetas).
+  - Compilación exitosa con Vite y publicación en Firebase Hosting (`https://sgh-merida.web.app`).
+
+**3. Archivos Involucrados:**
+- `webapp/package.json` (v2.20.3)
+- `webapp/index.html` (v2.20.3)
+- `webapp/src/main.js`
+- `webapp/src/admin.js`
+- `webapp/src/style.css`
+- `webapp/styles.css`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
+
+---
+
 ### v2.20.2 - 2026-10-30 (Obligatoriedad del Campo «Observaciones» en Registro y Actualización de Personal)
 
 **1. Objetivos del Ciclo:**

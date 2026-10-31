@@ -4,6 +4,23 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.20.3 (30 de Octubre de 2026)
+
+- **Restauración, Adaptabilidad y Blindaje del Botón «Salir del Sistema / Cerrar Sesión» en Teléfonos Móviles:**
+  - **Diagnóstico de Causa Raíz:**
+    - Al implementar el blindaje contra desbordamiento horizontal en v2.19.3 mediante `overflow-x: hidden !important` en `html, body, #app`, los elementos que excedían el ancho del viewport de celulares ($<440\text{px}$) quedaban recortados e inaccesibles hacia la derecha.
+    - En el Panel de Administración (`admin-view`), la cabecera fija poseía un ancho mínimo de $440\text{px}$ debido a sus rellenos rígidos (`padding: 15px 30px`), desplazando el botón `#btn-logout-admin` completamente fuera del área visible de la pantalla en dispositivos móviles sin posibilidad de desplazamiento manual.
+    - En la vista del Director (`lock-screen`), el botón de salida figuraba como un botón plano gris sin ícono con el texto genérico «Salir», y al desplazarse verticalmente por el formulario, la barra superior se ocultaba debido a la inhibición del comportamiento `sticky` provocada por contenedores con `overflow-x: hidden`.
+    - El menú lateral despegable de administración (`admin-sidebar`) no poseía una opción de cierre de sesión, dejando al usuario sin alternativas en pantallas reducidas.
+  - **Corrección y Optimización Integral:**
+    - **Cabecera Responsiva en Administrador:** Reducción de relleno en móviles a `10px 12px`, flex-shrink en controles y estilización con ícono y acento de alerta (`#ef4444`) en `#btn-logout-admin` garantizando visibilidad al 100% en pantallas desde $320\text{px}$.
+    - **Botón de Salida en Menú Lateral Móvil:** Inyección del botón `#btn-sidebar-logout` («Salir del Sistema») en la base del menú lateral hamburguesa (`admin-sidebar`), ofreciendo acceso directo e instantáneo al navegar en teléfonos.
+    - **Barra Superior Sticky y Botón de Salida en Director:** Transición de `overflow-x: hidden` a `overflow-x: clip`, asegurando que la barra de navegación superior permanezca permanentemente anclada arriba (`position: sticky !important`) durante el desplazamiento en teléfonos.
+    - **Botón Adicional en el Pie de Pantalla:** Incorporación de `#btn-logout-lock-footer` («Salir del Sistema») al final del formulario institucional para que el director pueda cerrar sesión de inmediato al culminar la carga de su personal sin necesidad de volver al inicio de la página.
+  - **Despliegue Inmediato:** Compilado limpio en Vite y desplegado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.20.2 (30 de Octubre de 2026)
 
 - **Obligatoriedad del Campo «Observaciones» en el Asistente de Registro de Personal:**
