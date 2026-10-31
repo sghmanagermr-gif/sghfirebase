@@ -4,6 +4,21 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.21.2 (31 de Octubre de 2026)
+
+- **Adaptabilidad Tipográfica Proporcional del Perfil y Blindaje Anti-Desborde en Móviles:**
+  - **Diagnóstico del Inconveniente (Causa Raíz):**
+    - En teléfonos móviles con pantallas estrechas ($360\text{px} - 390\text{px}$), al iniciar sesión un usuario municipal cuyo nombre y municipio son extensos (ej. *CARMEN ELENA RODRIGUEZ (CARACCIOLO PARRA OLMEDO)* o *MILEIDY RUBIO (JUSTO BRICEÑO)*), la etiqueta `#admin-user-name` ocupaba un ancho excesivo sin auto-ajuste de escala.
+    - Esto empujaba los extremos del contenedor horizontalmente, provocando que tanto el botón de menú hamburguesa (`☰`) a la izquierda como el botón de salida (`Salir`) a la derecha quedaran recortados y fuera de la vista del usuario.
+  - **Soluciones y Mejoras Implementadas:**
+    - **Escala Tipográfica Proporcional a la Longitud (Sugerencia del Usuario):** Se programó una rutina reactiva en `admin.js` que evalúa la longitud del texto (nombre + municipio) y reduce dinámicamente el tamaño de fuente (`font-size: 0.68rem` a `0.85rem`) y el interlineado (`line-height`) según los caracteres.
+    - **Contenedores Flexibles y Protección de Botones:** Se blindaron los botones `#btn-hamburger` y `#btn-logout-admin` con `flex-shrink: 0 !important;` y anchos mínimos garantizados, impidiendo que bajo ninguna circunstancia sean aplastados o desplazados fuera del viewport.
+    - **Truncamiento Inteligente con Tooltip:** Se aplicó `overflow: hidden; text-overflow: ellipsis; white-space: nowrap;` con ancho máximo adaptativo y el atributo `title` nativo, permitiendo ver el nombre completo al tocarlo sin deformar la cabecera.
+    - **Micro-Breakpoint para Teléfonos Compactos:** En pantallas $< 440\text{px}$, el distintivo de versión del header se oculta de forma inteligente para ceder espacio vital al nombre y botones.
+  - **Despliegue Inmediato:** Compilado limpio en Vite y desplegado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.21.1 (31 de Octubre de 2026)
 
 - **Cabecera Institucional Fija (Sticky Header) y Navegación Flotante en Desplazamiento Vertical:**

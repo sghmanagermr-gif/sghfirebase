@@ -350,21 +350,43 @@ export function initAdminDashboard(dbInstance, user) {
 
     if (adminNameEl) {
       adminNameEl.style.display = 'block';
+      let nombreTexto = '';
       if (isMunAdmin) {
-        adminNameEl.textContent = userData.nombre ? `${userData.nombre} (${mun})` : `Coordinador (${mun})`;
+        nombreTexto = userData.nombre ? `${userData.nombre} (${mun})` : `Coordinador (${mun})`;
         if (adminAvatarEl) adminAvatarEl.textContent = 'CM';
         if (statsTitleEl) statsTitleEl.textContent = `Pizarra Municipal - ${mun}`;
         if (statsDescEl) statsDescEl.textContent = `Resumen del municipio ${mun} en tiempo real.`;
       } else if (isZonAdmin) {
-        adminNameEl.textContent = userData.nombre || 'Pizarra Estadal';
+        nombreTexto = userData.nombre || 'Pizarra Estadal';
         if (adminAvatarEl) adminAvatarEl.textContent = 'ZA';
         if (statsTitleEl) statsTitleEl.textContent = 'Pizarra Estadal';
         if (statsDescEl) statsDescEl.textContent = 'Resumen consolidado del estado Mérida.';
       } else {
-        adminNameEl.textContent = userData.nombre || 'Administrador';
+        nombreTexto = userData.nombre || 'Administrador';
         if (adminAvatarEl) adminAvatarEl.textContent = 'SA';
         if (statsTitleEl) statsTitleEl.textContent = 'Pizarra Estadal';
         if (statsDescEl) statsDescEl.textContent = 'Resumen del sistema en tiempo real.';
+      }
+
+      adminNameEl.textContent = nombreTexto;
+      adminNameEl.title = nombreTexto; // Tooltip completo al pasar o tocar
+
+      // Reducción dinámica de tamaño según longitud para evitar desbordes en móviles
+      const len = nombreTexto.length;
+      if (len > 35) {
+        adminNameEl.style.fontSize = '0.68rem';
+        adminNameEl.style.lineHeight = '1.1';
+        adminNameEl.style.maxWidth = '150px';
+      } else if (len > 25) {
+        adminNameEl.style.fontSize = '0.74rem';
+        adminNameEl.style.lineHeight = '1.15';
+        adminNameEl.style.maxWidth = '180px';
+      } else if (len > 18) {
+        adminNameEl.style.fontSize = '0.78rem';
+        adminNameEl.style.maxWidth = '210px';
+      } else {
+        adminNameEl.style.fontSize = '0.85rem';
+        adminNameEl.style.maxWidth = '250px';
       }
     }
 

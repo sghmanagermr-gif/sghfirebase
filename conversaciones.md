@@ -3451,3 +3451,31 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    * **Menú Lateral Móvil Coordinado:** El menú hamburguesa lateral (`#admin-sidebar`) se fijó a la altura de la vista activa, permitiendo que al abrirlo desde cualquier parte del recorrido vertical, aparezca en pantalla sin desajustes.  
 > 3. **Control SemVer y Despliegue:** Incremento de versión a `v2.21.1`, compilación limpia en Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).  
 > 4. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 42
+
+* **Fecha / Hora:** 2026-10-31 ~15:46 - 15:55 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Estoy satisfecho.  
+>  
+> Ahora que hablas de celular, al entrar con un usuario que su nombre y en este caso el nombre del municipio es largo, tanto el boton hamburgueza como el de salir no se ven. mi sugerecia, que el nombre disminuya de tamaño según longitud  
+> *(Video adjunto en formato mp4 mostrando la pantalla de teléfono móvil con el header desbordado y los extremos ocultos)*
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Solución al Desborde de Cabecera Móvil y Adaptabilidad Tipográfica Dinámica (v2.21.2):  
+>  
+> 1. **Lectura obligatoria:** Verificación de `SKILL_sgh_firebase.md`.  
+> 2. **Solución Implementada (Explicación llana):**  
+>    * **Ajuste Automático del Tamaño de Letra (Su Sugerencia):** Se implementó una regla inteligente que mide cuántas letras tiene la combinación de *Nombre + Municipio*. Si el nombre es largo (como en municipios compuestos), el sistema reduce de inmediato el tamaño de la letra de forma proporcional para que quepa cómodamente en la pantalla.  
+>    * **Protección Blindada de Botones:** Se configuraron el botón de Menú (☰) y el botón de Salir con seguros estrictos (`flex-shrink: 0`) para que **JAMÁS** puedan ser aplastados ni empujados fuera de la pantalla, sin importar qué tan pequeño sea el celular.  
+>    * **Ajuste Suave (Puntos Suspensivos):** Si el nombre llega al límite máximo de espacio, se acorta suavemente con puntos suspensivos sin romper la cabecera. Al tocar el nombre con el dedo, se despliega una pequeña etiqueta flotante (*tooltip*) con el texto completo.  
+>    * **Optimización en Teléfonos Compactos:** En pantallas de menos de 440px de ancho, se oculta la pequeña pastilla de versión del encabezado para regalarle 45 píxeles adicionales al nombre y al botón de salida.  
+> 3. **Control SemVer y Despliegue:** Incremento de versión a `v2.21.2`, compilación limpia en Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).  
+> 4. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?

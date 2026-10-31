@@ -2376,3 +2376,39 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `versiones.md`
 - `bitacora.md`
 - `conversaciones.md`
+
+
+---
+
+### v2.21.2 - 2026-10-31 (Adaptabilidad Tipográfica Proporcional del Perfil y Blindaje Anti-Desborde en Móviles)
+
+**1. Objetivos del Ciclo:**
+- Atender la incidencia reportada por el Administrador con soporte de video: al iniciar sesión en un dispositivo móvil con un usuario de nombre y municipio largos, el título y el nombre ocupaban un ancho excesivo, desplazando el botón de menú hamburguesa (☰) a la izquierda y el botón de salida (*Salir*) a la derecha fuera del área visible de la pantalla.
+- Implementar la sugerencia del usuario: *"mi sugerencia, que el nombre disminuya de tamaño según longitud"*.
+- Asegurar que en cualquier resolución móvil (desde 320px en adelante), el botón hamburguesa, el logo, el nombre y el botón Salir coexistan de manera armoniosa y 100% visible sin ningún desbordamiento horizontal.
+
+**2. Solución Técnica y Arquitectura:**
+- **Escalado Tipográfico Dinámico Proporcional (`webapp/src/admin.js`):**
+  - En la rutina de configuración de encabezado (`configurarInterfazPorRol`), se programó una escala reactiva que calcula la longitud total de la cadena compuesta `${nombre} (${municipio})`:
+    - $> 35$ caracteres: `font-size: 0.68rem; line-height: 1.1; max-width: 150px;`
+    - $> 25$ caracteres: `font-size: 0.74rem; line-height: 1.15; max-width: 180px;`
+    - $> 18$ caracteres: `font-size: 0.78rem; max-width: 210px;`
+    - $\le 18$ caracteres: `font-size: 0.85rem; max-width: 250px;`
+  - Se inyectó el atributo nativo `title` con el texto completo para que el funcionario pueda visualizar el nombre y municipio íntegros al pulsar o pasar sobre el elemento.
+- **Blindaje Estructural y Protección de Extremos (`webapp/index.html` & `webapp/styles.css`):**
+  - Se aplicó `flex-shrink: 0 !important;` y ancho mínimo protegido tanto al botón hamburguesa `#btn-hamburger` como al botón `#btn-logout-admin`.
+  - El contenedor derecho `#admin-header-right` se configuró con `flex: 1 1 auto; justify-content: flex-end; min-width: 0;` y `#admin-user-container` con `max-width: 140px; min-width: 0;`.
+  - En `#admin-user-name` se forzó `overflow: hidden; text-overflow: ellipsis; white-space: nowrap;`.
+  - Para pantallas compactas ($\le 440\text{px}$), se ocultó la etiqueta de versión dentro del header para liberar 45px adicionales de espacio horizontal, permitiendo que la cabecera completa se ajuste con total holgura en viewports pequeños ($320\text{px} - 360\text{px}$).
+- **Control SemVer y Despliegue:**
+  - Incremento de versión PARCHE a `v2.21.2` en `package.json` y en las 5 referencias de `index.html`.
+  - Compilación limpia con Vite (713 ms) y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+
+**3. Archivos Involucrados:**
+- `webapp/package.json` (v2.21.2)
+- `webapp/index.html` (v2.21.2)
+- `webapp/src/admin.js`
+- `webapp/styles.css`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
