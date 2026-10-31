@@ -3277,3 +3277,33 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 4. **Compilación y Despliegue:** Proyecto compilado con Vite y desplegado en producción en Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión `v2.20.4`.  
 > 5. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?
 
+---
+
+### Intervención 36
+
+* **Fecha / Hora:** 2026-10-30 ~22:31 - 22:45 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> esta imagen Whatsapp*** me la envía el responsable municipal del JULIO CESAR SALAS, y se nota que ve las cantidades estadal. como puedes ver en la imagen ***0001.png JULIO CESAR SALAS es munadmin  
+> *(Imagen adjunta de la pantalla del responsable de Julio César Salas mostrando Pizarra Municipal - JULIO CESAR SALAS en v2.20.3 con 1,221 escuelas, 23,288 empleados y 0 en matrícula)*
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Diagnóstico Explicativo y Solución Definitiva para Municipios con Nombres Compuestos y Blindaje de Pizarra (v2.20.5):  
+>  
+> 1. **Lectura obligatoria:** Verificación de `SKILL_sgh_firebase.md`.  
+> 2. **¿Por qué el responsable de Julio César Salas veía las cantidades estadales? (Explicación llana):**  
+>    * Al revisar la foto que le enviaron, en la pestaña del navegador de esa computadora se observa la versión anterior **`v2.20.3`**.  
+>    * En dicha versión anterior existía una discrepancia entre el nombre largo y el nombre corto: el usuario se registró como **«JULIO CESAR SALAS»**, pero en el archivo de estadísticas de la base de datos el municipio estaba guardado con su clave abreviada histórica: **«JULIO CESAR»**.  
+>    * Al no encontrar una coincidencia exacta de la palabra, el sistema cometía el error de saltar por defecto a mostrar los datos globales de todo el estado Mérida (1,221 escuelas y 23,288 trabajadores).  
+>    * Además, como la búsqueda en la base de datos de planteles buscaba la palabra exacta, no encontraba los colegios registrados bajo el nombre abreviado y por eso el estatus de matrícula salía en 0.  
+> 3. **Soluciones y Blindajes Implementados (v2.20.5):**  
+>    * **Escudo Anti-Desbordamiento:** Se programó una regla estricta: un coordinador municipal **NUNCA** verá las cifras del estado Mérida bajo ninguna circunstancia.  
+>    * **Extractor Multi-Nombre Inteligente:** El sistema ahora reconoce tanto el nombre corto (**«JULIO CESAR»**) como el nombre completo (**«JULIO CESAR SALAS»** o con tildes **«JULIO CÉSAR SALAS»**), al igual que para los demás municipios como *Caracciolo Parra Olmedo*, *Antonio Pinto Salinas* o *Tulio Febres Cordero*. Al ingresar, el coordinador de Julio César Salas verá sus cifras exactas: **23 planteles**, **374 empleados** (266 docentes, 11 administrativos y 97 obreros).  
+>    * **Búsqueda Flexible de Planteles y Directores:** Se actualizaron las consultas a la base de datos para que busquen automáticamente todas las variantes del nombre del municipio, recuperando de inmediato todos sus colegios y directores.  
+> 4. **Compilación y Despliegue:** Proyecto compilado con Vite y desplegado en Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión `v2.20.5`.  
+> 5. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?
+
+

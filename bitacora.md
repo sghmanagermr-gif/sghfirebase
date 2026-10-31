@@ -2229,6 +2229,43 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `bitacora.md`
 - `conversaciones.md`
 
+---
+
+### v2.20.5 - 2026-10-30 (Blindaje Anti-Desbordamiento Estadal, Resolución Multi-Alias y Soporte Universal de Municipios Compuestos)
+
+**1. Objetivos del Ciclo:**
+- Atender el reporte remitido por el usuario en el que el Coordinador Municipal de **Julio César Salas** visualizaba en su pantalla el título municipal pero con los totales estadales consolidados (1,221 escuelas y 23,288 empleados), además de 0 directores y 0 planteles en el estatus de matrícula.
+- Eliminar de raíz cualquier riesgo de desbordamiento de datos estadales en vistas municipales.
+- Asegurar que cualquier municipio con nombre compuesto o variante abreviada/extendida (`JULIO CESAR SALAS` vs `JULIO CESAR`, `CARACCIOLO PARRA OLMEDO` vs `CARACCIOLO PARRA`, `ANTONIO PINTO SALINAS` vs `ANTONIO PINTO SALINA`, `TULIO FEBRES CORDERO` vs `TULIO FEBRES`) resuelva de forma infalible sus datos estadísticos y sus consultas en Firestore.
+
+**2. Solución Técnica y Arquitectura:**
+- **Diagnóstico Profundo:**
+  - En la captura aportada por el usuario, el navegador del coordinador municipal se encontraba ejecutando la versión `v2.20.3`.
+  - En `v2.20.3`, la lectura de municipio tomaba el valor literal sin normalización (`"JULIO CESAR SALAS"`).
+  - Al consultar `resumenData.porMunicipio["JULIO CESAR SALAS"]`, el resultado era `undefined` porque el índice maestro en `resumen_estadisticas.json` utilizaba la clave abreviada `"JULIO CESAR"`.
+  - La condición de fallback en el código recurría a `resumenData.global`, provocando que la interfaz municipal mostrara las cantidades completas de todo el estado Mérida.
+  - Las consultas directas a Firestore en las colecciones `planteles` y `usuarios` utilizaban `where("municipio", "==", mun)` estricto, devolviendo 0 documentos ante cualquier variación del nombre.
+- **Acciones Implementadas:**
+  - **Escudo Estricto Anti-Desbordamiento en `loadEstadisticas()`:** Se prohibió de forma absoluta que una vista municipal recurra a `resumenData.global`. Si un municipio no fuese encontrado, devolverá una estructura en blanco (ceros), garantizando que jamás se filtren cifras de escala estadal a un ámbito local.
+  - **Extractor Inteligente Multi-Alias (`getDatosMunicipio`):** Se implementó una función centralizada que busca por el nombre canónico normalizado, por el nombre literal en mayúsculas y por los alias registrados, resolviendo de inmediato las cifras reales de Julio César Salas (**23 planteles**, **374 empleados**, **266 docentes**, **11 administrativos**, **97 obreros**).
+  - **Consultas a Firestore Multi-Variante (`getVariantesMunicipio`):** Se extendió `geografia.js` con `getVariantesMunicipio()`, permitiendo que las consultas a Firestore (`planteles`, `usuarios`, `nomina`) busquen mediante el operador `in` cubriendo tanto el nombre largo como el corto y versiones con tildes.
+  - **Normalización de Doble Vía en Planteles y Descargas:** Se blindó `loadPlanteles()` y el modal de nómina para normalizar siempre `userMun` con `normalizarMunicipio()` y filtrar en cliente de manera insensible a variaciones de sintaxis.
+  - **Inyección de Aliases en `resumen_estadisticas.json`:** Se añadieron al archivo JSON de respaldo las 10 claves variantes para garantizar acceso instantáneo con cero lecturas adicionales a Firestore (*Zero-Cost Shield*).
+- **Control SemVer y Despliegue:**
+  - Incremento de versión PARCHE a `v2.20.5` en `package.json` y en las 5 ocurrencias de `index.html`.
+  - Compilación exitosa en Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+
+**3. Archivos Involucrados:**
+- `webapp/package.json` (v2.20.5)
+- `webapp/index.html` (v2.20.5)
+- `webapp/src/geografia.js`
+- `webapp/src/admin.js`
+- `webapp/public/resumen_estadisticas.json`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
+
+
 
 
 

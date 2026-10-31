@@ -189,3 +189,22 @@ export function getParroquias(municipio) {
   if (!parroquias || !Array.isArray(parroquias)) return [];
   return [...parroquias].sort((a, b) => a.localeCompare(b, 'es'));
 }
+
+/**
+ * Obtiene todas las variantes y aliases conocidos de un nombre de municipio para consultas flexibles (in)
+ */
+export function getVariantesMunicipio(mun) {
+  if (!mun || typeof mun !== 'string') return [];
+  const clean = mun.trim().toUpperCase();
+  const norm = normalizarMunicipio(clean);
+  const variantes = new Set([clean, norm]);
+
+  for (const [alias, canonical] of Object.entries(ALIASES_MUNICIPIOS)) {
+    if (canonical === norm || alias === clean) {
+      variantes.add(alias);
+      variantes.add(canonical);
+    }
+  }
+  return Array.from(variantes);
+}
+

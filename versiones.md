@@ -4,6 +4,24 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.20.5 (30 de Octubre de 2026)
+
+- **Blindaje Anti-Desbordamiento Estadal, Resolución Multi-Alias y Soporte Universal de Municipios Compuestos:**
+  - **Diagnóstico del Inconveniente (Causa Raíz):**
+    - Tras recibir la captura del Coordinador Municipal de **Julio César Salas**, se detectó que visualizaba el título municipal (`Pizarra Municipal - JULIO CESAR SALAS`) pero con las cantidades estadales globales (1,221 escuelas y 23,288 trabajadores), además de 0 directores y 0 planteles en el estatus de matrícula.
+    - Se constató que la imagen correspondía a la versión previa `v2.20.3` (visible en la pestaña del navegador).
+    - En dicha versión previa, el municipio se extraía literalmente del perfil del usuario (`"JULIO CESAR SALAS"`), pero en la base de datos precomputada (`resumen_estadisticas.json`) el índice histórico estaba registrado de forma abreviada como `"JULIO CESAR"`.
+    - Al fallar la coincidencia directa (`resumenData.porMunicipio["JULIO CESAR SALAS"] === undefined`), la condición de respaldo caía por defecto en `resumenData.global`, desbordando los totales de todo el estado hacia la vista municipal.
+    - Adicionalmente, las consultas directas a Firestore en planteles y usuarios empleaban igualdad estricta sin variantes de nombre, arrojando cero resultados cuando la denominación no coincidía al 100%.
+  - **Soluciones y Mejoras Implementadas:**
+    - **Escudo Estricto Anti-Desbordamiento:** En `loadEstadisticas()`, se impuso una regla inquebrantable: si la vista es municipal (`esVistaMunicipal`), el sistema **NUNCA** recurrirá a `resumenData.global`. Si un municipio no fuese localizado, reportará ceros, pero jamás las cantidades del estado Mérida.
+    - **Extractor de Datos Multi-Alias (`getDatosMunicipio`):** Tanto si se consulta por la denominación oficial abreviada (`JULIO CESAR`), extendida (`JULIO CESAR SALAS`), con tilde (`JULIO CÉSAR SALAS`), o para cualquier otro municipio con variantes (ej. `CARACCIOLO PARRA OLMEDO`, `ANTONIO PINTO SALINAS`, `TULIO FEBRES CORDERO`), el sistema resuelve y extrae de inmediato sus estadísticas reales (en Julio César Salas: **23 planteles**, **374 personal**, **266 docentes**, **11 administrativos**, **97 obreros**).
+    - **Consultas a Firestore con Variantes Flexibles (`getVariantesMunicipio`):** Se dotó a `geografia.js` de la función `getVariantesMunicipio()`, conectada a las consultas de `planteles` y `usuarios` en `admin.js` mediante el operador `in`. Esto asegura que el coordinador municipal recupere siempre la totalidad de sus escuelas y directores, sin importar qué variante fue guardada en cada registro.
+    - **Inyección de Aliases en Respaldo Local:** Se incorporaron formalmente las 10 variantes de municipios dentro de `resumen_estadisticas.json` para garantizar respuesta instantánea a costo cero (*Zero-Cost Shield*).
+  - **Despliegue Inmediato:** Compilado limpio en Vite y desplegado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.20.4 (30 de Octubre de 2026)
 
 - **Segmentación Territorial de la Pizarra por Municipio, Auto-reconciliación de Cuenta Municipal y Editor de Roles:**

@@ -2,7 +2,17 @@ import { safeSetDoc, safeUpdateDoc, safeAddDoc } from './dbUtils.js';
 import { doc, getDoc, setDoc, updateDoc, collection, query, where, getCountFromServer, getDocs, onSnapshot, deleteDoc, deleteField } from 'firebase/firestore';
 import * as XLSX from 'xlsx';
 import { showToast, showAlert } from './uiUtils.js';
-import { getMunicipios, getParroquias, normalizarMunicipio } from './geografia.js';
+import { getMunicipios, getParroquias, normalizarMunicipio, getVariantesMunicipio } from './geografia.js';
+
+// Helper de extracción de datos municipales con soporte multi-alias
+function getDatosMunicipio(resumenData, munInput) {
+  if (!resumenData || !resumenData.porMunicipio) return null;
+  const clean = (munInput || '').trim().toUpperCase();
+  const norm = normalizarMunicipio(clean);
+  return resumenData.porMunicipio[clean]
+      || resumenData.porMunicipio[norm]
+      || (munInput ? resumenData.porMunicipio[munInput] : null);
+}
 
 let isInitialized = false;
 let db = null;
@@ -566,17 +576,19 @@ export function initAdminDashboard(dbInstance, user) {
 
       // Determinar si la vista actual es municipal o estadal consolidada
       const esVistaMunicipal = isMunAdmin || (isEstadalUser && munFiltro && munFiltro !== 'ESTADAL');
-      const mun = isMunAdmin
-        ? normalizarMunicipio(userData.jerarquia?.municipio || userData.municipio || '')
-        : (esVistaMunicipal ? normalizarMunicipio(munFiltro) : '');
+      const munRaw = isMunAdmin
+        ? (userData.jerarquia?.municipio || userData.municipio || '')
+        : (esVistaMunicipal ? munFiltro : '');
+      const mun = normalizarMunicipio(munRaw);
+      const munNombreVisual = (munRaw ? munRaw.trim().toUpperCase() : mun) || 'MUNICIPAL';
 
       // Actualizar títulos de la pizarra si cambiamos el filtro
       const statsTitleEl = document.getElementById('admin-stats-title');
       const statsDescEl = document.getElementById('admin-stats-desc');
       if (statsTitleEl && statsDescEl) {
         if (esVistaMunicipal) {
-          statsTitleEl.textContent = `Pizarra Municipal - ${mun}`;
-          statsDescEl.textContent = `Resumen del municipio ${mun} en tiempo real.`;
+          statsTitleEl.textContent = `Pizarra Municipal - ${munNombreVisual}`;
+          statsDescEl.textContent = `Resumen del municipio ${munNombreVisual} en tiempo real.`;
         } else {
           statsTitleEl.textContent = 'Pizarra Estadal';
           statsDescEl.textContent = isZonAdmin ? 'Resumen consolidado del estado Mérida.' : 'Resumen del sistema en tiempo real.';
@@ -617,10 +629,15 @@ export function initAdminDashboard(dbInstance, user) {
         if (elMatriculaDesc) elMatriculaDesc.textContent = 'Estudiantes en el estado';
       }
 
-      // 1. Contador ligero de usuarios
+      // 1. Contador ligero de usuarios con soporte para variantes de municipio
       let qUsuarios = collection(db, 'usuarios');
       if (esVistaMunicipal && mun) {
-        qUsuarios = query(collection(db, 'usuarios'), where('rol', '==', 'plaadmin'), where('jerarquia.municipio', '==', mun));
+        const variantesMun = getVariantesMunicipio(mun);
+        if (variantesMun.length > 1) {
+          qUsuarios = query(collection(db, 'usuarios'), where('rol', '==', 'plaadmin'), where('jerarquia.municipio', 'in', variantesMun));
+        } else {
+          qUsuarios = query(collection(db, 'usuarios'), where('rol', '==', 'plaadmin'), where('jerarquia.municipio', '==', mun));
+        }
       } else if (isZonAdmin) {
         qUsuarios = query(collection(db, 'usuarios'), where('rol', '==', 'munadmin'));
       }
@@ -676,9 +693,19 @@ export function initAdminDashboard(dbInstance, user) {
         } catch (eSync) {}
       }
 
-      // 3. Segmentar información (Estadal vs Municipal)
-      const datosActivos = (esVistaMunicipal && mun && resumenData.porMunicipio && resumenData.porMunicipio[mun])
-        ? resumenData.porMunicipio[mun]
+      // 3. Segmentar información (Estadal vs Municipal) con Escudo Anti-Desbordamiento
+      const datosMun = getDatosMunicipio(resumenData, munRaw || mun);
+      const datosActivos = esVistaMunicipal
+        ? (datosMun || {
+            totalPersonal: 0,
+            totalPlanteles: 0,
+            docentes: 0,
+            administrativos: 0,
+            obreros: 0,
+            situacion_laboral: {},
+            jubilables: [],
+            matricula: { cargados: 0, pendientes: 0, arrCargados: [], arrPendientes: [] }
+          })
         : (resumenData.global || resumenData);
 
       // Renderizar tarjetas maestras
@@ -752,7 +779,7 @@ export function initAdminDashboard(dbInstance, user) {
         if (esVistaMunicipal && mun) {
           let plantelesMun = forzarSync ? null : obtenerPlantelesMunCache(mun);
           if (!forzarSync && !plantelesMun && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
-            const filt = currentPlanteles.filter(p => (p.municipio || '').trim().toUpperCase() === mun);
+            const filt = currentPlanteles.filter(p => normalizarMunicipio(p.municipio || '') === mun);
             if (filt.length > 0) {
               plantelesMun = filt;
               guardarPlantelesMunCache(mun, plantelesMun);
@@ -761,13 +788,19 @@ export function initAdminDashboard(dbInstance, user) {
 
           if (!plantelesMun) {
             try {
-              const snapP = await getDocs(query(collection(db, "planteles"), where("municipio", "==", mun)));
+              const variantesMun = getVariantesMunicipio(mun);
+              let snapP;
+              if (variantesMun.length > 1) {
+                snapP = await getDocs(query(collection(db, "planteles"), where("municipio", "in", variantesMun)));
+              } else {
+                snapP = await getDocs(query(collection(db, "planteles"), where("municipio", "==", mun)));
+              }
               plantelesMun = [];
               snapP.forEach(docSnap => {
                 plantelesMun.push({ id: docSnap.id, ...docSnap.data() });
               });
               guardarPlantelesMunCache(mun, plantelesMun);
-              currentPlanteles = plantelesMun;
+              if (isMunAdmin) currentPlanteles = plantelesMun;
             } catch (errP) {
               console.warn("[Zero-Cost Shield] Error al consultar planteles municipales:", errP);
             }
@@ -2451,18 +2484,19 @@ export function initAdminDashboard(dbInstance, user) {
     try {
       tbodyPlanteles.innerHTML = '<tr><td colspan="6" style="padding: 20px; text-align: center; color: var(--text-muted);">Cargando planteles...</td></tr>';
 
-      const userMun = (userData?.rol === 'munadmin') 
-        ? (userData?.jerarquia?.municipio || userData?.municipio || '').trim().toUpperCase() 
+      const isMun = (userData?.rol === 'munadmin');
+      const userMunNorm = isMun 
+        ? normalizarMunicipio(userData?.jerarquia?.municipio || userData?.municipio || '') 
         : null;
 
       // Verificación de caché de sesión Zero-Cost
-      if (userMun) {
-        let plantelesEnCache = obtenerPlantelesMunCache(userMun);
+      if (userMunNorm) {
+        let plantelesEnCache = obtenerPlantelesMunCache(userMunNorm);
         if (!plantelesEnCache && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
-          const filt = currentPlanteles.filter(p => (p.municipio || '').trim().toUpperCase() === userMun);
+          const filt = currentPlanteles.filter(p => normalizarMunicipio(p.municipio || '') === userMunNorm);
           if (filt.length > 0) {
             plantelesEnCache = filt;
-            guardarPlantelesMunCache(userMun, plantelesEnCache);
+            guardarPlantelesMunCache(userMunNorm, plantelesEnCache);
           }
         }
         if (plantelesEnCache && plantelesEnCache.length > 0) {
@@ -2480,9 +2514,14 @@ export function initAdminDashboard(dbInstance, user) {
       }
 
       let q;
-      if (userMun) {
-        // Zero-Cost Optimization (Spark): munadmin solo consulta los planteles de su municipio
-        q = query(collection(db, "planteles"), where("municipio", "==", userMun));
+      if (userMunNorm) {
+        // Zero-Cost Optimization (Spark): munadmin solo consulta los planteles de su municipio con variantes
+        const variantesMun = getVariantesMunicipio(userMunNorm);
+        if (variantesMun.length > 1) {
+          q = query(collection(db, "planteles"), where("municipio", "in", variantesMun));
+        } else {
+          q = query(collection(db, "planteles"), where("municipio", "==", userMunNorm));
+        }
       } else {
         q = collection(db, "planteles");
       }
@@ -2491,10 +2530,10 @@ export function initAdminDashboard(dbInstance, user) {
       currentPlanteles = [];
       snap.forEach(doc => {
         const data = doc.data();
-        // Doble validación en cliente
-        if (userMun) {
-          const pMun = (data.municipio || '').trim().toUpperCase();
-          if (pMun !== userMun) return;
+        // Doble validación en cliente con normalización
+        if (userMunNorm) {
+          const pMunNorm = normalizarMunicipio(data.municipio || '');
+          if (pMunNorm !== userMunNorm) return;
         }
         currentPlanteles.push({ id: doc.id, ...data });
       });
@@ -2525,7 +2564,6 @@ export function initAdminDashboard(dbInstance, user) {
 
       // Si es superadmin o zonadmin y ya están los planteles en memoria, sincronizar tarjeta Matrícula Estadal
       const elMat = document.getElementById('stat-matricula');
-      const isMun = (userData?.rol === 'munadmin');
       if (!isMun && elMat && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
         let sumMatEst = 0;
         let hayMatEst = false;
@@ -3539,10 +3577,12 @@ export function initAdminDashboard(dbInstance, user) {
     if (!modalSelMunNomina || !selMunNomina) return;
 
     const isMunAdmin = userData?.rol === 'munadmin';
-    let userMun = (userData?.jerarquia?.municipio || userData?.municipio || '').trim().toUpperCase();
+    let userMunRaw = (userData?.jerarquia?.municipio || userData?.municipio || '').trim().toUpperCase();
+    let userMun = normalizarMunicipio(userMunRaw);
     if (!userMun && Array.isArray(currentPlanteles) && currentPlanteles.length > 0 && isMunAdmin) {
-      userMun = (currentPlanteles[0].municipio || '').trim().toUpperCase();
+      userMun = normalizarMunicipio(currentPlanteles[0].municipio || '');
     }
+    const userMunVisual = userMunRaw || userMun;
 
     const modalTitle = document.getElementById('modal-nomina-title');
     const modalDesc = document.getElementById('modal-nomina-desc');
@@ -3550,7 +3590,7 @@ export function initAdminDashboard(dbInstance, user) {
 
     if (isMunAdmin && userMun) {
       // Caso 3: munadmin selecciona por Nuevo Epónimo del plantel o Todos los del municipio
-      if (modalTitle) modalTitle.innerHTML = `<span>\uD83D\uDCE5</span> Descargar Nómina - Municipio ${userMun}`;
+      if (modalTitle) modalTitle.innerHTML = `<span>\uD83D\uDCE5</span> Descargar Nómina - Municipio ${userMunVisual}`;
       if (modalDesc) modalDesc.textContent = 'Seleccione si desea descargar la nómina completa de todo el municipio o la de un plantel específico por su Nuevo Epónimo:';
       if (modalLabel) modalLabel.textContent = 'Plantel (Nuevo Epónimo) / Ámbito:';
 
@@ -3560,10 +3600,16 @@ export function initAdminDashboard(dbInstance, user) {
       try {
         let plantelesMun = [];
         if (Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
-          plantelesMun = currentPlanteles.filter(p => (p.municipio || '').trim().toUpperCase() === userMun);
+          plantelesMun = currentPlanteles.filter(p => normalizarMunicipio(p.municipio || '') === userMun);
         }
         if (plantelesMun.length === 0) {
-          const snapP = await getDocs(query(collection(db, "planteles"), where("municipio", "==", userMun)));
+          const variantes = getVariantesMunicipio(userMun);
+          let snapP;
+          if (variantes.length > 1) {
+            snapP = await getDocs(query(collection(db, "planteles"), where("municipio", "in", variantes)));
+          } else {
+            snapP = await getDocs(query(collection(db, "planteles"), where("municipio", "==", userMun)));
+          }
           snapP.forEach(docSnap => {
             plantelesMun.push({ id: docSnap.id, ...docSnap.data() });
           });
