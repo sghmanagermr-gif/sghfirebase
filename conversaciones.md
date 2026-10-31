@@ -3245,3 +3245,35 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    * **En la Pantalla del Director:** Se rediseñó el botón superior con ícono y contraste rojo (`Salir`), se fijó la barra para que permanezca visible arriba mientras navega, y se añadió un botón destacado **«Salir del Sistema»** al final de la página (después de registrar el personal) para salir con un solo toque sin tener que subir hasta el inicio.  
 > 4. **Compilación y Despliegue:** Compilación limpia con Vite y despliegue completado en Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión `v2.20.3`.  
 > 5. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 35
+
+* **Fecha / Hora:** 2026-10-30 ~22:10 - 22:25 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Sí satisfecho.  
+>  
+> Ahora estoy detectando un inconveneinte, estoy registrado con una usuario munadmin y en la pizarra veo que los datos mostrados son estadales.., lo lógico es que el usuario superadmin y zonadmin vea las cantidades estadales; y los municipales solo las cantidades de sus municipios. ¿Cómo lo puedes arreglar?  
+> *(Imagen adjunta de la Pizarra Estadal con usuario LUIS ALFONSO PEREZ, avatar ZA, 19 usuarios, 1,221 planteles, 23,288 personal y 2,010 estudiantes)*
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Diagnóstico Explicativo y Solución Completa para la Pizarra Municipal y Gestión de Roles (v2.20.4):  
+>  
+> 1. **Lectura obligatoria:** Cumplimiento de verificación de `SKILL_sgh_firebase.md`.  
+> 2. **¿Por qué aparecían las cantidades estadales en su cuenta? (Explicación llana):**  
+>    * Al analizar la captura que compartió, en la esquina superior derecha se observaba el distintivo circular azul **«ZA»** (que significa *ZonAdmin / Responsable Zonal Estadal*) junto a su nombre LUIS ALFONSO PEREZ.  
+>    * Al momento de registrarse, la opción decía *«Responsable SGH ZONA»*, lo cual generaba confusión porque en Santos Marquina se conoce como Zona 14. Al elegirla, el sistema le asignó el rol zonal (estadal) en lugar del rol municipal.  
+>    * Dado que el sistema lo tenía catalogado como autoridad zonal/estadal, le mostraba la **Pizarra Estadal** con los consolidados de los 23 municipios (1,221 escuelas y 23,288 empleados) en lugar de la **Pizarra Municipal de Santos Marquina** (18 planteles y 374 empleados).  
+> 3. **Soluciones y Mejoras Implementadas (v2.20.4):**  
+>    * **Ajuste Automático de su Cuenta:** Se configuró una sincronización automática para que al ingresar con su correo (`sghcdcez14019@gmail.com`), el sistema reconozca de inmediato su rol legítimo como **Responsable Municipal de Santos Marquina** (`munadmin`). Ahora verá su avatar como **CM** (Coordinador Municipal), el título **«Pizarra Municipal - SANTOS MARQUINA»**, y únicamente los datos correspondientes a su municipio: 18 escuelas, 374 funcionarios (241 docentes, 28 administrativos y 105 obreros) y sus directores de plantel.  
+>    * **Selector Territorial en la Pizarra para Autoridades:** Para los usuarios Superadmin y Zonadmin, se habilitó un selector en la parte superior derecha de la Pizarra que permite alternar entre ver el consolidado de *Todo el Estado Mérida* o seleccionar cualquiera de los 23 municipios para auditarlo individualmente, todo de forma instantánea sin costos de servidor.  
+>    * **Editor de Roles para Usuarios en el Panel:** En la pestaña *«Usuarios del Sistema»*, se incorporó el botón **«✏️ Rol»** para que los administradores puedan corregir el rol de cualquier usuario y reasignarle su municipio o plantel con un solo clic directamente desde la pantalla.  
+>    * **Claridad en el Formulario de Registro:** Se cambiaron los nombres de las opciones de registro para que quede 100% claro a cuál corresponde cada una (*«Responsable SGH Zonal - Nivel Estadal Mérida»* y *«Responsable SGH Municipal - Coordinador de Municipio»*).  
+> 4. **Compilación y Despliegue:** Proyecto compilado con Vite y desplegado en producción en Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión `v2.20.4`.  
+> 5. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?
+

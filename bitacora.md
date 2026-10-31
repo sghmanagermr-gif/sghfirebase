@@ -2195,5 +2195,40 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `bitacora.md`
 - `conversaciones.md`
 
+---
+
+### v2.20.4 - 2026-10-30 (Segmentación Territorial de Pizarra, Auto-reconciliación Municipal y Editor de Roles)
+
+**1. Objetivos del Ciclo:**
+- Resolver el inconveniente reportado por el usuario en el que, estando registrado con una cuenta de coordinador municipal, la Pizarra mostraba datos consolidados estadales (1,221 planteles, 23,288 empleados, 2,010 estudiantes) en lugar de las cifras exclusivas de su municipio asignado (Santos Marquina: 18 planteles, 374 personal).
+- Permitir que las autoridades estadales (`superadmin` y `zonadmin`) puedan filtrar y auditar las estadísticas de cualquier municipio específico mediante un selector territorial en la Pizarra manteniendo el consumo Zero-Cost.
+- Crear una herramienta administrativa interactiva en el panel (*«Usuarios del Sistema»*) para editar el rol y la adscripción territorial/DEA de cualquier usuario sin necesidad de intervenciones manuales en la consola de Firestore.
+- Corregir automáticamente la cuenta institucional `sghcdcez14019@gmail.com` (Lic. Luis Alfonso Pérez, CDCE Santos Marquina) a su rol legítimo `munadmin`.
+
+**2. Solución Técnica y Arquitectura:**
+- **Diagnóstico Integral de Causa Raíz:**
+  - El usuario `sghcdcez14019@gmail.com` fue creado y aprobado en Firestore con `rol: 'zonadmin'` debido a la ambigüedad en la etiqueta del selector de registro (*«Responsable SGH ZONA»*), interpretada como la zona territorial del municipio en lugar del nivel estadal.
+  - Al poseer el rol `zonadmin`, el motor `admin.js` (`configurarInterfazPorRol` y `loadEstadisticas`) le asignaba la identidad visual `ZA` (ZonAdmin), el título *«Pizarra Estadal»*, y le suministraba los totales generales del estado Mérida provenientes de `resumenData.global`.
+  - La Pizarra no poseía un filtro selector para alternar entre la visión estadal y las fichas de los 23 municipios.
+  - El listado de usuarios no disponía de un mecanismo de edición de rol ni de cambio de adscripción territorial.
+- **Acciones Implementadas:**
+  - **Auto-reconciliación de Cuenta en `initAdminDashboard()`:** Se inyectó una rutina que detecta el inicio de sesión de `sghcdcez14019@gmail.com` con `rol: 'zonadmin'` y procede de forma transparente a actualizarlo en memoria y en Firestore a `rol: 'munadmin'` con `jerarquia: { estado: 'MERIDA', municipio: 'SANTOS MARQUINA' }`, bloqueando la visualización a los 18 planteles y 374 trabajadores de Santos Marquina.
+  - **Filtro Territorial Pizarra (`#container-filtro-pizarra-mun`):** En `webapp/index.html` y `webapp/src/admin.js`, se inyectó un desplegable para `superadmin` y `zonadmin` con las opciones: *«Todo el Estado Mérida (Consolidado)»* y los 23 municipios oficiales. Al cambiar el selector, `loadEstadisticas(false, municipio)` actualiza instantáneamente títulos, tarjetas, discriminación de cargos (docentes, administrativos, obreros), estatus de matrícula (cargados/pendientes) y personal por jubilarse, extrayendo la información precomputada de `resumenData.porMunicipio` con **cero lecturas adicionales** a Firestore (*Zero-Cost Shield*).
+  - **Editor Interactivo de Rol y Adscripción (`#modal-editar-rol-usuario`):** Se incorporó el botón `✏️ Rol` en la tabla de usuarios. Al pulsarlo, se despliega un modal con control reactivo que permite conmutar entre `zonadmin`, `munadmin` y `plaadmin`. Si se selecciona `munadmin`, se exige y despliega el selector de los 23 municipios; si es `plaadmin`, se solicitan municipio y código DEA. Al guardar, se ejecuta `safeUpdateDoc` sobre el documento del usuario en Firestore y se refrescan las vistas.
+  - **Normalización de Nombres Geográficos:** Se integró la función `normalizarMunicipio()` de `geografia.js` en todas las evaluaciones de rol y municipio (`configurarInterfazPorRol`, `loadEstadisticas`, `loadUsuariosList`), previniendo desajustes por acentos, mayúsculas o espacios.
+  - **Clarificación de Roles en el Registro:** Se actualizaron los textos de las opciones de registro a: *«Responsable SGH Zonal (Nivel Estadal Mérida)»* y *«Responsable SGH Municipal (Coordinador de Municipio)»*.
+- **Control SemVer y Despliegue:**
+  - Actualización SemVer a `v2.20.4` en `package.json` y en las 5 referencias de `index.html`.
+  - Compilación exitosa en Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+
+**3. Archivos Involucrados:**
+- `webapp/package.json` (v2.20.4)
+- `webapp/index.html` (v2.20.4)
+- `webapp/src/admin.js`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
+
+
 
 

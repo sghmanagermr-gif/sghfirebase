@@ -4,6 +4,26 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.20.4 (30 de Octubre de 2026)
+
+- **Segmentación Territorial de la Pizarra por Municipio, Auto-reconciliación de Cuenta Municipal y Editor de Roles:**
+  - **Diagnóstico del Inconveniente (Causa Raíz):**
+    - Se identificó que la cuenta del Lic. Luis Alfonso Pérez (`sghcdcez14019@gmail.com`, Coordinador del CDCE Municipio Santos Marquina) fue registrada y autorizada en Firestore con el rol institucional `zonadmin` (Zonal / Nivel Estadal) en lugar de `munadmin` (Municipal). Esto se debió a la ambigüedad en la etiqueta original de registro (*«Responsable SGH ZONA»*), la cual indujo a confusión con la "Zona 14 Santos Marquina".
+    - Debido a este rol, el sistema le asignaba el avatar `ZA` (ZonAdmin), el título *«Pizarra Estadal»*, y le mostraba los consolidados de los 23 municipios (1,221 escuelas y 23,288 empleados) en lugar de los 18 planteles y 374 funcionarios de Santos Marquina.
+    - Asimismo, la Pizarra carecía de un selector territorial que permitiera a las autoridades de nivel estadal filtrar y auditar los datos de un municipio particular sin salir de la vista ejecutiva.
+    - No existía en el panel una herramienta que permitiese a un administrador corregir o reasignar el rol y municipio de un usuario registrado erróneamente sin acudir manualmente a la base de datos.
+  - **Soluciones y Mejoras Implementadas:**
+    - **Auto-reconciliación Transparente de Cuenta:** Al iniciar sesión el usuario `sghcdcez14019@gmail.com`, el sistema sincroniza automáticamente su perfil en Firestore a `rol: 'munadmin'` con `jerarquia: { estado: 'MERIDA', municipio: 'SANTOS MARQUINA' }`, bloqueando su vista al ámbito estricto de Santos Marquina (avatar `CM`, título *«Pizarra Municipal - SANTOS MARQUINA»*, 18 planteles, 374 trabajadores).
+    - **Filtro Territorial Dinámico en la Pizarra (Superadmin y Zonadmin):** Se incorporó el selector `#container-filtro-pizarra-mun` en la cabecera de la Pizarra. Los administradores estadales pueden alternar instantáneamente entre el consolidado general de Mérida y cualquiera de los 23 municipios de forma fluida, con cero lecturas adicionales a Firestore (arquitectura *Zero-Cost* basada en `porMunicipio`).
+    - **Modal de Edición de Roles y Adscripción Territorial:** En la pestaña *Usuarios del Sistema*, se integró el botón `✏️ Rol` para cada usuario. Abre un modal interactivo (`#modal-editar-rol-usuario`) que permite reclasificar el rol (`zonadmin`, `munadmin`, `plaadmin`), asignar el municipio oficial y, de ser el caso, el código DEA del plantel, actualizando en tiempo real la base de datos de usuarios.
+    - **Claridad Semántica en el Registro:** Se actualizaron las etiquetas del formulario de registro público a:
+      - `Responsable SGH Zonal (Nivel Estadal Mérida)`
+      - `Responsable SGH Municipal (Coordinador de Municipio)`
+    - **Normalización Geográfica Universal:** Todas las consultas y filtros de usuarios y planteles utilizan `normalizarMunicipio()` para garantizar total consistencia ante tildes o variaciones de espaciado.
+  - **Despliegue Inmediato:** Compilado limpio en Vite y desplegado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.20.3 (30 de Octubre de 2026)
 
 - **Restauración, Adaptabilidad y Blindaje del Botón «Salir del Sistema / Cerrar Sesión» en Teléfonos Móviles:**

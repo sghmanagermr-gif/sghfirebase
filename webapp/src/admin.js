@@ -173,6 +173,24 @@ export function initAdminDashboard(dbInstance, user) {
   db = dbInstance;
   userData = user;
 
+  // Auto-corrección / reconciliación de cuenta municipal de Santos Marquina si quedó registrada como zonadmin
+  if (userData?.email === 'sghcdcez14019@gmail.com' && userData?.rol === 'zonadmin') {
+    console.log("[Reconciliación] Ajustando cuenta Santos Marquina a rol munadmin...");
+    userData.rol = 'munadmin';
+    if (!userData.jerarquia) userData.jerarquia = { estado: 'MERIDA' };
+    userData.jerarquia.municipio = 'SANTOS MARQUINA';
+    userData.municipio = 'SANTOS MARQUINA';
+    try {
+      safeUpdateDoc(doc(db, 'usuarios', userData.uid), {
+        rol: 'munadmin',
+        'jerarquia.municipio': 'SANTOS MARQUINA',
+        municipio: 'SANTOS MARQUINA'
+      }).catch(e => console.warn("Error persistiendo corrección de rol Santos Marquina:", e));
+    } catch (e) {
+      console.warn("Error en corrección automática de usuario:", e);
+    }
+  }
+
   // Declaraciones principales de estado y elementos DOM de Planteles (Evita TDZ)
   let currentPlanteles = [];
   const tbodyPlanteles = document.getElementById('tbody-planteles');
@@ -187,7 +205,33 @@ export function initAdminDashboard(dbInstance, user) {
     const isMunAdmin = userData?.rol === 'munadmin';
     const isZonAdmin = userData?.rol === 'zonadmin';
     const isSuperAdmin = userData?.rol === 'superadmin' || userData?.rol === 'admin';
-    const mun = (userData.jerarquia?.municipio || userData.municipio || '').trim().toUpperCase();
+    const mun = normalizarMunicipio(userData.jerarquia?.municipio || userData.municipio || '');
+
+    // Control de visibilidad del selector de municipios en la Pizarra (Superadmin y Zonadmin)
+    const containerFiltroPizarra = document.getElementById('container-filtro-pizarra-mun');
+    const selFiltroPizarra = document.getElementById('sel-filtro-pizarra-mun');
+    if (containerFiltroPizarra && selFiltroPizarra) {
+      if (isSuperAdmin || isZonAdmin) {
+        containerFiltroPizarra.style.display = 'flex';
+        if (selFiltroPizarra.options.length <= 1) {
+          selFiltroPizarra.innerHTML = '<option value="ESTADAL">Todo el Estado Mérida (Consolidado)</option>';
+          getMunicipios().forEach(m => {
+            const opt = document.createElement('option');
+            opt.value = m;
+            opt.textContent = m;
+            selFiltroPizarra.appendChild(opt);
+          });
+        }
+        if (!selFiltroPizarra._hasListener) {
+          selFiltroPizarra._hasListener = true;
+          selFiltroPizarra.addEventListener('change', (e) => {
+            loadEstadisticas(false, e.target.value);
+          });
+        }
+      } else {
+        containerFiltroPizarra.style.display = 'none';
+      }
+    }
     const permisos = (isZonAdmin && userData?.permisos) ? userData.permisos : null;
 
     // Helper de evaluación de permisos modulares (Llavero)
@@ -505,11 +549,39 @@ export function initAdminDashboard(dbInstance, user) {
   }
 
   // Cargar Estadísticas (Tab por Defecto - Arquitectura Zero-Cost con Ficha Resumen)
-  async function loadEstadisticas(forzarSync = false) {
+  async function loadEstadisticas(forzarSync = false, munOverride = null) {
     try {
       const isMunAdmin = (userData?.rol === 'munadmin');
-      const mun = isMunAdmin ? (userData.jerarquia?.municipio || userData.municipio || '').trim().toUpperCase() : '';
-      const isEstadal = (userData?.rol === 'zonadmin' || userData?.rol === 'superadmin' || userData?.rol === 'admin');
+      const isZonAdmin = (userData?.rol === 'zonadmin');
+      const isSuperAdmin = (userData?.rol === 'superadmin' || userData?.rol === 'admin');
+      const isEstadalUser = isZonAdmin || isSuperAdmin;
+
+      const selPizarraMun = document.getElementById('sel-filtro-pizarra-mun');
+      let munFiltro = null;
+      if (munOverride !== null) {
+        munFiltro = munOverride;
+      } else if (selPizarraMun && selPizarraMun.value) {
+        munFiltro = selPizarraMun.value;
+      }
+
+      // Determinar si la vista actual es municipal o estadal consolidada
+      const esVistaMunicipal = isMunAdmin || (isEstadalUser && munFiltro && munFiltro !== 'ESTADAL');
+      const mun = isMunAdmin
+        ? normalizarMunicipio(userData.jerarquia?.municipio || userData.municipio || '')
+        : (esVistaMunicipal ? normalizarMunicipio(munFiltro) : '');
+
+      // Actualizar títulos de la pizarra si cambiamos el filtro
+      const statsTitleEl = document.getElementById('admin-stats-title');
+      const statsDescEl = document.getElementById('admin-stats-desc');
+      if (statsTitleEl && statsDescEl) {
+        if (esVistaMunicipal) {
+          statsTitleEl.textContent = `Pizarra Municipal - ${mun}`;
+          statsDescEl.textContent = `Resumen del municipio ${mun} en tiempo real.`;
+        } else {
+          statsTitleEl.textContent = 'Pizarra Estadal';
+          statsDescEl.textContent = isZonAdmin ? 'Resumen consolidado del estado Mérida.' : 'Resumen del sistema en tiempo real.';
+        }
+      }
 
       const elUsuarios = document.getElementById('stat-usuarios');
       const elPersonal = document.getElementById('stat-personal');
@@ -522,14 +594,14 @@ export function initAdminDashboard(dbInstance, user) {
       const elMatriculaTitle = document.getElementById('stat-matricula-title');
       const elMatriculaDesc = document.getElementById('stat-matricula-desc');
 
-      if (isMunAdmin) {
-        if (elPlantelesTitle) elPlantelesTitle.textContent = 'Planteles del Municipio';
-        if (elPlantelesDesc) elPlantelesDesc.textContent = 'Total escuelas en el municipio';
-        if (elPersonalDesc) elPersonalDesc.textContent = 'Nómina municipal activa';
-        if (elUsuariosDesc) elUsuariosDesc.textContent = 'Directores con cuenta de acceso';
+      if (esVistaMunicipal) {
+        if (elPlantelesTitle) elPlantelesTitle.textContent = isMunAdmin ? 'Planteles del Municipio' : `Planteles de ${mun}`;
+        if (elPlantelesDesc) elPlantelesDesc.textContent = `Total escuelas en ${mun}`;
+        if (elPersonalDesc) elPersonalDesc.textContent = `Nómina activa en ${mun}`;
+        if (elUsuariosDesc) elUsuariosDesc.textContent = isMunAdmin ? 'Directores con cuenta de acceso' : `Directores en ${mun}`;
         if (elMatriculaTitle) elMatriculaTitle.textContent = 'Matrícula Municipal';
-        if (elMatriculaDesc) elMatriculaDesc.textContent = 'Estudiantes en el municipio';
-      } else if (userData?.rol === 'zonadmin') {
+        if (elMatriculaDesc) elMatriculaDesc.textContent = `Estudiantes en ${mun}`;
+      } else if (isZonAdmin) {
         if (elPlantelesTitle) elPlantelesTitle.textContent = 'Planteles del Estado';
         if (elPlantelesDesc) elPlantelesDesc.textContent = 'Total escuelas del estado';
         if (elPersonalDesc) elPersonalDesc.textContent = 'Nómina estadal activa';
@@ -547,9 +619,9 @@ export function initAdminDashboard(dbInstance, user) {
 
       // 1. Contador ligero de usuarios
       let qUsuarios = collection(db, 'usuarios');
-      if (isMunAdmin && mun) {
+      if (esVistaMunicipal && mun) {
         qUsuarios = query(collection(db, 'usuarios'), where('rol', '==', 'plaadmin'), where('jerarquia.municipio', '==', mun));
-      } else if (userData?.rol === 'zonadmin') {
+      } else if (isZonAdmin) {
         qUsuarios = query(collection(db, 'usuarios'), where('rol', '==', 'munadmin'));
       }
       try {
@@ -605,7 +677,7 @@ export function initAdminDashboard(dbInstance, user) {
       }
 
       // 3. Segmentar información (Estadal vs Municipal)
-      const datosActivos = (isMunAdmin && mun && resumenData.porMunicipio && resumenData.porMunicipio[mun])
+      const datosActivos = (esVistaMunicipal && mun && resumenData.porMunicipio && resumenData.porMunicipio[mun])
         ? resumenData.porMunicipio[mun]
         : (resumenData.global || resumenData);
 
@@ -622,7 +694,7 @@ export function initAdminDashboard(dbInstance, user) {
 
       // 4. Extensión Munadmin y Zonadmin
       const extCont = document.getElementById('extended-stats-container');
-      if ((isMunAdmin && mun) || isEstadal) {
+      if ((esVistaMunicipal && mun) || isEstadalUser) {
         if (extCont) extCont.style.display = 'block';
 
         const discLoading = document.getElementById('stat-disc-loading');
@@ -660,9 +732,9 @@ export function initAdminDashboard(dbInstance, user) {
               btnSyncMat.disabled = true;
               btnSyncMat.innerHTML = '⏳ Sincronizando...';
 
-              if (isMunAdmin && mun) {
+              if (esVistaMunicipal && mun) {
                 limpiarPlantelesMunCache(mun);
-                currentPlanteles = [];
+                if (isMunAdmin) currentPlanteles = [];
               } else {
                 limpiarMatriculaEstadalCache();
                 currentPlanteles = [];
@@ -677,7 +749,7 @@ export function initAdminDashboard(dbInstance, user) {
           }
         }
 
-        if (isMunAdmin && mun) {
+        if (esVistaMunicipal && mun) {
           let plantelesMun = forzarSync ? null : obtenerPlantelesMunCache(mun);
           if (!forzarSync && !plantelesMun && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
             const filt = currentPlanteles.filter(p => (p.municipio || '').trim().toUpperCase() === mun);
@@ -730,7 +802,7 @@ export function initAdminDashboard(dbInstance, user) {
 
             renderStatValue(elMatricula, totalMatriculaMun);
           }
-        } else if (isEstadal) {
+        } else if (isEstadalUser) {
           // --- NIVEL ESTADAL: SUPERADMIN Y ZONADMIN (Zero-Cost Shield) ---
           let estCache = forzarSync ? null : obtenerMatriculaEstadalCache();
 
@@ -857,7 +929,7 @@ export function initAdminDashboard(dbInstance, user) {
 
           if (elMatLista) {
             let htmlLista = '';
-            if (isMunAdmin) {
+            if (esVistaMunicipal) {
               const arrP = matInfo.arrPendientes || [];
               const arrC = matInfo.arrCargados || [];
 
@@ -922,7 +994,7 @@ export function initAdminDashboard(dbInstance, user) {
                   }
                 });
               });
-            } else if (isEstadal) {
+            } else if (isEstadalUser) {
               const arrC = matInfo.arrCargados || [];
               const munMap = matInfo.porMunicipio || {};
               const munKeys = Object.keys(munMap).sort();
@@ -1022,14 +1094,14 @@ export function initAdminDashboard(dbInstance, user) {
         // Modificar Encabezado dinámicamente
         const thPlantel = document.querySelector('#extended-stats-container table th');
         if (thPlantel) {
-          thPlantel.textContent = isMunAdmin ? 'Plantel (DEA)' : 'Municipio';
+          thPlantel.textContent = esVistaMunicipal ? 'Plantel (DEA)' : 'Municipio';
         }
 
         // Renderizar Personal por Jubilarse
         if (tbodyJub) {
           tbodyJub.innerHTML = '';
           let jubList = [];
-          if (isMunAdmin) {
+          if (esVistaMunicipal) {
             jubList = datosActivos.jubilables || [];
           } else {
             jubList = (datosActivos.jubilables?.porMunicipio) || [];
@@ -1040,7 +1112,7 @@ export function initAdminDashboard(dbInstance, user) {
           } else {
             jubList.forEach(item => {
               const nombre = item.nombre || item.clave;
-              const subtitle = (isMunAdmin && item.clave) ? '<br><span style="color:#64748b; font-size: 0.75rem;">DEA: ' + item.clave + '</span>' : '';
+              const subtitle = (esVistaMunicipal && item.clave) ? '<br><span style="color:#64748b; font-size: 0.75rem;">DEA: ' + item.clave + '</span>' : '';
               tbodyJub.innerHTML += '<tr>' +
                 '<td style="padding: 8px; border-bottom: 1px solid #e2e8f0; color: #334155; font-size: 0.85rem;"><strong>' + nombre + '</strong>' + subtitle + '</td>' +
                 '<td style="padding: 8px; border-bottom: 1px solid #e2e8f0; color: #0f172a; text-align: center; font-weight: bold;">' + item.count + '</td>' +
@@ -1086,8 +1158,10 @@ export function initAdminDashboard(dbInstance, user) {
         
         // --- RBAC FILTER ---
         if (userData.rol === 'munadmin') {
-            // munadmin solo ve directores (plaadmin) de su municipio
-            if (u.rol !== 'plaadmin' || u.jerarquia?.municipio !== userData.jerarquia?.municipio) return;
+            // munadmin solo ve directores (plaadmin) de su municipio con coincidencia exacta normalizada
+            const uMun = normalizarMunicipio(u.jerarquia?.municipio || u.municipio || '');
+            const miMun = normalizarMunicipio(userData.jerarquia?.municipio || userData.municipio || '');
+            if (u.rol !== 'plaadmin' || uMun !== miMun) return;
         } else if (userData.rol === 'zonadmin') {
             // zonadmin solo ve coordinadores municipales (munadmin)
             if (u.rol !== 'munadmin') return;
@@ -1354,7 +1428,8 @@ export function initAdminDashboard(dbInstance, user) {
               ${u.estado_aprobacion || 'DESCONOCIDO'}
             </span>
           </td>
-          <td style="padding: 15px 20px; text-align: right; display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
+          <td style="padding: 15px 20px; text-align: right; display: flex; gap: 8px; justify-content: flex-end; align-items: center; flex-wrap: wrap;">
+            ${(isSuperOrZon && u.rol !== 'superadmin' && u.rol !== 'admin') ? `<button class="btn-editar-rol btn-secondary" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.82rem; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 600; border-color: #6366f1; color: #4f46e5;" title="Modificar rol o adscripción municipal">✏️ Rol</button>` : ''}
             ${(u.rol === 'zonadmin' && (userData.rol === 'superadmin' || userData.rol === 'admin')) ? `<button class="btn-competencias" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.82rem; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 600;" title="Configurar módulos y permisos del panel">🔑 Competencias</button>` : ''}
             ${!isAprobado ? `<button class="btn-aprobar" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.85rem; background: var(--success);">Aprobar</button>` : ''}
             <button class="btn-eliminar btn-secondary" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.85rem; border-color: var(--danger); color: var(--danger);">${isAprobado ? 'Eliminar' : 'Rechazar'}</button>
@@ -1366,6 +1441,17 @@ export function initAdminDashboard(dbInstance, user) {
     tbodyUsuarios.innerHTML = rowsHtml;
 
     // Eventos de botones
+    document.querySelectorAll('.btn-editar-rol').forEach(btn => {
+      btn.onclick = (e) => {
+        e.preventDefault();
+        const uid = btn.getAttribute('data-uid');
+        const userFound = usuariosLocales.find(x => x.uid === uid);
+        if (userFound) {
+          openEditarRolModal(userFound);
+        }
+      };
+    });
+
     document.querySelectorAll('.btn-competencias').forEach(btn => {
       btn.onclick = (e) => {
         e.preventDefault();
@@ -1415,6 +1501,142 @@ export function initAdminDashboard(dbInstance, user) {
       };
     });
   }
+
+  // --- CONTROLADOR DEL MODAL EDITAR ROL Y MUNICIPIO DE USUARIO ---
+  const modalEditarRol = document.getElementById('modal-editar-rol-usuario');
+  const selEditRol = document.getElementById('sel-edit-rol');
+  const selEditRolMun = document.getElementById('sel-edit-rol-mun');
+  const inpEditRolDea = document.getElementById('inp-edit-rol-dea');
+  const containerEditRolMun = document.getElementById('container-edit-rol-mun');
+  const containerEditRolDea = document.getElementById('container-edit-rol-dea');
+  const btnGuardarEditRol = document.getElementById('btn-guardar-edit-rol');
+  const btnCancelarEditRol = document.getElementById('btn-cancelar-edit-rol');
+  const nameEditRolEl = document.getElementById('edit-rol-user-nombre');
+  const emailEditRolEl = document.getElementById('edit-rol-user-email');
+  let usuarioEditandoRol = null;
+
+  if (selEditRolMun && selEditRolMun.options.length <= 1) {
+    selEditRolMun.innerHTML = '<option value="">-- SELECCIONE MUNICIPIO --</option>';
+    getMunicipios().forEach(m => {
+      const opt = document.createElement('option');
+      opt.value = m;
+      opt.textContent = m;
+      selEditRolMun.appendChild(opt);
+    });
+  }
+
+  function actualizarCamposModalRol() {
+    const rol = selEditRol?.value;
+    if (rol === 'munadmin') {
+      if (containerEditRolMun) containerEditRolMun.style.display = 'block';
+      if (containerEditRolDea) containerEditRolDea.style.display = 'none';
+    } else if (rol === 'plaadmin') {
+      if (containerEditRolMun) containerEditRolMun.style.display = 'block';
+      if (containerEditRolDea) containerEditRolDea.style.display = 'block';
+    } else {
+      if (containerEditRolMun) containerEditRolMun.style.display = 'none';
+      if (containerEditRolDea) containerEditRolDea.style.display = 'none';
+    }
+  }
+
+  if (selEditRol) {
+    selEditRol.addEventListener('change', actualizarCamposModalRol);
+  }
+
+  function openEditarRolModal(u) {
+    usuarioEditandoRol = u;
+    if (!modalEditarRol) return;
+
+    if (nameEditRolEl) nameEditRolEl.textContent = u.nombre || 'Sin nombre';
+    if (emailEditRolEl) emailEditRolEl.textContent = `${u.email} (C.I: ${u.cedula || 'N/A'})`;
+
+    if (selEditRol) {
+      selEditRol.value = u.rol || 'plaadmin';
+    }
+
+    const munU = normalizarMunicipio(u.jerarquia?.municipio || u.municipio || '');
+    if (selEditRolMun) {
+      selEditRolMun.value = munU || '';
+    }
+
+    if (inpEditRolDea) {
+      inpEditRolDea.value = u.jerarquia?.plantel_codigo || '';
+    }
+
+    actualizarCamposModalRol();
+    modalEditarRol.style.display = 'flex';
+  }
+
+  function closeEditarRolModal() {
+    if (modalEditarRol) modalEditarRol.style.display = 'none';
+    usuarioEditandoRol = null;
+  }
+
+  if (btnCancelarEditRol) {
+    btnCancelarEditRol.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      closeEditarRolModal();
+    });
+  }
+
+  if (btnGuardarEditRol) {
+    btnGuardarEditRol.addEventListener('click', async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!usuarioEditandoRol) return;
+
+      const nuevoRol = selEditRol?.value;
+      const nuevoMun = selEditRolMun?.value ? normalizarMunicipio(selEditRolMun.value) : '';
+      const nuevoDea = inpEditRolDea?.value.trim().toUpperCase() || '';
+
+      if (nuevoRol === 'munadmin' && !nuevoMun) {
+        showToast('Debe seleccionar el municipio asignado al coordinador.', 'error');
+        return;
+      }
+
+      if (nuevoRol === 'plaadmin' && !nuevoMun) {
+        showToast('Debe seleccionar el municipio al que pertenece el plantel.', 'error');
+        return;
+      }
+
+      btnGuardarEditRol.disabled = true;
+      btnGuardarEditRol.textContent = 'Guardando...';
+
+      try {
+        const uid = usuarioEditandoRol.uid;
+        const jerarquia = {
+          estado: 'MERIDA',
+          ...(nuevoMun ? { municipio: nuevoMun } : {}),
+          ...(nuevoRol === 'plaadmin' && nuevoDea ? { plantel_codigo: nuevoDea } : {})
+        };
+
+        const updateData = {
+          rol: nuevoRol,
+          jerarquia,
+          ...(nuevoMun ? { municipio: nuevoMun } : {})
+        };
+
+        await safeUpdateDoc(doc(db, 'usuarios', uid), updateData);
+
+        usuarioEditandoRol.rol = nuevoRol;
+        usuarioEditandoRol.jerarquia = jerarquia;
+        if (nuevoMun) usuarioEditandoRol.municipio = nuevoMun;
+
+        showToast('Rol y adscripción actualizados exitosamente.', 'success');
+        closeEditarRolModal();
+        renderUsuariosList();
+        loadEstadisticas();
+      } catch (errSave) {
+        console.error("Error al actualizar rol de usuario:", errSave);
+        showToast('Error al actualizar rol: ' + (errSave.message || errSave), 'error');
+      } finally {
+        btnGuardarEditRol.disabled = false;
+        btnGuardarEditRol.textContent = 'Guardar Cambios';
+      }
+    });
+  }
+
 
   // --- CONTROLADOR DEL MODAL DE COMPETENCIAS ZONALES (LLAVERO) ---
   const modalCompetencias = document.getElementById('modal-competencias-zonal');
