@@ -1,3 +1,4 @@
+import { normalizarMunicipio, getVariantesMunicipio } from './geografia.js';
 import './personalWizard.js';
 
 window.showLoading = (msg) => {
@@ -43,7 +44,7 @@ import { safeSetDoc, safeUpdateDoc, safeAddDoc } from './dbUtils.js';
 import { obtenerCatalogoPlanesCompleto } from './catalogosPlanes.js';
 import './style.css';
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, getDoc, setDoc, deleteField, onSnapshot } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, setDoc, deleteField, onSnapshot, query, where, getDocs, collection } from 'firebase/firestore';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, signOut, setPersistence, browserSessionPersistence } from 'firebase/auth';
 import { initAuth } from './auth.js';
 
@@ -294,6 +295,23 @@ function initRecuperacionPerfil(authUser) {
                 if (!mun) {
                     if (errEl) {
                         errEl.textContent = 'Por favor seleccione el municipio.';
+                        errEl.style.display = 'block';
+                    }
+                    return;
+                }
+                const variantes = getVariantesMunicipio(mun);
+                const qMun = query(
+                    collection(db, 'usuarios'),
+                    where('rol', '==', 'munadmin'),
+                    where('jerarquia.municipio', 'in', variantes)
+                );
+                const snapMun = await getDocs(qMun);
+                const titular = snapMun.docs.map(d => ({ id: d.id, ...d.data() }))
+                    .find(d => d.id !== authUser.uid && (d.estado_aprobacion === 'APROBADO' || d.estado_aprobacion === 'PENDIENTE'));
+                if (titular) {
+                    if (errEl) {
+                        const estadoTxt = titular.estado_aprobacion === 'APROBADO' ? 'activo y aprobado' : 'en revisión';
+                        errEl.innerHTML = `El municipio <b>${mun}</b> ya cuenta con un Coordinador Municipal ${estadoTxt} (<b>${titular.nombre || titular.email}</b>). No se permite duplicar coordinadores.`;
                         errEl.style.display = 'block';
                     }
                     return;
@@ -609,6 +627,37 @@ document.getElementById('register-form')?.addEventListener('submit', async (e) =
         }
 
         const cred = await createUserWithEmailAndPassword(auth, email, pwd);
+
+        // --- BARRERA INSTITUCIONAL: ÚNICO COORDINADOR MUNICIPAL (munadmin) ---
+        if (rol === 'munadmin') {
+            const variantes = getVariantesMunicipio(municipio);
+            const qMun = query(
+                collection(db, 'usuarios'),
+                where('rol', '==', 'munadmin'),
+                where('jerarquia.municipio', 'in', variantes)
+            );
+            const snapMun = await getDocs(qMun);
+            const titular = snapMun.docs.map(d => ({ id: d.id, ...d.data() }))
+                .find(d => d.id !== cred.user.uid && (d.estado_aprobacion === 'APROBADO' || d.estado_aprobacion === 'PENDIENTE'));
+
+            if (titular) {
+                // Eliminar la credencial recién creada en Auth para no dejar huérfanos
+                try {
+                    await cred.user.delete();
+                } catch(eDel) {
+                    console.warn("Aviso al eliminar cuenta duplicada en Auth:", eDel);
+                    await signOut(auth);
+                }
+                const estadoTxt = titular.estado_aprobacion === 'APROBADO' ? 'activo y aprobado' : 'en proceso de validación';
+                const nombreTitular = titular.nombre || 'otro funcionario';
+                await showAlert(
+                    "Municipio Ya Cuenta con Coordinador",
+                    `El municipio <b>${municipio}</b> ya cuenta con un Coordinador Municipal ${estadoTxt} (<b>${nombreTitular}</b>).<br><br>Por políticas institucionales del CDCE Mérida, no se permite más de un Coordinador Municipal para el mismo municipio. Si usted es el nuevo titular designado, por favor comuníquese con la Zona Educativa para su asignación.`,
+                    "warning"
+                );
+                return;
+            }
+        }
 
         let jerarquia = { estado: "MERIDA" };
         if(rol === 'munadmin') {

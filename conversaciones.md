@@ -3569,3 +3569,29 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    * Al presionar el botón azul **«Guardar Cambios»**, los datos se guardan de inmediato en la base de datos y la lista se actualiza al instante en su pantalla sin necesidad de recargar.  
 > 3. **Control SemVer y Despliegue:** Incremento a `v2.22.0`, compilación limpia en Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).  
 > 4. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 46
+
+* **Fecha / Hora:** 2026-10-31 ~17:20 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> otra cosa, hay que hacer una barrera para que no ingresen dos personas al mismo miunicipio munadmin
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Implementación del Escudo Institucional Anti-Duplicados para Coordinadores Municipales (v2.22.1):  
+>  
+> 1. **Lectura obligatoria:** Verificación de `SKILL_sgh_firebase.md`.  
+> 2. **Solución Implementada (Explicación llana):**  
+>    * **El Candado de Municipio Único:** En el estado Mérida solo existe un Coordinador Municipal por cada uno de los 23 municipios. Se instaló una barrera en 4 niveles de seguridad:  
+>      1. **Al Momento de Registrarse:** Si una persona intenta registrarse como Coordinador Municipal en un municipio que ya tiene titular activo (por ejemplo, Rivas Dávila), el sistema no le permite registrarse, le borra la cuenta inmediatamente para no dejar basura y le explica: *«El municipio ya cuenta con un Coordinador Municipal activo. Solo se permite un coordinador por municipio»*.  
+>      2. **Al Momento de Aprobar en el Panel:** Si el administrador intenta aprobar por error a un segundo coordinador para un municipio que ya tiene titular aprobado, el sistema bloquea la aprobación con una alerta: *«El municipio ya cuenta con un Coordinador Municipal aprobado: [Nombre del Titular Actual]. Debe desaprobar o reasignar al anterior antes de poder aprobar a este usuario»*.  
+>      3. **Al Cambiar el Rol o Municipio:** Si en el botón *✏️ Rol / Datos* se intenta cambiar a alguien al rol municipal de un municipio ocupado, el sistema también lo impide.  
+>      4. **Aviso Visual Preventivo:** En la lista de usuarios, si hay solicitudes pendientes de un municipio que ya tiene titular activo (como la cuenta secundaria de Rivas Dávila), aparece una etiqueta amarilla preventiva: *«⚠️ Municipio ya tiene coordinador activo»*.  
+> 3. **Control SemVer y Despliegue:** Incremento a `v2.22.1`, compilación limpia en Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).  
+> 4. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?

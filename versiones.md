@@ -4,6 +4,29 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.22.1 (31 de Octubre de 2026)
+
+- **Barrera Institucional Anti-Duplicados para Coordinadores Municipales (`munadmin`):**
+  - **Objetivo del Requerimiento:**
+    - Blindar el sistema para impedir de forma estricta que ingresen o se aprueben dos usuarios diferentes para el mismo municipio bajo el rol de Coordinador Municipal (`munadmin`).
+  - **Características y Blindajes Implementados:**
+    - **Barrera en el Registro Público (`#register-form`):**
+      - Si un usuario intenta registrarse como Coordinador Municipal (`munadmin`) en un municipio que ya cuenta con un coordinador activo (aprobado o en revisión), el sistema bloquea el registro inmediatamente.
+      - Para evitar cuentas huérfanas, la credencial temporal de acceso se elimina de inmediato de Firebase Authentication (`user.delete()`) y se despliega una alerta institucional indicando que el municipio ya cuenta con un titular asignado.
+      - Se agregó una nota orientadora en el selector de municipios del registro: *"ℹ️ Solo se admite un Coordinador Municipal activo por municipio"*.
+    - **Barrera en la Aprobación de Usuarios (`btn-aprobar`):**
+      - Antes de aprobar a cualquier usuario con rol `munadmin`, el sistema valida en memoria (`usuariosLocales`, 0 lecturas) si ya existe otro coordinador en estatus APROBADO para ese municipio.
+      - Si ya existe un titular activo, se bloquea la aprobación y se notifica al administrador con el nombre y correo del coordinador actual, instruyendo que debe primero rechazar o reasignar al anterior.
+    - **Barrera en la Reasignación de Rol (`modal-editar-rol-usuario`):**
+      - Al cambiar el rol o municipio de un usuario desde el botón *✏️ Rol / Datos*, se verifica que el municipio de destino no esté ocupado por otro coordinador activo, bloqueando cambios conflictivos.
+    - **Alerta Visual en la Tabla de Usuarios:**
+      - En la tabla de *Usuarios del Sistema*, si existe una solicitud pendiente de un municipio que ya tiene titular activo (ej. duplicados históricos), se resalta automáticamente con el distintivo: `⚠️ Municipio ya tiene coordinador activo`.
+    - **Barrera en Auto-Completado de Ficha (`#box-completar-perfil`):**
+      - Los usuarios que completan su ficha en la sala de espera tampoco pueden seleccionar un municipio ya ocupado como `munadmin`.
+  - **Despliegue Inmediato:** Compilado limpio en Vite (870 ms) y desplegado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.22.0 (31 de Octubre de 2026)
 
 - **Edición Integral de Identidad y Perfil de Usuarios (Nombre, Cédula, Teléfono, Rol y Adscripción):**

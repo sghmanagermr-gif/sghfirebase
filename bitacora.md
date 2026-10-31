@@ -2489,3 +2489,42 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `versiones.md`
 - `bitacora.md`
 - `conversaciones.md`
+
+
+---
+
+### Entrada de Bitácora - Versión v2.22.1 (31 de Octubre de 2026)
+
+**1. Contexto y Requerimiento:**
+- El Administrador instruye: *«otra cosa, hay que hacer una barrera para que no ingresen dos personas al mismo miunicipio munadmin»*.
+- Objetivo: Garantizar que en cada uno de los 23 municipios del estado Mérida exista única y exclusivamente un solo Coordinador Municipal (`munadmin`) activo, previniendo duplicados tanto en el registro público como en la aprobación y reasignación administrativa.
+
+**2. Diagnóstico Técnico y Casos Reales:**
+- Al auditar los 21 coordinadores municipales registrados en Firestore, se identificó un caso de duplicidad en **RIVAS DÁVILA**:
+  - Cuenta 1: *JOHAN CONTRERAS* (`gestionhumanarivasdavila@gmail.com`, APROBADO).
+  - Cuenta 2: *JOHANCONTRERASPADRINO* (`gestionhumanarivasdavilamunicipal@gmail.com`, PENDIENTE).
+- Sin una barrera estricta, un administrador podría aprobar por descuido una segunda cuenta municipal para el mismo territorio, generando inconsistencias en permisos de visualización y exportación de nómina.
+
+**3. Solución Técnica y Arquitectura:**
+- **Blindaje en Registro (`webapp/src/main.js`):**
+  - Tras invocar `createUserWithEmailAndPassword`, si `rol === 'munadmin'`, se consulta Firestore con `where('jerarquia.municipio', 'in', getVariantesMunicipio(municipio))`.
+  - Si ya existe un titular activo o en trámite, se ejecuta `await cred.user.delete()` para no dejar huérfana la credencial en Firebase Auth y se despliega una alerta explicativa al usuario.
+- **Blindaje en Aprobación (`webapp/src/admin.js`):**
+  - En el evento `btn-aprobar`, se verifica en memoria `usuariosLocales` si el municipio ya tiene un `munadmin` con `estado_aprobacion === 'APROBADO'`.
+  - Si existe coincidencia, se interrumpe la aprobación y se notifica: *«El municipio [MUNICIPIO] ya cuenta con un Coordinador Municipal aprobado: [NOMBRE] ([CORREO]). Desactive o reasigne al coordinador actual antes de aprobar a este usuario»*.
+- **Blindaje en Modal de Edición (`webapp/src/admin.js`):**
+  - En `btnGuardarEditRol`, se valida que no se pueda asignar el rol `munadmin` a un municipio ya ocupado por otro funcionario aprobado.
+- **Alerta Visual de Conflicto:**
+  - En `renderUsuariosList()`, cualquier registro pendiente perteneciente a un municipio con titular activo muestra un badge preventivo: `⚠️ Municipio ya tiene coordinador activo`.
+- **Control SemVer y Despliegue:**
+  - Incremento de versión a `v2.22.1`.
+  - Compilación limpia en Vite (870 ms) y publicación en Firebase Hosting (`https://sgh-merida.web.app`).
+
+**4. Archivos Involucrados:**
+- `webapp/package.json` (v2.22.1)
+- `webapp/index.html` (v2.22.1, notas orientadoras en registro)
+- `webapp/src/main.js` (barrera en registro y recuperación con eliminación atómica de auth)
+- `webapp/src/admin.js` (barrera en aprobación, edición de rol y badge visual de conflicto)
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`

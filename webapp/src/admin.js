@@ -1527,6 +1527,9 @@ export function initAdminDashboard(dbInstance, user) {
           <td style="padding: 15px 20px;">
             <div>${roleBadgeHtml}</div>
             <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 3px;">${ubicacion}</div>
+            ${(u.rol === 'munadmin' && !isAprobado && usuariosLocales.some(x => x.uid !== u.uid && x.rol === 'munadmin' && x.estado_aprobacion === 'APROBADO' && normalizarMunicipio(x.jerarquia?.municipio || x.municipio || '') === normalizarMunicipio(u.jerarquia?.municipio || u.municipio || ''))) 
+              ? `<div style="font-size: 0.73rem; color: #b45309; font-weight: 600; margin-top: 4px; display: inline-flex; align-items: center; gap: 4px; background: #fffbeb; padding: 2px 6px; border-radius: 4px; border: 1px solid #fde68a;">⚠️ Municipio ya tiene coordinador activo</div>` 
+              : ''}
             ${u.rol === 'zonadmin' ? `<div style="font-size: 0.75rem; color: #16a34a; font-weight: 500; margin-top: 3px;">🔑 ${u.permisos ? Object.entries(u.permisos).filter(([k, v]) => v === true && k !== 'listas' && k !== 'ultima_modificacion').length + ' competencias autorizadas' : 'Acceso Estándar'}</div>` : ''}
           </td>
           <td style="padding: 15px 20px;">
@@ -1574,6 +1577,27 @@ export function initAdminDashboard(dbInstance, user) {
     document.querySelectorAll('.btn-aprobar').forEach(btn => {
       btn.onclick = async (e) => {
         const uid = e.target.getAttribute('data-uid');
+        const userToApprove = usuariosLocales.find(x => x.uid === uid);
+
+        // --- BARRERA ANTI-DUPLICADOS MUNADMIN ---
+        if (userToApprove && userToApprove.rol === 'munadmin') {
+          const munNorm = normalizarMunicipio(userToApprove.jerarquia?.municipio || userToApprove.municipio || '');
+          const yaAprobado = usuariosLocales.find(x => 
+            x.uid !== uid && 
+            x.rol === 'munadmin' && 
+            x.estado_aprobacion === 'APROBADO' && 
+            normalizarMunicipio(x.jerarquia?.municipio || x.municipio || '') === munNorm
+          );
+          if (yaAprobado) {
+            await showAlert(
+              "Municipio Ya Asignado",
+              `El municipio <b>${munNorm}</b> ya cuenta con un Coordinador Municipal aprobado: <b>${yaAprobado.nombre}</b> (${yaAprobado.email}).<br><br>No se permite tener dos coordinadores activos para el mismo municipio. Si desea autorizar a este nuevo usuario, primero debe rechazar, eliminar o reasignar al coordinador actual.`,
+              "warning"
+            );
+            return;
+          }
+        }
+
         const conf = await showConfirm("¿Aprobar Acceso?", "El usuario tendrá permiso para ingresar al sistema.", "success");
         if(conf) {
           e.target.disabled = true;
@@ -1717,6 +1741,24 @@ export function initAdminDashboard(dbInstance, user) {
       if (nuevoRol === 'munadmin' && !nuevoMun) {
         showToast('Debe seleccionar el municipio asignado al coordinador.', 'error');
         return;
+      }
+
+      if (nuevoRol === 'munadmin') {
+        const munNorm = normalizarMunicipio(nuevoMun);
+        const yaAprobado = usuariosLocales.find(x => 
+          x.uid !== usuarioEditandoRol.uid && 
+          x.rol === 'munadmin' && 
+          x.estado_aprobacion === 'APROBADO' && 
+          normalizarMunicipio(x.jerarquia?.municipio || x.municipio || '') === munNorm
+        );
+        if (yaAprobado) {
+          await showAlert(
+            "Municipio Ya Asignado",
+            `El municipio <b>${munNorm}</b> ya cuenta con un Coordinador Municipal activo: <b>${yaAprobado.nombre}</b> (${yaAprobado.email}).<br><br>No se puede asignar más de un coordinador por municipio.`,
+            "warning"
+          );
+          return;
+        }
       }
 
       if (nuevoRol === 'plaadmin' && !nuevoMun) {
