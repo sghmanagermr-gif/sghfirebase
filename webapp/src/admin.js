@@ -210,6 +210,7 @@ export function initAdminDashboard(dbInstance, user) {
   const modalPlantel = document.getElementById('modal-plantel');
   const formPlantel = document.getElementById('form-plantel');
   const btnDescargarNominaMun = document.getElementById('btn-descargar-nomina-mun');
+  const btnDescargarPlanteles = document.getElementById('btn-descargar-planteles');
 
   function configurarInterfazPorRol() {
     const isMunAdmin = userData?.rol === 'munadmin';
@@ -283,6 +284,8 @@ export function initAdminDashboard(dbInstance, user) {
         let visible = false;
 
         if (target === 'admin-tab-planteles') {
+          visible = tienePermiso('planteles');
+        } else if (btn.id === 'btn-sidebar-descargar-planteles') {
           visible = tienePermiso('planteles');
         } else if (btn.id === 'btn-sidebar-descargar-nomina-mun') {
           visible = tienePermiso('nomina');
@@ -422,7 +425,7 @@ export function initAdminDashboard(dbInstance, user) {
     } else {
       // Buscar el primer botón visible del sidebar que no sea descarga directa
       const primerBotonVisible = Array.from(document.querySelectorAll('#admin-sidebar .sidebar-btn:not(.accordion-btn)'))
-        .find(b => b.style.display !== 'none' && b.id !== 'btn-sidebar-descargar-nomina-mun');
+        .find(b => b.style.display !== 'none' && b.id !== 'btn-sidebar-descargar-nomina-mun' && b.id !== 'btn-sidebar-descargar-planteles');
       if (primerBotonVisible) {
         primerBotonVisible.classList.add('active');
         const tgt = primerBotonVisible.getAttribute('data-target');
@@ -479,6 +482,13 @@ export function initAdminDashboard(dbInstance, user) {
             }
          }
          return; // No navegar ni cerrar el sidebar
+      }
+
+      // Descarga de Planteles en Excel
+      if (button.id === 'btn-sidebar-descargar-planteles') {
+         abrirModalSeleccionarPlanteles();
+         if(typeof window.closeSidebar === 'function') window.closeSidebar();
+         return;
       }
 
       // Descarga de Nómina en Excel
@@ -2543,6 +2553,14 @@ export function initAdminDashboard(dbInstance, user) {
 
 
   // --- GESTOR DE BD: PLANTELES ---
+  if (btnDescargarPlanteles && !btnDescargarPlanteles._hasListener) {
+    btnDescargarPlanteles._hasListener = true;
+    btnDescargarPlanteles.addEventListener('click', (e) => {
+      e.preventDefault();
+      abrirModalSeleccionarPlanteles();
+    });
+  }
+
   if (btnDescargarNominaMun && !btnDescargarNominaMun._hasListener) {
     btnDescargarNominaMun._hasListener = true;
     btnDescargarNominaMun.addEventListener('click', (e) => {
@@ -4548,6 +4566,8 @@ export function initAdminDashboard(dbInstance, user) {
   setupFichaEventListeners();
 
   window.abrirFichaAuditoria = abrirFichaAuditoria;
+  window.abrirModalSeleccionarPlanteles = abrirModalSeleccionarPlanteles;
+  window.exportarPlantelesExcel = abrirModalSeleccionarPlanteles;
   window.abrirModalSeleccionarNomina = abrirModalSeleccionarNomina;
   window.exportarNominaMunicipalExcel = abrirModalSeleccionarNomina;
 

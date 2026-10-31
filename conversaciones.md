@@ -3662,3 +3662,33 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 1. **Confirmación de Éxito:** Se valida la plena satisfacción del Administrador respecto a la optimización estética, diseño circular y alineación precisa del botón de limpieza (`✕`) en el buscador de usuarios para la versión `v2.22.2`.  
 > 2. **Cumplimiento Protocolar Skill 5:** Registro histórico formal en `bitacora.md`, actualización de `versiones.md`, registro cronológico textual íntegro en `conversaciones.md` y respaldo automático con commit y push hacia el repositorio remoto de GitHub (`origin main`).  
 > 3. **Estatus del Sistema:** La WebApp en `https://sgh-merida.web.app` opera con total fluidez visual, campo de búsqueda limpio y ergonómico en PC y móviles, blindaje municipal estricto y edición completa de datos institucionales.
+
+
+---
+
+### Intervención 50
+
+* **Fecha / Hora:** 2026-10-31 ~18:10 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Se necesita agregar un boton para descargar data de planteles; en este caso creo que es de la colección planteles. para los usuarios superadmin, zonadmin y munadmin
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Implementación del Botón y Módulo de Descarga del Catálogo Institucional de Planteles a Excel (.xlsx) para Superadmin, Zonadmin y Munadmin (v2.23.0):  
+>  
+> 1. **Lectura obligatoria de directrices:** Cumplimiento de `SKILL_sgh_firebase.md` (Filosofía Zero-Cost, control SemVer v2.23.0 y comunicación en lenguaje llano).  
+> 2. **Explicación llana y sencilla:**  
+>    * Se creó una nueva herramienta interactiva para que las autoridades zonales y los coordinadores municipales puedan descargar de manera inmediata la información completa de los planteles educativos en un archivo Excel (`.xlsx`) limpio y ordenado.  
+>    * **¿Dónde se encuentra el botón?**  
+>      * En la parte superior de la pestaña **Planteles**, justo al lado del botón de Nómina.  
+>      * También en el menú lateral izquierdo (sidebar), dentro de **Gestor de BD**, con el nombre **🏫 Descargar Planteles**, para que pueda descargarse desde cualquier lugar del sistema con un solo clic.  
+>    * **¿Cómo funciona según el usuario?**  
+>      * **Superadmin y Zonadmin:** Al presionar el botón se abre una ventana donde pueden elegir si desean descargar el consolidado completo de todo el estado Mérida (los 1.159 planteles) o solo los planteles de un municipio específico (ej. Campo Elías, Alberto Adriani, etc.). Si además estaban buscando una escuela específica en la tabla, el sistema les permite descargar directamente esos resultados filtrados.  
+>      * **Coordinadores Municipales (Munadmin):** El sistema reconoce automáticamente su municipio y les permite descargar todas las escuelas de su territorio, o si lo prefieren, filtrar por una parroquia determinada.  
+>    * **Contenido del Excel:** Contiene 20 columnas con los datos institucionales (Código DEA, Nuevo Epónimo, Nombre Nominal, Dependencia, Código Estadístico, Municipio, Parroquia, Nivel Educativo, Planes de Estudio, Estatus y Total de Matrícula, Secciones, Metros Cuadrados y Observaciones). Las columnas se auto-ajustan solas para que no queden textos cortados.  
+>    * **Costo Cero (Zero-Cost):** El archivo se construye directamente en la computadora o celular del usuario aprovechando los datos que ya están en pantalla, sin gastar cuota de lecturas de la base de datos de Firebase.  
+> 3. **Control SemVer y Despliegue:** Versión actualizada a `v2.23.0`, compilada en Vite en 685 ms y desplegada en Firebase Hosting (`https://sgh-merida.web.app`).  
+> 4. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?

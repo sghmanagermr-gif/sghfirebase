@@ -2560,3 +2560,40 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `versiones.md`
 - `bitacora.md`
 - `conversaciones.md`
+
+
+---
+
+### Entrada de Bitácora - Versión v2.23.0 (31 de Octubre de 2026)
+
+**1. Contexto y Requerimiento:**
+- El Administrador instruye: *«Se necesita agregar un boton para descargar data de planteles; en este caso creo que es de la colección planteles. para los usuarios superadmin, zonadmin y munadmin»*.
+- Objetivo: Proporcionar a las autoridades zonales y coordinadores municipales una herramienta de exportación en formato Excel (.xlsx) para auditar, respaldar y analizar la data maestra de las instituciones educativas del estado Mérida.
+
+**2. Diagnóstico Técnico y Arquitectura:**
+- La colección `planteles` en Cloud Firestore cuenta con 1.159 documentos estructurados con campos clave (códigos, nuevo epónimo, nominal, dependencia, municipio, parroquia, nivel, planes de estudio, matrícula y secciones).
+- En el panel administrativo existía previamente la exportación de nómina de personal (`#btn-descargar-nomina-mun`), pero no existía una función de descarga del catálogo de planteles.
+- Principio Zero-Cost: Para preservar la cuota del plan gratuito Spark, la exportación reutiliza el array `currentPlanteles` cargado en memoria durante la sesión del usuario. La transformación y renderizado del archivo binario .xlsx se procesa 100% en el navegador mediante SheetJS (`XLSX.utils.json_to_sheet` y `XLSX.writeFile`), con coste de 0 lecturas adicionales a Firestore.
+
+**3. Solución Técnica Implementada:**
+- **Interfaz en Pestaña de Planteles (`webapp/index.html`):**
+  - Se añadió el botón `🏫 Descargar Planteles (.xlsx)` (`#btn-descargar-planteles`) en la barra superior de acciones junto al botón de Nómina Municipal.
+- **Acceso en Barra Lateral (`webapp/index.html` & `webapp/src/admin.js`):**
+  - Se añadió el botón `🏫 Descargar Planteles` (`#btn-sidebar-descargar-planteles`) en el acordeón *Gestor de BD*, sincronizado con la regla de privilegios `tienePermiso('planteles')`.
+- **Modal de Selección de Ámbito (`#modal-seleccionar-ambito-planteles`):**
+  - Para `superadmin` y `zonadmin`: Permite exportar el consolidado estatal completo de Mérida (1.159 planteles) o seleccionar cualquiera de los 23 municipios. Si el usuario tiene una búsqueda activa en el campo de texto, el modal le ofrece la opción de exportar únicamente los resultados filtrados.
+  - Para `munadmin`: Adapta las opciones para descargar la totalidad de planteles de su municipio o descargar por parroquias específicas.
+- **Mapeo Integral de Columnas:**
+  - 20 campos formateados: Código DEA, Nuevo Epónimo, Nombre Nominal, Denominación, Dependencia, Código Dependencia, Código Estadístico, Estado, Municipio, Parroquia, Nivel, Modalidad, Turno, Ubicación Geográfica, Planes de Estudio, Estatus Matrícula, Total Matrícula, Total Secciones, Metros Cuadrados y Observaciones.
+  - Dimensionamiento automático de anchos de columna (`ws['!cols']`) y nombres de archivo limpios según ámbito y fecha ISO.
+- **Control SemVer y Despliegue:**
+  - Incremento de versión MENOR a `v2.23.0` en `package.json` e `index.html`.
+  - Compilación sin errores en Vite (685 ms) y despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`).
+
+**4. Archivos Involucrados:**
+- `webapp/package.json` (v2.23.0)
+- `webapp/index.html` (v2.23.0, modal `#modal-seleccionar-ambito-planteles` y botones)
+- `webapp/src/admin.js` (controladores DOM, lógica de exportación multi-rol y SheetJS)
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`

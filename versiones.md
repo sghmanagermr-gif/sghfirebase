@@ -4,6 +4,28 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.23.0 (31 de Octubre de 2026)
+
+- **Descarga y Exportación Institucional de Catálogo de Planteles a Excel (.xlsx) para Superadmin, Zonadmin y Munadmin:**
+  - **Objetivo del Requerimiento:**
+    - Incorporar un botón interactivo para descargar la data completa de planteles desde la colección `planteles` de Firestore, habilitado para los roles `superadmin`, `zonadmin` y `munadmin`.
+  - **Características y Mejoras Implementadas:**
+    - **Botón en Pestaña de Planteles (`admin-tab-planteles`):**
+      - Se añadió el botón `🏫 Descargar Planteles (.xlsx)` (`#btn-descargar-planteles`) con estilo institucional azul (#0284c7), ubicado en la barra de acciones junto a Nómina y Nuevo Plantel, adaptándose fluidamente tanto a pantallas de escritorio como a celulares.
+    - **Acceso Directo en Menú Lateral (`#admin-sidebar`):**
+      - Se integró la opción `🏫 Descargar Planteles` (`#btn-sidebar-descargar-planteles`) en el acordeón *Gestor de BD*, permitiendo a los usuarios exportar el catálogo desde cualquier sección del panel sin tener que ir previamente a la tabla.
+    - **Modal de Selección de Ámbito Territorial (`#modal-seleccionar-ambito-planteles`):**
+      - **Superadmin y Zonadmin:** Permite seleccionar entre exportar el consolidado estatal completo (1.159 planteles) o la data de cualquiera de los 23 municipios de Mérida. Si el usuario realizó una búsqueda por texto en la tabla, el modal ofrece de forma inteligente descargar los resultados filtrados en pantalla.
+      - **Coordinadores Municipales (`munadmin`):** Permite exportar la totalidad de escuelas de su municipio o filtrar por una parroquia en específico.
+    - **Estructura Enriquecida del Archivo Excel (.xlsx):**
+      - El archivo generado incluye 20 columnas institucionales: Código DEA, Nuevo Epónimo, Nombre Nominal, Denominación, Dependencia, Código de Dependencia, Código Estadístico, Estado, Municipio, Parroquia, Nivel Educativo, Modalidad, Turno, Ubicación Geográfica, Planes de Estudio asociados, Estatus de Matrícula (Declarada/Pendiente), Total de Matrícula de Estudiantes, Total de Secciones declaradas, Metros Cuadrados y Observaciones.
+      - Auto-ajuste de anchos de columna para una visualización ejecutiva óptima y nombres de archivo dinámicos según el ámbito territorial y la fecha.
+    - **Optimización Zero-Cost (Spark):**
+      - La exportación se procesa en el cliente utilizando los datos ya cargados en la memoria de la sesión (`currentPlanteles`), generando el libro Excel en menos de un segundo con la librería SheetJS sin lecturas repetidas ni consumo de cuota de Firestore.
+  - **Despliegue Inmediato:** Compilado limpio en Vite (685 ms) y publicado en Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.22.2 (31 de Octubre de 2026)
 
 - **Optimización Estética y Alineación Milimétrica del Botón de Limpieza (`✕`) en el Buscador de Usuarios:**
