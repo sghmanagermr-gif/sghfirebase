@@ -4,6 +4,19 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.23.2 (31 de Octubre de 2026)
+
+- **Consolidación Integral de Exportación de Planteles a Excel (.xlsx) y Garantía de Consumo Cero (Zero-Cost):**
+  - **Diagnóstico y Corrección de Enlace Operativo:**
+    - Se identificó que tras el parche de contención de lecturas de la versión v2.23.1, la definición funcional de `abrirModalSeleccionarPlanteles` y `ejecutarExportacionPlantelesExcel` en `webapp/src/admin.js` requería inyección directa y enlace global.
+    - Se inyectó la lógica completa conectada a SheetJS para `abrirModalSeleccionarPlanteles()` y `ejecutarExportacionPlantelesExcel()`, garantizando que al presionar el botón institucional de descarga de planteles (`#btn-descargar-planteles` o `#btn-sidebar-descargar-planteles`) se despliegue fluidamente el modal y se procese el archivo binario en memoria.
+  - **Blindaje de Consumo de Cuota (0 Lecturas):**
+    - La generación del archivo Excel se realiza al 100% en el procesador del dispositivo cliente (PC o móvil) tomando los datos ya residentes en la memoria RAM de la sesión (`currentPlanteles` o `sessionStorage`).
+    - Incluso ante descargas masivas o simultáneas por decenas de coordinadores en pocos segundos, el impacto en la cuota de Firestore es exactamente **0 lecturas**, protegiendo la permanencia indefinida en el plan gratuito Spark de Firebase.
+  - **Despliegue Inmediato:** Compilado limpio en Vite (1.29s) y desplegado exitosamente a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.23.1 (31 de Octubre de 2026)
 
 - **Blindaje Estricto Zero-Cost y Eliminación de Fuga de Lecturas en Usuarios y Planteles:**

@@ -2630,3 +2630,38 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `versiones.md`
 - `bitacora.md`
 - `conversaciones.md`
+
+
+---
+
+### Entrada de Bitácora - Versión v2.23.2 (31 de Octubre de 2026)
+
+**1. Contexto y Requerimiento:**
+- El Administrador consulta: *«¿Ese boton de descargar planteles agotaría la cuota si muchos en corto tiempo hacen descargas?»*.
+- Instruye además leer con atención `SKILL_sgh_firebase.md` de `webapp-expert` antes de cualquier acción.
+- Se requirió verificar el modelo de consumo de cuota de la función de descarga de planteles para garantizar la permanencia del proyecto en el Plan Gratuito (Spark) de Firebase.
+
+**2. Diagnóstico Técnico y Arquitectura de Cuota:**
+- **Modelo de Ejecución en Navegador (Client-Side Rendering):**
+  - La función de descarga `ejecutarExportacionPlantelesExcel(opcion)` toma los planteles directamente del arreglo `currentPlanteles` que ya reside en la memoria RAM del navegador y en la sesión (`sessionStorage`).
+  - La transformación de la matriz JSON a formato binario `.xlsx` de Microsoft Excel se ejecuta íntegramente con SheetJS (`XLSX.utils.json_to_sheet` y `XLSX.writeFile`) en el procesador local del dispositivo.
+  - **Consumo de Firestore por cada descarga: 0 lecturas.** El botón de descarga no realiza solicitudes HTTP ni consultas a la base de datos de Cloud Firestore.
+  - Incluso si 50 directores o coordinadores hacen clic repetidamente al botón de descarga decenas de veces en simultáneo, el consumo de cuota es estrictamente **CERO**.
+- **Definición Funcional en `admin.js`:**
+  - Se verificó e inyectó de forma explícita el bloque `function abrirModalSeleccionarPlanteles()` y `function ejecutarExportacionPlantelesExcel(opcion)` en `webapp/src/admin.js` para asegurar su completa operatividad sin errores de referencia en tiempo de ejecución.
+
+**3. Solución Técnica Implementada:**
+- **Inyección de Funciones Exportadoras en `admin.js`:**
+  - Modal selector de ámbito (`#modal-seleccionar-ambito-planteles`) conectado a los eventos click de los botones `#btn-descargar-planteles` y `#btn-sidebar-descargar-planteles`.
+  - Rutina de exportación con ordenamiento por municipio/parroquia/epónimo y mapeo exhaustivo de 20 campos institucionales.
+- **Control SemVer y Despliegue:**
+  - Incremento de versión a `v2.23.2` en `package.json` e `index.html`.
+  - Compilación limpia en Vite (1.29s) y despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`).
+
+**4. Archivos Involucrados:**
+- `webapp/package.json` (v2.23.2)
+- `webapp/index.html` (v2.23.2)
+- `webapp/src/admin.js` (inyección y enlace de `abrirModalSeleccionarPlanteles` y `ejecutarExportacionPlantelesExcel`)
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`

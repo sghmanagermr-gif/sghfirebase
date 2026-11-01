@@ -3835,7 +3835,353 @@ export function initAdminDashboard(dbInstance, user) {
       });
   }
 
-  // --- EXPORTACIÓN DE NÓMINA A EXCEL (.XLSX) MULTI-ROL ---
+  // --- EXPORTACIÓN DE PLANTELES A EXCEL (.XLSX) MULTI-ROL (SUPERADMIN, ZONADMIN, MUNADMIN) ---
+  const modalSelAmbitoPlanteles = document.getElementById('modal-seleccionar-ambito-planteles');
+  const selAmbitoPlanteles = document.getElementById('sel-ambito-planteles-modal');
+  const btnCancelarSelAmbitoPlanteles = document.getElementById('btn-cancelar-sel-ambito-planteles');
+  const btnConfirmarSelAmbitoPlanteles = document.getElementById('btn-confirmar-sel-ambito-planteles');
+
+  function cerrarModalSelAmbitoPlanteles() {
+    if (modalSelAmbitoPlanteles) modalSelAmbitoPlanteles.style.display = 'none';
+  }
+
+  if (btnCancelarSelAmbitoPlanteles) btnCancelarSelAmbitoPlanteles.addEventListener('click', cerrarModalSelAmbitoPlanteles);
+  if (modalSelAmbitoPlanteles) {
+    modalSelAmbitoPlanteles.addEventListener('click', (e) => {
+      if (e.target === modalSelAmbitoPlanteles) cerrarModalSelAmbitoPlanteles();
+    });
+  }
+
+  async function abrirModalSeleccionarPlanteles() {
+    if (!modalSelAmbitoPlanteles || !selAmbitoPlanteles) return;
+
+    const isMunAdmin = userData?.rol === 'munadmin';
+    const isZonAdmin = userData?.rol === 'zonadmin';
+    const isSuperAdmin = userData?.rol === 'superadmin' || userData?.rol === 'admin';
+
+    if (!isMunAdmin && !isZonAdmin && !isSuperAdmin) {
+      if (typeof showAlert === 'function') {
+        showAlert("Acceso Restringido", "No posee los privilegios requeridos para descargar el catálogo de planteles.", "warning");
+      }
+      return;
+    }
+
+    // Asegurar que los planteles estén cargados en memoria (Zero-Cost: busca primero en sessionStorage)
+    if (!Array.isArray(currentPlanteles) || currentPlanteles.length === 0) {
+      if (typeof window.showLoading === 'function') window.showLoading("Cargando catálogo institucional de planteles...");
+      try {
+        await loadPlanteles();
+      } catch (errP) {
+        console.warn("Aviso cargando planteles para exportación:", errP);
+      } finally {
+        if (typeof window.hideLoading === 'function') window.hideLoading();
+      }
+    }
+
+    const modalTitle = document.getElementById('modal-planteles-title');
+    const modalDesc = document.getElementById('modal-planteles-desc');
+    const modalLabel = document.getElementById('modal-planteles-label');
+
+    const selMunElem = document.getElementById('filtro-municipio-plantel');
+    const selParElem = document.getElementById('filtro-parroquia-plantel');
+    const valMunActual = (selMunElem && !selMunElem.disabled) ? selMunElem.value.trim().toUpperCase() : '';
+    const valParActual = selParElem ? selParElem.value.trim().toUpperCase() : '';
+    const termActual = (inpBuscarPlantel ? inpBuscarPlantel.value : '').trim();
+
+    if (isMunAdmin) {
+      let userMunRaw = (userData?.jerarquia?.municipio || userData?.municipio || '').trim().toUpperCase();
+      let userMun = normalizarMunicipio(userMunRaw);
+      if (!userMun && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
+        userMun = normalizarMunicipio(currentPlanteles[0].municipio || '');
+      }
+      const userMunVisual = userMunRaw || userMun || 'MUNICIPAL';
+
+      if (modalTitle) modalTitle.innerHTML = `<span>🏫</span> Descargar Catálogo de Planteles - Municipio ${userMunVisual}`;
+      if (modalDesc) modalDesc.textContent = 'Seleccione si desea exportar todos los planteles de su municipio o descargar por parroquia:';
+      if (modalLabel) modalLabel.textContent = 'Ámbito Municipal / Parroquia:';
+
+      const parroquiasMun = getParroquias(userMun);
+      let opcionesHtml = `
+        <option value="TODOS_MUN">⭐ TODOS LOS PLANTELES DEL MUNICIPIO (${userMunVisual})</option>
+        ${parroquiasMun.map(p => `<option value="PARROQUIA:${p}">📍 Parroquia: ${p}</option>`).join('')}
+      `;
+
+      if (termActual) {
+        opcionesHtml = `<option value="__BUSQUEDA_ACTUAL__" style="font-weight: bold; color: #0284c7;">🔍 RESULTADOS DE BÚSQUEDA ACTUAL ("${termActual}")</option>` + opcionesHtml;
+      }
+
+      selAmbitoPlanteles.innerHTML = opcionesHtml;
+
+      if (termActual) {
+        selAmbitoPlanteles.value = '__BUSQUEDA_ACTUAL__';
+      } else if (valParActual && parroquiasMun.includes(valParActual)) {
+        selAmbitoPlanteles.value = `PARROQUIA:${valParActual}`;
+      } else {
+        selAmbitoPlanteles.value = 'TODOS_MUN';
+      }
+
+      modalSelAmbitoPlanteles.style.display = 'flex';
+    } else {
+      // Superadmin o Zonadmin
+      if (modalTitle) modalTitle.innerHTML = '<span>🏫</span> Descargar Catálogo de Planteles Institucionales';
+      if (modalDesc) modalDesc.textContent = 'Como autoridad de nivel Estadal, seleccione si desea descargar el consolidado de todo el Estado Mérida o de un municipio específico:';
+      if (modalLabel) modalLabel.textContent = 'Ámbito Territorial / Municipio:';
+
+      const municipios = getMunicipios();
+      let opcionesHtml = `
+        <option value="TODOS" style="font-weight: bold; color: #0284c7;">⭐ TODOS LOS MUNICIPIOS (CONSOLIDADO ESTATAL - 1.159 PLANTELES)</option>
+        ${municipios.map(m => `<option value="${m}">🏢 Municipio: ${m}</option>`).join('')}
+      `;
+
+      if (termActual) {
+        opcionesHtml = `<option value="__BUSQUEDA_ACTUAL__" style="font-weight: bold; color: #0284c7;">🔍 RESULTADOS DE BÚSQUEDA ACTUAL ("${termActual}")</option>` + opcionesHtml;
+      }
+
+      selAmbitoPlanteles.innerHTML = opcionesHtml;
+
+      if (termActual) {
+        selAmbitoPlanteles.value = '__BUSQUEDA_ACTUAL__';
+      } else if (valMunActual && municipios.includes(valMunActual)) {
+        selAmbitoPlanteles.value = valMunActual;
+      } else {
+        selAmbitoPlanteles.value = 'TODOS';
+      }
+
+      modalSelAmbitoPlanteles.style.display = 'flex';
+    }
+  }
+
+  if (btnConfirmarSelAmbitoPlanteles) {
+    btnConfirmarSelAmbitoPlanteles.addEventListener('click', () => {
+      const opcionElegida = selAmbitoPlanteles ? selAmbitoPlanteles.value.trim() : '';
+      if (!opcionElegida) {
+        if (typeof showToast === 'function') showToast("Por favor, seleccione una opción para continuar.", "warning");
+        return;
+      }
+      cerrarModalSelAmbitoPlanteles();
+      ejecutarExportacionPlantelesExcel(opcionElegida);
+    });
+  }
+
+  async function ejecutarExportacionPlantelesExcel(opcion) {
+    if (window._isExportingExcelPlanteles) {
+      if (typeof showToast === 'function') showToast("Generando archivo Excel de planteles, por favor espere...", "info");
+      return;
+    }
+    window._isExportingExcelPlanteles = true;
+
+    try {
+      if (typeof showToast === 'function') showToast("Procesando catálogo de planteles...", "info", 3000);
+
+      const isMunAdmin = userData?.rol === 'munadmin';
+      let userMunRaw = (userData?.jerarquia?.municipio || userData?.municipio || '').trim().toUpperCase();
+      let userMun = normalizarMunicipio(userMunRaw);
+      if (!userMun && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
+        userMun = normalizarMunicipio(currentPlanteles[0].municipio || '');
+      }
+
+      let plantelesAExportar = [];
+
+      if (opcion === '__BUSQUEDA_ACTUAL__') {
+        const term = (inpBuscarPlantel ? inpBuscarPlantel.value : '').toLowerCase().trim();
+        const selMunElem = document.getElementById('filtro-municipio-plantel');
+        const selParElem = document.getElementById('filtro-parroquia-plantel');
+        const fMun = (selMunElem && !selMunElem.disabled ? selMunElem.value : (userMun || '')).trim().toUpperCase();
+        const fPar = (selParElem ? selParElem.value : '').trim().toUpperCase();
+
+        let list = currentPlanteles;
+        if (userMun) {
+          list = list.filter(p => normalizarMunicipio(p.municipio || '') === userMun);
+        } else if (fMun) {
+          list = list.filter(p => normalizarMunicipio(p.municipio || '') === normalizarMunicipio(fMun));
+        }
+        if (fPar) {
+          list = list.filter(p => (p.parroquia || '').trim().toUpperCase() === fPar);
+        }
+        if (term) {
+          list = list.filter(p => {
+            const d = (p.codigos?.plantel || p.id || '').toLowerCase();
+            const ep = (obtenerEponimoLimpioPlantel(p)).toLowerCase();
+            const n = (p['nombre-plantel']?.nominal || '').toLowerCase();
+            const m = (p.municipio || '').toLowerCase();
+            const pr = (p.parroquia || '').toLowerCase();
+            return d.includes(term) || ep.includes(term) || n.includes(term) || m.includes(term) || pr.includes(term);
+          });
+        }
+        plantelesAExportar = [...list];
+      } else if (isMunAdmin) {
+        if (opcion.startsWith('PARROQUIA:')) {
+          const par = opcion.replace('PARROQUIA:', '').trim().toUpperCase();
+          plantelesAExportar = currentPlanteles.filter(p => 
+            normalizarMunicipio(p.municipio || '') === userMun && 
+            (p.parroquia || '').trim().toUpperCase() === par
+          );
+        } else {
+          plantelesAExportar = currentPlanteles.filter(p => 
+            normalizarMunicipio(p.municipio || '') === userMun
+          );
+        }
+      } else {
+        // Superadmin o Zonadmin
+        if (opcion === 'TODOS') {
+          plantelesAExportar = [...currentPlanteles];
+        } else {
+          plantelesAExportar = currentPlanteles.filter(p => 
+            normalizarMunicipio(p.municipio || '') === normalizarMunicipio(opcion)
+          );
+        }
+      }
+
+      if (!plantelesAExportar || plantelesAExportar.length === 0) {
+        if (typeof showAlert === 'function') {
+          showAlert("Sin Registros", "No se encontraron planteles con el criterio seleccionado.", "warning");
+        }
+        return;
+      }
+
+      // Ordenar alfabéticamente por Municipio, luego Parroquia, luego Nuevo Epónimo
+      plantelesAExportar.sort((a, b) => {
+        const munA = (a.municipio || '').localeCompare(b.municipio || '', 'es');
+        if (munA !== 0) return munA;
+        const parA = (a.parroquia || '').localeCompare(b.parroquia || '', 'es');
+        if (parA !== 0) return parA;
+        const epA = obtenerEponimoLimpioPlantel(a);
+        const epB = obtenerEponimoLimpioPlantel(b);
+        return epA.localeCompare(epB, 'es', { sensitivity: 'base' });
+      });
+
+      // Mapeo detallado de campos institucionales
+      const filasExcel = plantelesAExportar.map(p => {
+        const codDEA = (p.codigos?.plantel || p.codigoDEA || p.id || '').toString().trim().toUpperCase();
+        const eponimo = (obtenerEponimoLimpioPlantel(p) || '').trim().toUpperCase();
+        const nominal = (p['nombre-plantel']?.nominal || '').trim().toUpperCase();
+        const denominacion = (p.denominacion || '').trim().toUpperCase();
+        const dependencia = (p.dependencia || '').trim().toUpperCase();
+        
+        let codDep = p.codigos?.dependencia;
+        if (Array.isArray(codDep)) codDep = codDep.join(', ');
+        else codDep = (codDep !== null && codDep !== undefined) ? String(codDep) : '';
+
+        const codEst = (p.codigos?.estadistico !== null && p.codigos?.estadistico !== undefined) ? String(p.codigos.estadistico) : '';
+        const estado = (p.estado || 'MÉRIDA').toString().trim().toUpperCase();
+        const municipio = (p.municipio || '').toString().trim().toUpperCase();
+        const parroquia = (p.parroquia || '').toString().trim().toUpperCase();
+        const nivel = (p.nivel || '').toString().trim().toUpperCase();
+        const modalidad = (p.modalidad || '').toString().trim().toUpperCase();
+        const turno = (p['turno-plantel'] || p.turno || '').toString().trim().toUpperCase();
+        const ubicacion = (p['ubicacion-geografica'] || p.ubicacion || '').toString().trim().toUpperCase();
+        const metros2 = (p.metros2 !== null && p.metros2 !== undefined) ? String(p.metros2) : '';
+        const observaciones = (p.observaciones || '').toString().trim();
+
+        // Planes de estudio
+        let planesStr = '';
+        const planesObj = p['planes-estudio'] || p.planes_estudio || {};
+        if (planesObj && typeof planesObj === 'object') {
+          const cods = Object.keys(planesObj).filter(c => c !== 'especial' && c !== 'adulto');
+          planesStr = cods.join(', ');
+        }
+
+        // Matrícula declarada
+        const { tiene: tieneMat, total: totalMat } = verificarPlantelTieneMatricula(p);
+        const estatusMat = tieneMat && totalMat > 0 ? 'DECLARADA' : 'PENDIENTE';
+
+        // Total secciones declaradas
+        let totalSec = 0;
+        const sp = p['secciones-planes'];
+        if (sp && typeof sp === 'object') {
+          Object.keys(sp).forEach(key => {
+            const item = sp[key];
+            if (typeof item === 'number') {
+              totalSec += item;
+            } else if (typeof item === 'object' && item !== null) {
+              Object.values(item).forEach(v => {
+                const num = parseInt(v || 0, 10);
+                if (!isNaN(num)) totalSec += num;
+              });
+            }
+          });
+        }
+
+        return {
+          "CÓDIGO DEA": codDEA,
+          "NUEVO EPÓNIMO": eponimo || nominal || 'SIN NOMBRE',
+          "NOMBRE NOMINAL": nominal,
+          "DENOMINACIÓN": denominacion,
+          "DEPENDENCIA": dependencia,
+          "CÓDIGO DEPENDENCIA": codDep,
+          "CÓDIGO ESTADÍSTICO": codEst,
+          "ESTADO": estado,
+          "MUNICIPIO": municipio,
+          "PARROQUIA": parroquia,
+          "NIVEL": nivel,
+          "MODALIDAD": modalidad,
+          "TURNO": turno,
+          "UBICACIÓN GEOGRÁFICA": ubicacion,
+          "PLANES DE ESTUDIO": planesStr,
+          "ESTATUS MATRÍCULA": estatusMat,
+          "TOTAL MATRÍCULA": totalMat || 0,
+          "TOTAL SECCIONES": totalSec || 0,
+          "METROS CUADRADOS": metros2,
+          "OBSERVACIONES": observaciones
+        };
+      });
+
+      const ws = XLSX.utils.json_to_sheet(filasExcel);
+      const colWidths = Object.keys(filasExcel[0]).map(k => {
+        let maxLen = k.length;
+        filasExcel.forEach(row => {
+          const val = String(row[k] ?? '');
+          if (val.length > maxLen) maxLen = val.length;
+        });
+        return { wch: Math.min(Math.max(maxLen + 3, 12), 40) };
+      });
+      ws['!cols'] = colWidths;
+
+      const wb = XLSX.utils.book_new();
+      let sheetName = 'Planteles';
+      if (isMunAdmin) {
+        sheetName = `Planteles ${userMun}`;
+      } else if (opcion && opcion !== 'TODOS' && opcion !== '__BUSQUEDA_ACTUAL__') {
+        sheetName = `Planteles ${opcion}`;
+      } else {
+        sheetName = 'Planteles Mérida';
+      }
+      XLSX.utils.book_append_sheet(wb, ws, sheetName.slice(0, 31));
+
+      const fechaStr = new Date().toISOString().slice(0, 10);
+      let nombreArchivo = `SGH_Planteles_${fechaStr}.xlsx`;
+      if (isMunAdmin) {
+        if (opcion.startsWith('PARROQUIA:')) {
+          const par = opcion.replace('PARROQUIA:', '').trim().replace(/\s+/g, '_');
+          nombreArchivo = `SGH_Planteles_Municipio_${userMun.replace(/\s+/g, '_')}_Parroquia_${par}_${fechaStr}.xlsx`;
+        } else {
+          nombreArchivo = `SGH_Planteles_Municipio_${userMun.replace(/\s+/g, '_')}_${fechaStr}.xlsx`;
+        }
+      } else {
+        if (opcion === 'TODOS') {
+          nombreArchivo = `SGH_Planteles_Estado_MERIDA_Consolidado_${fechaStr}.xlsx`;
+        } else if (opcion === '__BUSQUEDA_ACTUAL__') {
+          nombreArchivo = `SGH_Planteles_Filtrados_${fechaStr}.xlsx`;
+        } else {
+          nombreArchivo = `SGH_Planteles_Municipio_${opcion.replace(/\s+/g, '_')}_${fechaStr}.xlsx`;
+        }
+      }
+
+      XLSX.writeFile(wb, nombreArchivo);
+      if (typeof showToast === 'function') {
+        showToast(`¡Catálogo de planteles exportado con éxito (${filasExcel.length} planteles)!`, "success", 4000);
+      }
+    } catch (err) {
+      console.error("Error al exportar catálogo de planteles a Excel:", err);
+      if (typeof showAlert === 'function') {
+        showAlert("Error de Exportación", "Ocurrió una falla generando el archivo Excel: " + (err.message || err), "danger");
+      }
+    } finally {
+      window._isExportingExcelPlanteles = false;
+    }
+  }
+
+    // --- EXPORTACIÓN DE NÓMINA A EXCEL (.XLSX) MULTI-ROL ---
   const modalSelMunNomina = document.getElementById('modal-seleccionar-municipio-nomina');
   const selMunNomina = document.getElementById('sel-municipio-nomina-modal');
   const btnCancelarSelMunNomina = document.getElementById('btn-cancelar-sel-mun-nomina');
