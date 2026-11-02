@@ -3988,3 +3988,44 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 4. **Control SemVer y Despliegue:** Versión elevada a `v2.24.1` (PARCHE), compilada en Vite (813 ms) y desplegada en Firebase Hosting (`https://sgh-merida.web.app`). Sincronización protocolar con GitHub (`origin main`).  
 > 5. **Pregunta Protocolar de Cierre:** ¿Los resultados fueron satisfactorios?
 
+---
+
+### Intervención 66
+
+* **Fecha / Hora:** 2026-11-02 ~12:50 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Perfecto gracias. resultados satisfactorios.  
+> Otra cosa, que lo había pensado hace mucho tiempo, pero de verdad que con tantas cosas se me ha pasado. Necesito como desarrollador tener un plantel ficticio que no afecte la base de datos, para asi crear un usuario. Es para poder dar respuesta a muchas dudas de directores, peronecesito ver en tiempo real como se ve la pantalla del director. Me entiendes?
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Planificación de Escuela Laboratorio / Sandbox (Skill 6):  
+> 1. Se validó la necesidad operativa de contar con un plantel de pruebas idéntico al del director para dar soporte en tiempo real por WhatsApp sin alterar la base de datos real.  
+> 2. Se propuso la arquitectura de un plantel demo (`DEMO140000`) con bandera de exclusión en métricas (`es_demo: true`) y se solicitaron el correo y contraseña deseados.
+
+---
+
+### Intervención 67
+
+* **Fecha / Hora:** 2026-11-02 ~12:55 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> alfonsozere@gmail.com  
+> clave: america2000
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Creación de la Escuela Laboratorio y Usuario Director Sandbox (v2.25.0):  
+> 1. **Alta en Auth:** Creación de cuenta `alfonsozere@gmail.com` con correo verificado administrativamente (0 consumo de cuota de correo Spark).  
+> 2. **Alta de Usuario en Firestore:** Documento `usuarios/1P9RI6NwNCQWFlQJ4VLstAgwxix1` aprobado con rol `plaadmin`, vinculado al plantel `DEMO140000`.  
+> 3. **Alta de Plantel Ficticio en Firestore:** Documento `planteles/DEMO140000` ("PLANTEL EXPERIMENTAL PILOTO SGH", Municipio Libertador, Parroquia Sagrario) habilitado con Inicial, Primaria, Media General y Técnica.  
+> 4. **Aislamiento Estadístico:** Se blindaron `verificarPlantelTieneMatricula`, las exportaciones de Excel de planteles y nóminas, y se ocultó de la vista de coordinadores municipales para garantizar 0 impacto en las estadísticas oficiales de Mérida.  
+> 5. **Control SemVer y Despliegue:** Versión elevada a `v2.25.0` (MENOR), compilada en Vite (734 ms) y desplegada a producción en Firebase Hosting (`https://sgh-merida.web.app`). Sincronización con GitHub (`origin main`).  
+> 6. **Pregunta Protocolar de Cierre:** ¿Los resultados fueron satisfactorios?
+
+

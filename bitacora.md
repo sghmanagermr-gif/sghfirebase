@@ -2780,3 +2780,53 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `bitacora.md`
 - `conversaciones.md`
 
+---
+
+### Entrada de Bitácora - Versión v2.25.0 (2 de Noviembre de 2026)
+
+**1. Contexto y Requerimiento:**
+- El Administrador y Desarrollador solicita la habilitación de un plantel ficticio de prueba que no afecte la base de datos real del Estado Mérida, con su respectivo usuario Director (`plaadmin`), con el objetivo de poder visualizar e interactuar en tiempo real con la pantalla del director para resolver dudas operativas y guiar a los directores del estado durante la jornada por WhatsApp.
+- Credenciales solicitadas por el usuario:
+  - Correo: `alfonsozere@gmail.com`
+  - Contraseña: `america2000`
+
+**2. Arquitectura de Blindaje y Sandbox Creado:**
+- **Creación en Firebase Auth:**
+  - Se dio de alta la cuenta de usuario `alfonsozere@gmail.com` mediante la API REST de Google Identity Toolkit, configurando de forma automática `emailVerified: true` sin envío de correo electrónico saliente, respetando el Escudo Zero-Cost y sin consumir la cuota diaria del plan Spark.
+- **Creación de Documento de Usuario en Firestore (`usuarios/{uid}`):**
+  - UID: `1P9RI6NwNCQWFlQJ4VLstAgwxix1`.
+  - Rol: `plaadmin` (Director de Plantel).
+  - Estado: `APROBADO` (Aprobado de forma inmediata).
+  - Jerarquía: Plantel `DEMO140000`, Municipio Libertador, Parroquia Sagrario.
+  - Bandera identificadora: `es_demo: true`.
+- **Creación de Plantel Ficticio en Firestore (`planteles/DEMO140000`):**
+  - Código DEA: `DEMO140000`.
+  - Nombre Nominal: `ESCUELA PILOTO DE PRUEBAS SGH`.
+  - Nuevo Epónimo: `PLANTEL EXPERIMENTAL PILOTO SGH`.
+  - Municipio: `LIBERTADOR` | Parroquia: `SAGRARIO`.
+  - Dependencia: `NACIONAL` (Cód. 6490000) | Cód. Estadístico: `999999`.
+  - Planes de Estudio habilitados para pruebas libres: Inicial (20000), Primaria (21000), Media General (31059) y Media Técnica (31060).
+  - Matrícula y Secciones inicializadas en 0.
+- **Aislamiento Estadístico Zero-Impact en `webapp/src/admin.js`:**
+  - **Métrica de Matrícula:** `verificarPlantelTieneMatricula` retorna `{ tiene: false, total: 0 }` para planteles con prefijo `DEMO` o bandera `es_demo`, impidiendo que alumnos de prueba alteren la matrícula oficial municipal o estadal.
+  - **Exportación de Planteles a Excel:** Se filtran automáticamente los planteles con `es_demo` o `DEMO`.
+  - **Exportación de Nómina a Excel:** Se descartan automáticamente funcionarios vinculados a códigos `DEMO`.
+  - **Filtro Municipal:** Oculto para coordinadores municipales (`munadmin`) de Libertador para evitar confusiones, y destacado con distintivo visual `🧪 Laboratorio DEMO` en el panel de `superadmin`.
+
+**3. Control SemVer y Despliegue:**
+- Incremento a **`v2.25.0`** (MENOR por introducción de infraestructura de Sandbox y Laboratorio) en `package.json` e `index.html`.
+- Compilación en Vite (734 ms) generando el bundle `dist/assets/index-DCXVyrLt.js`.
+- Despliegue exitoso en Firebase Hosting (`https://sgh-merida.web.app`).
+
+**4. Archivos Involucrados:**
+- `webapp/package.json` (v2.25.0)
+- `webapp/index.html` (v2.25.0)
+- `webapp/src/admin.js` (filtros de aislamiento estadístico y exportaciones para demo)
+- Colección Firestore `planteles/DEMO140000`
+- Colección Firestore `usuarios/1P9RI6NwNCQWFlQJ4VLstAgwxix1`
+- Cuenta Firebase Auth `alfonsozere@gmail.com`
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
+
+

@@ -154,7 +154,7 @@ export function limpiarMatriculaEstadalCache() {
 }
 
 export function verificarPlantelTieneMatricula(p) {
-  if (!p) return { tiene: false, total: 0 };
+  if (!p || p.es_demo || p.id?.startsWith('DEMO') || p.codigos?.plantel?.startsWith('DEMO')) return { tiene: false, total: 0 };
   if (p.matricula) {
     const mat = p.matricula;
     const totGen = parseInt(mat['total-gen'] || mat.total_gen || 0, 10);
@@ -2951,7 +2951,7 @@ export function initAdminDashboard(dbInstance, user) {
 
     // 1. Filtrado por Municipio
     if (userMun) {
-      filtered = filtered.filter(p => normalizarMunicipio(p.municipio || '') === userMun);
+      filtered = filtered.filter(p => normalizarMunicipio(p.municipio || '') === userMun && !p.es_demo && !p.id?.startsWith('DEMO'));
     } else if (filtroMun) {
       filtered = filtered.filter(p => normalizarMunicipio(p.municipio || '') === normalizarMunicipio(filtroMun));
     }
@@ -2995,6 +2995,8 @@ export function initAdminDashboard(dbInstance, user) {
        const eponimoVal = obtenerEponimoLimpioPlantel(p);
        const nominalVal = (p['nombre-plantel']?.nominal || '').trim();
        const textoPrincipal = eponimoVal || nominalVal || 'SIN NOMBRE';
+       const isDemo = p.es_demo || p.id?.startsWith('DEMO');
+       const badgeDemo = isDemo ? `<span style="display: inline-block; margin-left: 6px; background: #fdf4ff; color: #a21caf; border: 1px solid #f0abfc; padding: 2px 6px; border-radius: 4px; font-size: 0.72rem; font-weight: bold;">🧪 Laboratorio DEMO</span>` : '';
        const subtextoNominal = (eponimoVal && nominalVal && eponimoVal.toUpperCase() !== nominalVal.toUpperCase())
          ? `<div style="font-size: 0.75rem; color: #64748b; font-weight: normal; margin-top: 2px;">(Nominal: ${nominalVal})</div>`
          : '';
@@ -3012,7 +3014,7 @@ export function initAdminDashboard(dbInstance, user) {
            <span style="background: rgba(37,99,235,0.1); color: var(--primary-color); padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">${p.codigos?.plantel || 'N/A'}</span>
          </td>
          <td style="padding: 15px 20px; font-weight: 600; color: var(--text-main);">
-           ${textoPrincipal}
+           ${textoPrincipal}${badgeDemo}
            ${subtextoNominal}
          </td>
          <td style="padding: 15px 20px; color: var(--text-muted); font-size: 0.9rem;">${p.municipio || 'N/A'}</td>
@@ -4096,6 +4098,9 @@ export function initAdminDashboard(dbInstance, user) {
         }
       }
 
+      // Filtrar planteles de prueba / demo para no contaminar el reporte oficial
+      plantelesAExportar = plantelesAExportar.filter(p => !p.es_demo && !p.id?.startsWith('DEMO'));
+
       if (!plantelesAExportar || plantelesAExportar.length === 0) {
         if (typeof showAlert === 'function') {
           showAlert("Sin Registros", "No se encontraron planteles con el criterio seleccionado.", "warning");
@@ -4441,9 +4446,11 @@ export function initAdminDashboard(dbInstance, user) {
         console.warn("Aviso consultando planteles para enriquecer Excel:", errP);
       }
 
-      // 3. Extraer funcionarios, descartar registros vacíos / huérfanos y ordenar
+      // 3. Extraer funcionarios, descartar registros vacíos / huérfanos / demo y ordenar
       const listaPersonal = listaPersonalCache
         .filter(emp => {
+          const codPl = (emp['codigo-plantel'] || emp.codigoDEA || '').toString().trim().toUpperCase();
+          if (codPl.startsWith('DEMO')) return false;
           const ced = (emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÉDULA'] || '').toString().trim();
           const nom = (emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || emp['APELLIDOS Y NOMBRES'] || emp['NOMBRE Y APELLIDO'] || '').toString().trim();
           return !!(ced || nom);

@@ -4,6 +4,22 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.25.0 (2 de Noviembre de 2026)
+
+- **Escuela Laboratorio Ficticia (`DEMO140000`) y Usuario Director Sandbox para Soporte en Tiempo Real:**
+  - **Diagnóstico y Requerimiento:**
+    - El Desarrollador y Administrador requirió contar con un entorno de pruebas idéntico a la pantalla del director (`plaadmin`) para replicar en tiempo real dudas, procedimientos y asistencias a directores por WhatsApp sin contaminar ni alterar las métricas oficiales ni las nóminas de Mérida.
+  - **Arquitectura de Blindaje y Sandbox Creado:**
+    - **Plantel Ficticio en Firestore (`planteles/DEMO140000`):** Creado con código DEA `DEMO140000`, Epónimo: *"PLANTEL EXPERIMENTAL PILOTO SGH"*, Parroquia Sagrario, Municipio Libertador, habilitado con planes de Inicial (20000), Primaria (21000), Media General (31059) y Media Técnica (31060), identificado con bandera `es_demo: true`.
+    - **Usuario Director Aprobado en Auth y Firestore:** Creado con UID `1P9RI6NwNCQWFlQJ4VLstAgwxix1`, correo `alfonsozere@gmail.com`, clave configurada, correo marcado como verificado administrativamente (0 consumo de cuota Spark) y rol `plaadmin` vinculado a `DEMO140000`.
+    - **Escudo Protector en Métricas y Exportaciones:**
+      - Se blindó la función de auditoría de matrícula (`verificarPlantelTieneMatricula`) para retornar siempre `{ tiene: false, total: 0 }` ante planteles demo.
+      - Se excluyeron automáticamente de las exportaciones a Excel tanto de planteles (`ejecutarExportacionPlantelesExcel`) como de nóminas (`ejecutarExportacionNominaExcel`).
+      - Se ocultó de la vista de coordinadores municipales (`munadmin`) para evitar confusiones en Libertador, y se identificó visualmente en el panel de superadmin con distintivo `🧪 Laboratorio DEMO`.
+  - **Despliegue y SemVer:** Versión MENOR `v2.25.0` compilada en Vite (734 ms) y desplegada a producción en Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.24.1 (2 de Noviembre de 2026)
 
 - **Corrección de Referencia y Garantía de Plenos Privilegios para Superadmin en Edición de Planteles:**
