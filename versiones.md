@@ -14,6 +14,7 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
   - **Solución Técnica Implementada:**
     - Se implementó soporte dual y retrocompatible (`maternal || materna`) tanto para la lectura, la persistencia en Firestore (`matricula.basica['20000']` y `secciones-planes['20000']`) como para la suma general de género (`sumFem` y `sumMas`).
     - Se sincronizó la sumatoria en vivo del formulario (`plantel-form`) para que `matTotal` sume de forma directa e incontestable los subtotales de cada nivel activo (`totIni + totPri + sumMg + sumMt + totEsp + totAdu`), garantizando paridad matemática exacta en todo momento.
+    - Se configuraron cabeceras estrictas de anti-caché en `firebase.json` (`Cache-Control: no-cache, no-store, must-revalidate`) para forzar a los navegadores móviles a descargar siempre la última versión de la aplicación sin retener bundles obsoletos en memoria.
   - **Despliegue y SemVer:** Versión PATCH `v2.25.1` compilada en Vite (687 ms) y desplegada a producción en Firebase Hosting (`https://sgh-merida.web.app`).
 
 ---

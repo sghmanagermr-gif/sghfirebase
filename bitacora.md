@@ -2864,7 +2864,9 @@ Durante la preparación del payload de guardado en `webapp/src/main.js`, la secc
    - Se ajustó `_renderCajasInicial` para precargar datos tanto si el documento existente contiene `materna` como si contiene `maternal`.
 2. **Coherencia Matemática en Tiempo Real:**
    - Se refactorizó la sumatoria en vivo del formulario (`plantel-form`) para que `matTotal` sea directamente la suma de los subtotales calculados (`totIni + totPri + sumMg + sumMt + totEsp + totAdu`), impidiendo divergencias entre los indicadores de nivel y el total general.
-3. **Control SemVer y Despliegue:**
+3. **Inyección de Cabeceras Anti-Caché en Firebase Hosting (`webapp/firebase.json`):**
+   - Se configuró `Cache-Control: no-cache, no-store, must-revalidate` para todos los documentos HTML y rutas rewrites, resolviendo de raíz el problema donde navegadores móviles (Chrome en Android) retenían en caché bundles antiguos (`v2.25.0`) e impedían ejecutar el nuevo código hotfix sin forzar limpieza de historial.
+4. **Control SemVer y Despliegue:**
    - Elevación a `v2.25.1` (PATCH). Compilación en Vite (687 ms) y despliegue completado a Firebase Hosting (`https://sgh-merida.web.app`).
 
 

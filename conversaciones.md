@@ -4101,3 +4101,22 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 3. **Corrección Implementada:** Soporte dual `maternal || materna` en lectura, guardado y cálculo consolidado; y sincronización directa en vivo de `matTotal = totIni + totPri + sumMg + sumMt + totEsp + totAdu`.  
 > 4. **Despliegue y SemVer:** Versión elevada a `v2.25.1` (PATCH), compilada en Vite (687 ms) y desplegada a Firebase Hosting (`https://sgh-merida.web.app`). Sincronización con GitHub (`origin main`).  
 > 5. **Pregunta Protocolar de Cierre:** ¿Los resultados fueron satisfactorios?
+---
+
+### Intervención 72
+
+* **Fecha / Hora:** 2026-11-02 ~14:24 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> cuando estoy ingresando las cantidades de matricula se ve claramente que matricula total hace el calculo, pero al guardar dice solo 2 estudiantes  
+> [Adjunta segundo video demostrativo desde teléfono móvil]
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Detección de Caché Móvil en Teléfono y Despliegue de Cabeceras Anti-Caché:  
+> 1. **Diagnóstico del Video:** En la cabecera del video enviado se evidencia que el navegador móvil aún ejecutaba la versión antigua `SGH v2.25.0` (grabado a las 14:20), ejecutando el código previo al hotfix sin refrescar el bundle de Vite.  
+> 2. **Blindaje de Cabeceras:** Se configuró en `webapp/firebase.json` la directiva `Cache-Control: no-cache, no-store, must-revalidate` para todas las rutas HTML, asegurando que los teléfonos móviles descarguen de inmediato la versión activa `v2.25.1`.  
+> 3. **Instrucción de Recarga:** Se explicó al usuario cómo cerrar pestaña o recargar para ver la versión `v2.25.1` en la cabecera, tras lo cual la persistencia de Maternal guardará los totales completos de inmediato.  
+> 4. **Pregunta Protocolar de Cierre:** ¿Los resultados fueron satisfactorios?
