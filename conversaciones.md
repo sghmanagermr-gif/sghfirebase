@@ -4081,3 +4081,23 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 1. Confirmación de que los 5 funcionarios ficticios y la matrícula de prueba quedaron 100% inyectados y sincronizados en `DEMO140000`.  
 > 2. Indicación clara de recargar la pantalla de `alfonsozere@gmail.com` para interactuar con la tabla de personal y todas las herramientas de director.  
 > 3. Pregunta protocolar de cierre.
+---
+
+### Intervención 71
+
+* **Fecha / Hora:** 2026-11-02 ~13:45 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Me dijiste hace rato que la matricula total se calcula automaticamente. pero en el video se demuestra que no es así  
+> [Adjunta video demostrativo de pantalla en móvil]
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Diagnóstico y Corrección de Sumatoria y Persistencia de Matrícula (v2.25.1):  
+> 1. **Análisis del Video:** Se extrajeron los fotogramas del video confirmando que al cargar Maternal (1 FEM + 1 MAS = 2) y Preescolar (1 FEM = 1), el badge "Total Inicial" sumaba 3 correctamente, pero tras guardar, el campo superior *"Matrícula (Total Calculada)"* se reajustaba a 2 omitiendo los alumnos de Maternal.  
+> 2. **Causa Raíz:** Discrepancia tipográfica interna en `webapp/src/main.js` entre la clave de persistencia `materna` y la variable de cómputo `maternal`, causando que Maternal se evaluara como 0 al consolidar `sumFem` y `sumMas` hacia Firestore.  
+> 3. **Corrección Implementada:** Soporte dual `maternal || materna` en lectura, guardado y cálculo consolidado; y sincronización directa en vivo de `matTotal = totIni + totPri + sumMg + sumMt + totEsp + totAdu`.  
+> 4. **Despliegue y SemVer:** Versión elevada a `v2.25.1` (PATCH), compilada en Vite (687 ms) y desplegada a Firebase Hosting (`https://sgh-merida.web.app`). Sincronización con GitHub (`origin main`).  
+> 5. **Pregunta Protocolar de Cierre:** ¿Los resultados fueron satisfactorios?

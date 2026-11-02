@@ -4,6 +4,20 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.25.1 (2 de Noviembre de 2026)
+
+- **Corrección en Cálculo y Persistencia de Matrícula Total (Maternal e Inicial):**
+  - **Diagnóstico (Evidencia en Video):**
+    - En el formulario del director, al ingresar matrícula en Educación Inicial (Maternal + Preescolar), el subtotal visual de la sección "Total Inicial" sumaba correctamente, pero al presionar *"Guardar Datos y Continuar"*, el campo superior *"Matrícula (Total Calculada)"* (`inp-matricula-total`) quedaba con un valor inferior o congelado, omitiendo a los alumnos registrados en Maternal.
+  - **Causa Raíz:**
+    - En `webapp/src/main.js`, durante el empaquetado del guardado, el bloque de Maternal se guardaba en el documento como `matricula.basica['20000'].materna`, mientras que la función encargada de sumar el total general (`sumFem + sumMas`) consultaba la clave en inglés `matricula.basica['20000'].maternal?.['total-mat-fem']`. Debido a la discrepancia de nombres (`materna` vs `maternal`), la matrícula de Maternal se evaluaba como 0 en la sumatoria global, guardando en Firestore un `total-gen` y `matricula-total` truncado que luego sobreescribía la interfaz.
+  - **Solución Técnica Implementada:**
+    - Se implementó soporte dual y retrocompatible (`maternal || materna`) tanto para la lectura, la persistencia en Firestore (`matricula.basica['20000']` y `secciones-planes['20000']`) como para la suma general de género (`sumFem` y `sumMas`).
+    - Se sincronizó la sumatoria en vivo del formulario (`plantel-form`) para que `matTotal` sume de forma directa e incontestable los subtotales de cada nivel activo (`totIni + totPri + sumMg + sumMt + totEsp + totAdu`), garantizando paridad matemática exacta en todo momento.
+  - **Despliegue y SemVer:** Versión PATCH `v2.25.1` compilada en Vite (687 ms) y desplegada a producción en Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.25.0 (2 de Noviembre de 2026)
 
 - **Escuela Laboratorio Ficticia (`DEMO140000`) y Usuario Director Sandbox para Soporte en Tiempo Real:**

@@ -2848,5 +2848,25 @@ Se culminó la configuración funcional de la Escuela Laboratorio (`DEMO140000`)
 3. **Generador Administrativo de Enlaces de Restablecimiento Out-of-Band:**
    - Archivo `scratch/generar_enlace_recuperacion.js`: Consume el endpoint seguro de administración Identity Toolkit (`sendOobCode` con `returnOobLink: true`) para expedir enlaces firmados listos para compartir por WhatsApp/mensajería, sorteando la cuota diaria de correo del plan Spark. Se probó y generó exitosamente el enlace para `munijuliocesarsalaspiconlares@gmail.com`.
 
+---
+
+## [v2.25.1] - 2026-11-02 (Hotfix: Consolidación y Persistencia de Matrícula Total en Maternal e Inicial)
+
+### Resumen Técnico
+Se atendió la inconsistencia demostrada por el usuario mediante video, donde al guardar los datos de matrícula en Educación Inicial (Maternal + Preescolar), el subtotal "Total Inicial" mostraba la suma exacta (ej. 3 alumnos), pero el campo superior "Matrícula (Total Calculada)" quedaba desfasado o con valor inferior (ej. 2 alumnos). 
+
+### Causa Raíz
+Durante la preparación del payload de guardado en `webapp/src/main.js`, la sección de Maternal se asociaba a la clave `matricula.basica['20000'].materna`, mientras que la función de sumatoria consolidada (`sumFem + sumMas`) realizaba la lectura usando `matricula.basica['20000'].maternal?.['total-mat-fem']`. Al no coincidir el identificador (`materna` vs `maternal`), la matrícula de Maternal devolvía `undefined` (0), por lo que Firestore recibía un valor truncado de `total-gen` y `matricula-total`, sobrescribiendo la interfaz vía `onSnapshot`.
+
+### Solución Implementada
+1. **Soporte Dual `maternal || materna`:**
+   - Se garantizó compatibilidad total en `seccionesPlanes['20000']`, en `matricula.basica['20000']` y en la sumatoria de género (`sumFem + sumMas`), asignando y leyendo de forma cruzada ambas claves.
+   - Se ajustó `_renderCajasInicial` para precargar datos tanto si el documento existente contiene `materna` como si contiene `maternal`.
+2. **Coherencia Matemática en Tiempo Real:**
+   - Se refactorizó la sumatoria en vivo del formulario (`plantel-form`) para que `matTotal` sea directamente la suma de los subtotales calculados (`totIni + totPri + sumMg + sumMt + totEsp + totAdu`), impidiendo divergencias entre los indicadores de nivel y el total general.
+3. **Control SemVer y Despliegue:**
+   - Elevación a `v2.25.1` (PATCH). Compilación en Vite (687 ms) y despliegue completado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+
 
 

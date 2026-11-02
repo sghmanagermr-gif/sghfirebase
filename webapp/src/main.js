@@ -1085,13 +1085,8 @@ document.getElementById('plantel-form')?.addEventListener('input', (e) => {
           if(document.getElementById('tot-sec-media-tec')) document.getElementById('tot-sec-media-tec').textContent = totalSecMt;
         
 
-                // Sumar todos los inputs de matrícula (.mat-input)
-        document.querySelectorAll('.mat-input').forEach(input => {
-            const b = input.closest('div[id^="bloque-"]');
-            if (b && b.style.display !== 'none') {
-                matTotal += parseInt(input.value || 0);
-            }
-        });
+        // Sumar todos los inputs de matrícula en tiempo real garantizando coherencia absoluta con los subtotales
+        matTotal = totIni + totPri + sumMg + sumMt + totEsp + totAdu;
         
         if (document.getElementById('lbl-matricula-total')) document.getElementById('lbl-matricula-total').textContent = matTotal;
         if (document.getElementById('inp-matricula-total')) document.getElementById('inp-matricula-total').value = matTotal;
@@ -2020,15 +2015,16 @@ async function mostrarCandado(codigoDEA, dataParcial) {
         const b21 = mat.basica ? (mat.basica["21000"] || {}) : {};
         
         // --- 1. MATERNAL ---
-        if (b20.materna) {
-            const numMat = Object.keys(b20.materna).filter(k => k.length === 1).length;
+        const b20Mat = b20.maternal || b20.materna;
+        if (b20Mat) {
+            const numMat = Object.keys(b20Mat).filter(k => k.length === 1).length;
             if (document.getElementById('secMat')) document.getElementById('secMat').value = numMat;
             _renderCajasInicial('maternal', numMat);
-            Object.keys(b20.materna).forEach(letra => {
+            Object.keys(b20Mat).forEach(letra => {
                 const f = document.querySelector('.mat-input.mat-maternal[data-grupo="maternal-' + letra + '"][data-sexo="F"]');
                 const m = document.querySelector('.mat-input.mat-maternal[data-grupo="maternal-' + letra + '"][data-sexo="M"]');
-                if (f) f.value = b20.materna[letra].fem || 0;
-                if (m) m.value = b20.materna[letra].mas || 0;
+                if (f) f.value = b20Mat[letra].fem || 0;
+                if (m) m.value = b20Mat[letra].mas || 0;
             });
         }
         
@@ -2288,6 +2284,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                   if (!seccionesPlanes['20000']) seccionesPlanes['20000'] = {};
                   if (!seccionesPlanes['20000'].maternal) seccionesPlanes['20000'].maternal = {};
                   seccionesPlanes['20000'].maternal[secLetra] = 1;
+                  seccionesPlanes['20000'].materna = seccionesPlanes['20000'].maternal;
               });
 
               // 20000/preescolar
@@ -2385,7 +2382,8 @@ async function mostrarCandado(codigoDEA, dataParcial) {
               }
 
               if (!matricula.basica['20000']) matricula.basica['20000'] = { 'total-20000': 0 };
-              matricula.basica['20000'].materna = materna;
+              matricula.basica['20000'].maternal = materna;
+              matricula.basica['20000'].materna  = materna;
               matricula.basica['20000']['total-20000'] += (tMatMas + tMatFem);
           }
 
@@ -2646,10 +2644,11 @@ async function mostrarCandado(codigoDEA, dataParcial) {
           // ── SUMA GLOBAL DE MATRÍCULA (Básica + Media) ─────────────────────
           let sumFem = 0, sumMas = 0, sumVacFem = 0, sumVacMas = 0;
           if (matricula.basica['20000']) {
-              sumFem += (matricula.basica['20000'].maternal?.['total-mat-fem'] || 0) + (matricula.basica['20000'].preescolar?.['total-pre-fem'] || 0);
-              sumMas += (matricula.basica['20000'].maternal?.['total-mat-mas'] || 0) + (matricula.basica['20000'].preescolar?.['total-pre-mas'] || 0);
-              sumVacFem += (matricula.basica['20000'].maternal?.['total-vac-mat-fem'] || 0) + (matricula.basica['20000'].preescolar?.['total-vac-pre-fem'] || 0);
-              sumVacMas += (matricula.basica['20000'].maternal?.['total-vac-mat-mas'] || 0) + (matricula.basica['20000'].preescolar?.['total-vac-pre-mas'] || 0);
+              const matObj = matricula.basica['20000'].maternal || matricula.basica['20000'].materna;
+              sumFem += (matObj?.['total-mat-fem'] || 0) + (matricula.basica['20000'].preescolar?.['total-pre-fem'] || 0);
+              sumMas += (matObj?.['total-mat-mas'] || 0) + (matricula.basica['20000'].preescolar?.['total-pre-mas'] || 0);
+              sumVacFem += (matObj?.['total-vac-mat-fem'] || 0) + (matricula.basica['20000'].preescolar?.['total-vac-pre-fem'] || 0);
+              sumVacMas += (matObj?.['total-vac-mat-mas'] || 0) + (matricula.basica['20000'].preescolar?.['total-vac-pre-mas'] || 0);
           }
           if (matricula.basica['21000']) {
               sumFem += matricula.basica['21000']['total-21000-fem'] || 0;
