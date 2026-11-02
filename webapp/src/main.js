@@ -705,7 +705,7 @@ document.getElementById('register-form')?.addEventListener('submit', async (e) =
             }
         }
 
-        // --- BARRERA INSTITUCIONAL: CÉDULA ÚNICA ---
+        // --- BARRERA INSTITUCIONAL: CÉDULA ÚNICA Y GESTIÓN MULTI-PLANTEL ---
         if (cedula) {
             const cleanCedula = cedula.trim().toUpperCase();
             const qCed = query(
@@ -713,22 +713,45 @@ document.getElementById('register-form')?.addEventListener('submit', async (e) =
                 where('cedula', '==', cleanCedula)
             );
             const snapCed = await getDocs(qCed);
-            const titularCed = snapCed.docs.map(d => ({ id: d.id, ...d.data() }))
-                .find(d => d.id !== cred.user.uid && (d.estado_aprobacion === 'APROBADO' || d.estado_aprobacion === 'PENDIENTE'));
+            const cuentasExistentes = snapCed.docs.map(d => ({ id: d.id, ...d.data() }))
+                .filter(d => d.id !== cred.user.uid && (d.estado_aprobacion === 'APROBADO' || d.estado_aprobacion === 'PENDIENTE'));
 
-            if (titularCed) {
-                try {
-                    await cred.user.delete();
-                } catch(eDel) {
-                    console.warn("Aviso al eliminar cuenta duplicada en Auth:", eDel);
-                    await signOut(auth);
+            if (cuentasExistentes.length > 0) {
+                // Caso Directores (plaadmin): Se permite la misma cédula para directores a cargo de múltiples planteles (códigos DEA distintos)
+                if (rol === 'plaadmin') {
+                    const deaUpper = (dea || '').trim().toUpperCase();
+                    const cuentaMismoPlantel = cuentasExistentes.find(d => d.rol === 'plaadmin' && d.jerarquia?.plantel_codigo === deaUpper);
+                    if (cuentaMismoPlantel) {
+                        try {
+                            await cred.user.delete();
+                        } catch(eDel) {
+                            console.warn("Aviso al eliminar cuenta duplicada en Auth:", eDel);
+                            await signOut(auth);
+                        }
+                        await showAlert(
+                            "Cuenta Ya Registrada Para Este Plantel",
+                            `La cédula <b>${cleanCedula}</b> ya posee una cuenta registrada para el plantel <b>${deaUpper}</b> bajo el correo <b>${cuentaMismoPlantel.email}</b>.<br><br>No es necesario registrarse dos veces para la misma institución. Si no recuerda su clave, utilice la opción de recuperación de contraseña.`,
+                            "warning"
+                        );
+                        return;
+                    }
+                    // Si la cuenta existente es para otro plantel diferente, se autoriza el registro institucional multi-plantel
+                } else {
+                    // Para otros roles institucionales (ej: munadmin), la cédula debe ser estrictamente única
+                    const titularCed = cuentasExistentes[0];
+                    try {
+                        await cred.user.delete();
+                    } catch(eDel) {
+                        console.warn("Aviso al eliminar cuenta duplicada en Auth:", eDel);
+                        await signOut(auth);
+                    }
+                    await showAlert(
+                        "Cédula Ya Registrada",
+                        `La cédula de identidad <b>${cleanCedula}</b> ya se encuentra registrada en el sistema bajo la cuenta <b>${titularCed.email}</b>.<br><br>No se permite registrar múltiples cuentas con la misma cédula para este rol.`,
+                        "warning"
+                    );
+                    return;
                 }
-                await showAlert(
-                    "Cédula Ya Registrada",
-                    `La cédula de identidad <b>${cleanCedula}</b> ya se encuentra registrada en el sistema bajo la cuenta <b>${titularCed.email}</b>.<br><br>No se permite registrar múltiples cuentas con la misma cédula de identidad. Si no recuerda su contraseña, use la opción "¿Olvidaste tu contraseña?" en el formulario de inicio de sesión.`,
-                    "warning"
-                );
-                return;
             }
         }
 

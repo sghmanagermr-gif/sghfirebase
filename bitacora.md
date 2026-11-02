@@ -2869,6 +2869,25 @@ Durante la preparación del payload de guardado en `webapp/src/main.js`, la secc
 4. **Control SemVer y Despliegue:**
    - Elevación a `v2.25.1` (PATCH). Compilación en Vite (687 ms) y despliegue completado a Firebase Hosting (`https://sgh-merida.web.app`).
 
+---
+
+## [v2.26.0] - 2026-11-02 (Soporte Multi-Plantel para Directores con Cédula Compartida)
+
+### Resumen Técnico
+Se implementó la **Opción 1** aprobada por el Administrador para resolver el bloqueo de directores con múltiples planteles a su cargo (ej. circuitos escolares y NER). El sistema ahora permite que una misma persona registre múltiples cuentas institucionales con su misma cédula de identidad, siempre que cada registro corresponda a un código DEA diferente.
+
+### Acciones Realizadas
+1. **Refactorización de la Validación de Cédula Única en `webapp/src/main.js`:**
+   - Si `rol === 'plaadmin'`, el sistema verifica si la cédula ya posee cuenta activa o pendiente para ese mismo código DEA (`d.jerarquia?.plantel_codigo === deaUpper`).
+   - Si intenta duplicar el mismo plantel, se frena con un aviso preventivo indicando que ya posee cuenta para esa institución.
+   - Si la cédula ya existe pero para otros planteles distintos, se autoriza con éxito el registro del nuevo plantel.
+2. **Preservación Estricta de Candados Institucionales:**
+   - Se mantiene la restricción de 1 único Director por código DEA (ningún plantel puede ser reclamado por dos usuarios distintos).
+   - Se mantiene la regla de 1 único Coordinador Municipal (`munadmin`) por municipio.
+3. **Control SemVer y Despliegue:**
+   - Elevación a **`v2.26.0`** (MENOR por nueva capacidad institucional multi-plantel). Compilación en Vite (708 ms) y despliegue completado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+
 
 
 

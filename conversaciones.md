@@ -4120,3 +4120,41 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 2. **Blindaje de Cabeceras:** Se configuró en `webapp/firebase.json` la directiva `Cache-Control: no-cache, no-store, must-revalidate` para todas las rutas HTML, asegurando que los teléfonos móviles descarguen de inmediato la versión activa `v2.25.1`.  
 > 3. **Instrucción de Recarga:** Se explicó al usuario cómo cerrar pestaña o recargar para ver la versión `v2.25.1` en la cabecera, tras lo cual la persistencia de Maternal guardará los totales completos de inmediato.  
 > 4. **Pregunta Protocolar de Cierre:** ¿Los resultados fueron satisfactorios?
+---
+
+### Intervención 73
+
+* **Fecha / Hora:** 2026-11-02 ~14:44 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa." porque estás tomando atribuciones sin explicar como lo resolverás  
+> Ok revisemos otro caso. resulta que hace rato se hico la modificación que se registrara un usuario por plantel y tambien mas temprano uno por municipio, hasta allí toto bien. Pero resulta que estoy recibiendo quejas de Directores que tienen hasta mas de 10 planteles a su cargo, y evidentemente deben registrar cada plantel con su respectivo correo instirucional o sea si son 5 plantles 5 correos distintos, con los 5 codigo dea -perfecto-; pero resulta que el distema le está notificando a estos directores que el numero de cedula ya está registrado como usuario; obviamente si un director tiene muchos planteles a su cargo hará el registro cada plantel con su correo institucinal y su codigo dea respectivo, pero el numero de cedula del director no cambia.  
+> ¿Cómo resolverías ese caso?
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Lectura Estricta de Habilidades y Propuesta de Solución (Skill 6):  
+> 1. Se confirmó la lectura íntegra de `SKILL_sgh_firebase.md` de `webapp-expert`.  
+> 2. Se presentó el diagnóstico en lenguaje claro y sin código: el candado de cédula única bloqueaba a los directores encargados al intentar registrar su segundo o tercer plantel.  
+> 3. Se propusieron dos alternativas: la Opción 1 (permitir misma cédula si el código DEA es diferente) y la Opción 2 (cuenta única con menú de escuelas). Se recomendó la Opción 1 por apegarse al flujo ya informado por WhatsApp.
+
+---
+
+### Intervención 74
+
+* **Fecha / Hora:** 2026-11-02 ~14:48 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Gracias. Procede con la Opción 1
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Implementación de Soporte Multi-Plantel para Directores (v2.26.0):  
+> 1. Se adaptó la barrera institucional de cédula en `webapp/src/main.js` para autorizar registros de un mismo director (`plaadmin`) en planteles distintos (`deaUpper`).  
+> 2. Se mantuvo el candado de un único director por plantel y un único coordinador por municipio.  
+> 3. Se incrementó la versión a `v2.26.0` (MENOR), se compiló en Vite (708 ms) y se desplegó a producción en Firebase Hosting (`https://sgh-merida.web.app`). Sincronización con GitHub (`origin main`).  
+> 4. Pregunta protocolar de cierre.

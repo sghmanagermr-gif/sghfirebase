@@ -4,6 +4,19 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.26.0 (2 de Noviembre de 2026)
+
+- **Soporte Institucional Multi-Plantel para Directores (`plaadmin`) con Cédula Compartida:**
+  - **Diagnóstico y Requerimiento:**
+    - Se identificaron casos reales de directores encargados o directores de circuitos escolares y NER en el estado Mérida con 2, 5 o más de 10 planteles a su cargo. Al intentar registrar cada plantel con su correo institucional y su código DEA respectivo, el sistema bloqueaba el registro advirtiendo que la cédula ya existía en la base de datos de usuarios.
+  - **Solución Implementada (Opción 1 Aprobada):**
+    - Se flexibilizó la barrera institucional de cédula única para el rol `plaadmin`, permitiendo que una misma persona (misma cédula) registre múltiples planteles educativos, siempre y cuando cada registro corresponda a un código DEA diferente.
+    - Se mantuvo intacto el candado de no duplicidad de plantel (un mismo código DEA jamás podrá tener dos directores activos o en validación) y el candado de un único coordinador por municipio (`munadmin`).
+    - En caso de que el mismo director intente registrarse dos veces para el mismo código DEA, el sistema le notifica amigablemente que ya posee cuenta para esa institución específica.
+  - **Despliegue y SemVer:** Versión MENOR `v2.26.0` compilada en Vite (708 ms) y desplegada a producción en Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.25.1 (2 de Noviembre de 2026)
 
 - **Corrección en Cálculo y Persistencia de Matrícula Total (Maternal e Inicial):**
