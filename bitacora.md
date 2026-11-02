@@ -2705,3 +2705,43 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `versiones.md`
 - `bitacora.md`
 - `conversaciones.md`
+
+
+---
+
+### Entrada de Bitácora - Versión v2.24.0 (2 de Noviembre de 2026)
+
+**1. Contexto y Requerimiento:**
+- El Administrador consulta mediante soporte de captura de pantalla (`media_1793632335873_1a57c7c6.png`): *«¿un usuario director puede acceder dos veces con correos distintos a un mismo codigo DEA?»*.
+- En la imagen se evidenciaron dos cuentas activas y aprobadas para el Prof. René Maximiliano Guillén González (C.I. 9397736) asignadas al plantel `OD03971408` (Cardenal Quintero) mediante dos correos Gmail distintos.
+- El Administrador instruye: *«Sí procede»* para blindar el sistema y activar el candado institucional anti-duplicados a nivel de directores de plantel.
+
+**2. Diagnóstico Técnico y Arquitectura de Blindaje:**
+- **Vulnerabilidad de Duplicidad:** La barrera institucional previa únicamente validaba el rol `munadmin` por municipio. Para `plaadmin`, no existía restricción a nivel de código DEA en el registro ni en la aprobación, permitiendo múltiples cuentas para la misma institución y la misma cédula de identidad.
+- **Principio Zero-Cost:**
+  - En el panel administrativo (`admin.js`), la validación de duplicados opera 100% sobre la memoria local (`usuariosLocales`), con coste de **0 lecturas** de Firestore.
+  - En el formulario de registro (`main.js`), la validación se ejecuta mediante consultas indexadas ultra-acotadas por clave única (`where('jerarquia.plantel_codigo', '==', dea)` y `where('cedula', '==', cedula)`), consumiendo únicamente los documentos estrictamente necesarios antes de abortar.
+
+**3. Solución Técnica Implementada:**
+- **Blindaje en Registro (`webapp/src/main.js`):**
+  - Si un usuario intenta registrarse como `plaadmin` con un código DEA que ya tiene director titular (`APROBADO` o `PENDIENTE`), la credencial de Auth se purga al instante (`cred.user.delete()`) y se bloquea el proceso.
+  - Se añadió validación de cédula única para impedir que la misma persona física registre cuentas múltiples con correos alternativos.
+  - Se extendió la protección a la sala de espera (`initRecuperacionPerfil`) y a la rutina de auto-recuperación de cuenta huérfana.
+- **Blindaje en Panel Administrativo (`webapp/src/admin.js`):**
+  - **Aprobación Segura:** El botón `btn-aprobar` evalúa si el código DEA ya cuenta con un director aprobado activo. Si existe, cancela la acción y alerta al administrador con los datos del titular actual.
+  - **Reasignación Protegida:** Al editar roles o municipios en `#modal-editar-rol-usuario`, se bloquea la asignación de un código DEA ocupado por otro directivo activo.
+  - **Alertas Visuales en Tabla:** Se incorporaron insignias diferenciadas: ámbar para registros pendientes conflictivos y roja (`⚠️ Cuenta duplicada para el mismo DEA`) para duplicados aprobados preexistentes.
+- **Interfaz Orientadora (`webapp/index.html`):**
+  - Se incluyó la nota institucional: *"ℹ️ Solo se admite un Director activo por código DEA"*.
+- **Control SemVer y Despliegue:**
+  - Incremento a **`v2.24.0`** (versión MENOR por nueva capacidad institucional) en `package.json` e `index.html`.
+  - Compilación limpia en Vite (933 ms) y despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`).
+
+**4. Archivos Involucrados:**
+- `webapp/package.json` (v2.24.0)
+- `webapp/index.html` (v2.24.0, nota orientadora en registro)
+- `webapp/src/main.js` (barrera anti-duplicados DEA y cédula en registro y auto-recuperación)
+- `webapp/src/admin.js` (barrera anti-duplicados DEA en aprobación, edición de rol y distintivos visuales)
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`

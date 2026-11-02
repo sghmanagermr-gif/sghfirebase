@@ -4,6 +4,26 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.24.0 (2 de Noviembre de 2026)
+
+- **Barrera Institucional Anti-Duplicados para Directores de Plantel (`plaadmin`) y Validación de Cédula Única:**
+  - **Diagnóstico del Inconveniente (Causa Raíz):**
+    - El Administrador reportó con captura de pantalla (`media_1793632335873_1a57c7c6.png`) la existencia de dos cuentas aprobadas con roles de Director (`plaadmin`) pertenecientes al mismo docente (Prof. René Maximiliano Guillén González, C.I. 9397736) asignadas al mismo código DEA (`OD03971408`), creadas con dos correos distintos (`augustoescuela47@gmail.com` y `escuelacarlos74@gmail.com`).
+    - Se identificó que la barrera anti-duplicados previa protegía exclusivamente a los Coordinadores Municipales (`munadmin`), permitiendo que el formulario de registro y la validación en panel dejaran pasar múltiples directores para un mismo plantel.
+  - **Soluciones y Blindajes Institucionales Implementados:**
+    - **Barrera en Registro Público (`#register-form`):** Al intentar registrarse como `plaadmin`, el sistema verifica si el código DEA ya cuenta con un director activo (`APROBADO` o `PENDIENTE`). Si ya existe un titular, la credencial temporal de Auth se destruye de inmediato (`cred.user.delete()`) y se notifica al usuario con el nombre y correo del titular actual.
+    - **Barrera de Cédula Única en Registro:** Se implementó una verificación indexada para impedir que una misma cédula de identidad se registre con correos diferentes, orientando al usuario a recuperar su clave en lugar de duplicar cuentas.
+    - **Barrera en Auto-Completado de Ficha (`initRecuperacionPerfil` y auto-recuperación):** Si un usuario completa su perfil en la sala de espera, tampoco puede seleccionar un código DEA que ya tenga director asignado.
+    - **Barrera en Aprobación Administrativa (`btn-aprobar`):** Antes de autorizar a un director, el panel valida en memoria local (`usuariosLocales`, 0 lecturas) si ya existe otro director en estatus `APROBADO` para ese DEA, impidiendo aprobaciones duplicadas y alertando al administrador.
+    - **Barrera en Edición de Rol / Datos (`modal-editar-rol-usuario`):** Al reasignar rol o DEA a un usuario, se comprueba que el plantel de destino no esté ocupado por otro directivo activo.
+    - **Insignias Visuales de Alerta en Tabla de Usuarios:**
+      - Si una solicitud pendiente corresponde a un DEA ya ocupado: `⚠️ Plantel ya tiene director activo` (ámbar).
+      - Si existen cuentas duplicadas ya aprobadas históricamente para el mismo DEA: `⚠️ Cuenta duplicada para el mismo DEA` (rojo).
+    - **Nota Orientadora en Registro:** En el selector de código DEA del formulario se incorporó: *"ℹ️ Solo se admite un Director activo por código DEA"*.
+  - **Despliegue Inmediato:** Compilado limpio en Vite (933 ms) y publicado en Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.23.3 (2 de Noviembre de 2026)
 
 - **Alta Institucional y Vinculación Operativa del Plantel `OD12551412` (Centro de Rehabilitación del Lenguaje):**

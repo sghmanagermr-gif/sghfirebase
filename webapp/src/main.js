@@ -289,7 +289,23 @@ function initRecuperacionPerfil(authUser) {
                     }
                     return;
                 }
-                jerarquia.plantel_codigo = dea;
+                const deaUpper = dea.trim().toUpperCase();
+                const qPla = query(
+                    collection(db, 'usuarios'),
+                    where('jerarquia.plantel_codigo', '==', deaUpper)
+                );
+                const snapPla = await getDocs(qPla);
+                const titularPla = snapPla.docs.map(d => ({ id: d.id, ...d.data() }))
+                    .find(d => d.id !== authUser.uid && d.rol === 'plaadmin' && (d.estado_aprobacion === 'APROBADO' || d.estado_aprobacion === 'PENDIENTE'));
+                if (titularPla) {
+                    if (errEl) {
+                        const estadoTxt = titularPla.estado_aprobacion === 'APROBADO' ? 'activo y aprobado' : 'en revisión';
+                        errEl.innerHTML = `El plantel <b>${deaUpper}</b> ya cuenta con un Director ${estadoTxt} (<b>${titularPla.nombre || titularPla.email}</b>). No se permite duplicar directores por código DEA.`;
+                        errEl.style.display = 'block';
+                    }
+                    return;
+                }
+                jerarquia.plantel_codigo = deaUpper;
                 jerarquia.municipio = dp.municipio || dp.municipio_nombre || '';
             } else if (rol === 'munadmin') {
                 if (!mun) {
@@ -659,6 +675,63 @@ document.getElementById('register-form')?.addEventListener('submit', async (e) =
             }
         }
 
+        // --- BARRERA INSTITUCIONAL: ÚNICO DIRECTOR DE PLANTEL (plaadmin) ---
+        if (rol === 'plaadmin') {
+            const deaUpper = dea.trim().toUpperCase();
+            const qPla = query(
+                collection(db, 'usuarios'),
+                where('jerarquia.plantel_codigo', '==', deaUpper)
+            );
+            const snapPla = await getDocs(qPla);
+            const titularPla = snapPla.docs.map(d => ({ id: d.id, ...d.data() }))
+                .find(d => d.id !== cred.user.uid && d.rol === 'plaadmin' && (d.estado_aprobacion === 'APROBADO' || d.estado_aprobacion === 'PENDIENTE'));
+
+            if (titularPla) {
+                try {
+                    await cred.user.delete();
+                } catch(eDel) {
+                    console.warn("Aviso al eliminar cuenta duplicada en Auth:", eDel);
+                    await signOut(auth);
+                }
+                const estadoTxt = titularPla.estado_aprobacion === 'APROBADO' ? 'activo y aprobado' : 'en proceso de validación';
+                const nombreTitular = titularPla.nombre || 'otro directivo';
+                const emailTitular = titularPla.email ? ` (${titularPla.email})` : '';
+                await showAlert(
+                    "Plantel Ya Cuenta con Director",
+                    `El plantel con código DEA <b>${deaUpper}</b> ya cuenta con un Director ${estadoTxt}: <b>${nombreTitular}</b>${emailTitular}.<br><br>Por políticas institucionales del CDCE Mérida, no se permite más de un Director activo para el mismo código DEA. Si usted es el nuevo directivo designado o requiere actualizar su correo de acceso, por favor comuníquese con su Coordinador Municipal o la Sala Técnica del CDCE Mérida.`,
+                    "warning"
+                );
+                return;
+            }
+        }
+
+        // --- BARRERA INSTITUCIONAL: CÉDULA ÚNICA ---
+        if (cedula) {
+            const cleanCedula = cedula.trim().toUpperCase();
+            const qCed = query(
+                collection(db, 'usuarios'),
+                where('cedula', '==', cleanCedula)
+            );
+            const snapCed = await getDocs(qCed);
+            const titularCed = snapCed.docs.map(d => ({ id: d.id, ...d.data() }))
+                .find(d => d.id !== cred.user.uid && (d.estado_aprobacion === 'APROBADO' || d.estado_aprobacion === 'PENDIENTE'));
+
+            if (titularCed) {
+                try {
+                    await cred.user.delete();
+                } catch(eDel) {
+                    console.warn("Aviso al eliminar cuenta duplicada en Auth:", eDel);
+                    await signOut(auth);
+                }
+                await showAlert(
+                    "Cédula Ya Registrada",
+                    `La cédula de identidad <b>${cleanCedula}</b> ya se encuentra registrada en el sistema bajo la cuenta <b>${titularCed.email}</b>.<br><br>No se permite registrar múltiples cuentas con la misma cédula de identidad. Si no recuerda su contraseña, use la opción "¿Olvidaste tu contraseña?" en el formulario de inicio de sesión.`,
+                    "warning"
+                );
+                return;
+            }
+        }
+
         let jerarquia = { estado: "MERIDA" };
         if(rol === 'munadmin') {
             jerarquia.municipio = municipio;
@@ -698,6 +771,26 @@ document.getElementById('register-form')?.addEventListener('submit', async (e) =
                     const signInCred = await signInWithEmailAndPassword(auth, email, pwd);
                     const userDocSnap = await getDoc(doc(db, 'usuarios', signInCred.user.uid));
                     if (!userDocSnap.exists()) {
+                        if (rol === 'munadmin') {
+                            const variantes = getVariantesMunicipio(municipio);
+                            const snapMun = await getDocs(query(collection(db, 'usuarios'), where('rol', '==', 'munadmin'), where('jerarquia.municipio', 'in', variantes)));
+                            const titularMun = snapMun.docs.map(d => ({ id: d.id, ...d.data() })).find(d => d.id !== signInCred.user.uid && (d.estado_aprobacion === 'APROBADO' || d.estado_aprobacion === 'PENDIENTE'));
+                            if (titularMun) {
+                                await signOut(auth);
+                                await showAlert("Municipio Ya Cuenta con Coordinador", `El municipio <b>${municipio}</b> ya cuenta con un coordinador registrado.`, "warning");
+                                return;
+                            }
+                        } else if (rol === 'plaadmin') {
+                            const deaUpper = dea.trim().toUpperCase();
+                            const snapPla = await getDocs(query(collection(db, 'usuarios'), where('jerarquia.plantel_codigo', '==', deaUpper)));
+                            const titularPla = snapPla.docs.map(d => ({ id: d.id, ...d.data() })).find(d => d.id !== signInCred.user.uid && d.rol === 'plaadmin' && (d.estado_aprobacion === 'APROBADO' || d.estado_aprobacion === 'PENDIENTE'));
+                            if (titularPla) {
+                                await signOut(auth);
+                                await showAlert("Plantel Ya Cuenta con Director", `El plantel con código DEA <b>${deaUpper}</b> ya cuenta con un director registrado.`, "warning");
+                                return;
+                            }
+                        }
+
                         let jerarquia = { estado: "MERIDA" };
                         if(rol === 'munadmin') {
                             jerarquia.municipio = municipio;

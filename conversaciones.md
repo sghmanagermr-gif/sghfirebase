@@ -3834,3 +3834,42 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 2. **Habilitación Operativa:** El Director Encargado (Prof. Deifilio Contreras Rivas) ya puede registrarse de inmediato con el código `OD12551412` sin bloqueos. Sus 20 trabajadores en nómina se vincularán de forma automática.  
 > 3. **Control SemVer y Despliegue:** Incremento a `v2.23.3`, compilado y desplegado a producción en Firebase Hosting (`https://sgh-merida.web.app`). Respaldo protocolar en `bitacora.md`, `versiones.md` y sincronización con GitHub (`origin main`).  
 > 4. **Pregunta Protocolar de Cierre:** ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 58
+
+* **Fecha / Hora:** 2026-11-02 ~11:12 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Te pregunto: ¿un usuario director puede acceder dos veces con correos distintos a un mismo codigo DEA?  
+> *(Adjunta captura de pantalla mostrando dos cuentas aprobadas con roles de Director para el Prof. René Maximiliano Guillén González con el mismo DEA OD03971408 y correos distintos)*
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Explicación Institucional Pedagógica (Skill 6):  
+> 1. Se aclaró que técnicamente ocurrió porque la barrera anti-duplicados previa solo cubría a los municipios (`munadmin`), no a los planteles (`plaadmin`).  
+> 2. Se explicaron los riesgos de sobrescritura de nómina y duplicidad de perfiles.  
+> 3. Se indicó la acción inmediata en el panel (eliminar el correo secundario para dejar solo el oficial) y se consultó la autorización para implementar la barrera anti-duplicados para directores.
+
+---
+
+### Intervención 59
+
+* **Fecha / Hora:** 2026-11-02 ~11:32 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Sí procede
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Activación de la Barrera Institucional Anti-Duplicados para Directores y Validación de Cédula Única (v2.24.0):  
+> 1. **Blindaje en Registro:** Se activó la validación estricta por código DEA y por cédula de identidad en `#register-form`, destruyendo cuentas temporales de Auth si el plantel o cédula ya están tomados. Se protegió también la sala de espera y la auto-recuperación de cuentas.  
+> 2. **Blindaje en Panel de Control:** El botón de aprobación (`btn-aprobar`) y el editor de roles (`Rol / Datos`) bloquean la asignación de directores duplicados en el mismo DEA (0 lecturas, validado en memoria local). Se añadieron distintivos visuales en la tabla resaltando duplicados existentes en color rojo (`⚠️ Cuenta duplicada para el mismo DEA`).  
+> 3. **Nota de Orientación:** Se añadió la nota *"ℹ️ Solo se admite un Director activo por código DEA"* en el formulario.  
+> 4. **Control SemVer y Despliegue:** Versión actualizada a `v2.24.0` (MENOR), compilada en Vite (933 ms) y desplegada a Firebase Hosting (`https://sgh-merida.web.app`). Respaldo protocolar en `bitacora.md`, `versiones.md` y sincronización con GitHub (`origin main`).  
+> 5. **Pregunta Protocolar de Cierre:** ¿Los resultados fueron satisfactorios?

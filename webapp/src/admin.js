@@ -1620,6 +1620,12 @@ export function initAdminDashboard(dbInstance, user) {
             ${(u.rol === 'munadmin' && !isAprobado && usuariosLocales.some(x => x.uid !== u.uid && x.rol === 'munadmin' && x.estado_aprobacion === 'APROBADO' && normalizarMunicipio(x.jerarquia?.municipio || x.municipio || '') === normalizarMunicipio(u.jerarquia?.municipio || u.municipio || ''))) 
               ? `<div style="font-size: 0.73rem; color: #b45309; font-weight: 600; margin-top: 4px; display: inline-flex; align-items: center; gap: 4px; background: #fffbeb; padding: 2px 6px; border-radius: 4px; border: 1px solid #fde68a;">⚠️ Municipio ya tiene coordinador activo</div>` 
               : ''}
+            ${(u.rol === 'plaadmin' && !isAprobado && (u.jerarquia?.plantel_codigo) && usuariosLocales.some(x => x.uid !== u.uid && x.rol === 'plaadmin' && x.estado_aprobacion === 'APROBADO' && (x.jerarquia?.plantel_codigo || '').trim().toUpperCase() === (u.jerarquia?.plantel_codigo || '').trim().toUpperCase())) 
+              ? `<div style="font-size: 0.73rem; color: #b45309; font-weight: 600; margin-top: 4px; display: inline-flex; align-items: center; gap: 4px; background: #fffbeb; padding: 2px 6px; border-radius: 4px; border: 1px solid #fde68a;">⚠️ Plantel ya tiene director activo</div>` 
+              : ''}
+            ${(u.rol === 'plaadmin' && isAprobado && (u.jerarquia?.plantel_codigo) && usuariosLocales.some(x => x.uid !== u.uid && x.rol === 'plaadmin' && x.estado_aprobacion === 'APROBADO' && (x.jerarquia?.plantel_codigo || '').trim().toUpperCase() === (u.jerarquia?.plantel_codigo || '').trim().toUpperCase())) 
+              ? `<div style="font-size: 0.73rem; color: #dc2626; font-weight: 600; margin-top: 4px; display: inline-flex; align-items: center; gap: 4px; background: #fef2f2; padding: 2px 6px; border-radius: 4px; border: 1px solid #fecaca;">⚠️ Cuenta duplicada para el mismo DEA</div>` 
+              : ''}
             ${u.rol === 'zonadmin' ? `<div style="font-size: 0.75rem; color: #16a34a; font-weight: 500; margin-top: 3px;">🔑 ${u.permisos ? Object.entries(u.permisos).filter(([k, v]) => v === true && k !== 'listas' && k !== 'ultima_modificacion').length + ' competencias autorizadas' : 'Acceso Estándar'}</div>` : ''}
           </td>
           <td style="padding: 15px 20px;">
@@ -1685,6 +1691,27 @@ export function initAdminDashboard(dbInstance, user) {
               "warning"
             );
             return;
+          }
+        }
+
+        // --- BARRERA ANTI-DUPLICADOS PLAADMIN (DIRECTOR DE PLANTEL) ---
+        if (userToApprove && userToApprove.rol === 'plaadmin') {
+          const deaNorm = (userToApprove.jerarquia?.plantel_codigo || '').trim().toUpperCase();
+          if (deaNorm) {
+            const yaAprobado = usuariosLocales.find(x => 
+              x.uid !== uid && 
+              x.rol === 'plaadmin' && 
+              x.estado_aprobacion === 'APROBADO' && 
+              (x.jerarquia?.plantel_codigo || '').trim().toUpperCase() === deaNorm
+            );
+            if (yaAprobado) {
+              await showAlert(
+                "Plantel Ya Cuenta con Director",
+                `El plantel con código DEA <b>${deaNorm}</b> ya cuenta con un Director aprobado y activo: <b>${yaAprobado.nombre}</b> (${yaAprobado.email}).<br><br>No se permite tener dos directores activos para el mismo plantel institucional. Si desea autorizar a este nuevo usuario, primero debe rechazar, eliminar o reasignar al director actual.`,
+                "warning"
+              );
+              return;
+            }
           }
         }
 
@@ -1872,6 +1899,31 @@ export function initAdminDashboard(dbInstance, user) {
       if (nuevoRol === 'plaadmin' && !nuevoMun) {
         showToast('Debe seleccionar el municipio al que pertenece el plantel.', 'error');
         return;
+      }
+
+      if (nuevoRol === 'plaadmin' && !nuevoDea) {
+        showToast('Debe ingresar el código DEA del plantel asignado.', 'error');
+        return;
+      }
+
+      if (nuevoRol === 'plaadmin') {
+        const deaNorm = nuevoDea.trim().toUpperCase();
+        if (deaNorm) {
+          const yaAprobado = usuariosLocales.find(x => 
+            x.uid !== usuarioEditandoRol.uid && 
+            x.rol === 'plaadmin' && 
+            x.estado_aprobacion === 'APROBADO' && 
+            (x.jerarquia?.plantel_codigo || '').trim().toUpperCase() === deaNorm
+          );
+          if (yaAprobado) {
+            await showAlert(
+              "Plantel Ya Asignado",
+              `El plantel con código DEA <b>${deaNorm}</b> ya cuenta con un Director activo: <b>${yaAprobado.nombre}</b> (${yaAprobado.email}).<br><br>No se puede asignar más de un director activo por código DEA.`,
+              "warning"
+            );
+            return;
+          }
+        }
       }
 
       btnGuardarEditRol.disabled = true;
