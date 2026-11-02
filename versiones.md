@@ -4,6 +4,33 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.23.3 (2 de Noviembre de 2026)
+
+- **Alta Institucional y Vinculación Operativa del Plantel `OD12551412` (Centro de Rehabilitación del Lenguaje):**
+  - **Diagnóstico del Inconveniente (Causa Raíz):**
+    - Durante la auditoría de registros huérfanos se evidenció que el Centro de Rehabilitación de Lenguaje (DEA: `OD12551412`, Parroquia Mariano Picón Salas, Municipio Libertador) no se encontraba en la colección activa de `planteles` en Cloud Firestore debido a una omisión en los archivos CSV suministrados durante la migración original de planteles.
+    - Como consecuencia, el Director Encargado (**Prof. Deifilio Contreras Rivas, C.I. 11.461.168**) no podía registrarse como usuario del sistema (`plaadmin`), recibiendo el error: *"El código DEA no existe en la base de datos institucional"*, y los 20 trabajadores adscritos a dicha institución en la colección `cargos_personal` permanecían sin plantel padre asociado.
+  - **Solución Técnica y Alta de Registro:**
+    - Se extrajo la ficha completa del archivo maestro institucional (`bd_sgh.json`):
+      - **Código DEA:** `OD12551412`
+      - **Nombre Nominal:** CENTRO DE REHABILITACION DE LENGUAJE
+      - **Nuevo Epónimo:** CENTRO DE REHABILITACION DEL LENGUAJE
+      - **Denominación:** CENTRO DE REHABILITACION DE LENGUAJE
+      - **Dependencia:** NACIONAL (Cód. Dependencia: `6490063`)
+      - **Código Estadístico:** `141676`
+      - **Municipio:** LIBERTADOR
+      - **Parroquia:** MARIANO PICON SALAS
+      - **Modalidad:** EDUCACION ESPECIAL
+      - **Turno:** DOBLE TURNO
+      - **Planes de Estudio / Matrícula / Secciones:** Inicializados para auditoría.
+    - Se inyectó el documento en Firestore mediante la API REST autorizada por credenciales administrativas, consumiendo exactamente **1 escritura y 0 lecturas**, preservando de forma absoluta el principio **Zero-Cost**.
+    - El Director Encargado ya puede registrarse de inmediato e iniciar la carga de información en la jornada institucional, quedando enlazado automáticamente con los 20 trabajadores de su nómina.
+  - **Control SemVer y Despliegue:**
+    - Incremento a **`v2.23.3`** en `package.json` e `index.html`.
+    - Compilación limpia en Vite (1.18s) y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.23.2 (31 de Octubre de 2026)
 
 - **Consolidación Integral de Exportación de Planteles a Excel (.xlsx) y Garantía de Consumo Cero (Zero-Cost):**

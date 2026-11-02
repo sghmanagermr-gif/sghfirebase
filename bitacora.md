@@ -2665,3 +2665,43 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `versiones.md`
 - `bitacora.md`
 - `conversaciones.md`
+
+
+---
+
+### Entrada de Bitácora - Versión v2.23.3 (2 de Noviembre de 2026)
+
+**1. Contexto y Requerimiento:**
+- El Administrador consulta si es posible verificar si el plantel `OD12551412` está en la base de datos sin afectar la regla de Zero-Cost.
+- Tras verificar que no existía en la colección activa de Firestore pero sí en el respaldo maestro histórico (`bd_sgh.json`) y con 20 trabajadores ya cargados en `cargos_personal` (entre ellos su Director Encargado, Prof. Deifilio Contreras Rivas, C.I. 11.461.168), el Administrador aprueba: *«Los resultados son satisfactorios. Sí autorizo a dar de alta al plantel OD12551412, para que el director pueda integrarse a la jornada que comenzó hoy»*.
+
+**2. Diagnóstico Técnico y Arquitectura de Alta:**
+- **Identificación de Datos Oficiales (`bd_sgh.json`):**
+  - Código DEA: `OD12551412`
+  - Denominación: CENTRO DE REHABILITACION DE LENGUAJE
+  - Nombre Nominal: CENTRO DE REHABILITACION DE LENGUAJE
+  - Nuevo Epónimo: CENTRO DE REHABILITACION DEL LENGUAJE
+  - Dependencia: NACIONAL (Código Dependencia: `6490063`)
+  - Código Estadístico: `141676`
+  - Municipio: LIBERTADOR
+  - Parroquia: MARIANO PICON SALAS
+  - Modalidad: EDUCACION ESPECIAL
+  - Turno: DOBLE TURNO
+- **Zero-Cost & Impacto de Cuota:**
+  - Se realizó la inyección directa mediante solicitud HTTP REST autorizada contra el endpoint `/planteles/OD12551412`.
+  - Costo: **1 escritura única y 0 lecturas**. Preservación absoluta de las cuotas del plan Spark de Firebase.
+
+**3. Solución Técnica Implementada:**
+- **Creación en Firestore:** Documento `planteles/OD12551412` generado con todos los atributos requeridos por el sistema.
+- **Habilitación de Registro Inmediato:** El Director Encargado puede ahora completar su registro como `plaadmin` con el DEA `OD12551412`. Al iniciar sesión, el sistema enlazará automáticamente los 20 registros existentes en `cargos_personal`.
+- **Control SemVer y Despliegue:**
+  - Incremento a **`v2.23.3`** en `package.json` e `index.html`.
+  - Compilación limpia en Vite (1.18s) y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+
+**4. Archivos Involucrados:**
+- `webapp/package.json` (v2.23.3)
+- `webapp/index.html` (v2.23.3)
+- Base de datos Cloud Firestore (`planteles/OD12551412`)
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
