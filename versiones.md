@@ -12,10 +12,14 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
   - **Arquitectura de Blindaje y Sandbox Creado:**
     - **Plantel Ficticio en Firestore (`planteles/DEMO140000`):** Creado con código DEA `DEMO140000`, Epónimo: *"PLANTEL EXPERIMENTAL PILOTO SGH"*, Parroquia Sagrario, Municipio Libertador, habilitado con planes de Inicial (20000), Primaria (21000), Media General (31059) y Media Técnica (31060), identificado con bandera `es_demo: true`.
     - **Usuario Director Aprobado en Auth y Firestore:** Creado con UID `1P9RI6NwNCQWFlQJ4VLstAgwxix1`, correo `alfonsozere@gmail.com`, clave configurada, correo marcado como verificado administrativamente (0 consumo de cuota Spark) y rol `plaadmin` vinculado a `DEMO140000`.
+    - **Inyección de Personal Demo Multicargo (5 Registros):** Se cargó en `cargos_personal` y `personal_resumen` una nómina de prueba realista: Docente de Aula Primaria (V-99000001, 1121DI), Docente de Media General por Horas (V-99000002, 1125DB), Secretaria Administrativa (V-99000003, 5022N), Obrero de Mantenimiento (V-99000004, 8036N) y Cocinera de la Patria CNAE (V-99000005, 8991N).
+    - **Matrícula Piloto y Desbloqueo Automático:** Se configuró una matrícula muestra de 30 estudiantes (Grado 1A) con `datos_completados: true` para desbloquear la tabla de personal inmediatamente sin obligar al director a completar el Paso 1.
     - **Escudo Protector en Métricas y Exportaciones:**
       - Se blindó la función de auditoría de matrícula (`verificarPlantelTieneMatricula`) para retornar siempre `{ tiene: false, total: 0 }` ante planteles demo.
       - Se excluyeron automáticamente de las exportaciones a Excel tanto de planteles (`ejecutarExportacionPlantelesExcel`) como de nóminas (`ejecutarExportacionNominaExcel`).
       - Se ocultó de la vista de coordinadores municipales (`munadmin`) para evitar confusiones en Libertador, y se identificó visualmente en el panel de superadmin con distintivo `🧪 Laboratorio DEMO`.
+  - **Herramienta Administrativa para Recuperación de Contraseñas Out-of-Band:**
+    - Se implementó script de soporte (`scratch/generar_enlace_recuperacion.js`) que genera enlaces oficiales de restablecimiento de contraseña vía Identity Toolkit REST (`returnOobLink: true`), mitigando el error 429 por agotamiento de cuota diaria de correos salientes del plan Spark.
   - **Despliegue y SemVer:** Versión MENOR `v2.25.0` compilada en Vite (734 ms) y desplegada a producción en Firebase Hosting (`https://sgh-merida.web.app`).
 
 ---

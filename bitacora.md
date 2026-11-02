@@ -2829,4 +2829,24 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `bitacora.md`
 - `conversaciones.md`
 
+---
+
+## [v2.25.0 - Complemento] - 2026-11-02 (Inyección de Nómina Demo y Generador Out-of-Band de Contraseñas)
+
+### Resumen Técnico
+Se culminó la configuración funcional de la Escuela Laboratorio (`DEMO140000`) para el usuario `alfonsozere@gmail.com`, dotándola de una nómina representativa multicargo de 5 funcionarios ficticios en `cargos_personal` y precargando una matrícula piloto de 30 estudiantes para desbloquear el flujo del director de inmediato. Adicionalmente, ante el bloqueo temporal por cuota de correos salientes de Firebase (error 429), se construyó un script de administración para generar enlaces oficiales de restablecimiento de contraseña out-of-band sin consumo de cuota de correo.
+
+### Acciones Realizadas
+1. **Inyección de 5 Funcionarios Demo en `cargos_personal` y `personal_resumen`:**
+   - V-99000001: MARIA ELENA RAMIREZ (Docente Aula Primaria, RAC 1121DI)
+   - V-99000002: CARLOS ALBERTO MORALES (Docente Media General por Horas, RAC 1125DB)
+   - V-99000003: CARMEN ROSA DAVILA (Secretaria Administrativa, RAC 5022N)
+   - V-99000004: PEDRO JOSE MALDONADO (Obrero Mantenimiento, RAC 8036N)
+   - V-99000005: YELITZA COROMOTO MENDEZ (Cocinera de la Patria CNAE, RAC 8991N)
+2. **Matrícula Piloto y Habilitación Inmediata de Pantalla:**
+   - Se registró en `planteles/DEMO140000` una matrícula muestra de 30 estudiantes (1er Grado A) con `datos_completados: true`, permitiendo que el contenedor `#seccion-personal-existente` se muestre de inmediato sin forzar al usuario a cargar matrícula desde cero.
+3. **Generador Administrativo de Enlaces de Restablecimiento Out-of-Band:**
+   - Archivo `scratch/generar_enlace_recuperacion.js`: Consume el endpoint seguro de administración Identity Toolkit (`sendOobCode` con `returnOobLink: true`) para expedir enlaces firmados listos para compartir por WhatsApp/mensajería, sorteando la cuota diaria de correo del plan Spark. Se probó y generó exitosamente el enlace para `munijuliocesarsalaspiconlares@gmail.com`.
+
+
 
