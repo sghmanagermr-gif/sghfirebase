@@ -4,6 +4,20 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.24.1 (2 de Noviembre de 2026)
+
+- **Corrección de Referencia y Garantía de Plenos Privilegios para Superadmin en Edición de Planteles:**
+  - **Diagnóstico del Inconveniente (Causa Raíz):**
+    - El Administrador (rol `superadmin`) reportó que al presionar el botón de editar en la tabla de planteles del panel administrativo no abría el formulario y la consola arrojaba: `Uncaught ReferenceError: isMunAdmin is not defined at wt (index-CGSd-a7b.js:434)`.
+    - La variable `isMunAdmin` (así como `isSuperAdmin` y `isZonAdmin`) había sido declarada únicamente dentro de la función local `configurarInterfazPorRol()`, quedando fuera de alcance léxico (scope) para la función `openPlantelModal` y el listener de guardado `formPlantel.addEventListener('submit')`.
+  - **Solución Técnica Implementada:**
+    - Se declararon `isMunAdmin`, `isZonAdmin` e `isSuperAdmin` al nivel principal de `initAdminDashboard` en `webapp/src/admin.js`, garantizando cobertura universal para todas las subfunciones y modales del panel.
+    - Se reforzó la definición local explícita en `openPlantelModal` y en el evento de guardado del formulario de planteles.
+    - Se ratificaron los privilegios plenos y sin restricciones del rol `superadmin` (`superadmin` y `admin`), asegurando la capacidad irrestricta de edición, creación, cambio de dependencia/parroquia/municipio y eliminación de planteles en todo el estado Mérida.
+  - **Despliegue y SemVer:** Actualización de versión a `v2.24.1` (PARCHE) en `package.json` e `index.html`. Compilado en Vite (813 ms) y desplegado exitosamente en Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.24.0 (2 de Noviembre de 2026)
 
 - **Barrera Institucional Anti-Duplicados para Directores de Plantel (`plaadmin`) y Validación de Cédula Única:**

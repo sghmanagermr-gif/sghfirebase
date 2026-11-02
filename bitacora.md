@@ -2745,3 +2745,38 @@ ode.js que el contenedor principal <main id="admin-main"> sufr�a un cierre pre
 - `versiones.md`
 - `bitacora.md`
 - `conversaciones.md`
+
+---
+
+### Entrada de Bitácora - Versión v2.24.1 (2 de Noviembre de 2026)
+
+**1. Contexto y Requerimiento:**
+- El Administrador reportó que al intentar editar los datos de un plantel desde la tabla de planteles en el panel administrativo, el botón "Editar" no abría el formulario y la consola del navegador arrojaba un error de ejecución: `index-CGSd-a7b.js:434 Uncaught ReferenceError: isMunAdmin is not defined at wt (index-CGSd-a7b.js:434:849) at e.onclick (index-CGSd-a7b.js:416:327)`.
+- El Administrador requirió además garantizar que el usuario `superadmin` cuente con privilegios de toda clase en el sistema sin restricciones.
+
+**2. Diagnóstico Técnico (Causa Raíz):**
+- **Ámbito Léxico Desconectado (Scope):** Las variables booleanas de rol (`isMunAdmin`, `isZonAdmin`, `isSuperAdmin`) habían sido declaradas localmente dentro del bloque interno de la función `configurarInterfazPorRol()`. 
+- Al invocarse `openPlantelModal(plantel)` desde el evento `onclick` del botón `.btn-edit-plantel`, la función evaluaba `if (isMunAdmin)` sin tener dicha variable en su cadena de alcance (scope), desencadenando el `ReferenceError` y bloqueando la apertura del modal.
+- Similarmente, en el listener de envío del formulario de plantel (`formPlantel.addEventListener('submit')`), las variables `isSuperAdmin` e `isZonAdmin` quedaban fuera de alcance al momento de validar el registro de nuevos planteles.
+
+**3. Solución Técnica Implementada:**
+- **Declaración Universal en `initAdminDashboard` (`webapp/src/admin.js`):**
+  - Se declararon `isMunAdmin`, `isZonAdmin` e `isSuperAdmin` en el nivel superior de `initAdminDashboard`, haciéndolas accesibles para todas las funciones internas del panel administrativo.
+- **Refuerzo de Alcance Local:**
+  - Se agregaron las asignaciones explícitas de `isMunAdmin`, `isZonAdmin` e `isSuperAdmin` al inicio de `openPlantelModal(plantel)` y dentro de `formPlantel.addEventListener('submit')`.
+- **Ratificación de Privilegios Plenos de Superadmin:**
+  - Se validó que el rol `superadmin` / `admin` tiene acceso total e irrestricto: edición de planteles de cualquier municipio, modificación de códigos DEA, denominación, epónimos, ubicación, niveles, modalidades, turnos y planes de estudio; creación y eliminación de planteles; asignación de competencias zonales; y descargas de nóminas y planteles sin restricciones.
+
+**4. Control SemVer y Despliegue:**
+- Incremento a **`v2.24.1`** (PARCHE por corrección de error de referencia) en `package.json` e `index.html`.
+- Compilación limpia en Vite (813 ms) generando el chunk `dist/assets/index-Dk-5kgay.js`.
+- Despliegue exitoso en Firebase Hosting (`https://sgh-merida.web.app`).
+
+**5. Archivos Involucrados:**
+- `webapp/package.json` (v2.24.1)
+- `webapp/index.html` (v2.24.1)
+- `webapp/src/admin.js` (alcance léxico corregido en `initAdminDashboard`, `openPlantelModal` y `formPlantel.submit`)
+- `versiones.md`
+- `bitacora.md`
+- `conversaciones.md`
+

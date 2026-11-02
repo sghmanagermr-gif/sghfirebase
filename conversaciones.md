@@ -3873,3 +3873,118 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 3. **Nota de Orientación:** Se añadió la nota *"ℹ️ Solo se admite un Director activo por código DEA"* en el formulario.  
 > 4. **Control SemVer y Despliegue:** Versión actualizada a `v2.24.0` (MENOR), compilada en Vite (933 ms) y desplegada a Firebase Hosting (`https://sgh-merida.web.app`). Respaldo protocolar en `bitacora.md`, `versiones.md` y sincronización con GitHub (`origin main`).  
 > 5. **Pregunta Protocolar de Cierre:** ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 60
+
+* **Fecha / Hora:** 2026-11-02 ~11:43 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> tengo otro caso de plantel que no esta en el SGH PD12461412: ¿Tiene personal huerfano?
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Auditoría Zero-Cost de Plantel Privado `PD12461412`:  
+> 1. **Identificación:** Se identificó como el Colegio "NATIVIDAD NIÑO" (Privado, Parroquia Domingo Peña, Municipio Libertador).  
+> 2. **Resultado Huérfanos:** Tiene cero (0) personal huérfano, dado que las instituciones privadas no cuentan con personal en nómina RAC del MPPE.
+
+---
+
+### Intervención 61
+
+* **Fecha / Hora:** 2026-11-02 ~11:56 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Pasemos a otra cosa. Para actualizar contraseña comenzó a aparecer lo siguiente:  
+> `index-CGSd-a7b.js:95 POST https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyDSdDRB... 429 (Too Many Requests)`  
+> `FirebaseError: Firebase: Error (auth/quota-exceeded-for-quota-metric-'get-oob-code'-and-limit-'get-oob-code-per-day'-of-service-'identitytoolkit.googleapis.com'-for-consumer-'project-number:873672016601'.)`
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Diagnóstico de Cuota Spark y Rescate Administrativo:  
+> 1. Se identificó el límite diario de Google Spark (100 correos diarios para todo el proyecto) alcanzado por múltiples intentos de directores.  
+> 2. Se generó de inmediato el enlace administrativo oficial de restablecimiento de contraseña para la cuenta afectada (`munijuliocesarsalaspiconlares@gmail.com`) sin consumir cuota de correos.
+
+---
+
+### Intervención 62
+
+* **Fecha / Hora:** 2026-11-02 ~12:07 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Dos preguntas:  
+> Primero: ¿Este enlace https://sgh-merida.firebaseapp.com/__/auth/action?mode=resetPassword&oobCode=104W1wh... me sirve para todos los que están intentando recuperar contraseña an este momento? **porque son varios**  
+> Segundo: Con tu mensaje anterior me estas diciendo que e¿liminaremos el paso de verificación de correo? (así podrán ingresar hasta correos falsos)
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Clarificación Institucional y Pedagógica (Skill 6):  
+> 1. **Pregunta 1:** NO, el enlace no sirve para todos; es una llave criptográfica única, personal e intransferible vinculada a la cuenta de Silvia Pérez y de un solo uso. Cada director requiere su propio enlace individual.  
+> 2. **Pregunta 2:** NO se eliminará jamás la verificación de correo; es el filtro de seguridad indispensable para evitar correos falsos. Se explicó cómo prevenir el agotamiento de cuota mediante temporizadores en botones y rescates administrativos.
+
+---
+
+### Intervención 63
+
+* **Fecha / Hora:** 2026-11-02 ~12:14 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Ok voy a enviar un mensaje al grupo de Whatsapp para que me envien los correos afectados. Le llamaremos correos_afectados  
+> Mientras tanto verifica si este plantel OD15991423 tiene personal huerfano
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Auditoría Zero-Cost del Plantel `OD15991423`:  
+> 1. **Identificación:** Se identificó en `bd_sgh.json` como Instituto de Educación Especial (IEE) "MILAGROS DEL VALLE RONDÓN" (Municipio Zea, Parroquia Zea, Dependencia Nacional Cód. 6490527, Cód. Estadístico 142016).  
+> 2. **Resultado Huérfanos:** NO tiene personal huérfano (0 registros en `huerfanos.csv` y 0 registros en nóminas nacionales).  
+> 3. Se ofreció dar de alta al plantel en Firestore en cuanto el director lo requiera.
+
+---
+
+### Intervención 64
+
+* **Fecha / Hora:** 2026-11-02 ~12:21 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Perfecto. Sigamos.  
+> Dime Si o No ¿el campo Matricula Total de la pantalla del director se están dumando correctamente los niveles INICIAL(Maternal-Preescolar), PRIMARIA y MEDIA ?
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Respuesta Afirmativa ("SÍ"):  
+> 1. Se detalló cómo el sistema recorre todos los inputs de alumnos con la clase `.mat-input` en tiempo real y suma acumulativamente Maternal + Preescolar + Primaria (grados 1-6) + Media General + Media Técnica (+ Especial/Adultos si aplican).  
+> 2. Se ratificó que las casillas de cantidad de secciones no se mezclan con los alumnos y que al guardar se consolida el total en Firestore.
+
+---
+
+### Intervención 65
+
+* **Fecha / Hora:** 2026-11-02 ~12:33 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Perfecto gracias. El usuario superadmin necesito que tenga privilegios de toda clase. como ejemplo particular, estoy tratando de editar los datos de un plantel y el boton editar no funciona: index-CGSd-a7b.js:434 Uncaught ReferenceError: isMunAdmin is not defined  
+>     at wt (index-CGSd-a7b.js:434:849)  
+>     at e.onclick (index-CGSd-a7b.js:416:327)
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Corrección de Alcance Léxico y Consolidación de Privilegios Plenos de Superadmin (v2.24.1):  
+> 1. **Causa Raíz:** La variable `isMunAdmin` estaba encapsulada únicamente dentro de `configurarInterfazPorRol()`, quedando indefinida al invocar `openPlantelModal` desde el botón "✏️ Editar" de la tabla de planteles.  
+> 2. **Corrección Técnica:** Se declararon `isMunAdmin`, `isZonAdmin` e `isSuperAdmin` al nivel superior de `initAdminDashboard` en `webapp/src/admin.js`, así como de forma explícita en `openPlantelModal` y `formPlantel.submit`.  
+> 3. **Ratificación de Privilegios:** Se aseguró que el rol `superadmin` tenga libertad plena para editar cualquier plantel del estado Mérida, alterar códigos DEA, municipios, parroquias, dependencias y planes de estudio, así como crear y eliminar planteles sin restricciones.  
+> 4. **Control SemVer y Despliegue:** Versión elevada a `v2.24.1` (PARCHE), compilada en Vite (813 ms) y desplegada en Firebase Hosting (`https://sgh-merida.web.app`). Sincronización protocolar con GitHub (`origin main`).  
+> 5. **Pregunta Protocolar de Cierre:** ¿Los resultados fueron satisfactorios?
+

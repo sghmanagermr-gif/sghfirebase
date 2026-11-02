@@ -244,6 +244,10 @@ export function initAdminDashboard(dbInstance, user) {
   const btnDescargarNominaMun = document.getElementById('btn-descargar-nomina-mun');
   const btnDescargarPlanteles = document.getElementById('btn-descargar-planteles');
 
+  const isMunAdmin = userData?.rol === 'munadmin';
+  const isZonAdmin = userData?.rol === 'zonadmin';
+  const isSuperAdmin = userData?.rol === 'superadmin' || userData?.rol === 'admin';
+
   function configurarInterfazPorRol() {
     const isMunAdmin = userData?.rol === 'munadmin';
     const isZonAdmin = userData?.rol === 'zonadmin';
@@ -3370,6 +3374,10 @@ export function initAdminDashboard(dbInstance, user) {
   }
 
   function openPlantelModal(plantel = null) {
+     const isMunAdmin = userData?.rol === 'munadmin';
+     const isZonAdmin = userData?.rol === 'zonadmin';
+     const isSuperAdmin = userData?.rol === 'superadmin' || userData?.rol === 'admin';
+
      if (isMunAdmin) {
        showAlert("Acceso Restringido", "La modificación de datos institucionales de planteles corresponde al Director del Plantel o a las autoridades zonales.", "warning");
        return;
@@ -3527,7 +3535,11 @@ export function initAdminDashboard(dbInstance, user) {
 
        const id = document.getElementById('p-uid').value;
        const isEdit = !!id;
-       if (userData?.rol === 'munadmin') {
+       const isMunAdmin = userData?.rol === 'munadmin';
+       const isZonAdmin = userData?.rol === 'zonadmin';
+       const isSuperAdmin = userData?.rol === 'superadmin' || userData?.rol === 'admin';
+
+       if (isMunAdmin) {
          await showAlert("Acceso Restringido", "El rol Coordinador Municipal (munadmin) no tiene potestades para modificar los datos del plantel.", "danger");
          return;
        }
