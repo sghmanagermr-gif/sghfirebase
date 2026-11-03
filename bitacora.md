@@ -2953,3 +2953,34 @@ En `webapp/src/admin.js`, al someter el formulario `formPlantel`, se preparaba e
    - Si se modifica el código DEA del colegio y el documento de origen no existía en Firestore, se inicializan estructuras de matrícula y secciones vacías y se escribe el nuevo documento sin lanzar excepciones.
 4. **Control SemVer:**
    - Elevación a `v2.26.2` (PATCH). Compilación en Vite (745 ms) y sincronización con GitHub (`origin main`).
+
+---
+
+## [v2.27.0] - 2026-11-02 (Actualización Automática en Cascada al Modificar Código DEA)
+
+### Resumen Técnico
+Se diseñó e implementó la **Opción 2: Migración en Cascada Automática de Código DEA** en el módulo de administración institucional (`webapp/src/admin.js`). Ante cualquier corrección o edición del código DEA de un plantel educativo desde la interfaz gráfica, el sistema ejecuta de forma atómica y asistida el traslado de todo el personal asignado y los usuarios directores hacia el nuevo identificador institucional en una sola transacción.
+
+### Arquitectura de la Solución (Zero-Cost & Consistencia Relacional)
+1. **Detección Automática de Renombramiento (`codP !== id`):**
+   - En el evento `submit` de `#form-plantel`, cuando el código ingresado difiere del identificador original del documento, se invoca de manera asíncrona la función interna `migrarEnCascadaCodigoDEA(deaViejo, deaNuevo, nombrePlantel)`.
+2. **Migración de Nómina de Personal (`cargos_personal`):**
+   - Se ejecutan consultas indexadas específicas (`where('codigo-plantel', '==', deaViejo)` y `where('codigoDEA', '==', deaViejo)`), respetando la cuota Spark Zero-Cost sin escaneos completos.
+   - Para cada funcionario detectado, se compone la nueva llave primaria canónica `${deaNuevo}_${cedula}` y se actualizan los campos `codigo-plantel`, `codigoDEA`, `ubicacion-fisica` y `ultima_actualizacion`.
+   - Se escribe el nuevo registro con `{ merge: true }` y se elimina de forma limpia el documento con la llave obsoleta.
+3. **Sincronización de `personal_resumen`:**
+   - Se compila un resumen actualizado de la nómina y se inyecta directamente en el nuevo documento `planteles/${deaNuevo}`, preservando al mismo tiempo la estructura histórica de matrícula y secciones.
+4. **Actualización de Directores de Plantel (`usuarios`):**
+   - Se identifican y actualizan las credenciales institucionales de los directores (`plaadmin`) asociados al DEA viejo en los campos `jerarquia.plantel_codigo`, `jerarquia.plantel_id` y `plantel_codigo`.
+   - Se sincroniza la colección en memoria `usuariosLocales` para que la tabla de gestión de usuarios refleje el cambio de inmediato sin requerir recargar la página.
+5. **Feedback y Notificaciones UI:**
+   - Se emite una alerta modal corporativa (`showAlert`) informando al administrador el total exacto de funcionarios y directores migrados con éxito en cascada.
+
+### Archivos Modificados
+- `webapp/src/admin.js`: Inyección de la función `migrarEnCascadaCodigoDEA` y disparo en el guardado de `formPlantel`.
+- `webapp/package.json`: Incremento de versión a `2.27.0`.
+- `webapp/index.html`: Sincronización de badges y títulos de versión a `v2.27.0`.
+- `versiones.md`, `bitacora.md`, `conversaciones.md`: Registro documental obligatorio.
+
+### Control SemVer y Despliegue
+- Elevación a `v2.27.0` (MENOR). Compilación con Vite (782 ms) y sincronización con GitHub (`origin main`).

@@ -3520,6 +3520,141 @@ export function initAdminDashboard(dbInstance, user) {
     });
   }
 
+  /**
+   * Migración en Cascada Automática de DEA (Opción 2)
+   * Cuando se edita el código DEA de un plantel, traslada de forma inmediata y automática:
+   * 1. Toda la nómina de funcionarios en 'cargos_personal' con sus nuevas llaves compuestas.
+   * 2. El 'personal_resumen' en el documento del plantel.
+   * 3. La asociación institucional de directores registrados en 'usuarios'.
+   */
+  async function migrarEnCascadaCodigoDEA(deaViejo, deaNuevo, nombrePlantel) {
+    if (!deaViejo || !deaNuevo || deaViejo === deaNuevo) return { personalMigrado: 0, directoresMigrados: 0 };
+    
+    let personalMigrado = 0;
+    let directoresMigrados = 0;
+    const idsProcesados = new Set();
+    const resumenPersonalNuevo = [];
+
+    try {
+      // 1. Migración de Funcionarios en cargos_personal (por codigo-plantel y codigoDEA)
+      const qPers1 = query(collection(db, "cargos_personal"), where("codigo-plantel", "==", deaViejo));
+      const snapPers1 = await getDocs(qPers1);
+      const qPers2 = query(collection(db, "cargos_personal"), where("codigoDEA", "==", deaViejo));
+      const snapPers2 = await getDocs(qPers2);
+
+      const docsAMigrar = [...snapPers1.docs];
+      for (const d of snapPers2.docs) {
+        if (!docsAMigrar.some(exist => exist.id === d.id)) docsAMigrar.push(d);
+      }
+
+      for (const docSnap of docsAMigrar) {
+        if (idsProcesados.has(docSnap.id)) continue;
+        idsProcesados.add(docSnap.id);
+
+        const dataP = docSnap.data();
+        const cleanCed = dataP.cedula || docSnap.id.replace(deaViejo + '_', '');
+        const newDocId = `${deaNuevo}_${cleanCed}`;
+        
+        const updatedEmp = {
+          ...dataP,
+          "codigo-plantel": deaNuevo,
+          codigoDEA: deaNuevo,
+          "ubicacion-fisica": nombrePlantel || dataP["ubicacion-fisica"] || '',
+          ultima_actualizacion: new Date().toISOString()
+        };
+
+        await safeSetDoc(doc(db, "cargos_personal", newDocId), updatedEmp, { merge: true });
+        if (docSnap.id !== newDocId) {
+          try {
+            await deleteDoc(doc(db, "cargos_personal", docSnap.id));
+          } catch (eDelPers) {
+            console.warn(`[Cascada] Error eliminando registro previo de personal ${docSnap.id}:`, eDelPers);
+          }
+        }
+        personalMigrado++;
+        resumenPersonalNuevo.push({
+          cedula: cleanCed,
+          nombre: updatedEmp["nombre-apellido"] || updatedEmp.nombres || updatedEmp.nombre || '',
+          cargo: updatedEmp.cargo || ''
+        });
+      }
+
+      // Si se migraron funcionarios, sincronizar personal_resumen en el documento del nuevo plantel
+      if (resumenPersonalNuevo.length > 0) {
+        try {
+          await safeSetDoc(doc(db, "planteles", deaNuevo), {
+            personal_resumen: resumenPersonalNuevo
+          }, { merge: true });
+        } catch (eRes) {
+          console.warn("[Cascada] Error actualizando personal_resumen:", eRes);
+        }
+      }
+
+      // Invalidar caché de personal si estaba presente
+      if (window._cacheStaffSupervision) {
+        delete window._cacheStaffSupervision[deaViejo];
+        if (resumenPersonalNuevo.length > 0) {
+          window._cacheStaffSupervision[deaNuevo] = null;
+        }
+      }
+
+      // 2. Migración de Usuarios Directores en colección usuarios
+      const uidsDirectores = new Set();
+      try {
+        const qUsers1 = query(collection(db, "usuarios"), where("jerarquia.plantel_codigo", "==", deaViejo));
+        const snapUsers1 = await getDocs(qUsers1);
+        snapUsers1.forEach(u => uidsDirectores.add(u.id));
+      } catch (eU1) {
+        console.warn("[Cascada] Consulta jerarquia.plantel_codigo:", eU1);
+      }
+
+      try {
+        const qUsers2 = query(collection(db, "usuarios"), where("plantel_codigo", "==", deaViejo));
+        const snapUsers2 = await getDocs(qUsers2);
+        snapUsers2.forEach(u => uidsDirectores.add(u.id));
+      } catch (eU2) {
+        console.warn("[Cascada] Consulta plantel_codigo:", eU2);
+      }
+
+      for (const uId of uidsDirectores) {
+        try {
+          const userRef = doc(db, "usuarios", uId);
+          const uSnap = await getDoc(userRef);
+          if (uSnap.exists()) {
+            const uData = uSnap.data();
+            await safeSetDoc(userRef, {
+              plantel_codigo: deaNuevo,
+              jerarquia: {
+                ...(uData.jerarquia || {}),
+                plantel_codigo: deaNuevo,
+                plantel_id: deaNuevo
+              }
+            }, { merge: true });
+            directoresMigrados++;
+
+            // Sincronizar en memoria si existe cache usuariosLocales
+            if (Array.isArray(usuariosLocales)) {
+              const uLoc = usuariosLocales.find(x => x.uid === uId);
+              if (uLoc) {
+                uLoc.plantel_codigo = deaNuevo;
+                if (!uLoc.jerarquia) uLoc.jerarquia = {};
+                uLoc.jerarquia.plantel_codigo = deaNuevo;
+                uLoc.jerarquia.plantel_id = deaNuevo;
+              }
+            }
+          }
+        } catch (eUUpdate) {
+          console.warn(`[Cascada] Error actualizando usuario director ${uId}:`, eUUpdate);
+        }
+      }
+
+    } catch (errCascada) {
+      console.error("[Cascada] Error general durante la migración en cascada de DEA:", errCascada);
+    }
+
+    return { personalMigrado, directoresMigrados };
+  }
+
   if(formPlantel) {
     formPlantel.addEventListener('submit', async (e) => {
        e.preventDefault();
@@ -3638,6 +3773,8 @@ export function initAdminDashboard(dbInstance, user) {
           newData["turno"] = deleteField();
        }
 
+       let msgCascada = null;
+
        try {
          btn.disabled = true;
          btn.innerText = 'Guardando...';
@@ -3652,6 +3789,7 @@ export function initAdminDashboard(dbInstance, user) {
                    const oldData = oldDocSnap.data();
                    newData['matricula'] = oldData['matricula'] || {};
                    newData['secciones-planes'] = oldData['secciones-planes'] || {};
+                   newData['personal_resumen'] = oldData['personal_resumen'] || [];
                    
                    await safeSetDoc(doc(db, "planteles", codP), newData, { merge: true });
                    try {
@@ -3664,6 +3802,13 @@ export function initAdminDashboard(dbInstance, user) {
                    newData['matricula'] = {};
                    newData['secciones-planes'] = {};
                    await safeSetDoc(doc(db, "planteles", codP), newData, { merge: true });
+               }
+
+               // 🚀 ACTUALIZACIÓN AUTOMÁTICA EN CASCADA (OPCIÓN 2)
+               const epNuevo = newData["nombre-plantel"]?.["nuevo-eponimo"] || newData["nombre-plantel"]?.nominal || '';
+               const resultadoCascada = await migrarEnCascadaCodigoDEA(id, codP, epNuevo);
+               if (resultadoCascada.personalMigrado > 0 || resultadoCascada.directoresMigrados > 0) {
+                   msgCascada = `El código DEA fue actualizado a "${codP}". Se migraron automáticamente en cascada ${resultadoCascada.personalMigrado} funcionario(s) de nómina y ${resultadoCascada.directoresMigrados} usuario(s) director al nuevo código.`;
                }
             } else {
                try {
@@ -3681,6 +3826,12 @@ export function initAdminDashboard(dbInstance, user) {
          
          cerrarModalPlantel();
          await loadPlanteles(); // reload table
+
+         if (msgCascada) {
+           await showAlert("Código DEA Actualizado en Cascada", msgCascada, "success");
+         } else {
+           showToast("Plantel guardado con éxito", "success");
+         }
          
        } catch(err) {
          console.error(err);

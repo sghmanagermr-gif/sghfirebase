@@ -4,6 +4,21 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.27.0 (2 de Noviembre de 2026)
+
+- **Migración Automática en Cascada al Modificar Código DEA de un Plantel (Opción 2):**
+  - **Requerimiento y Diagnóstico Institucional:**
+    - Si un administrador modifica el código DEA de una institución educativa desde el modal de edición (`ModalPlantel`) debido a una corrección de código erróneo, los funcionarios registrados previamente en `cargos_personal` y los directores asignados en `usuarios` quedaban desvinculados ("referencia rota"), requiriendo migraciones manuales individuales.
+  - **Solución Implementada:**
+    - Se incorporó la función institucional `migrarEnCascadaCodigoDEA(deaViejo, deaNuevo, nombrePlantel)` en `webapp/src/admin.js`.
+    - **Nómina de Personal (`cargos_personal`):** Al detectar `codP !== id`, el sistema busca de manera indexada todos los funcionarios adscritos al DEA anterior (tanto por `codigo-plantel` como por `codigoDEA`). Genera sus nuevos expedientes con la llave compuesta actualizada `${deaNuevo}_${cedula}`, actualiza su ubicación física y elimina de forma limpia el documento anterior.
+    - **Resumen Institucional (`personal_resumen`):** Sincroniza en un solo movimiento el array `personal_resumen` en el documento del nuevo plantel en Firestore para que la visualización sea inmediata.
+    - **Directores Institucionales (`usuarios`):** Localiza los usuarios directores vinculados al DEA anterior (`jerarquia.plantel_codigo` y `plantel_codigo`) y actualiza su asignación al nuevo código, sincronizando además la memoria de la tabla de usuarios en pantalla sin recargar.
+    - **Alerta de Confirmación:** Tras completar la operación, el panel administrativo presenta un diálogo detallando exactamente cuántos funcionarios de nómina y cuántos directores fueron migrados en cascada.
+  - **Despliegue y SemVer:** Versión MENOR `v2.27.0`. Compilada en Vite (782 ms) y sincronizada con GitHub (`origin main`).
+
+---
+
 ### v2.26.2 (2 de Noviembre de 2026)
 
 - **Hotfix: Soporte Seguro de Fusión (`{ merge: true }`) en Edición de Planteles:**

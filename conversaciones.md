@@ -4321,3 +4321,58 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 1. Se modificó el guardado del modal de planteles en `webapp/src/admin.js`, agregando `{ merge: true }` y protección con fallback para documentos no inicializados.  
 > 2. Se incrementó la versión a `v2.26.2` (PATCH), se compiló en Vite (745 ms) y se sincronizó el repositorio mediante commit y push a `origin main`.  
 > 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 83
+
+* **Fecha / Hora:** 2026-11-02 ~20:42 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Ajá pero un moemento, si le hago un cambio al codigo dea de un plantel -porque está errado- y ya hay un usuario registrado con el codigo errado. ¿Qué sucede con ese registro? Respuesta teorica por favor  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Explicación Teórica de la Referencia Rota (Skill 6):  
+> Se explicó que el plantel y el usuario director están conectados por el código DEA. Si el código del colegio cambia a uno nuevo pero el usuario conserva el código viejo en su perfil, ocurre una "desconexión" (referencia rota): el director entra al sistema pero no ve el plantel, y el plantel aparece como si no tuviera director registrado.
+
+---
+
+### Intervención 84
+
+* **Fecha / Hora:** 2026-11-02 ~20:45 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> ok perfecto eso lo puedo hacer... ¿y que hacemos con los funcionarios que quedaron asignados con el codigo dea viejo?  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Comparativa de Opciones (Manual vs. Cascada Automática - Skill 6):  
+> Se detalló que cada funcionario en la nómina también está vinculado por el código DEA. Se presentaron dos alternativas:  
+> 1. Opción 1: Reasignación manual de cada funcionario desde el panel.  
+> 2. Opción 2: Migración en cascada automática, donde al editar el DEA del colegio, el sistema en un solo movimiento busca todo su personal y directores y los traslada al nuevo código de forma transparente.
+
+---
+
+### Intervención 85
+
+* **Fecha / Hora:** 2026-11-02 ~20:50 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Mejor deja programada la Opción 2, por si el día de mañana sucede con otra institución se pueda resolver con un solo movimiento  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Implementación de la Migración en Cascada (v2.27.0 - Skill 6):  
+> 1. Se programó en `webapp/src/admin.js` la función `migrarEnCascadaCodigoDEA` que, al cambiar el código DEA de cualquier colegio, actualiza en un solo paso:  
+>    - Todos los funcionarios de la nómina en `cargos_personal` con sus nuevas llaves compuestas `${deaNuevo}_${cedula}`.  
+>    - El listado resumen de personal en la ficha del plantel.  
+>    - La vinculación de los directores registrados en `usuarios`.  
+> 2. Se incrementó la versión a `v2.27.0` (MENOR), se compiló limpiamente en Vite (782 ms) y se sincronizó el repositorio en GitHub (`origin main`).  
+> 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
