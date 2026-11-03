@@ -3218,3 +3218,16 @@ Atención y regularización institucional del usuario directivo asociado a la **
 2. **Sincronización de Perfil Directivo:** Asignación de rol `plaadmin`, estatus `APROBADO` y jerarquía territorial del Municipio Rangel.
 3. **Carga Oficial de Nómina:** Inyección atómica de los 6 trabajadores de la institución en `cargos_personal` y consolidación en `planteles/OD03381417.personal_resumen`.
 4. **Generación OOB y Entrega WhatsApp:** Emisión de enlace seguro de restablecimiento de contraseña y confección de mensaje para la dirección del plantel.
+
+---
+
+## [Operación Administrativa] - 2026-11-03 (Regularización Institucional Plantel OD16551415 - Padre Noguera)
+
+### Resumen Técnico
+Regularización de credenciales y activación del usuario directivo asociado a `lenderm884@gmail.com` correspondiente al **Instituto de Educación Especial "Lender Molina" (`OD16551415`)**, Municipio Padre Noguera.
+
+### Acciones Ejecutadas
+1. **Sincronización de Usuario (`usuarios/7PpNfgt2BRQZCJ4BKn3LevcZOln1`):** Aprobación oficial con rol `plaadmin` y vinculación estricta al DEA `OD16551415`.
+2. **Alta Institucional (`planteles/OD16551415`):** Creación y homologación de metadatos del plantel en Firestore.
+3. **Emisión de Credencial Segura:** Generación de enlace de restablecimiento out-of-band y redacción de comunicación WhatsApp.
+4. **Respaldo Documental:** Sincronización formal en `conversaciones.md` y `bitacora.md`.
