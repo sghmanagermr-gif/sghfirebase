@@ -20242,6 +20242,28 @@
                   "mencion": null
                 }
               }
+            },
+            "OD03541414": {
+              "nombre_plantel": "ESCUELA GABRIEL MARCIANO PARRA",
+              "nuevo_eponimo": "GABRIEL MARCIANO PARRA",
+              "den_abr": "ESC",
+              "denominacion": "ESCUELA",
+              "dependencia": "ESTADAL",
+              "codigo_dependencia": null,
+              "codigo_dependencia_2": null,
+              "codigo_estadistico": null,
+              "ubicacion": "RURAL",
+              "nivel": "PRIMARIA",
+              "modalidad": "REGULAR",
+              "turno": "MAÑANA",
+              "metros2": null,
+              "observaciones": null,
+              "planes_estudio": {
+                "21000": {
+                  "especialidad": null,
+                  "mencion": null
+                }
+              }
             }
           }
         },

@@ -4,6 +4,21 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.29.3 (3 de Noviembre de 2026)
+
+- **Alta Institucional y Vinculación de Nómina Huérfana para Escuela Gabriel Marciano Parra (`OD03541414`):**
+  - **Requerimiento Institucional:**
+    - Se solicitó auditar y activar en el sistema el código DEA `OD03541414`, el cual no figuraba en la base de datos de planteles y mantenía a su personal docente y de cocina en condición de "huérfanos de plantel".
+  - **Diagnóstico y Conciliación:**
+    - Al auditar `migracion/huerfanos.csv` y `RAC ESTADO MERIDA - PERSONAL.csv`, se confirmaron 7 funcionarios asignados a la **Escuela Gabriel Marciano Parra** (código de dependencia 5997), ubicada en Santa Elena de Arenales, Municipio Obispo Ramos de Lora (6 docentes estadales y 1 cocinera escolar nacional).
+  - **Solución Implementada:**
+    - **Alta en Colección `planteles`:** Se creó el documento `planteles/OD03541414` con dependencia Estadal, nivel Primaria, turno Mañana, y su nómina vinculada en `personal_resumen`.
+    - **Inyección de Expedientes en `cargos_personal`:** Se crearon los 7 expedientes individuales con sus llaves compuestas `OD03541414_${cedula}`.
+    - **Sincronización de Catálogos:** Se agregaron los metadatos institucionales del plantel en `bd_sgh.json` y `webapp/public/bd_sgh.json` bajo el Municipio Obispo Ramos de Lora, Parroquia Santa Elena de Arenales.
+  - **Despliegue y SemVer:** Versión PARCHE `v2.29.3`. Compilada en Vite (718 ms), desplegada a Firebase Hosting (`https://sgh-merida.web.app`) y sincronizada con GitHub (`origin main`).
+
+---
+
 ### v2.29.2 (3 de Noviembre de 2026)
 
 - **Corrección de Discrepancia Canónica y Acceso Universal en Control de Despliegue Global (Antonio Pinto Salinas / Salina):**

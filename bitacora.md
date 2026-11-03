@@ -3102,3 +3102,30 @@ Se investigó y corrigió el bloqueo de acceso al sistema que experimentaban los
 
 ### Control SemVer y Despliegue
 - Elevación a `v2.29.2` (PARCHE). Compilación con Vite (829 ms), despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`) y sincronización con GitHub (`origin main`).
+
+---
+
+## [v2.29.3] - 2026-11-03 (Alta Institucional OD03541414 y Carga de 7 Funcionarios Huérfanos)
+
+### Resumen Técnico
+Se realizó la auditoría, conciliación y rescate institucional de la **Escuela Gabriel Marciano Parra**, identificada con el código DEA **`OD03541414`**, ubicada en Santa Elena de Arenales, Municipio Obispo Ramos de Lora. La institución no existía en los catálogos ni en Firestore, manteniendo a 7 trabajadores en condición de huérfanos registrados en `huerfanos.csv` y en el censo RAC original.
+
+### Acciones Ejecutadas
+1. **Auditoría de Nómina Huérfana:**
+   - Se confirmaron 7 trabajadores en `migracion/huerfanos.csv` y `migracion/RAC ESTADO MERIDA - PERSONAL.csv`: 6 docentes estadales (Elvia Contreras, Emigley Vergara, Yulimar Araque, Andreina Araque, Carlos Parra, Dania Parra) y 1 cocinera escolar nacional (Ana Julia Quintero).
+2. **Alta de Plantel en Firestore (`planteles/OD03541414`):**
+   - Se registró la institución con sus metadatos (Denominación: ESCUELA, Ubicación: RURAL, Nivel: PRIMARIA, Turno: MAÑANA, Dependencia: ESTADAL).
+   - Se pobló su nómina en el array `personal_resumen` con los 7 empleados para visualización instantánea.
+3. **Carga Atómica en `cargos_personal`:**
+   - Se insertaron los 7 expedientes individuales con sus llaves compuestas `OD03541414_${cedula}`, preservando todos los campos requeridos por el sistema.
+4. **Sincronización de Catálogos Locales:**
+   - Se actualizó `bd_sgh.json` y `webapp/public/bd_sgh.json` bajo el Municipio Obispo Ramos de Lora, Parroquia Santa Elena de Arenales.
+
+### Archivos Modificados
+- `bd_sgh.json`, `webapp/public/bd_sgh.json`: Inyección del plantel `OD03541414`.
+- `webapp/package.json`: Elevación a `2.29.3`.
+- `webapp/index.html`: Sincronización de badges y título a `v2.29.3`.
+- `versiones.md`, `bitacora.md`, `conversaciones.md`: Registro documental obligatorio.
+
+### Control SemVer y Despliegue
+- Elevación a `v2.29.3` (PARCHE). Compilación con Vite (718 ms), despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`) y sincronización con GitHub (`origin main`).

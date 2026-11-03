@@ -4622,3 +4622,24 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 3. Detalle de los 7 Funcionarios: 6 docentes estadales (Elvia Contreras, Emigley Vergara, Yulimar Araque, Andreina Araque, Carlos Parra, Dania Parra) y 1 cocinera escolar nacional (Ana Julia Quintero).  
 > 4. Estado en Base de Datos: El plantel no existe aún en `planteles` ni en `bd_sgh.json` ni en `cargos_personal`. Script de alta institucional preparado listo para ejecutar ante la autorización del usuario.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 95
+
+* **Fecha / Hora:** 2026-11-03 ~09:50 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Sí, Activalos  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Alta Institucional y Activación de 7 Funcionarios Huérfanos para OD03541414 (v2.29.3 - Skill 6):  
+> 1. Alta Institucional: Se creó el documento `planteles/OD03541414` (Escuela Gabriel Marciano Parra, Santa Elena de Arenales, Obispo Ramos de Lora) con dependencia Estadal y nivel Primaria.  
+> 2. Inyección de Personal: Se crearon los 7 expedientes en `cargos_personal` con la llave compuesta `OD03541414_${cedula}` y se pobló su array `personal_resumen` en el documento del plantel.  
+> 3. Catálogos Geográficos: Se sincronizaron `bd_sgh.json` y `webapp/public/bd_sgh.json` con el nuevo plantel.  
+> 4. SemVer y Despliegue: Se elevó la versión a `v2.29.3`, se compiló en Vite (718 ms), se desplegó en Firebase Hosting (`https://sgh-merida.web.app`) y se respaldó en GitHub.  
+> 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
