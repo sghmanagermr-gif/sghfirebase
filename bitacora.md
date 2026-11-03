@@ -3177,4 +3177,17 @@ Se realizó la auditoría, conciliación e inyección atómica de la nómina ins
 3. **Inyección Atómica en `cargos_personal`:** Se crearon los 95 expedientes individuales bajo la llave canónica `S2959D1421_${cedula}`, preservando todos los campos requeridos (cargos, horas, RAC, datos personales y de contacto).
 4. **Respaldo Documental:** Actualización y sincronización de `conversaciones.md` y `bitacora.md`.
 
+---
+
+## [Operación Administrativa] - 2026-11-03 (Saneamiento Canónico de Cédulas Colisionadas 19047594 y 19047597)
+
+### Resumen Técnico
+Se corrigió una colisión histórica de identidades originada por una errata de un dígito (`4` por `7`) en la migración de datos, que asignaba a Irma Coromoto Ruiz la cédula de Cleidy Yohana Salas Márquez.
+
+### Acciones Ejecutadas
+1. **Cleidy Yohana Salas Márquez (V-19.047.594):** Restauración de expediente en `cargos_personal/OD15181423_19047594` como Docente I / Aula Boliv. (NER 23, Zea).
+2. **Irma Coromoto Ruiz (V-19.047.597):** Creación de expediente en `cargos_personal/OD01941409_19047597` como Cocinero II (Esc. Mesa de Quintero, Guaraque).
+3. **Depuración de Residuo:** Eliminación del documento conflictivo `OD01941409_19047594`, erradicando la colisión.
+
+
 

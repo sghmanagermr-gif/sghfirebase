@@ -4799,4 +4799,35 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
 
 
+---
+
+### Intervención 112
+
+* **Fecha / Hora:** 2026-11-03 ~17:19 - 17:28 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> ahora tengo este caso, en el RAC ESTADO MERIDA aparecen, una registrada en el municipio Guaraque y la ptra en el municipio Zea  
+> 19047597 V IRMA COROMOTO RUIZ  
+> 19047594 V CLEIDY YOHANA SALAS MARQUEZ  
+> Y esta sucediendo lo siguiente en SGH v2.29.4, al ingresar el numero de cedula 19047594 aparece con el nombre IRMA COROMOTO RUIZ  
+> Mi teoría. Tú la IA cuando hizo la migración cometió un error.  
+> Ahora bien; ¿Cómo lo puedes resolver? siempre y cuando manteniendo todo en orden  
+> [Posterior autorización del usuario: "Sí lo autorizo"]  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Saneamiento y Separación Canónica de Identidades Colisionadas (Skill 6):  
+> 1. Confirmación de Causa Raíz: La teoría del usuario fue 100% acertada. En la migración inicial del censo RAC a Firestore, ocurrió una errata de transcripción de un dígito entre números vecinos (el `4` por el `7`), registrando a Irma Ruiz con la cédula de Cleidy Salas y solapando su identidad.  
+> 2. Ejecución Atómica en Firestore:  
+>    - **Cleidy Yohana Salas Marquez (V-19.047.594):** Expediente restaurado en `cargos_personal/OD15181423_19047594` como Docente I / Aula Boliv. en el NER 23 de Zea (`OD15181423`), con carga de 53 horas y datos de contacto oficiales.  
+>    - **Irma Coromoto Ruiz (V-19.047.597):** Expediente reubicado en `cargos_personal/OD01941409_19047597` como Cocinero II en la Esc. Mesa de Quintero de Guaraque (`OD01941409`).  
+>    - **Eliminación del Residuo Espurio:** Se eliminó de raíz el documento `OD01941409_19047594`, liberando la cédula `19047594` de cualquier colisión o falso positivo.  
+>    - **Verificación de Planteles:** Sincronizados los metadatos de ambas instituciones en `planteles/OD15181423` y `planteles/OD01941409`.  
+> 3. Resultado Final: Al consultar la cédula `19047594`, el sistema retorna única y exclusivamente a **Cleidy Yohana Salas Márquez** (Zea); y al consultar `19047597`, retorna a **Irma Coromoto Ruiz** (Guaraque).  
+> 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+
 
