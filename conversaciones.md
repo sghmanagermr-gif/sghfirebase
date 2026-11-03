@@ -4853,3 +4853,25 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - Inyección de los 25 expedientes individuales completos en la colección `cargos_personal` (`OD11441405_${cedula}`) con sus cargas horarias y datos administrativos oficiales.  
 > 4. Enlace Seguro de Restablecimiento: Se generó un enlace directo oficial de restablecimiento de contraseña para entrega al director del plantel vía WhatsApp.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 114
+
+* **Fecha / Hora:** 2026-11-03 ~17:37 - 17:41 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> mensaje de Whatsapp para este correo_afectado escuelajoseebertocanderonalbar@gmail.com  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Auditoría, Regularización Institucional y Redacción de Mensaje Oficial (Skill 6):  
+> 1. Detección y Validación de Cuenta: Se identificó que la cuenta registrada en Firebase Authentication bajo el epónimo institucional corresponde a `escuelajoseebertocalderonalbar@gmail.com` (con "l" de Calderón, UID `sjSku9olPOMlcKt3QGaFthub7Ys2`), perteneciente a la **Escuela Estadal Básica "El Vergel" / "José Eberto Calderón Albarrán" (Código DEA `OD03381417`)**, Municipio Rangel (Mucuchíes).  
+> 2. Sincronización Integral:  
+>    - Perfil directivo en `usuarios/sjSku9olPOMlcKt3QGaFthub7Ys2` actualizado con rol `plaadmin`, estatus `APROBADO` y jerarquía oficial.  
+>    - Plantel `planteles/OD03381417` sincronizado con metadatos y arreglo `personal_resumen`.  
+>    - Inyección de los 6 trabajadores adscritos (5 docentes y 1 cocinera) en la colección `cargos_personal` (`OD03381417_${cedula}`).  
+> 3. Emisión de Enlace Seguro y Mensaje de WhatsApp: Se generó el enlace oficial out-of-band de restablecimiento de contraseña y se redactó el formato institucional listo para copiar y enviar por WhatsApp a la directiva del plantel.  
+> 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?

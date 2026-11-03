@@ -3205,3 +3205,16 @@ Se procesó el requerimiento de regularización institucional para el correo `ee
 3. **Inyección Atómica en `cargos_personal`:** Creación exitosa de los 25 expedientes individuales bajo la nomenclatura `OD11441405_${cedula}` (docentes y obreros), con carga horaria completa y datos de procedencia RAC.
 4. **Generación de Enlace Out-of-Band (OOB):** Emisión de enlace seguro de Firebase Authentication para recuperación y establecimiento inmediato de contraseña por parte del directivo.
 5. **Respaldo Documental:** Actualización y sincronización formal en `conversaciones.md` y `bitacora.md`.
+
+---
+
+## [Operación Administrativa] - 2026-11-03 (Regularización y Emisión de Credencial Plantel OD03381417 - Rangel)
+
+### Resumen Técnico
+Atención y regularización institucional del usuario directivo asociado a la **Escuela Estadal Básica "El Vergel" / "José Eberto Calderón Albarrán" (`OD03381417`)**, Parroquia Mucuchíes, Municipio Rangel.
+
+### Acciones Ejecutadas
+1. **Auditoría de Identidad:** Corrección de discrepancia fonética en correo (`escuelajoseebertocalderonalbar@gmail.com`, UID `sjSku9olPOMlcKt3QGaFthub7Ys2`).
+2. **Sincronización de Perfil Directivo:** Asignación de rol `plaadmin`, estatus `APROBADO` y jerarquía territorial del Municipio Rangel.
+3. **Carga Oficial de Nómina:** Inyección atómica de los 6 trabajadores de la institución en `cargos_personal` y consolidación en `planteles/OD03381417.personal_resumen`.
+4. **Generación OOB y Entrega WhatsApp:** Emisión de enlace seguro de restablecimiento de contraseña y confección de mensaje para la dirección del plantel.
