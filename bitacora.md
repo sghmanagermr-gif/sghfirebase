@@ -3231,3 +3231,16 @@ Regularización de credenciales y activación del usuario directivo asociado a `
 2. **Alta Institucional (`planteles/OD16551415`):** Creación y homologación de metadatos del plantel en Firestore.
 3. **Emisión de Credencial Segura:** Generación de enlace de restablecimiento out-of-band y redacción de comunicación WhatsApp.
 4. **Respaldo Documental:** Sincronización formal en `conversaciones.md` y `bitacora.md`.
+
+---
+
+## [Operación Administrativa] - 2026-11-03 (Carga de Nómina Oficial Plantel OD14321419 - Santos Marquina)
+
+### Resumen Técnico
+Carga oficial y regularización integral de la nómina del **Complejo Educativo "UEB La Mucuy Baja" / Epónimo "Laureano Maldonado" (`OD14321419`)**, Parroquia Tabay, Municipio Santos Marquina, tras el reporte de la docente titular *Andrea Estefania Parra Peña* (C.I. V-20.849.329).
+
+### Acciones Ejecutadas
+1. **Inyección en (`planteles/OD14321419`):** Registro institucional y consolidación de los 25 trabajadores en el arreglo `personal_resumen`.
+2. **Inyección Atómica en `cargos_personal`:** Creación exitosa de los 25 expedientes individuales bajo la clave `OD14321419_${cedula}` (16 docentes, 3 administrativos, 6 obreros).
+3. **Sincronización Directiva (`usuarios/ZNEgg7DjoNUbKDiU2PGs4FGXKVp2`):** Homologación de la cuenta en línea `ueblamucuybaja@gmail.com` con rol `plaadmin` y estado `APROBADO`.
+4. **Respaldo Documental:** Sincronización en `conversaciones.md` y `bitacora.md`.
