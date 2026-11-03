@@ -2983,4 +2983,4 @@ Se diseñó e implementó la **Opción 2: Migración en Cascada Automática de C
 - `versiones.md`, `bitacora.md`, `conversaciones.md`: Registro documental obligatorio.
 
 ### Control SemVer y Despliegue
-- Elevación a `v2.27.0` (MENOR). Compilación con Vite (782 ms) y sincronización con GitHub (`origin main`).
+- Elevación a `v2.27.0` (MENOR). Compilación con Vite (782 ms), despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`) y sincronización con GitHub (`origin main`).
