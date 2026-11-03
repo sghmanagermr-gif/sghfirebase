@@ -4979,3 +4979,22 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - Inyección de los 13 expedientes completos en `cargos_personal/OD03371417_${cedula}`.  
 > 4. Emisión de Credencial OOB y Redacción de WhatsApp: Generado enlace seguro de restablecimiento de contraseña y confección de mensaje protocolar para la dirección del plantel.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 120
+
+* **Fecha / Hora:** 2026-11-03 ~18:34 - 18:37 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Si datisfactorios, dubelo a firebase  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Despliegue Exitoso a Producción de la Versión v2.29.5 en Firebase Hosting (Skill 6):  
+> 1. Compilación de Producción: Compilado con Vite en 716 ms sin errores.  
+> 2. Despliegue Oficial en Hosting: Publicado con éxito en Firebase Hosting para el proyecto institucional `sgh-merida`.  
+> 3. Disponibilidad Inmediata: La versión `v2.29.5` se encuentra activa en producción en `https://sgh-merida.web.app`, incorporando la búsqueda en tiempo real por correo electrónico tanto en Usuarios del Sistema como en la Nómina de Personal.  
+> 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?

@@ -3271,3 +3271,16 @@ Regularización de cuenta y carga oficial de nómina para el usuario directivo a
 3. **Inyección Atómica en `cargos_personal`:** Creación exitosa de los 13 expedientes individuales bajo la clave `OD03371417_${cedula}` (12 docentes y 1 cocinera).
 4. **Generación OOB y Entrega WhatsApp:** Emisión de enlace seguro de restablecimiento y confección de mensaje institucional.
 5. **Respaldo Documental:** Sincronización en `conversaciones.md` y `bitacora.md`.
+
+---
+
+## [Despliegue a Producción] - 2026-11-03 (Versión v2.29.5 a Firebase Hosting)
+
+### Resumen Técnico
+Despliegue a producción de la versión `v2.29.5` en Firebase Hosting tras la validación y aprobación explícita del Administrador.
+
+### Métricas y Estado
+- **Compilación:** Vite 8.2.1 en 716 ms (`dist/` con 10 archivos optimizados).
+- **Hosting URL:** `https://sgh-merida.web.app`.
+- **Funcionalidad Activa:** Búsqueda integral por correo electrónico en los módulos de Usuarios y Nómina de Personal.
+- **Respaldo:** Sincronizado en `conversaciones.md`, `bitacora.md` y GitHub (`origin main`).
