@@ -1463,15 +1463,50 @@ export function initAdminDashboard(dbInstance, user) {
     const searchTerm = (inpBuscarUsuario ? inpBuscarUsuario.value : '').trim().toLowerCase();
 
     let filtrados = usuariosLocales.filter(u => {
-      // 1. Filtro por Rol
+      // 1. Normalización de campos del usuario para búsqueda integral multi-criterio
+      const nom = String(u.nombre || u['nombre-apellido'] || u.nombres || u.displayName || '').toLowerCase().trim();
+      const email = String(u.email || u.correo || u.correo_electronico || u['correo-electronico'] || u.user_email || '').toLowerCase().trim();
+      const ciRaw = String(u.cedula || u.ci || u.documento || u['cedula-identidad'] || '').toLowerCase().trim();
+      const ciDigits = ciRaw.replace(/\D/g, '');
+      const searchDigits = searchTerm.replace(/\D/g, '');
+
+      const dea = String(
+        u.jerarquia?.plantel_codigo || 
+        u.codigo_plantel || 
+        u.plantel_codigo || 
+        u.dea || 
+        u.codigoPlantel || 
+        u.codigoDEA || ''
+      ).toLowerCase().trim();
+
+      const mun = String(u.jerarquia?.municipio || u.municipio || '').toLowerCase().trim();
+
+      // 2. Coincidencia con el Buscador Integral (Correo, Nombre, Cédula, DEA, Municipio)
+      if (searchTerm) {
+        const matchNombre = nom.includes(searchTerm);
+        const matchEmail = email.includes(searchTerm);
+        const matchDea = dea.includes(searchTerm);
+        const matchMun = mun.includes(searchTerm);
+        const matchCi = ciRaw.includes(searchTerm) || (searchDigits.length >= 3 && ciDigits.includes(searchDigits));
+
+        const matchCriterio = matchNombre || matchEmail || matchDea || matchCi || matchMun;
+        if (!matchCriterio) return false;
+
+        // Búsqueda directa por identidad: Si coincide con correo o cédula completa, priorizar y mostrar directamente
+        if (matchEmail || (searchDigits.length >= 6 && ciDigits.includes(searchDigits))) {
+          return true;
+        }
+      }
+
+      // 3. Filtro por Rol
       const matchRol = (filtroRol === 'TODOS') ? true : (u.rol === filtroRol);
       if (!matchRol) return false;
 
-      // 2. Filtro por Estado de Aprobación
+      // 4. Filtro por Estado de Aprobación
       const matchEstado = (filtro === 'TODOS') ? true : (u.estado_aprobacion === filtro);
       if (!matchEstado) return false;
 
-      // 3. Filtro por Municipio
+      // 5. Filtro por Municipio
       if (filtroMun !== 'TODOS') {
         let uMun = u.jerarquia?.municipio || u.municipio || '';
         if (!uMun && u.rol === 'plaadmin') {
@@ -1487,34 +1522,6 @@ export function initAdminDashboard(dbInstance, user) {
         const uMunNorm = normalizarMunicipio(uMun);
         const fMunNorm = normalizarMunicipio(filtroMun);
         if (uMunNorm !== fMunNorm) return false;
-      }
-
-      // 4. Filtro por Buscador Integral (nombre, cédula, código plantel, correo)
-      if (searchTerm) {
-        const nom = (u.nombre || '').toLowerCase();
-        const email = (u.email || '').toLowerCase();
-        const ciRaw = String(u.cedula || '').toLowerCase();
-        const ciDigits = ciRaw.replace(/\D/g, '');
-        const searchDigits = searchTerm.replace(/\D/g, '');
-
-        const dea = String(
-          u.jerarquia?.plantel_codigo || 
-          u.codigo_plantel || 
-          u.plantel_codigo || 
-          u.dea || 
-          u.codigoPlantel || 
-          u.codigoDEA || ''
-        ).toLowerCase();
-
-        const mun = String(u.jerarquia?.municipio || u.municipio || '').toLowerCase();
-
-        const matchNombre = nom.includes(searchTerm);
-        const matchEmail = email.includes(searchTerm);
-        const matchDea = dea.includes(searchTerm);
-        const matchMun = mun.includes(searchTerm);
-        const matchCi = ciRaw.includes(searchTerm) || (searchDigits.length >= 3 && ciDigits.includes(searchDigits));
-
-        return matchNombre || matchEmail || matchDea || matchCi || matchMun;
       }
 
       return true;
@@ -1652,7 +1659,7 @@ export function initAdminDashboard(dbInstance, user) {
         <tr style="border-bottom: 1px solid var(--glass-border); transition: background 0.2s;">
           <td style="padding: 15px 20px;">
             <div style="font-weight: 600; color: var(--text-main);">${u.nombre || 'Sin nombre'}</div>
-            <div style="font-size: 0.8rem; color: var(--text-muted);">${u.email} <br> C.I: ${u.cedula}</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">${u.email || u.correo || 'Sin correo'} <br> C.I: ${u.cedula || u.ci || 'S/C'}</div>
           </td>
           <td style="padding: 15px 20px;">
             <div>${roleBadgeHtml}</div>

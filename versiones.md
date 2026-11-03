@@ -4,6 +4,24 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.29.5 (3 de Noviembre de 2026)
+
+- **Buscador Integral Multi-Criterio con Soporte Completo por Correo Electrónico en Usuarios del Sistema y Asistente de Personal:**
+  - **Requerimiento Institucional:**
+    - Se solicitó que en el apartado de Usuarios del Sistema el buscador permita filtrar, además del nombre y la cédula, el correo electrónico institucional o personal del funcionario/usuario.
+  - **Solución Implementada:**
+    - **Módulo de Usuarios del Sistema (`webapp/src/admin.js`):**
+      - Normalización exhaustiva del campo de correo electrónico para soportar todas las variantes presentes en la base de datos (`u.email`, `u.correo`, `u.correo_electronico`, `u['correo-electronico']`, `u.user_email`).
+      - Prioridad inteligente de búsqueda por identidad: si el término buscado coincide directamente con el correo o con la cédula completa, el resultado se despliega de inmediato sin ser enmascarado por filtros secundarios de estado o municipio.
+      - Respaldo visual en la tabla para desplegar `Sin correo` en lugar de `undefined` en registros incompletos.
+    - **Módulo de Personal del Plantel (`webapp/src/personalWizard.js` y `webapp/index.html`):**
+      - Enriquecimiento de cada fila de la nómina con `tr.dataset.correo` capturando el correo del trabajador.
+      - Ampliación del motor de búsqueda en tiempo real para evaluar Cédula, Nombre y Correo Electrónico simultáneamente.
+      - Actualización de los marcadores de posición (*placeholders*) en las barras de búsqueda para reflejar explícitamente el soporte de correo.
+  - **Control SemVer y Despliegue:** Elevación a versión PARCHE `v2.29.5`. Compilado con Vite en 1.11s y sincronizado.
+
+---
+
 ### v2.29.4 (3 de Noviembre de 2026)
 
 - **Configuración Granular de Secciones por Grado en Educación Primaria (Resolución de Secciones Asimétricas y Persistencia de Matrícula):**

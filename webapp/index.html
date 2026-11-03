@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SGH - v2.29.4</title>
+  <title>SGH - v2.29.5</title>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
@@ -123,7 +123,7 @@
           style="width: 110px; height: 110px; border-radius: 20px; object-fit: cover; box-shadow: 0 10px 25px rgba(0,0,0,0.2); margin-bottom: 18px;" />
         <h1
           style="color: var(--primary-color); margin-bottom: 5px; display: flex; align-items: baseline; justify-content: center; gap: 8px;">
-          SGH <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">v2.29.4</span></h1>
+          SGH <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">v2.29.5</span></h1>
         <p>Sistema de Gestión Humana - Estado Mérida</p>
         <form id="login-form">
           <input type="email" id="login-email" placeholder="Correo Electrónico" required autocomplete="email" />
@@ -228,7 +228,7 @@
     <section id="dashboard-view" class="view">
       <nav class="navbar">
         <div class="nav-brand">
-          <span style="color: var(--primary-color);">SGH</span> v2.29.4
+          <span style="color: var(--primary-color);">SGH</span> v2.29.5
         </div>
         <div class="nav-user">
           <span id="user-display-name" style="font-weight: 500;">Cargando...</span>
@@ -291,7 +291,7 @@
         <img src="/sgh-logo.png" alt="SGH Logo"
           style="width: 32px; height: 32px; border-radius: 6px; object-fit: cover; box-shadow: 0 2px 6px rgba(0,0,0,0.15);" />
         <span style="color: var(--primary-color); font-weight: 700;">SGH</span> <span
-          style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">v2.29.4</span>
+          style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">v2.29.5</span>
       </div>
       <div class="nav-user" style="display: flex; gap: 10px; align-items: center;">
         <button id="btn-logout-lock" class="btn-icon"
@@ -786,7 +786,7 @@
             <span class="search-icon">
               <i class="bi bi-search"></i>
             </span>
-            <input type="text" id="buscador-personal" class="search-input" placeholder="Buscar cédula o nombre...">
+            <input type="text" id="buscador-personal" class="search-input" placeholder="Buscar por cédula, nombre o correo...">
           </div>
           <button id="btn-descargar-nomina-excel" type="button" class="btn-excel-export"
             onclick="if(window.exportarNominaExcel) window.exportarNominaExcel();"
@@ -1853,7 +1853,7 @@
             <h1
               style="color: var(--primary-color); font-size: 1.05rem; margin: 0; display: flex; align-items: center; gap: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
               SGH Panel <span id="admin-header-version-badge"
-                style="font-size: 0.72rem; font-weight: 600; color: var(--primary-color); background: rgba(37,99,235,0.1); padding: 2px 6px; border-radius: 10px;">v2.29.4</span>
+                style="font-size: 0.72rem; font-weight: 600; color: var(--primary-color); background: rgba(37,99,235,0.1); padding: 2px 6px; border-radius: 10px;">v2.29.5</span>
             </h1>
           </div>
         </div>
@@ -2149,7 +2149,7 @@
             </div>
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; flex: 1; justify-content: flex-end; min-width: 280px;">
               <div style="position: relative; flex: 1; min-width: 200px; max-width: 380px; display: flex; align-items: center;">
-                <input type="text" id="inp-buscar-usuario" placeholder="🔍 Buscar por nombre, cédula, DEA o correo..."
+                <input type="text" id="inp-buscar-usuario" placeholder="🔍 Buscar por correo, nombre, cédula o DEA..."
                   style="width: 100%; height: 42px; padding: 0 38px 0 14px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.88rem; box-sizing: border-box; background: white; margin: 0; outline: none; transition: border-color 0.2s, box-shadow 0.2s;">
                 <button type="button" id="btn-limpiar-buscar-usuario" title="Limpiar búsqueda"
                   style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 22px !important; height: 22px !important; min-width: 22px !important; max-width: 22px !important; padding: 0 !important; margin: 0 !important; border-radius: 50% !important; background: #e2e8f0 !important; color: #64748b !important; border: none !important; font-size: 12px !important; font-weight: bold !important; cursor: pointer !important; display: none; align-items: center; justify-content: center; line-height: 1 !important; box-shadow: none !important; transition: all 0.2s ease; z-index: 2;">✕</button>

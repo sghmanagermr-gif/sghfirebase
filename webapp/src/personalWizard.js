@@ -1605,6 +1605,8 @@ async function cargarPersonalExistente(codigoDEA) {
             window._personalPlantelData.push({ ...data, _docId: docId });
             const tr = document.createElement('tr');
             tr.style.borderBottom = '1px solid #e2e8f0';
+            const emailFunc = (data['correo'] || data['correo-electronico'] || data.email || data['CORREO ELECTRONICO'] || '').toString().trim().toLowerCase();
+            tr.dataset.correo = emailFunc;
 
             const tdCed = document.createElement('td');
             tdCed.style.padding = '12px';
@@ -1698,8 +1700,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (row.cells.length === 1) return;
                 const cedula = row.cells[0]?.textContent.toLowerCase() || '';
                 const nombre = row.cells[1]?.textContent.toLowerCase() || '';
+                const correo = (row.dataset.correo || '').toLowerCase();
 
-                if (cedula.includes(searchTerm) || nombre.includes(searchTerm)) {
+                if (cedula.includes(searchTerm) || nombre.includes(searchTerm) || correo.includes(searchTerm)) {
                     row.style.display = '';
                     matchCount++;
                 } else {

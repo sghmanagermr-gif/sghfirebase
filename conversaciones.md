@@ -4935,3 +4935,25 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 2. Sincronización de Cuenta Directiva: Se detectó la cuenta institucional en sesión activa `ueblamucuybaja@gmail.com` (UID `ZNEgg7DjoNUbKDiU2PGs4FGXKVp2`) y se sincronizó su perfil en `usuarios/ZNEgg7DjoNUbKDiU2PGs4FGXKVp2` con estatus `APROBADO` y rol `plaadmin`.  
 > 3. Instrucción Operativa para el Director: La dirección del plantel solo debe recargar la página (F5 o Ctrl+R) para visualizar de inmediato a Andrea Estefania Parra Peña y a la nómina completa en pantalla.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 118
+
+* **Fecha / Hora:** 2026-11-03 ~18:13 - 18:22 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> en el partado de usuarios necesito que el buscador tambien filtre ademas de el nommbre y la cedula, tambien el correo  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Implementación del Filtro por Correo Electrónico y Elevación a v2.29.5 (Skill 6):  
+> 1. Diagnóstico y Optimización Integral: Se identificó que la coincidencia por correo en el módulo de usuarios requería normalización para capturar todas las variantes de almacenamiento (`email`, `correo`, `correo_electronico`), y que al buscar identificadores únicos (como correos o cédulas completas) los filtros secundarios de estado o municipio no debían ocultar al usuario.  
+> 2. Mejoras Aplicadas en el Sistema:  
+>    - En `Usuarios del Sistema` (`webapp/src/admin.js`): Búsqueda multi-criterio robusta por correo, nombre, cédula, código DEA y municipio, con visualización segura y soporte ante cualquier nomenclatura.  
+>    - En `Personal del Plantel` (`webapp/src/personalWizard.js`): El buscador de la nómina ahora también evalúa el correo electrónico de cada funcionario en tiempo real además del nombre y la cédula.  
+>    - En `Interfaz de Usuario` (`webapp/index.html`): Textos de ayuda (*placeholders*) actualizados indicando la búsqueda por correo en ambos buscadores.  
+> 3. Control de Calidad y Compilación: Compilación de producción con Vite exitosa en 1.11s. Elevación a la versión `v2.29.5`.  
+> 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?

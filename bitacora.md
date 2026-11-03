@@ -3244,3 +3244,16 @@ Carga oficial y regularización integral de la nómina del **Complejo Educativo 
 2. **Inyección Atómica en `cargos_personal`:** Creación exitosa de los 25 expedientes individuales bajo la clave `OD14321419_${cedula}` (16 docentes, 3 administrativos, 6 obreros).
 3. **Sincronización Directiva (`usuarios/ZNEgg7DjoNUbKDiU2PGs4FGXKVp2`):** Homologación de la cuenta en línea `ueblamucuybaja@gmail.com` con rol `plaadmin` y estado `APROBADO`.
 4. **Respaldo Documental:** Sincronización en `conversaciones.md` y `bitacora.md`.
+
+---
+
+## [2.29.5] - 2026-11-03
+
+### Resumen del Cambio
+Ampliación y optimización del motor de búsqueda en el módulo de "Usuarios del Sistema" y "Personal del Plantel" para filtrar de forma ágil, exacta y simultánea por correo electrónico, nombre, cédula de identidad y código DEA.
+
+### Cambios Implementados
+1. **Normalización Multi-Atributo en Usuarios (`webapp/src/admin.js`):** Soporte unificado para `email`, `correo`, `correo_electronico`, etc. Prioridad de búsqueda directa al ingresar correos o documentos de identidad para evitar bloqueos por filtros de estado/municipio.
+2. **Búsqueda por Correo en Nómina (`webapp/src/personalWizard.js`):** Inyección de metadatos de correo en filas de la tabla y extensión del filtro en tiempo real.
+3. **Ajuste de Interfaz (`webapp/index.html`):** Actualización de *placeholders* y elevación de versión visible a `v2.29.5`.
+4. **Control SemVer:** Incremento a `v2.29.5` (PARCHE) en `package.json`, `versiones.md`, `bitacora.md` y `conversaciones.md`.
