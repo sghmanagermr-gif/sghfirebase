@@ -4158,3 +4158,50 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 2. Se mantuvo el candado de un único director por plantel y un único coordinador por municipio.  
 > 3. Se incrementó la versión a `v2.26.0` (MENOR), se compiló en Vite (708 ms) y se desplegó a producción en Firebase Hosting (`https://sgh-merida.web.app`). Sincronización con GitHub (`origin main`).  
 > 4. Pregunta protocolar de cierre.
+
+
+---
+
+### Intervención 75
+
+* **Fecha / Hora:** 2026-11-02 ~15:15 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Sí satisfactorios.  
+> Le haré saber a la responsable que solo un correo está registrado.  
+> Pasemos a otro caso. hay personal huerfano de los planteles:  
+> OD13071412  
+> OD13471413  
+> OD00901413  
+> Si es positivo hay que darles de alta  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Diagnóstico de Auditoría y Propuesta de Alta (Skill 6):  
+> 1. `OD13071412` (Aura Marina Saavedra de Torres, Libertador): Plantel de dependencia municipal; posee 0 registros en la nómina del RAC y 0 en huérfanos. Se recomendó confirmar el DEA o cargarlo manualmente.  
+> 2. `OD13471413` (Escuela Estadal José Audelino Delgado Castellano, Piñango - Miranda): Positivo con 4 trabajadores registrados en nómina oficial del RAC.  
+> 3. `OD00901413` (Francisca Sánchez de Palmi, Piñango - Miranda): Positivo con 5 trabajadores registrados en nómina oficial del RAC. Se destacó que la Directora Carmen Teresa Araujo Delgado (V-15920318) está a cargo de ambas instituciones.  
+> Se solicitó autorización para dar de alta ambos planteles y sus 9 cargos en la base de datos.
+
+---
+
+### Intervención 76
+
+* **Fecha / Hora:** 2026-11-02 ~19:53 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Sí, proceda a dar de alta ambos planteles y sus nóminas
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Ejecución de Alta y Carga de Nóminas (v2.26.1):  
+> 1. Se renovó el token de autenticación administrativa de forma segura.  
+> 2. Se inyectaron exitosamente en Firestore (`cargos_personal`) los 9 expedientes oficiales completos correspondientes a la Escuela José Audelino Delgado Castellano (4 cargos) y Francisca Sánchez de Palmi (5 cargos).  
+> 3. Se crearon los documentos oficiales de ambos planteles en `planteles/` con sus datos estadísticos, planes de estudio y el resumen de personal precargado.  
+> 4. Se actualizaron los catálogos institucionales `bd_sgh.json` y `webapp/public/bd_sgh.json`.  
+> 5. Se incrementó la versión a `v2.26.1` (PATCH), se compiló el frontend en Vite (1.30s) y se sincronizó el avance mediante commit y push a `origin main`.  
+> 6. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?

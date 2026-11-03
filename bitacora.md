@@ -2891,3 +2891,44 @@ Se implementó la **Opción 1** aprobada por el Administrador para resolver el b
 
 
 
+
+
+---
+
+## [v2.26.1] - 2026-11-02 (Alta Institucional y Carga de Nóminas para Piñango - Miranda)
+
+### Resumen Técnico
+Se atendió la solicitud de auditoría de personal huérfano para tres códigos DEA: `OD13071412`, `OD13471413` y `OD00901413`. Se ejecutó la revisión cruzada contra el catálogo maestro institucional (`bd_sgh.json`), la nómina consolidada del RAC (`migracion/RAC ESTADO MERIDA - PERSONAL.csv`), la relación de planteles del RAC (`migracion/RAC ESTADO MERIDA - PLANTELES.csv`) y el registro de personal huérfano (`migracion/huerfanos.csv`).
+
+### Diagnóstico de Auditoría
+1. **`OD13071412` (Aura Marina Saavedra de Torres):**
+   - Parroquia Jacinto Plaza, Municipio Libertador.
+   - Dependencia Municipal. Registra 0 trabajadores en el RAC estadal y 0 en la lista de huérfanos. Al ser municipal, su personal no figuraba en la nómina centralizada del estado.
+2. **`OD13471413` (Escuela Estadal José Audelino Delgado Castellano):**
+   - Parroquia Piñango, Municipio Miranda. Dependencia Estadal (Cód. Estadístico: `141026`). Plan Primaria (`21000`).
+   - Matrícula histórica: 10 estudiantes.
+   - Nómina activa oficial: 4 trabajadores.
+3. **`OD00901413` (Francisca Sánchez de Palmi):**
+   - Parroquia Piñango, Municipio Miranda. Dependencia Estadal (Cód. Estadístico: `141027`). Plan Primaria (`21000`).
+   - Matrícula histórica: 9 estudiantes.
+   - Nómina activa oficial: 5 trabajadores.
+   - **Nota Institucional:** La Directora Encargada Carmen Teresa Araujo Delgado (V-15920318) está asignada oficialmente a ambas instituciones, haciendo uso de la capacidad multi-plantel implementada en la versión v2.26.0.
+
+### Acciones Realizadas en Base de Datos (Firestore REST)
+1. **Inyección en `cargos_personal` (9 Registros):**
+   - Se inyectaron los 9 expedientes completos con identificadores compuestos `${dea}_${cedula}`:
+     - `OD13471413_15920318`: Carmen Teresa Araujo Delgado (Directora Encargada / Docente IV)
+     - `OD13471413_23725365`: María Yarleny Paredez Ramírez (Docente Contratada)
+     - `OD13471413_20848531`: Mary Eleodina Paredes Pérez (Cocinero I / Obrero Nacional)
+     - `OD13471413_20848528`: Francis Margarita Lobo de Ramírez (Cocinero I / Obrero Nacional)
+     - `OD00901413_15920318`: Carmen Teresa Araujo Delgado (Directora Encargada / Docente IV)
+     - `OD00901413_20848536`: Yoselin Marvelys Ramírez de Salcedo (Docente III)
+     - `OD00901413_20435039`: Sandra Yoleida Paredes de Salcedo (Docente de Aula)
+     - `OD00901413_13391614`: Arminda Lobo de Molina (Cocinero I / Obrero Nacional)
+     - `OD00901413_18310359`: Grecia Alejandra Ramírez (Cocinero I / Obrero Nacional)
+2. **Creación de Documentos de Planteles en Firestore (`planteles/`):**
+   - Se crearon los documentos `planteles/OD13471413` y `planteles/OD00901413` con sus metadatos oficiales, códigos estadísticos, planes de estudio y sus respectivos arrays `personal_resumen` poblados.
+3. **Sincronización de Catálogos:**
+   - Se actualizaron los campos de nivel, modalidad, turno y ubicación para ambos planteles en `bd_sgh.json` y `webapp/public/bd_sgh.json`.
+4. **Control SemVer y Despliegue:**
+   - Elevación a `v2.26.1` (PATCH). Compilación en Vite (1.30s) y sincronización con GitHub (`origin main`).

@@ -4,6 +4,24 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.26.1 (2 de Noviembre de 2026)
+
+- **Alta Institucional y Carga de Nóminas para Planteles Rurales de Piñango (Municipio Miranda):**
+  - **Diagnóstico y Requerimiento:**
+    - Se solicitó auditar si existía personal huérfano para tres planteles: `OD13071412`, `OD13471413` y `OD00901413`.
+    - `OD13071412` (Aura Marina Saavedra de Torres, Jacinto Plaza - Libertador): De dependencia municipal, no cuenta con personal en las nóminas centralizadas del RAC ni en la lista de huérfanos (0 registros).
+    - `OD13471413` (Escuela Estadal José Audelino Delgado Castellano, Piñango - Miranda) y `OD00901413` (Francisca Sánchez de Palmi, Piñango - Miranda): Resultaron **POSITIVOS**, figurando en los registros maestros del RAC con 4 y 5 trabajadores respectivamente, compartiendo la misma Directora Encargada: Prof. Carmen Teresa Araujo Delgado (V-15920318).
+  - **Acciones y Carga en Base de Datos Realizadas:**
+    - **Alta de Planteles en Firestore (`planteles/`):** Se crearon los documentos oficiales para ambos planteles en Firestore (`OD13471413` y `OD00901413`) con su información geográfica (Piñango, Miranda, Rural), dependencias (Estadal), códigos estadísticos (`141026` y `141027`), planes de estudio de Primaria (`21000`) y matrícula histórica registrada (10 y 9 alumnos respectivamente).
+    - **Inyección de 9 Registros de Nómina en `cargos_personal`:** Se cargaron los 9 expedientes con sus datos completos de filiación, contacto, formación, cargo, código RAC, carga horaria, turnos y ubicación administrativa:
+      - Para `OD13471413`: V-15920318 (Carmen Araujo, Directora/Docente IV), V-23725365 (María Paredez, Docente Contratada), V-20848531 (Mary Paredes, Cocinero I/Obrero), V-20848528 (Francis Lobo, Cocinero I/Obrero).
+      - Para `OD00901413`: V-15920318 (Carmen Araujo, Directora/Docente IV), V-20848536 (Yoselin Ramírez, Docente III), V-20435039 (Sandra Paredes, Docente), V-13391614 (Arminda Lobo, Cocinero I/Obrero), V-18310359 (Grecia Ramírez, Cocinero I/Obrero).
+    - **Sincronización de `personal_resumen`:** Ambos planteles quedaron precargados con su array de `personal_resumen` para que al ingresar la directora encuentre su nómina disponible de inmediato.
+    - **Actualización de Catálogos Locales:** Sincronizados `bd_sgh.json` y `webapp/public/bd_sgh.json`.
+  - **Despliegue y SemVer:** Versión PATCH `v2.26.1`. Compilado en Vite (1.30s) y sincronizado con GitHub (`origin main`).
+
+---
+
 ### v2.26.0 (2 de Noviembre de 2026)
 
 - **Soporte Institucional Multi-Plantel para Directores (`plaadmin`) con Cédula Compartida:**
