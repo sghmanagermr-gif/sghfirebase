@@ -4513,3 +4513,25 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 4. Se incluyó un candado de seguridad en el guardado que prohíbe el registro libre de personal nuevo para directores (`plaadmin`).  
 > 5. Se incrementó la versión a `v2.29.0`, se compiló en Vite (1.17s), se desplegó a Firebase Hosting (`https://sgh-merida.web.app`) y se sincronizó con GitHub.  
 > 6. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 90
+
+* **Fecha / Hora:** 2026-11-03 ~09:05 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Verifica que si hay empleados huerfanos con este codigo DEA que no aparece en el sistema OD13281412  
+> [Posterior confirmación del usuario: "Si dale de alta por favor"]  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Alta Institucional de OD13281412 y Carga de Personal Huérfano (v2.29.1 - Skill 6):  
+> 1. Se verificó el archivo maestro `RAC ESTADO MERIDA - PERSONAL.csv` y se confirmaron 11 empleados adscritos a la Escuela Elpidio Brandtt Meléndez (`OD13281412`), Parroquia El Morro, Municipio Libertador (9 docentes estadales y 2 cocineras CNAE).  
+> 2. Se dio de alta el documento `planteles/OD13281412` en Firestore con su resumen `personal_resumen` poblado con los 11 trabajadores.  
+> 3. Se crearon los 11 expedientes en `cargos_personal` con la llave compuesta `OD13281412_${cedula}`, dejando a la Directora Yanelys Ruiz Peña (C.I. 23.583.693) lista para asociarse en el sistema.  
+> 4. Se actualizaron los catálogos estáticos `bd_sgh.json` y `webapp/public/bd_sgh.json`.  
+> 5. Se elevó la versión a `v2.29.1`, se compiló con Vite (696 ms), se desplegó en Firebase Hosting (`https://sgh-merida.web.app`) y se sincronizó con GitHub.  
+> 6. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?

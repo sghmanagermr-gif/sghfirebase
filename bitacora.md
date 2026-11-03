@@ -3044,3 +3044,30 @@ Se resolvieron dos vulnerabilidades funcionales en el módulo de gestión de per
 
 ### Control SemVer y Despliegue
 - Elevación a `v2.29.0` (MENOR). Compilación con Vite (1.17s), despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`) y sincronización con GitHub (`origin main`).
+
+---
+
+## [v2.29.1] - 2026-11-03 (Alta Institucional OD13281412 y Carga de Personal Huérfano)
+
+### Resumen Técnico
+Se realizó la auditoría, rescate y alta institucional de la **Escuela Elpidio Brandtt Meléndez** (antes Elpidio Branth), identificada con el código DEA **`OD13281412`**, ubicada en Aldea Mocaz, Parroquia El Morro, Municipio Libertador. Esta institución no figuraba en la base de datos de planteles de Firestore ni en los catálogos estáticos locales, dejando en condición de huérfanos a 11 trabajadores registrados en la base histórica del censo de personal RAC Mérida.
+
+### Acciones Ejecutadas
+1. **Auditoría de Nómina Huérfana:**
+   - Se confirmó la existencia de 11 registros en `migracion/RAC ESTADO MERIDA - PERSONAL.csv` adscritos a `OD13281412`: 9 docentes estadales (incluida la Directora Yanelys Ruiz Peña, C.I. 23.583.693) y 2 cocineras de la Patria adscritas al CNAE Nacional.
+2. **Alta de Plantel en Firestore (`planteles/OD13281412`):**
+   - Se registró la institución con todos sus metadatos (Denominación: ESCUELA, Ubicación: RURAL, Nivel: INICIAL - PRIMARIA, Turno: MAÑANA, Dependencia: ESTADAL, Matrícula total histórica: 41 alumnos).
+   - Se generó el resumen de personal `personal_resumen` con los 11 trabajadores para visualización instantánea.
+3. **Carga Atómica en `cargos_personal`:**
+   - Se insertaron los 11 documentos individuales con sus llaves compuestas `OD13281412_${cedula}`, preservando todos los campos requeridos por el sistema (nombres, cargos, códigos RAC, teléfonos, correos, tallas, direcciones, horas de nómina).
+4. **Sincronización de Catálogos Locales:**
+   - Se actualizó el árbol geográfico en `bd_sgh.json` y `webapp/public/bd_sgh.json` para que el plantel aparezca disponible en el selector de Libertador -> El Morro.
+
+### Archivos Modificados
+- `bd_sgh.json`, `webapp/public/bd_sgh.json`: Inyección del plantel `OD13281412`.
+- `webapp/package.json`: Elevación de versión a `2.29.1`.
+- `webapp/index.html`: Sincronización de insignias y título de versión a `v2.29.1`.
+- `versiones.md`, `bitacora.md`, `conversaciones.md`: Registro documental obligatorio.
+
+### Control SemVer y Despliegue
+- Elevación a `v2.29.1` (PARCHE). Compilación con Vite (696 ms), despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`) y sincronización con GitHub (`origin main`).

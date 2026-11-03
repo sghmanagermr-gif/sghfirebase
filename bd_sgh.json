@@ -16121,6 +16121,32 @@
                   "especialidad": null
                 }
               }
+            },
+            "OD13281412": {
+              "nombre_plantel": "ESCUELA ELPIDIO BRANDTT MELENDEZ (ANTES ELPIDIO BRANTH)",
+              "nuevo_eponimo": "ELPIDIO BRANDTT MELENDEZ",
+              "den_abr": "ESC",
+              "denominacion": "ESCUELA",
+              "dependencia": "ESTADAL",
+              "codigo_dependencia": null,
+              "codigo_dependencia_2": null,
+              "codigo_estadistico": null,
+              "ubicacion": "RURAL",
+              "nivel": "INICIAL - PRIMARIA",
+              "modalidad": "REGULAR",
+              "turno": "MAÑANA",
+              "metros2": null,
+              "observaciones": null,
+              "planes_estudio": {
+                "20000": {
+                  "especialidad": null,
+                  "mencion": null
+                },
+                "21000": {
+                  "especialidad": null,
+                  "mencion": null
+                }
+              }
             }
           }
         },

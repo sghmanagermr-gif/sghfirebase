@@ -4,6 +4,21 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.29.1 (3 de Noviembre de 2026)
+
+- **Alta Institucional y Vinculación de Nómina Huérfana para Escuela Elpidio Brandtt Meléndez (`OD13281412`):**
+  - **Requerimiento Institucional:**
+    - Se solicitó verificar y dar de alta en el sistema la institución educativa identificada con el código DEA `OD13281412`, la cual no aparecía en el catálogo de planteles pero contaba con personal docente y obrero asignado en el censo RAC original.
+  - **Diagnóstico y Conciliación:**
+    - Tras auditar el archivo maestro de nómina (`RAC ESTADO MERIDA - PERSONAL.csv`), se identificaron 11 trabajadores en condición de "huérfanos de plantel", adscritos a la **Escuela Elpidio Brandtt Meléndez** (antes Elpidio Branth), ubicada en Aldea Mocaz, Parroquia El Morro, Municipio Libertador.
+  - **Solución Implementada:**
+    - **Alta en Colección `planteles`:** Se creó el documento `planteles/OD13281412` con dependencia Estadal, niveles Inicial - Primaria, turno Mañana, matrícula histórica de 41 estudiantes, y su array `personal_resumen` con los 11 funcionarios vinculados.
+    - **Inyección de Expedientes en `cargos_personal`:** Se crearon los 11 expedientes completos con llaves compuestas `OD13281412_${cedula}`, incluyendo a la Directora/Docente Yanelys Ruiz Peña (C.I. 23.583.693), 8 docentes estadales y 2 cocineras CNAE.
+    - **Sincronización de Catálogos:** Se agregaron los metadatos institucionales del plantel en `bd_sgh.json` y `webapp/public/bd_sgh.json` bajo la parroquia El Morro, Municipio Libertador.
+  - **Despliegue y SemVer:** Versión PARCHE `v2.29.1`. Compilada en Vite (696 ms), desplegada a Firebase Hosting (`https://sgh-merida.web.app`) y sincronizada con GitHub (`origin main`).
+
+---
+
 ### v2.29.0 (3 de Noviembre de 2026)
 
 - **Corrección Asistida de Cédulas y Blindaje Anti-Colados en Gestión de Personal:**
