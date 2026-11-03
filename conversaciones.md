@@ -4205,3 +4205,28 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 4. Se actualizaron los catálogos institucionales `bd_sgh.json` y `webapp/public/bd_sgh.json`.  
 > 5. Se incrementó la versión a `v2.26.1` (PATCH), se compiló el frontend en Vite (1.30s) y se sincronizó el avance mediante commit y push a `origin main`.  
 > 6. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 77
+
+* **Fecha / Hora:** 2026-11-02 ~20:08 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> correos_afectados  
+> pedagogicomutus2023@gmail.com  
+> direccionlmpspueblollano@gmail.com  
+> liceonicolasa@gmail.com  
+> liceopedrojosegonzalez2026@gmail.com  
+> jardinffc1493@gmail.com  
+> mariaisabelb683@gmail.com  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Diagnóstico, Verificación y Generación de Enlaces de Restablecimiento Out-of-Band (Skill 6):  
+> 1. Se auditaron los 6 correos en Firebase Authentication, confirmando que las 6 cuentas ya se encontraban creadas. Todas corresponden a planteles educativos del Municipio Pueblo Llano.  
+> 2. Se actualizó el estado de todas a `emailVerified: true` vía Identity Toolkit REST, eliminando de raíz la barrera de verificación de correo para permitir el ingreso directo.  
+> 3. Se generaron los 6 enlaces oficiales y seguros de asignación de contraseña listos para compartir por WhatsApp con cada director o responsable.
