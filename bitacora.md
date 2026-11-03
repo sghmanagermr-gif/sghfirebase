@@ -3257,3 +3257,17 @@ Ampliación y optimización del motor de búsqueda en el módulo de "Usuarios de
 2. **Búsqueda por Correo en Nómina (`webapp/src/personalWizard.js`):** Inyección de metadatos de correo en filas de la tabla y extensión del filtro en tiempo real.
 3. **Ajuste de Interfaz (`webapp/index.html`):** Actualización de *placeholders* y elevación de versión visible a `v2.29.5`.
 4. **Control SemVer:** Incremento a `v2.29.5` (PARCHE) en `package.json`, `versiones.md`, `bitacora.md` y `conversaciones.md`.
+
+---
+
+## [Operación Administrativa] - 2026-11-03 (Regularización Institucional Plantel OD03371417 - Rangel)
+
+### Resumen Técnico
+Regularización de cuenta y carga oficial de nómina para el usuario directivo asociado a `escuelapatriciozerpa@gmail.com` correspondiente a la **Escuela Estadal Básica "Misintá" / Epónimo "Patricio Zerpa" (`OD03371417`)**, Parroquia Mucuchíes, Municipio Rangel.
+
+### Acciones Ejecutadas
+1. **Sincronización Directiva (`usuarios/DaObGDJBiuWuTcN7jLapJB7avC53`):** Asignación de rol `plaadmin`, estado `APROBADO` y vinculación estricta al DEA `OD03371417`.
+2. **Alta de Nómina en Plantel (`planteles/OD03371417`):** Consolidación de los 13 funcionarios oficiales en el arreglo `personal_resumen`.
+3. **Inyección Atómica en `cargos_personal`:** Creación exitosa de los 13 expedientes individuales bajo la clave `OD03371417_${cedula}` (12 docentes y 1 cocinera).
+4. **Generación OOB y Entrega WhatsApp:** Emisión de enlace seguro de restablecimiento y confección de mensaje institucional.
+5. **Respaldo Documental:** Sincronización en `conversaciones.md` y `bitacora.md`.
