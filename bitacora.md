@@ -3013,3 +3013,34 @@ Se diseñó e implementó un filtro selector de municipios en la barra de herram
 
 ### Control SemVer y Despliegue
 - Elevación a `v2.28.0` (MENOR). Compilación con Vite (776 ms), despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`) y sincronización con GitHub (`origin main`).
+
+---
+
+## [v2.29.0] - 2026-11-03 (Corrección Asistida de Cédulas y Blindaje Anti-Colados en Personal)
+
+### Resumen Técnico
+Se resolvieron dos vulnerabilidades funcionales en el módulo de gestión de personal institucional (`webapp/src/personalWizard.js`):
+1. **Corrección de Cédula de Identidad:** Se desbloqueó la edición de la cédula en modo actualización, garantizando que el renombramiento del expediente en Firestore (`cargos_personal`) ocurra de manera atómica sin duplicar registros y sincronizando la lista de resumen institucional.
+2. **Blindaje Anti-Colados:** Se eliminó la persistencia del formulario vacío tras guardar o cancelar. El formulario ahora permanece oculto (`display: none`) por defecto y solo se abre cuando el director edita un registro existente o procesa un traslado oficial.
+
+### Arquitectura de la Solución (Zero-Cost & Pureza de Datos)
+1. **Edición Segura de Cédula:**
+   - En `cargarEmpleadoEnFormulario`, se desbloqueó el campo `#wp-cedula` (`readOnly = false`) y se respalda la cédula original en `window._cedulaOriginalEnEdicion`.
+   - En `guardarPersonalInline`, si se detecta cambio de cédula:
+     - Se valida previamente que la nueva cédula no exista ya en el plantel para evitar colisiones.
+     - Se crea el nuevo documento con la llave compuesta `${dea}_${newCedula}`.
+     - Se elimina de forma limpia el documento con la cédula errónea (`deleteDoc`).
+     - Se actualiza el array `personal_resumen` en `planteles/${dea}`.
+2. **Cierre Automático y Protección del Formulario:**
+   - En `limpiarFormularioPersonal` y `mostrarFormularioPersonal`, se fuerza `seccion-registro-personal.style.display = 'none'`.
+   - Tras presionar «Actualizar Empleado» o «Cancelar Edición», el formulario desaparece de la pantalla y la vista regresa suavemente a la tabla `#seccion-personal-existente`.
+   - Se añadió un candado en `guardarPersonalInline`: si el rol es director (`plaadmin`) y no está en modo edición ni en modo traslado, cualquier intento de guardado se cancela con alerta institucional.
+
+### Archivos Modificados
+- `webapp/src/personalWizard.js`: Control de estado `_cedulaOriginalEnEdicion`, validación de conflicto de cédula, migración y depuración de documento previo, ocultamiento del formulario y candado de seguridad.
+- `webapp/package.json`: Elevación de versión a `2.29.0`.
+- `webapp/index.html`: Sincronización de versión a `v2.29.0`.
+- `versiones.md`, `bitacora.md`, `conversaciones.md`: Registro documental obligatorio.
+
+### Control SemVer y Despliegue
+- Elevación a `v2.29.0` (MENOR). Compilación con Vite (1.17s), despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`) y sincronización con GitHub (`origin main`).

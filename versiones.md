@@ -4,6 +4,22 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.29.0 (3 de Noviembre de 2026)
+
+- **Corrección Asistida de Cédulas y Blindaje Anti-Colados en Gestión de Personal:**
+  - **Requerimiento Institucional:**
+    - Se identificaron dos requerimientos críticos para la jornada de actualización del personal:
+      1. Permitir la corrección de cédulas de identidad erróneas en los expedientes de personal cargados previamente.
+      2. Blindar el formulario de personal para que, al presionar «Actualizar Empleado» o «Cancelar», la sección de captura se cierre y oculte inmediatamente, erradicando el riesgo de que directores ingresen personal nuevo no autorizado («colados»).
+  - **Solución Implementada:**
+    - **Habilitación de Edición de Cédula:** Se desbloqueó la casilla `#wp-cedula` en el formulario (`readOnly = false`), almacenando en memoria la cédula original (`window._cedulaOriginalEnEdicion`).
+    - **Migración Atómica de Expediente:** Si la cédula es modificada, el sistema valida que no colisione con otro funcionario en el mismo plantel, crea el nuevo documento en `cargos_personal` con la llave compuesta `${dea}_${newCedula}`, elimina de forma limpia el documento con la cédula errónea y actualiza el array `personal_resumen` en el documento del plantel.
+    - **Ocultamiento Automático del Formulario:** Se reconfiguró `limpiarFormularioPersonal()` y `mostrarFormularioPersonal()` para que `#seccion-registro-personal` permanezca oculta (`display: none`) por defecto y solo se abra cuando el director pulse «Editar» en un empleado existente o «Incorporar por Traslado». Al actualizar o cancelar, el formulario se cierra y oculta de inmediato devolviendo la vista a la tabla.
+    - **Candado de Seguridad en Guardado:** Bloqueo explícito en `guardarPersonalInline` que rechaza cualquier intento de guardar registros que no correspondan a una edición activa o a un traslado oficial autorizado.
+  - **Despliegue y SemVer:** Versión MENOR `v2.29.0`. Compilada en Vite (1.17s), desplegada a Firebase Hosting (`https://sgh-merida.web.app`) y sincronizada con GitHub (`origin main`).
+
+---
+
 ### v2.28.0 (2 de Noviembre de 2026)
 
 - **Filtro Selector por Municipio en Gestión de Usuarios del Sistema:**

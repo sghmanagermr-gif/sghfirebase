@@ -38,6 +38,7 @@ let _CATALOGOS_CACHE = null;
 
 // Variable de estado global para controlar modo edición
 window._docIdEnEdicion = null;
+window._cedulaOriginalEnEdicion = null;
 
 /**
  * Obtiene los catálogos maestros desde localStorage o Firestore si aún no están cacheados
@@ -470,15 +471,12 @@ export function mostrarFormularioPersonal(autoScroll = true) {
     const contenedorTabla = document.getElementById('seccion-personal-existente');
 
     if (contenedorTabla) contenedorTabla.style.display = 'block';
+    // 🔒 REGLA DE ORO: El formulario de registro NUNCA se muestra vacío por defecto
     if (contenedor) {
-        contenedor.style.display = 'block';
-        if (autoScroll) {
-            if (contenedorTabla) {
-                contenedorTabla.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            } else {
-                contenedor.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }
+        contenedor.style.display = 'none';
+    }
+    if (autoScroll && contenedorTabla) {
+        contenedorTabla.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     let dea = '';
@@ -505,8 +503,15 @@ export function cerrarFormularioPersonal() {
 
 export function limpiarFormularioPersonal() {
     window._docIdEnEdicion = null;
+    window._cedulaOriginalEnEdicion = null;
     window._esTraslado = false;
     window._datosTraslado = null;
+
+    // 🔒 REGLA DE ORO: El formulario de registro se oculta para que NUNCA quede abierto en blanco
+    const contenedor = document.getElementById('seccion-registro-personal');
+    if (contenedor) {
+        contenedor.style.display = 'none';
+    }
 
     const bannerEdit = document.getElementById('banner-modo-edicion');
     if (bannerEdit) {
@@ -703,13 +708,21 @@ export function cargarEmpleadoEnFormulario(data, docId) {
     }
     window._docIdEnEdicion = docId;
 
+    const nom = (data['nombre-apellido'] || data['apellidos-nombres'] || data.nombres || data.nombre || '').toUpperCase();
+    const ced = String(data['cedula-identidad'] || data.cedula || '').trim();
+    window._cedulaOriginalEnEdicion = ced; // Respaldar cédula original para detectar correcciones
+
     const contenedor = document.getElementById('seccion-registro-personal');
-    if (contenedor) contenedor.style.display = 'block';
+    if (contenedor) {
+        contenedor.style.display = 'block';
+        const headerOffset = 95;
+        const elementPosition = contenedor.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+    }
 
     const bannerEdit = document.getElementById('banner-modo-edicion');
     const txtBanner = document.getElementById('texto-modo-edicion');
-    const nom = (data['nombre-apellido'] || data['apellidos-nombres'] || data.nombres || data.nombre || '').toUpperCase();
-    const ced = data['cedula-identidad'] || data.cedula || '';
 
     if (bannerEdit) {
         if (txtBanner) txtBanner.textContent = `Modo Edición: Modificando a ${nom} (C.I. ${ced})`;
@@ -730,7 +743,10 @@ export function cargarEmpleadoEnFormulario(data, docId) {
     setVal('wp-nacionalidad', data.nacionalidad || 'V');
     setVal('wp-cedula', ced);
     const cedInp = document.getElementById('wp-cedula');
-    if (cedInp) cedInp.readOnly = true;
+    if (cedInp) {
+        cedInp.readOnly = false; // 🔓 Permitir corrección de cédula mal escrita
+        cedInp.style.backgroundColor = '';
+    }
 
     setVal('wp-nombres', nom);
     setVal('wp-lugar-nacimiento', data['lugar-nacimiento'] || '');
@@ -1406,6 +1422,44 @@ export async function guardarPersonalInline() {
 
     const isEditing = !!window._docIdEnEdicion;
     const isTraslado = !!window._esTraslado;
+    const oldCedula = String(window._cedulaOriginalEnEdicion || '').trim();
+    const newCedula = String(payload.cedula || '').trim();
+    const cedulaCambio = isEditing && oldCedula && newCedula && (newCedula !== oldCedula);
+
+    // 🔒 REGLA DE ORO INSTITUCIONAL: CERO COLADOS NO AUTORIZADOS
+    // Los directores (plaadmin) NO pueden registrar personal nuevo libremente.
+    // Solo pueden actualizar personal existente o incorporar traslados oficiales.
+    const rolUsuario = window.sgh_user_data?.rol;
+    const esDirector = rolUsuario === 'plaadmin';
+    if (esDirector && !isEditing && !isTraslado) {
+        if (window.showAlert) {
+            await window.showAlert("Operación No Permitida", "Los directores no tienen autorización para registrar nuevo personal libremente. Solo pueden actualizar personal existente o incorporar traslados oficiales.", "danger");
+        }
+        limpiarFormularioPersonal();
+        return;
+    }
+
+    // 🔒 PREVENCIÓN DE CONFLICTO: Si se corrige la cédula, validar que no colisione con otro trabajador en el mismo plantel
+    if (cedulaCambio && dea) {
+        const targetDocKey = `${dea}_${newCedula}`;
+        try {
+            const checkSnap = await getDoc(doc(db, "cargos_personal", targetDocKey));
+            if (checkSnap.exists()) {
+                if (window.showAlert) {
+                    await window.showAlert("Cédula en Conflicto", `Ya existe un funcionario registrado en este plantel con la cédula ${newCedula}. Verifique el número antes de guardar para evitar sobrescribir a otro trabajador.`, "warning");
+                }
+                const btn = document.getElementById('btn-guardar-empleado-inline');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.textContent = isTraslado ? "INCORPORAR AL PLANTEL" : "ACTUALIZAR EMPLEADO";
+                }
+                return;
+            }
+        } catch (eCheck) {
+            console.warn("Aviso verificando existencia de cédula:", eCheck);
+        }
+    }
+
     // Si se está actualizando o incorporando por traslado, limpiar el campo de búsqueda de inmediato
     if (isEditing || isTraslado) {
         const searchInput = document.getElementById('buscador-personal');
@@ -1422,12 +1476,24 @@ export async function guardarPersonalInline() {
 
     try {
         let docId = window._docIdEnEdicion;
-        if (!docId) {
+        if (cedulaCambio) {
+            docId = dea ? `${dea}_${newCedula}` : newCedula;
+        } else if (!docId) {
             docId = dea ? (dea + '_' + payload.cedula) : payload.cedula;
         }
 
         const ref = doc(db, "cargos_personal", docId);
         await setDoc(ref, payload, { merge: true });
+
+        // Si la cédula cambió, eliminar el documento previo con la cédula errónea
+        if (cedulaCambio && window._docIdEnEdicion && window._docIdEnEdicion !== docId) {
+            try {
+                await deleteDoc(doc(db, "cargos_personal", window._docIdEnEdicion));
+                console.log(`[SGH-Auditoria] Documento anterior ${window._docIdEnEdicion} eliminado tras corrección de cédula a ${newCedula}.`);
+            } catch (eDelOld) {
+                console.warn("Aviso eliminando registro previo con cédula incorrecta:", eDelOld);
+            }
+        }
 
         // Si era un traslado, eliminar la ficha viajera de personal_traslados y registrar en auditoría de traslados
         if (isTraslado) {
@@ -1456,11 +1522,14 @@ export async function guardarPersonalInline() {
                 const pSnap = await getDoc(plantelRef);
                 if (pSnap.exists()) {
                     const pData = pSnap.data();
-                    const resumenLimpio = (pData.personal_resumen || []).filter(item => item.cedula !== payload.cedula);
+                    const resumenLimpio = (pData.personal_resumen || []).filter(item => {
+                        const itemCed = String(item.cedula || '').trim();
+                        return itemCed !== newCedula && itemCed !== oldCedula;
+                    });
                     resumenLimpio.push({
-                        cedula: payload.cedula,
-                        nombre: payload.nombres,
-                        cargo: payload.cargo
+                        cedula: newCedula,
+                        nombre: payload.nombres || payload['nombre-apellido'] || '',
+                        cargo: payload.cargo || ''
                     });
                     await updateDoc(plantelRef, { personal_resumen: resumenLimpio });
                 }
@@ -1471,51 +1540,31 @@ export async function guardarPersonalInline() {
 
         const mensajeExito = isTraslado
             ? "¡Funcionario incorporado al plantel exitosamente por traslado!"
-            : (isEditing ? "¡Empleado actualizado exitosamente!" : "¡Empleado guardado exitosamente!");
+            : (cedulaCambio
+                ? `¡Empleado actualizado exitosamente! Cédula corregida a ${newCedula}.`
+                : "¡Empleado actualizado exitosamente!");
         showToast(mensajeExito, "success");
         limpiarFormularioPersonal();
         if (dea) cargarPersonalExistente(dea);
 
-        // Desplazamiento inteligente diferenciado:
-        // AL ACTUALIZAR o TRASLADAR -> Va a 'Personal Registrado en el Plantel' (con cursor en el buscador)
-        // AL GUARDAR (Nuevo) -> Va a 'Registro de Personal' (con cursor en la Cédula listo para el siguiente)
-        const headerOffset = 95; // Margen para el header sticky
-        if (isEditing || isTraslado) {
-            const seccionTabla = document.getElementById('seccion-personal-existente');
-            if (seccionTabla) {
-                setTimeout(() => {
-                    const elementPosition = seccionTabla.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        // Retorno automático a la tabla de personal existente
+        const headerOffset = 95;
+        const seccionTabla = document.getElementById('seccion-personal-existente');
+        if (seccionTabla) {
+            setTimeout(() => {
+                const elementPosition = seccionTabla.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth'
-                    });
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
 
-                    const buscador = document.getElementById('buscador-personal');
-                    if (buscador) {
-                        buscador.focus({ preventScroll: true });
-                    }
-                }, 100);
-            }
-        } else {
-            const seccionRegistro = document.getElementById('seccion-registro-personal');
-            if (seccionRegistro) {
-                setTimeout(() => {
-                    const elementPosition = seccionRegistro.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth'
-                    });
-
-                    const inpCedula = document.getElementById('wp-cedula');
-                    if (inpCedula) {
-                        inpCedula.focus({ preventScroll: true });
-                    }
-                }, 100);
-            }
+                const buscador = document.getElementById('buscador-personal');
+                if (buscador) {
+                    buscador.focus({ preventScroll: true });
+                }
+            }, 100);
         }
 
     } catch (error) {
@@ -2289,6 +2338,7 @@ export async function buscarFichaTraslado(cedulaInput, nac = 'V') {
 
                 const seccionRegistro = document.getElementById('seccion-registro-personal');
                 if (seccionRegistro) {
+                    seccionRegistro.style.display = 'block';
                     const headerOffset = 95;
                     const elementPosition = seccionRegistro.getBoundingClientRect().top;
                     const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
