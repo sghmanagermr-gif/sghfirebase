@@ -4,6 +4,20 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.29.2 (3 de Noviembre de 2026)
+
+- **Corrección de Discrepancia Canónica y Acceso Universal en Control de Despliegue Global (Antonio Pinto Salinas / Salina):**
+  - **Requerimiento y Diagnóstico:**
+    - Se reportó que el municipio Antonio Pinto Salinas no permitía el ingreso de sus directores (`plaadmin`) a la plataforma, manteniéndolos bloqueados en pantalla de espera («El Sistema SGH aún no está habilitado para el municipio...»), a pesar de que en el módulo administrativo «Control de Despliegue Global» el interruptor aparecía activo y encendido.
+    - **Causa Raíz Identificada:** La geografía canónica de la base de datos (`bd_sgh.json`) y los perfiles de 40 directores en Firestore tienen grabado el municipio en singular: `ANTONIO PINTO SALINA`. Sin embargo, la matriz de botones de despliegue en `admin.js` guardaba la configuración con la «S» final: `ANTONIO PINTO SALINAS`. Al validar el acceso en `auth.js`, la comparación estricta de cadenas fallaba impidiendo el acceso a los planteles de dicha jurisdicción.
+  - **Solución Implementada:**
+    - **Inyección Inmediata en Base de Datos:** Se actualizó en vivo el documento `configuracion/despliegue` en Firestore para incluir tanto `ANTONIO PINTO SALINA` como `ANTONIO PINTO SALINAS` y los alias ortográficos de otros municipios.
+    - **Normalización Inteligente en Acceso (`auth.js`):** Se integró la función `normalizarMunicipio()` en la compuerta de acceso institucional, evaluando si el municipio del usuario coincide canónicamente con cualquiera de los municipios activos del despliegue sin importar discrepancias de plural o acentos.
+    - **Sincronización de Variantes en Panel Administrativo (`admin.js`):** Se modificó la renderización y guardado del despliegue global para que al conmutar un municipio se persistan automáticamente sus variantes canónicas y aliases (`getVariantesMunicipio()`), asegurando compatibilidad hacia el pasado y futuro.
+  - **Despliegue y SemVer:** Versión PARCHE `v2.29.2`. Compilada en Vite (829 ms), desplegada a Firebase Hosting (`https://sgh-merida.web.app`) y sincronizada con GitHub (`origin main`).
+
+---
+
 ### v2.29.1 (3 de Noviembre de 2026)
 
 - **Alta Institucional y Vinculación de Nómina Huérfana para Escuela Elpidio Brandtt Meléndez (`OD13281412`):**

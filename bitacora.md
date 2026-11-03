@@ -3071,3 +3071,34 @@ Se realizó la auditoría, rescate y alta institucional de la **Escuela Elpidio 
 
 ### Control SemVer y Despliegue
 - Elevación a `v2.29.1` (PARCHE). Compilación con Vite (696 ms), despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`) y sincronización con GitHub (`origin main`).
+
+---
+
+## [v2.29.2] - 2026-11-03 (Normalización Geográfica y Acceso Universal en Despliegue Global)
+
+### Resumen Técnico
+Se investigó y corrigió el bloqueo de acceso al sistema que experimentaban los directores del municipio Antonio Pinto Salinas / Salina. A pesar de que en la interfaz del Administrador ("Control de Despliegue Global") el interruptor del municipio figuraba activo, las cuentas institucionales de 40 directores recibían el mensaje de espera "El Sistema SGH aún no está habilitado para el municipio...".
+
+### Diagnóstico de Causa Raíz
+- En la geografía oficial del sistema (`bd_sgh.json`) y en los perfiles de los usuarios en Firestore, el municipio está registrado en singular: `ANTONIO PINTO SALINA`.
+- En el panel administrativo de despliegue (`admin.js`), la lista de municipios utilizaba la variante en plural: `ANTONIO PINTO SALINAS`.
+- La compuerta de seguridad en `auth.js` validaba el acceso mediante un estricto `despliegue.municipios_activos?.includes(mun)`, lo que resultaba en falso (`"ANTONIO PINTO SALINA"` !== `"ANTONIO PINTO SALINAS"`).
+
+### Solución Arquitectónica Implementada
+1. **Actualización Inmediata en Caliente:**
+   - Se inyectó directamente en `configuracion/despliegue` de Firestore el valor `ANTONIO PINTO SALINA` y los aliases comunes de otros municipios, habilitando el acceso instantáneo.
+2. **Normalización Inteligente en Acceso (`auth.js`):**
+   - Se importó `normalizarMunicipio()` de `geografia.js`. La validación ahora evalúa equivalencia canónica: `despliegue.municipios_activos?.some(m => normalizarMunicipio(m) === munNorm)`.
+3. **Persistencia de Variantes en Guardado (`admin.js`):**
+   - Se actualizó `renderGrid()` para reconocer municipios activos por su forma canónica normalizada.
+   - Al guardar la configuración de despliegue, el sistema expande cada municipio activo mediante `getVariantesMunicipio()`, garantizando que tanto la forma singular como la plural (y variantes con acentos) queden almacenadas en Firestore.
+
+### Archivos Modificados
+- `webapp/src/auth.js`: Importación de `normalizarMunicipio` y validación canónica en compuerta de despliegue.
+- `webapp/src/admin.js`: Normalización en `renderGrid()`, sincronización en toggles y persistencia con `getVariantesMunicipio()`.
+- `webapp/package.json`: Elevación a `2.29.2`.
+- `webapp/index.html`: Sincronización de insignias a `v2.29.2`.
+- `versiones.md`, `bitacora.md`, `conversaciones.md`: Registro documental obligatorio.
+
+### Control SemVer y Despliegue
+- Elevación a `v2.29.2` (PARCHE). Compilación con Vite (829 ms), despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`) y sincronización con GitHub (`origin main`).

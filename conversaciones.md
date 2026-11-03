@@ -4535,3 +4535,24 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 4. Se actualizaron los catálogos estáticos `bd_sgh.json` y `webapp/public/bd_sgh.json`.  
 > 5. Se elevó la versión a `v2.29.1`, se compiló con Vite (696 ms), se desplegó en Firebase Hosting (`https://sgh-merida.web.app`) y se sincronizó con GitHub.  
 > 6. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 91
+
+* **Fecha / Hora:** 2026-11-03 ~09:12 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> por favor ve que esta pasando con el municipio ANTONIO PINTO SALINA todos los municipios estan desplegados pero a ese municipio en especifico no da acceso al sistema [Adjunta captura del Control de Despliegue Global]  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Diagnóstico y Solución de Acceso para Antonio Pinto Salinas / Salina (v2.29.2 - Skill 6):  
+> 1. Diagnóstico de Causa Raíz: En los perfiles de los directores en Firestore y la base de datos geográfica oficial el municipio está registrado en singular (`ANTONIO PINTO SALINA`), mientras que en la matriz de botones del panel de despliegue se guardaba en plural (`ANTONIO PINTO SALINAS`). La validación estricta en el inicio de sesión impedía el acceso por la discrepancia de la última letra.  
+> 2. Solución en Vivo: Se actualizó de inmediato en caliente el documento `configuracion/despliegue` de Firestore agregando `ANTONIO PINTO SALINA` y los demás alias conocidos para permitir el acceso inmediato de los 40 directores.  
+> 3. Blindaje en Código: En `webapp/src/auth.js` se implementó `normalizarMunicipio()` para comparar canónicamente el municipio del usuario contra los activos; y en `webapp/src/admin.js` se sincronizan todas las variantes (`getVariantesMunicipio()`) al guardar.  
+> 4. Se elevó la versión a `v2.29.2`, se compiló con Vite (829 ms), se desplegó en Firebase Hosting (`https://sgh-merida.web.app`) y se sincronizó con GitHub.  
+> 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?

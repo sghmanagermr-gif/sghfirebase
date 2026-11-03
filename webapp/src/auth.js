@@ -1,5 +1,6 @@
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, collection, query, where, getDocs, setDoc } from 'firebase/firestore';
+import { normalizarMunicipio } from './geografia.js';
 
 export function initAuth(auth, db, callbacks) {
   const { onLogin, onLogout, onWait, onAdmin } = callbacks;
@@ -137,11 +138,15 @@ export function initAuth(auth, db, callbacks) {
       if (userData.rol === 'plant' || userData.rol === 'plaadmin') {
          // --- GATE: DESPLIEGUE ---
          const despliegue = await getDespliegueConfig();
-         const cod = userData.jerarquia?.plantel_codigo;
-         const mun = userData.jerarquia?.municipio;
+         const cod = userData.jerarquia?.plantel_codigo || userData.plantel_codigo;
+         const mun = userData.jerarquia?.municipio || userData.municipio;
+         const munNorm = normalizarMunicipio(mun);
          
-         const isExp = despliegue.excepciones?.includes(cod);
-         const isMun = despliegue.municipios_activos?.includes(mun);
+         const isExp = Boolean(cod && despliegue.excepciones?.includes(cod));
+         const isMun = Boolean(mun && (
+            despliegue.municipios_activos?.includes(mun) ||
+            (munNorm && despliegue.municipios_activos?.some(m => normalizarMunicipio(m) === munNorm))
+         ));
          
          if (!isExp && !isMun) {
             const mensajeDespliegue = mun

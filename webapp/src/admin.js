@@ -2250,7 +2250,8 @@ export function initAdminDashboard(dbInstance, user) {
 
   function renderGrid() {
     grid.innerHTML = MUNICIPIOS_MERIDA.map(mun => {
-      const isActive = configActual.municipios_activos.includes(mun);
+      const normMun = normalizarMunicipio(mun);
+      const isActive = configActual.municipios_activos.some(m => normalizarMunicipio(m) === normMun || m === mun);
       return `
       <div style="background:white; border-radius:8px; padding:16px; display:flex; align-items:center; justify-content:space-between; border:1px solid ${isActive ? '#10B981' : '#e2e8f0'};">
         <span style="font-size:0.9rem; font-weight:600; color:${isActive ? '#10B981' : 'var(--text-muted)'};">${mun}</span>
@@ -2266,10 +2267,19 @@ export function initAdminDashboard(dbInstance, user) {
     document.querySelectorAll('.mun-toggle').forEach(chk => {
       chk.onchange = (e) => {
         const mun = e.target.dataset.mun;
+        const norm = normalizarMunicipio(mun);
+        const variantes = getVariantesMunicipio(mun);
         if (e.target.checked) {
+          variantes.forEach(v => {
+            if (!configActual.municipios_activos.includes(v)) configActual.municipios_activos.push(v);
+          });
           if (!configActual.municipios_activos.includes(mun)) configActual.municipios_activos.push(mun);
+          if (norm && !configActual.municipios_activos.includes(norm)) configActual.municipios_activos.push(norm);
         } else {
-          configActual.municipios_activos = configActual.municipios_activos.filter(m => m !== mun);
+          configActual.municipios_activos = configActual.municipios_activos.filter(m => {
+            const mNorm = normalizarMunicipio(m);
+            return mNorm !== norm && m !== mun && !variantes.includes(m);
+          });
         }
         renderGrid();
       };
@@ -2341,8 +2351,18 @@ export function initAdminDashboard(dbInstance, user) {
       if (selModo) {
         configActual.modo_operacion = selModo.value;
       }
+      // Sincronizar todas las variantes y aliases para compatibilidad y acceso universal
+      const setMuns = new Set();
+      (configActual.municipios_activos || []).forEach(m => {
+        setMuns.add(m);
+        const norm = normalizarMunicipio(m);
+        if (norm) setMuns.add(norm);
+        getVariantesMunicipio(m).forEach(v => setMuns.add(v));
+      });
+      const municipiosToSave = Array.from(setMuns);
+
       await safeUpdateDoc(docRef, {
-        municipios_activos: configActual.municipios_activos,
+        municipios_activos: municipiosToSave,
         excepciones: configActual.excepciones,
         modo_operacion: configActual.modo_operacion || 'TOTAL'
       });
