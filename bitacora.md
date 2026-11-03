@@ -3164,3 +3164,17 @@ Se implementó la solución estructural (Opción 1) para la configuración y per
 ### Control SemVer y Despliegue
 - Elevación a `v2.29.4` (PARCHE). Compilación con Vite (739 ms), despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`) y sincronización con GitHub (`origin main`).
 
+---
+
+## [Operación Administrativa] - 2026-11-03 (Carga de Nómina Oficial Plantel S2959D1421 - Tovar)
+
+### Resumen Técnico
+Se realizó la auditoría, conciliación e inyección atómica de la nómina institucional completa de la **Escuela Básica Nacional "Amanías Avendaño" (`S2959D1421`)**, Parroquia El Llano, Municipio Tovar, tras reporte de personal docente ausente en la plataforma (caso testigo: *Nayibel Iratsuy Flores Rodríguez*, C.I. V-22.523.646).
+
+### Acciones Ejecutadas
+1. **Auditoría de Nómina:** Se identificaron y extrajeron 94 trabajadores adscritos en `migracion/RAC ESTADO MERIDA - PERSONAL.csv` y 1 docente adicional en `migracion/Personal_Nacional.xlsx` (Zenaida Márquez, C.I. 8.708.357), totalizando 95 funcionarios oficiales (55 docentes, 4 administrativos y 36 obreros).
+2. **Alta de Plantel en Firestore (`planteles/S2959D1421`):** Se crearon los metadatos institucionales y el arreglo consolidado `personal_resumen` con los 95 trabajadores para carga instantánea en pantalla.
+3. **Inyección Atómica en `cargos_personal`:** Se crearon los 95 expedientes individuales bajo la llave canónica `S2959D1421_${cedula}`, preservando todos los campos requeridos (cargos, horas, RAC, datos personales y de contacto).
+4. **Respaldo Documental:** Actualización y sincronización de `conversaciones.md` y `bitacora.md`.
+
+
