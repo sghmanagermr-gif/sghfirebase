@@ -4556,3 +4556,28 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 3. Blindaje en Código: En `webapp/src/auth.js` se implementó `normalizarMunicipio()` para comparar canónicamente el municipio del usuario contra los activos; y en `webapp/src/admin.js` se sincronizan todas las variantes (`getVariantesMunicipio()`) al guardar.  
 > 4. Se elevó la versión a `v2.29.2`, se compiló con Vite (829 ms), se desplegó en Firebase Hosting (`https://sgh-merida.web.app`) y se sincronizó con GitHub.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 92
+
+* **Fecha / Hora:** 2026-11-03 ~09:24 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> correos_afectados  
+> rafaelrondonpena86@gmail.com  
+> e.e.pascualignaciovillasmil@gmail.com  
+> e.e.tucanicito01@gmail.com  
+> l.b.riofrio04@gmail.com  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Diagnóstico, Verificación, Enlaces Out-of-Band y Carga de 108 Funcionarios (Skill 6):  
+> 1. Auditoría de Cuentas: Se confirmaron las cuentas de `rafaelrondonpena86@gmail.com` y `e.e.tucanicito01@gmail.com`, forzando `emailVerified: true`.  
+> 2. Resolución de Discrepancias de Correo: Para Pascual Ignacio Villasmil, se habilitó tanto `e.e.pascualignaciovillasmil01@gmail.com` como `e.e.pascualignaciovillasmil@gmail.com`. Para `l.b.riofrio04@gmail.com` (Liceo Rio Frío), se dio de alta la cuenta en Auth y Firestore como `plaadmin` aprobada.  
+> 3. Enlaces Out-of-Band: Se generaron los 4 enlaces seguros de restablecimiento de contraseña listos para entregar por WhatsApp.  
+> 4. Inyección de Personal Huérfano: Se detectó que estos 4 planteles tenían su nómina en 0 dentro de Firestore a pesar de tener 108 trabajadores en el RAC oficial. Se cargaron los 108 expedientes en `cargos_personal` y sus `personal_resumen` en `planteles` (28 en Rafael Rondón Peña, 14 en Tucanicito, 48 en Pascual Ignacio Villasmil y 18 en Liceo Rio Frío).  
+> 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
