@@ -4895,3 +4895,22 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 3. Alta y Configuración de Plantel: Sincronizado `planteles/OD16551415` con sus datos oficiales y notas institucionales de adscripción.  
 > 4. Emisión de Credencial OOB y Redacción de WhatsApp: Generado enlace seguro de restablecimiento de contraseña y confección de mensaje protocolar para la directiva.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 116
+
+* **Fecha / Hora:** 2026-11-03 ~18:06 - 18:10 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> la siguiente empleada 20849329	V	ANDREA ESTEFANIA PARRA PEÑA no aparece en el SGH pero si aparece en el RAC ESTADO MERIDA  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Auditoría y Diagnóstico de Funcionario y Plantel (Skill 6):  
+> 1. Identificación y Verificación Oficial: Se localizó a **Andrea Estefania Parra Peña** (C.I. **V-20.849.329**) en el censo RAC como Docente III de Aula Bolivariana titular (Código RAC `1163DB`), estatus ACTIVO, con carga de 53 horas (Primer Grado Sección U), adscrita al **Complejo Educativo "UEB La Mucuy Baja" / Epónimo "Laureano Maldonado" (Código DEA `OD14321419`)**, Parroquia Tabay, Municipio Santos Marquina (Dependencia Nacional).  
+> 2. Diagnóstico de Causa Raíz: La nómina de este plantel nacional (conformada por 25 trabajadores: 16 docentes, 3 administrativos y 6 obreros) permanecía en los archivos fuente del RAC y no había sido volcada aún a las colecciones activas de Firebase (`cargos_personal` y `planteles/OD14321419`), razón por la cual no es retornada en las búsquedas del SGH.  
+> 3. Plan de Solución Inmediata: Se dispone del script automatizado para inyectar de manera atómica al 100% los 25 expedientes de la nómina en `cargos_personal` y actualizar `planteles/OD14321419` con su resumen de personal, dejando habilitada a Andrea Parra y a toda la institución.  
+> 4. Solicitud de confirmación para proceder con la carga y pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
