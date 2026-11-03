@@ -3653,16 +3653,30 @@ export function initAdminDashboard(dbInstance, user) {
                    newData['matricula'] = oldData['matricula'] || {};
                    newData['secciones-planes'] = oldData['secciones-planes'] || {};
                    
-                   await safeSetDoc(doc(db, "planteles", codP), newData);
-                   await deleteDoc(doc(db, "planteles", id));
+                   await safeSetDoc(doc(db, "planteles", codP), newData, { merge: true });
+                   try {
+                       await deleteDoc(doc(db, "planteles", id));
+                   } catch (eDel) {
+                       console.warn("No se pudo eliminar documento anterior tras renombrado:", eDel);
+                   }
+               } else {
+                   // Si el documento anterior no existía en Firestore (venía de catálogo local), se guarda directamente
+                   newData['matricula'] = {};
+                   newData['secciones-planes'] = {};
+                   await safeSetDoc(doc(db, "planteles", codP), newData, { merge: true });
                }
             } else {
-               await safeUpdateDoc(doc(db, "planteles", id), newData);
+               try {
+                   await safeUpdateDoc(doc(db, "planteles", id), newData);
+               } catch (errUpdate) {
+                   console.warn("safeUpdateDoc falló al actualizar plantel, recurriendo a safeSetDoc con merge:true:", errUpdate);
+                   await safeSetDoc(doc(db, "planteles", id), newData, { merge: true });
+               }
             }
          } else {
             newData['matricula'] = {};
             newData['secciones-planes'] = {};
-            await safeSetDoc(doc(db, "planteles", codP), newData);
+            await safeSetDoc(doc(db, "planteles", codP), newData, { merge: true });
          }
          
          cerrarModalPlantel();

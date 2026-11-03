@@ -4267,3 +4267,57 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 1. Se confirmó la existencia de la cuenta en Firebase Auth (UID: `6j0wxTkvk5OmnxuJICkVxTJ2mMy1`).  
 > 2. Se actualizó el estado a `emailVerified: true` para desbloquear el acceso institucional.  
 > 3. Se generó el enlace seguro de restablecimiento de contraseña y se preparó el mensaje listo para enviar por WhatsApp.
+
+
+---
+
+### Intervención 80
+
+* **Fecha / Hora:** 2026-11-02 ~20:30 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Por favor dime que quiere decir este mensaje:  
+> index-DVbEzeVR.js:434 FirebaseError: Function setDoc() called with invalid data. deleteField() cannot be used with set() unless you pass {merge:true} (found in field planes_estudio in document planteles/ON15491412)  
+> (anonymous) @ index-DVbEzeVR.js:434  
+> Y luego tomaré la discision de que hacer  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Explicación Simple del Error (Skill 6):  
+> Se explicó de manera didáctica que la base de datos frenó la operación porque la instrucción de guardado intentó borrar campos viejos (`deleteField`) sin activar el modo fusión (`merge: true`). Se aclaró que ocurría en la ventana de edición de planteles del panel administrativo.
+
+---
+
+### Intervención 81
+
+* **Fecha / Hora:** 2026-11-02 ~20:37 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Pues la intención del apartado de editar planteles es precisamente para eso, editar planteles. Dime antes de hacer cualqier modificación ¿Qué se debe hacer? ¿es viable?  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Propuesta y Viabilidad (Skill 6):  
+> Se confirmó que es 100% viable, seguro y necesario. Se explicó el plan de acción: activar `{ merge: true }` en el guardado de `admin.js` y proteger la creación de documentos nuevos sin afectar ninguna otra área del sistema.
+
+---
+
+### Intervención 82
+
+* **Fecha / Hora:** 2026-11-02 ~20:38 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Me parece muy bien la propuesta, procede  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Aplicación del Hotfix v2.26.2 (Skill 6):  
+> 1. Se modificó el guardado del modal de planteles en `webapp/src/admin.js`, agregando `{ merge: true }` y protección con fallback para documentos no inicializados.  
+> 2. Se incrementó la versión a `v2.26.2` (PATCH), se compiló en Vite (745 ms) y se sincronizó el repositorio mediante commit y push a `origin main`.  
+> 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?

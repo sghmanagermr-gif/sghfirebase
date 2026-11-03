@@ -4,6 +4,20 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.26.2 (2 de Noviembre de 2026)
+
+- **Hotfix: Soporte Seguro de Fusión (`{ merge: true }`) en Edición de Planteles:**
+  - **Diagnóstico:**
+    - Al intentar guardar cambios en la ficha institucional de un plantel desde el panel administrativo (`ModalPlantel`), el sistema emitía el error: `FirebaseError: Function setDoc() called with invalid data. deleteField() cannot be used with set() unless you pass {merge:true} (found in field planes_estudio in document planteles/...)`.
+    - Esto ocurría porque al editar un plantel, el sistema limpiaba los campos obsoletos (`planes_estudio`, `ubicacion`, `turno`) mediante la instrucción `deleteField()`, pero la invocación a `safeSetDoc()` no incluía la opción `{ merge: true }`, violando las restricciones del SDK de Firestore.
+  - **Solución Implementada:**
+    - Se incorporó la opción `{ merge: true }` en todas las ramas de guardado (`safeSetDoc`) dentro de `admin.js`.
+    - Se blindó la actualización de documentos (`safeUpdateDoc`) con bloque de contingencia: si el documento aún no existía físicamente en Firestore (proveniente únicamente del catálogo local), se crea automáticamente con `{ merge: true }` sin arrojar error.
+    - Se garantizó la preservación de matrícula y secciones si se modifica o renombra el código DEA de la institución.
+  - **Despliegue y SemVer:** Versión PATCH `v2.26.2`. Compilada en Vite (745 ms) y sincronizada con GitHub (`origin main`).
+
+---
+
 ### v2.26.1 (2 de Noviembre de 2026)
 
 - **Alta Institucional y Carga de Nóminas para Planteles Rurales de Piñango (Municipio Miranda):**

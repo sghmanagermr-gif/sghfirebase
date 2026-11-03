@@ -2932,3 +2932,24 @@ Se atendió la solicitud de auditoría de personal huérfano para tres códigos 
    - Se actualizaron los campos de nivel, modalidad, turno y ubicación para ambos planteles en `bd_sgh.json` y `webapp/public/bd_sgh.json`.
 4. **Control SemVer y Despliegue:**
    - Elevación a `v2.26.1` (PATCH). Compilación en Vite (1.30s) y sincronización con GitHub (`origin main`).
+
+
+---
+
+## [v2.26.2] - 2026-11-02 (Hotfix: Modo Fusión y Resiliencia en Edición de Planteles)
+
+### Resumen Técnico
+Se atendió el error reportado en consola: `FirebaseError: Function setDoc() called with invalid data. deleteField() cannot be used with set() unless you pass {merge:true} (found in field planes_estudio in document planteles/ON15491412)`. El fallo impedía guardar modificaciones en fichas de colegios desde el modal de administración de planteles.
+
+### Causa Raíz
+En `webapp/src/admin.js`, al someter el formulario `formPlantel`, se preparaba el objeto `newData` asignándole `deleteField()` a las llaves obsoletas `planes_estudio`, `ubicacion` y `turno`. Si el código DEA cambiaba (`codP !== id`) o se invocaba `safeSetDoc`, la función de guardado se ejecutaba sin la opción `{ merge: true }`. Las reglas del SDK de Firestore prohíben estrictamente el uso de centinelas de eliminación (`deleteField`) en escrituras destructivas completas (`setDoc`), requiriendo imperativamente el modo fusión. Adicionalmente, si el colegio provenía del catálogo estático y no existía físicamente en Firestore, `updateDoc` fallaba con `No document to update`.
+
+### Solución Implementada
+1. **Inyección de `{ merge: true }` en `safeSetDoc`:**
+   - Se aseguró que toda llamada a `safeSetDoc` en el flujo de guardado de planteles en `admin.js` pase el objeto de configuración `{ merge: true }`, legitimando las instrucciones `deleteField()` para sanear la estructura de datos del plantel.
+2. **Fallback Automático en Actualización:**
+   - La llamada `safeUpdateDoc(doc(db, "planteles", id), newData)` fue encapsulada en bloque `try/catch`: ante cualquier fallo de documento inexistente, se conmuta automáticamente a `safeSetDoc(doc(db, "planteles", id), newData, { merge: true })`.
+3. **Manejo Seguro de Renombramiento de DEA:**
+   - Si se modifica el código DEA del colegio y el documento de origen no existía en Firestore, se inicializan estructuras de matrícula y secciones vacías y se escribe el nuevo documento sin lanzar excepciones.
+4. **Control SemVer:**
+   - Elevación a `v2.26.2` (PATCH). Compilación en Vite (745 ms) y sincronización con GitHub (`origin main`).
