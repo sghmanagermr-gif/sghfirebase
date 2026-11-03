@@ -2984,3 +2984,32 @@ Se diseñó e implementó la **Opción 2: Migración en Cascada Automática de C
 
 ### Control SemVer y Despliegue
 - Elevación a `v2.27.0` (MENOR). Compilación con Vite (782 ms), despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`) y sincronización con GitHub (`origin main`).
+
+---
+
+## [v2.28.0] - 2026-11-02 (Filtro Selector por Municipio en Gestión de Usuarios del Sistema)
+
+### Resumen Técnico
+Se diseñó e implementó un filtro selector de municipios en la barra de herramientas del módulo de administración de usuarios (`#admin-tab-validacion`). Permite a los usuarios con potestades estadales (`superadmin` y `zonadmin`) segmentar y auditar de inmediato las cuentas de directores y coordinadores por municipio específico, optimizando la supervisión territorial sin necesidad de búsquedas textuales manuales o navegación secuencial.
+
+### Arquitectura de la Solución (Zero-Cost & RBAC)
+1. **Inyección en la Barra de Herramientas UI:**
+   - Se añadió el contenedor `#container-filter-municipio-usuario` con el elemento select `#filter-municipio-usuario` en `webapp/index.html`, ubicado junto a los filtros de rol, estado y buscador general.
+2. **Poblado Automático de Municipios:**
+   - En `webapp/src/admin.js`, al inicializarse el panel administrativo, el selector se puebla con los 23 municipios oficiales del estado Mérida obtenidos desde `getMunicipios()`.
+3. **Control RBAC de Visualización:**
+   - Siguiendo las directrices de seguridad, el selector se activa y muestra únicamente para los roles con alcance multiterritorial (`superadmin` y `zonadmin`). Para los coordinadores municipales (`munadmin`), el selector permanece oculto preservando el aislamiento de su jurisdicción.
+4. **Filtrado Multicriterio en Memoria (Zero-Cost):**
+   - En `renderUsuariosList()`, el valor de `filterMunicipioUsuario` se combina de forma reactiva con `filterRolUsuario`, `filterEstado` y el término de búsqueda de `inpBuscarUsuario`.
+   - Se implementó resolución de respaldo: si un director (`plaadmin`) no posee el campo `jerarquia.municipio` grabado directamente en su documento de usuario, el sistema resuelve su municipio consultando el catálogo de planteles en memoria a través de su código DEA.
+5. **Mensajes Adaptativos al Usuario:**
+   - La tabla presenta mensajes informativos claros cuando no hay usuarios para el municipio seleccionado o cuando un término de búsqueda no arroja coincidencias en dicha jurisdicción.
+
+### Archivos Modificados
+- `webapp/index.html`: Inyección del contenedor `#container-filter-municipio-usuario` y select `#filter-municipio-usuario`. Actualización de versión a `v2.28.0`.
+- `webapp/src/admin.js`: Control de visibilidad RBAC, poblado de opciones con `getMunicipios()`, listener de cambio y evaluación de filtro en `renderUsuariosList()`.
+- `webapp/package.json`: Elevación de versión a `2.28.0`.
+- `versiones.md`, `bitacora.md`, `conversaciones.md`: Registro documental obligatorio.
+
+### Control SemVer y Despliegue
+- Elevación a `v2.28.0` (MENOR). Compilación con Vite (776 ms), despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`) y sincronización con GitHub (`origin main`).

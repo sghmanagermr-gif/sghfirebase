@@ -4,6 +4,21 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.28.0 (2 de Noviembre de 2026)
+
+- **Filtro Selector por Municipio en Gestión de Usuarios del Sistema:**
+  - **Requerimiento y Necesidad Operativa:**
+    - Se solicitó la capacidad de filtrar usuarios directamente por municipio en la pestaña "Usuarios del Sistema" del panel administrativo (`admin-tab-validacion`), ya que los administradores necesitaban auditar usuarios en municipios específicos sin tener que recorrer una lista extensa con cientos de directores y coordinadores.
+  - **Solución Implementada:**
+    - Se incorporó un nuevo selector desplegable `#filter-municipio-usuario` (`container-filter-municipio-usuario`) en la barra de herramientas de la tabla de usuarios (`webapp/index.html`).
+    - Se pobló automáticamente con los 23 municipios oficiales del estado Mérida utilizando `getMunicipios()`.
+    - **Control RBAC de Visualización:** El selector de municipios se muestra exclusivamente a los roles `superadmin` y `zonadmin` (quienes tienen competencia estadal), manteniéndose oculto para `munadmin` quienes únicamente gestionan su jurisdicción local.
+    - **Filtrado Reactivo en Memoria (Zero-Cost):** Integrado a la función `renderUsuariosList()` de `webapp/src/admin.js`, permitiendo combinar de forma simultánea el filtro de municipio con el filtro de rol (`filterRolUsuario`), estado de aprobación (`filterEstado`) y el buscador de texto (`inpBuscarUsuario`), con resolución de respaldo municipal a través del plantel para directores (`plaadmin`).
+    - **Mensajes de Búsqueda Precisos:** Al no encontrarse coincidencias, el sistema informa con claridad si no existen usuarios registrados o si no hubo coincidencias de búsqueda dentro del municipio seleccionado.
+  - **Despliegue y SemVer:** Versión MENOR `v2.28.0`. Compilada en Vite (776 ms), desplegada a Firebase Hosting (`https://sgh-merida.web.app`) y sincronizada con GitHub (`origin main`).
+
+---
+
 ### v2.27.0 (2 de Noviembre de 2026)
 
 - **Migración Automática en Cascada al Modificar Código DEA de un Plantel (Opción 2):**

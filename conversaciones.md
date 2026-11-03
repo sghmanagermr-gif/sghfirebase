@@ -4376,3 +4376,58 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - La vinculación de los directores registrados en `usuarios`.  
 > 2. Se incrementó la versión a `v2.27.0` (MENOR), se compiló limpiamente en Vite (782 ms) y se sincronizó el repositorio en GitHub (`origin main`).  
 > 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 86
+
+* **Fecha / Hora:** 2026-11-02 ~21:05 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> doy F5 y Shift+F5 al navegador y no cambia a la versión 2.27.0  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Despliegue de Producción a Firebase Hosting (Skill 6):  
+> Se explicó que los archivos ya estaban compilados localmente y se ejecutó el despliegue directo a la nube (`npx firebase-tools deploy --only hosting`). Una vez liberada la versión en el servidor web (`sgh-merida.web.app`), se invitó al usuario a refrescar la página.
+
+---
+
+### Intervención 87
+
+* **Fecha / Hora:** 2026-11-02 ~21:13 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Ya hice el cambio. estoy esperando que el director se conecte y me diga si sí se realizó el cambio. Otra cosa. ¿Que significa el siguiente mensaje? sale despues que se vallida el login: ... 429 Too Many Requests runAggregationQuery / Casos con: Utiliza un formato que coincida con el solicitado. ¿qué está sucediendo? / ¿es correcto que ubicación administrativa sea opcional?  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Explicación Teórica Didáctica (Skill 6):  
+> 1. Error 429: Se explicó que corresponde al medidor de lecturas gratuitas diarias del plan Spark de Firebase (50.000 lecturas/día), que no detiene el funcionamiento general y se reinicia cada madrugada.  
+> 2. Formato Solicitado: Se explicó que es una validación nativa del navegador cuando el celular no tiene exactamente 7 dígitos o la ubicación administrativa tiene 6 dígitos o letras.  
+> 3. Se confirmó que la ubicación administrativa es opcional y se acordó mantener el comportamiento actual según lo indicado por el usuario.
+
+---
+
+### Intervención 88
+
+* **Fecha / Hora:** 2026-11-02 ~21:25 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> por favor necesito que en el apartado de usuarios del sistema pueda filtrar por municipio. a veces necesito verificar algunos usuario en municipios especificos y me toca revizar una lista larga de usuarios.  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Implementación del Filtro de Municipios en Usuarios (v2.28.0 - Skill 6):  
+> 1. Se incorporó el selector `#filter-municipio-usuario` en la barra de herramientas de la tabla de usuarios (`webapp/index.html`).  
+> 2. Se pobló automáticamente con los 23 municipios de Mérida y se activó solo para roles estadales (`superadmin` y `zonadmin`).  
+> 3. Se integró la lógica de filtrado reactivo en `renderUsuariosList` en `webapp/src/admin.js`, permitiendo filtrar conjuntamente con el rol, estado y buscador.  
+> 4. Se elevó la versión a `v2.28.0`, se compiló en Vite (776 ms), se desplegó a Firebase Hosting (`https://sgh-merida.web.app`) y se sincronizó con GitHub.  
+> 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?

@@ -361,7 +361,7 @@ export function initAdminDashboard(dbInstance, user) {
       btnNuevoPlantel.style.display = (isSuperAdmin || isZonAdmin) ? 'flex' : 'none';
     }
 
-    // 2.2. Control de visibilidad del selector de roles en Validación de Usuarios
+    // 2.2. Control de visibilidad del selector de roles y selector de municipios en Validación de Usuarios
     const containerFilterRol = document.getElementById('container-filter-rol-usuario');
     if (containerFilterRol) {
       containerFilterRol.style.display = (isSuperAdmin || isZonAdmin) ? 'block' : 'none';
@@ -369,6 +369,16 @@ export function initAdminDashboard(dbInstance, user) {
         const optZon = filterRolUsuario?.querySelector('option[value="zonadmin"]');
         if (optZon) optZon.style.display = 'none';
       }
+    }
+    const containerFilterMun = document.getElementById('container-filter-municipio-usuario');
+    const filterMunUsuario = document.getElementById('filter-municipio-usuario');
+    if (containerFilterMun) {
+      containerFilterMun.style.display = (isSuperAdmin || isZonAdmin) ? 'block' : 'none';
+    }
+    if (filterMunUsuario && (isSuperAdmin || isZonAdmin)) {
+      const municipios = getMunicipios();
+      filterMunUsuario.innerHTML = '<option value="TODOS">🏢 Todos los municipios (23)</option>' +
+        municipios.map(m => `<option value="${m}">🏢 ${m}</option>`).join('');
     }
     const valDescEl = document.getElementById('admin-validacion-desc');
     if (valDescEl) {
@@ -1245,6 +1255,7 @@ export function initAdminDashboard(dbInstance, user) {
   const tbodyUsuarios = document.getElementById('tbody-usuarios');
   const filterEstado = document.getElementById('filter-estado');
   const filterRolUsuario = document.getElementById('filter-rol-usuario');
+  const filterMunicipioUsuario = document.getElementById('filter-municipio-usuario');
   const inpBuscarUsuario = document.getElementById('inp-buscar-usuario');
   const btnLimpiarBuscarUsuario = document.getElementById('btn-limpiar-buscar-usuario');
   const btnRefrescarUsuarios = document.getElementById('btn-refrescar-usuarios');
@@ -1447,6 +1458,8 @@ export function initAdminDashboard(dbInstance, user) {
     const filtro = filterEstado ? filterEstado.value : 'TODOS'; // "TODOS", "PENDIENTE", "APROBADO"
     const containerFilterRol = document.getElementById('container-filter-rol-usuario');
     const filtroRol = (filterRolUsuario && containerFilterRol && containerFilterRol.style.display !== 'none') ? filterRolUsuario.value : 'TODOS';
+    const containerFilterMun = document.getElementById('container-filter-municipio-usuario');
+    const filtroMun = (filterMunicipioUsuario && containerFilterMun && containerFilterMun.style.display !== 'none') ? filterMunicipioUsuario.value : 'TODOS';
     const searchTerm = (inpBuscarUsuario ? inpBuscarUsuario.value : '').trim().toLowerCase();
 
     let filtrados = usuariosLocales.filter(u => {
@@ -1458,7 +1471,25 @@ export function initAdminDashboard(dbInstance, user) {
       const matchEstado = (filtro === 'TODOS') ? true : (u.estado_aprobacion === filtro);
       if (!matchEstado) return false;
 
-      // 3. Filtro por Buscador Integral (nombre, cédula, código plantel, correo)
+      // 3. Filtro por Municipio
+      if (filtroMun !== 'TODOS') {
+        let uMun = u.jerarquia?.municipio || u.municipio || '';
+        if (!uMun && u.rol === 'plaadmin') {
+          const codPlantel = u.jerarquia?.plantel_codigo || u.codigo_plantel || u.plantel_codigo || '';
+          if (codPlantel) {
+            const todosPlanteles = obtenerPlantelesEstadalCache();
+            if (Array.isArray(todosPlanteles)) {
+              const pFound = todosPlanteles.find(p => p.id === codPlantel || p.codigo === codPlantel || p.codigos?.plantel === codPlantel);
+              if (pFound) uMun = pFound.municipio || '';
+            }
+          }
+        }
+        const uMunNorm = normalizarMunicipio(uMun);
+        const fMunNorm = normalizarMunicipio(filtroMun);
+        if (uMunNorm !== fMunNorm) return false;
+      }
+
+      // 4. Filtro por Buscador Integral (nombre, cédula, código plantel, correo)
       if (searchTerm) {
         const nom = (u.nombre || '').toLowerCase();
         const email = (u.email || '').toLowerCase();
@@ -1490,9 +1521,14 @@ export function initAdminDashboard(dbInstance, user) {
     });
 
     if (filtrados.length === 0) {
-      const msg = searchTerm 
-        ? `No se encontraron usuarios coincidentes con "${searchTerm.replace(/</g, '&lt;')}"` 
-        : 'No se encontraron usuarios';
+      let msg = 'No se encontraron usuarios';
+      if (searchTerm && filtroMun !== 'TODOS') {
+        msg = `No se encontraron usuarios coincidentes con "${searchTerm.replace(/</g, '&lt;')}" en el municipio ${filtroMun}`;
+      } else if (searchTerm) {
+        msg = `No se encontraron usuarios coincidentes con "${searchTerm.replace(/</g, '&lt;')}"`;
+      } else if (filtroMun !== 'TODOS') {
+        msg = `No hay usuarios registrados en el municipio ${filtroMun}`;
+      }
       tbodyUsuarios.innerHTML = `<tr><td colspan="4" style="padding: 30px; text-align: center; color: var(--text-muted);">${msg}</td></tr>`;
       return;
     }
@@ -2127,6 +2163,9 @@ export function initAdminDashboard(dbInstance, user) {
   }
   if (filterRolUsuario) {
     filterRolUsuario.addEventListener('change', renderUsuariosList);
+  }
+  if (filterMunicipioUsuario) {
+    filterMunicipioUsuario.addEventListener('change', renderUsuariosList);
   }
   if (inpBuscarUsuario) {
     inpBuscarUsuario.addEventListener('input', () => {
