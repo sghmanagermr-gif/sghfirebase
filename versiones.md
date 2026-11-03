@@ -4,6 +4,22 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.29.4 (3 de Noviembre de 2026)
+
+- **Configuración Granular de Secciones por Grado en Educación Primaria (Resolución de Secciones Asimétricas y Persistencia de Matrícula):**
+  - **Requerimiento Institucional:**
+    - Se reportó mediante video explicativo un incidente crítico en el módulo de Matrícula de Primaria (`Plan 21000`): planteles con distribución irregular de secciones (por ejemplo, 1º a 6º con 2 secciones A y B, pero 3er Grado con 3 secciones A, B y C) no podían declarar la sección C directamente debido a que el sistema calculaba un reparto equitativo rígido desde 1er Grado. Al forzar un total mayor (15 secciones) para habilitar 3er Grado C y guardar con secciones vacías en 1ro y 2do, al recargar la página el sistema recalculaba las secciones hacia abajo a 13, recortando 3er Grado C y ocultando los datos de sus 26 estudiantes.
+  - **Solución Implementada (Opción 1 Estructural):**
+    - **Interfaz por Grado (`webapp/index.html`):** Se reemplazó el campo único de "Secciones Totales" por una cuadrícula responsiva con 6 selectores independientes (1er Grado a 6to Grado), idéntico al estándar de Media General. El total global se calcula y refleja automáticamente en tiempo real.
+    - **Renderizado Dinámico Preservativo (`webapp/src/main.js`):** `_renderCajasPrimaria` ahora procesa la configuración exacta de secciones por grado, generando únicamente las secciones requeridas (evitando secciones vacías o ficticias), preservando los valores ingresados por el usuario durante la interacción.
+    - **Persistencia en Firestore y Retrocompatibilidad Total:** En `secciones-planes.21000` se almacenan las secciones por grado `{ "1": n, "2": n, ... }` como fuente de verdad autoritativa. Se corrigió la interpretación de la letra `'U'` (Sección Única = 1 sección), impidiendo que el algoritmo la tratara como la letra 21 del alfabeto (lo cual inflaba los grados a 21 secciones y el total a 89).
+    - **Modal de Vacantes:** `_abrirModalVacantes` ahora consulta directamente las secciones por grado activas, manteniendo sincronizada la matriz de vacantes.
+  - **Validación Local:** Probada exhaustivamente mediante suite automatizada Playwright (creación de secciones asimétricas con secciones únicas 'U', carga de alumnos, recarga de página y recuperación de planteles legados con 100% de éxito). Versión lista para prueba local del usuario previa al despliegue.
+- **Flexibilización de Horas en Asistente de Personal:**
+  - El campo `wp-horas-administrativas` (`Horas Administrativas`) se estableció como opcional en la interfaz y en el motor de validación (`webapp/src/personalWizard.js` y `webapp/index.html`), removiendo validaciones bloqueantes y el asterisco obligatorio, permitiendo guardar personal sin exigir horas administrativas obligatorias.
+
+---
+
 ### v2.29.3 (3 de Noviembre de 2026)
 
 - **Alta Institucional y Vinculación de Nómina Huérfana para Escuela Gabriel Marciano Parra (`OD03541414`):**

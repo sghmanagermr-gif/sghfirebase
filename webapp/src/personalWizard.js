@@ -435,7 +435,7 @@ export async function initCascadaPersonal() {
         if (tipoVal === 'DOCENTE') {
             if (lblRecibo) lblRecibo.innerHTML = 'Horas según Recibo (H.DOC) <span style="color: #dc2626;">*</span>';
             if (inpHRecibo) inpHRecibo.placeholder = 'Ej. 53.33 o 40';
-            if (lblAdmin) lblAdmin.innerHTML = (atiendeMatSel?.value === 'SI') ? 'Horas Administrativas' : 'Horas Administrativas (en este Plantel) <span style="color: #dc2626;">*</span>';
+            if (lblAdmin) lblAdmin.innerHTML = (atiendeMatSel?.value === 'SI') ? 'Horas Administrativas' : 'Horas Administrativas (en este Plantel)';
             if (inpAdmin) inpAdmin.placeholder = 'Ej. 0 o 20 (Coordinación)';
             if (atiendeMatSel && !atiendeMatSel.dataset.manualChanged) {
                 atiendeMatSel.value = 'SI';
@@ -443,7 +443,7 @@ export async function initCascadaPersonal() {
         } else if (tipoVal === 'ADMINISTRATIVO' || tipoVal === 'OBRERO') {
             if (lblRecibo) lblRecibo.innerHTML = 'Horas según Recibo (H.ADM) <span style="color: #dc2626;">*</span>';
             if (inpHRecibo) inpHRecibo.placeholder = '40';
-            if (lblAdmin) lblAdmin.innerHTML = 'Horas Administrativas (en este Plantel) <span style="color: #dc2626;">*</span>';
+            if (lblAdmin) lblAdmin.innerHTML = 'Horas Administrativas (en este Plantel)';
             if (inpAdmin) inpAdmin.placeholder = '40';
             if (inpHRecibo && !inpHRecibo.value) inpHRecibo.value = '40';
             if (inpAdmin && !inpAdmin.value) inpAdmin.value = '40';
@@ -1192,8 +1192,7 @@ export function validarFormularioPersonal() {
         campos.push({ id: 'wp-horas-recibo', nombre: 'Horas según Recibo de Pago' });
         campos.push({ id: 'wp-horas-academicas', nombre: 'Horas Académicas' });
     } else {
-        // Para personal administrativo, obrero o docente en comisión sin aula
-        campos.push({ id: 'wp-horas-administrativas', nombre: 'Horas Administrativas' });
+        // Para personal administrativo, obrero o docente en comisión sin aula: wp-horas-administrativas es opcional
     }
 
     // Revisión secuencial de cada campo
@@ -1254,13 +1253,8 @@ export function validarFormularioPersonal() {
             return false;
         }
     } else {
-        if (hAdmin <= 0) {
-            const elAdmin = document.getElementById('wp-horas-administrativas');
-            if (elAdmin) { elAdmin.style.borderColor = '#dc2626'; elAdmin.focus(); }
-            showToast('Por favor, indique las Horas Administrativas (debe ser mayor a 0).', "warning");
-            return false;
-        }
-        if (hAdmin > (hRecibo + 0.01)) {
+        // Horas Administrativas es opcional
+        if (hAdmin > 0 && hRecibo > 0 && hAdmin > (hRecibo + 0.01)) {
             const elAdmin = document.getElementById('wp-horas-administrativas');
             if (elAdmin) { elAdmin.style.borderColor = '#dc2626'; elAdmin.focus(); }
             showToast(`Las Horas Administrativas (${hAdmin} hrs) no pueden superar las Horas según Recibo (${hRecibo} hrs).`, "warning");

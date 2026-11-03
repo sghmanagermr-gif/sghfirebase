@@ -4643,3 +4643,115 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 3. Catálogos Geográficos: Se sincronizaron `bd_sgh.json` y `webapp/public/bd_sgh.json` con el nuevo plantel.  
 > 4. SemVer y Despliegue: Se elevó la versión a `v2.29.3`, se compiló en Vite (718 ms), se desplegó en Firebase Hosting (`https://sgh-merida.web.app`) y se respaldó en GitHub.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 105
+
+* **Fecha / Hora:** 2026-11-03 ~15:15 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> ahora tenemos este inconveniente. ve el video. Espero entiendas la explicación. ¿Qué se debe hacer?  
+> *(Adjunto: Video explicativo WhatsApp de 4m 15s sobre la pérdida de secciones y matrícula en Educación Primaria)*  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Diagnóstico Explicativo y Propuestas de Solución (Skill 6):  
+> 1. Comprensión del Video: Se analizó el video y audio completo. La escuela tiene 13 secciones reales en Primaria (1ro a 6to con 2 secciones A y B cada uno, excepto 3er grado que tiene 3 secciones: A, B y C).  
+> 2. Causa Raíz: El sistema anterior repartía las secciones de forma fija y secuencial desde 1er grado. Para que apareciera 3er Grado C, los directores tuvieron que declarar 15 secciones artificialmente. Al guardar y volver a ingresar, el sistema contaba únicamente las 13 secciones con datos cargados, sobrescribía el total a 13 y recortaba la visualización de 3er Grado C, ocultando a los 26 alumnos registrados.  
+> 3. Soluciones Propuestas:  
+>    - Opción 1 (Estructural / Recomendada): Configuración de secciones independiente por cada grado (1º a 6º), idéntico a Media General. Elimina trucos, se ajusta a la realidad de cada plantel y garantiza persistencia total.  
+>    - Opción 2 (Parche Inmediato): Modificar la lectura/recuperación para que no recorte el total de secciones a 13 ni oculte secciones si tienen datos guardados.  
+> 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 106
+
+* **Fecha / Hora:** 2026-11-03 ~15:30 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Si implementa la opción 1 pero primero necesito probarla en local, antes de subirla a firebase.  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Implementación de la Opción 1 en Local (v2.29.4 - Skill 6):  
+> 1. Interfaz de Primaria Actualizada: Se incorporaron 6 casillas independientes (1er a 6to Grado) en `webapp/index.html`, permitiendo declarar con exactitud las secciones de cada grado sin inventar secciones vacías ni usar trucos. El total de secciones se calcula y refleja automáticamente en pantalla.  
+> 2. Lógica Dinámica y Persistencia: En `webapp/src/main.js`, `_renderCajasPrimaria` genera exactamente las secciones correspondientes a cada grado (por ejemplo: si 3er grado tiene 3 secciones, dibuja A, B y C; y si los demás tienen 2, solo dibuja A y B). Al guardar en Firestore, se registran las secciones por grado en `secciones-planes.21000`. Al recargar, el cargador respeta y recupera la configuración exacta sin recortar secciones ni ocultar estudiantes.  
+> 3. Pruebas Automatizadas en Local: Se ejecutó una prueba completa con Playwright simulando el caso exacto del video (13 secciones en total, 3 secciones en 3er Grado, 26 alumnos en 3er Grado C, recarga de página y retrocompatibilidad), superando todas las validaciones con 100% de éxito.  
+> 4. Instrucciones para Prueba Local: Se indica al usuario cómo iniciar y probar el sistema en su navegador localmente (`npm run dev` o `npm run preview` en el puerto local) antes de autorizar el despliegue a Firebase.  
+> 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 107
+
+* **Fecha / Hora:** 2026-11-03 ~15:45 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Ok, los resultadon no son satisfactorios. Sin embargo te voy a mostrar un video del por que. Pero mientras se carga el video por favor necesito que el campo id="wp-horas-administrativas" y id="wp-horas-administrativas" sean opcionales. Por favor. Depues de esto te muestro del video para seguir con lo de las secciones  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Flexibilización del Campo Horas Administrativas (Skill 6):  
+> 1. Eliminación de Obligatoriedad en Interfaz: Se retiró el asterisco rojo de campo requerido de la etiqueta `Horas Administrativas (en este Plantel)` tanto en `webapp/index.html` como en los modificadores dinámicos de texto en `webapp/src/personalWizard.js`.  
+> 2. Desbloqueo en Validación de Formulario: Se eliminó la validación que exigía obligatoriamente que `wp-horas-administrativas` fuera mayor a 0 al guardar personal no docente o sin aula. Ahora el campo puede quedar vacío o en 0 sin bloquear el guardado. Si el usuario ingresa un valor positivo, únicamente se verifica que no supere las horas según recibo.  
+> 3. Compilación y Preparación Local: Se recompiló el frontend localmente en Vite. Listo para prueba inmediata en local.  
+> 4. Quedamos a la espera del video explicativo del usuario para atender con total precisión el módulo de secciones de Primaria.  
+> 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 108
+
+* **Fecha / Hora:** 2026-11-03 ~16:00 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Sí Satisfactorio. Ahora si ve el video, y observa que hay algun error. Espero entiendas y lo puedas solucionar  
+> *(Adjunto: Video explicativo WhatsApp de 2m 41s demostrando el error al recargar secciones de Primaria: aparición de "89 secciones" y "21" en los grados con sección única).*  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Diagnóstico de Causa Raíz y Corrección Definitiva (Skill 6):  
+> 1. Análisis del Video y Causa Exacta: Al configurar 1 sección en un grado, el sistema asigna la letra `U` (Sección Única). Al recargar la página, el lector de datos interpretaba la letra `U` por su posición alfabética (letra 21 del abecedario: 85 - 64 = 21). Por ello, convertía automáticamente cada sección única en 21 secciones (1º: 21, 2º: 21, 4º: 21, 5º: 21), sumando exactamente los 89 que aparecían en el video.  
+> 2. Solución Aplicada:  
+>    - Se estableció `secciones-planes.21000` como la fuente de verdad prioritaria para los grados declarados.  
+>    - Se ajustó el decodificador para que la letra `U` siempre represente exactamente 1 sección (`maxLetraIdx = 1`), nunca 21.  
+>    - Se aseguró el mapeo automático bidireccional entre la casilla `primaria-gU` y los datos guardados en Firestore.  
+> 3. Validación Automatizada: Se ejecutó la prueba con Playwright reproduciendo el escenario idéntico del video (1, 1, 3, 1, 1, 2 = 9 secciones y 185 alumnos). Al simular logout y login, los 6 grados conservaron sus valores exactos, el total se mantuvo en 9 y los alumnos de 1º U y 3º C se recuperaron al 100%.  
+> 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 109
+
+* **Fecha / Hora:** 2026-11-03 ~16:15 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Ok perfecto. Estoy satisfecho y creo que esto si entra en la incrementación del numero de la versión. Monsta en firebase  
+> Ok en el local se ve bien. pero ahora te pido que seas sincero conmigo. Al dubirlo a Firebase, los planteles que no tienen esta situación atípica con las secciones, van a encontrar su carga bien estructurada, o tendrán que cargar de nuevo  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Claridad Absoluta sobre la Carga de Planteles Típicos y Despliegue v2.29.4 (Skill 6):  
+> 1. Respuesta Categórica y Honesta: Los planteles típicos/regulares NO tendrán que cargar absolutamente nada de nuevo. Al entrar a la aplicación en Firebase, encontrarán toda su información 100% intacta, estructurada y en las casillas correspondientes.  
+> 2. Explicación Técnica y Retrocompatibilidad: El nuevo cargador fue programado con compatibilidad dual: si un plantel guardó su matrícula con el esquema tradicional (por ejemplo, 6 secciones con sección única 'U' o 12 secciones con 'A' y 'B'), el sistema reconoce automáticamente esa estructura, asigna las secciones correspondientes a cada grado y rellena los varones y hembras sin pérdidas ni alteraciones.  
+> 3. Prueba de Verificación Ejecutada: Se probó mediante simulación en navegador tanto una escuela típica de 6 secciones como una de 12 secciones con datos de la base de datos previa, confirmando que ambas se abren de inmediato con su conteo y casillas exactas sin requerir intervención del usuario.  
+> 4. Despliegue Oficial en Producción: Se compiló el proyecto con Vite y se desplegó exitosamente a Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión **v2.29.4**.  
+> 5. Sincronización en GitHub: Cambios respaldados y subidos al repositorio remoto (`origin main`).  
+> 6. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+

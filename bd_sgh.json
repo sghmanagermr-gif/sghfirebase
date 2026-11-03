@@ -19697,6 +19697,28 @@
                   "mencion": null
                 }
               }
+            },
+            "OD13571413": {
+              "nombre_plantel": "JESUS ANTONIO PARRA",
+              "nuevo_eponimo": "GARABULLA",
+              "den_abr": "E",
+              "denominacion": "ESCUELA",
+              "dependencia": "ESTADAL",
+              "codigo_dependencia": null,
+              "codigo_dependencia_2": null,
+              "codigo_estadistico": null,
+              "ubicacion": "RURAL",
+              "nivel": "PRIMARIA",
+              "modalidad": "REGULAR",
+              "turno": "MAÑANA",
+              "metros2": null,
+              "observaciones": null,
+              "planes_estudio": {
+                "21000": {
+                  "especialidad": null,
+                  "mencion": null
+                }
+              }
             }
           }
         }

@@ -916,18 +916,59 @@ function _renderCajasInicial(tipo, numSec) {
     cont.innerHTML = html;
 }
 
-function _renderCajasPrimaria(numSec) {
+function _renderCajasPrimaria(config = null) {
     const cont = document.getElementById('cont-dinamico-primaria');
     if (!cont) return;
 
-    if (numSec === 0) {
+    let dist = [0, 0, 0, 0, 0, 0];
+
+    if (Array.isArray(config)) {
+        for (let i = 0; i < 6; i++) {
+            dist[i] = parseInt(config[i]) || 0;
+            const inp = document.querySelector(`.sec-pri-grado-input[data-grado="${i + 1}"]`);
+            if (inp) inp.value = dist[i] > 0 ? dist[i] : '';
+        }
+    } else if (typeof config === 'object' && config !== null) {
+        for (let i = 0; i < 6; i++) {
+            dist[i] = parseInt(config[String(i + 1)] || config[i + 1]) || 0;
+            const inp = document.querySelector(`.sec-pri-grado-input[data-grado="${i + 1}"]`);
+            if (inp) inp.value = dist[i] > 0 ? dist[i] : '';
+        }
+    } else if (typeof config === 'number') {
+        const d = _distribuirSecciones(config, 6);
+        for (let i = 0; i < 6; i++) {
+            dist[i] = d[i];
+            const inp = document.querySelector(`.sec-pri-grado-input[data-grado="${i + 1}"]`);
+            if (inp) inp.value = dist[i] > 0 ? dist[i] : '';
+        }
+    } else {
+        // Leer directamente desde los 6 inputs de grado
+        for (let i = 0; i < 6; i++) {
+            const inp = document.querySelector(`.sec-pri-grado-input[data-grado="${i + 1}"]`);
+            dist[i] = parseInt(inp?.value) || 0;
+        }
+    }
+
+    const totalSec = dist.reduce((a, b) => a + b, 0);
+    const secPri = document.getElementById('secPri');
+    if (secPri) secPri.value = totalSec;
+    const lblTot = document.getElementById('lbl-tot-sec-pri');
+    if (lblTot) lblTot.textContent = totalSec;
+
+    // Preservar valores previos ingresados por el usuario
+    const valoresPrevios = {};
+    cont.querySelectorAll('.mat-input.mat-primaria').forEach(inp => {
+        if (inp.value && inp.dataset.grupo && inp.dataset.sexo) {
+            valoresPrevios[inp.dataset.grupo + '_' + inp.dataset.sexo] = inp.value;
+        }
+    });
+
+    if (totalSec === 0) {
         cont.innerHTML = '';
         return;
     }
 
-    const dist = _distribuirSecciones(numSec, 6);
     const ORDINALES = ['1er', '2do', '3er', '4to', '5to', '6to'];
-    
     let html = '<div style="margin-top: 15px;">';
     html += '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;">';
 
@@ -938,7 +979,7 @@ function _renderCajasPrimaria(numSec) {
         for (let s = 0; s < secsEnGrado; s++) {
             const letra = secsEnGrado === 1 ? 'U' : _letraGrupo(s);
             const titulo = ORDINALES[g] + ' Grado ' + letra;
-            const ident = 'primaria-' + (g+1) + letra;
+            const ident = 'primaria-' + (g + 1) + letra;
             
             html += '<div style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; background: #f8fafc;">';
             html += '  <h5 style="margin: 0 0 8px; font-size: 0.85rem; color: #1e293b; text-align: center;">' + titulo + '</h5>';
@@ -958,7 +999,15 @@ function _renderCajasPrimaria(numSec) {
 
     html += '</div></div>';
     cont.innerHTML = html;
+
+    // Restaurar valores previos
+    Object.keys(valoresPrevios).forEach(key => {
+        const [grupo, sexo] = key.split('_');
+        const inp = cont.querySelector(`.mat-input.mat-primaria[data-grupo="${grupo}"][data-sexo="${sexo}"]`);
+        if (inp) inp.value = valoresPrevios[key];
+    });
 }
+window._renderCajasPrimaria = _renderCajasPrimaria;
 
 function _renderCajasEspecial(numGrupos) {
     const cont = document.getElementById('cont-dinamico-especial');
@@ -1036,7 +1085,13 @@ document.addEventListener('input', (e) => {
         }
         
         // Recalcular matrícula al redibujar
-        document.getElementById('contenedor-matricula').dispatchEvent(new Event('input', { bubbles: true }));
+        document.getElementById('contenedor-matricula')?.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+
+    if (e.target.classList.contains('sec-pri-grado-input')) {
+        _renderCajasPrimaria();
+        document.getElementById('contenedor-matricula')?.dispatchEvent(new Event('input', { bubbles: true }));
+        document.getElementById('plantel-form')?.dispatchEvent(new Event('input', { bubbles: true }));
     }
 });
 
@@ -1546,7 +1601,14 @@ async function _abrirModalVacantes() {
     if (pre > 0) contenido.appendChild(_crearBloque('PREESCOLAR', 'preescolar', pre, VAC['preescolar']));
 
     if (pri > 0) {
-        const dist = _distribuirSecciones(pri, 6);
+        let dist = [];
+        for (let i = 0; i < 6; i++) {
+            const inp = document.querySelector(`.sec-pri-grado-input[data-grado="${i + 1}"]`);
+            dist[i] = inp ? (parseInt(inp.value) || 0) : 0;
+        }
+        if (dist.every(x => x === 0)) {
+            dist = _distribuirSecciones(pri, 6);
+        }
         const ORDINALES = ['1ER','2DO','3ER','4TO','5TO','6TO'];
         const dataPri = VAC['primaria'] ? JSON.parse(JSON.stringify(VAC['primaria'])) : {};
         for (let g = 0; g < 6; g++) {
@@ -2065,17 +2127,76 @@ async function mostrarCandado(codigoDEA, dataParcial) {
         }
 
         // --- 3. PRIMARIA ---
-        if (Object.keys(b21).length > 0) {
-            let totalPri = 0;
-            for (let g = 1; g <= 6; g++) {
-                if (b21[String(g)]) totalPri += Object.keys(b21[String(g)]).filter(k => k.length === 1).length;
+        const sp21 = dataParcial?.["secciones-planes"]?.["21000"] || dp?.["secciones-planes"]?.["21000"] || null;
+        const distPorGrado = [0, 0, 0, 0, 0, 0];
+        let hayDatosPrimaria = false;
+
+        // 1. Secciones guardadas por grado en secciones-planes (Fuente de verdad)
+        let tieneSpPorGrado = false;
+        for (let g = 1; g <= 6; g++) {
+            if (sp21 && sp21[String(g)] !== undefined) {
+                const s = parseInt(sp21[String(g)]) || 0;
+                if (s > 0) {
+                    distPorGrado[g - 1] = s;
+                    tieneSpPorGrado = true;
+                    hayDatosPrimaria = true;
+                }
             }
-            if (document.getElementById('secPri')) document.getElementById('secPri').value = totalPri;
-            _renderCajasPrimaria(totalPri);
+        }
+
+        // 2. Solo si NO existía secciones-planes por grado, inferir de la matrícula b21 (planteles legados)
+        if (!tieneSpPorGrado && Object.keys(b21).length > 0) {
+            for (let g = 1; g <= 6; g++) {
+                const gObj = b21[String(g)];
+                if (gObj && typeof gObj === 'object') {
+                    let maxLetraIdx = 0;
+                    Object.keys(gObj).forEach(k => {
+                        if (k === 'U') {
+                            maxLetraIdx = Math.max(maxLetraIdx, 1);
+                            hayDatosPrimaria = true;
+                        } else if (k.length === 1 && k >= 'A' && k <= 'T') {
+                            const idx = k.charCodeAt(0) - 64; // A=1, B=2, C=3...
+                            if (idx > maxLetraIdx) maxLetraIdx = idx;
+                            hayDatosPrimaria = true;
+                        }
+                    });
+                    if (maxLetraIdx > distPorGrado[g - 1]) {
+                        distPorGrado[g - 1] = maxLetraIdx;
+                    }
+                }
+            }
+        }
+
+        // 3. Fallback legado si no había desglose por grado pero había un total
+        if (!hayDatosPrimaria) {
+            let legacyTotal = 0;
+            if (document.getElementById('secPri')?.value) {
+                legacyTotal = parseInt(document.getElementById('secPri').value) || 0;
+            }
+            if (!legacyTotal && dataParcial?.matricula_detalle?.secPri) {
+                legacyTotal = parseInt(dataParcial.matricula_detalle.secPri) || 0;
+            }
+            if (legacyTotal > 0) {
+                const d = _distribuirSecciones(legacyTotal, 6);
+                for (let i = 0; i < 6; i++) distPorGrado[i] = d[i];
+                hayDatosPrimaria = true;
+            }
+        }
+
+        if (hayDatosPrimaria || Object.keys(b21).length > 0) {
+            _renderCajasPrimaria(distPorGrado);
+
             for (let g = 1; g <= 6; g++) {
                 if (!b21[String(g)]) continue;
+                const secsEnGrado = distPorGrado[g - 1];
                 Object.keys(b21[String(g)]).forEach(letra => {
-                    const ident = 'primaria-' + g + letra;
+                    let targetLetra = letra;
+                    if (secsEnGrado === 1) {
+                        targetLetra = 'U';
+                    } else if (secsEnGrado > 1 && letra === 'U') {
+                        targetLetra = 'A';
+                    }
+                    const ident = 'primaria-' + g + targetLetra;
                     const f = document.querySelector('.mat-input.mat-primaria[data-grupo="' + ident + '"][data-sexo="F"]');
                     const m = document.querySelector('.mat-input.mat-primaria[data-grupo="' + ident + '"][data-sexo="M"]');
                     if (f) f.value = b21[String(g)][letra].fem || 0;
@@ -2320,17 +2441,21 @@ async function mostrarCandado(codigoDEA, dataParcial) {
               });
           }
 
-          // 21000/primaria: valor = cantidad de grados que tienen esa letra
+          // 21000/primaria: secciones por cada grado
           if (document.getElementById('bloque-primaria')?.style.display !== 'none') {
-              document.querySelectorAll('.mat-input.mat-primaria[data-sexo="F"]').forEach(inp => {
-                  if (!isVisible(inp)) return;
-                  if (!inp.dataset.grupo) return;
-                  const match = inp.dataset.grupo.match(/primaria-(\d)([A-Z])/);
-                  if (!match) return;
-                  const secLetra = match[2];
-                  if (!seccionesPlanes['21000']) seccionesPlanes['21000'] = {};
-                  seccionesPlanes['21000'][secLetra] = (seccionesPlanes['21000'][secLetra] || 0) + 1;
-              });
+              if (!seccionesPlanes['21000']) seccionesPlanes['21000'] = {};
+              for (let g = 1; g <= 6; g++) {
+                  const inpG = document.querySelector(`.sec-pri-grado-input[data-grado="${g}"]`);
+                  let val = parseInt(inpG?.value) || 0;
+                  // Si el input está vacío pero hay casillas visibles, contar las casillas de ese grado
+                  if (val === 0) {
+                      const boxes = document.querySelectorAll(`.mat-input.mat-primaria[data-grupo^="primaria-${g}"][data-sexo="F"]`);
+                      if (boxes.length > 0) val = boxes.length;
+                  }
+                  if (val > 0) {
+                      seccionesPlanes['21000'][String(g)] = val;
+                  }
+              }
           }
 
           // Media: secciones por año de cada plan

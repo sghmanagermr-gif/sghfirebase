@@ -3129,3 +3129,38 @@ Se realizó la auditoría, conciliación y rescate institucional de la **Escuela
 
 ### Control SemVer y Despliegue
 - Elevación a `v2.29.3` (PARCHE). Compilación con Vite (718 ms), despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`) y sincronización con GitHub (`origin main`).
+
+
+---
+
+## [v2.29.4] - 2026-11-03 (Configuración Granular de Secciones por Grado en Educación Primaria)
+
+### Resumen Técnico
+Se implementó la solución estructural (Opción 1) para la configuración y persistencia de secciones y matrícula en Educación Primaria (`Plan 21000`), resolviendo de raíz el problema de planteles con distribución irregular de secciones (e.g. 3er grado con 3 secciones A, B, C mientras los demás tienen 2).
+
+### Acciones Ejecutadas
+1. **Rediseño de Interfaz de Primaria (`webapp/index.html`):**
+   - Se reemplazó el campo monolítico `#secPri` por 6 casillas independientes correspondientes a cada grado (1er Grado a 6to Grado, clase `.sec-pri-grado-input`), con cálculo dinámico y sumatoria automática del total de secciones en `#lbl-tot-sec-pri` y `#secPri`.
+2. **Motor de Renderizado Dinámico y Preservación (`webapp/src/main.js`):**
+   - Se refactorizó `_renderCajasPrimaria` para aceptar la configuración granular de secciones por grado, generando exactamente las secciones necesarias sin crear casillas vacías o ficticias.
+   - Se implementó mecanismo de memoria en caliente para preservar los números de estudiantes previamente ingresados al momento de alterar las secciones de cualquier grado.
+   - Se vinculó el evento `input` de las casillas de grado para redibujar y disparar los eventos de recalculo de matrícula en tiempo real.
+3. **Persistencia en Firestore y Retrocompatibilidad (`secciones-planes` y `matricula`):**
+   - Al guardar, las secciones por grado se registran en `secciones-planes['21000']` bajo la estructura `{ "1": n, "2": n, ... }`.
+   - Al cargar datos existentes, el loader prioriza `secciones-planes['21000']` como fuente de verdad. Se corrigió la decodificación de la letra `'U'` (Sección Única), evitando que fuera evaluada por su índice alfabético (letra 21), lo que provocaba que se multiplicaran las secciones a 21 por grado y el total a 89.
+   - Se garantizó el mapeo automático bidireccional entre la casilla `primaria-gU` y los registros de matrícula.
+4. **Flexibilización de Horas Administrativas (`webapp/src/personalWizard.js` e `index.html`):**
+   - Se removió la obligatoriedad del campo `wp-horas-administrativas`, retirando el asterisco visual y eliminando la validación que exigía valores mayores a 0 para personal no docente.
+5. **Validación Exhaustiva con Playwright:**
+   - Se ejecutó suite automatizada reproduciendo exactamente el escenario del segundo video (1, 1, 3, 1, 1, 2 = 9 secciones y 185 alumnos), confirmando que al recargar la sesión no se alteran las secciones ni se pierden los datos.
+
+### Archivos Modificados
+- `webapp/index.html`: Nueva cuadrícula de secciones por grado (1º a 6º), flexibilización de horas y actualización a `v2.29.4`.
+- `webapp/src/main.js`: Lógica de `_renderCajasPrimaria`, persistencia por grado, loader retrocompatible sin sesgo de letra 'U' y modal de vacantes.
+- `webapp/src/personalWizard.js`: Desbloqueo y flexibilización de `wp-horas-administrativas`.
+- `webapp/package.json`: Elevación a `2.29.4`.
+- `versiones.md`, `bitacora.md`, `conversaciones.md`: Documentación de cambio institucional.
+
+### Control SemVer y Despliegue
+- Elevación a `v2.29.4` (PARCHE). Compilación con Vite (739 ms), despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`) y sincronización con GitHub (`origin main`).
+
