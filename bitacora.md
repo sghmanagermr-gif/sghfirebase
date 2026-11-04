@@ -3370,3 +3370,17 @@ Se atendió el reporte de soporte institucional para el correo `eb21denoviembre@
 2. **Colección `cargos_personal`:** Inyectados los 35 expedientes individuales completos (`OD02891419_${cedula}`) con esquema de 42 atributos del RAC.
 3. **Generación de Enlace Seguro:** Generado enlace directo Out-of-Band (OOB) vía Firebase Auth REST API para restablecimiento inmediato de contraseña sin depender del servidor de correo.
 4. **Métricas Zero-Cost:** 36 escrituras en Firestore (0.18% del cupo diario de 20.000 operaciones).
+
+
+---
+
+## [Operación Forense] - 2026-11-04 (Regularización y Sincronización Integral: E.B. Los Aráquez / Simona Corredor de Picón - Sucre)
+
+### Resumen Técnico
+Se procesó el reporte de soporte institucional para el correo `uebsimonacorredordepico1@gmail.com`. La cuenta pertenece a la Directora Magdalena Mendoza (C.I. 10.903.909), al frente de la **E.B. Los Aráquez / Epónimo "Simona Corredor de Picón" (Código DEA `OD14831420`)**, Parroquia Lagunillas, Municipio Sucre. El plantel en Firestore carecía de la plantilla de personal. Se realizó la extracción y carga completa de los 29 trabajadores registrados en el RAC Estado Mérida y se generó el enlace seguro Out-of-Band (OOB) para acceso inmediato.
+
+### Acciones Realizadas
+1. **Colección `planteles`:** Actualizado `planteles/OD14831420` con arreglo consolidado `personal_resumen` y contador `total_personal: 29`.
+2. **Colección `cargos_personal`:** Inyectados los 29 expedientes individuales completos (`OD14831420_${cedula}`) con esquema de 42 atributos del RAC.
+3. **Generación de Enlace Seguro:** Generado enlace directo Out-of-Band (OOB) vía Firebase Auth REST API para restablecimiento de contraseña vía WhatsApp.
+4. **Métricas Zero-Cost:** 30 escrituras en Firestore (0.15% del cupo diario gratuito).

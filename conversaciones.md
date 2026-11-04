@@ -5330,3 +5330,25 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - Se inyectaron exitosamente al 100% los 35 expedientes completos en `cargos_personal/OD02891419_${cedula}` con los 42 atributos oficiales del RAC.  
 > 3. Enlace Directo Out-of-Band (OOB): Se generó enlace oficial seguro para restablecimiento inmediato de contraseña vía WhatsApp sin depender del buzón de correo.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 136
+
+* **Fecha / Hora:** 2026-11-04 ~09:22 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> correos_afectados: uebsimonacorredordepico1@gmail.com  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Protocolo de Regularización, Sincronización de Plantel y Enlace Seguro de Acceso (Skill 5 y Skill 6):  
+> 1. Verificación Institucional: Cuenta `uebsimonacorredordepico1@gmail.com` vinculada a la Directora **Magdalena Mendoza** (C.I. 10.903.909), al frente de la **E.B. Los Aráquez / Epónimo "Simona Corredor de Picón" (Código DEA `OD14831420`)**, ubicada en la Parroquia Lagunillas, Municipio Sucre (Dependencia Nacional, Código Estadístico 140887).  
+> 2. Sincronización Integral de Nómina Oficial RAC (29 Funcionarios):  
+>    - Se actualizó el documento institucional `planteles/OD14831420` incorporando el arreglo consolidado `personal_resumen` y fijando `total_personal: 29`.  
+>    - Se inyectaron exitosamente al 100% los 29 expedientes completos en `cargos_personal/OD14831420_${cedula}` con los 42 atributos oficiales del RAC.  
+> 3. Enlace Directo Out-of-Band (OOB): Se generó enlace oficial seguro para restablecimiento inmediato de contraseña vía WhatsApp sin depender del servidor de correo.  
+> 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
