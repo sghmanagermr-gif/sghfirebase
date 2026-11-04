@@ -3444,3 +3444,17 @@ En respuesta a reportes de directores sobre presuntos "datos cruzados y duplicad
 - **Colección `cargos_personal`:** 7 documentos creados con esquema de 42 atributos del RAC.
 - **Colección `planteles`:** 2 documentos actualizados con `personal_resumen` y contadores `total_personal`.
 - **Métricas:** 9 escrituras consumidas (0.045% del cupo diario gratuito).
+
+
+---
+
+## [Operación Forense] - 2026-11-04 (Operativo CASO_HUERFANOS Lote 5: Inyección de 2 Funcionarias en Escuela La Vega de Tabay - Santos Marquina)
+
+### Resumen Técnico
+Se procesó el Lote 5 del operativo `CASO_HUERFANOS` para la Escuela La Vega de Tabay / Diolys María Paredes (Código DEA `OD14281419`), Municipio Santos Marquina. Tras constatar en la auditoría previa la inexistencia de duplicados en Cloud Firestore y la coincidencia al 100% de ambas trabajadoras en el RAC regional, se ejecutó la inyección en la base de datos de producción.
+
+### Acciones Realizadas
+1. **Colección `cargos_personal`:** Creados 2 documentos (`OD14281419_19592468` y `OD14281419_20434134`) con esquema completo de 42 atributos del RAC.
+2. **Colección `planteles`:** Actualizado `planteles/OD14281419` incorporando a las 2 trabajadoras al arreglo consolidado `personal_resumen`, elevando el contador `total_personal` de 12 a 14 funcionarios.
+3. **Formato de Comunicación:** Se actualizó la plantilla de WhatsApp suprimiendo de manera definitiva el párrafo de instrucciones para recaudos en la Parte 2.
+4. **Métricas Zero-Cost:** 3 escrituras en Firestore (0.015% del cupo diario gratuito).

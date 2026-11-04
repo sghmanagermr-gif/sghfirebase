@@ -5528,3 +5528,27 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 3. Cumplimiento de Formato WhatsApp: Se suprime de manera estricta el párrafo de instrucción en la Parte 2.  
 > 4. Solicitud de Luz Verde para inyección.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 144
+
+* **Fecha / Hora:** 2026-11-04 ~13:23 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Luz verde  
+> Resultados satisfactorios  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Ejecución de Inyección Lote 5 y Entrega de Formato para WhatsApp (Skill 5 y Skill 6):  
+> 1. Inyección Exitosa en Cloud Firestore:  
+>    - Se inyectaron al 100% los 2 expedientes en la colección `cargos_personal` (`OD14281419_19592468` y `OD14281419_20434134`) con los 42 atributos institucionales del RAC.  
+>    - Se actualizó el plantel `planteles/OD14281419` (*La Vega de Tabay / Diolys María Paredes*), incrementando su nómina de 12 a 14 trabajadores en `personal_resumen`.  
+>    - Cero duplicados generados.  
+> 2. Formato de Comunicación WhatsApp:  
+>    - Mensaje entregado con viñetas, negritas y emojis, omitiendo permanentemente el párrafo de instrucción en la Parte 2 según la directriz institucional.  
+> 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
