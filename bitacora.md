@@ -3546,3 +3546,20 @@ Se atendió el reporte de discrepancia visual formulado por la Dirección de la 
 1. **Colección `cargos_personal`:** Se actualizaron los documentos `OD14281419_19592468` y `OD14281419_20434134` inyectando el esquema dual completo de compatibilidad: `codigo-plantel`, `codigoDEA`, `codigoPlantel`, `nombre-apellido`, `nombre`, `cedula-identidad`, `tipo-personal` y `situacion-laboral`.
 2. **Colección `planteles`:** Se normalizó el arreglo `personal_resumen` de `planteles/OD14281419` para garantizar que las llaves `nombre`, `nombres` y `nombre-apellido` existan en cada elemento para la renderización sin fisuras en la Ficha Municipal de Supervisión.
 3. **Métricas Zero-Cost:** 3 escrituras en Firestore (0.015% del cupo diario).
+
+
+---
+
+## [Operación Forense] - 2026-11-04 (Operativo CASO_HUERFANOS Lote 9: Municipio Andrés Bello - Inyección de 37 Funcionarios en 11 Planteles con Esquema Dual y Política Anti-Traslados)
+
+### Resumen Técnico
+Se procesó el comando `CASO_HUERFANOS` (Lote 9) contentivo de 51 funcionarios reportados por direcciones educativas en 15 planteles del **Municipio Andrés Bello** (La Azulita). Tras la auditoría estricta contra el maestro `migracion/RAC ESTADO MERIDA - PERSONAL.csv` y aplicando la política institucional de **cero traslados sin resolución oficial**:
+- **37 funcionarios** fueron validados con adscripción idéntica en RAC e inyectados exitosamente en Cloud Firestore.
+- **6 funcionarios** fueron detectados con adscripción formal a otros planteles en RAC (se reportaron en sus sedes de origen sin transferencias forzadas).
+- **8 funcionarios** no figuraban en la nómina central MPPE RAC (Madres Cocineras CNAE, personal Fundabit y contratos no centralizados).
+
+### Acciones Realizadas
+1. **Colección `cargos_personal`:** Se crearon 37 documentos individuales bajo el patrón `{codigoDEA}_{cedula}` implementando el esquema dual de compatibilidad exhaustiva (`codigo-plantel`, `codigoDEA`, `codigoPlantel`, `nombre-apellido`, `nombre`, `nombres`, `cedula-identidad`, `cedula`, `tipo-personal`, `tipoPersonal`, `situacion-laboral`).
+2. **Colección `planteles`:** Se actualizaron 11 documentos de planteles mediante transformaciones atómicas (`appendMissingElements` e `increment`), agregando a los trabajadores al arreglo `personal_resumen` con todas sus claves redundantes y actualizando `total_personal` y `ultima_actualizacion`.
+3. **Métricas Zero-Cost y Rate-Limit Bypass:** Se utilizaron commits atómicos y transformaciones del servidor sin consumo de cuota de lectura en cliente, ejecutando 48 operaciones de escritura con 100% de efectividad.
+4. **Reporte Institucional:** Generado `scratch/whatsapp_message_lote9.txt` con estructura oficial en 2 partes, omitiendo el bloque de recaudos en la Parte 2 según directriz del usuario.
