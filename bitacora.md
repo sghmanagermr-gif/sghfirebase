@@ -3330,3 +3330,29 @@ Se ejecutó una auditoría forense integral de veracidad sobre un lote de 81 fun
 - **Colección `cargos_personal`:** Se crearon/actualizaron 79 documentos individuales con clave compuesta `${dea}_${cedula}`, incorporando esquema de 42 atributos institucionales completos.
 - **Colección `planteles`:** Se crearon/actualizaron 24 documentos de planteles consolidando sus arreglos `personal_resumen` y contadores `total_personal`.
 - **Métricas:** 103 escrituras consumidas (0.51% del cupo diario gratuito de 20.000 operaciones en el plan Spark).
+
+
+---
+
+## [Operación Forense] - 2026-11-04 (Operativo CASO_HUERFANOS Lote 2: Conciliación e Inyección de 76 Funcionarios Oficiales RAC Estado Mérida - Julio César Salas)
+
+### Resumen Técnico
+Bajo el comando operativo `CASO_HUERFANOS`, se procesó un lote de 95 funcionarios reportados en 21 planteles del Municipio Julio César Salas (Arapuey / Palmira, códigos DEA parroquia `1410`). La auditoría forense determinó que 76 trabajadores (80%) cuentan con registro pleno y legal en el maestro `migracion/RAC ESTADO MERIDA - PERSONAL.csv`, requiriendo únicamente la subsanación de errores de tipeo y la asignación a sus planteles de origen oficial. Los 76 trabajadores fueron inyectados en Firestore con éxito total. Los 19 trabajadores restantes no figuran en las nóminas regionales y fueron remitidos a regularización física de credenciales y contratos.
+
+### Hallazgos Forenses y Conciliación
+1. **Subsanación de Errores de Tipeo en Cédulas (4 casos):**
+   - *Liceo José Américo Torres (`S1068D1410`):* María Senaida Araujo Fonseca corregida de CI 1.886.422 (faltaba un dígito) a **18.864.222**.
+   - *Liceo José Américo Torres (`S1068D1410`):* Angélica María Montilla Barreto corregida de CI 20.040.681 a **20.040.481**.
+   - *Escuela Santa Cruz / Aula Anexa Las González (`OD12161410`):* José Yoel Moreno Díaz corregido de CI 23.543.459 a **23.593.459**.
+   - *Escuela Ramón Ignacio Vergara (`OD12281410`):* Yudith Gregoria Ramírez Gómez corregida de CI 17.696.395 a **17.696.935**.
+2. **Adscripción Oficial por Nómina RAC (3 casos con plantel distinto al solicitado):**
+   - *Katiuska Jackeline Rojas Salas (CI 19.383.323):* Solicitada en Preescolar Ana Ylda Uzcátegui (`OD17131410`), adscrita oficialmente en RAC a Escuela José Miguel Fernández Rivas (`OD12241410`).
+   - *Beatriz Coromoto Quevedo Hernández (CI 13.825.307):* Solicitada en Escuela Roberto Picón Lares (`OD01021410`), adscrita oficialmente en RAC a Escuela José Miguel Fernández Rivas (`OD12241410`).
+   - *Mario Gerardo Ramírez Moreno (CI 15.942.671):* Solicitado en Escuela Roberto Picón Lares (`OD01021410`), adscrito oficialmente en RAC a Escuela José Natividad Torres Díaz (`OD12301410`).
+3. **Casos Pendientes de Regularización (19 no encontrados en RAC):**
+   - No figuran en el maestro de personal RAC de julio de 2026. Requieren consignar cédula y designación/contrato ante la Dirección de Gestión Humana.
+
+### Acciones Técnicas en Firestore (Zero-Cost Execution)
+- **Colección `cargos_personal`:** 76 documentos creados con claves compuestas `${targetDEA}_${cedula}` y esquema completo de 42 atributos.
+- **Colección `planteles`:** 17 documentos actualizados/inicializados con sus arreglos `personal_resumen` y contadores `total_personal`.
+- **Métricas:** 93 escrituras consumidas (0.46% del cupo diario gratuito de 20.000 operaciones en el plan Spark).
