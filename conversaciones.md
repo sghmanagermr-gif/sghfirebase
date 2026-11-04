@@ -5500,3 +5500,31 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 1. Confirmación de Satisfacción: Registrada la conformidad del Administrador respecto al Lote 4.  
 > 2. Nueva Regla de Formato para WhatsApp: Se suprime de forma permanente el párrafo de "INSTRUCCIÓN" sobre consignar recaudos ante Gestión Humana en la Parte 2 del mensaje de WhatsApp.  
 > 3. En espera activa del siguiente lote bajo el protocolo `CASO_HUERFANOS`.
+
+
+---
+
+### Intervención 143
+
+* **Fecha / Hora:** 2026-11-04 ~13:20 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> CASO_HUERFANOS  
+> Yenny Karina Andrade Moreno C.I. 19592468 Código de recibo de pago: 8991N Código de Plantel: OD 14281419  
+> María Jesús Ramírez Hernández C.I.: 20434134 Codigo de Plantel: OD14281419  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Protocolo de Control de Calidad y Auditoría Forense Lote 5 (Skill 5 y Skill 6):  
+> 1. Verificación e Identificación Institucional:  
+>    - Plantel: **Escuela La Vega de Tabay / Epónimo "Diolys María Paredes" (Código DEA `OD14281419`)**, Parroquia Tabay, Municipio Santos Marquina.  
+>    - Ambas funcionarias figuran en el maestro oficial `RAC ESTADO MERIDA - PERSONAL.csv` adscritas exactamente a este código DEA `OD14281419`:  
+>      * Yenny Karina Andrade Moreno (C.I. 19.592.468 - Cocinero II, recibo 8991N).  
+>      * María Jesús Ramírez Hernández (C.I. 20.434.134 - Docente Único).  
+> 2. Verificación Anti-Duplicados en Firestore:  
+>    - Se consultó en vivo la colección `cargos_personal` y el arreglo `personal_resumen` de `planteles/OD14281419`: ninguna de las dos cédulas existe previamente en la base de datos (0 duplicados).  
+> 3. Cumplimiento de Formato WhatsApp: Se suprime de manera estricta el párrafo de instrucción en la Parte 2.  
+> 4. Solicitud de Luz Verde para inyección.  
+> 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
