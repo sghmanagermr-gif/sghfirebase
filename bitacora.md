@@ -3678,3 +3678,20 @@ Se procesó el comando `CASO_HUERFANOS` (Lote 14) para la **Escuela Luis Alberto
 2. **Colección `planteles`:** Actualizados los documentos `planteles/OD14271419` (+1), `planteles/OD14331419` (+1) y `planteles/OD03311419` (+1) mediante transformaciones atómicas (`appendMissingElements` e `increment`).
 3. **Métricas Zero-Cost:** 6 escrituras atómicas en Firestore sin consumo de cuota de lectura en cliente.
 4. **Reporte Institucional:** Generado `scratch/whatsapp_message_lote14.txt` con estructura oficial en 2 partes, omitiendo el bloque de recaudos en la Parte 2.
+
+
+---
+
+## [Operación Forense] - 2026-11-04 (Operativo CASO_HUERFANOS: Escuela Loma del Pueblo / Isidra Antonia Monsalve OD14251419 - Sincronización Integral de Nómina)
+
+### Resumen Técnico
+Se atendió la solicitud de auditoría técnica y rescate para la **Escuela Loma del Pueblo / Epónimo Isidra Antonia Monsalve (Código DEA `OD14251419`)**, ubicada en la Parroquia Tabay, Municipio Santos Marquina (Dependencia Estadal, Código Estadístico 140798). 
+- **Diagnóstico:** Se constató que la directora cuenta con usuario activo en Firebase Auth (`escuelaisidramonsalves@gmail.com`) habiendo ingresado en la fecha, pero la nómina del plantel no había sido precargada en Cloud Firestore (mostrándose en blanco con 0 personal).
+- **Validación RAC:** Se localizó al 100% de la nómina central oficial ministerial: **Merines Madelein Carrillo Albornoz (C.I. V-19.592.260)**, Docente Contratada en funciones directivas y secretariales.
+- **Inyección:** Se creó el expediente individual en `cargos_personal/OD14251419_19592260` con esquema dual exhaustivo y se actualizó `planteles/OD14251419` incorporándola a `personal_resumen` e incrementando `total_personal: 1`.
+
+### Acciones Realizadas
+1. **Colección `cargos_personal`:** Creado el expediente individual `OD14251419_19592260` implementando el estándar de doble nomenclatura (`codigo-plantel`, `codigoPlantel`, `codigoDEA`, `nombre-apellido`, `nombre`, `nombres`, `cedula-identidad`, `cedula`, `tipo-personal`, `tipoPersonal`, `situacion-laboral`).
+2. **Colección `planteles`:** Actualizado el documento `planteles/OD14251419` mediante transformaciones atómicas (`appendMissingElements` e `increment`).
+3. **Métricas Zero-Cost:** 2 escrituras directas ejecutadas con 0 consumo de cuota de lectura en cliente.
+4. **Reporte Institucional:** Generado `scratch/whatsapp_message_od14251419.txt` para difusión institucional.
