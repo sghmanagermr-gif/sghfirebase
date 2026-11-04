@@ -5726,3 +5726,51 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - Cero duplicados y cero traslados indebidos. Las 2 funcionarias adscritas a otros planteles se mantuvieron intactas en sus sedes oficiales de origen.  
 > 2. Formato de Comunicación WhatsApp: Mensaje entregado listo para su difusión a directivos.  
 > 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 151
+
+* **Fecha / Hora:** 2026-11-04 ~14:17 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> El director de la escuela OD14281419 me dice que sigue sin ver los funcionarios que le fueron tramitado:  
+> * V-19.592.468 - YENNY KARINA ANDRADE MORENO - COCINERO II  
+> * V-20.434.134 - MARIA JESUS RAMIREZ HERNANDEZ - DOCENTE UNICO  
+> Tu me dijiste que ya los habías subido a Firebase.   
+> Desde el usuario municipal de santos marquina se corroboró por medio de la ficha que ciertamente los funcionarios no están. ¿Qué me puedes decir al respecto?  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Diagnóstico Forense y Corrección en Caliente de Visibilidad en Firestore (Skill 5 y Skill 6):  
+> 1. Diagnóstico de Causa Raíz Técnica:  
+>    - **Discrepancia en Llave de Consulta:** La aplicación web (`personalWizard.js` línea 1590 y `admin.js` línea 5101) ejecuta estrictamente `where('codigo-plantel', '==', codigoDEA)`. En la inyección previa se había almacenado la llave en camelCase (`codigoPlantel`), provocando que Firestore ignorara los documentos en la consulta del director y del supervisor.  
+>    - **Discrepancia en Ficha Municipal:** En `planteles/OD14281419` se guardó la propiedad en plural (`nombres`) en vez de la esperada por la ficha (`nombre`).  
+>    - **Caché en Memoria del Navegador:** Los usuarios mantenían cargada la sesión previa sin recarga forzada.  
+> 2. Corrección Inmediata Aplicada en Firestore (`scratch/fix_od14281419.js`):  
+>    - Actualizados ambos documentos en `cargos_personal` con esquema integral dual (kebab-case y camelCase): `codigo-plantel`, `codigoDEA`, `codigoPlantel`, `nombre-apellido`, `nombre`, `cedula-identidad`, `tipo-personal`, `situacion-laboral`.  
+>    - Actualizado `planteles/OD14281419` con sus 14 funcionarias normalizadas en `personal_resumen` y `total_personal: 14`.  
+> 3. Instrucción al Usuario: Se orientó a solicitar al Director y al Supervisor la recarga forzada con `Ctrl + F5` para refrescar la memoria del navegador.  
+> 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 152
+
+* **Fecha / Hora:** 2026-11-04 ~14:27 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> No era la solución que quería, pero ciertamente resolvió el problema. Estoy satisfecho  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Conformidad Registrada y Prevención Arquitectónica (Skill 5 y Skill 6):  
+> 1. Aprobación y Satisfacción: Se documenta la satisfacción del Administrador con la resolución efectiva de la visibilidad de los funcionarios en la plataforma.  
+> 2. Aprendizaje y Mejora Estructural: Se estandariza el generador de inyecciones para que nunca más se omitan las llaves canónicas en kebab-case (`codigo-plantel`, `codigoDEA`, `nombre-apellido`, `nombre`) requeridas por el frontend, garantizando compatibilidad absoluta y transparencia en tiempo real.  
+> 3. En espera activa de los siguientes requerimientos o casos de huérfanos.

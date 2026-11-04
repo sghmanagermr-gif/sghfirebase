@@ -3533,3 +3533,16 @@ Se atendió la solicitud de personal bajo el comando `CASO_HUERFANOS` para el **
 1. **Colección `cargos_personal`:** Creados 3 expedientes individuales (`OD02341419_${cedula}`) con esquema completo de 42 atributos del RAC regional del Estado Mérida.
 2. **Colección `planteles`:** Actualizado el documento `planteles/OD02341419` inicializando su arreglo `personal_resumen` de 0 a 3 funcionarios activos y actualizando `total_personal: 3`.
 3. **Métricas Zero-Cost:** 4 escrituras en Firestore (0.02% del cupo diario gratuito).
+
+
+---
+
+## [Hotfix y Estabilización] - 2026-11-04 (Corrección de Esquema Kebab-Case en cargos_personal y Ficha Municipal: OD14281419)
+
+### Resumen Técnico
+Se atendió el reporte de discrepancia visual formulado por la Dirección de la **Escuela La Vega de Tabay / Diolys María Paredes (Código DEA `OD14281419`)** y corroborado por la supervisión municipal de Santos Marquina, quienes no visualizaban a las dos funcionarias inyectadas (`19592468` y `20434134`). El análisis forense reveló que mientras los documentos existían físicamente en Firestore, las consultas del frontend (`personalWizard.js` línea 1590 y `admin.js` línea 5101) filtran de manera estricta por el campo `codigo-plantel` (kebab-case). Debido a que el script de inyección había guardado el campo en formato camelCase (`codigoPlantel`), Firestore excluía a las funcionarias del conjunto de resultados.
+
+### Acciones Realizadas
+1. **Colección `cargos_personal`:** Se actualizaron los documentos `OD14281419_19592468` y `OD14281419_20434134` inyectando el esquema dual completo de compatibilidad: `codigo-plantel`, `codigoDEA`, `codigoPlantel`, `nombre-apellido`, `nombre`, `cedula-identidad`, `tipo-personal` y `situacion-laboral`.
+2. **Colección `planteles`:** Se normalizó el arreglo `personal_resumen` de `planteles/OD14281419` para garantizar que las llaves `nombre`, `nombres` y `nombre-apellido` existan en cada elemento para la renderización sin fisuras en la Ficha Municipal de Supervisión.
+3. **Métricas Zero-Cost:** 3 escrituras en Firestore (0.015% del cupo diario).
