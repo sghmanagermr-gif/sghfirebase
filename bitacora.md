@@ -3402,3 +3402,24 @@ Se atendió el reporte de soporte institucional para dos cuentas directivas: `es
    - Inyectados 8 expedientes para `OD13551413` con 42 atributos del RAC.
 3. **Generación de Enlaces Seguros:** Generados 2 enlaces Out-of-Band (OOB) mediante Firebase Auth REST API para restablecimiento directo vía WhatsApp.
 4. **Métricas Zero-Cost:** 12 escrituras en Firestore (0.06% del cupo diario gratuito).
+
+
+---
+
+## [Operación Forense] - 2026-11-04 (Operativo CASO_HUERFANOS Lote 3: Conciliación e Inyección de 24 Funcionarios Oficiales RAC Estado Mérida - Rangel)
+
+### Resumen Técnico
+Bajo el comando operativo `CASO_HUERFANOS`, se procesó un lote de 30 funcionarios reportados en 8 planteles del Municipio Rangel (Páramo Merideño, códigos DEA parroquia `1417`). La auditoría forense comprobó que 24 trabajadores (80%) cuentan con estatus oficial y activo en el maestro `migracion/RAC ESTADO MERIDA - PERSONAL.csv`. Los 24 funcionarios fueron inyectados en Cloud Firestore en sus planteles oficiales. Los 6 casos no encontrados en RAC fueron catalogados como verdaderos huérfanos y remitidos a consignación física de credenciales o contratos.
+
+### Hallazgos Forenses y Conciliación
+1. **Subsanación de Error de Tipeo en Cédula:**
+   - *Escuela César Rengifo / EB Cacute (`OD03331417`):* Jhemireet Cristina Erazo Rangel corregida de CI 19.592.973 (error de dígito) a su cédula real en RAC **19.592.573**.
+2. **Adscripción Oficial en RAC por Nómina:**
+   - *Edelmira del Carmen Rivas Díaz (CI 11.953.660):* Solicitada en `OD13981417` (*C.E. José Natividad Rivas Sánchez*), adscrita oficialmente en RAC a `ON00401417` (*Liceo Nocturno Mucuchíes*).
+3. **Casos Pendientes de Regularización (6 no encontrados en RAC):**
+   - No figuran en la base de datos RAC del Estado Mérida. Requieren consignar cédula y designación/contrato ante Gestión Humana.
+
+### Acciones Técnicas en Firestore (Zero-Cost Execution)
+- **Colección `cargos_personal`:** 24 documentos creados/actualizados con esquema completo de 42 atributos.
+- **Colección `planteles`:** 6 documentos actualizados con sus arreglos `personal_resumen` y contadores `total_personal`.
+- **Métricas:** 30 escrituras consumidas (0.15% del cupo diario gratuito).
