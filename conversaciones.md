@@ -5308,3 +5308,25 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - Parte 1: 76 funcionarios agrupados en sus 17 planteles oficiales según el RAC, indicando correcciones de cédula subsanadas y reubicaciones legales.  
 >    - Parte 2: 19 funcionarios no localizados en RAC agrupados por plantel reportado, con instrucciones para consignar cédula y contrato/designación ante Gestión Humana.  
 > 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 135
+
+* **Fecha / Hora:** 2026-11-04 ~09:18 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> correos_afectados: eb21denoviembre@gmail.com  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Protocolo de Regularización, Sincronización de Plantel y Enlace Seguro de Acceso (Skill 5 y Skill 6):  
+> 1. Verificación Institucional: Cuenta `eb21denoviembre@gmail.com` vinculada a la Directora **Magaly Calderón Dugarte** (C.I. 15.174.192), al frente de la **E.B. 21 de Noviembre / Epónimo "Leopoldina Albornoz" (Código DEA `OD02891419`)**, ubicada en la Parroquia Tabay, Municipio Santos Marquina (Dependencia Nacional, Código Estadístico 140802).  
+> 2. Sincronización Integral de Nómina Oficial RAC (35 Funcionarios):  
+>    - Se actualizó el documento institucional `planteles/OD02891419` incorporando el arreglo `personal_resumen` y fijando `total_personal: 35`.  
+>    - Se inyectaron exitosamente al 100% los 35 expedientes completos en `cargos_personal/OD02891419_${cedula}` con los 42 atributos oficiales del RAC.  
+> 3. Enlace Directo Out-of-Band (OOB): Se generó enlace oficial seguro para restablecimiento inmediato de contraseña vía WhatsApp sin depender del buzón de correo.  
+> 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?

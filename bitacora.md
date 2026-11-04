@@ -3356,3 +3356,17 @@ Bajo el comando operativo `CASO_HUERFANOS`, se procesó un lote de 95 funcionari
 - **Colección `cargos_personal`:** 76 documentos creados con claves compuestas `${targetDEA}_${cedula}` y esquema completo de 42 atributos.
 - **Colección `planteles`:** 17 documentos actualizados/inicializados con sus arreglos `personal_resumen` y contadores `total_personal`.
 - **Métricas:** 93 escrituras consumidas (0.46% del cupo diario gratuito de 20.000 operaciones en el plan Spark).
+
+
+---
+
+## [Operación Forense] - 2026-11-04 (Regularización y Sincronización Integral: E.B. 21 de Noviembre - Santos Marquina)
+
+### Resumen Técnico
+Se atendió el reporte de soporte institucional para el correo `eb21denoviembre@gmail.com`. La cuenta corresponde a la Directora Magaly Calderón Dugarte (C.I. 15.174.192), al frente de la **E.B. 21 de Noviembre (Código DEA `OD02891419`)**, Parroquia Tabay, Municipio Santos Marquina. Si bien el plantel contaba con datos de matrícula en Firestore, su plantilla de personal no había sido inicializada. Se realizó la extracción y carga completa de los 35 funcionarios registrados en el RAC Estado Mérida y se emitió el enlace seguro directo de acceso.
+
+### Acciones Realizadas
+1. **Colección `planteles`:** Actualizado `planteles/OD02891419` con arreglo consolidado `personal_resumen` y contador `total_personal: 35`.
+2. **Colección `cargos_personal`:** Inyectados los 35 expedientes individuales completos (`OD02891419_${cedula}`) con esquema de 42 atributos del RAC.
+3. **Generación de Enlace Seguro:** Generado enlace directo Out-of-Band (OOB) vía Firebase Auth REST API para restablecimiento inmediato de contraseña sin depender del servidor de correo.
+4. **Métricas Zero-Cost:** 36 escrituras en Firestore (0.18% del cupo diario de 20.000 operaciones).
