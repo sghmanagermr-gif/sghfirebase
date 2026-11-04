@@ -3580,3 +3580,19 @@ Se procesó la instrucción `correos_afectados` para regularizar el acceso insti
 3. **Colección `cargos_personal`:** Inyectados 9 expedientes individuales con esquema dual kebab/camelCase (`codigo-plantel`, `codigoDEA`, `codigoPlantel`, etc.).
 4. **Colección `planteles`:** Actualizados ambos planteles fijando `total_personal` (5 y 4 respectivamente) y su consolidado `personal_resumen`.
 5. **Métricas Zero-Cost:** Operación ejecutada mediante commits atómicos directos protegiendo la cuota Spark de Firestore.
+
+
+---
+
+## [Operación Forense] - 2026-11-04 (Operativo CASO_HUERFANOS Lote 10: Municipio Santos Marquina - Inyección de 9 Funcionarios en 3 Planteles con Esquema Dual)
+
+### Resumen Técnico
+Se procesó el comando `CASO_HUERFANOS` (Lote 10) contentivo de 10 trabajadores reportados en 3 planteles del **Municipio Santos Marquina** (Tabay). Tras la auditoría contra el maestro `migracion/RAC ESTADO MERIDA - PERSONAL.csv`:
+- **9 funcionarios** fueron validados en RAC en sus respectivos planteles solicitados e inyectados exitosamente en Cloud Firestore.
+- **1 funcionaria** (Mariluz Domínguez, C.I. 15.923.230 en `OD17631419`) no figura en la nómina central MPPE RAC y fue reservada en el reporte oficial.
+
+### Acciones Realizadas
+1. **Colección `cargos_personal`:** Creados 9 expedientes individuales bajo el patrón `{codigoDEA}_{cedula}` implementando el esquema dual de compatibilidad (`codigo-plantel`, `codigoPlantel`, `codigoDEA`, `nombre-apellido`, `nombre`, `nombres`, `cedula-identidad`, `cedula`, `tipo-personal`, `tipoPersonal`, `situacion-laboral`).
+2. **Colección `planteles`:** Actualizados los documentos `OD17631419` (+2), `OD03311419` (+4) y `OD02891419` (+3) mediante transformaciones atómicas (`appendMissingElements` e `increment`).
+3. **Métricas Zero-Cost:** 12 escrituras atómicas en Firestore sin consumo de cuota de lectura en cliente.
+4. **Reporte Institucional:** Generado `scratch/whatsapp_message_lote10.txt` con estructura oficial en 2 partes, omitiendo el bloque de recaudos en la Parte 2.
