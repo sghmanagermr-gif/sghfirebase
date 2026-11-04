@@ -5062,3 +5062,202 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 4. Registro Íntegro de Conversaciones: Anexadas las intervenciones 121, 122 y 123 en \`conversaciones.md\`.  
 > 5. Respaldo en Git / GitHub: Ejecutado el commit institucional y sincronización mediante \`git push origin main\`.  
 > 6. Estado Operativo: Sistema 100% activo y estable en producción (`https://sgh-merida.web.app`).
+
+---
+
+### Intervención 124
+
+* **Fecha / Hora:** 2026-11-04 ~07:50 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> vamos a comenzar a buscar verdaderos huerfanos. A continuación te voy a pasar una lista de funcionarios, que los directores alegando que esos funcionarios fueron ingresados en la jornada de julio RAC ESTADO MERIDA. Pero aquí es donde entra nuestra astucia de auditoria y veracidad. Lee la lista verifica si es cierto y hacemos un plan de trabajo. Disculpa que la lista parece algo desordenada, pero los directores envian como mejor les parezca [Lista de 81 funcionarios en 19 planteles de Municipio Tovar]  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Auditoría Forense de Veracidad sobre 81 Funcionarios del Municipio Tovar y Plan de Acción (Skill 6):  
+> 1. Auditoría Forense de Base de Datos: Cruce exhaustivo de las 81 cédulas contra \`RAC ESTADO MERIDA - PERSONAL.csv\`, \`RAC ESTADO MERIDA - PLANTELES.csv\`, \`huerfanos.csv\` y Cloud Firestore.  
+> 2. Desmontaje de Mitos y Verificación de Veracidad:  
+>    - Categoría 1 (Confirmados en RAC en su Mismo Plantel): 68 funcionarios (84%) sí están registrados oficialmente. Los directores no los veían porque sus planteles tenían nóminas pendientes de inyección en SGH o cometieron errores de un dígito al tipear la cédula o código DEA.  
+>    - Categoría 2 (Confirmados en RAC en Otro Plantel): 11 funcionarios (14%) poseen adscripción formal en otro código DEA (compartimiento de horas como en Liceo Alí Hernández, comisiones de servicio o escuelas fusionadas como Ananías Avendaño).  
+>    - Categoría 3 (Verdaderos Huérfanos / No en RAC): Solo 2 funcionarios (2%) no figuran en ninguna base regional (Enny Johanna Rojas Torres en Monseñor Moreno y Maryory Lluiseth Rondón Iriarte en Don Tomás Labrador Ramírez).  
+> 3. Hallazgos Forenses de Errores de Tipeo: Resueltas discrepancias numéricas en Leonor de la Guerra, Félix Román Duque, Don Tomás Labrador Ramírez, Santa Juana, San Isidro y Jesús Alveiro Bustamante Ramírez.  
+> 4. Plan de Trabajo en 3 Fases: Propuesta estructurada de inyección inmediata de los 68 confirmados, conciliación de los 11 compartidos y regularización de los 2 verdaderos huérfanos.  
+> 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 125
+
+* **Fecha / Hora:** 2026-11-04 ~08:00 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Tus resultados me parecen bien, pero aclarame algo en resumes y sencillo  
+> 1- Los 68 funcionarios estén en el RAC ESTADO MERIDA pero no en SGH 2.29.6  
+> 2- Los 11 funcionarios están en el RAC ESTADO MERIDA pero no en SGH 2.29.6  
+> 3- Los 2 funcionarios no están ni en el RAC ESTADO MERIDA ni el SGH 2.29.6  
+> ¿Es así la cosa?  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Clarificación y Validación Estructurada en Tres Puntos (Skill 6):  
+> 1. Validación del Punto 1 (Los 68): Confirmado. Existen y son legítimos en el RAC en sus mismas escuelas; la razón por la que no aparecen en SGH 2.29.6 es porque su nómina aún no ha sido inyectada en la base de datos web.  
+> 2. Validación y Matiz del Punto 2 (Los 11): Confirmado en la escuela que los reclama. Están en el RAC pero asignados formalmente a otro plantel (horas compartidas o escuelas fusionadas). En SGH 2.29.6 no figuran en la escuela donde están trabajando físicamente hoy.  
+> 3. Validación del Punto 3 (Los 2): Exactamente así. No existen en el RAC ni en SGH 2.29.6; son los únicos dos verdaderos huérfanos que requieren verificación de credenciales.  
+> 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 126
+
+* **Fecha / Hora:** 2026-11-04 ~08:05 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Ok, entonces, ¿puedes subir los 68 + 11 funcionarios que si están en el RAC ESTADO MERIDA a firebase para que sus directores los puedan ver? ¿Cómo lo harías?  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Plan Técnico y Operativo para la Inyección de 79 Funcionarios en Firebase (Skill 6):  
+> 1. Viabilidad y Costo Cero: Se confirma la total viabilidad a costo cero (consumo estimado de ~98 escrituras de las 20.000 disponibles diariamente en el plan Spark).  
+> 2. Metodología de Carga en 3 Pasos:  
+>    - Extracción y corrección: Obtención de expedientes completos desde el RAC aplicando las cédulas y códigos DEA subsanados en la auditoría.  
+>    - Destino y vinculación de horas: Los 68 se asignan a su plantel natural; los 11 (horas compartidas) se asocian al plantel donde laboran actualmente preservando nota de su adscripción original.  
+>    - Inyección atómica dual: Creación simultánea del expediente en `cargos_personal` y actualización de la lista rápida `personal_resumen` en `planteles`.  
+> 3. Solicitud de autorización de ejecución al Administrador.  
+> 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 127
+
+* **Fecha / Hora:** 2026-11-04 ~08:08 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> No, los 11 funcionarios deben ser insertados en el SGH v2.29.6, en el plantel segun el RAC ESTADO MERIDA  
+> Si me entiendes  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Alineación Estricta al Principio de Veracidad y Legalidad del RAC Estado Mérida (Skill 6):  
+> 1. Comprensión Total de la Directriz: Se ratifica y adopta sin reservas la instrucción del Administrador. Queda prohibido asociar funcionarios a planteles por meros reclamos verbales o cargas horarias no formalizadas en el RAC.  
+> 2. Regla Universal Aplicada a los 79 Funcionarios (68 + 11): Los 79 funcionarios serán inyectados en SGH v2.29.6 estrictamente en el código DEA del plantel que dicta el documento oficial \`RAC ESTADO MERIDA - PERSONAL.csv\`.  
+> 3. Destino Oficial de los 11 Casos:  
+>    - Profesores del Alí Hernández se insertan en sus planteles oficiales: \`S1067D1421\` (José Nucete Sardi), \`S0271D1421\` (Félix Román Duque) y \`OD17651418\` (Liceo La Playa).  
+>    - Casos de Don Tomás Labrador y Ciudad Tovar se cargan bajo su DEA oficial del RAC (\`OD02201421\`, \`ON14941421\`, \`OD02211403\`, \`OD02911421\` y \`ON14991421\`).  
+>    - Norma Guerrero se asigna a su DEA oficial \`ON15731418\`.  
+> 4. Solicitud de confirmación final para iniciar la inyección técnica masiva en Firestore a costo cero.  
+> 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 128
+
+* **Fecha / Hora:** 2026-11-04 ~08:15 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Sí listo, ejecute la inyección de los 79 funcionarios con esta distribución oficial exacta  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Ejecución Exitosa de Inyección Masiva de 79 Funcionarios en Firebase (Skill 6):  
+> 1. Inyección de Expedientes (Fase 1): Creados exitosamente los 79 documentos individuales en la colección \`cargos_personal\` (79/79 exitosos, 0 fallos), cargados con sus fichas completas extraídas del RAC (identidad, datos de contacto, cargos, asignación horaria y fechas).  
+> 2. Actualización de Planteles (Fase 2): Creados y sincronizados los 24 planteles oficiales en la colección \`planteles\`, consolidando sus listas visibles \`personal_resumen\` y contadores de nómina.  
+> 3. Adscripción Estricta al RAC Cumplida:  
+>    - Profesores con horas en Alí Hernández quedan asentados legalmente en José Nucete Sardi (\`S1067D1421\`), Félix Román Duque (\`S0271D1421\`) y Liceo La Playa (\`OD17651418\`).  
+>    - Personal de Jesús Alveiro Bustamante (\`OD02161421\`), Leonor de la Guerra (\`OD09661421\`), Santa Juana (\`OD05081421\`), San Isidro (\`OD05091421\`), Don Tomás Labrador (\`OD02201421\`) y demás planteles 100% operativos.  
+> 4. Verificación en Vivo: Comprobada la persistencia en tiempo real en Firestore.  
+> 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 129
+
+* **Fecha / Hora:** 2026-11-04 ~08:24 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> ¿Cuales fueron los dos funcionarios que no fueron registrados?  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Identificación Detallada de los Dos Funcionarios Excluidos por Falta de Registro Oficial (Skill 6):  
+> 1. Primer Funcionario:  
+>    - Nombre: Enny Johanna Rojas Torres  
+>    - Cédula reportada: 13.965.858  
+>    - Plantel solicitante: Escuela Monseñor Moreno (DEA \`OD02281421\`)  
+>    - Cargo reportado: Docente  
+>    - Diagnóstico de auditoría: No existe registro en el RAC oficial ni por cédula ni por apellidos.  
+> 2. Segundo Funcionario:  
+>    - Nombre: Maryory Lluiseth Rondón Iriarte  
+>    - Cédula reportada: 21.330.126  
+>    - Plantel solicitante: Escuela Don Tomás Labrador Ramírez (DEA \`OD02201421\`)  
+>    - Cargo reportado: Docente / Personal  
+>    - Diagnóstico de auditoría: No existe registro en el RAC oficial del estado.  
+> 3. Recomendación de Gestión: Solicitar a las direcciones copia en físico/digital de la cédula de identidad y constancia de designación o contrato para verificar si hubo un error al transcribir el número o si corresponden a nuevos ingresos pendientes de inclusión ministerial.  
+> 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 130
+
+* **Fecha / Hora:** 2026-11-04 ~08:27 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Ok ahora pasa el listado por planteles de los funcionarios subidos a firebase  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Entrega del Listado Consolidado por Plantel de los 79 Funcionarios Inyectados (Skill 6):  
+> 1. Reporte Oficial Ordenado: Despliegue estructurado de los 24 planteles receptores en orden alfabético, detallando nombre institucional, código DEA, dependencia territorial y nómina con Cédula, Nombres Completos y Cargo Oficial RAC.  
+> 2. Total Cuadrado: 79 funcionarios cargados al 100% en Firestore.  
+> 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 131
+
+* **Fecha / Hora:** 2026-11-04 ~08:30 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Por favor en una lista que no este en tablas, porque lo voy a copiar para pasarlo por un mensaje de whatsapp  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Entrega del Listado Adaptado a Formato de Mensajería WhatsApp (Skill 6):  
+> 1. Formateo Especial para WhatsApp: Estructurado sin tablas, utilizando viñetas limpias (•), resaltado con negritas WhatsApp (`*texto*`), encabezados con emojis (📍) y orden alfabético por plantel.  
+> 2. Contenido Completo y Exacto: 79 funcionarios en 24 planteles con Cédula, Nombres y Cargo Oficial del RAC.  
+> 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 132
+
+* **Fecha / Hora:** 2026-11-04 ~08:43 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Gracias por ese trabajo. Sí los resultados fueron satisfactorios.  
+> Vendrán mas casos como ese, ¿le podemos poner un nombre clave para cuando te transmita otro?  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Protocolo de Aprobación, Registro en Bitácora y Establecimiento de Nombre Clave Operativo (Skill 5 y Skill 6):  
+> 1. Registro Obligatorio: Confirmada la satisfacción del Administrador, se actualizó la memoria histórica en \`bitacora.md\` y \`conversaciones.md\`.  
+> 2. Respaldo Remoto en Git / GitHub: Ejecución de commit institucional y sincronización a \`origin main\`.  
+> 3. Propuesta de Nombre Clave: Se define el comando clave \`CASO_HUERFANOS\` (o \`LOTE_HUERFANOS\`) para que el Administrador transmita futuros listados desordenados de directores activando de forma inmediata la auditoría forense, corrección de tipeo, conciliación RAC e inyección en Firestore.  
+> 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?

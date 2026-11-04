@@ -3305,3 +3305,28 @@ Para garantizar la sostenibilidad a costo cero dentro del plan Spark de Firebase
 - **Versión SemVer:** Incremento a PARCHE `v2.29.6` en `webapp/package.json`, `webapp/index.html` y `versiones.md`.
 - **Compilación de Producción:** Vite 8.2.1 generó artefactos en 1.23s.
 - **Despliegue a Firebase Hosting:** Desplegado con éxito al proyecto `sgh-merida` y activo en `https://sgh-merida.web.app`.
+
+---
+
+## [Operación Forense] - 2026-11-04 (Conciliación e Inyección Masiva de 79 Funcionarios Oficiales RAC Estado Mérida - Tovar)
+
+### Resumen Técnico
+Se ejecutó una auditoría forense integral de veracidad sobre un lote de 81 funcionarios reportados por directores de 19 planteles del Municipio Tovar bajo la presunción de ser "huérfanos de la jornada de julio". El cruce automatizado contra el maestro institucional `migracion/RAC ESTADO MERIDA - PERSONAL.csv` desmintió la desvinculación masiva: 73 funcionarios ya contaban con expediente oficial, y tras subsanar errores de transcripción de cédulas y códigos DEA por parte de las direcciones, se logró autenticar al 97.5% del lote. En apego estricto al principio de veracidad administrativa, los 79 funcionarios confirmados fueron inyectados en Firestore en sus códigos DEA oficiales del RAC.
+
+### Hallazgos Forenses y Conciliación
+1. **Errores de Transcripción Subsanados:**
+   - *Escuela Leonor de la Guerra:* Cocinera CNAE Yulye Molina corregida de CI 19.847.506 a **19.487.506** (`OD09661421`).
+   - *Complejo Educativo Félix Román Duque:* Subsanadas 4 cédulas (Gilberto Montero CI 10.902.209, Glenda Carrillo CI 23.240.278, Luis Méndez CI 10.897.681, Raiza Morales CI 80.709.438).
+   - *Escuela Don Tomás Labrador Ramírez:* Cocinera Aura María Hernández corregida a CI **19.046.073** (`OD02201421`).
+   - *IEEB Jesús Alveiro Bustamante Ramírez:* Código DEA corregido de OD02261421 al oficial **OD02161421** (6 trabajadores legitimados).
+   - *NER 559 Santa Juana y San Isidro:* Homologados bajo sus DEA oficiales **OD05081421** y **OD05091421**.
+2. **Adscripción Estricta de Horas Compartidas (11 funcionarios):**
+   - Docentes que imparten clases en Liceo Alí Hernández (`S0271N1421`) fueron registrados en sus planteles titulares de nómina RAC: Liceo José Nucete Sardi (`S1067D1421`), Félix Román Duque (`S0271D1421`) y Liceo La Playa (`OD17651418`).
+   - Docentes de E.P.E. Ananías Avendaño (`ON14991421`), Francisco de Asís (`OD02211403`) y Matías Codina (`OD02911421`) asignados a sus DEA de origen legal.
+3. **Identificación de Verdaderos Huérfanos (2 casos):**
+   - Enny Johanna Rojas Torres (CI 13.965.858 - Monseñor Moreno) y Maryory Lluiseth Rondón Iriarte (CI 21.330.126 - Don Tomás Labrador) son los únicos 2 casos no presentes en el RAC, remitidos a validación documental física.
+
+### Acciones Técnicas en Firestore (Zero-Cost Execution)
+- **Colección `cargos_personal`:** Se crearon/actualizaron 79 documentos individuales con clave compuesta `${dea}_${cedula}`, incorporando esquema de 42 atributos institucionales completos.
+- **Colección `planteles`:** Se crearon/actualizaron 24 documentos de planteles consolidando sus arreglos `personal_resumen` y contadores `total_personal`.
+- **Métricas:** 103 escrituras consumidas (0.51% del cupo diario gratuito de 20.000 operaciones en el plan Spark).
