@@ -4,6 +4,21 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.29.6 (4 de Noviembre de 2026)
+
+- **Optimización Preventiva de Cuotas de Correo y Protección del Plan Spark (Ocultamiento de "¿Olvidaste tu contraseña?"):**
+  - **Requerimiento Institucional:**
+    - Para evitar la saturación del cupo diario gratuito de correos automáticos en Firebase (100 correos/día en el plan Spark) y prevenir intentos fallidos de directores al no recibir los enlaces de recuperación (debido a filtros de spam de proveedores externos), se solicitó invisibilizar el acceso público de restablecimiento de contraseña en la pantalla de inicio de sesión. El equipo de administración asume el acompañamiento y asignación asistida de accesos mediante enlaces directos por WhatsApp.
+  - **Solución Implementada:**
+    - **Pantalla de Inicio de Sesión (`webapp/index.html`):**
+      - Se aplicó `display: none !important;` al enlace `#link-forgot-pwd` («¿Olvidaste tu contraseña?»), retirándolo de la vista de los usuarios en el login.
+      - Se mantiene la estructura interna protegida sin alterar la estabilidad de scripts ni generar excepciones en `webapp/src/main.js`.
+  - **Control SemVer y Despliegue:**
+    - Elevación de versión a PARCHE `v2.29.6`.
+    - Compilación exitosa en Vite (1.23s) y despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.29.5 (3 de Noviembre de 2026)
 
 - **Buscador Integral Multi-Criterio con Soporte Completo por Correo Electrónico en Usuarios del Sistema y Asistente de Personal:**

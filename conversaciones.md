@@ -4998,3 +4998,67 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 2. Despliegue Oficial en Hosting: Publicado con éxito en Firebase Hosting para el proyecto institucional `sgh-merida`.  
 > 3. Disponibilidad Inmediata: La versión `v2.29.5` se encuentra activa en producción en `https://sgh-merida.web.app`, incorporando la búsqueda en tiempo real por correo electrónico tanto en Usuarios del Sistema como en la Nómina de Personal.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 121
+
+* **Fecha / Hora:** 2026-11-04 ~07:25 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+> Ponme en contexto. La verificación del registro por correo está funcionando.  
+> Lo pregunto porque hay directores que no les está llegando a la carpeta spam [Adjunta captura de métricas de Cloud Firestore nov 3 - nov 4]  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Diagnóstico y Contexto Integral del Sistema de Verificación de Correos y Métricas de Servidor (Skill 6):  
+> 1. Lectura Previa Obligatoria: Leído y procesado en su totalidad el archivo `SKILL_sgh_firebase.md` antes de emitir cualquier diagnóstico.  
+> 2. Diagnóstico del Envío de Correos: Se explica en lenguaje llano por qué los correos automáticos no llegan a la bandeja ni a spam (remitente no autenticado noreply@sgh-merida.firebaseapp.com descartado silenciosamente por pasarelas de correo, y cupo diario del plan Spark gratuito).  
+> 3. El Mecanismo de Salvaguarda (Bypass de Aprobación): Se aclara que el registro en base de datos nunca se detiene y que al marcar la cuenta como 'APROBADO', el sistema suprime automáticamente la necesidad de validar el correo.  
+> 4. Canal de Contingencia (WhatsApp OOB): Respaldo directo mediante enlaces seguros vía mensajería instantánea.  
+> 5. Interpretación de la Captura Adjunta: Aclaratoria de que las métricas corresponden al motor de base de datos Firestore (125k lecturas acumuladas del 3 de nov) y que el ciclo de consumo se reinició fresco y despejado para la jornada del 4 de nov.  
+> 6. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 122
+
+* **Fecha / Hora:** 2026-11-04 ~07:34 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> perfecto, entonces para que no se sature el cupo diario, invisibiliza la opción ¿Olvidaste tu contraseña? y nosostros nos encargamos de apoyarlos cuando olviden la contraseña  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Ocultamiento Preventivo de Recuperación de Contraseña y Despliegue de la Versión v2.29.6 (Skill 6):  
+> 1. Modificación de Interfaz: Invisibilizado el enlace "¿Olvidaste tu contraseña?" en el formulario de inicio de sesión (`webapp/index.html`) aplicando `display: none !important;`.  
+> 2. Estabilidad de Código Preservada: Los controladores de eventos en `webapp/src/main.js` se mantienen intactos y seguros sin generar errores ni advertencias de consola.  
+> 3. Control SemVer: Incremento de versión de parche a `v2.29.6` en `webapp/package.json` e `webapp/index.html`.  
+> 4. Compilación y Despliegue a Producción: Compilado con Vite en 1.23s y desplegado exitosamente a Firebase Hosting (`https://sgh-merida.web.app`).  
+> 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+---
+
+### Intervención 123
+
+* **Fecha / Hora:** 2026-11-04 ~07:37 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Si, Satisfactorios  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Protocolo de Aprobación, Registro Histórico y Respaldo en Repositorio Remoto (Skill 5 y Skill 6):  
+> 1. Verificación de Conformidad: Recibida confirmación explícita de satisfacción del Administrador.  
+> 2. Registro en Bitácora Institucional: Actualizado el archivo físico \`bitacora.md\` documentando la versión \`v2.29.6\`, la decisión arquitectónica de protección del cupo diario de correos del plan Spark de Firebase y el flujo de asistencia asistida por WhatsApp.  
+> 3. Registro en Historial de Versiones: Registrada la versión \`v2.29.6\` en \`versiones.md\`.  
+> 4. Registro Íntegro de Conversaciones: Anexadas las intervenciones 121, 122 y 123 en \`conversaciones.md\`.  
+> 5. Respaldo en Git / GitHub: Ejecutado el commit institucional y sincronización mediante \`git push origin main\`.  
+> 6. Estado Operativo: Sistema 100% activo y estable en producción (`https://sgh-merida.web.app`).

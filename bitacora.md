@@ -3284,3 +3284,24 @@ Despliegue a producción de la versión `v2.29.5` en Firebase Hosting tras la va
 - **Hosting URL:** `https://sgh-merida.web.app`.
 - **Funcionalidad Activa:** Búsqueda integral por correo electrónico en los módulos de Usuarios y Nómina de Personal.
 - **Respaldo:** Sincronizado en `conversaciones.md`, `bitacora.md` y GitHub (`origin main`).
+
+---
+
+## [2.29.6] - 2026-11-04 (Protección de Cuota Spark y Ocultamiento de "¿Olvidaste tu contraseña?")
+
+### Resumen Técnico
+Para garantizar la sostenibilidad a costo cero dentro del plan Spark de Firebase y evitar el agotamiento de la cuota diaria de correos automáticos (límite de 100 emails/día), se procedió a invisibilizar la opción pública de restablecimiento de contraseña en el formulario de inicio de sesión. La gestión de restablecimiento de credenciales queda canalizada formalmente a través del equipo de administración mediante enlaces directos seguros (OOB) distribuidos por WhatsApp.
+
+### Decisiones Arquitectónicas y Lógicas Implementadas
+1. **Invisibilización en Capa de Presentación (`webapp/index.html`):**
+   - Se inyectó la propiedad `display: none !important;` sobre el elemento ancla `#link-forgot-pwd` («¿Olvidaste tu contraseña?»).
+   - Se mantiene la estructura del DOM y los elementos del modal `#modal-recuperar-pwd` en estado latente para asegurar que los controladores de eventos y referencias en `webapp/src/main.js` mantengan absoluta coherencia sin lanzar errores en tiempo de ejecución.
+2. **Mitigación de Bloqueos Externos de Entrega:**
+   - Previene que los directores queden en espera indefinida por correos automáticos descartados silenciosamente por filtros de seguridad de proveedores de correo (Gmail, Hotmail, Cantv).
+3. **Flujo de Soporte Directivo Consolidado:**
+   - La entrega de accesos y reseteos se realiza de manera controlada y auditada vía WhatsApp mediante generación manual de enlaces autorizados en Firestore/Auth.
+
+### Control SemVer y Despliegue
+- **Versión SemVer:** Incremento a PARCHE `v2.29.6` en `webapp/package.json`, `webapp/index.html` y `versiones.md`.
+- **Compilación de Producción:** Vite 8.2.1 generó artefactos en 1.23s.
+- **Despliegue a Firebase Hosting:** Desplegado con éxito al proyecto `sgh-merida` y activo en `https://sgh-merida.web.app`.
