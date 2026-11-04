@@ -5552,3 +5552,73 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 2. Formato de Comunicación WhatsApp:  
 >    - Mensaje entregado con viñetas, negritas y emojis, omitiendo permanentemente el párrafo de instrucción en la Parte 2 según la directriz institucional.  
 > 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 145
+
+* **Fecha / Hora:** 2026-11-04 ~13:44 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Antes de darte luz verde, agrega los siguiente huerfanos  
+> Código DEA: OD14211418  
+> institución: ESCUELA DR. MISAEL ROSALES  
+> Cédula y nombres del Funcionario  
+> * V - 19.848.470 María Isabel Pereira Moreno  
+> * V - 20.395.518 Nohelia Andreina Vivas Vivas  
+> * V- 20.218.551 Luis Gerardo Belandria Mora  
+> * V- 20.396.223 Ana Gabriel Pérez Pereira  
+> * V- 18.809.454 Grisel Dairis Vivas Gutiérrez  
+> * V- 20.829.672 Domingo Alberto Arellano Carrero   
+> * V- 23.493.571 Oscar Cuadros Espinel  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Protocolo de Control de Calidad y Auditoría Forense Lote 6 Consolidado (Skill 5 y Skill 6):  
+> 1. Verificación e Identificación de los 7 Casos Agregados:  
+>    - Plantel: **Escuela Dr. Misael Rosales (Código DEA `OD14211418`)**, Municipio Rivas Dávila.  
+>    - 100% de coincidencia en el RAC regional: los 7 funcionarios pertenecen exactamente a la Escuela Dr. Misael Rosales.  
+>    - Rescate forense por error de tipeo en cédula: Grisel Dairis Vivas Gutiérrez (reportada con CI 18.809.454) corregida a su cédula oficial en RAC **V-18.209.454** (Aseador II, titular, código RAC 8032N).  
+> 2. Verificación Anti-Duplicados en Firestore:  
+>    - Se consultaron los 7 casos contra la colección `cargos_personal` y `personal_resumen` de `OD14211418` (que poseía 4 funcionarios preexistentes). Cero duplicados detectados.  
+> 3. Balance Consolidado Lote 6 (Municipio Rivas Dávila):  
+>    - Total reportados: 54 casos en 9 planteles.  
+>    - Confirmados en RAC: 39 funcionarios con 42 atributos institucionales.  
+>    - No localizados en RAC (Huérfanos puros): 15 funcionarios.  
+> 4. Solicitud de Luz Verde para inyección segura de los 39 funcionarios en los 9 planteles.  
+> 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 146
+
+* **Fecha / Hora:** 2026-11-04 ~13:53 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Luz verde  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Ejecución de Inyección Lote 6 y Entrega de Formato para WhatsApp (Skill 5 y Skill 6):  
+> 1. Inyección Exitosa en Cloud Firestore:  
+>    - Se inyectaron al 100% los 39 expedientes individuales en la colección `cargos_personal` (`${dea}_${cedula}`) con el esquema de 42 atributos del RAC Estado Mérida.  
+>    - Se actualizaron los 9 planteles destino en la colección `planteles`:  
+>      * `OD08191418` (Escuela Víctor Evencio Castillo): +6 funcionarios (Total: 25).  
+>      * `OD14221418` (Escuela Zaida Mora): +1 funcionario (Total: 20).  
+>      * `OD14061418` (Escuela Rita Verdi): +3 funcionarios (Total: 15).  
+>      * `OD01931418` (Escuela San Pablo): +2 funcionarios (Total: 51).  
+>      * `OD02271418` (Escuela José Gregorio Ramírez): +2 funcionarios (Total: 26).  
+>      * `ON15731418` (Liceo Don Luis Zambrano): +2 funcionarios (Total: 3).  
+>      * `OD00701418` (Complejo Educativo Br. Apolonio Rosales): +12 funcionarios (Total: 60).  
+>      * `OD01921418` (Escuela Flor de Maldonado): +4 funcionarios (Total: 54).  
+>      * `OD14211418` (Escuela Dr. Misael Rosales): +7 funcionarios (Total: 11).  
+>    - Cero duplicados generados y cero registros cruzados en la base de datos de producción.  
+> 2. Formato de Comunicación WhatsApp:  
+>    - Mensaje entregado con viñetas, negritas y emojis, omitiendo permanentemente el párrafo de instrucción en la Parte 2 según la directriz institucional.  
+> 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?

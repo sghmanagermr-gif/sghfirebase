@@ -3458,3 +3458,41 @@ Se procesó el Lote 5 del operativo `CASO_HUERFANOS` para la Escuela La Vega de 
 2. **Colección `planteles`:** Actualizado `planteles/OD14281419` incorporando a las 2 trabajadoras al arreglo consolidado `personal_resumen`, elevando el contador `total_personal` de 12 a 14 funcionarios.
 3. **Formato de Comunicación:** Se actualizó la plantilla de WhatsApp suprimiendo de manera definitiva el párrafo de instrucciones para recaudos en la Parte 2.
 4. **Métricas Zero-Cost:** 3 escrituras en Firestore (0.015% del cupo diario gratuito).
+
+
+---
+
+## [Operación Forense] - 2026-11-04 (Operativo CASO_HUERFANOS Lote 6: Control de Calidad Anti-Duplicados e Inyección de 39 Funcionarios - Municipio Rivas Dávila)
+
+### Resumen Técnico
+Se procesó el Lote 6 del operativo institucional `CASO_HUERFANOS` correspondiente al Municipio Rivas Dávila (códigos DEA `1418`, Bailadores y Gerónimo Maldonado). Se evaluaron inicialmente 47 funcionarios reportados en 8 planteles, a los cuales se sumaron posteriormente 7 funcionarios solicitados para la Escuela Dr. Misael Rosales (`OD14211418`), totalizando **54 funcionarios auditados en 9 planteles**. La auditoría forense contra el archivo maestro `migracion/RAC ESTADO MERIDA - PERSONAL.csv` confirmó que **39 trabajadores (72.2%)** cuentan con estatus oficial y activo en la nómina del Estado Mérida. Previo a la escritura en base de datos, se ejecutó una verificación exhaustiva en vivo sobre Cloud Firestore (`sgh-merida`), certificando que ninguna de las 39 cédulas existía en `cargos_personal` (0 duplicados). Los 39 funcionarios fueron inyectados exitosamente y los 9 planteles destino fueron actualizados. Los 15 funcionarios no encontrados en el RAC fueron catalogados como huérfanos puros.
+
+### Hallazgos Forenses y Conciliación
+1. **Subsanaciones por Errores de Tipeo y Omisión de Cédulas (6 rescates exitosos):**
+   - *Escuela San Pablo (`OD01931418`):* Erika Aracelis Pérez García (reportada sin cédula) fue localizada con C.I. **V-20.397.579** (Docente II titular).
+   - *Escuela José Gregorio Ramírez (`OD02271418`):* Marili Solena Rojas Ramírez (reportada sin cédula) fue localizada con C.I. **V-19.047.873** (Docente Único titular).
+   - *Complejo Educativo Br. Apolonio Rosales (`OD00701418`):*
+     * Ana Yamile Medina Bastos: Reportada CI 20396054 -> Cédula oficial en RAC **V-20.396.055** (*Medina Basto*).
+     * Jennifer Andreina Rumano Ruiz: Reportada CI 20394726 -> Cédula y apellido oficial en RAC **V-20.294.726** (*Jennifer Andreina Rujano Ruiz*).
+     * Janeth Paola Arellano Maldonado: Reportada CI 23555402 -> Cédula oficial en RAC **V-23.555.502**.
+   - *Escuela Dr. Misael Rosales (`OD14211418`):* Grisel Dairis Vivas Gutiérrez (reportada con CI 18.809.454) fue corregida a su cédula oficial en RAC **V-18.209.454** (Aseador II titular, código RAC 8032N).
+2. **Planteles con Adscripción en Nómina RAC Diferente al Reporte Directivo:**
+   - Dubelis Yaritza Márquez Rosales, Yeilin Carolina Ramírez Velazco y Yusneidy Alexandra Rodríguez Molina solicitadas en `OD14061418` (*Rita Verdi*), figuran en nómina RAC adscritas a `OD14071418` (*Mesa Laguna*).
+   - Mayorlin del Valle Ramírez solicitada en `OD02271418` (*José Gregorio Ramírez*), figura en RAC adscrita a `OD14121418` (*Loma del Árbol*).
+   - Isbelia Consuelo Contreras Belandria solicitada en `ON15731418` (*Liceo Don Luis Zambrano*), figura en RAC adscrita a `OD00701418` (*Br. Apolonio Rosales*).
+3. **Casos Pendientes de Regularización (15 no encontrados en RAC):**
+   - Corresponden a 2 en `OD14061418`, 12 en `OD00701418` y 1 en `OD01921418`.
+
+### Acciones Técnicas en Firestore (Zero-Cost Execution)
+- **Colección `cargos_personal`:** 39 documentos creados con el esquema estricto de 42 atributos institucionales.
+- **Colección `planteles`:** 9 planteles actualizados con `personal_resumen`, contadores `total_personal` y `ultima_actualizacion`:
+  - `OD08191418` (Víctor Evencio Castillo): 25 funcionarios.
+  - `OD14221418` (Zaida Mora): 20 funcionarios.
+  - `OD14061418` (Rita Verdi): 15 funcionarios.
+  - `OD01931418` (San Pablo): 51 funcionarios.
+  - `OD02271418` (José Gregorio Ramírez): 26 funcionarios.
+  - `ON15731418` (Liceo Don Luis Zambrano): 3 funcionarios.
+  - `OD00701418` (Br. Apolonio Rosales): 60 funcionarios.
+  - `OD01921418` (Flor de Maldonado): 54 funcionarios.
+  - `OD14211418` (Dr. Misael Rosales): 11 funcionarios.
+- **Métricas:** 48 escrituras en Firestore (0.24% del cupo diario gratuito).
