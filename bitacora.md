@@ -3384,3 +3384,21 @@ Se procesó el reporte de soporte institucional para el correo `uebsimonacorredo
 2. **Colección `cargos_personal`:** Inyectados los 29 expedientes individuales completos (`OD14831420_${cedula}`) con esquema de 42 atributos del RAC.
 3. **Generación de Enlace Seguro:** Generado enlace directo Out-of-Band (OOB) vía Firebase Auth REST API para restablecimiento de contraseña vía WhatsApp.
 4. **Métricas Zero-Cost:** 30 escrituras en Firestore (0.15% del cupo diario gratuito).
+
+
+---
+
+## [Operación Forense] - 2026-11-04 (Regularización y Sincronización Integral: Planteles OD13501413 y OD13551413 - Piñango, Miranda)
+
+### Resumen Técnico
+Se atendió el reporte de soporte institucional para dos cuentas directivas: `escuelafranciscomiranda88@gmail.com` y `escuelamariabriseno@gmail.com`. La auditoría constató que ambas cuentas corresponden a la Directora Beatriz del Carmen Rivas Terán (C.I. 18.149.517), responsable de dos instituciones educativas en la Parroquia Piñango del Municipio Miranda. Ambos planteles contaban con registro en Firestore pero carecían de sus plantillas de personal. Se sincronizaron un total de 10 trabajadores oficiales del RAC Estado Mérida y se generaron enlaces directos Out-of-Band (OOB).
+
+### Acciones Realizadas
+1. **Colección `planteles`:**
+   - Actualizado `planteles/OD13501413` (Escuela Ezequiel Zamora) con arreglo consolidado `personal_resumen` y `total_personal: 2`.
+   - Actualizado `planteles/OD13551413` (Escuela Simón Bolívar) con arreglo consolidado `personal_resumen` y `total_personal: 8`.
+2. **Colección `cargos_personal`:**
+   - Inyectados 2 expedientes para `OD13501413` con 42 atributos del RAC.
+   - Inyectados 8 expedientes para `OD13551413` con 42 atributos del RAC.
+3. **Generación de Enlaces Seguros:** Generados 2 enlaces Out-of-Band (OOB) mediante Firebase Auth REST API para restablecimiento directo vía WhatsApp.
+4. **Métricas Zero-Cost:** 12 escrituras en Firestore (0.06% del cupo diario gratuito).

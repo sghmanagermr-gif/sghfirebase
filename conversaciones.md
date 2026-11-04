@@ -5352,3 +5352,28 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - Se inyectaron exitosamente al 100% los 29 expedientes completos en `cargos_personal/OD14831420_${cedula}` con los 42 atributos oficiales del RAC.  
 > 3. Enlace Directo Out-of-Band (OOB): Se generó enlace oficial seguro para restablecimiento inmediato de contraseña vía WhatsApp sin depender del servidor de correo.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 137
+
+* **Fecha / Hora:** 2026-11-04 ~10:02 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> correos_afectados:   
+> escuelafranciscomiranda88@gmail.com, escuelamariabriseno@gmail.com  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Protocolo de Regularización, Sincronización de Planteles y Enlaces Seguros de Acceso (Skill 5 y Skill 6):  
+> 1. Verificación Institucional: Ambas cuentas pertenecen a la misma docente directiva, **Prof. Beatriz del Carmen Rivas Terán** (C.I. 18.149.517, Tel. 0416-3464131), en la Parroquia Piñango, Municipio Miranda:  
+>    - Cuenta 1 (`escuelafranciscomiranda88@gmail.com`): Asignada a la **Escuela Ezequiel Zamora (Código DEA `OD13501413`)**.  
+>    - Cuenta 2 (`escuelamariabriseno@gmail.com`): Asignada a la **Escuela Simón Bolívar (Código DEA `OD13551413`)**.  
+> 2. Sincronización Integral de Nóminas Oficiales RAC:  
+>    - *Plantel OD13501413:* Actualizado con los 2 trabajadores oficiales en `personal_resumen` e inyectados 2 documentos en `cargos_personal`.  
+>    - *Plantel OD13551413:* Actualizado con los 8 trabajadores oficiales en `personal_resumen` e inyectados 8 documentos en `cargos_personal` (incluyendo la ficha de la Directora Beatriz Rivas).  
+> 3. Enlaces Directos Out-of-Band (OOB): Generados y entregados enlaces seguros oficiales individuales para restablecimiento inmediato vía WhatsApp sin depender de bandejas de correo.  
+> 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
