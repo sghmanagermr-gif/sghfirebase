@@ -5622,3 +5622,56 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 2. Formato de Comunicación WhatsApp:  
 >    - Mensaje entregado con viñetas, negritas y emojis, omitiendo permanentemente el párrafo de instrucción en la Parte 2 según la directriz institucional.  
 > 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 147
+
+* **Fecha / Hora:** 2026-11-04 ~14:00 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> CASO_HUERFANOS  
+> Nombre del Plantel: Complejo Educativo Omar Gregorio Rivas  
+> Código DEA: S2855D1410   
+> CI. Nombres y Apellidos Docentes:  
+> CI Nombres Y Apellidos ADM.:   
+> ✅Yuleny Del Carmen Bernal Rangel   
+> C. I 19529390  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Protocolo de Control de Calidad y Auditoría Forense Lote 7 (Skill 5 y Skill 6):  
+> 1. Verificación e Identificación Institucional:  
+>    - Plantel: **Complejo Educativo Omar Gregorio Rivas / E.B. Palmira (Código DEA `S2855D1410`)**, Municipio Julio César Salas.  
+>    - Coincidencia exacta al 100% en el maestro oficial `RAC ESTADO MERIDA - PERSONAL.csv`:  
+>      * Yuleny Del Carmen Bernal Rangel (C.I. 19.529.390): Tipo Personal Administrativo, Cargo Bachiller II (Código RAC `110000`), 37 horas administrativas semanales, condición titular activo, adscrita exactamente a `S2855D1410`.  
+> 2. Verificación Anti-Duplicados en Firestore:  
+>    - Se consultó en vivo la colección `cargos_personal` y el arreglo `personal_resumen` de `planteles/S2855D1410` (que contaba con 8 funcionarios): ninguna coincidencia previa (0 duplicados).  
+> 3. Formato WhatsApp: Generado mensaje listo para copiar omitiendo de forma definitiva el párrafo de instrucción sobre recaudos.  
+> 4. Solicitud de Luz Verde para inyección segura.  
+> 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 148
+
+* **Fecha / Hora:** 2026-11-04 ~14:03 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Luz verde  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Ejecución de Inyección Lote 7 y Entrega de Formato para WhatsApp (Skill 5 y Skill 6):  
+> 1. Inyección Exitosa en Cloud Firestore:  
+>    - Creado documento `cargos_personal/S2855D1410_19529390` con los 42 atributos del RAC regional del Estado Mérida.  
+>    - Actualizado el documento `planteles/S2855D1410` (*Complejo Educativo Omar Gregorio Rivas*), incorporando a la trabajadora en `personal_resumen` y elevando el contador `total_personal` de 8 a 9 funcionarios.  
+>    - Cero duplicados generados.  
+> 2. Formato de Comunicación WhatsApp: Mensaje entregado con viñetas, negritas y emojis listo para enviar a directivos.  
+> 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?

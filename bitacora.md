@@ -3496,3 +3496,17 @@ Se procesó el Lote 6 del operativo institucional `CASO_HUERFANOS` correspondien
   - `OD01921418` (Flor de Maldonado): 54 funcionarios.
   - `OD14211418` (Dr. Misael Rosales): 11 funcionarios.
 - **Métricas:** 48 escrituras en Firestore (0.24% del cupo diario gratuito).
+
+
+---
+
+## [Operación Forense] - 2026-11-04 (Operativo CASO_HUERFANOS Lote 7: Inyección de Personal Administrativo en Complejo Educativo Omar Gregorio Rivas - Julio César Salas)
+
+### Resumen Técnico
+Se procesó el caso de incorporación de personal administrativo bajo el comando `CASO_HUERFANOS` para el **Complejo Educativo Omar Gregorio Rivas / E.B. Palmira (Código DEA `S2855D1410`)**, Municipio Julio César Salas. La auditoría contra el maestro oficial `migracion/RAC ESTADO MERIDA - PERSONAL.csv` verificó la existencia y adscripción directa de la funcionaria **Yuleny Del Carmen Bernal Rangel (C.I. 19.529.390)** como personal titular activo bajo el cargo **Bachiller II (Código RAC `110000`)**. Se ejecutó la verificación previa en vivo sobre Cloud Firestore, garantizando cero duplicados antes de la inyección.
+
+### Acciones Realizadas
+1. **Colección `cargos_personal`:** Creado el documento `S2855D1410_19529390` con el esquema completo de 42 atributos del RAC regional del Estado Mérida.
+2. **Colección `planteles`:** Actualizado el documento `planteles/S2855D1410` incorporando a la trabajadora en el arreglo consolidado `personal_resumen` y elevando el contador `total_personal` de 8 a 9 trabajadores.
+3. **Formato de Comunicación:** Se entregó el mensaje de WhatsApp estructurado con viñetas y negritas, omitiendo de forma definitiva el párrafo de instrucciones para recaudos en la Parte 2.
+4. **Métricas Zero-Cost:** 2 escrituras en Firestore (0.01% del cupo diario gratuito).
