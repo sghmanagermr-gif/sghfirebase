@@ -3510,3 +3510,26 @@ Se procesó el caso de incorporación de personal administrativo bajo el comando
 2. **Colección `planteles`:** Actualizado el documento `planteles/S2855D1410` incorporando a la trabajadora en el arreglo consolidado `personal_resumen` y elevando el contador `total_personal` de 8 a 9 trabajadores.
 3. **Formato de Comunicación:** Se entregó el mensaje de WhatsApp estructurado con viñetas y negritas, omitiendo de forma definitiva el párrafo de instrucciones para recaudos en la Parte 2.
 4. **Métricas Zero-Cost:** 2 escrituras en Firestore (0.01% del cupo diario gratuito).
+
+
+---
+
+## [Operación Forense] - 2026-11-04 (Operativo CASO_HUERFANOS Lote 8: Inyección Estricta Anti-Traslados en J.I. Estado Apure - Santos Marquina)
+
+### Resumen Técnico
+Se atendió la solicitud de personal bajo el comando `CASO_HUERFANOS` para el **J.I. Estado Apure / Tabay (Código DEA `OD02341419`)**, Municipio Santos Marquina. Tras la directriz estricta del Administrador que prohíbe de forma tajante procesar o asumir traslados en el sistema sin resolución administrativa de Gestión Humana, se auditó exhaustivamente la adscripción en el archivo maestro `migracion/RAC ESTADO MERIDA - PERSONAL.csv`. De los 5 trabajadores reportados por la dirección, se determinó que **3 pertenecen oficialmente por nómina al plantel consultado** y fueron inyectados en Cloud Firestore. Las 2 trabajadoras reportadas informalmente como "de traslado" pertenecen formalmente a otras instituciones en el RAC y fueron excluidas de la inyección en `OD02341419` para proteger la fidelidad de los datos.
+
+### Hallazgos Forenses y Conciliación
+1. **Personal Incorporado a `OD02341419` (3 trabajadores confirmados por nómina RAC):**
+   - Anakary Alarcón Peña (C.I. 23.583.051): Receptor Informador (Obrero, RAC 8034N).
+   - Mercedes Liliana Moreno Maldonado (C.I. 19.145.913): Cocinero (Madre Cocinera / Obrero, RAC 8990N).
+   - María Daniela Zerpa Dugarte (C.I. 20.849.548): Cocinero II (Madre Cocinera / Obrero, RAC 8991N).
+2. **Personal No Transferido / Retenido en Sedes de Origen (2 trabajadoras):**
+   - Natacha Andreina Albornoz Dugarte (C.I. 27.310.028): Pertenece oficialmente a `OD17621419` (*J.I. 21 de Noviembre*, Santos Marquina).
+   - Florely Hasmar Reinoza Villarreal (C.I. 17.129.554): Pertenece oficialmente a `OD02551412` (*J.I. Vicente Dávila*, Libertador).
+   - Ambas trabajadoras quedan en reporte para que la dirección tramite el traslado por la vía administrativa correspondiente ante Gestión Humana.
+
+### Acciones Realizadas
+1. **Colección `cargos_personal`:** Creados 3 expedientes individuales (`OD02341419_${cedula}`) con esquema completo de 42 atributos del RAC regional del Estado Mérida.
+2. **Colección `planteles`:** Actualizado el documento `planteles/OD02341419` inicializando su arreglo `personal_resumen` de 0 a 3 funcionarios activos y actualizando `total_personal: 3`.
+3. **Métricas Zero-Cost:** 4 escrituras en Firestore (0.02% del cupo diario gratuito).

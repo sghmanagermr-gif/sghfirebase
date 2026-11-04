@@ -5675,3 +5675,54 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - Cero duplicados generados.  
 > 2. Formato de Comunicación WhatsApp: Mensaje entregado con viñetas, negritas y emojis listo para enviar a directivos.  
 > 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 149
+
+* **Fecha / Hora:** 2026-11-04 ~14:10 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Epa, tu no tienes la autorización de hacer ningun traslado, No señor. Si el funcionario no figura en el plantel que se está consultando se hace el reporte correspondiente  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Rectificación Institucional y Aplicación de Regla Estricta Anti-Traslados (Skill 5 y Skill 6):  
+> 1. Principio Institucional Ratificado:  
+>    - Se prohíbe de manera absoluta asumir o procesar traslados en el SGH si el funcionario no figura formalmente en la nómina RAC del plantel consultado. Los traslados corresponden con exclusividad a la Dirección de Gestión Humana mediante resolución administrativa.  
+> 2. Reclasificación del Reporte para el Plantel **OD02341419 (J.I. Estado Apure)**:  
+>    - **Personal Legítimo a Incorporar (3 funcionarios con coincidencia exacta de adscripción en RAC):**  
+>      * Anakary Alarcón Peña (C.I. 23.583.051 - Receptor Informador).  
+>      * Mercedes Liliana Moreno Maldonado (C.I. 19.145.913 - Cocinero).  
+>      * María Daniela Zerpa Dugarte (C.I. 20.849.548 - Cocinero II).  
+>    - **Personal Retenido para Reporte de Adscripción Oficial (2 funcionarios NO transferidos):**  
+>      * Natacha Andreina Albornoz Dugarte (C.I. 27.310.028) -> Adscrita oficialmente en RAC a `OD17621419` (J.I. 21 de Noviembre, Santos Marquina).  
+>      * Florely Hasmar Reinoza Villarreal (C.I. 17.129.554) -> Adscrita oficialmente en RAC a `OD02551412` (J.I. Vicente Dávila, Libertador).  
+> 3. Formato WhatsApp: Mensaje rectificado separando claramente a los 3 funcionarios adscritos de los 2 casos retenidos en su sede de origen.  
+> 4. Solicitud de Luz Verde para inyección estricta de los 3 funcionarios legítimos.  
+> 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 150
+
+* **Fecha / Hora:** 2026-11-04 ~14:12 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> luz verde  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Ejecución de Inyección Estricta Lote 8 y Entrega de Formato para WhatsApp (Skill 5 y Skill 6):  
+> 1. Inyección Exitosa en Cloud Firestore:  
+>    - Creados 3 expedientes individuales en la colección `cargos_personal` (`OD02341419_23583051`, `OD02341419_19145913`, `OD02341419_20849548`) con el esquema de 42 atributos del RAC regional del Estado Mérida.  
+>    - Actualizado el documento `planteles/OD02341419` (*J.I. Estado Apure*), inicializando su plantilla `personal_resumen` de 0 a 3 funcionarios activos.  
+>    - Cero duplicados y cero traslados indebidos. Las 2 funcionarias adscritas a otros planteles se mantuvieron intactas en sus sedes oficiales de origen.  
+> 2. Formato de Comunicación WhatsApp: Mensaje entregado listo para su difusión a directivos.  
+> 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
