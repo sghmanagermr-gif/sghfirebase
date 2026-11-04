@@ -3609,3 +3609,17 @@ Se atendió el reporte de rescate bajo la directriz `correos_afectados` para la 
 3. **Colección `usuarios`:** Documento administrativo actualizado con rol institucional `plaadmin`, estatus `APROBADO` y vinculación estricta al código DEA `S2872D1419`.
 4. **Nómina Oficial RAC (77 Funcionarios):** Se inyectaron exitosamente al 100% los 77 expedientes completos en `cargos_personal/S2872D1419_${cedula}` implementando el esquema dual de compatibilidad (`codigo-plantel`, `codigoDEA`, etc.) y se actualizó `planteles/S2872D1419` consolidando el arreglo `personal_resumen` con `total_personal: 77`.
 5. **Métricas Zero-Cost:** Operación ejecutada mediante batches de commits atómicos en 7 segundos, con cero consumo de cuota de lectura en cliente.
+
+
+---
+
+## [Operación Forense] - 2026-11-04 (Operativo CASO_HUERFANOS Lote 11: Municipio Zea - Inyección de 6 Funcionarios en EB Haydee Maldonado de Toro OD01971423)
+
+### Resumen Técnico
+Se procesó el comando `CASO_HUERFANOS` (Lote 11) para la **Escuela Bolivariana Haydee Maldonado de Toro (Código DEA `OD01971423`)**, ubicada en Caño El Tigre, Municipio Zea. Los 6 funcionarios reportados por la dirección fueron validados al 100% en la nómina oficial del RAC e inyectados en Cloud Firestore. Durante la operación se renovó proactivamente el token OAuth2 administrativo tras detectar su expiración de 1 hora.
+
+### Acciones Realizadas
+1. **Colección `cargos_personal`:** Creados 6 expedientes individuales bajo el patrón `OD01971423_{cedula}` con el esquema dual exhaustivo (`codigo-plantel`, `codigoPlantel`, `codigoDEA`, etc.).
+2. **Colección `planteles`:** Actualizado el documento `planteles/OD01971423` mediante transformaciones atómicas (`appendMissingElements` e `increment`), agregando a los trabajadores al arreglo `personal_resumen`.
+3. **Métricas Zero-Cost:** 7 escrituras atómicas en Firestore sin consumo de cuota de lectura en cliente.
+4. **Reporte Institucional:** Generado `scratch/whatsapp_message_lote11.txt` para difusión institucional.
