@@ -5426,3 +5426,30 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - Parte 1: 24 funcionarios registrados en sus 6 planteles oficiales según nómina RAC, con corrección de cédula de Jhemireet Erazo (19.592.573) y adscripción oficial de Edelmira Rivas (Liceo Nocturno Mucuchíes).  
 >    - Parte 2: 6 funcionarios pendientes por consignar recaudos ante Gestión Humana.  
 > 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 140
+
+* **Fecha / Hora:** 2026-11-04 ~12:38 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Ojo, **ATENCIÓN** te pido estés muy pendientes de lo que estás insertando en la base de datos. Dese que comenzamos a subir los funcionarios huerfanos hay uno que otros directores alegando que sus datos estan cruzados y dubplicados. por favor haz el trabajo con mucha delicadeza. Pendiente si el funcionario ya existe en el SGH v2.29.6  
+> CASO_HUERFANOS [Transmite 8 casos en 3 planteles de Municipio Rangel]  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Protocolo de Control de Calidad Estricto, Verificación Anti-Duplicidad y Auditoría Forense Lote 4 (Skill 5 y Skill 6):  
+> 1. Verificación Exhaustiva Anti-Duplicados en Cloud Firestore: Se ejecutó consulta directa sobre la base de datos en vivo (`sgh-merida`). Las 7 cédulas a incorporar **NO existen actualmente en ninguna parte de `cargos_personal` ni en `planteles`** (cero riesgo de duplicidad).  
+> 2. Detección Forense del Origen de "Datos Cruzados":  
+>    - La dirección reportó a Fran David Calderón (Vigilante) con C.I. incompleta `194863.` en la "Escuela José Eberto Calderón Albarrán" bajo el código DEA `OD13981417`.  
+>    - En el maestro oficial del RAC y de Planteles (`migracion/RAC ESTADO MERIDA - PLANTELES.csv`), `OD13981417` pertenece a la **Escuela José Natividad Rivas Sánchez** (San Rafael). La "Escuela José Eberto Calderón" (El Vergel, Mucuchíes) posee el código DEA oficial **`OD03381417`**.  
+>    - Se detecta que los directores confunden y cruzan los códigos DEA de sus instituciones al reportar. El funcionario tampoco existe en el RAC y tiene cédula truncada, por lo que **NO se inyecta** para evitar corromper los datos de la institución vecina.  
+> 3. Balance del Lote 4:  
+>    - 7 Confirmados al 100% en RAC y limpios de duplicados (3 en OD03391417 y 4 en S2905D1417).  
+>    - 1 Caso retenido por cédula incompleta y DEA discordante (Fran David Calderón).  
+> 4. Solicitud de Luz Verde para inyección segura y entrega de mensaje para WhatsApp.  
+> 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
