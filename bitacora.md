@@ -3596,3 +3596,16 @@ Se procesó el comando `CASO_HUERFANOS` (Lote 10) contentivo de 10 trabajadores 
 2. **Colección `planteles`:** Actualizados los documentos `OD17631419` (+2), `OD03311419` (+4) y `OD02891419` (+3) mediante transformaciones atómicas (`appendMissingElements` e `increment`).
 3. **Métricas Zero-Cost:** 12 escrituras atómicas en Firestore sin consumo de cuota de lectura en cliente.
 4. **Reporte Institucional:** Generado `scratch/whatsapp_message_lote10.txt` con estructura oficial en 2 partes, omitiendo el bloque de recaudos en la Parte 2.
+
+
+---
+
+## [Operación Forense] - 2026-11-04 (Protocolo correos_afectados: Rescate de Acceso y Sincronización Integral de Nómina para E.B. San Rafael de Tabay - S2872D1419)
+
+### Resumen Técnico
+Se atendió el reporte de rescate bajo la directriz `correos_afectados` para la cuenta institucional **`uesanrafaeldetabay@gmail.com`**:
+1. **Identificación Institucional:** Corresponde a la **E.B. San Rafael de Tabay / Epónimo "José Roberto Contreras Márquez" (Código DEA `S2872D1419`)**, ubicada en la Parroquia Tabay, Municipio Santos Marquina (Dependencia Nacional, Código Estadístico 140804).
+2. **Firebase Authentication:** Cuenta localizada y validada (UID `c2g4MN6oxffCdZqjgh3bvBJAXPq1`, `emailVerified: true`). Se emitió el enlace seguro oficial Out-of-Band (OOB) para asignación de clave vía WhatsApp.
+3. **Colección `usuarios`:** Documento administrativo actualizado con rol institucional `plaadmin`, estatus `APROBADO` y vinculación estricta al código DEA `S2872D1419`.
+4. **Nómina Oficial RAC (77 Funcionarios):** Se inyectaron exitosamente al 100% los 77 expedientes completos en `cargos_personal/S2872D1419_${cedula}` implementando el esquema dual de compatibilidad (`codigo-plantel`, `codigoDEA`, etc.) y se actualizó `planteles/S2872D1419` consolidando el arreglo `personal_resumen` con `total_personal: 77`.
+5. **Métricas Zero-Cost:** Operación ejecutada mediante batches de commits atómicos en 7 segundos, con cero consumo de cuota de lectura en cliente.
