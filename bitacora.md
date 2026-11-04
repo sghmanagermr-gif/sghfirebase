@@ -3640,3 +3640,19 @@ Se procesó el comando `CASO_HUERFANOS` (Lote 12) contentivo de 12 trabajadores 
 2. **Colección `planteles`:** Actualizados los documentos `planteles/OD12261410` (+1) y `planteles/OD12321410` (+8) mediante transformaciones atómicas (`appendMissingElements` e `increment`).
 3. **Métricas Zero-Cost:** 11 escrituras atómicas en Firestore sin consumo de cuota de lectura en cliente.
 4. **Reporte Institucional:** Generado `scratch/whatsapp_message_lote12.txt` con estructura oficial en 2 partes, omitiendo el bloque de recaudos en la Parte 2.
+
+
+---
+
+## [Operación Forense] - 2026-11-04 (Operativo CASO_HUERFANOS Lote 13: Municipio Santos Marquina - Inyección de 2 Funcionarios en J.I. 21 de Noviembre OD17621419 con Esquema Dual)
+
+### Resumen Técnico
+Se procesó el comando `CASO_HUERFANOS` (Lote 13) para el **J.I. 21 de Noviembre (Código DEA `OD17621419`)**, ubicado en la Parroquia Tabay, Municipio Santos Marquina. Los 2 funcionarios reportados por la institución fueron validados al 100% en la nómina oficial del RAC e inyectados en Cloud Firestore.
+
+### Acciones Realizadas
+1. **Colección `cargos_personal`:** Creados 2 expedientes individuales bajo el patrón `OD17621419_{cedula}` con el esquema dual exhaustivo (`codigo-plantel`, `codigoPlantel`, `codigoDEA`, `nombre-apellido`, `nombre`, `nombres`, `cedula-identidad`, `cedula`, `tipo-personal`, `tipoPersonal`, `situacion-laboral`):
+   - `OD17621419_19146126` (Yenny Lisbeth Rangel Parra - Docente II / Aula Boliv. / Cumple funciones como Director).
+   - `OD17621419_18965995` (Rosa Peña - Aseador I / Obrero).
+2. **Colección `planteles`:** Actualizado el documento `planteles/OD17621419` mediante transformaciones atómicas (`appendMissingElements` e `increment`), agregando a los trabajadores al arreglo `personal_resumen`.
+3. **Métricas Zero-Cost:** 3 escrituras atómicas en Firestore sin consumo de cuota de lectura en cliente.
+4. **Reporte Institucional:** Generado `scratch/whatsapp_message_lote13.txt` para difusión institucional en WhatsApp.
