@@ -3563,3 +3563,20 @@ Se procesó el comando `CASO_HUERFANOS` (Lote 9) contentivo de 51 funcionarios r
 2. **Colección `planteles`:** Se actualizaron 11 documentos de planteles mediante transformaciones atómicas (`appendMissingElements` e `increment`), agregando a los trabajadores al arreglo `personal_resumen` con todas sus claves redundantes y actualizando `total_personal` y `ultima_actualizacion`.
 3. **Métricas Zero-Cost y Rate-Limit Bypass:** Se utilizaron commits atómicos y transformaciones del servidor sin consumo de cuota de lectura en cliente, ejecutando 48 operaciones de escritura con 100% de efectividad.
 4. **Reporte Institucional:** Generado `scratch/whatsapp_message_lote9.txt` con estructura oficial en 2 partes, omitiendo el bloque de recaudos en la Parte 2 según directriz del usuario.
+
+
+---
+
+## [Operación Forense] - 2026-11-04 (Protocolo correos_afectados: Rescate de Acceso y Sincronización de Nóminas para Gonzalo Mora Araque y Escuela de Emprendimiento Daysi M. Bravo)
+
+### Resumen Técnico
+Se procesó la instrucción `correos_afectados` para regularizar el acceso institucional de dos planteles educativos del Estado Mérida:
+1. **`escuelagonzalomoraaraque@gmail.com`**: Vinculada a la **Escuela Gonzalo Mora Araque (Código DEA `OD10571403`)**, Municipio Antonio Pinto Salinas (Santa Cruz de Mora). Se constató la existencia de la cuenta en Firebase Auth (UID `rNpCJi5kCLai300296BWEFmqdo63`), se forzó `emailVerified: true`, se sincronizó su expediente en `usuarios/`, se generó su enlace oficial Out-of-Band (OOB) y se inyectaron sus 5 funcionarios en `cargos_personal` y `planteles/OD10571403`.
+2. **`escuelaemprendimientodaysimba@gmail.com`**: Vinculada a la **Escuela para el Emprendimiento Daysi Matilde Bravo Álvarez (Código DEA `ON13841414`)**, Municipio Obispo Ramos de Lora (Santa Elena de Arenales). Dado que no existía en Firebase Auth, se aprovisionó la cuenta directamente (UID `zvoNo1nqU9MBY43TvJi5vQdk9Eg1`) con `emailVerified: true`, se creó su documento administrativo en `usuarios/`, se generó su enlace OOB de asignación de contraseña y se inyectaron sus 4 funcionarias en `cargos_personal` y `planteles/ON13841414`.
+
+### Acciones Realizadas
+1. **Firebase Authentication:** 1 cuenta verificada y 1 cuenta aprovisionada administrativamente. Se emitieron los enlaces OOB oficiales para activación inmediata vía WhatsApp.
+2. **Colección `usuarios`:** Creados/actualizados ambos documentos con rol institucional `plaadmin`, estatus `APROBADO` y asignación jerárquica estricta a sus respectivos códigos DEA.
+3. **Colección `cargos_personal`:** Inyectados 9 expedientes individuales con esquema dual kebab/camelCase (`codigo-plantel`, `codigoDEA`, `codigoPlantel`, etc.).
+4. **Colección `planteles`:** Actualizados ambos planteles fijando `total_personal` (5 y 4 respectivamente) y su consolidado `personal_resumen`.
+5. **Métricas Zero-Cost:** Operación ejecutada mediante commits atómicos directos protegiendo la cuota Spark de Firestore.
