@@ -3623,3 +3623,20 @@ Se procesó el comando `CASO_HUERFANOS` (Lote 11) para la **Escuela Bolivariana 
 2. **Colección `planteles`:** Actualizado el documento `planteles/OD01971423` mediante transformaciones atómicas (`appendMissingElements` e `increment`), agregando a los trabajadores al arreglo `personal_resumen`.
 3. **Métricas Zero-Cost:** 7 escrituras atómicas en Firestore sin consumo de cuota de lectura en cliente.
 4. **Reporte Institucional:** Generado `scratch/whatsapp_message_lote11.txt` para difusión institucional.
+
+
+---
+
+## [Operación Forense] - 2026-11-04 (Operativo CASO_HUERFANOS Lote 12: Municipio Julio César Salas - Inyección de 9 Funcionarios en 2 Planteles con Esquema Dual y Política Anti-Traslados)
+
+### Resumen Técnico
+Se procesó el comando `CASO_HUERFANOS` (Lote 12) contentivo de 12 trabajadores reportados en 2 planteles del **Municipio Julio César Salas**:
+- **9 funcionarios** fueron validados en nómina RAC en sus respectivos planteles e inyectados exitosamente en Cloud Firestore (1 en `OD12261410` y 8 en `OD12321410`).
+- **1 funcionaria** (Sulay Josefina Moreno Blanco, C.I. 18.615.107) fue detectada con adscripción en RAC a `OD17141410` (Escuela Roberto Picón Lares); en estricto cumplimiento de la política anti-traslados, fue reservada en el reporte oficial de su plantel de origen sin transferencias no autorizadas.
+- **2 funcionarias** no figuraban en la nómina central MPPE RAC (`OD12261410`: Dairy Moreno y Oriannys Labastida).
+
+### Acciones Realizadas
+1. **Colección `cargos_personal`:** Creados 9 expedientes individuales bajo el patrón `{codigoDEA}_{cedula}` implementando el esquema dual de compatibilidad (`codigo-plantel`, `codigoPlantel`, `codigoDEA`, `nombre-apellido`, `nombre`, `nombres`, `cedula-identidad`, `cedula`, `tipo-personal`, `tipoPersonal`, `situacion-laboral`).
+2. **Colección `planteles`:** Actualizados los documentos `planteles/OD12261410` (+1) y `planteles/OD12321410` (+8) mediante transformaciones atómicas (`appendMissingElements` e `increment`).
+3. **Métricas Zero-Cost:** 11 escrituras atómicas en Firestore sin consumo de cuota de lectura en cliente.
+4. **Reporte Institucional:** Generado `scratch/whatsapp_message_lote12.txt` con estructura oficial en 2 partes, omitiendo el bloque de recaudos en la Parte 2.
