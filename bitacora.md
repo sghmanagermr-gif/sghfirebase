@@ -3656,3 +3656,25 @@ Se procesó el comando `CASO_HUERFANOS` (Lote 13) para el **J.I. 21 de Noviembre
 2. **Colección `planteles`:** Actualizado el documento `planteles/OD17621419` mediante transformaciones atómicas (`appendMissingElements` e `increment`), agregando a los trabajadores al arreglo `personal_resumen`.
 3. **Métricas Zero-Cost:** 3 escrituras atómicas en Firestore sin consumo de cuota de lectura en cliente.
 4. **Reporte Institucional:** Generado `scratch/whatsapp_message_lote13.txt` para difusión institucional en WhatsApp.
+
+
+---
+
+## [Operación Forense] - 2026-11-04 (Operativo CASO_HUERFANOS Lote 14: Municipio Santos Marquina - Inyección de 3 Funcionarios en OD14271419, OD14331419 y OD03311419 con Esquema Dual y Política Anti-Traslados)
+
+### Resumen Técnico
+Se procesó el comando `CASO_HUERFANOS` (Lote 14) para la **Escuela Luis Alberto Sulbarán (Código DEA `OD14271419`)**, ubicada en la Parroquia Tabay, Municipio Santos Marquina. Del listado de 7 trabajadores reportados:
+- **1 funcionaria** (Ana María Aranguren Villarreal, C.I. 19.146.385) fue validada en RAC en su sede solicitada (`OD14271419`) como Docente de Primaria e inyectada exitosamente.
+- **2 funcionarias** reportadas en comisión/funciones externas fueron validadas y sincronizadas formalmente en sus planteles oficiales RAC:
+  - Vanessa Virginia Márquez Benítez (C.I. 17.239.501) en `OD14331419` (Escuela Aquiles Nazoa) con medida de protección.
+  - María Marleny Lacruz Paredes (C.I. 16.664.770) en `OD03311419` (E.B. Francisco Antonio Zerpa) en funciones directivas.
+- **4 funcionarios** clasificados en Media General no figuraban en la nómina central MPPE RAC y fueron reservados en el reporte oficial.
+
+### Acciones Realizadas
+1. **Colección `cargos_personal`:** Creados 3 expedientes individuales con esquema dual kebab/camelCase (`codigo-plantel`, `codigoPlantel`, `codigoDEA`, `nombre-apellido`, `nombre`, `nombres`, `cedula-identidad`, `cedula`, `tipo-personal`, `tipoPersonal`, `situacion-laboral`):
+   - `OD14271419_19146385` (Ana María Aranguren Villarreal - Docente Único D/U).
+   - `OD14331419_17239501` (Vanessa Virginia Márquez Benítez - Docente Único D/U).
+   - `OD03311419_16664770` (María Marleny Lacruz Paredes - Docente IV).
+2. **Colección `planteles`:** Actualizados los documentos `planteles/OD14271419` (+1), `planteles/OD14331419` (+1) y `planteles/OD03311419` (+1) mediante transformaciones atómicas (`appendMissingElements` e `increment`).
+3. **Métricas Zero-Cost:** 6 escrituras atómicas en Firestore sin consumo de cuota de lectura en cliente.
+4. **Reporte Institucional:** Generado `scratch/whatsapp_message_lote14.txt` con estructura oficial en 2 partes, omitiendo el bloque de recaudos en la Parte 2.
