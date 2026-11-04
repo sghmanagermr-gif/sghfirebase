@@ -3423,3 +3423,24 @@ Bajo el comando operativo `CASO_HUERFANOS`, se procesó un lote de 30 funcionari
 - **Colección `cargos_personal`:** 24 documentos creados/actualizados con esquema completo de 42 atributos.
 - **Colección `planteles`:** 6 documentos actualizados con sus arreglos `personal_resumen` y contadores `total_personal`.
 - **Métricas:** 30 escrituras consumidas (0.15% del cupo diario gratuito).
+
+
+---
+
+## [Operación Forense] - 2026-11-04 (Operativo CASO_HUERFANOS Lote 4: Control de Calidad Anti-Duplicados e Inyección de 7 Funcionarios - Rangel)
+
+### Resumen Técnico
+En respuesta a reportes de directores sobre presuntos "datos cruzados y duplicados", se ejecutó una verificación exhaustiva en vivo sobre Cloud Firestore (`sgh-merida`) previa a la inyección del Lote 4 (Municipio Rangel). Se constató que ninguna de las cédulas reportadas existía previamente en la base de datos (0 duplicados). Además, se detectó la causa raíz de los cruces reportados por directivos: la dirección de la "Escuela José Eberto Calderón Albarrán" reportó el código DEA `OD13981417` (perteneciente a la Escuela José Natividad Rivas Sánchez en San Rafael), en lugar de su código real `OD03381417` (El Vergel). El trabajador asociado a dicho plantel (Fran David Calderón, con cédula incompleta `194863.`) fue excluido de la inyección. Se inyectaron exitosamente 7 funcionarios confirmados en RAC.
+
+### Hallazgos Forenses y Conciliación
+1. **Verificación de Inexistencia Previa en Firestore:** Las 7 cédulas a incorporar arrojaron 0 coincidencias en consultas directas a `cargos_personal` y `planteles`, garantizando que no se generen registros duplicados.
+2. **Prevención de Cruce Inter-Institucional:**
+   - La exclusión de Fran David Calderón protegió los datos del plantel `OD13981417` de ser contaminados con personal de otra institución.
+3. **Planteles Actualizados:**
+   - `OD03391417` (Escuela José Grimaldo Lobo): 3 docentes incorporados.
+   - `S2905D1417` (Complejo Educativo Gilberto Benítez Lobo): 4 funcionarios incorporados.
+
+### Acciones Técnicas en Firestore (Zero-Cost Execution)
+- **Colección `cargos_personal`:** 7 documentos creados con esquema de 42 atributos del RAC.
+- **Colección `planteles`:** 2 documentos actualizados con `personal_resumen` y contadores `total_personal`.
+- **Métricas:** 9 escrituras consumidas (0.045% del cupo diario gratuito).
