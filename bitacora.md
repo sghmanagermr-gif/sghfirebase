@@ -3737,3 +3737,27 @@ Se procesó el comando `CASO_HUERFANOS` para la **Escuela Roberto Picón Lares (
 3. **Métricas Zero-Cost:** 2 escrituras directas ejecutadas con 0 consumo de cuota de lectura en cliente.
 4. **Reporte Institucional:** Generado reporte de difusión oficial para WhatsApp.
 
+
+---
+
+## [Operación Forense] - 2026-11-05 (Operativo CASO_HUERFANOS: Municipio Julio César Salas - Inclusión Exclusiva Anti-Duplicados en S3379N1410 y OD17141410)
+
+### Resumen Técnico
+Se procesó el comando `CASO_HUERFANOS` para 4 planteles del Municipio Julio César Salas correspondientes a 7 funcionarios:
+- **Liceo Emira Matheus (`S3379N1410`):** Validadas en RAC e inyectadas 2 funcionarias huérfanas: Yoeliys Del Valle Rodríguez Fernández (C.I. 19.713.568, Docente III de Aula, 20 hrs) y Milagros Del Valle Villarreal (C.I. 18.864.994, Despensero Obrero). Yoneida Coromoto Guerra (C.I. 15.142.594) fue protegida contra duplicados por existir previamente en `OD12261410`.
+- **Escuela María Dalia Durán de Montilla (`OD17141410`):** Validada en RAC e inyectada Sulay Josefina Moreno Blanco (C.I. 18.615.107, Docente Único D/U, 40 hrs).
+- **Complejo Educativo Omar Gregorio Rivas (`S2855D1410`):** Yuleny Del Carmen Bernal Rangel (C.I. 19.529.390) fue protegida contra duplicados por estar 100% registrada y visible en el sistema.
+- **Complejo Educativo Braulio Belandria (`OD12261410`):** Dairy Dioveli Moreno Acevedo (C.I. 20.352.557) y Oriannys Alexandra Labastida Castillo (C.I. 29.994.198) no figuraban en el archivo ministerial RAC y se dejaron asentadas para verificación del CDCE.
+
+### Acciones Realizadas
+1. **Colección `cargos_personal`:** Creados 3 expedientes individuales con esquema dual canónico (kebab-case y camelCase):
+   - `S3379N1410_19713568` (Yoeliys Del Valle Rodríguez Fernández).
+   - `S3379N1410_18864994` (Milagros Del Valle Villarreal).
+   - `OD17141410_18615107` (Sulay Josefina Moreno Blanco).
+2. **Colección `planteles`:** Actualizados los documentos:
+   - `planteles/S3379N1410`: incorporadas 2 funcionarias a `personal_resumen` (de 8 a 10).
+   - `planteles/OD17141410`: incorporada 1 funcionaria a `personal_resumen` (de 2 a 3).
+3. **Métricas Zero-Cost:** 5 escrituras atómicas directas con 0 consumo de cuota de lectura en cliente.
+4. **Reporte Institucional:** Generado reporte oficial en `scratch/whatsapp_message_lote17.txt`.
+
+

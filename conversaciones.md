@@ -5842,3 +5842,37 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - Actualizado `planteles/OD01021410` incorporándola a `personal_resumen` (elevando nómina de 54 a 55).  
 > 3. Documentación y Difusión:  
 >    - Actualizados `versiones.md`, `bitacora.md`, `conversaciones.md` y generado el reporte institucional de WhatsApp.
+
+
+---
+
+### Intervención 155
+
+* **Fecha / Hora:** 2026-11-05 ~11:05 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Atento con duplicar personal en la base de datos de Firebase  
+> CASO_HUERFANOS  
+> Nombre del Plantel: LICEO EMIRA MATHEUS Código DEA: S3379N1410 (YONEIDA GUERRA CI:15142594, YOELIYS RODRÍGUEZ CI:19713568, MILAGROS VILLARREAL CI: 18864994)  
+> Nombre del Plantel: Complejo Educativo Braulio Belandria Código DEA:0D12261410 (Dairy Moreno CI 20352557, Oriannys Labastida CI 29994198)  
+> Nombre del Plantel: Complejo Educativo Omar Gregorio Rivas Código DEA: S2855D1410 (Yuleny Bernal Rangel C.I.19529390)  
+> Nombre del Plantel: ESCUELA MARÍA DALIA DURAN DE MONTILLA Código DEA:OD171410 (Sulay Moreno Blanco C.I.18.615.107)  
+> [...]  
+> Luz verde  
+> [...]  
+> Satisfecho. Pero no enviaste el mensaje  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Auditoría Forense y Rescate Exclusivo Anti-Duplicados en Municipio Julio César Salas (Skill 5 y Skill 6):  
+> 1. Auditoría Cruzada y Prevención de Duplicados:  
+>    - Yoneida Guerra (15.142.594) y Yuleny Bernal (19.529.390) ya existían y estaban activas en Firebase; se mantuvieron intactas sin duplicación.  
+>    - Dairy Moreno (20.352.557) y Oriannys Labastida (29.994.198) no figuraban en nómina ministerial RAC; se dejaron registradas para trámite del CDCE.  
+>    - Se identificaron 3 funcionarias huérfanas validadas al 100% en RAC que no existían en Firebase: Yoeliys Rodríguez (19.713.568) y Milagros Villarreal (18.864.994) en `S3379N1410`, y Sulay Moreno Blanco (18.615.107) en `OD17141410`.  
+> 2. Inyecciones Ejecutadas:  
+>    - Creados 3 expedientes individuales en `cargos_personal` con esquema dual exhaustivo.  
+>    - Actualizados `planteles/S3379N1410` (de 8 a 10) y `planteles/OD17141410` (de 2 a 3).  
+> 3. Documentación y Entrega:  
+>    - Actualizados `bitacora.md`, `conversaciones.md` y entregado el mensaje oficial estructurado para WhatsApp.
