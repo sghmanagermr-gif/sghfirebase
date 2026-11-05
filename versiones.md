@@ -4,6 +4,30 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.30.0 (5 de Noviembre de 2026)
+
+- **Módulo de Auditoría Quirúrgica de Personal y Detección de Duplicados en Tiempo Real (Zero-Cost):**
+  - **Requerimiento Institucional:**
+    - Se requirió dotar a la administración de una herramienta de control y verificación inmediata para responder a directores y supervisores sobre funcionarios presuntamente duplicados, cruzados o con errores de adscripción institucional.
+    - Se exigió la capacidad de auditar por número de cédula y examinar la ficha o expediente completo en cada una de las instituciones donde aparezca, para diagnosticar inconsistencias de nómina (horas, cargo, dependencia, situación laboral) garantizando el estricto cumplimiento de la política Zero-Cost del Plan Spark de Firebase.
+  - **Arquitectura y Solución Técnica Zero-Cost:**
+    - **Consulta Quirúrgica Indexada (`webapp/src/admin.js`):**
+      - Búsqueda directa sobre `cargos_personal` mediante `where('cedula', 'in', variantes)` cubriendo variantes numéricas y con prefijo (`V-`, `E-`).
+      - Costo de cuota mínimo absoluto: solo consume 1 lectura si el funcionario es único, 2 lecturas si está duplicado, o 0 si no existe.
+    - **Visualizador Comparativo de Duplicidades (`webapp/index.html` & `admin.js`):**
+      - Banner dinámico inteligente: verde (`🟢 REGISTRO ÚNICO Y VÁLIDO`) o rojo (`⚠️ ALERTA DE DUPLICIDAD / MULTI-PLANTEL`).
+      - En caso de duplicidad, genera una **Tabla Resumen Comparativa Frente a Frente** (Plantel, DEA, Municipio, Cargo, Horas, Situación, Dependencia) para identificar la contradicción al instante.
+      - Genera **Expedientes Completos Detallados por Institución**: Datos laborales, carga horaria y desglose de asignaturas (planes 31059, 31060 o primaria), expediente personal, contacto, dotación, salud y observaciones.
+      - Botones de acción directa: *"Ver Escuela"* (`abrirFichaAuditoria`) y *"Modo Supervisión"* (`iniciarSupervisionPlantel`).
+    - **Integración en Panel Administrativo (`webapp/index.html`):**
+      - Nuevo botón de acceso directo en el sidebar: `🔍 Auditor de Cédula`.
+      - Nueva pestaña de administración `#admin-tab-auditor-cedula` con formulario de búsqueda, atajo con tecla `Enter`, estado inicial intuitivo y spinner de carga.
+  - **Control SemVer y Despliegue:**
+    - Incremento SemVer a versión MENOR **v2.30.0** (nueva funcionalidad) en `webapp/package.json` y en las 5 cabeceras/vistas de `webapp/index.html`.
+    - Compilación exitosa en Vite (819ms) y despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.29.7 (5 de Noviembre de 2026)
 
 - **Corrección Integral de Persistencia y Caché en Edición de Planteles (Sincronización Instantánea y Compatibilidad de Esquema):**

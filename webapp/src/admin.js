@@ -298,16 +298,18 @@ export function initAdminDashboard(dbInstance, user) {
       return defecto;
     };
 
-    // 1. Botones de nivel superior: Estadísticas, Validación y Despliegue
+    // 1. Botones de nivel superior: Estadísticas, Validación, Auditor de Cédula y Despliegue
     const btnEstadisticas = document.getElementById('btn-sidebar-estadisticas') || document.querySelector('.sidebar-btn[data-target="admin-tab-estadisticas"]');
     const btnValidacion = document.getElementById('btn-sidebar-validacion') || document.querySelector('.sidebar-btn[data-target="admin-tab-validacion"]');
+    const btnAuditorCedula = document.getElementById('btn-sidebar-auditor-cedula');
     const btnDespliegue = document.getElementById('btn-sidebar-despliegue');
-      const btnAspiradora = document.getElementById('btn-sidebar-aspiradora');
+    const btnAspiradora = document.getElementById('btn-sidebar-aspiradora');
 
     if (btnEstadisticas) btnEstadisticas.style.display = tienePermiso('estadisticas') ? 'block' : 'none';
     if (btnValidacion) btnValidacion.style.display = tienePermiso('validacion') ? 'block' : 'none';
+    if (btnAuditorCedula) btnAuditorCedula.style.display = (isSuperAdmin || isZonAdmin || userData?.rol === 'munadmin' || tienePermiso('planteles', true)) ? 'flex' : 'none';
     if (btnDespliegue) btnDespliegue.style.display = tienePermiso('despliegue', false) ? 'block' : 'none';
-      if (btnAspiradora) btnAspiradora.style.display = tienePermiso('despliegue', false) ? 'flex' : 'none';
+    if (btnAspiradora) btnAspiradora.style.display = tienePermiso('despliegue', false) ? 'flex' : 'none';
 
     // 2. Acordeón Gestor de BD y sus opciones
     const btnAcordeonBd = document.getElementById('btn-sidebar-bd');
@@ -549,7 +551,8 @@ export function initAdminDashboard(dbInstance, user) {
       if (userData?.rol === 'munadmin') {
          if (targetId !== 'admin-tab-estadisticas' && 
              targetId !== 'admin-tab-validacion' && 
-             targetId !== 'admin-tab-planteles') {
+             targetId !== 'admin-tab-planteles' &&
+             targetId !== 'admin-tab-auditor-cedula') {
             return;
          }
       }
@@ -610,6 +613,11 @@ export function initAdminDashboard(dbInstance, user) {
             const lista = button.getAttribute('data-lista');
             const tipo = button.getAttribute('data-tipo');
             if(typeof window.loadListasMaestras === 'function') window.loadListasMaestras(lista, tipo); 
+         }
+         if (targetId === 'admin-tab-auditor-cedula') {
+            setTimeout(() => {
+               document.getElementById('inp-auditor-cedula')?.focus();
+            }, 100);
          }
       }
       
@@ -5411,6 +5419,411 @@ export function initAdminDashboard(dbInstance, user) {
     });
   };
   setupFichaEventListeners();
+
+  // =========================================================================
+  // MÓDULO DE AUDITORÍA QUIRÚRGICA DE PERSONAL Y DUPLICADOS (ZERO-COST)
+  // =========================================================================
+  function setupAuditorCedula() {
+    const formAuditor = document.getElementById('form-auditor-cedula');
+    const inpAuditor = document.getElementById('inp-auditor-cedula');
+    const btnLimpiar = document.getElementById('btn-limpiar-auditor-cedula');
+    const estadoInicial = document.getElementById('auditor-estado-inicial');
+    const spinner = document.getElementById('auditor-spinner');
+    const resultadosBody = document.getElementById('auditor-resultados-body');
+
+    if (!formAuditor) return;
+
+    btnLimpiar?.addEventListener('click', () => {
+      if (inpAuditor) inpAuditor.value = '';
+      if (estadoInicial) estadoInicial.style.display = 'block';
+      if (spinner) spinner.style.display = 'none';
+      if (resultadosBody) {
+        resultadosBody.style.display = 'none';
+        resultadosBody.innerHTML = '';
+      }
+      inpAuditor?.focus();
+    });
+
+    formAuditor.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const rawVal = inpAuditor?.value?.trim() || '';
+      const cleanCedula = rawVal.replace(/[^0-9]/g, '');
+
+      if (!cleanCedula) {
+        showToast("Por favor ingrese un número de cédula válido.", "warning");
+        inpAuditor?.focus();
+        return;
+      }
+
+      if (estadoInicial) estadoInicial.style.display = 'none';
+      if (resultadosBody) {
+        resultadosBody.style.display = 'none';
+        resultadosBody.innerHTML = '';
+      }
+      if (spinner) spinner.style.display = 'block';
+
+      try {
+        const variantes = [cleanCedula, `V-${cleanCedula}`, `V${cleanCedula}`, `E-${cleanCedula}`, `E${cleanCedula}`];
+        
+        // 1. Consulta directa a cargos_personal (Zero-Cost: 1 consulta indexada, solo trae los documentos coincidentes)
+        let snap = await getDocs(query(collection(db, 'cargos_personal'), where('cedula', 'in', variantes)));
+        let docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+        if (docs.length === 0) {
+          // Búsqueda de respaldo por cedula-identidad
+          const snap2 = await getDocs(query(collection(db, 'cargos_personal'), where('cedula-identidad', 'in', variantes)));
+          docs = snap2.docs.map(d => ({ id: d.id, ...d.data() }));
+        }
+
+        renderResultadosAuditoria(cleanCedula, docs);
+      } catch (err) {
+        console.error("Error en auditoría de cédula:", err);
+        showToast("Error al auditar la cédula: " + (err.message || err), "error");
+        if (resultadosBody) {
+          resultadosBody.style.display = 'block';
+          resultadosBody.innerHTML = `
+            <div style="background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; padding: 20px; border-radius: 12px; text-align: center;">
+              <h4>Error al conectar con la base de datos</h4>
+              <p style="font-size: 0.9rem; margin-top: 5px;">${err.message || 'Error desconocido'}</p>
+            </div>
+          `;
+        }
+      } finally {
+        if (spinner) spinner.style.display = 'none';
+      }
+    });
+
+    // Helper de extracción de asignaturas de planes 31059 / 31060 / primaria
+    function parsearCargaHoraria(val) {
+      if (!val) return [];
+      let data = val;
+      if (typeof val === 'string') {
+        try { data = JSON.parse(val); } catch(e) { return []; }
+      }
+      if (!data || typeof data !== 'object') return [];
+      const list = [];
+      for (const [k, v] of Object.entries(data)) {
+        if (k === 'observacion' || k === '0_PLANIFICACION') continue;
+        const num = Number(v);
+        if (!isNaN(num) && num > 0) {
+          const parts = k.split('_');
+          const anio = parts[0] ? `${parts[0]}° Año` : '';
+          const materia = parts.slice(1).join(' ') || k;
+          list.push({ anio, materia, horas: num });
+        }
+      }
+      return list;
+    }
+
+    // Helper de renderizado de resultados
+    function renderResultadosAuditoria(cedulaBuscada, docs) {
+      if (!resultadosBody) return;
+      resultadosBody.style.display = 'block';
+
+      // CASO 1: NO ENCONTRADO
+      if (docs.length === 0) {
+        resultadosBody.innerHTML = `
+          <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 35px 25px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+            <div style="font-size: 2.8rem; margin-bottom: 12px;">⚪</div>
+            <h3 style="color: #334155; margin: 0 0 10px; font-size: 1.3rem;">Funcionario No Registrado en el Sistema</h3>
+            <p style="color: #64748b; font-size: 0.95rem; max-width: 520px; margin: 0 auto 20px;">
+              No se localizó ningún registro activo en la nómina para la cédula <strong style="color: #0f172a; font-family: monospace;">V-${cedulaBuscada}</strong>.
+            </p>
+            <div style="background: #f8fafc; border-left: 4px solid #64748b; padding: 12px 18px; border-radius: 6px; display: inline-block; text-align: left; max-width: 500px; font-size: 0.85rem; color: #475569;">
+              ℹ️ <strong>Causas comunes:</strong>
+              <ul style="margin: 5px 0 0 18px; padding: 0;">
+                <li>El funcionario es un nuevo ingreso pendiente de asignación institucional.</li>
+                <li>Pertenecía a casos huérfanos que aún no han sido procesados.</li>
+                <li>Verifique si el número de cédula posee algún dígito transpuesto o erróneo.</li>
+              </ul>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      // CASO 2: FUNCIONARIO ÚNICO O DUPLICADO
+      const esDuplicado = docs.length > 1;
+      let html = '';
+
+      // Banner Superior de Estado
+      if (!esDuplicado) {
+        const d = docs[0];
+        const dea = d['codigo-plantel'] || d['codigoDEA'] || d['codigoPlantel'] || 'S/D';
+        const escuela = d['ubicacion-fisica'] || d.plantel || 'Plantel Registrado';
+        html += `
+          <div style="background: linear-gradient(135deg, #065f46 0%, #047857 100%); color: white; padding: 16px 20px; border-radius: 10px; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-shadow: 0 4px 12px rgba(4,120,87,0.15);">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="background: rgba(255,255,255,0.2); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">🟢</div>
+              <div>
+                <h4 style="margin: 0; font-size: 1.1rem; color: #ffffff;">REGISTRO ÚNICO Y VÁLIDO</h4>
+                <p style="margin: 3px 0 0; font-size: 0.85rem; color: #a7f3d0;">Esta cédula figura registrada formalmente en <strong>1 sola institución</strong> (${dea} - ${escuela}).</p>
+              </div>
+            </div>
+            <span style="background: rgba(255,255,255,0.25); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;">Sin Duplicidad</span>
+          </div>
+        `;
+      } else {
+        html += `
+          <div style="background: linear-gradient(135deg, #991b1b 0%, #b91c1c 100%); color: white; padding: 18px 22px; border-radius: 10px; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-shadow: 0 4px 15px rgba(185,28,28,0.2);">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="background: rgba(255,255,255,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">⚠️</div>
+              <div>
+                <h4 style="margin: 0; font-size: 1.15rem; color: #ffffff; letter-spacing: 0.5px;">ALERTA DE DUPLICIDAD / MULTI-PLANTEL</h4>
+                <p style="margin: 3px 0 0; font-size: 0.88rem; color: #fecaca;">
+                  La cédula <strong>V-${cedulaBuscada}</strong> aparece registrada <strong>${docs.length} VECES</strong> en la base de datos en diferentes instituciones.
+                </p>
+              </div>
+            </div>
+            <span style="background: #ffffff; color: #b91c1c; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 800; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+              ${docs.length} REGISTROS ACTIVOS
+            </span>
+          </div>
+        `;
+
+        // TABLA COMPARATIVA RESUMEN (FRENTE A FRENTE)
+        html += `
+          <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); overflow-x: auto;">
+            <h4 style="margin: 0 0 15px; color: #1e293b; font-size: 1rem; display: flex; align-items: center; gap: 8px;">
+              <span>📊</span> Resumen Comparativo de Discrepancias
+            </h4>
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.86rem; text-align: left;">
+              <thead>
+                <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
+                  <th style="padding: 10px 14px; color: #475569; width: 180px;">Parámetro</th>
+                  ${docs.map((d, idx) => `
+                    <th style="padding: 10px 14px; color: #0284c7; font-weight: bold; border-left: 1px solid #e2e8f0;">
+                      Registro #${idx + 1} (${d['codigo-plantel'] || d['codigoDEA'] || 'S/D'})
+                    </th>
+                  `).join('')}
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                  <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">Plantel / Ubicación</td>
+                  ${docs.map(d => `<td style="padding: 10px 14px; color: #1e293b; border-left: 1px solid #f1f5f9; font-weight: 500;">${d['ubicacion-fisica'] || d.plantel || 'Plantel no especificado'}</td>`).join('')}
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                  <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">Código DEA</td>
+                  ${docs.map(d => `<td style="padding: 10px 14px; font-family: monospace; font-weight: bold; color: #0284c7; border-left: 1px solid #f1f5f9;">${d['codigo-plantel'] || d['codigoDEA'] || 'N/A'}</td>`).join('')}
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                  <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">Municipio / Parroquia</td>
+                  ${docs.map(d => `<td style="padding: 10px 14px; color: #475569; border-left: 1px solid #f1f5f9;">${d.municipio || 'N/R'} — ${d.parroquia || 'N/R'}</td>`).join('')}
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                  <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">Cargo / Código RAC</td>
+                  ${docs.map(d => `<td style="padding: 10px 14px; color: #1e293b; border-left: 1px solid #f1f5f9;"><strong>${d.cargo || 'DOCENTE'}</strong> <span style="font-size: 0.78rem; color: #64748b;">(${d['codigo-rac'] || d['codigo-cargo'] || 'S/C'})</span></td>`).join('')}
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                  <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">Horas de Nómina</td>
+                  ${docs.map(d => {
+                    const rec = d['horas-recibo'] ?? d.horasRecibo ?? 40;
+                    const acad = d['horas-academicas'] ?? d.horasAcademicas ?? 0;
+                    const adm = d['horas-administrativas'] ?? d.horasAdministrativas ?? 0;
+                    return `<td style="padding: 10px 14px; color: #1e293b; border-left: 1px solid #f1f5f9;"><strong>${rec} hrs</strong> (Acad: ${acad}h / Adm: ${adm}h)</td>`;
+                  }).join('')}
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                  <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">Situación Laboral</td>
+                  ${docs.map(d => {
+                    const sit = (d['situacion-laboral'] || d.situacion || 'ACTIVO').toUpperCase();
+                    const colorBg = sit.includes('ACT') ? '#dcfce7' : '#fee2e2';
+                    const colorTxt = sit.includes('ACT') ? '#166534' : '#991b1b';
+                    return `<td style="padding: 10px 14px; border-left: 1px solid #f1f5f9;"><span style="background: ${colorBg}; color: ${colorTxt}; padding: 2px 8px; border-radius: 4px; font-size: 0.78rem; font-weight: bold;">${sit}</span></td>`;
+                  }).join('')}
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                  <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">Dependencia / Condición</td>
+                  ${docs.map(d => `<td style="padding: 10px 14px; color: #475569; border-left: 1px solid #f1f5f9;">${d.dependencia || 'NACIONAL'} — Titular: <strong>${d.titular || 'SI'}</strong></td>`).join('')}
+                </tr>
+                <tr>
+                  <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">ID del Documento</td>
+                  ${docs.map(d => `<td style="padding: 10px 14px; font-family: monospace; font-size: 0.78rem; color: #64748b; border-left: 1px solid #f1f5f9;">${d.id}</td>`).join('')}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+
+      // FICHAS COMPLETAS DETALLADAS (EXPEDIENTES INDIVIDUALES)
+      html += `
+        <h3 style="color: #0f172a; font-size: 1.25rem; margin: 0 0 15px; display: flex; align-items: center; gap: 8px;">
+          <span>📋</span> ${esDuplicado ? 'Expedientes Detallados por Institución' : 'Expediente Completo del Funcionario'}
+        </h3>
+        <div style="display: flex; flex-direction: column; gap: 24px;">
+      `;
+
+      docs.forEach((d, idx) => {
+        const nombre = (d['nombre-apellido'] || d['apellidos-nombres'] || d.nombre || 'Sin Nombre').toUpperCase();
+        const ced = d['cedula-identidad'] || d.cedula || cedulaBuscada;
+        const nac = d.nacionalidad || 'V';
+        const dea = d['codigo-plantel'] || d['codigoDEA'] || d['codigoPlantel'] || 'S/D';
+        const escuela = d['ubicacion-fisica'] || d.plantel || 'Plantel no registrado';
+        const cargo = d.cargo || 'DOCENTE';
+        const codRac = d['codigo-rac'] || d['codigo-cargo'] || 'S/C';
+        const dep = d.dependencia || 'NACIONAL';
+        const tipoPer = d['tipo-personal'] || d.tipoPersonal || 'DOCENTE';
+        const sitLab = d['situacion-laboral'] || d.situacion || 'ACTIVO';
+        const tit = d.titular || 'SI';
+        const hrsRec = d['horas-recibo'] ?? d.horasRecibo ?? 40;
+        const hrsAcad = d['horas-academicas'] ?? d.horasAcademicas ?? 0;
+        const hrsAdm = d['horas-administrativas'] ?? d.horasAdministrativas ?? 0;
+        const ant = d.antiguedad ?? 0;
+        const fIngreso = d['fecha-ingreso'] || d.fechaIngreso || 'N/R';
+        const turnos = d['turnos-atiende'] || d.turnos || 'MAÑANA';
+        const matricula = d['atiende-matricula'] || 'NO';
+
+        // Carga horaria detallada
+        const carga31059 = parsearCargaHoraria(d['31059']);
+        const carga31060 = parsearCargaHoraria(d['31060']);
+        const materiasTotal = [...carga31059, ...carga31060];
+
+        // Observación de primaria si aplica
+        let obsPrimaria = '';
+        if (d.primaria) {
+          try {
+            const pObj = typeof d.primaria === 'string' ? JSON.parse(d.primaria) : d.primaria;
+            if (pObj && pObj.observacion) obsPrimaria = pObj.observacion;
+          } catch(e) {}
+        }
+
+        html += `
+          <div style="background: white; border: 1px solid #cbd5e1; border-radius: 14px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.05);">
+            <!-- Encabezado de Ficha -->
+            <div style="background: #f8fafc; border-bottom: 2px solid #e2e8f0; padding: 18px 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                  <span style="background: #0284c7; color: white; padding: 3px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: bold; letter-spacing: 0.5px;">
+                    ${esDuplicado ? `INSTITUCIÓN #${idx + 1}` : 'FICHA INSTITUCIONAL'}
+                  </span>
+                  <span style="font-family: monospace; font-size: 0.82rem; color: #64748b; background: #e2e8f0; padding: 2px 8px; border-radius: 4px;">
+                    ID: ${d.id}
+                  </span>
+                </div>
+                <h3 style="margin: 0; color: #0f172a; font-size: 1.25rem;">${nombre}</h3>
+                <div style="color: #475569; font-size: 0.9rem; margin-top: 3px;">
+                  C.I: <strong style="font-family: monospace; color: #0284c7;">${nac}-${ced}</strong> | Plantel: <strong>${escuela}</strong> (DEA: <code style="color: #0369a1;">${dea}</code>)
+                </div>
+              </div>
+
+              <!-- Botones de Acción sobre el Plantel -->
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button type="button" class="btn-auditor-ver-plantel" data-dea="${dea}"
+                  style="background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; padding: 7px 14px; border-radius: 6px; font-size: 0.82rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                  🏫 Ver Escuela
+                </button>
+                <button type="button" class="btn-auditor-supervision" data-dea="${dea}" data-nombre="${escuela}"
+                  style="background: #0284c7; color: white; border: none; padding: 7px 14px; border-radius: 6px; font-size: 0.82rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                  👁️ Modo Supervisión
+                </button>
+              </div>
+            </div>
+
+            <!-- Cuerpo de Ficha en Secciones Claras -->
+            <div style="padding: 22px; display: flex; flex-direction: column; gap: 20px;">
+              
+              <!-- SECCIÓN 1: DATOS LABORALES Y HORAS -->
+              <div>
+                <h5 style="color: #0284c7; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 10px; display: flex; align-items: center; gap: 6px;">
+                  <span>💼</span> Datos Laborales y Condición
+                </h5>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; background: #f8fafc; padding: 14px 18px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.85rem;">
+                  <div><span style="color: #64748b;">Cargo Oficial:</span> <strong style="color: #1e293b; display: block;">${cargo}</strong></div>
+                  <div><span style="color: #64748b;">Código RAC:</span> <strong style="color: #1e293b; display: block; font-family: monospace;">${codRac}</strong></div>
+                  <div><span style="color: #64748b;">Tipo de Personal:</span> <strong style="color: #1e293b; display: block;">${tipoPer}</strong></div>
+                  <div><span style="color: #64748b;">Dependencia:</span> <strong style="color: #1e293b; display: block;">${dep}</strong></div>
+                  <div><span style="color: #64748b;">Condición:</span> <strong style="color: #1e293b; display: block;">${tit === 'SI' ? 'Titular' : 'Interino / Contratado'}</strong></div>
+                  <div><span style="color: #64748b;">Situación:</span> <strong style="color: ${sitLab.includes('ACT') ? '#16a34a' : '#dc2626'}; display: block;">${sitLab}</strong></div>
+                  <div><span style="color: #64748b;">Horas de Nómina:</span> <strong style="color: #1e293b; display: block;">${hrsRec} hrs (Acad: ${hrsAcad}h / Adm: ${hrsAdm}h)</strong></div>
+                  <div><span style="color: #64748b;">Antigüedad / Ingreso:</span> <strong style="color: #1e293b; display: block;">${ant} años (${fIngreso})</strong></div>
+                  <div><span style="color: #64748b;">Turno Atiende:</span> <strong style="color: #1e293b; display: block;">${turnos}</strong></div>
+                  <div><span style="color: #64748b;">Atiende Matrícula:</span> <strong style="color: #1e293b; display: block;">${matricula}</strong></div>
+                </div>
+              </div>
+
+              <!-- SECCIÓN 2: CARGA HORARIA Y ASIGNATURAS DISTRIBUIDAS -->
+              <div>
+                <h5 style="color: #0284c7; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 10px; display: flex; align-items: center; gap: 6px;">
+                  <span>📚</span> Carga Horaria y Asignaturas Distribuidas
+                </h5>
+                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 18px;">
+                  ${materiasTotal.length > 0 ? `
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                      ${materiasTotal.map(m => `
+                        <span style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; padding: 5px 12px; border-radius: 6px; font-size: 0.82rem; font-weight: 500;">
+                          <strong>${m.anio}:</strong> ${m.materia} (${m.horas} hrs)
+                        </span>
+                      `).join('')}
+                    </div>
+                  ` : `
+                    <div style="color: #64748b; font-size: 0.85rem; font-style: italic;">
+                      Sin asignaturas académicas específicas desglosadas en este expediente institucional.
+                    </div>
+                  `}
+                  ${obsPrimaria ? `
+                    <div style="margin-top: 10px; font-size: 0.82rem; background: #fffbeb; color: #92400e; padding: 8px 12px; border-radius: 6px; border: 1px solid #fef3c7;">
+                      📌 <strong>Nota de Primaria/Inactividad:</strong> ${obsPrimaria}
+                    </div>
+                  ` : ''}
+                </div>
+              </div>
+
+              <!-- SECCIÓN 3: DATOS PERSONALES, CONTACTO Y SALUD -->
+              <div>
+                <h5 style="color: #0284c7; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 10px; display: flex; align-items: center; gap: 6px;">
+                  <span>👤</span> Expediente Personal y Contacto
+                </h5>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; background: #f8fafc; padding: 14px 18px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.85rem;">
+                  <div><span style="color: #64748b;">Teléfono Móvil:</span> <strong style="color: #1e293b; display: block;">${d['tel-celular'] || d.telefono || 'N/R'}</strong></div>
+                  <div><span style="color: #64748b;">Correo Electrónico:</span> <strong style="color: #1e293b; display: block; word-break: break-all;">${d.correo || d.email || 'N/R'}</strong></div>
+                  <div><span style="color: #64748b;">Fecha Nacimiento / Edad:</span> <strong style="color: #1e293b; display: block;">${d['fecha-nacimiento'] || 'N/R'} (${d.edad || 0} años)</strong></div>
+                  <div><span style="color: #64748b;">Estado Civil / Género:</span> <strong style="color: #1e293b; display: block;">${d['estado-civil'] || 'N/R'} / ${d.genero || 'N/R'}</strong></div>
+                  <div><span style="color: #64748b;">Instrucción / Profesión:</span> <strong style="color: #1e293b; display: block;">${d.instruccion || 'N/R'} — ${d.profesion || 'N/R'}</strong></div>
+                  <div><span style="color: #64748b;">Dirección:</span> <strong style="color: #1e293b; display: block;">${d.direccion || 'N/R'}</strong></div>
+                  <div><span style="color: #64748b;">Tallas (Camisa / Pant. / Zap.):</span> <strong style="color: #1e293b; display: block;">${d['talla-camisa'] || '-'} / ${d['talla-pantalon'] || '-'} / ${d['talla-zapato'] || '-'}</strong></div>
+                  <div><span style="color: #64748b;">Salud / Discapacidad:</span> <strong style="color: #1e293b; display: block;">${d['tipo-enfermedad'] || 'Ninguna'} (Disc: ${d.discapacidad || 'NO'})</strong></div>
+                </div>
+              </div>
+
+              <!-- SECCIÓN 4: OBSERVACIONES -->
+              ${d.observaciones ? `
+                <div style="background: #fffbeb; border: 1px solid #fef3c7; border-left: 4px solid #f59e0b; padding: 12px 16px; border-radius: 6px; font-size: 0.85rem; color: #92400e;">
+                  <strong>📝 Observaciones del Expediente:</strong> ${d.observaciones}
+                </div>
+              ` : ''}
+
+            </div>
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+      resultadosBody.innerHTML = html;
+
+      // Event listeners para los botones de las fichas
+      resultadosBody.querySelectorAll('.btn-auditor-ver-plantel').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const dea = btn.getAttribute('data-dea');
+          if (dea && typeof window.abrirFichaAuditoria === 'function') {
+            window.abrirFichaAuditoria(dea);
+          }
+        });
+      });
+
+      resultadosBody.querySelectorAll('.btn-auditor-supervision').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const dea = btn.getAttribute('data-dea');
+          const nom = btn.getAttribute('data-nombre');
+          if (dea && typeof window.iniciarSupervisionPlantel === 'function') {
+            window.iniciarSupervisionPlantel(dea, nom);
+          }
+        });
+      });
+    }
+  }
+  setupAuditorCedula();
 
   window.abrirFichaAuditoria = abrirFichaAuditoria;
   window.abrirModalSeleccionarPlanteles = abrirModalSeleccionarPlanteles;

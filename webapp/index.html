@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SGH - v2.29.7</title>
+  <title>SGH - v2.30.0</title>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
@@ -123,7 +123,7 @@
           style="width: 110px; height: 110px; border-radius: 20px; object-fit: cover; box-shadow: 0 10px 25px rgba(0,0,0,0.2); margin-bottom: 18px;" />
         <h1
           style="color: var(--primary-color); margin-bottom: 5px; display: flex; align-items: baseline; justify-content: center; gap: 8px;">
-          SGH <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">v2.29.7</span></h1>
+          SGH <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">v2.30.0</span></h1>
         <p>Sistema de Gestión Humana - Estado Mérida</p>
         <form id="login-form">
           <input type="email" id="login-email" placeholder="Correo Electrónico" required autocomplete="email" />
@@ -228,7 +228,7 @@
     <section id="dashboard-view" class="view">
       <nav class="navbar">
         <div class="nav-brand">
-          <span style="color: var(--primary-color);">SGH</span> v2.29.7
+          <span style="color: var(--primary-color);">SGH</span> v2.30.0
         </div>
         <div class="nav-user">
           <span id="user-display-name" style="font-weight: 500;">Cargando...</span>
@@ -291,7 +291,7 @@
         <img src="/sgh-logo.png" alt="SGH Logo"
           style="width: 32px; height: 32px; border-radius: 6px; object-fit: cover; box-shadow: 0 2px 6px rgba(0,0,0,0.15);" />
         <span style="color: var(--primary-color); font-weight: 700;">SGH</span> <span
-          style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">v2.29.7</span>
+          style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">v2.30.0</span>
       </div>
       <div class="nav-user" style="display: flex; gap: 10px; align-items: center;">
         <button id="btn-logout-lock" class="btn-icon"
@@ -1853,7 +1853,7 @@
             <h1
               style="color: var(--primary-color); font-size: 1.05rem; margin: 0; display: flex; align-items: center; gap: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
               SGH Panel <span id="admin-header-version-badge"
-                style="font-size: 0.72rem; font-weight: 600; color: var(--primary-color); background: rgba(37,99,235,0.1); padding: 2px 6px; border-radius: 10px;">v2.29.7</span>
+                style="font-size: 0.72rem; font-weight: 600; color: var(--primary-color); background: rgba(37,99,235,0.1); padding: 2px 6px; border-radius: 10px;">v2.30.0</span>
             </h1>
           </div>
         </div>
@@ -1885,6 +1885,10 @@
             Pizarra</button>
           <button id="btn-sidebar-validacion" class="sidebar-btn" data-target="admin-tab-validacion">👥 Usuarios del
             Sistema</button>
+          <button id="btn-sidebar-auditor-cedula" class="sidebar-btn" data-target="admin-tab-auditor-cedula"
+            style="display: flex; gap: 8px; align-items: center; font-size: 0.95rem; color: #0284c7; font-weight: 600;">
+            <span>🔍</span> Auditor de Cédula
+          </button>
 
           <!-- ACORDEON: GESTOR DE BD -->
           <button id="btn-sidebar-bd" class="sidebar-btn accordion-btn"
@@ -2483,6 +2487,73 @@
               </svg>
               Analizar Registro Sospechoso
             </button>
+          </div>
+        </div>
+
+        <!-- TAB: AUDITOR DE CÉDULA Y DUPLICADOS -->
+        <div id="admin-tab-auditor-cedula" class="admin-tab">
+          <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; padding: 22px 24px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 5px solid #0284c7;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+              <div>
+                <h2 style="font-size: 1.55rem; margin: 0; color: #ffffff; display: flex; align-items: center; gap: 10px;">
+                  <span>🔍</span> Auditor de Cédulas y Expedientes
+                </h2>
+                <p style="color: #94a3b8; font-size: 0.88rem; margin: 6px 0 0 0;">
+                  Detección en tiempo real de registros activos, duplicidades institucionales e inspección completa de expediente laboral (Zero-Cost).
+                </p>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <span style="background: rgba(2, 132, 199, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 600;">
+                  ⚡ Consulta Quirúrgica
+                </span>
+                <span style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3); padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 600;">
+                  🛡️ Zero-Cost
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Barra de Búsqueda -->
+          <div style="background: white; padding: 18px 20px; border-radius: 12px; border: 1px solid var(--glass-border); box-shadow: 0 2px 8px rgba(0,0,0,0.04); margin-bottom: 25px;">
+            <form id="form-auditor-cedula" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin: 0;">
+              <div style="position: relative; flex: 1; min-width: 250px; max-width: 450px;">
+                <input type="text" id="inp-auditor-cedula" placeholder="Ingrese número de cédula (ej. 19752765)..." autocomplete="off"
+                  style="width: 100%; height: 46px; padding: 0 16px; font-size: 1rem; border-radius: 8px; border: 2px solid #cbd5e1; box-sizing: border-box; font-family: monospace; font-weight: bold; color: #1e293b;">
+              </div>
+              <button type="submit" id="btn-buscar-auditor-cedula"
+                style="height: 46px; background: #0284c7; color: white; border: none; padding: 0 22px; border-radius: 8px; font-size: 0.95rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.2s;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                Auditar Cédula
+              </button>
+              <button type="button" id="btn-limpiar-auditor-cedula"
+                style="height: 46px; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 0 16px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                🧹 Limpiar
+              </button>
+            </form>
+            <div style="margin-top: 10px; font-size: 0.8rem; color: #64748b; display: flex; gap: 15px; align-items: center;">
+              <span>💡 <em>Tip: Puede ingresar la cédula con o sin letras (V-19752765 o 19752765). Presione <strong>Enter</strong> para auditar inmediatamente.</em></span>
+            </div>
+          </div>
+
+          <!-- Contenedor de Resultados Dinámicos -->
+          <div id="contenedor-resultados-auditor">
+            <!-- Estado Inicial / Instrucciones -->
+            <div id="auditor-estado-inicial" style="text-align: center; padding: 50px 20px; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 12px;">
+              <div style="font-size: 3rem; margin-bottom: 12px;">🔎</div>
+              <h3 style="color: #334155; margin: 0 0 8px; font-size: 1.2rem;">Auditoría de Personal y Detección de Duplicados</h3>
+              <p style="color: #64748b; max-width: 580px; margin: 0 auto; font-size: 0.9rem; line-height: 1.5;">
+                Ingrese un número de cédula arriba para consultar en tiempo real en qué planteles se encuentra registrado el funcionario, qué cargo y horas tiene asignados, y diagnosticar posibles duplicidades o inconsistencias de nómina.
+              </p>
+            </div>
+
+            <!-- Spinner de Carga -->
+            <div id="auditor-spinner" style="display: none; text-align: center; padding: 50px 20px;">
+              <div style="display: inline-block; width: 42px; height: 42px; border: 4px solid #e2e8f0; border-top: 4px solid #0284c7; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+              <p style="color: #0284c7; font-weight: 600; margin-top: 15px; font-size: 0.95rem;">Consultando registros en la base de datos...</p>
+            </div>
+
+            <!-- Resultados -->
+            <div id="auditor-resultados-body" style="display: none;"></div>
           </div>
         </div>
 

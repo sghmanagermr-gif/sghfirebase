@@ -5915,3 +5915,42 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 3. Documentación y Entrega:  
 >    - Actualizados `bitacora.md`, `conversaciones.md` y entregado el mensaje oficial estructurado para WhatsApp.
 
+
+---
+
+### Intervención 157
+
+* **Fecha / Hora:** 2026-11-05 ~11:30 - 12:25 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+> Con toda honestidad dime. Puedo tener accedo de lectura como una pantalla de director toda la nomina siendo superadmin, sin que afecte zero-cost  
+> [...]  
+> Para que me entiendas. Necesito dar respuesta a caso como por ejemplo me dicen el funcionario tal con numero de cedula x aparece doble: entonces en un buscador meto la cedula y verifico si es verdad que aparece doble, triple, cuadruple X, y en que instituciones aparece de esa manera irregular si fuera el caso. ¿Me explico?  
+> [...]  
+> Ajá ok, pero necesito ver la ficha de los 1 o tantas veces resulte el funcionario, para entender las fallas que tenga  
+> [...]  
+> Me gusta el diseño  
+> [...]  
+> estoy satisfecho  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Arquitectura, Diseño e Implementación del Módulo Auditor de Cédula y Expedientes (SGH v2.30.0 - Zero-Cost):  
+> 1. Análisis Técnico y Viabilidad Zero-Cost:  
+>    - Se demostró que cargar 26.000 funcionarios en bloque agotaría la cuota diaria gratuita de 50.000 lecturas en 2 recargas.  
+>    - En contraste, la consulta quirúrgica por cédula con filtro indexado (`where('cedula', 'in', [...])`) consume únicamente 1 o 2 lecturas por búsqueda, garantizando viabilidad permanente y costo cero absoluto.  
+> 2. Desarrollo e Integración en Producción:  
+>    - Creado en `webapp/index.html` el botón lateral `🔍 Auditor de Cédula` y la pestaña de administración `#admin-tab-auditor-cedula`.  
+>    - Implementada en `webapp/src/admin.js` la lógica reactiva `setupAuditorCedula()`:  
+>      * Detección automática de registros únicos vs registros duplicados en diferentes planteles.  
+>      * Generación de tabla comparativa frente a frente con parámetros clave (Plantel, DEA, Municipio, Cargo, Horas, Situación, Dependencia).  
+>      * Generación de expedientes institucionales completos con desglose de carga horaria (planes 31059, 31060 o primaria), expediente personal, contacto, dotación, salud y observaciones.  
+>      * Botones de navegación directa a la ficha de la escuela (`abrirFichaAuditoria`) y al modo supervisión (`iniciarSupervisionPlantel`).  
+> 3. Control de Versiones SemVer y Despliegue:  
+>    - Elevada la versión a SemVer MENOR `v2.30.0` en `package.json` y en las 5 interfaces de `index.html`.  
+>    - Compilación exitosa en Vite (819ms) y despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`).
+
+

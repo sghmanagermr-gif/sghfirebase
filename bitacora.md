@@ -3788,4 +3788,28 @@ Se procesó el requerimiento `CASO_HUERFANOS` para 8 funcionarios ubicados en el
 4. **Reporte Institucional:** Generado y entregado el reporte oficial estructurado para WhatsApp.
 
 
+---
+
+## [Nueva Funcionalidad - v2.30.0] - 2026-11-05 (Módulo de Auditoría Quirúrgica de Personal y Detección de Duplicados en Tiempo Real)
+
+### Resumen Técnico
+Se diseñó, desarrolló e integró el módulo **"Auditor de Cédulas y Expedientes"** para el rol superadmin, zonadmin y munadmin en el sistema SGH v2.30.0. Este módulo permite responder en tiempo real a denuncias de duplicidades de personal o funcionarios cruzados entre planteles, inspeccionando la totalidad de su expediente laboral sin violar las directrices de cuota gratuita (Zero-Cost).
+
+### Acciones Realizadas
+1. **Frontend / UI (`webapp/index.html`):**
+   - Agregado el botón directo `🔍 Auditor de Cédula` en el panel de navegación lateral `#admin-sidebar`.
+   - Creada la pestaña `#admin-tab-auditor-cedula` con interfaz ejecutiva, formulario de búsqueda con validación instantánea por teclado (`Enter`), estado de bienvenida y spinner de procesamiento reactivo.
+   - Incremento SemVer a **v2.30.0** en los 5 encabezados e interfaces institucionales.
+2. **Lógica de Auditoría Zero-Cost (`webapp/src/admin.js`):**
+   - Implementada función `setupAuditorCedula()` ejecutando consulta indexada directa sobre `cargos_personal` filtrando por `cedula` en arreglo de variantes (numérica y prefijo V/E).
+   - Costo de cuota ultra-optimizado: 1 lectura si el funcionario es único, 2 lecturas si está duplicado, 0 lecturas si no existe.
+   - Generación de **Alerta de Duplicidad** y **Tabla Comparativa Frente a Frente** ante registros múltiples en planteles distintos.
+   - Generación de **Fichas Completas Detalladas** por cada aparición institucional: datos laborales, carga horaria desglosada (planes 31059, 31060 o primaria), contacto, dotación, salud y observaciones del expediente.
+   - Enlace directo a *"Ver Ficha de Escuela"* (`abrirFichaAuditoria`) y *"Modo Supervisión"* (`iniciarSupervisionPlantel`).
+3. **Control de Versiones y Despliegue:**
+   - Actualizado `webapp/package.json` a `2.30.0`.
+   - Compilación exitosa en Vite (819ms) y despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`).
+
+
+
 
