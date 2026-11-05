@@ -5954,3 +5954,48 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - Compilación exitosa en Vite (819ms) y despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`).
 
 
+---
+
+### Intervención 158
+
+* **Fecha / Hora:** 2026-11-05 ~12:25 - 12:35 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Atento con duplicar personal en la base de datos de Firebase Protocolo CASO_HUERFANOS  
+> DOCENTE : MARIA ADELAIDA BRICEÑO AVENDAÑO C.I 20849050  
+> MADRE COCINERA: YUSMARY DEL VALLE SÁNCHEZ SÁNCHEZ C.I 23722629  
+> [...]  
+> luz verde  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Auditoría Forense y Rescate Exclusivo Anti-Duplicados en Aguas Caliente OD14291419 (Skill 5 y Skill 6):  
+> 1. Auditoría Cruzada RAC vs Firebase: Ambas funcionarias pertenecen al plantel `OD14291419` (Aguas Caliente, Santos Marquina) y poseían 0 registros en Firebase.  
+> 2. Inyección Ejecutada: Creados expedientes `OD14291419_20849050` y `OD14291419_23722629` con esquema dual canónico y nómina de `planteles/OD14291419` actualizada de 3 a 5 funcionarios.  
+> 3. Reporte Institucional: Emitido el mensaje oficial para WhatsApp.
+
+
+---
+
+### Intervención 159
+
+* **Fecha / Hora:** 2026-11-05 ~12:42 - 12:50 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> correos_afectados escuelaemprendimientodaysimba@gmail.com  
+> [...]  
+> estoy satisfecho  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Protocolo de Regularización, Sincronización Institucional y Enlace Seguro OOB (Skill 5 y Skill 6):  
+> 1. Verificación y Normalización: Cuenta `escuelaemprendimientodaysimba@gmail.com` vinculada a la Escuela para el Emprendimiento Daysi Matilde Bravo Álvarez (`ON13841414`), Santa Elena de Arenales, Obispo Ramos de Lora.  
+> 2. Estado de Acceso y Nómina: Cuenta Auth verificada (`emailVerified: true`), perfil `plaadmin` aprobado, metadatos canónicos corregidos en `planteles/ON13841414` y nómina de 4 docentes confirmada y operativa al 100% en `cargos_personal`.  
+> 3. Enlace Directo OOB y Mensaje WhatsApp: Generado enlace seguro de restablecimiento y redactado mensaje protocolar listo para enviar al director.
+
+
+

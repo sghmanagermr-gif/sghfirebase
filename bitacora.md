@@ -3811,5 +3811,41 @@ Se diseñó, desarrolló e integró el módulo **"Auditor de Cédulas y Expedien
    - Compilación exitosa en Vite (819ms) y despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`).
 
 
+---
+
+## [Operación Forense] - 2026-11-05 (Operativo CASO_HUERFANOS: Aguas Caliente OD14291419 - Inclusión Exclusiva Anti-Duplicados)
+
+### Resumen Técnico
+Se procesó el requerimiento `CASO_HUERFANOS` para 2 funcionarias pertenecientes al **Plantel Aguas Caliente (Código DEA `OD14291419`)**, Parroquia Tabay, Municipio Santos Marquina:
+- **Auditoría Cruzada RAC vs Firebase:**
+  * **María Adelaida Briceño Avendaño (C.I. 20.849.050):** Validada en nómina ministerial RAC como Docente Contratado (MI-4697), 40 horas académicas, titularidad no, dependencia estadal, activa. Poseía 0 registros en Firebase.
+  * **Yusmary Del Valle Sánchez Sánchez (C.I. 23.722.629):** Validada en nómina ministerial RAC como Cocinero (8990N), 40 horas administrativas, titularidad nacional, obrero, activa, Cocinera de la Patria. Poseía 0 registros en Firebase.
+  * Ambas resultaron ser huérfanas legítimas validadas con cero riesgo de duplicidad.
+
+### Acciones Realizadas
+1. **Colección `cargos_personal`:** Creados 2 expedientes individuales con esquema dual canónico (kebab-case y camelCase):
+   - `OD14291419_20849050` (María Adelaida Briceño Avendaño).
+   - `OD14291419_23722629` (Yusmary Del Valle Sánchez Sánchez).
+2. **Colección `planteles`:** Actualizado `planteles/OD14291419` incorporando a ambas funcionarias en `personal_resumen`, elevando la nómina institucional de 3 a 5 trabajadores.
+3. **Métricas Zero-Cost:** 3 escrituras atómicas directas con 0 consumo de cuota de lectura en cliente.
+4. **Reporte Institucional:** Generado reporte oficial para WhatsApp.
+
+
+---
+
+## [Operación Forense] - 2026-11-05 (Protocolo correos_afectados: Regularización y Enlace Seguro para Escuela para el Emprendimiento Daysi Matilde Bravo Álvarez - ON13841414)
+
+### Resumen Técnico
+Se procesó la solicitud `correos_afectados` para la cuenta directiva **`escuelaemprendimientodaysimba@gmail.com`**:
+- **Identificación:** Vinculada a la **Escuela para el Emprendimiento Daysi Matilde Bravo Álvarez (Código DEA `ON13841414`)**, Parroquia Santa Elena de Arenales, Municipio Obispo Ramos de Lora (Dependencia Estadal, Código Estadístico 141873).
+- **Diagnóstico y Normalización:**
+  * Cuenta en Firebase Auth verificada y activa (`emailVerified: true`, UID `zvoNo1nqU9MBY43TvJi5vQdk9Eg1`).
+  * Perfil en `usuarios/zvoNo1nqU9MBY43TvJi5vQdk9Eg1` confirmado con rol `plaadmin`, estatus `APROBADO` y jerarquía oficial.
+  * Normalizados metadatos institucionales canónicos en `planteles/ON13841414` (`nombre-plantel`, `denominacion`, `eponimo`, `nuevo_eponimo`, `codigos`).
+  * Nómina ministerial de 4 docentes confirmada y operativa al 100% en `cargos_personal` y `personal_resumen`.
+- **Acceso:** Emitido enlace seguro Out-of-Band (OOB) de restablecimiento de contraseña para entrega al director vía WhatsApp.
+
+
+
 
 
