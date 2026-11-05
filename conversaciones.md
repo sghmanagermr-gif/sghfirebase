@@ -5876,3 +5876,42 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - Actualizados `planteles/S3379N1410` (de 8 a 10) y `planteles/OD17141410` (de 2 a 3).  
 > 3. Documentación y Entrega:  
 >    - Actualizados `bitacora.md`, `conversaciones.md` y entregado el mensaje oficial estructurado para WhatsApp.
+
+
+---
+
+### Intervención 156
+
+* **Fecha / Hora:** 2026-11-05 ~11:20 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Mismo procedimiento. Atento con duplicar personal en la base de datos de Firebase  
+> CASO_HUERFANOS  
+> Yoniraima del Carmen Mendoza Salas Cedula 12355160 Codigo 1135DH  
+> Sandra Evelyn Becerra Sanche Cedula 19752765 Codigo 1132DH  
+> Richard Alexander Herrera Salazar Cedula 19752861 Codigo 4130DH  
+> Damaris Andreina Puentes Monsalve Cedula 19752687 Codigo 4140DH  
+> Mayerlyn Coromoto Marquina Cedula 21570218 Codigo 1132DH  
+> Carmen Victoria Mancilla Fernandez Cedula 19503499 Codigo 1143DH  
+> Luz Enyd Claro Sanchez Cedula 12654330 Codigo 1163DI  
+> OBRERO Elizabeth Nava Peña Cedula 20432818 Codigo 8032N  
+> [...]  
+> luz verde  
+> [...]  
+> Se te olvida enviarme el mensaje de Whatsapp  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Auditoría Forense y Rescate Exclusivo Anti-Duplicados en Municipio Andrés Bello (Skill 5 y Skill 6):  
+> 1. Auditoría Cruzada RAC vs Firebase:  
+>    - Se verificó que todos los 8 funcionarios pertenecen a La Azulita (Municipio Andrés Bello).  
+>    - 6 funcionarios validados en RAC para CB La Azulita (`S1465D1402`) y 1 funcionaria para Complejo Educativo Jesús Manuel Nava (`OD05511402`), todos con 0 registros previos en Firebase.  
+>    - Luz Enyd Claro Sánchez fue localizada en RAC bajo la C.I. 12.654.339 (código 1163DI) en IEE 22 de Febrero (`OD16191402`), constatando que ya se encontraba registrada en Firebase con expediente completo, por lo cual se protegió y no se duplicó.  
+> 2. Inyección Ejecutada:  
+>    - Creados 7 expedientes en `cargos_personal` con esquema dual exhaustivo (kebab-case y camelCase).  
+>    - Actualizados `planteles/S1465D1402` (de 39 a 45 funcionarios) y `planteles/OD05511402` (de 12 a 13 funcionarios).  
+> 3. Documentación y Entrega:  
+>    - Actualizados `bitacora.md`, `conversaciones.md` y entregado el mensaje oficial estructurado para WhatsApp.
+

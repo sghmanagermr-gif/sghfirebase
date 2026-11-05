@@ -3761,3 +3761,31 @@ Se procesó el comando `CASO_HUERFANOS` para 4 planteles del Municipio Julio Cé
 4. **Reporte Institucional:** Generado reporte oficial en `scratch/whatsapp_message_lote17.txt`.
 
 
+---
+
+## [Operación Forense] - 2026-11-05 (Operativo CASO_HUERFANOS: Municipio Andrés Bello - Inclusión Exclusiva Anti-Duplicados en S1465D1402 y OD05511402)
+
+### Resumen Técnico
+Se procesó el requerimiento `CASO_HUERFANOS` para 8 funcionarios ubicados en el Municipio Andrés Bello (La Azulita):
+- **Auditoría Cruzada RAC vs Firebase:**
+  * **CB La Azulita (`S1465D1402`):** Se validaron al 100% en RAC ministerial 6 funcionarios sin registro previo en Firebase (Carmen Victoria Mancilla Fernández C.I. 19.503.499, Sandra Evelin Becerra Sánchez C.I. 19.752.765, Richard Alexander Herrera Salazar C.I. 19.752.861, Damaris Andreina Puentes Monsalve C.I. 19.752.687, Mayerlyn Coromoto Marquina C.I. 21.570.218, y Elizabeth Nava Peña C.I. 20.432.818 - Obrera).
+  * **Complejo Educativo Jesús Manuel Nava (`OD05511402`):** Se validó en RAC a Yoniraima del Carmen Mendoza Salas (C.I. 12.355.160, Docente V Estadal) sin registro previo en Firebase.
+  * **IEE 22 de Febrero (`OD16191402`):** Se detectó que el registro solicitado para Luz Enyd Claro Sánchez correspondía a la C.I. oficial 12.654.339 (con código 1163DI). Al verificar en Firebase, se constató que ya existía con expediente completo en `cargos_personal/OD16191402_12654339`, por lo que fue protegida y **no se duplicó**.
+
+### Acciones Realizadas
+1. **Colección `cargos_personal`:** Creados 7 expedientes individuales con esquema dual exhaustivo (kebab-case y camelCase):
+   - `S1465D1402_19503499` (Carmen Victoria Mancilla Fernández - Docente IV / Aula)
+   - `S1465D1402_19752765` (Sandra Evelin Becerra Sánchez - Docente II / Aula)
+   - `S1465D1402_19752861` (Richard Alexander Herrera Salazar - Docente NG / Aula)
+   - `S1465D1402_19752687` (Damaris Andreina Puentes Monsalve - Docente NG / Aula)
+   - `S1465D1402_21570218` (Mayerlyn Coromoto Marquina - Docente II / Aula)
+   - `S1465D1402_20432818` (Elizabeth Nava Peña - Aseador II / Obrero)
+   - `OD05511402_12355160` (Yoniraima del Carmen Mendoza Salas - Docente V)
+2. **Colección `planteles`:**
+   - `planteles/S1465D1402`: incorporados 6 funcionarios a `personal_resumen` (de 39 a 45).
+   - `planteles/OD05511402`: incorporada 1 funcionaria a `personal_resumen` (de 12 a 13).
+3. **Métricas Zero-Cost:** 9 escrituras atómicas directas con 0 consumo de cuota de lectura en cliente.
+4. **Reporte Institucional:** Generado y entregado el reporte oficial estructurado para WhatsApp.
+
+
+
