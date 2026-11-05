@@ -2874,43 +2874,47 @@ export function initAdminDashboard(dbInstance, user) {
     }
   }
 
-  async function loadPlanteles() {
+  async function loadPlanteles(forzarSync = false) {
     if(!tbodyPlanteles) return;
     try {
-      tbodyPlanteles.innerHTML = '<tr><td colspan="6" style="padding: 20px; text-align: center; color: var(--text-muted);">Cargando planteles...</td></tr>';
+      if (!forzarSync && (!Array.isArray(currentPlanteles) || currentPlanteles.length === 0)) {
+        tbodyPlanteles.innerHTML = '<tr><td colspan="6" style="padding: 20px; text-align: center; color: var(--text-muted);">Cargando planteles...</td></tr>';
+      }
 
       const isMun = (userData?.rol === 'munadmin');
       const userMunNorm = isMun 
         ? normalizarMunicipio(userData?.jerarquia?.municipio || userData?.municipio || '') 
         : null;
 
-      // Verificación de caché de sesión Zero-Cost
-      if (userMunNorm) {
-        let plantelesEnCache = obtenerPlantelesMunCache(userMunNorm);
-        if (!plantelesEnCache && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
-          const filt = currentPlanteles.filter(p => normalizarMunicipio(p.municipio || '') === userMunNorm);
-          if (filt.length > 0) {
-            plantelesEnCache = filt;
-            guardarPlantelesMunCache(userMunNorm, plantelesEnCache);
+      // Verificación de caché de sesión Zero-Cost (solo si no se fuerza sincronización directa)
+      if (!forzarSync) {
+        if (userMunNorm) {
+          let plantelesEnCache = obtenerPlantelesMunCache(userMunNorm);
+          if (!plantelesEnCache && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
+            const filt = currentPlanteles.filter(p => normalizarMunicipio(p.municipio || '') === userMunNorm);
+            if (filt.length > 0) {
+              plantelesEnCache = filt;
+              guardarPlantelesMunCache(userMunNorm, plantelesEnCache);
+            }
           }
-        }
-        if (plantelesEnCache && plantelesEnCache.length > 0) {
-          currentPlanteles = plantelesEnCache;
-          poblarFiltrosGeograficosTabla();
-          renderPlantelesList();
-          return;
-        }
-      } else {
-        let plantelesEnCache = obtenerPlantelesEstadalCache();
-        if (!plantelesEnCache && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
-          plantelesEnCache = currentPlanteles;
-          guardarPlantelesEstadalCache(currentPlanteles);
-        }
-        if (plantelesEnCache && plantelesEnCache.length > 0) {
-          currentPlanteles = plantelesEnCache;
-          poblarFiltrosGeograficosTabla();
-          renderPlantelesList();
-          return;
+          if (plantelesEnCache && plantelesEnCache.length > 0) {
+            currentPlanteles = plantelesEnCache;
+            poblarFiltrosGeograficosTabla();
+            renderPlantelesList();
+            return;
+          }
+        } else {
+          let plantelesEnCache = obtenerPlantelesEstadalCache();
+          if (!plantelesEnCache && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
+            plantelesEnCache = currentPlanteles;
+            guardarPlantelesEstadalCache(currentPlanteles);
+          }
+          if (plantelesEnCache && plantelesEnCache.length > 0) {
+            currentPlanteles = plantelesEnCache;
+            poblarFiltrosGeograficosTabla();
+            renderPlantelesList();
+            return;
+          }
         }
       }
 
@@ -2959,8 +2963,10 @@ export function initAdminDashboard(dbInstance, user) {
         }
       });
 
-      if (userMun && currentPlanteles.length > 0) {
-        guardarPlantelesMunCache(userMun, currentPlanteles);
+      if (userMunNorm && currentPlanteles.length > 0) {
+        guardarPlantelesMunCache(userMunNorm, currentPlanteles);
+      } else if (!userMunNorm && currentPlanteles.length > 0) {
+        guardarPlantelesEstadalCache(currentPlanteles);
       }
 
       // Si es superadmin o zonadmin y ya están los planteles en memoria, sincronizar tarjeta Matrícula Estadal
@@ -3122,7 +3128,21 @@ export function initAdminDashboard(dbInstance, user) {
               b.disabled = true;
               b.innerText = 'Borrando...';
               await deleteDoc(doc(db, "planteles", id));
-              await loadPlanteles();
+              
+              // Actualizar en memoria y limpiar cachés de sesión inmediatamente
+              currentPlanteles = currentPlanteles.filter(x => x.id !== id && x.codigos?.plantel !== id);
+              limpiarPlantelesEstadalCache();
+              guardarPlantelesEstadalCache(currentPlanteles);
+              if (plantel?.municipio) {
+                limpiarPlantelesMunCache(plantel.municipio);
+              }
+              if (window._cacheSupervision) {
+                delete window._cacheSupervision[id];
+                if (plantel?.codigos?.plantel) delete window._cacheSupervision[plantel.codigos.plantel];
+              }
+              poblarFiltrosGeograficosTabla();
+              renderPlantelesList();
+              showToast("Plantel eliminado con éxito", "success");
             } catch(e) {
               console.error(e);
               showConfirm("Error", "Ocurrió un problema eliminando el plantel.", "danger");
@@ -3146,6 +3166,30 @@ export function initAdminDashboard(dbInstance, user) {
 
   if(selFiltroParroquia) {
     selFiltroParroquia.addEventListener('change', renderPlantelesList);
+  }
+
+  const btnRefrescarPlanteles = document.getElementById('btn-refrescar-planteles');
+  if (btnRefrescarPlanteles) {
+    btnRefrescarPlanteles.addEventListener('click', async () => {
+      btnRefrescarPlanteles.disabled = true;
+      const origHtml = btnRefrescarPlanteles.innerHTML;
+      btnRefrescarPlanteles.innerHTML = '🔄 Sincronizando...';
+      try {
+        limpiarPlantelesEstadalCache();
+        const userMun = (userData?.rol === 'munadmin') 
+          ? (userData?.jerarquia?.municipio || userData?.municipio || '').trim().toUpperCase() 
+          : null;
+        if (userMun) limpiarPlantelesMunCache(userMun);
+        await loadPlanteles(true);
+        showToast("Planteles sincronizados directamente con el servidor", "success");
+      } catch (errSync) {
+        console.error("Error sincronizando planteles:", errSync);
+        showToast("Error al sincronizar con el servidor", "error");
+      } finally {
+        btnRefrescarPlanteles.disabled = false;
+        btnRefrescarPlanteles.innerHTML = origHtml;
+      }
+    });
   }
 
   function asegurarOpcionEnSelect(selectElem, valor) {
@@ -3468,10 +3512,14 @@ export function initAdminDashboard(dbInstance, user) {
 
      if(plantel) {
        document.getElementById('p-uid').value = plantel.id;
-       document.getElementById('p-codigo').value = plantel.codigos?.plantel || '';
+       document.getElementById('p-codigo').value = plantel.codigos?.plantel || plantel.codigoPlantel || plantel.codigoDEA || plantel.id || '';
        document.getElementById('p-estadistico').value = plantel.codigos?.estadistico || '';
        document.getElementById('p-denominacion').value = plantel.denominacion || '';
-       document.getElementById('p-nominal').value = plantel['nombre-plantel']?.nominal || '';
+       
+       const nomVal = (typeof plantel['nombre-plantel'] === 'object' && plantel['nombre-plantel'] !== null)
+         ? (plantel['nombre-plantel'].nominal || '')
+         : (plantel.nombre_plantel || (typeof plantel['nombre-plantel'] === 'string' ? plantel['nombre-plantel'] : '') || plantel.nombre || '');
+       document.getElementById('p-nominal').value = nomVal;
        document.getElementById('p-eponimo').value = obtenerEponimoLimpioPlantel(plantel);
        
        const munVal = normalizarMunicipio(plantel.municipio || userMun || '');
@@ -3810,14 +3858,24 @@ export function initAdminDashboard(dbInstance, user) {
          return;
        }
 
+       const epInp = document.getElementById('p-eponimo').value.toUpperCase().trim();
+       const nomInp = document.getElementById('p-nominal').value.toUpperCase().trim();
+       const denInp = document.getElementById('p-denominacion').value.toUpperCase().trim();
+
        const newData = {
           "municipio": munFinal,
           "parroquia": parFinal,
-          "denominacion": document.getElementById('p-denominacion').value.toUpperCase(),
+          "denominacion": denInp,
           "nombre-plantel": {
-            "nominal": document.getElementById('p-nominal').value.toUpperCase(),
-            "nuevo-eponimo": document.getElementById('p-eponimo').value.toUpperCase()
+            "nominal": nomInp,
+            "nuevo-eponimo": epInp,
+            "nuevo_eponimo": epInp
           },
+          "nuevo_eponimo": epInp,
+          "nuevo-eponimo": epInp,
+          "nombre_plantel": nomInp,
+          "codigoPlantel": codP,
+          "codigoDEA": codP,
           "codigos": {
             "plantel": codP,
             "estadistico": Number(document.getElementById('p-estadistico').value) || 0,
@@ -3830,7 +3888,10 @@ export function initAdminDashboard(dbInstance, user) {
           "turno-plantel": turnoVal,
           "metros2": metros2Val,
           "observaciones": obsVal,
-          "planes-estudio": planesSelected
+          "planes-estudio": planesSelected,
+          "ultima_actualizacion": new Date().toISOString(),
+          "fecha_modificacion_datos": new Date().toISOString(),
+          "modificado_por": userData?.email || "ADMIN"
        };
 
        if (isEdit) {
@@ -3871,7 +3932,7 @@ export function initAdminDashboard(dbInstance, user) {
                }
 
                // 🚀 ACTUALIZACIÓN AUTOMÁTICA EN CASCADA (OPCIÓN 2)
-               const epNuevo = newData["nombre-plantel"]?.["nuevo-eponimo"] || newData["nombre-plantel"]?.nominal || '';
+               const epNuevo = epInp || nomInp || '';
                const resultadoCascada = await migrarEnCascadaCodigoDEA(id, codP, epNuevo);
                if (resultadoCascada.personalMigrado > 0 || resultadoCascada.directoresMigrados > 0) {
                    msgCascada = `El código DEA fue actualizado a "${codP}". Se migraron automáticamente en cascada ${resultadoCascada.personalMigrado} funcionario(s) de nómina y ${resultadoCascada.directoresMigrados} usuario(s) director al nuevo código.`;
@@ -3890,8 +3951,42 @@ export function initAdminDashboard(dbInstance, user) {
             await safeSetDoc(doc(db, "planteles", codP), newData, { merge: true });
          }
          
+         // 1. Sincronizar memoria activa inmediatamente
+         const targetId = isEdit ? id : codP;
+         const existingIdx = currentPlanteles.findIndex(p => p.id === targetId || p.codigos?.plantel === targetId || p.codigoDEA === targetId);
+         const updatedPlantelObj = {
+           ...(existingIdx >= 0 ? currentPlanteles[existingIdx] : {}),
+           ...newData,
+           id: codP
+         };
+         if (existingIdx >= 0) {
+           currentPlanteles[existingIdx] = updatedPlantelObj;
+         } else {
+           currentPlanteles.push(updatedPlantelObj);
+         }
+
+         // 2. Limpiar y refrescar cachés de sesión
+         limpiarPlantelesEstadalCache();
+         guardarPlantelesEstadalCache(currentPlanteles);
+
+         if (munFinal) {
+           limpiarPlantelesMunCache(munFinal);
+           const munList = currentPlanteles.filter(p => normalizarMunicipio(p.municipio || '') === normalizarMunicipio(munFinal));
+           guardarPlantelesMunCache(munFinal, munList);
+         }
+
+         if (window._cacheSupervision) {
+           delete window._cacheSupervision[id];
+           delete window._cacheSupervision[codP];
+         }
+
+         // 3. Cerrar modal y renderizar lista con datos actualizados
          cerrarModalPlantel();
-         await loadPlanteles(); // reload table
+         poblarFiltrosGeograficosTabla();
+         renderPlantelesList();
+
+         // 4. Confirmar sincronización con servidor en background sin bloquear
+         loadPlanteles(true).catch(errSync => console.warn("[Sync Planteles]", errSync));
 
          if (msgCascada) {
            await showAlert("Código DEA Actualizado en Cascada", msgCascada, "success");

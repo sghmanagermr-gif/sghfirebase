@@ -3695,3 +3695,45 @@ Se atendió la solicitud de auditoría técnica y rescate para la **Escuela Loma
 2. **Colección `planteles`:** Actualizado el documento `planteles/OD14251419` mediante transformaciones atómicas (`appendMissingElements` e `increment`).
 3. **Métricas Zero-Cost:** 2 escrituras directas ejecutadas con 0 consumo de cuota de lectura en cliente.
 4. **Reporte Institucional:** Generado `scratch/whatsapp_message_od14251419.txt` para difusión institucional.
+
+
+---
+
+## [v2.29.7] - 2026-11-05 (Hotfix: Sincronización y Purga de Caché en Edición de Planteles)
+
+### Resumen Técnico
+Se diagnosticó y corrigió el fallo de persistencia visual reportado al editar planteles desde el panel de administración (`#modal-plantel` en `admin.js`). Aunque la actualización en Firestore se completaba con éxito en Google Cloud, la tabla y la ficha de supervisión seguían mostrando los datos desactualizados debido a que `sessionStorage` (`sgh_cache_planteles_ESTADAL` y cachés municipales) retenía los datos anteriores y cortaba la sincronización. Adicionalmente, planteles históricos con `nombre-plantel` plano no renderizaban su nombre nominal.
+
+### Acciones Realizadas
+1. **Módulo Administrativo (`webapp/src/admin.js`):**
+   - Actualización directa en memoria del arreglo `currentPlanteles` al guardar la edición de cualquier plantel, manteniendo intactas la matrícula, secciones y nómina.
+   - Purga y sincronización inmediata de `sessionStorage` (`limpiarPlantelesEstadalCache()` y `limpiarPlantelesMunCache()`).
+   - Invalidación de caché en `window._cacheSupervision[dea]` para evitar discrepancias al abrir la Ficha de Auditoría.
+   - Implementación del parámetro `forzarSync` en `loadPlanteles(forzarSync = true)` para eludir cachés estáticos.
+   - Adición del botón y listener `#btn-refrescar-planteles` para sincronización manual directa con el servidor.
+   - Blindaje de selectores y campos de texto en `openPlantelModal` con fallbacks robustos para nombres planos (`nombre-plantel.nominal || nombre_plantel || nombre`) y códigos DEA (`codigos.plantel || codigoPlantel || codigoDEA || id`).
+   - Sincronización en eliminación de planteles (`btn-del-plantel`) filtrando memoria y depurando caché.
+2. **Módulo de Directores (`webapp/src/main.js`):**
+   - Inyección de purga de cachés de sesión al guardar datos de matrícula y plantel en `form.onsubmit`.
+   - Soporte de compatibilidad dual para llaves canónicas en Firestore (`nuevo_eponimo`, `codigoPlantel`, `codigoDEA`).
+3. **Interfaz y SemVer (`webapp/index.html` y `webapp/package.json`):**
+   - Adición del botón `🔄 Sincronizar` en la barra de herramientas de la tabla de planteles.
+   - Elevación de versión a `v2.29.7` en los 5 encabezados e interfaces.
+   - Compilación exitosa en Vite y despliegue oficial a Firebase Hosting (`https://sgh-merida.web.app`).
+
+
+---
+
+## [Operación Forense] - 2026-11-05 (Operativo CASO_HUERFANOS: Escuela Roberto Picón Lares OD01021410 - Inclusión Exclusiva Anti-Duplicados)
+
+### Resumen Técnico
+Se procesó el comando `CASO_HUERFANOS` para la **Escuela Roberto Picón Lares (Código DEA `OD01021410`)**, ubicada en Arapuey, Municipio Julio César Salas. Se ejecutó una auditoría cruzada integral sobre los 4 docentes reportados:
+- **3 docentes preexistentes en sistema:** Beatriz Coromoto Quevedo Hernández (C.I. 13.825.307), Mario Gerardo Ramírez Moreno (C.I. 15.942.671) y Rosmery Paola Vergara Abreu (C.I. 17.436.056) poseen cargos en sistema vinculados a funciones directivas/enlaces en otras instituciones (`OD12241410`, `OD12301410` y `OD12281410`). Siguiendo la estricta directriz del usuario de **cero duplicados**, estos 3 funcionarios **NO fueron modificados ni duplicados**.
+- **1 docente huérfana rescatada:** Isbelys Alejandra Gómez Rodríguez (C.I. 19.383.306) no poseía ningún registro en Firebase y fue localizada al 100% en la nómina oficial RAC como titular de aula.
+
+### Acciones Realizadas
+1. **Colección `cargos_personal`:** Creado el expediente individual `OD01021410_19383306` para Isbelys Alejandra Gómez Rodríguez con esquema dual completo (kebab-case y camelCase), cargo TSU en Educación (Aula Integrada), 40 horas académicas, titularidad nacional.
+2. **Colección `planteles`:** Actualizado el documento `planteles/OD01021410` incorporando a Isbelys Gómez a `personal_resumen`, elevando la nómina institucional de 54 a 55 funcionarios.
+3. **Métricas Zero-Cost:** 2 escrituras directas ejecutadas con 0 consumo de cuota de lectura en cliente.
+4. **Reporte Institucional:** Generado reporte de difusión oficial para WhatsApp.
+

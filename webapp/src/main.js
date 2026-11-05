@@ -1890,7 +1890,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
         document.getElementById('inp-municipio').value = dp.municipio || '';
         document.getElementById('inp-parroquia').value = dp.parroquia || '';
         document.getElementById('inp-dependencia-plantel').value = dp.dependencia || '';
-        document.getElementById('inp-codigo-plantel').value = dp.codigos?.plantel || codigoDEA;
+        document.getElementById('inp-codigo-plantel').value = dp.codigos?.plantel || dp.codigoPlantel || dp.codigoDEA || codigoDEA;
         document.getElementById('inp-cod-estadistico').value = dp.codigos?.estadistico || '';
         
         let codDep = dp.codigos?.dependencia;
@@ -1898,7 +1898,10 @@ async function mostrarCandado(codigoDEA, dataParcial) {
         document.getElementById('inp-cod-dependencia').value = codDep || '';
 
         document.getElementById('inp-denominacion').value = dp.denominacion || '';
-        document.getElementById('inp-nombre-nominal').value = dp['nombre-plantel']?.nominal || '';
+        const nomVal = (typeof dp['nombre-plantel'] === 'object' && dp['nombre-plantel'] !== null)
+          ? (dp['nombre-plantel'].nominal || '')
+          : (dp.nombre_plantel || (typeof dp['nombre-plantel'] === 'string' ? dp['nombre-plantel'] : '') || dp.nombre || '');
+        document.getElementById('inp-nombre-nominal').value = nomVal;
         document.getElementById('inp-nuevo-eponimo').value = obtenerEponimoLimpioPlantel(dp);
 
         const selNivMod = document.getElementById('inp-niveles-modalidades');
@@ -2875,6 +2878,9 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                       "nuevo-eponimo": eponimoVal,
                       nuevo_eponimo: eponimoVal
                   };
+                  payload["nuevo_eponimo"] = eponimoVal;
+                  payload["nuevo-eponimo"] = eponimoVal;
+                  payload["nombre_plantel"] = nominalVal;
               }
               if (codEstadisticoVal) {
                   const codigosActuales = (currentPlantel && currentPlantel.codigos) ? { ...currentPlantel.codigos } : { plantel: codigoDEA };
@@ -2973,6 +2979,18 @@ async function mostrarCandado(codigoDEA, dataParcial) {
               if (userDisplayName && (nominalVal || eponimoVal)) {
                   userDisplayName.textContent = `${codigoDEA} - ${nominalVal || eponimoVal}`;
               }
+
+              // Invalidar cachés de sesión para que el panel de administración y supervisiones reflejen los cambios inmediatamente
+              try {
+                  sessionStorage.removeItem('sgh_cache_planteles_ESTADAL');
+                  if (currentPlantel?.municipio) {
+                      sessionStorage.removeItem('sgh_cache_planteles_' + currentPlantel.municipio.trim().toUpperCase());
+                  }
+                  if (window._cachePlantelesEstadal) delete window._cachePlantelesEstadal;
+                  if (window._cacheSupervision) {
+                      delete window._cacheSupervision[codigoDEA];
+                  }
+              } catch (eCache) {}
 
               const previaSinMatricula = !hasData;
               hasData = true;

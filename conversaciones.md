@@ -5774,3 +5774,71 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 1. Aprobación y Satisfacción: Se documenta la satisfacción del Administrador con la resolución efectiva de la visibilidad de los funcionarios en la plataforma.  
 > 2. Aprendizaje y Mejora Estructural: Se estandariza el generador de inyecciones para que nunca más se omitan las llaves canónicas en kebab-case (`codigo-plantel`, `codigoDEA`, `nombre-apellido`, `nombre`) requeridas por el frontend, garantizando compatibilidad absoluta y transparencia en tiempo real.  
 > 3. En espera activa de los siguientes requerimientos o casos de huérfanos.
+
+
+---
+
+### Intervención 153
+
+* **Fecha / Hora:** 2026-11-05 ~10:30 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+> estoy intentando guardar la edición de todos los campos de un plantel y supuestamente si guarda, pero al revisarlo de nuevo no se actualzó nada  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Diagnóstico de Causa Raíz y Corrección de Persistencia/Caché en Edición de Planteles (v2.29.7):  
+> 1. Diagnóstico Técnico:  
+>    - La actualización en Firestore (`updateDoc`) se completaba en Google Cloud, pero `admin.js` llamaba a `loadPlanteles()`, la cual leía de inmediato la copia estática en `sessionStorage` (`sgh_cache_planteles_ESTADAL` y municipales), sobreescribiendo los datos recién editados con la versión vieja en la memoria del navegador.  
+>    - `window._cacheSupervision` retenía el objeto desactualizado en la ficha de supervisión.  
+>    - Nombres guardados en formato plano histórico no cargaban en `p-nominal` al abrir el modal.  
+> 2. Corrección Integral:  
+>    - Actualización directa de `currentPlanteles` en memoria tras guardar, purga y refresco de `sessionStorage`.  
+>    - Invalidación de caché en `_cacheSupervision` y soporte de `forzarSync` en `loadPlanteles()`.  
+>    - Adición del botón `🔄 Sincronizar` en la barra de herramientas de planteles (`index.html`).  
+>    - Normalización de selectores con fallbacks multi-formato para nombres y códigos DEA.  
+>    - Elevación de versión a SemVer `v2.29.7` en `package.json` y en las 5 interfaces de `index.html`.  
+> 3. Despliegue: Compilación exitosa en Vite y despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`).  
+> 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
+
+
+---
+
+### Intervención 154
+
+* **Fecha / Hora:** 2026-11-05 ~10:46 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Atento con duplicar personal en la base de datos de Firebase  
+> CASO_HUERFANOS  
+> Nombre del Plantel: ESCUELA ROBERTO PICÓN LARES  
+> Código DEA:OD01021410  
+> CI. Nombres y Apellidos Docentes;  
+> 13825307 BEATRIZ COROMOTO QUEVEDO HERNÁNDEZ.  
+> 15942671 MARIO GERARDO RAMÍREZ.  
+> 19.383.306 ISBELYS ALEJANDRA GOMEZ RODRÍGUEZ.  
+> 17436056 ROSMERY PAOLA VERGARA ABREU  
+> [...]  
+> Para darte luz verde, Solo debes incluir en la base de datos los funcionarios que no esten en la base de datos.  
+> [...]  
+> Luz verde.  
+> [...]  
+> Estoy satisfecho. enviame el mensaje de Whatsapp de la operación  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Auditoría Forense y Rescate Exclusivo Anti-Duplicados en Escuela Roberto Picón Lares OD01021410 (Skill 5 y Skill 6):  
+> 1. Auditoría Cruzada RAC vs Firebase:  
+>    - Se detectó que 3 de los 4 docentes ya existían en Firebase asociados a funciones directivas/enlaces en otros planteles: Beatriz Quevedo (OD12241410), Mario Ramírez (OD12301410) y Rosmery Vergara (OD12281410).  
+>    - En estricto cumplimiento de la orden del usuario de no duplicar personal, se protegieron y se mantuvieron intactos sin alteración.  
+>    - Se confirmó que Isbelys Alejandra Gómez Rodríguez (C.I. 19.383.306) era la única huérfana absoluta (0 registros en Firebase, validada al 100% en RAC como TSU en Educación de aula integrada).  
+> 2. Inyección Ejecutada:  
+>    - Creado `cargos_personal/OD01021410_19383306` con esquema dual canónico (40 hrs, Titular, Nacional).  
+>    - Actualizado `planteles/OD01021410` incorporándola a `personal_resumen` (elevando nómina de 54 a 55).  
+> 3. Documentación y Difusión:  
+>    - Actualizados `versiones.md`, `bitacora.md`, `conversaciones.md` y generado el reporte institucional de WhatsApp.

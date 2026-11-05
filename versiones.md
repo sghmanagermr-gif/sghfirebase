@@ -4,6 +4,36 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.29.7 (5 de Noviembre de 2026)
+
+- **Corrección Integral de Persistencia y Caché en Edición de Planteles (Sincronización Instantánea y Compatibilidad de Esquema):**
+  - **Requerimiento Institucional:**
+    - Se reportó que al guardar la edición de campos institucionales de un plantel desde el panel administrativo (`#modal-plantel` en `admin.js`), el sistema notificaba éxito, pero al reabrir la ventana o consultar la ficha el plantel continuaba mostrando la información anterior sin reflejar los cambios realizados.
+  - **Causa Raíz Diagnosticada:**
+    - **Caché Estático de Sesión no Invalidado:** Al completar la edición y llamar a `loadPlanteles()`, la función recurría de inmediato a `sessionStorage` (`sgh_cache_planteles_ESTADAL` y cachés municipales) restaurando los datos antiguos en memoria (`currentPlanteles`) y abortando la sincronización en vivo.
+    - **Retención en Ficha de Supervisión:** La caché en memoria `window._cacheSupervision[dea]` retenía el objeto obsoleto de la escuela.
+    - **Campos en Blanco por Formato de Nombres:** Planteles históricos con `nombre-plantel` almacenado como cadena plana provocaban que `plantel['nombre-plantel']?.nominal` fuera `undefined`, abriendo el campo vacío.
+    - **Falta de Llaves Duales:** Faltaba la sincronización simétrica de llaves con guion bajo (`nuevo_eponimo`, `codigoPlantel`, `codigoDEA`).
+  - **Solución Implementada:**
+    - **Módulo de Administración (`webapp/src/admin.js`):**
+      - Actualización atómica inmediata en memoria de `currentPlanteles` al guardar la edición, preservando matrícula, secciones y nómina.
+      - Purga y actualización proactiva de cachés en `sessionStorage` (`limpiarPlantelesEstadalCache()`, `guardarPlantelesEstadalCache()` y cachés municipales).
+      - Invalidación de `window._cacheSupervision` para el DEA editado.
+      - Soporte de recarga forzada en `loadPlanteles(forzarSync = true)`.
+      - Incorporación de listener y botón de recarga forzada `#btn-refrescar-planteles`.
+      - Blindaje de lecturas nominales y de código DEA con respaldos multi-formato en `openPlantelModal`.
+      - Actualización simétrica en eliminación de planteles (`btn-del-plantel`) con purga de caché.
+    - **Módulo Principal de Directores (`webapp/src/main.js`):**
+      - Blindaje de lectura en `mostrarCandado` para nombres y códigos DEA.
+      - Al guardar matrícula y datos institucionales (`form.onsubmit`), purga inmediata de cachés en `sessionStorage` para sincronizar la vista del administrador.
+    - **Interfaz (`webapp/index.html`):**
+      - Incorporación del botón **"🔄 Sincronizar"** en la barra superior de herramientas de la tabla de planteles.
+  - **Control SemVer y Despliegue:**
+    - Elevación de versión a PARCHE `v2.29.7` en `webapp/package.json` y en las 5 ubicaciones visibles de `webapp/index.html`.
+    - Compilación exitosa en Vite (815ms) y despliegue oficial a producción en Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.29.6 (4 de Noviembre de 2026)
 
 - **Optimización Preventiva de Cuotas de Correo y Protección del Plan Spark (Ocultamiento de "¿Olvidaste tu contraseña?"):**
