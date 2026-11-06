@@ -4069,3 +4069,22 @@ Se procesó el requerimiento bajo el protocolo `CASO_HUERFANOS` para el **Liceo 
   * Simulada y verificada la consulta del Auditor de Cédula arrojando 100% de coincidencias verdes válidas.
 - **Comunicación Institucional:**
   * Emitido el comunicado oficial para WhatsApp bajo la plantilla estandarizada.
+---
+
+## [Operación Forense] - 2026-11-06 (Operativo CASO_HUERFANOS: Municipio Andrés Bello - Complejo Educativo Rodolfo La Cruz OD05671402)
+
+### Resumen Técnico
+Se procesó el requerimiento bajo el protocolo `CASO_HUERFANOS` para el **Complejo Educativo Rodolfo La Cruz (`OD05671402`)**, Parroquia La Azulita, Municipio Andrés Bello:
+- **Diagnóstico Forense y Auditoría Cruzada vs RAC.xlsx:**
+  * **Cédula Auditada:** V-21.305.064 (Daniuska Raibeth Echeverría Lacruz), Profesional Univ. I (Administrativo Titular).
+  * **Adscripción Ministerial:** 100% coincidente en RAC con el código `OD05671402` (NER 159).
+  * **Causa Raíz de Omisión Previa:** En el operativo previo (Lote 9), la dirección del plantel reportó erróneamente la cédula 21.305.053 (adscrita a otra institución), excluyendo involuntariamente a Daniuska Echeverría de la asignación a `personal_resumen`.
+- **Control Anti-Duplicados Estricto:**
+  * Se identificó la preexistencia del expediente bajo el doc ID legado `cargos_personal/21305064`.
+  * Siguiendo la política de **CERO DUPLICADOS**, se actualizó in-situ dicho documento con el esquema dual exhaustivo (`cedula`, `cedula-identidad`, `codigo-plantel`, `codigoPlantel`, `codigoDEA`, etc.), evitando la duplicidad que causaría una segunda inserción como `OD05671402_21305064`.
+- **Acciones Realizadas:**
+  * Commit atómico en Cloud Firestore aplicando actualización in-situ de `cargos_personal/21305064`.
+  * Transformación atómica en el servidor (`appendMissingElements`) incorporando a la trabajadora al arreglo `personal_resumen` de `planteles/OD05671402` e incrementando `total_personal` a 5 funcionarios.
+  * Verificada la no existencia de duplicados (0 colisiones).
+- **Comunicación Institucional:**
+  * Generado y entregado el informe oficial para WhatsApp bajo la plantilla estandarizada.
