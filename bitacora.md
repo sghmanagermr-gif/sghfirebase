@@ -3970,3 +3970,25 @@ Se realizó la auditoría forense del archivo de personal remitido para la E.P.E
   * Por instrucción expresa y en estricto cumplimiento de la política de cero duplicados, no se ejecutó ninguna inyección ni modificación en la base de datos ("No hagamos nada").
 - **Comunicación Institucional:**
   * Se generó y entregó informe oficial en formato nativo de WhatsApp para notificar a la directiva institucional que la totalidad del personal solicitado ya se encuentra debidamente resguardado en el sistema.
+---
+
+## [Operación Forense] - 2026-11-06 (Habilitación de Sede y Regularización: Municipio Tovar - U.E. Colegio Fe y Alegría S2004D1421)
+
+### Resumen Técnico
+Se procesó la solicitud de regularización de personal obrero/cocineras asignadas en apoyo institucional al Colegio Fe y Alegría (`S2004D1421`):
+- **Habilitación de Sede Institucional:**
+  * Creado el documento **`planteles/S2004D1421`** en Firebase con denominación `UNIDAD EDUCATIVA`, epónimo `COLEGIO FE Y ALEGRIA`, municipio `TOVAR`, dependencia `SUBVENCIONADO`, código estadístico `140951` e integrado al catálogo maestro del SGH.
+- **Control Anti-Duplicados y Validación de Consistencia:**
+  * 0% de duplicados: ninguna de las 6 trabajadoras existía previamente en Firebase.
+  * Consistencia total de datos: cargos (`8990N` Cocinero I y `8991N` Cocinero II), dependencia nacional CNAE (`1200764`), estado civil, tallas y situaciones laborales validados al 100% contra los selectores oficiales del SGH.
+- **Inyección y Sincronización:**
+  * Inyectados 6 expedientes en `cargos_personal` (`S2004D1421_{cedula}`):
+    - Anny Rosa Vargas Quiñones (25.586.357) – Cocinero
+    - Maigualida Rujano (16.907.108) – Cocinero
+    - Dana Elisa Nava Mejias (22.929.929) – Cocinero
+    - Marlin Soret Gutiérrez Rujano (17.771.324) – Cocinero II
+    - Siria Margarita Márquez (15.695.263) – Cocinero II
+    - Rosaura Merliz Donado Suárez (12.346.840) – Cocinero
+  * Sincronizada la nómina en `planteles/S2004D1421` (`personal_resumen` con 6 funcionarias y `total_personal: 6`).
+- **Comunicación:**
+  * Emitido informe oficial en sintaxis nativa de WhatsApp.

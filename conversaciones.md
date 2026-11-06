@@ -6184,3 +6184,22 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 1. Validación de Criterio: Confirmación de que el protocolo CASO_HUERFANOS aplica estrictamente para personal inexistente en Firebase. Al estar los 11 ya registrados en Firebase, el saldo formal de huérfanos es 0.  
 > 2. Política Anti-Duplicados: Cero modificaciones a la base de datos para preservar la integridad de los expedientes.  
 > 3. Informe Institucional: Entrega del comunicado oficial para WhatsApp en sintaxis nativa certificando que el personal ya está activo en el sistema.
+### Intervención 169
+
+* **Fecha / Hora:** 2026-11-06 ~14:17 - 14:32 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Satisfactorio. Si, satisfactorios. Continuemos. Ok, vamos a usar el protocolo: CASO_HUERFANOS, pero esta ves me lo enviaron en un excel que está en: huerfanos\tovar.xlsx. Atento con duplicar personal en la base de datos de Firebase CASO_HUERFANOS.  
+> pudiera decirte que la opción B, pero temo por la consistencia de los datos, que sean iguales a los predeterminados en el sistema, como por ejemplo: estado civil, rango, cargo, codigo de cargo, etc. me entiendes. No tengo la rapidez para darme cuenta si hay coincidencia de los criterios predefinidos  
+> ok procede con la opción b  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Auditoría de Consistencia y Habilitación de Sede S2004D1421:  
+> 1. Auditoría de Esquema: Comprobación contra el código fuente de webapp/src/personalWizard.js de que todos los valores (códigos 8990N/8991N, situaciones laborales, estado civil y tallas) coinciden al 100% con los selectores predeterminados del SGH.  
+> 2. Habilitación de Sede: Creado documento planteles/S2004D1421 (Colegio Fe y Alegría).  
+> 3. Inyección de Expedientes: Inyectados 6 expedientes individuales de cocineras en cargos_personal con adscripción administrativa CNAE 1200764.  
+> 4. Sincronización Institucional: Nómina de la sede actualizada con total_personal: 6.  
+> 5. Informe Oficial: Generado reporte institucional en sintaxis nativa de WhatsApp.
