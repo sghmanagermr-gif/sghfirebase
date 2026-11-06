@@ -5999,3 +5999,150 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 
 
+
+---
+
+### Intervención 160
+
+* **Fecha / Hora:** 2026-11-06 ~11:00 - 11:20 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Atento con NO duplicar personal en la base de datos de Firebase Protocolo CASO_HUERFANOS  
+> NOMBRE DEL PLANTEL: Escuela Ruth del Carmen Sarauz CODIGO: OD15211423  
+> NOMBRE DEL PLANTEL: LICEO DOCTOR JOSÉ RAMÓN VEGA CODIGO: S1361D1423 (34 funcionarios)  
+> NOMBRE DEL PLANTEL: Isabel Molina de Jaimes CODIGO: OD05141421  
+> NOMBRE DEL PLANTEL: Mario Mora CODIGO: OD05151421  
+> [...]  
+> OK LUZ VERDE PARA LOS 33 FUNCIONARIOS Y EL CASO FALLECIDO  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Ejecución Operativa CASO_HUERFANOS Lote 21:  
+> 1. Inyección de 33 funcionarios activos en cargos_personal con esquema dual y preservación histórica del caso fallecido (Livia García C.I. 8.086.564).  
+> 2. Sincronización de personal_resumen en los planteles correspondientes (OD15211423, S1361D1423, OD05141421, OD05151421).  
+> 3. Cero duplicados y preservación de cuota Zero-Cost.
+
+
+---
+
+### Intervención 161
+
+* **Fecha / Hora:** 2026-11-06 ~11:20 - 11:35 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> después de las últimas modificaciones que has hecho al sistema, has desconfigurado muchas cosas. Comencemos con: Primero: después que hiciste la modificación de la distribución de secciones de primaria, los planteles comenzaron a quejarse de que los datos que habían ingresado no les daba la sumatoria en el campo matricula total: id="inp-matricula-total" POR FAVOR REVISA y primero dime que sucede y como se debe resolver  
+> [...]  
+> Sin afectar alguna otra funcionalidad del sistema: Estoy de acuerdo, procede.  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Despliegue de Hotfix v2.30.1:  
+> 1. Diagnóstico: Detección de fallos en event bubbling sobre #contenedor-matricula, clave "vacantes" en iteración de grados y pérdida de valores al cambiar de sección U a múltiples.  
+> 2. Solución: Implementación de recalcularMatriculaTotalUI() en memoria volátil de cliente (Zero-Cost), calculando en tiempo real subtotales por nivel y total general con preservación bidireccional U <-> A.  
+> 3. Despliegue a Firebase Hosting exitoso en v2.30.1.
+
+
+---
+
+### Intervención 162
+
+* **Fecha / Hora:** 2026-11-06 ~11:35 - 11:45 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> correos_afectados: ee.obduliaj@gmail.com escuelagonzalomoraaraque@gmail.com  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Protocolo correos_afectados ejecutado:  
+> 1. ee.obduliaj@gmail.com: Activado emailVerified en Auth, perfil en usuarios/ aprobado con DEA OD09721421, docente Elena Yusmery Rivas Ruiz (14.401.318) inyectada en cargos_personal y sincronizada en planteles/OD09721421. Enlace OOB generado.  
+> 2. escuelagonzalomoraaraque@gmail.com: Perfil homologado con DEA OD10571403, nómina de 5 funcionarios confirmada y enlace OOB generado.  
+> 3. Mensajes protocolares listos para WhatsApp.
+
+
+---
+
+### Intervención 163
+
+* **Fecha / Hora:** 2026-11-06 ~11:45 - 11:55 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> correo_afectado: escuelajme@gmail.com  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Protocolo correo_afectado ejecutado para Escuela José María España (OD04831403):  
+> 1. Identificación y Auth: Activado emailVerified en Auth (UID IlGMbdzJZxSNojvwviP483toKIk1), perfil aprobado con rol plaadmin.  
+> 2. Conciliación Anti-Duplicados: Enriquecidos los 5 expedientes preexistentes en cargos_personal con llaves duales sin duplicar documentos. Actualizado personal_resumen en planteles/OD04831403.  
+> 3. Enlace OOB generado y mensaje institucional listo para WhatsApp.
+
+
+---
+
+### Intervención 164
+
+* **Fecha / Hora:** 2026-11-06 ~12:00 - 12:05 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+> Como no estoy claro cuál archivo RAC ESTADO MERIDA estás apuntando. He vuelto a descargarlo y lo guarde como: C:\Proyectos\sgh-mr - firebase\RAC.xlsx Estamos de acuerdo?  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Lectura integral de SKILL_sgh_firebase.md confirmada. Alineación absoluta con RAC.xlsx como fuente única de verdad oficial (hojas PERSONAL con 30.324 registros y PLANTELES con 1.252 registros). Sincronizados los archivos de consulta rápida en migracion/.
+
+
+---
+
+### Intervención 165
+
+* **Fecha / Hora:** 2026-11-06 ~12:10 - 12:35 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Ok, vamos a usar el protocolo: CASO_HUERFANOS, pero esta ves me lo enviaron en un excel que está en: huerfanos\tuliofebrescordero.xlsx  
+> Atento con duplicar personal en la base de datos de Firebase CASO_HUERFANOS,  
+> [...]  
+> luz verde para los 56 funcionarios confirmados  
+> Al finalizar envías mensaje de whatsapp nombrendo los dos que no se incluyeron en la jornada de julio  
+> Envíame siempre el mensaje de whatsapp en formato de whatsapp  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Auditoría Forense y Conciliación Operativa de Tulio Febres Cordero:  
+> 1. Auditoría: Evaluados 58 trabajadores en 19 planteles. 0 duplicados en Firebase. 53 validados directos, 1 corrección de cédula (Grilmer Ramírez a 20.749.627), 2 correcciones de DEA (ETA Don Luis Zambrano a OD17071422), 2 observados excluidos (Marisol Pérez y Luz Olivar).  
+> 2. Inyección: Creados 56 expedientes en cargos_personal y actualizadas las nóminas de 18 planteles en planteles/ sin alterar matrículas.  
+> 3. Comunicado oficial entregado en sintaxis nativa de WhatsApp.
+
+
+---
+
+### Intervención 166
+
+* **Fecha / Hora:** 2026-11-06 ~12:43 - 12:55 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Ok, vamos a usar el protocolo: CASO_HUERFANOS, pero esta ves me lo enviaron en un excel que está en: huerfanos\tovar.xlsx  
+> Atento con duplicar personal en la base de datos de Firebase CASO_HUERFANOS,  
+> [...]  
+> Luz verde para los 43 funcionarios confirmados. recuerda incluir informe en el mensaje de whatsapp  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Auditoría Forense y Conciliación Operativa de Tovar:  
+> 1. Control Anti-Duplicados: 16 trabajadores preexistentes detectados y protegidos intactos sin duplicar en Firebase.  
+> 2. Conciliación Oficial: 43 funcionarios legítimos confirmados e inyectados en cargos_personal y en personal_resumen de 10 planteles sede.  
+> 3. Casos Observados: 6 de dependencia nacional en Claudio Vivas, 2 conflicto DEA en RAC, 1 no encontrada.  
+> 4. Comunicado e informe general entregado en sintaxis nativa de WhatsApp.

@@ -884,8 +884,17 @@ function _renderCajasInicial(tipo, numSec) {
     const cont = document.getElementById('cont-dinamico-' + tipo);
     if (!cont) return;
     
+    // Preservar valores previos ingresados por el usuario
+    const valoresPrevios = {};
+    cont.querySelectorAll('.mat-input.mat-' + tipo).forEach(inp => {
+        if (inp.value && inp.dataset.grupo && inp.dataset.sexo) {
+            valoresPrevios[inp.dataset.grupo + '_' + inp.dataset.sexo] = inp.value;
+        }
+    });
+
     if (numSec === 0) {
         cont.innerHTML = '';
+        if (typeof recalcularMatriculaTotalUI === 'function') recalcularMatriculaTotalUI();
         return;
     }
 
@@ -914,6 +923,24 @@ function _renderCajasInicial(tipo, numSec) {
     
     html += '</div></div>';
     cont.innerHTML = html;
+
+    // Restaurar valores previos con soporte bidireccional U <-> A
+    Object.keys(valoresPrevios).forEach(key => {
+        const [grupo, sexo] = key.split('_');
+        let inp = cont.querySelector(`.mat-input.mat-${tipo}[data-grupo="${grupo}"][data-sexo="${sexo}"]`);
+        if (!inp) {
+            if (grupo.endsWith('U')) {
+                const alt = grupo.replace(/U$/, 'A');
+                inp = cont.querySelector(`.mat-input.mat-${tipo}[data-grupo="${alt}"][data-sexo="${sexo}"]`);
+            } else if (grupo.endsWith('A')) {
+                const alt = grupo.replace(/A$/, 'U');
+                inp = cont.querySelector(`.mat-input.mat-${tipo}[data-grupo="${alt}"][data-sexo="${sexo}"]`);
+            }
+        }
+        if (inp && !inp.value) inp.value = valoresPrevios[key];
+    });
+
+    if (typeof recalcularMatriculaTotalUI === 'function') recalcularMatriculaTotalUI();
 }
 
 function _renderCajasPrimaria(config = null) {
@@ -965,6 +992,7 @@ function _renderCajasPrimaria(config = null) {
 
     if (totalSec === 0) {
         cont.innerHTML = '';
+        if (typeof recalcularMatriculaTotalUI === 'function') recalcularMatriculaTotalUI();
         return;
     }
 
@@ -1000,20 +1028,41 @@ function _renderCajasPrimaria(config = null) {
     html += '</div></div>';
     cont.innerHTML = html;
 
-    // Restaurar valores previos
+    // Restaurar valores previos con soporte bidireccional U <-> A
     Object.keys(valoresPrevios).forEach(key => {
         const [grupo, sexo] = key.split('_');
-        const inp = cont.querySelector(`.mat-input.mat-primaria[data-grupo="${grupo}"][data-sexo="${sexo}"]`);
-        if (inp) inp.value = valoresPrevios[key];
+        let inp = cont.querySelector(`.mat-input.mat-primaria[data-grupo="${grupo}"][data-sexo="${sexo}"]`);
+        if (!inp) {
+            if (grupo.endsWith('U')) {
+                const alt = grupo.replace(/U$/, 'A');
+                inp = cont.querySelector(`.mat-input.mat-primaria[data-grupo="${alt}"][data-sexo="${sexo}"]`);
+            } else if (grupo.endsWith('A')) {
+                const alt = grupo.replace(/A$/, 'U');
+                inp = cont.querySelector(`.mat-input.mat-primaria[data-grupo="${alt}"][data-sexo="${sexo}"]`);
+            }
+        }
+        if (inp && !inp.value) inp.value = valoresPrevios[key];
     });
+
+    if (typeof recalcularMatriculaTotalUI === 'function') recalcularMatriculaTotalUI();
 }
 window._renderCajasPrimaria = _renderCajasPrimaria;
 
 function _renderCajasEspecial(numGrupos) {
     const cont = document.getElementById('cont-dinamico-especial');
     if (!cont) return;
+
+    // Preservar valores previos ingresados por el usuario
+    const valoresPrevios = {};
+    cont.querySelectorAll('.mat-input.mat-especial').forEach(inp => {
+        if (inp.value && inp.dataset.grupo && inp.dataset.sexo) {
+            valoresPrevios[inp.dataset.grupo + '_' + inp.dataset.sexo] = inp.value;
+        }
+    });
+
     if (numGrupos === 0) {
         cont.innerHTML = '';
+        if (typeof recalcularMatriculaTotalUI === 'function') recalcularMatriculaTotalUI();
         return;
     }
     let html = '<div style="margin-top: 15px;">';
@@ -1037,12 +1086,41 @@ function _renderCajasEspecial(numGrupos) {
     }
     html += '</div></div>';
     cont.innerHTML = html;
+
+    // Restaurar valores previos con soporte bidireccional U <-> A
+    Object.keys(valoresPrevios).forEach(key => {
+        const [grupo, sexo] = key.split('_');
+        let inp = cont.querySelector(`.mat-input.mat-especial[data-grupo="${grupo}"][data-sexo="${sexo}"]`);
+        if (!inp) {
+            if (grupo.endsWith('U')) {
+                const alt = grupo.replace(/U$/, 'A');
+                inp = cont.querySelector(`.mat-input.mat-especial[data-grupo="${alt}"][data-sexo="${sexo}"]`);
+            } else if (grupo.endsWith('A')) {
+                const alt = grupo.replace(/A$/, 'U');
+                inp = cont.querySelector(`.mat-input.mat-especial[data-grupo="${alt}"][data-sexo="${sexo}"]`);
+            }
+        }
+        if (inp && !inp.value) inp.value = valoresPrevios[key];
+    });
+
+    if (typeof recalcularMatriculaTotalUI === 'function') recalcularMatriculaTotalUI();
 }
+
 function _renderCajasAdulto(numGrupos) {
     const cont = document.getElementById('cont-dinamico-adulto');
     if (!cont) return;
+
+    // Preservar valores previos ingresados por el usuario
+    const valoresPrevios = {};
+    cont.querySelectorAll('.mat-input.mat-adulto').forEach(inp => {
+        if (inp.value && inp.dataset.grupo && inp.dataset.sexo) {
+            valoresPrevios[inp.dataset.grupo + '_' + inp.dataset.sexo] = inp.value;
+        }
+    });
+
     if (numGrupos === 0) {
         cont.innerHTML = '';
+        if (typeof recalcularMatriculaTotalUI === 'function') recalcularMatriculaTotalUI();
         return;
     }
     let html = '<div style="margin-top: 15px;">';
@@ -1066,6 +1144,24 @@ function _renderCajasAdulto(numGrupos) {
     }
     html += '</div></div>';
     cont.innerHTML = html;
+
+    // Restaurar valores previos con soporte bidireccional U <-> A
+    Object.keys(valoresPrevios).forEach(key => {
+        const [grupo, sexo] = key.split('_');
+        let inp = cont.querySelector(`.mat-input.mat-adulto[data-grupo="${grupo}"][data-sexo="${sexo}"]`);
+        if (!inp) {
+            if (grupo.endsWith('U')) {
+                const alt = grupo.replace(/U$/, 'A');
+                inp = cont.querySelector(`.mat-input.mat-adulto[data-grupo="${alt}"][data-sexo="${sexo}"]`);
+            } else if (grupo.endsWith('A')) {
+                const alt = grupo.replace(/A$/, 'U');
+                inp = cont.querySelector(`.mat-input.mat-adulto[data-grupo="${alt}"][data-sexo="${sexo}"]`);
+            }
+        }
+        if (inp && !inp.value) inp.value = valoresPrevios[key];
+    });
+
+    if (typeof recalcularMatriculaTotalUI === 'function') recalcularMatriculaTotalUI();
 }
 
 document.addEventListener('input', (e) => {
@@ -1084,91 +1180,132 @@ document.addEventListener('input', (e) => {
             _renderCajasAdulto(val);
         }
         
-        // Recalcular matrícula al redibujar
-        document.getElementById('contenedor-matricula')?.dispatchEvent(new Event('input', { bubbles: true }));
+        recalcularMatriculaTotalUI();
     }
 
     if (e.target.classList.contains('sec-pri-grado-input')) {
         _renderCajasPrimaria();
-        document.getElementById('contenedor-matricula')?.dispatchEvent(new Event('input', { bubbles: true }));
-        document.getElementById('plantel-form')?.dispatchEvent(new Event('input', { bubbles: true }));
+        recalcularMatriculaTotalUI();
     }
 });
 
-// Reemplazar la lógica anterior de sumatoria de matrícula
-
 // --- Lógica del "Candado de Navegación" ---
-// Cálculo automático de totales
+// Motor centralizado de cálculo de matrícula y subtotales en memoria (100% Zero-Cost)
+function recalcularMatriculaTotalUI() {
+    const isVisible = (inp) => {
+        if (!inp) return false;
+        const b1 = inp.closest('div[id^="bloque-"]');
+        const b2 = inp.closest('#cont-secciones-detalle');
+        return (b1 && b1.style.display !== 'none') || (b2 && b2.style.display !== 'none');
+    };
+
+    const sumInputs = (selector) => {
+        let sum = 0;
+        document.querySelectorAll(selector).forEach(inp => {
+            if (isVisible(inp)) {
+                sum += Math.max(0, parseInt(inp.value || 0) || 0);
+            }
+        });
+        return sum;
+    };
+
+    // Subtotales por nivel y modalidad
+    const totMat = sumInputs('.mat-maternal');
+    const totPre = sumInputs('.mat-preescolar');
+    const totIni = totMat + totPre;
+    
+    const totPri = sumInputs('.mat-primaria');
+    const totEsp = sumInputs('.mat-especial');
+    const totAdu = sumInputs('.mat-adulto');
+    
+    // Subtotales dinámicos Media General y Media Técnica
+    let sumMg = 0, sumMt = 0;
+    document.querySelectorAll('.dyn-mg-fem, .dyn-mg-mas').forEach(i => {
+        if (isVisible(i)) sumMg += Math.max(0, parseInt(i.value || 0) || 0);
+    });
+    document.querySelectorAll('.dyn-mt-fem, .dyn-mt-mas').forEach(i => {
+        if (isVisible(i)) sumMt += Math.max(0, parseInt(i.value || 0) || 0);
+    });
+
+    // Actualización de elementos visuales de subtotales
+    const elTotIni = document.getElementById('tot-inicial');
+    if (elTotIni) elTotIni.textContent = totIni;
+
+    const elTotPri = document.getElementById('tot-primaria');
+    if (elTotPri) elTotPri.textContent = totPri;
+
+    const elTotMg = document.getElementById('tot-media-gen');
+    if (elTotMg) elTotMg.textContent = sumMg;
+
+    const elTotMt = document.getElementById('tot-media-tec');
+    if (elTotMt) elTotMt.textContent = sumMt;
+
+    const elTotEsp = document.getElementById('tot-especial');
+    if (elTotEsp) elTotEsp.textContent = totEsp;
+
+    const elTotAdu = document.getElementById('tot-adulto');
+    if (elTotAdu) elTotAdu.textContent = totAdu;
+
+    // Conteo y sumas de secciones en Media si aplican
+    let totalSecMg = 0, totalSecMt = 0;
+    const planesSums = {};
+    document.querySelectorAll('.sec-anio-input').forEach(inp => {
+        if (isVisible(inp)) {
+            const plan = inp.dataset.plan;
+            const v = Math.max(0, parseInt(inp.value || 0) || 0);
+            if (plan) {
+                if (!planesSums[plan]) planesSums[plan] = 0;
+                planesSums[plan] += v;
+                if (plan.startsWith('3')) totalSecMg += v;
+                if (plan.startsWith('4')) totalSecMt += v;
+            }
+        }
+    });
+
+    Object.keys(planesSums).forEach(p => {
+        const el = document.getElementById('tot-sec-plan-' + p);
+        if (el) el.textContent = planesSums[p];
+    });
+
+    const elTotSecMg = document.getElementById('tot-sec-media-gen');
+    if (elTotSecMg) elTotSecMg.textContent = totalSecMg;
+
+    const elTotSecMt = document.getElementById('tot-sec-media-tec');
+    if (elTotSecMt) elTotSecMt.textContent = totalSecMt;
+
+    // Gran Total de Matrícula (coherencia absoluta con bloques activos)
+    let matTotal = 0;
+    const bIni = document.getElementById('bloque-inicial');
+    if (bIni && bIni.style.display !== 'none') matTotal += totIni;
+
+    const bPri = document.getElementById('bloque-primaria');
+    if (bPri && bPri.style.display !== 'none') matTotal += totPri;
+
+    const bMg = document.getElementById('bloque-mediageneral');
+    if (bMg && bMg.style.display !== 'none') matTotal += sumMg;
+
+    const bMt = document.getElementById('bloque-mediatecnica');
+    if (bMt && bMt.style.display !== 'none') matTotal += sumMt;
+
+    const bEsp = document.getElementById('bloque-especial');
+    if (bEsp && bEsp.style.display !== 'none') matTotal += totEsp;
+
+    const bAdu = document.getElementById('bloque-adulto');
+    if (bAdu && bAdu.style.display !== 'none') matTotal += totAdu;
+
+    const lblMatTotal = document.getElementById('lbl-matricula-total');
+    if (lblMatTotal) lblMatTotal.textContent = matTotal;
+
+    const inpMatTotal = document.getElementById('inp-matricula-total');
+    if (inpMatTotal) inpMatTotal.value = matTotal;
+
+    return matTotal;
+}
+window.recalcularMatriculaTotalUI = recalcularMatriculaTotalUI;
+
+// Cálculo automático de totales al interactuar con el formulario
 document.getElementById('plantel-form')?.addEventListener('input', (e) => {
-    if (e.target.tagName.toLowerCase() === 'input') {
-        let matTotal = 0;
-        
-        const sumInputs = (selector) => {
-            let sum = 0;
-            document.querySelectorAll(selector).forEach(inp => {
-                const b1 = inp.closest('div[id^="bloque-"]'); const b2 = inp.closest('#cont-secciones-detalle'); if ((b1 && b1.style.display !== 'none') || (b2 && b2.style.display !== 'none')) {
-                    sum += parseInt(inp.value || 0);
-                }
-            });
-            return sum;
-        };
-
-        // Subtotales
-        const totMat = sumInputs('.mat-maternal');
-        const totPre = sumInputs('.mat-preescolar');
-        const totIni = totMat + totPre;
-        
-        const totPri = sumInputs('.mat-primaria');
-        const totMed = sumInputs('.mat-media');
-        const totTec = sumInputs('.mat-tecnica');
-        const totEsp = sumInputs('.mat-especial');
-        const totAdu = sumInputs('.mat-adulto');
-        
-        if(document.getElementById('tot-inicial')) document.getElementById('tot-inicial').textContent = totIni;
-        if(document.getElementById('tot-primaria')) document.getElementById('tot-primaria').textContent = totPri;
-        if(document.getElementById('tot-especial')) document.getElementById('tot-especial').textContent = totEsp;
-        if(document.getElementById('tot-adulto')) document.getElementById('tot-adulto').textContent = totAdu;
-        
-          // Calculate dynamic media gen
-          let sumMg = 0, sumMt = 0;
-          document.querySelectorAll('.dyn-mg-fem, .dyn-mg-mas').forEach(i => sumMg += parseInt(i.value||0));
-          document.querySelectorAll('.dyn-mt-fem, .dyn-mt-mas').forEach(i => sumMt += parseInt(i.value||0));
-          
-          if(document.getElementById('tot-media-gen')) document.getElementById('tot-media-gen').textContent = sumMg;
-          if(document.getElementById('tot-media-tec')) document.getElementById('tot-media-tec').textContent = sumMt;
-
-          // Calculate section sums per plan and totals
-          let totalSecMg = 0, totalSecMt = 0;
-          const planesSums = {};
-          document.querySelectorAll('.sec-anio-input').forEach(inp => {
-              if (inp.closest('div[id^="bloque-"]')?.style.display !== 'none' && inp.closest('#cont-secciones-detalle')?.style.display !== 'none') {
-                  const plan = inp.dataset.plan;
-                  const v = parseInt(inp.value || 0);
-                  if (!planesSums[plan]) planesSums[plan] = 0;
-                  planesSums[plan] += v;
-                  
-                  if (plan.startsWith('3')) totalSecMg += v;
-                  if (plan.startsWith('4')) totalSecMt += v;
-              }
-          });
-          
-          // Update the plan section counters
-          Object.keys(planesSums).forEach(p => {
-              const el = document.getElementById('tot-sec-plan-' + p);
-              if (el) el.textContent = planesSums[p];
-          });
-          
-          // Update global section counters
-          if(document.getElementById('tot-sec-media-gen')) document.getElementById('tot-sec-media-gen').textContent = totalSecMg;
-          if(document.getElementById('tot-sec-media-tec')) document.getElementById('tot-sec-media-tec').textContent = totalSecMt;
-        
-
-        // Sumar todos los inputs de matrícula en tiempo real garantizando coherencia absoluta con los subtotales
-        matTotal = totIni + totPri + sumMg + sumMt + totEsp + totAdu;
-        
-        if (document.getElementById('lbl-matricula-total')) document.getElementById('lbl-matricula-total').textContent = matTotal;
-        if (document.getElementById('inp-matricula-total')) document.getElementById('inp-matricula-total').value = matTotal;
-    }
+    recalcularMatriculaTotalUI();
 });
 
 // --- Lógicas Algorítmicas Migradas de sgh_gas ---
@@ -1288,6 +1425,10 @@ function _renderizarMatriculaMedia(planes, guardadas = null) {
             contMt.innerHTML += html;
         }
     });
+
+    if (typeof recalcularMatriculaTotalUI === 'function') {
+        recalcularMatriculaTotalUI();
+    }
 }
 
 // --- GESTOR DINÁMICO DE PLANES DE ESTUDIO DEL DIRECTOR ---
@@ -1355,7 +1496,9 @@ function actualizarUIPlanesDirector() {
     if (msgSin) msgSin.style.display = tieneAlgunPlan ? 'none' : 'block';
 
     // Disparar recálculo de sumatoria en vivo
-    document.getElementById('plantel-form')?.dispatchEvent(new Event('input', { bubbles: true }));
+    if (typeof recalcularMatriculaTotalUI === 'function') {
+        recalcularMatriculaTotalUI();
+    }
 }
 
 function renderizarSelectorPlanesDirector(planesActivos = {}) {
@@ -1982,11 +2125,13 @@ async function mostrarCandado(codigoDEA, dataParcial) {
         const inpObs = document.getElementById('inp-observaciones-plantel');
         if (inpObs) inpObs.value = dp.observaciones || '';
 
-        const totalGenDp = dp.matricula?.['total-gen'] 
+        const totalGenDp = (dataParcial?.matricula?.['total-gen'] !== undefined) ? dataParcial.matricula['total-gen'] :
+            ((dataParcial?.['matricula-total'] !== undefined) ? dataParcial['matricula-total'] :
+            (dp.matricula?.['total-gen'] 
             || dp['matricula-total'] 
             || dp.matricula?.modalidades?.especial?.['total-especial'] 
             || dp.matricula?.modalidades?.adulto?.['total-adulto'] 
-            || '';
+            || ''));
         document.getElementById('inp-matricula-total').value = totalGenDp;
         
         // Mantener el oculto para no romper compatibilidad en otras funciones
@@ -2193,6 +2338,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                 if (!b21[String(g)]) continue;
                 const secsEnGrado = distPorGrado[g - 1];
                 Object.keys(b21[String(g)]).forEach(letra => {
+                    if (letra === 'vacantes' || letra.length !== 1) return;
                     let targetLetra = letra;
                     if (secsEnGrado === 1) {
                         targetLetra = 'U';
@@ -2234,8 +2380,10 @@ async function mostrarCandado(codigoDEA, dataParcial) {
         }
     }
     
-    // Forzar recálculo
-    document.getElementById('contenedor-matricula')?.dispatchEvent(new Event('input', { bubbles: true }));
+    // Forzar recálculo inmediato de todos los subtotales y matrícula total (Zero-Cost)
+    if (typeof recalcularMatriculaTotalUI === 'function') {
+        recalcularMatriculaTotalUI();
+    }
 
     // Verificación estricta de Matrícula Real: ¿El plantel tiene estudiantes registrados (> 0)?
     let hasData = false;

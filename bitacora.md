@@ -3849,3 +3849,92 @@ Se procesó la solicitud `correos_afectados` para la cuenta directiva **`escuela
 
 
 
+
+---
+
+## [Operación Forense] - 2026-11-06 (Operativo CASO_HUERFANOS: Lote 21 - Miranda, Zea y Santos Marquina)
+
+### Resumen Técnico
+Se procesó el requerimiento operativo `CASO_HUERFANOS` contentivo de 34 funcionarios reportados en 4 planteles educativos:
+- **Liceo Doctor José Ramón Vega (`S1361D1423`):** 34 funcionarios evaluados.
+  * 33 funcionarios validados y confirmados en nómina ministerial RAC.
+  * 1 caso de funcionario fallecido: Livia García (C.I. 8.086.564), registrado su estatus histórico sin generar distorsión activa.
+- **Escuela Ruth del Carmen Sarauz (`OD15211423`):** Daniela Jeimar Meza Medina (C.I. 20.832.437) validada como Docente en RAC.
+- **Isabel Molina de Jaimes (`OD05141421`):** Edwin Desiderio Rivera Ramírez (C.I. 20.217.334) validado.
+- **Mario Mora (`OD05151421`):** Yusmari Katerin Araque Gutiérrez (C.I. 26.880.724) y Mariela Josefina Molina Sánchez (C.I. 14.255.151) validadas.
+
+### Acciones Realizadas
+1. **Colección `cargos_personal`:** Inyectados los 33 expedientes activos con esquema dual canónico, cargas horarias y homologación de cargos.
+2. **Colección `planteles`:** Actualizados los documentos institucionales con su respectivo `personal_resumen` y conteo de nómina (`total_personal`).
+3. **Métricas Zero-Cost:** 37 escrituras directas ejecutadas con 0 consumo de cuota de lectura en cliente.
+
+
+---
+
+## [Ingeniería de Software] - 2026-11-06 (Hotfix v2.30.1: Motor de Matrícula Dinámica y Subtotales Zero-Cost)
+
+### Resumen Técnico
+Se corrigió la desconfiguración de cálculo dinámico en el formulario de matrícula del plantel:
+- Implementación de `recalcularMatriculaTotalUI()` en `webapp/src/main.js`.
+- Recalcula dinámicamente en tiempo real los subtotales de Inicial, Primaria, Media General, Media Técnica, Especial y Adulto, así como el campo maestro `#inp-matricula-total`.
+- Preservación de valores en memoria al transicionar de sección única (`U`) a secciones múltiples (`A`, `B`).
+- Despliegue de producción v2.30.1 en Firebase Hosting.
+
+
+---
+
+## [Operación Forense] - 2026-11-06 (Protocolo correos_afectados: Regularización y Enlaces Seguros en Tovar y Antonio Pinto Salinas)
+
+### Resumen Técnico
+Se atendió el protocolo `correos_afectados` para 3 cuentas institucionales con accesos bloqueados:
+1. **`ee.obduliaj@gmail.com` (Escuela Obdulia Jaimes de Medina / NER 015 - `OD09721421`):**
+   - Firebase Auth: Cuenta activada con `emailVerified: true` (UID `DfCOur9Qz2SUqwjs35sd8WsBma52`).
+   - Firestore: Perfil de usuario en `usuarios/` aprobado con `codigoDEA: "OD09721421"` y rol `plaadmin`.
+   - Expediente docente de Elena Yusmery Rivas Ruiz (C.I. 14.401.318, Docente Único) incorporado en `cargos_personal` y en `personal_resumen` de `planteles/OD09721421` preservando intacta la matrícula existente.
+   - Enlace OOB de restablecimiento de contraseña generado.
+2. **`escuelagonzalomoraaraque@gmail.com` (Escuela Gonzalo Mora Araque - `OD10571403`):**
+   - Perfil homologado con `codigoDEA: "OD10571403"`, `aprobado: true` y rol `plaadmin`.
+   - Confirmada nómina de 5 funcionarios en `cargos_personal` y `personal_resumen`.
+   - Enlace OOB generado.
+3. **`escuelajme@gmail.com` (Escuela José María España - `OD04831403`):**
+   - Firebase Auth: Activado `emailVerified: true` (UID `IlGMbdzJZxSNojvwviP483toKIk1`).
+   - Perfil de usuario en `usuarios/` aprobado con rol `plaadmin` y código DEA `OD04831403`.
+   - Nómina completa de 5 funcionarios enriquecida con identificadores duales en sus expedientes preexistentes para garantizar **cero duplicados**, y cargada a `personal_resumen` de `planteles/OD04831403`.
+   - Enlace OOB generado.
+
+
+---
+
+## [Operación Forense] - 2026-11-06 (Operativo CASO_HUERFANOS: Municipio Tulio Febres Cordero - 56 Funcionarios en 18 Planteles)
+
+### Resumen Técnico
+Se procesó el archivo de huérfanos del Municipio Tulio Febres Cordero (`huerfanos/tuliofebrescordero.xlsx`) contentivo de 58 trabajadores reportados:
+- **Auditoría Cruzada vs RAC.xlsx:**
+  * 53 funcionarios validados con coincidencia exacta (100%) en cédula, nombres, cargo y código DEA.
+  * 1 corrección tipográfica de cédula: Grilmer Yoel Ramírez Mendoza reportado como 20.743.627, corregido a su C.I. real en RAC **20.749.627** (Cocinero, OD16711422).
+  * 2 correcciones tipográficas de código DEA: Alberys Villasmil y Yexaly Centeno reportadas erróneamente en OD17071522, reasignadas a su código ministerial oficial de la E.T.A. Don Luis Zambrano (**OD17071422**).
+  * 2 casos en observación excluidos: Marisol Pérez Colina (C.I. 13.064.935 no figura en RAC; en el liceo aparece María Ángela Pérez Colina C.I. 15.590.083) y Luz Maidelin Olivar Villarreal (C.I. 16.710.110 no figura en RAC).
+- **Control Anti-Duplicados:**
+  * Cero registros previos en Firebase; 56 huérfanos legítimos confirmados.
+- **Acciones Realizadas:**
+  * Inyectados 56 expedientes en `cargos_personal` con esquema dual canónico completo.
+  * Actualizadas las nóminas de 18 planteles educativos en `planteles/` (`personal_resumen` y `total_personal`) usando `updateMask` para blindar datos de matrícula.
+
+
+---
+
+## [Operación Forense] - 2026-11-06 (Operativo CASO_HUERFANOS: Municipio Tovar - 43 Funcionarios en 10 Planteles)
+
+### Resumen Técnico
+Se procesó el archivo de huérfanos del Municipio Tovar (`huerfanos/tovar.xlsx`) contentivo de 68 trabajadores reportados:
+- **Control Anti-Duplicados:**
+  * Se identificaron **16 funcionarios preexistentes en Firebase** (6 en el mismo plantel y 10 en sedes históricas/traslados como el Nucete Sardi `D1067D1421`).
+  * En estricto cumplimiento de la política institucional de cero duplicados, estos 16 trabajadores **no fueron duplicados**.
+- **Auditoría Cruzada vs RAC.xlsx:**
+  * **43 funcionarios legítimos validados** con coincidencia plena en nómina ministerial RAC.
+  * 9 casos en observación: 6 trabajadores de Claudio Vivas con dependencia nacional en registro ministerial, 2 con discrepancia de plantel en RAC (Raquel Rivas y Liz Hernández) y 1 no localizada (Margarita Ramírez).
+- **Acciones Realizadas:**
+  * Inyectados 43 expedientes individuales en `cargos_personal` con esquema dual y homologación ministerial.
+  * Actualizadas las nóminas institucionales de 10 planteles en `planteles/` sincronizando `personal_resumen` y `total_personal`.
+- **Comunicación Institucional:**
+  * Generado y entregado el informe consolidado en formato nativo de WhatsApp.

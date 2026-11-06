@@ -4,6 +4,22 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.30.1 (6 de Noviembre de 2026)
+
+- **Corrección de Cálculo de Matrícula Total y Subtotales Dinámicos en Memoria (Zero-Cost):**
+  - **Problema Reportado:** Tras los ajustes de distribución de secciones en primaria, el campo de matrícula total (`id="inp-matricula-total"`) no actualizaba dinámicamente la sumatoria de las casillas cargadas, y los subtotales por nivel (`tot-inicial`, `tot-primaria`, `tot-media-gen`, `tot-media-tec`, `tot-especial`, `tot-adulto`) no reflejaban valores al abrir el formulario.
+  - **Causa Raíz:**
+    1. El listener de eventos delegados en `plantel-form` evaluaba `e.target.tagName === 'input'`, ignorando los eventos sintéticos despachados sobre `#contenedor-matricula`.
+    2. La función de restauración de datos (`mostrarCandado`) iteraba sobre las claves del plan incluyendo la propiedad interna `"vacantes"`, lo que forzaba `targetLetra = 'U'` y reseteaba a cero las casillas de matrícula en secciones individuales.
+    3. Al alternar dinámicamente de una sección (`U`) a dos o más secciones (`A`, `B`), las claves de entrada cambiaban sin preservación bidireccional.
+  - **Solución Implementada:**
+    - Creada la función `recalcularMatriculaTotalUI()` en `webapp/src/main.js`, ejecutada en memoria volátil de cliente (**Zero-Cost**, 0 lecturas y 0 escrituras a Firestore).
+    - Deserialización segura de todos los niveles educativos (Inicial, Primaria, Media General, Media Técnica, Especial y Adulto) calculando subtotales por nivel y total general en tiempo real.
+    - Mecanismo de preservación bidireccional `U` ↔ `A` en todas las modalidades.
+    - Despliegue en Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.30.0 (5 de Noviembre de 2026)
 
 - **Módulo de Auditoría Quirúrgica de Personal y Detección de Duplicados en Tiempo Real (Zero-Cost):**
