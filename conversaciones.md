@@ -6203,3 +6203,22 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 3. Inyección de Expedientes: Inyectados 6 expedientes individuales de cocineras en cargos_personal con adscripción administrativa CNAE 1200764.  
 > 4. Sincronización Institucional: Nómina de la sede actualizada con total_personal: 6.  
 > 5. Informe Oficial: Generado reporte institucional en sintaxis nativa de WhatsApp.
+### Intervención 170
+
+* **Fecha / Hora:** 2026-11-06 ~14:32 - 14:45 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Satisfecho. Tu no viste en el archivo tovar.xlsx los registro: 14255770 V LUZ MARINA ROSALES MOLINA, 14771604 V ESPERANZA RAMIREZ CONTRERAS, 18577989 V LUZ MARINA MOLINA DE MOLINA ¿?¿?¿?¿?  
+> si procede  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Auditoría Forense y Habilitación de Sede PD00141421:  
+> 1. Diagnóstico: Detección y rescate de las filas 7, 8 y 9 desde el búfer de autorecuperación de Excel (tovar.xlsb) retenidas en el equipo del usuario.  
+> 2. Control Anti-Duplicados: Verificación de 0 duplicados en Firebase para las 3 funcionarias.  
+> 3. Habilitación de Sede: Creación de documento planteles/PD00141421 (Colegio Hermana Felisa Elustondo Fe y Alegría).  
+> 4. Inyección de Expedientes: Inyectados los 3 expedientes en cargos_personal con adscripción CNAE / Nacional.  
+> 5. Sincronización Institucional: Nómina de la sede actualizada con total_personal: 3.  
+> 6. Informe Oficial: Generado reporte institucional en sintaxis nativa de WhatsApp.

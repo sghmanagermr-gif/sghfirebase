@@ -3992,3 +3992,22 @@ Se procesó la solicitud de regularización de personal obrero/cocineras asignad
   * Sincronizada la nómina en `planteles/S2004D1421` (`personal_resumen` con 6 funcionarias y `total_personal: 6`).
 - **Comunicación:**
   * Emitido informe oficial en sintaxis nativa de WhatsApp.
+---
+
+## [Operación Forense] - 2026-11-06 (Habilitación de Sede y Regularización: Municipio Tovar - U.E. Colegio Hna. Felisa Elustondo PD00141421)
+
+### Resumen Técnico
+Se procesó la regularización de la sede escolar y 3 trabajadoras recuperadas desde el búfer de autorecuperación de Excel:
+- **Habilitación de Sede Institucional:**
+  * Creado el documento **`planteles/PD00141421`** en Firebase con denominación `UNIDAD EDUCATIVA`, epónimo `COLEGIO HERMANA FELISA ELUSTONDO FE Y ALEGRIA`, parroquia `SAN FRANCISCO`, municipio `TOVAR`, dependencia `SUBVENCIONADO` y nivel `MEDIA TECNICA`.
+- **Control Anti-Duplicados y Validación:**
+  * Cero registros previos en Firebase (0% duplicados).
+  * Consistencia total contra selectores oficiales del SGH (cargos `8990N` Cocinero I y `8036N` Obrero Certificado II en trámite de sinceración a cocinera, dependencias `1200764` y `6590851`).
+- **Inyección y Sincronización:**
+  * Inyectados 3 expedientes en `cargos_personal` (`PD00141421_{cedula}`):
+    - Luz Marina Rosales Molina (14.255.770) – Cocinero
+    - Esperanza Ramírez Contreras (14.771.604) – Cocinero
+    - Luz Marina Molina de Molina (18.577.989) – Albañil (en sinceración a cocinera)
+  * Sincronizada la nómina en `planteles/PD00141421` (`personal_resumen` con 3 trabajadoras y `total_personal: 3`).
+- **Comunicación:**
+  * Emitido informe oficial en sintaxis nativa de WhatsApp.
