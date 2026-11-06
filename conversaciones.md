@@ -6166,3 +6166,21 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 4. Inyección de Expedientes: Inyectados los expedientes individuales de Sandra Gutiérrez (18.579.171) e Isamar Contreras (23.493.717) con esquema dual y homologación ministerial.  
 > 5. Sincronización Institucional: Nómina de la sede actualizada con total_personal: 2.  
 > 6. Informe Oficial: Generado reporte institucional en sintaxis nativa de WhatsApp.
+### Intervención 168
+
+* **Fecha / Hora:** 2026-11-06 ~13:48 - 14:15 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> estoy consultando las cedulas 19046183, 8083647, 17770119, 8080101, 10899909, 13790514, 10898038, 8763761, 25154561, 10901179 ya están una única vez en la base de datos de firebase en el plantel ON14991421; y 12048387 esta dos veces en los planteles ON14991421 y ON14991421. Entonces no entiendo a que te refieres con plan de regularización.  
+> Creo que el único objetivo del protocolo CASO_HUERFANOS es para migrar los funcionarios que no estan en firebase y si estan en RAC.  
+> Por favor explicame, para ver que es lo que no estpy entendiendo  
+> No hagamos nada. Solo redacta un informe de para enviarlo por whatsapp acerca de que los funcionarios solicitados ya se encuentran en el sistema  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Validación y Auditoría de Integridad:  
+> 1. Validación de Criterio: Confirmación de que el protocolo CASO_HUERFANOS aplica estrictamente para personal inexistente en Firebase. Al estar los 11 ya registrados en Firebase, el saldo formal de huérfanos es 0.  
+> 2. Política Anti-Duplicados: Cero modificaciones a la base de datos para preservar la integridad de los expedientes.  
+> 3. Informe Institucional: Entrega del comunicado oficial para WhatsApp en sintaxis nativa certificando que el personal ya está activo en el sistema.
