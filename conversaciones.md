@@ -6146,3 +6146,23 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 2. Conciliación Oficial: 43 funcionarios legítimos confirmados e inyectados en cargos_personal y en personal_resumen de 10 planteles sede.  
 > 3. Casos Observados: 6 de dependencia nacional en Claudio Vivas, 2 conflicto DEA en RAC, 1 no encontrada.  
 > 4. Comunicado e informe general entregado en sintaxis nativa de WhatsApp.
+### Intervención 167
+
+* **Fecha / Hora:** 2026-11-06 ~13:15 - 13:32 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Si, satisfactorios. Continuemos. Ok, vamos a usar el protocolo: CASO_HUERFANOS, pero esta ves me lo enviaron en un excel que está en: huerfanos\tovar.xlsx. Atento con duplicar personal en la base de datos de Firebase CASO_HUERFANOS.  
+> ¿me estás diciendo que el plantel OD05041421 no existe en la coleccion planteles de la base de datos de firebase?  
+> procede con la opción 1  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Auditoría Forense y Habilitación de Sede NER 559 Amador Morales Mora (OD05041421):  
+> 1. Diagnóstico: Comprobación de ausencia de la sede OD05041421 en Firebase debido a omisión ministerial en la hoja PLANTELES de RAC.xlsx.  
+> 2. Control Anti-Duplicados: Verificación exhaustiva de 0 duplicados en cargos_personal y en los 1.165 planteles de Firebase.  
+> 3. Habilitación de Sede: Creado documento canónico planteles/OD05041421 con epónimo ministerial NER 559 - AMADOR MORALES MORA.  
+> 4. Inyección de Expedientes: Inyectados los expedientes individuales de Sandra Gutiérrez (18.579.171) e Isamar Contreras (23.493.717) con esquema dual y homologación ministerial.  
+> 5. Sincronización Institucional: Nómina de la sede actualizada con total_personal: 2.  
+> 6. Informe Oficial: Generado reporte institucional en sintaxis nativa de WhatsApp.

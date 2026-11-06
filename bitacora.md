@@ -3938,3 +3938,22 @@ Se procesó el archivo de huérfanos del Municipio Tovar (`huerfanos/tovar.xlsx`
   * Actualizadas las nóminas institucionales de 10 planteles en `planteles/` sincronizando `personal_resumen` y `total_personal`.
 - **Comunicación Institucional:**
   * Generado y entregado el informe consolidado en formato nativo de WhatsApp.
+---
+
+## [Operación Forense] - 2026-11-06 (Operativo CASO_HUERFANOS: Municipio Tovar - Sede NER 559 Amador Morales Mora)
+
+### Resumen Técnico
+Se procesó el requerimiento específico de regularización del plantel omitido por el ministerio en la hoja oficial de escuelas:
+- **Diagnóstico Forense de Sede:**
+  * El código DEA ministerial `OD05041421` (NER 559 - Amador Morales Mora) fue omitido por el Ministerio de Educación en la hoja `PLANTELES` del RAC original, por lo que nunca fue migrado a Firebase y ambas trabajadoras quedaron catalogadas históricamente como huérfanas en `migracion/huerfanos.csv`.
+- **Habilitación Institucional de Sede:**
+  * Creado el documento `planteles/OD05041421` en Firebase con denominación `ESCUELA`, epónimo ministerial `AMADOR MORALES MORA`, nominal `NER 559`, municipio `TOVAR`, parroquia `TOVAR`, dependencia `NACIONAL`, turnos `MAÑANA` y estructura canónica.
+- **Control Anti-Duplicados:**
+  * Verificado en `cargos_personal` y en los 1.165 planteles registrados: 0 registros previos (0% duplicados).
+- **Inyección y Sincronización:**
+  * Inyectados 2 expedientes completos en `cargos_personal`:
+    - **Sandra Gutiérrez** (C.I. 18.579.171) - Docente de Aula (40 hrs - Titular).
+    - **Isamar Contreras** (C.I. 23.493.717) - Obrero / Cocinero (40 hrs - Sinceración de nómina).
+  * Sincronizada la nómina en `planteles/OD05041421` (`personal_resumen` con 2 funcionarios y `total_personal: 2`).
+- **Comunicación:**
+  * Emitido informe oficial para WhatsApp en sintaxis nativa.
