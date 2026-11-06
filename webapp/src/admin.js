@@ -5464,15 +5464,43 @@ export function initAdminDashboard(dbInstance, user) {
 
       try {
         const variantes = [cleanCedula, `V-${cleanCedula}`, `V${cleanCedula}`, `E-${cleanCedula}`, `E${cleanCedula}`];
+        const numCedula = parseInt(cleanCedula, 10);
+        const variantesNum = !isNaN(numCedula) ? [...variantes, numCedula] : variantes;
         
-        // 1. Consulta directa a cargos_personal (Zero-Cost: 1 consulta indexada, solo trae los documentos coincidentes)
+        // 1. Consulta directa a cargos_personal por cedula en minúscula
         let snap = await getDocs(query(collection(db, 'cargos_personal'), where('cedula', 'in', variantes)));
         let docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
         if (docs.length === 0) {
-          // Búsqueda de respaldo por cedula-identidad
-          const snap2 = await getDocs(query(collection(db, 'cargos_personal'), where('cedula-identidad', 'in', variantes)));
-          docs = snap2.docs.map(d => ({ id: d.id, ...d.data() }));
+          // 2. Búsqueda de respaldo por cedula-identidad
+          try {
+            const snap2 = await getDocs(query(collection(db, 'cargos_personal'), where('cedula-identidad', 'in', variantes)));
+            docs = snap2.docs.map(d => ({ id: d.id, ...d.data() }));
+          } catch (e2) {
+            console.warn("Fallo búsqueda cedula-identidad:", e2);
+          }
+        }
+
+        if (docs.length === 0) {
+          // 3. Búsqueda de respaldo por campo histórico CEDULA (mayúscula/numérico)
+          try {
+            const snap3 = await getDocs(query(collection(db, 'cargos_personal'), where('CEDULA', 'in', variantesNum)));
+            docs = snap3.docs.map(d => ({ id: d.id, ...d.data() }));
+          } catch (e3) {
+            console.warn("Fallo búsqueda CEDULA:", e3);
+          }
+        }
+
+        if (docs.length === 0) {
+          // 4. Búsqueda directa por ID de documento (por si el expediente legado usa la cédula como ID)
+          try {
+            const snapDoc = await getDoc(doc(db, 'cargos_personal', cleanCedula));
+            if (snapDoc.exists()) {
+              docs = [{ id: snapDoc.id, ...snapDoc.data() }];
+            }
+          } catch (eDoc) {
+            console.warn("Fallo búsqueda directa por ID:", eDoc);
+          }
         }
 
         renderResultadosAuditoria(cleanCedula, docs);
@@ -5549,8 +5577,8 @@ export function initAdminDashboard(dbInstance, user) {
       // Banner Superior de Estado
       if (!esDuplicado) {
         const d = docs[0];
-        const dea = d['codigo-plantel'] || d['codigoDEA'] || d['codigoPlantel'] || 'S/D';
-        const escuela = d['ubicacion-fisica'] || d.plantel || 'Plantel Registrado';
+        const dea = d['codigo-plantel'] || d['codigoDEA'] || d['codigoPlantel'] || d['CODIGO DEL PLANTEL'] || d['CODIGO'] || 'S/D';
+        const escuela = d['ubicacion-fisica'] || d.plantel || d['UBICACIÓN FÍSICA'] || 'Plantel Registrado';
         html += `
           <div style="background: linear-gradient(135deg, #065f46 0%, #047857 100%); color: white; padding: 16px 20px; border-radius: 10px; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-shadow: 0 4px 12px rgba(4,120,87,0.15);">
             <div style="display: flex; align-items: center; gap: 12px;">
@@ -5656,24 +5684,24 @@ export function initAdminDashboard(dbInstance, user) {
       `;
 
       docs.forEach((d, idx) => {
-        const nombre = (d['nombre-apellido'] || d['apellidos-nombres'] || d.nombre || 'Sin Nombre').toUpperCase();
-        const ced = d['cedula-identidad'] || d.cedula || cedulaBuscada;
-        const nac = d.nacionalidad || 'V';
-        const dea = d['codigo-plantel'] || d['codigoDEA'] || d['codigoPlantel'] || 'S/D';
-        const escuela = d['ubicacion-fisica'] || d.plantel || 'Plantel no registrado';
-        const cargo = d.cargo || 'DOCENTE';
-        const codRac = d['codigo-rac'] || d['codigo-cargo'] || 'S/C';
-        const dep = d.dependencia || 'NACIONAL';
-        const tipoPer = d['tipo-personal'] || d.tipoPersonal || 'DOCENTE';
-        const sitLab = d['situacion-laboral'] || d.situacion || 'ACTIVO';
-        const tit = d.titular || 'SI';
-        const hrsRec = d['horas-recibo'] ?? d.horasRecibo ?? 40;
-        const hrsAcad = d['horas-academicas'] ?? d.horasAcademicas ?? 0;
-        const hrsAdm = d['horas-administrativas'] ?? d.horasAdministrativas ?? 0;
-        const ant = d.antiguedad ?? 0;
-        const fIngreso = d['fecha-ingreso'] || d.fechaIngreso || 'N/R';
-        const turnos = d['turnos-atiende'] || d.turnos || 'MAÑANA';
-        const matricula = d['atiende-matricula'] || 'NO';
+        const nombre = (d['nombre-apellido'] || d['apellidos-nombres'] || d.nombre || d['NOMBRE Y APELLIDO'] || 'Sin Nombre').toUpperCase();
+        const ced = d['cedula-identidad'] || d.cedula || d.CEDULA || cedulaBuscada;
+        const nac = d.nacionalidad || d.NACIONALIDAD || 'V';
+        const dea = d['codigo-plantel'] || d['codigoDEA'] || d['codigoPlantel'] || d['CODIGO DEL PLANTEL'] || d['CODIGO'] || 'S/D';
+        const escuela = d['ubicacion-fisica'] || d.plantel || d['UBICACIÓN FÍSICA'] || 'Plantel no registrado';
+        const cargo = d.cargo || d['descripcion-cargo'] || d['CARGO'] || 'DOCENTE';
+        const codRac = d['codigo-rac'] || d['codigo-cargo'] || d['CODIGO RAC'] || 'S/C';
+        const dep = d.dependencia || d['DEPENDENCIA'] || 'NACIONAL';
+        const tipoPer = d['tipo-personal'] || d.tipoPersonal || d['TIPO PERSONAL'] || 'DOCENTE';
+        const sitLab = d['situacion-laboral'] || d.situacion || d['SITUACIÓN DEL TRABAJADOR'] || 'ACTIVO';
+        const tit = d.titular || d['TITULAR'] || 'SI';
+        const hrsRec = d['horas-recibo'] ?? d.horasRecibo ?? d['HORAS ACADEMICAS'] ?? 40;
+        const hrsAcad = d['horas-academicas'] ?? d.horasAcademicas ?? d['HORAS ACADEMICAS'] ?? 0;
+        const hrsAdm = d['horas-administrativas'] ?? d.horasAdministrativas ?? d['HORAS ADMINISTRATIVAS'] ?? 0;
+        const ant = d.antiguedad ?? d['ANTIGUEDAD'] ?? 0;
+        const fIngreso = d['fecha-ingreso'] || d.fechaIngreso || d['FECHA DE INGRESO'] || 'N/R';
+        const turnos = d['turnos-atiende'] || d.turnos || d['TURNOS QUE ATIENDE'] || 'MAÑANA';
+        const matricula = d['atiende-matricula'] || d['ATIENDE MATRICUAL'] || 'NO';
 
         // Carga horaria detallada
         const carga31059 = parsearCargaHoraria(d['31059']);

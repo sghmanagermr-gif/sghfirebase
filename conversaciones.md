@@ -6312,3 +6312,19 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 3. Sincronización Institucional: Nóminas de los planteles actualizadas mediante transformaciones atómicas en `personal_resumen`.  
 > 4. Verificación Zero-Defects: Comprobada la no existencia de duplicados (0 colisiones).  
 > 5. Comunicado Oficial: Entrega del informe oficial para WhatsApp bajo la plantilla estandarizada preferida por el usuario.
+### Intervención 176
+
+* **Fecha / Hora:** 2026-11-06 ~16:30 - 16:37 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Estoy satisfecho. Ahora te voy a pedir algo. revisa cuantos registros tienen cedula en mayúscula y cámbialo a minúscula, para no seguir teniendo ese problema  
+> satisfecho  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. Diagnóstico Cuantitativo: Determinados 24.209 documentos en cargos_personal (22.800 con cedula en minúscula y aprox. 1.409 legados con CEDULA o identificados por ID).  
+> 2. Blindaje Frontend en 4 Capas: Actualizados webapp/src/admin.js y webapp/src/personalWizard.js con cascada de búsqueda (cedula -> cedula-identidad -> CEDULA -> ID directo).  
+> 3. Herramienta Backend: Desarrollado scripts/normalizar_cedulas_mayusculas.js para ejecución de barrido masivo.  
+> 4. Verificación de Build: Compilación de producción validada exitosamente.

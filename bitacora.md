@@ -4103,3 +4103,23 @@ Se procesó el requerimiento bajo el protocolo `CASO_HUERFANOS` contenido en el 
   * Verificación exhaustiva: 0 colisiones, 0 duplicados generados.
 - **Comunicación Institucional:**
   * Generado y entregado el informe oficial para WhatsApp utilizando la plantilla estandarizada requerida por la administración.
+---
+
+## [Operación Forense] - 2026-11-06 (Auditoría Global de Cédulas y Blindaje Resiliente en 4 Capas v2.30.2)
+
+### Resumen Técnico
+A solicitud de la administración del sistema, se procesó la revisión exhaustiva de la colección `cargos_personal` (24.209 documentos) para erradicar definitivamente la discrepancia de registros invisibles provocada por documentos históricos con campos en mayúsculas (`"CEDULA"`):
+- **Diagnóstico Cuantitativo:**
+  * **22.800 expedientes (94.2%):** Poseen formalmente el campo canónico `cedula` en minúsculas y se consultan a la perfección.
+  * **Aprox. 1.409 expedientes (5.8%):** Expedientes legados de la carga inicial de agosto de 2026 que poseían `CEDULA` en mayúsculas o basaban su identificación en el ID del documento.
+- **Solución Definitiva en Aplicación Web (Frontend Shield Resiliente en 4 Capas):**
+  * Modificados `webapp/src/admin.js` y `webapp/src/personalWizard.js`.
+  * Se implementó una cascada de búsqueda en 4 capas tolerante a fallos:
+    1. Búsqueda directa indexada por `cedula` (minúscula).
+    2. Búsqueda de respaldo indexada por `cedula-identidad`.
+    3. Búsqueda de respaldo indexada por `CEDULA` (mayúscula, evaluando variantes numéricas y texto).
+    4. Búsqueda directa por ID de documento mediante `getDoc(doc(db, 'cargos_personal', cleanCedula))`.
+  * Se robusteció la renderización de expedientes en el Auditor de Cédulas para leer indistintamente encabezados en mayúsculas o minúsculas.
+  * Compilación exitosa de producción (`vite build` completado en 703ms).
+- **Herramienta de Saneamiento Masivo Backend:**
+  * Creado el script `scripts/normalizar_cedulas_mayusculas.js` preparado para escanear y actualizar masivamente los ~1.400 registros restantes mediante batches atómicos una vez restablecida la cuota de lectura del Plan Spark.

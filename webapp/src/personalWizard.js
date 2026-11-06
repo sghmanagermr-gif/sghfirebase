@@ -1818,8 +1818,15 @@ export async function verificarTopeHorasDocente(forzarConsulta = false) {
         if (forzarConsulta || !window._cacheCargosPorCedula[cleanCed]) {
             const posibles = [cleanCed, `V-${cleanCed}`, `E-${cleanCed}`, `V${cleanCed}`, `E${cleanCed}`];
             try {
-                const snap = await getDocs(query(collection(db, "cargos_personal"), where("cedula", "in", posibles)));
-                window._cacheCargosPorCedula[cleanCed] = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                let snap = await getDocs(query(collection(db, "cargos_personal"), where("cedula", "in", posibles)));
+                let docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                if (docs.length === 0) {
+                    try {
+                        const snapDoc = await getDoc(doc(db, "cargos_personal", cleanCed));
+                        if (snapDoc.exists()) docs = [{ id: snapDoc.id, ...snapDoc.data() }];
+                    } catch(eDoc) {}
+                }
+                window._cacheCargosPorCedula[cleanCed] = docs;
             } catch (err) {
                 console.warn("[SGH-Horas] Error al consultar cargos cruzados de cédula:", err);
             }
@@ -2350,8 +2357,15 @@ export async function buscarFichaTraslado(cedulaInput, nac = 'V') {
 
         // 2. Si no está en personal_traslados, verificar si está activo en cargos_personal (Cero-Cost: query limit 1)
         const posiblesCedulas = [cedula, `${nac}-${cedula}`, `${nac}${cedula}`];
-        const qActivo = query(collection(db, "cargos_personal"), where("cedula", "in", posiblesCedulas), limit(1));
-        const snapActivo = await getDocs(qActivo);
+        let snapActivo = await getDocs(query(collection(db, "cargos_personal"), where("cedula", "in", posiblesCedulas), limit(1)));
+        if (snapActivo.empty) {
+            try {
+                const snapDoc = await getDoc(doc(db, "cargos_personal", cedula));
+                if (snapDoc.exists()) {
+                    snapActivo = { empty: false, docs: [snapDoc] };
+                }
+            } catch(eDoc) {}
+        }
 
         if (!snapActivo.empty) {
             const dataActivo = snapActivo.docs[0].data();
