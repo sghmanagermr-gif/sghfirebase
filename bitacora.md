@@ -4035,3 +4035,17 @@ Se procesó el reporte institucional remitido directamente por los directores de
   * Actualizadas las nóminas institucionales de 4 planteles en `planteles/` sincronizando `personal_resumen` y `total_personal` mediante `updateMask` para proteger datos de matrícula y generales.
 - **Comunicación Institucional:**
   * Emitido el comunicado oficial en formato nativo de WhatsApp bajo la plantilla estandarizada del CDCE Mérida.
+---
+
+## [Operación Forense] - 2026-11-06 (Protocolo correos_afectados: Rescate de Acceso y Sincronización de Nómina CEI Tovar - OD14891421)
+
+### Resumen Técnico
+Se atendió el reporte de rescate bajo la directriz `correos_afectados` para la cuenta institucional **`sghmartintovar@gmail.com`**:
+1. **Identificación Institucional:** Corresponde al **CEI Tovar / Epónimo oficial: "Martín Tovar y Tovar" (Código DEA `OD14891421`)**, Parroquia Tovar, Municipio Tovar (Dependencia Nacional, Código Estadístico 140923), bajo la dirección de la Prof. Thais del Valle Torres Osuna (C.I. V-12.048.817).
+2. **Firebase Authentication:** Cuenta validada en Firebase Auth (UID `C9pCDb8wmHd2hZtb82qTf5txAM23`, `emailVerified: true`).
+3. **Colección `usuarios`:** Perfil administrativo en `usuarios/C9pCDb8wmHd2hZtb82qTf5txAM23` confirmado con rol `plaadmin`, estatus `APROBADO` y vinculación estricta al código DEA `OD14891421`.
+4. **Nómina Oficial RAC (31 Funcionarios - Cero Duplicados):**
+   - Se constató que los 31 trabajadores registrados en RAC para `OD14891421` ya existían en Firestore en `cargos_personal` bajo identificadores legacy.
+   - Se enriquecieron y sincronizaron sus 31 expedientes con llaves compuestas `OD14891421_{cedula}` y esquema canónico dual sin generar duplicados.
+   - Se actualizó `planteles/OD14891421` normalizando los metadatos institucionales y consolidando `personal_resumen` con los 31 funcionarios (`total_personal: 31`).
+5. **Generación OOB y Entrega WhatsApp:** Emisión de enlace seguro de restablecimiento de contraseña Out-of-Band y redacción del mensaje institucional oficial.

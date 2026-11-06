@@ -6242,3 +6242,19 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 3. Inyección y Regularización: Inyectados 8 expedientes en cargos_personal y actualizadas las nóminas en planteles/ para OD02821421, OD09731421, S0271D1421 y OD14881421.  
 > 4. Verificación Post-Vuelo: Verificada lectura 200 OK de los 8 expedientes y consistencia de nóminas institucionales.  
 > 5. Informe Oficial: Readecuación del comunicado oficial para WhatsApp bajo la plantilla canónica estandarizada del CDCE Mérida.
+### Intervención 172
+
+* **Fecha / Hora:** 2026-11-06 ~15:05 - 15:15 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> correos_afectados: sghmartintovar@gmail.com  
+> Satisfactorio. Continuemos  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Protocolo correos_afectados ejecutado para CEI Tovar / Martín Tovar y Tovar (OD14891421):  
+> 1. Identificación y Auth: Validado correo verificado en Auth (UID C9pCDb8wmHd2hZtb82qTf5txAM23), perfil aprobado en usuarios/ con rol plaadmin.  
+> 2. Sincronización Anti-Duplicados: Enriquecidos y mapeados los 31 expedientes preexistentes en cargos_personal/OD14891421_{cedula} sin crear duplicados. Actualizada la ficha institucional en planteles/OD14891421 con total_personal: 31 y personal_resumen completo.  
+> 3. Enlace OOB generado y entregado junto con el mensaje institucional para WhatsApp.
