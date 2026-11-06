@@ -6293,3 +6293,22 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 2. Control Anti-Duplicados: Localizado documento legado cargos_personal/21305064; actualizado in-situ para garantizar 0 duplicados sin crear documentos redundantes.  
 > 3. Sincronización Institucional: Incorporada a personal_resumen de planteles/OD05671402 mediante transformación atómica del servidor (total_personal incrementado a 5).  
 > 4. Comunicado Oficial: Entrega de la notificación estandarizada para WhatsApp.
+### Intervención 175
+
+* **Fecha / Hora:** 2026-11-06 ~16:07 - 16:27 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Estoy satisfecho, pero no usaste la misma plantilla de mensaje whatsapp, debes usar la plantilla que me gusta. Continuemos. Ok, vamos a usar el protocolo: CASO_HUERFANOS, pero esta ves me lo enviaron en un excel que está en: huerfanos\guaraque.xlsx. Atento con duplicar personal en la base de datos de Firebase CASO_HUERFANOS  
+> los funcionarios que ya esten en SGH no se hace nada [...]  
+> los 6 funcionarios a los que propones Normalización In-Situ los estoy buscando con el Auditor de Cédulas y Expedientes y dicen Funcionario No Registrado en el Sistema. En serio no te entiendo...,  
+> Opción 1 cambia cedula de mayúscula a minúscula  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. Diagnóstico de Plataforma: Demostrado al usuario por qué el Auditor de Cédula arrojaba "Funcionario No Registrado" en los 6 casos (documentos legados del 11 de agosto con llaves en mayúsculas).  
+> 2. Ejecución Opción 1: Inyectados los 8 huérfanos legítimos con clave compuesta `{dea}_{ci}` y normalizados in-situ los 6 expedientes preexistentes agregándoles `cedula` en minúscula (0% duplicados).  
+> 3. Sincronización Institucional: Nóminas de los planteles actualizadas mediante transformaciones atómicas en `personal_resumen`.  
+> 4. Verificación Zero-Defects: Comprobada la no existencia de duplicados (0 colisiones).  
+> 5. Comunicado Oficial: Entrega del informe oficial para WhatsApp bajo la plantilla estandarizada preferida por el usuario.

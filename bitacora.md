@@ -4088,3 +4088,18 @@ Se procesó el requerimiento bajo el protocolo `CASO_HUERFANOS` para el **Comple
   * Verificada la no existencia de duplicados (0 colisiones).
 - **Comunicación Institucional:**
   * Generado y entregado el informe oficial para WhatsApp bajo la plantilla estandarizada.
+---
+
+## [Operación Forense] - 2026-11-06 (Operativo CASO_HUERFANOS: Municipio Guaraque - Inyección de 8 Huérfanos y Normalización In-Situ de 6 Preexistentes con Esquema Dual)
+
+### Resumen Técnico
+Se procesó el requerimiento bajo el protocolo `CASO_HUERFANOS` contenido en el archivo `huerfanos/guaraque.xlsx` (35 funcionarios reportados en 8 planteles del Municipio Guaraque):
+- **Diagnóstico Forense y Auditoría Cruzada vs RAC.xlsx:**
+  * **8 Huérfanos Legítimos Inexistentes:** Validados 100% en nómina central MPPE RAC con adscripción idéntica de plantel, e inyectados formalmente en Cloud Firestore en `cargos_personal/{dea}_{ci}` y `planteles/{dea}.personal_resumen`.
+  * **6 Preexistentes Normalizados In-Situ (CERO DUPLICADOS):** Cédulas 23.493.706, 23.236.268, 20.828.522, 21.332.447, 23.723.118 y 20.832.773. Existían desde el 11 de agosto de 2026 con encabezado en mayúsculas (`"CEDULA"`), lo que provocaba que el Auditor de Cédula de la web arrojara "Funcionario No Registrado". Se actualizaron in-situ agregándoles las etiquetas en minúsculas (`cedula`, `cedula-identidad`, `codigo-plantel`), asegurando su visibilidad inmediata como registros únicos válidos sin crear documentos redundantes.
+  * **21 Casos en Observación:** No figuraban en la nómina central MPPE RAC; se reservaron en la Parte 3 para validación formal del CDCE.
+- **Acciones Realizadas:**
+  * 20 operaciones atómicas en Cloud Firestore ejecutadas en commit único (8 inyecciones en `cargos_personal`, 6 normalizaciones in-situ y 6 transformaciones atómicas en `planteles`).
+  * Verificación exhaustiva: 0 colisiones, 0 duplicados generados.
+- **Comunicación Institucional:**
+  * Generado y entregado el informe oficial para WhatsApp utilizando la plantilla estandarizada requerida por la administración.
