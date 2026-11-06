@@ -6222,3 +6222,23 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 4. Inyección de Expedientes: Inyectados los 3 expedientes en cargos_personal con adscripción CNAE / Nacional.  
 > 5. Sincronización Institucional: Nómina de la sede actualizada con total_personal: 3.  
 > 6. Informe Oficial: Generado reporte institucional en sintaxis nativa de WhatsApp.
+### Intervención 171
+
+* **Fecha / Hora:** 2026-11-06 ~14:46 - 15:02 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Si, satisfactorios.  
+> Atento con duplicar personal en la base de datos de Firebase CASO_HUERFANOS, Concentrate en los datos codigo DEA, cedula y nombres; el resto del testo es lo que escriben de mas los directores  
+> [Reporte de 16 trabajadores en 6 planteles del Municipio Tovar]  
+> luz verde  
+> satisfecho. Ese no es el modelo de mensaje whatsapp-informe que has venido usando  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. Auditoría Forense y Control Anti-Duplicados: Verificados los 16 registros contra Firebase y RAC.xlsx. Identificados 3 preexistentes resguardados (0 duplicados), 8 huérfanos legítimos confirmados y 5 casos en observación.  
+> 2. Autorización Institucional: Recibida luz verde del usuario.  
+> 3. Inyección y Regularización: Inyectados 8 expedientes en cargos_personal y actualizadas las nóminas en planteles/ para OD02821421, OD09731421, S0271D1421 y OD14881421.  
+> 4. Verificación Post-Vuelo: Verificada lectura 200 OK de los 8 expedientes y consistencia de nóminas institucionales.  
+> 5. Informe Oficial: Readecuación del comunicado oficial para WhatsApp bajo la plantilla canónica estandarizada del CDCE Mérida.

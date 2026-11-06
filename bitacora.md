@@ -4011,3 +4011,27 @@ Se procesó la regularización de la sede escolar y 3 trabajadoras recuperadas d
   * Sincronizada la nómina en `planteles/PD00141421` (`personal_resumen` con 3 trabajadoras y `total_personal: 3`).
 - **Comunicación:**
   * Emitido informe oficial en sintaxis nativa de WhatsApp.
+---
+
+## [Operación Forense] - 2026-11-06 (Operativo CASO_HUERFANOS: Municipio Tovar - Reporte Directores 16 Casos en 6 Planteles)
+
+### Resumen Técnico
+Se procesó el reporte institucional remitido directamente por los directores de 6 planteles educativos del Municipio Tovar contentivo de 16 trabajadores:
+- **Control Anti-Duplicados (Blindaje Institucional):**
+  * Se identificaron **3 funcionarios preexistentes en Firebase**:
+    - Francy Johana Márquez Graziosi (C.I. 20.830.141) en U.E. Monseñor Chacón (`OD02821421`).
+    - Norma Josefina Guerrero de Guerrero (C.I. 8.086.413) en L.N. Félix Román Duque (`ON15731418`).
+    - Jessica María Molina Barillas (C.I. 19.046.183) adscrita a E.P.E.E. Ananías Avendaño (`ON14991421`).
+  * En estricto cumplimiento de la política de cero duplicados, estos 3 trabajadores **no fueron duplicados ni alterados**.
+- **Auditoría Cruzada vs RAC.xlsx:**
+  * **8 huérfanos legítimos validados** con asignación y coincidencia plena en el registro maestro ministerial de RAC:
+    - 1 en U.E. Monseñor Chacón (`OD02821421`): Oriangel Alexandra Berbesi Tovar (20.397.276).
+    - 4 en Escuela Estadal Santa Bárbara (`OD09731421`): Rudi Yoenis Hernández Rujano (19.848.413), Yeni Andreina Hernández de Guiza (19.046.074), Yisel Rocío Hernández Rujano (19.046.075) y Raquel Daniela García Hernández (20.395.724).
+    - 1 en Complejo Educativo Félix Román Duque (`S0271D1421`): Zaida Coromoto Romero de Pereira (8.711.419).
+    - 2 en J.I. Mercedes Elena Cordero de G / Milagros Chiquinquirá Quiñones (`OD14881421`): Maria Eugenia Rosales (19.047.200) y Fernando Alonso Suarez Rivas (19.486.703).
+  * **5 casos en observación:** No figuran en RAC ni en Firebase (Liliam Guerrero 9.202.839, Angelica Moreno 31.209.563, Loida Cruces 13.013.608, Ana Escalante 19.046.510, Maryori Rondón 21.330.126).
+- **Acciones Realizadas:**
+  * Inyectados 8 expedientes individuales en `cargos_personal` (`{dea}_{cedula}`) con esquema dual y homologación ministerial.
+  * Actualizadas las nóminas institucionales de 4 planteles en `planteles/` sincronizando `personal_resumen` y `total_personal` mediante `updateMask` para proteger datos de matrícula y generales.
+- **Comunicación Institucional:**
+  * Emitido el comunicado oficial en formato nativo de WhatsApp bajo la plantilla estandarizada del CDCE Mérida.
