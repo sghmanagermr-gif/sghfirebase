@@ -6258,3 +6258,22 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 1. Identificación y Auth: Validado correo verificado en Auth (UID C9pCDb8wmHd2hZtb82qTf5txAM23), perfil aprobado en usuarios/ con rol plaadmin.  
 > 2. Sincronización Anti-Duplicados: Enriquecidos y mapeados los 31 expedientes preexistentes en cargos_personal/OD14891421_{cedula} sin crear duplicados. Actualizada la ficha institucional en planteles/OD14891421 con total_personal: 31 y personal_resumen completo.  
 > 3. Enlace OOB generado y entregado junto con el mensaje institucional para WhatsApp.
+### Intervención 173
+
+* **Fecha / Hora:** 2026-11-06 ~15:15 - 15:43 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Satisfactorio. Continuemos. Atento con duplicar personal en la base de datos de Firebase CASO_HUERFANOS, S1539D1419 [10 funcionarios]  
+> del listado que dices que ya esta en firebase, segun el video no coincide con tu respuesta: [...] Necesito creer en ti  
+> luz verde  
+> Si, satisfactorios. Continuemos  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. Auditoría Forense y Diagnóstico de Plataforma: Identificada la causa exacta de la discrepancia en el video (registros legados con encabezados en mayúsculas invisibles para la consulta web y registros sin código DEA asignado).  
+> 2. Regularización y Normalización: Inyectados 3 huérfanos legítimos (Vilma León, Jessica Valero y Maryuri Andrade), corregida adscripción de Ivonne Méndez y normalizados los 4 funcionarios con llaves en mayúsculas (Keila Salcedo, Cristhian Parra, Carmen Andrade, Edis Andrade).  
+> 3. Sincronización Institucional: Nómina de `planteles/S1539D1419` actualizada a 11 trabajadores en `personal_resumen`.  
+> 4. Verificación Zero-Defects: Simulada la consulta del Auditor de Cédula de la web confirmando 100% de registros válidos verdes.  
+> 5. Comunicado Oficial: Entrega del informe oficial para WhatsApp.

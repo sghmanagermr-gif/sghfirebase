@@ -4049,3 +4049,23 @@ Se atendió el reporte de rescate bajo la directriz `correos_afectados` para la 
    - Se enriquecieron y sincronizaron sus 31 expedientes con llaves compuestas `OD14891421_{cedula}` y esquema canónico dual sin generar duplicados.
    - Se actualizó `planteles/OD14891421` normalizando los metadatos institucionales y consolidando `personal_resumen` con los 31 funcionarios (`total_personal: 31`).
 5. **Generación OOB y Entrega WhatsApp:** Emisión de enlace seguro de restablecimiento de contraseña Out-of-Band y redacción del mensaje institucional oficial.
+---
+
+## [Operación Forense] - 2026-11-06 (Operativo CASO_HUERFANOS: Municipio Santos Marquina - Liceo Dr. Miguel Otero Silva S1539D1419)
+
+### Resumen Técnico
+Se procesó el requerimiento bajo el protocolo `CASO_HUERFANOS` para el **Liceo Dr. Miguel Otero Silva (`S1539D1419`)**, Parroquia Tabay, Municipio Santos Marquina:
+- **Diagnóstico Forense y Auditoría Cruzada vs RAC.xlsx:**
+  * **3 Huérfanos Legítimos Inexistentes en Firebase:** Vilma Yris León Rondón (19.042.681), Jessica Angely Valero Díaz (19.752.194) y Maryuri Yuleimi Andrade Andrade (20.433.705). 100% validadas en nómina ministerial RAC.
+  * **1 Corrección de DEA:** Ivonne Méndez Uzcátegui (10.103.290), cuyo expediente preexistía sin campo de código DEA ("S/N"), asignándole formalmente `S1539D1419`.
+  * **4 Normalizaciones de Casing:** Keila Salcedo (22.272.594), Cristhian Parra (23.724.746), Carmen Andrade (21.185.355) y Edis Andrade (23.583.290), cuyos documentos legados en Firestore tenían llaves en mayúsculas (`"CEDULA"`), haciéndolos invisibles al Auditor de Cédula de la web. Se enriquecieron con campos en minúsculas y llave compuesta `S1539D1419_{cedula}`.
+  * **1 Preexistente Preservado:** Carlos César Moreno Moreno (15.753.718), ya activo en el plantel (0% duplicados).
+  * **1 Caso en Observación Excluido:** Zoiza Moreno (15.754.825), adscrita oficialmente en RAC a la Escuela San Antonio (`OD12951412`, Libertador).
+- **Control Anti-Duplicados:**
+  * Cero duplicados generados. Se vincularon las llaves compuestas requeridas para el ecosistema web.
+- **Acciones Realizadas:**
+  * Inyectados y normalizados los 9 expedientes canónicos en `cargos_personal`.
+  * Actualizado `planteles/S1539D1419` sincronizando `personal_resumen` con 11 trabajadores (2 previos + 9 procesados) y protegiendo intacta la matrícula institucional.
+  * Simulada y verificada la consulta del Auditor de Cédula arrojando 100% de coincidencias verdes válidas.
+- **Comunicación Institucional:**
+  * Emitido el comunicado oficial para WhatsApp bajo la plantilla estandarizada.
