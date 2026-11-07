@@ -4219,3 +4219,25 @@ Se procesó el requerimiento bajo el protocolo `CASO_HUERFANOS` para el listado 
   * Verificación exhaustiva: 100% de los 24 huérfanos confirmados y reflejados; 0 duplicados generados.
 - **Comunicación Institucional:**
   * Generado y entregado el informe oficial para WhatsApp utilizando la plantilla estandarizada CDCE Mérida (Opción 1: *Personal No Reflejado en Plantel*).
+
+---
+
+## [Operación Forense] - 2026-11-07 (Operativo CASO_HUERFANOS: Municipio Julio César Salas - Inyección de 5 Huérfanos en 3 Planteles con Pluriempleo y Protección de 2 Preexistentes)
+
+### Resumen Técnico
+Se procesó el requerimiento bajo el protocolo `CASO_HUERFANOS` para el listado institucional de **9 funcionarios** reportados en 5 planteles educativos del **Municipio Julio César Salas**:
+- **Diagnóstico Forense y Auditoría Cruzada vs RAC.xlsx:**
+  * **5 Huérfanos Legítimos Confirmados:** Validados al 100% en nómina central MPPE RAC e inyectados formalmente en Cloud Firestore en `cargos_personal/{dea}_{ci}` y `planteles/{dea}.personal_resumen` a lo largo de 3 instituciones educativas (`OD01021410`, `S3379N1410`, `OD17141410`).
+  * **4 Resoluciones de Doble Cargo Legítimo / Pluriempleo Nacional + Estadal:**
+    - Beatriz Coromoto Quevedo Hernández (C.I. 13.825.307), Mario Gerardo Ramírez Moreno (C.I. 15.942.671) y Rosmery Paola Vergara Abreu (C.I. 17.436.056) en la Escuela Roberto Picón Lares (`OD01021410`), resguardando sus cargos estadales en `OD12241410`, `OD12301410` y `OD12281410`.
+    - Yoneida Coromoto Guerra (C.I. 15.142.594) en el Liceo Emira Matheus (`S3379N1410`), resguardando su cargo estadal en `OD12261410`.
+  * **2 Preexistentes en Firebase (PROTEGIDOS CONTRA DUPLICACIÓN):**
+    - Kasandra Castro Bermúdez (C.I. 23.718.147): expediente preexistente en `cargos_personal/23718147` enlazado formalmente a `personal_resumen` de `OD17141410` sin duplicación.
+    - Yuleny Del Carmen Bernal Rangel (C.I. 19.529.390): confirmada 100% activa y visible en `S2855D1410`.
+  * **2 Casos en Observación:** Dairy Moreno (C.I. 20.352.577) y Oriannys Labastida (C.I. 22.994.198) en `OD00961410` no figuran en la nómina central ministerial RAC activa.
+  * **2 Planteles Mencionados sin Personal:** Escuela Estadal José Elpidio Salcedo (`OD12251410`) y Escuela Estadal Luisa Cáceres de Arismendi (`OD16341410`) registradas sin nómina adjunta en el reporte.
+- **Acciones Realizadas:**
+  * 8 operaciones atómicas en Cloud Firestore ejecutadas en commit único (5 inyecciones en `cargos_personal` y 3 transformaciones en `planteles` actualizando `personal_resumen` e incrementando `total_personal`).
+  * Verificación exhaustiva: 100% de los 5 expedientes verificados HTTP 200; 0 duplicados generados.
+- **Comunicación Institucional:**
+  * Generado y entregado el informe oficial para WhatsApp utilizando la plantilla canónica estandarizada del CDCE Mérida.

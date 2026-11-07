@@ -6418,3 +6418,23 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 4. Inyección Atómica Dual: Ejecutado commit de 35 operaciones (24 en `cargos_personal` y 11 transformaciones atómicas en `planteles` actualizando `personal_resumen` e incrementando `total_personal`).  
 > 5. Blindaje Anti-Duplicados: Verificada la no duplicidad en los 17 preexistentes y confirmación de los 24 expedientes inyectados.  
 > 6. Comunicación Institucional: Generación y entrega del reporte oficial para WhatsApp bajo la nomenclatura estandarizada "Personal No Reflejado en Plantel".
+
+### Intervención 182
+
+* **Fecha / Hora:** 2026-11-07 ~12:10 - 12:34 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Continuemos. Ok, vamos a usar el protocolo: CASO_HUERFANOS. Atento con duplicar personal en la base de datos de Firebase CASO_HUERFANOS, enfocarse en codigo dea, cedula y nombres... [Listado de 9 registros de Julio César Salas]  
+> [Parametrización estandarizada en dos fases y creación del documento Parametrización del protocolo CASO_HUERFANOS.md]  
+> luz verde  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. Auditoría Forense y Cruce Ministerial RAC: Auditados los 9 funcionarios reportados en 5 instituciones de Julio César Salas.  
+> 2. Resolución de Doble Cargo / Pluriempleo Legítimo: 4 docentes (Beatriz Quevedo, Mario Ramírez, Rosmery Vergara en OD01021410 y Yoneida Guerra en S3379N1410) identificados con doble cargo Nacional + Estadal en RAC. Preservados sus cargos estadales e incorporados con clave compuesta `{dea}_{ci}`.  
+> 3. Blindaje de Preexistentes: Kasandra Castro (23718147) vinculada formalmente a `personal_resumen` de OD17141410 sin duplicar su expediente de cargo. Yuleny Bernal (19529390) confirmada 100% activa en S2855D1410.  
+> 4. Inyección Atómica Dual: Ejecutado commit de 8 operaciones en Cloud Firestore (5 en `cargos_personal` y 3 en `planteles` actualizando `personal_resumen` e incrementando `total_personal`).  
+> 5. Documentación de Parametrización: Redacción y almacenamiento de `Parametrización del protocolo CASO_HUERFANOS.md` en la raíz del proyecto y como artefacto oficial.  
+> 6. Comunicación Institucional: Generación y entrega del reporte para WhatsApp bajo el modelo canónico estandarizado del CDCE Mérida.
