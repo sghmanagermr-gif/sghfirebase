@@ -4123,3 +4123,19 @@ A solicitud de la administración del sistema, se procesó la revisión exhausti
   * Compilación exitosa de producción (`vite build` completado en 703ms).
 - **Herramienta de Saneamiento Masivo Backend:**
   * Creado el script `scripts/normalizar_cedulas_mayusculas.js` preparado para escanear y actualizar masivamente los ~1.400 registros restantes mediante batches atómicos una vez restablecida la cuota de lectura del Plan Spark.
+---
+
+## [Operación Forense] - 2026-11-06 (Operativo CASO_HUERFANOS: Municipio Pueblo Llano - Inyección de 49 Huérfanos en 13 Planteles con Esquema Dual)
+
+### Resumen Técnico
+Se procesó el requerimiento bajo el protocolo `CASO_HUERFANOS` contenido en el archivo `huerfanos/pueblollano.xlsx` (95 funcionarios reportados en 15 planteles del Municipio Pueblo Llano):
+- **Diagnóstico Forense y Auditoría Cruzada vs RAC.xlsx:**
+  * **49 Huérfanos Legítimos Inexistentes:** Validados 100% en nómina central MPPE RAC con adscripción idéntica de plantel, e inyectados formalmente en Cloud Firestore en `cargos_personal/{dea}_{ci}` y `planteles/{dea}.personal_resumen` a lo largo de 13 instituciones educativas.
+  * **28 Preexistentes en Firebase (PROTEGIDOS):** Registros previamente activos preservados sin alteración ni duplicación (0% duplicados).
+  * **4 Casos con Discrepancia de Sede en RAC:** Adscritos en nómina ministerial a otros planteles (reservados para sinceración de traslado).
+  * **14 Casos en Observación:** No figuraban en la nómina central MPPE RAC (retenidos para validación formal del CDCE).
+- **Acciones Realizadas:**
+  * 62 operaciones atómicas en Cloud Firestore ejecutadas en commit único (49 inyecciones en `cargos_personal` y 13 transformaciones atómicas en `planteles` actualizando `personal_resumen` e incrementando `total_personal`).
+  * Verificación exhaustiva: 0 colisiones, 0 duplicados generados.
+- **Comunicación Institucional:**
+  * Generado y entregado el informe oficial para WhatsApp utilizando la plantilla estandarizada CDCE Mérida (*Lic. Luis Pérez*).

@@ -6328,3 +6328,19 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 2. Blindaje Frontend en 4 Capas: Actualizados webapp/src/admin.js y webapp/src/personalWizard.js con cascada de búsqueda (cedula -> cedula-identidad -> CEDULA -> ID directo).  
 > 3. Herramienta Backend: Desarrollado scripts/normalizar_cedulas_mayusculas.js para ejecución de barrido masivo.  
 > 4. Verificación de Build: Compilación de producción validada exitosamente.
+### Intervención 177
+
+* **Fecha / Hora:** 2026-11-06 ~16:41 - 16:50 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> CASO_HUERFANOS: seguimos con el municipio pueblollano.xlsx  
+> luz verde  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. Auditoría Forense y Validación RAC: Auditados los 95 registros de pueblollano.xlsx (49 huérfanos legítimos confirmados, 28 preexistentes protegidos, 4 discrepancias de sede en RAC y 14 en observación).  
+> 2. Inyección Cero-Cost: Ejecutado commit atómico de 62 operaciones (49 cargos_personal y 13 transforms en planteles).  
+> 3. Control Anti-Duplicados: Verificada la no duplicidad de los 28 preexistentes.  
+> 4. Comunicado Oficial: Entrega de la notificación estandarizada para WhatsApp bajo el formato requerido.
