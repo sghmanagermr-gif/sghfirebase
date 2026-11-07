@@ -4282,3 +4282,24 @@ Tras la descarga y análisis forense de la nómina consolidada estadal descargad
   * **Depuración de Registros Dummy:** Eliminados definitivamente de Firestore los documentos residuales `cargos_personal/123` y `cargos_personal/12345678`.
   * **Transacción Atómica:** 25 operaciones ejecutadas en commit único HTTP 200 (`2026-11-07T23:38:20.521053Z`).
 - **Impacto Institucional:** La nómina estadal consolidada queda 100% libre de filas en blanco al inicio; los 129 trabajadores quedan agrupados y enriquecidos bajo sus planteles oficiales y municipios correspondientes.
+
+## [Blindaje Anti-Fantasmas y Gestión Administrativa v2.30.3] - 2026-11-07 (Eliminación de Expedientes desde Auditor, Blindaje de Aspiradora y Filtro de Exportación Excel)
+
+### Resumen Técnico
+Tras la sincronización de los 8 planteles, la nómina descargada redujo sus inconsistencias en un 99% (pasando de 17 filas vacías a únicamente 1 fila residual con Cédula `123`). Se identificó que dicha fila persistía debido a tres factores concurrentes:
+1. **Filtro de Exportación permisivo (`webapp/src/admin.js`):** La condición previa `!!(ced || nom)` aceptaba registros con cédula que carecían por completo de nombre y apellidos.
+2. **Criterio de la Aspiradora de BD:** Solo evaluaba registros donde simultáneamente faltaban cédula Y nombre (`!ced && !nom`), por lo cual omitía el registro `123`.
+3. **Caché en Memoria del Navegador:** `window._cacheExportPersonal['TODOS']` mantenía en la sesión del cliente los datos previamente cargados si no se recargaba la pestaña.
+
+### Acciones Realizadas (Despliegue v2.30.3):
+1. **Filtro Anti-Fantasmas en Exportador a Excel:**
+   - Se actualizó la función `exportarNominaExcelMunicipio` para requerir estrictamente `nom && nom.length >= 2 && ced && ced !== '123' && ced !== '12345678' && ced.length >= 4`.
+   - Garantiza que ningún registro huérfano, dummy o sin nombre figure jamás en los reportes oficiales.
+2. **Potenciación de la Aspiradora Inteligente de BD:**
+   - Detecta y agrega a la lista de depuración registros con cédula de prueba (`123`, `12345678`), registros sin nombre con cédulas truncadas (< 5 dígitos) y registros en blanco.
+3. **Botón «🗑️ Eliminar Expediente» en Auditor de Cédulas y Expedientes:**
+   - Incorporado en la cabecera de cada ficha de funcionario en el Auditor de Cédulas (`btn-auditor-eliminar-expediente`).
+   - Permite a los administradores buscar cualquier cédula (incluyendo anomalías como `123`) y eliminar su documento directamente en Firestore mediante confirmación modal con `deleteDoc`, invalidando automáticamente el caché en memoria.
+4. **Bumping SemVer a v2.30.3 y Despliegue:**
+   - Actualizado en `package.json` e `index.html`.
+   - Compilación exitosa con Vite y despliegue completado a Firebase Hosting (`https://sgh-merida.web.app`).
