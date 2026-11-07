@@ -1,0 +1,34 @@
+*INFORME OFICIAL: REGULARIZACIÓN DE PERSONAL NO REFLEJADO EN PLANTEL*
+*MUNICIPIO {MUNICIPIO} – ESTADO BOLIVARIANO DE MÉRIDA*
+
+Saludos cordiales. Se informa la resolución y vinculación formal del personal que labora en las instituciones educativas y no se encontraba reflejado en la plataforma SGH:
+
+*DATOS DE LA INSTITUCIÓN:*
+• *Municipio:* {MUNICIPIO}
+• *Instituciones Atendidas:* {N_PLANTELES} Planteles Educativos
+• *Dependencia:* {DEPENDENCIA}
+
+*1. PERSONAL VINCULADO E INCORPORADO AL SISTEMA ({N_INCORPORADOS}):*
+_(Personal activo en nómina central ministerial RAC que fue asociado formalmente a su plantel)_
+{LISTA_INCORPORADOS}
+
+*2. PERSONAL PREEXISTENTE VERIFICADO EN SISTEMA ({N_PREEXISTENTES}):*
+_(Personal que ya se encontraba registrado y activo en la plataforma oficial. Sus expedientes se preservan sin alteraciones ni duplicados para gestión directa por su directivo)_
+{LISTA_PREEXISTENTES}
+
+*3. CASOS EN OBSERVACIÓN:*
+
+*A. DISCREPANCIA DE SEDE EN RAC ({N_DISCREPANCIAS}):*
+_(Personal activo en nómina ministerial RAC pero asignado formalmente a otro plantel. Requiere sinceración formal de traslado ante Zona Educativa)_
+{LISTA_DISCREPANCIAS}
+
+*B. NO LOCALIZADOS EN NÓMINA CENTRAL RAC ({N_NO_RAC}):*
+_(Personal no ubicado en la nómina central MPPE RAC: Madres Cocineras CNAE locales, personal obrero/vigilante comunal, maternal nuevo ingreso o revisión de cédula)_
+{LISTA_NO_RAC}
+
+*4. CONTROL DE INTEGRIDAD Y SEGURIDAD:*
+• 100% de coincidencia ministerial vs. nómina oficial RAC en los casos incorporados.
+• 0% de duplicados en la base de datos estadal ({N_PREEXISTENTES} registros preexistentes protegidos).
+• Nóminas institucionales sincronizadas en personal_resumen protegiendo los datos de matrícula.
+
+_Lic. Luis Perez Soporte técnico y Gestión Humana - CDCE Mérida_

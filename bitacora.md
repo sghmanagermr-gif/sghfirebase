@@ -4159,3 +4159,20 @@ Se procesó el requerimiento bajo el protocolo `CASO_HUERFANOS` para el listado 
   * Verificación exhaustiva: 0 colisiones, 0 duplicados generados.
 - **Comunicación Institucional:**
   * Generado y entregado el informe oficial para WhatsApp utilizando la plantilla estandarizada CDCE Mérida (*Lic. Luis Pérez*).
+---
+
+## [Operación Forense] - 2026-11-07 (Operativo CASO_HUERFANOS: Municipio Rangel - Inyección de 7 Huérfanos en 4 Planteles con Esquema Dual)
+
+### Resumen Técnico
+Se procesó el requerimiento bajo el protocolo `CASO_HUERFANOS` para el listado institucional de **31 funcionarios** reportados en 5 planteles educativos del **Municipio Rangel**:
+- **Diagnóstico Forense y Auditoría Cruzada vs RAC.xlsx:**
+  * **7 Huérfanos Legítimos Inexistentes:** Validados 100% en nómina central MPPE RAC con adscripción idéntica de plantel, e inyectados formalmente en Cloud Firestore en `cargos_personal/{dea}_{ci}` y `planteles/{dea}.personal_resumen` a lo largo de 4 instituciones educativas.
+  * **11 Preexistentes en Firebase (PROTEGIDOS):** Registros previamente activos preservados sin alteración ni duplicación (0% duplicados).
+  * **13 Casos en Observación:** No figuraban en la nómina central MPPE RAC (Madres cocineras CNAE locales, personal obrero comunal, personal de maternal o validación de C.I.).
+- **Saneamientos Forenses Aplicados:**
+  * Identificación de adscripción y código DEA canónico para la *Escuela Juan Ramón Lobo* (`OD13971417` - *NER 429*).
+- **Acciones Realizadas:**
+  * 11 operaciones atómicas en Cloud Firestore ejecutadas en commit único (7 inyecciones en `cargos_personal` y 4 transformaciones atómicas en `planteles` actualizando `personal_resumen` e incrementando `total_personal`).
+  * Verificación exhaustiva: 0 colisiones, 0 duplicados generados.
+- **Comunicación Institucional:**
+  * Generado y entregado el informe oficial para WhatsApp utilizando la plantilla estandarizada CDCE Mérida (*Lic. Luis Pérez*).
