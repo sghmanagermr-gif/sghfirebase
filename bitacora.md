@@ -4241,3 +4241,27 @@ Se procesó el requerimiento bajo el protocolo `CASO_HUERFANOS` para el listado 
   * Verificación exhaustiva: 100% de los 5 expedientes verificados HTTP 200; 0 duplicados generados.
 - **Comunicación Institucional:**
   * Generado y entregado el informe oficial para WhatsApp utilizando la plantilla canónica estandarizada del CDCE Mérida.
+
+
+## [Operación Forense] - 2026-11-07 (Operativo CASO_HUERFANOS: Municipio Libertador - Inyección de 501 Huérfanos en 116 Planteles, 25 Circuitos y Resolución de 5 Casos de Pluriempleo)
+
+### Resumen Técnico
+Se procesó el requerimiento bajo el protocolo `CASO_HUERFANOS` para el listado institucional maestro del **Municipio Libertador** (código parroquial `1412`), compilado a partir de `libertador1.xlsx` (593), `libertador2.xlsx` (13) y `libertador3.xlsx` (7) en el archivo canónico `huerfanos/libertador.xlsx` (**613 registros totales**):
+- **Diagnóstico Forense y Auditoría Cruzada vs RAC.xlsx (30.323 registros) y Cloud Firestore:**
+  * **503 Huérfanos Legítimos Confirmados (501 Expedientes Canónicos Únicos):** Coincidencia ministerial 100% en cargo, horas y código DEA. Se unificaron 2 registros redundantes en origen (Eneida Pérez Pérez C.I. `20.849.699` en `OD13011412` y Edny Coromoto Gómez Peña C.I. `18.964.003` en `OD12841412`), garantizando cero duplicación en Firestore.
+  * **5 Resoluciones de Doble Cargo / Pluriempleo Legítimo en RAC:**
+    - Daniel Peña (C.I. 17.456.025): Docente Único (40 hrs) en `OD12941412` y Doc. II / Aula (40 hrs) en `S2878D1412`.
+    - Omar Javier Bolívar (C.I. 19.775.547): Docente Contratado (40 hrs) en `OD13031412` y TSU Educación (40 hrs) en `OD17471412`.
+    - Mery del Carmen Contreras Sosa (C.I. 19.751.945): Doc. II / Aula (40 hrs) en `S1964D1412` y Docente Único (40 hrs) en `OD13001412`.
+    - Eddy Yajaira Zambrano Dugarte (C.I. 10.718.786): Docente Único (40 hrs) en `OD13011412` y Doc. VI / Aula (53 hrs) en `OD12771412`.
+    - María Elsy Sánchez Sánchez (C.I. 19.593.354): Doc. NG / Aula (40 hrs) en `OD15281412` y Docente Único (40 hrs) en `OD00211412`.
+  * **0 Preexistentes en Firebase:** Ningún registro de este lote figuraba previamente en Firestore (todos formaban parte de las cargas omitidas en julio).
+  * **58 Discrepancias de Sede en RAC:** Personal activo en nómina nacional asignado en RAC a otra sede formal o reportado con inconsistencia tipográfica en el código DEA (`OD-00251412`, `T0097D1413`, `ON1212501412`).
+  * **52 Casos en Observación:** Personal sin registro en la nómina central MPPE RAC (personal de apoyo/obrero comunal, suplentes o nuevo ingreso sin cargar en RAC central).
+- **Acciones Realizadas:**
+  * **617 operaciones atómicas en Cloud Firestore** distribuidas en 3 lotes secuenciales HTTP 200 (Lote 1: 300 ops, Lote 2: 300 ops, Lote 3: 17 ops):
+    - 501 documentos creados bajo clave canónica compuesta `cargos_personal/{dea}_{ci}` con campos completos normalizados en minúsculas y mayúsculas, circuito y metadatos de nómina.
+    - 116 transformaciones atómicas en `planteles/{dea}` ejecutando `appendMissingElements` sobre `personal_resumen` e `increment` sobre `total_personal`.
+  * Verificación exhaustiva: 100% de los 501 expedientes y 116 planteles verificados con éxito en base de datos.
+- **Comunicación Institucional:**
+  * Generado el informe canónico oficial para WhatsApp archivado en `huerfanos/reporte_whatsapp_libertador.txt` (87.802 caracteres) y sintetizado para difusión directiva y zonal.

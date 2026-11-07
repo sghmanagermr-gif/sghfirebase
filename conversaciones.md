@@ -6438,3 +6438,27 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 4. Inyección Atómica Dual: Ejecutado commit de 8 operaciones en Cloud Firestore (5 en `cargos_personal` y 3 en `planteles` actualizando `personal_resumen` e incrementando `total_personal`).  
 > 5. Documentación de Parametrización: Redacción y almacenamiento de `Parametrización del protocolo CASO_HUERFANOS.md` en la raíz del proyecto y como artefacto oficial.  
 > 6. Comunicación Institucional: Generación y entrega del reporte para WhatsApp bajo el modelo canónico estandarizado del CDCE Mérida.
+
+
+### Intervención 183
+
+* **Fecha / Hora:** 2026-11-07 ~12:45 - 13:00 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> antes de eso me gustaría saber si la siguiente lista, se puede compilar en el archivo libertador.xlsx... no, entonces no hace falta; solo aplica el protocolo CASO_HUERFANOS con el archivo libertador.xlsx existente  
+> [Entrega de la auditoría forense de Fase 1 con Balance General de 613 registros, 503 confirmados, 58 discrepancias y 52 en observación]  
+> luz verde  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. Compilación y Auditoría Forense: Integrados los 613 registros de `huerfanos/libertador.xlsx` y cruzados exhaustivamente contra los 30.323 registros de `RAC.xlsx` y Cloud Firestore.  
+> 2. Clasificación Forense:  
+>    - 503 Huérfanos Confirmados en RAC (501 expedientes canónicos únicos, resolviendo 2 duplicados de origen).  
+>    - 5 casos de pluriempleo legítimo / doble cargo RAC incorporados en planteles independientes con claves compuestas.  
+>    - 0 preexistentes protegidos.  
+>    - 58 discrepancias de sede y 52 en observación resguardados sin alterar la BD.  
+> 3. Inyección Atómica en Lotes: Ejecutadas 617 operaciones atómicas en Cloud Firestore divididas en 3 commits HTTP 200 (501 documentos en `cargos_personal/{dea}_{ci}` y 116 transformaciones atómicas `appendMissingElements` e `increment` en `planteles`).  
+> 4. Verificación Post-Inyección: Comprobada la presencia íntegra de expedientes y actualización de personal_resumen en planteles.  
+> 5. Comunicación Institucional: Generación del reporte completo en `huerfanos/reporte_whatsapp_libertador.txt` y entrega del comunicado oficial estructurado para WhatsApp.
