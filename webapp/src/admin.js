@@ -2422,7 +2422,10 @@ export function initAdminDashboard(dbInstance, user) {
           const ced = (emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÉDULA'] || '').toString().trim();
           const nom = (emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || emp['APELLIDOS Y NOMBRES'] || emp['NOMBRE Y APELLIDO'] || '').toString().trim();
           
-          if (!ced && !nom) {
+          const esInvalido = (!ced && !nom) || 
+                             (!nom && (!ced || ced === '123' || ced === '12345678' || ced.length < 5)) ||
+                             (ced === '123' || ced === '12345678');
+          if (esInvalido) {
             vacios.push(emp.id);
           }
         });
@@ -2437,7 +2440,7 @@ export function initAdminDashboard(dbInstance, user) {
         // 2. Pedir confirmación segura
         const confirmado = await showConfirm(
           "Limpieza de Base de Datos",
-          `La aspiradora detectó ${vacios.length} registro(s) completamente en blanco o huérfano(s). ¿Deseas eliminarlos definitivamente? Esto NO afectará a tus trabajadores válidos.`,
+          `La aspiradora detectó ${vacios.length} registro(s) inválido(s), de prueba o huérfano(s) (como cédulas dummy o registros sin nombre). ¿Deseas eliminarlos definitivamente? Esto NO afectará a tus trabajadores válidos.`,
           "warning"
         );
 
@@ -4787,7 +4790,9 @@ export function initAdminDashboard(dbInstance, user) {
           if (codPl.startsWith('DEMO')) return false;
           const ced = (emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÉDULA'] || '').toString().trim();
           const nom = (emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || emp['APELLIDOS Y NOMBRES'] || emp['NOMBRE Y APELLIDO'] || '').toString().trim();
-          return !!(ced || nom);
+          // Blindaje anti-fantasmas: Descartar si no tiene nombre o si es un registro dummy/inválido
+          if (!nom || nom.length < 2 || !ced || ced === '123' || ced === '12345678' || ced.length < 4) return false;
+          return true;
         });
 
       listaPersonal.sort((a, b) => {
@@ -5746,6 +5751,11 @@ export function initAdminDashboard(dbInstance, user) {
                   style="background: #0284c7; color: white; border: none; padding: 7px 14px; border-radius: 6px; font-size: 0.82rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px;">
                   👁️ Modo Supervisión
                 </button>
+                <button type="button" class="btn-auditor-eliminar-expediente" data-id="${d.id}" data-cedula="${ced}"
+                  style="background: #ef4444; color: white; border: none; padding: 7px 14px; border-radius: 6px; font-size: 0.82rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px;"
+                  title="Eliminar este expediente de la base de datos">
+                  🗑️ Eliminar Expediente
+                </button>
               </div>
             </div>
 
@@ -5846,6 +5856,33 @@ export function initAdminDashboard(dbInstance, user) {
           const nom = btn.getAttribute('data-nombre');
           if (dea && typeof window.iniciarSupervisionPlantel === 'function') {
             window.iniciarSupervisionPlantel(dea, nom);
+          }
+        });
+      });
+
+      resultadosBody.querySelectorAll('.btn-auditor-eliminar-expediente').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const docId = btn.getAttribute('data-id');
+          const ced = btn.getAttribute('data-cedula');
+          const confirmado = await showConfirm(
+            "Eliminar Expediente",
+            `¿Estás completamente seguro de eliminar de forma permanente el expediente con Cédula ${ced} (ID de Documento: ${docId}) de la base de datos de Firebase? Esta acción es irreversible.`,
+            "danger"
+          );
+          if (!confirmado) return;
+          try {
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Eliminando...';
+            await deleteDoc(doc(db, 'cargos_personal', docId));
+            if (window._cacheExportPersonal) window._cacheExportPersonal = {};
+            showToast(`Expediente ${docId} eliminado exitosamente de la base de datos.`, "success", 5000);
+            const cardEl = btn.closest('div[style*="border-radius: 14px"]');
+            if (cardEl) cardEl.remove();
+          } catch(err) {
+            console.error("Error al eliminar expediente:", err);
+            showAlert("Error", "No se pudo eliminar el expediente: " + err.message, "danger");
+            btn.disabled = false;
+            btn.innerHTML = '🗑️ Eliminar Expediente';
           }
         });
       });
