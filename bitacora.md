@@ -4176,3 +4176,24 @@ Se procesó el requerimiento bajo el protocolo `CASO_HUERFANOS` para el listado 
   * Verificación exhaustiva: 0 colisiones, 0 duplicados generados.
 - **Comunicación Institucional:**
   * Generado y entregado el informe oficial para WhatsApp utilizando la plantilla estandarizada CDCE Mérida (*Lic. Luis Pérez*).
+
+---
+
+## [Operación Forense] - 2026-11-07 (Operativo CASO_HUERFANOS: Municipio Antonio Pinto Salinas - Auditoría de 13 Docentes en 3 Planteles Estadales)
+
+### Resumen Técnico
+Se procesó el requerimiento bajo el protocolo `CASO_HUERFANOS` para el listado de **13 docentes** reportados en 3 instituciones educativas de dependencia estadal del **Municipio Antonio Pinto Salinas**:
+- **Diagnóstico Forense y Auditoría Cruzada vs RAC.xlsx:**
+  * **0 Huérfanos en Nómina Ministerial RAC:** Los 3 planteles (`OD16201403` - Escuela Cayetano Carreño, `OD10501403` - Escuela María Auxiliadora Chacón y `OD10671403` - Escuela Rosario Merchán Marquez) son de dependencia **ESTADAL**, y su personal docente no figura en la nómina ministerial centralizada del MPPE RAC.
+  * **1 Conflicto Crítico de Cédula Protegido (0% Colisión / CERO DUPLICADOS):**
+    - Se reportó a la docente *Suleima Del Valle Rangel Fernández* con la C.I. `20.828.129` en la Escuela Cayetano Carreño.
+    - Se detectó que dicha cédula pertenece legítimamente en Firestore (`cargos_personal/20828129`) y en nómina RAC al docente *Alfredo Enrique Rubio Pernia* (Escuela Juan Eduardo Ramírez Roa, Tovar).
+    - Se blindó y preservó intacto el expediente preexistente de Alfredo Rubio, evitando su sobreescritura accidental. El caso fue derivado a observación con solicitud de copia de cédula laminada.
+  * **12 Casos en Observación (Nómina Estadal Directa / Nuevo Ingreso):**
+    - 6 docentes en `OD16201403`, 3 docentes en `OD10501403` (incluyendo 1 "Nuevo Ingreso") y 3 docentes en `OD10671403`.
+    - Al no tener registro en RAC nacional, se instruyó su carga directa por los directivos mediante el Asistente de Registro de Personal en SGH o su validación ante la Dirección de Educación Estadal / CDCE.
+- **Acciones Realizadas:**
+  * 0 inyecciones en Firestore para proteger la integridad estricta de la base de datos ministerial.
+  * Preservación del 100% de los datos y bloqueo de colisión de identidad en C.I. `20.828.129`.
+- **Comunicación Institucional:**
+  * Generado y entregado el informe oficial para WhatsApp utilizando la plantilla estandarizada requerida por la administración (Opción 1: *Personal No Reflejado en Plantel*).
