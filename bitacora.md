@@ -4139,3 +4139,23 @@ Se procesó el requerimiento bajo el protocolo `CASO_HUERFANOS` contenido en el 
   * Verificación exhaustiva: 0 colisiones, 0 duplicados generados.
 - **Comunicación Institucional:**
   * Generado y entregado el informe oficial para WhatsApp utilizando la plantilla estandarizada CDCE Mérida (*Lic. Luis Pérez*).
+---
+
+## [Operación Forense] - 2026-11-07 (Operativo CASO_HUERFANOS: Municipio Obispo Ramos de Lora - Inyección de 79 Huérfanos en 28 Planteles con Esquema Dual)
+
+### Resumen Técnico
+Se procesó el requerimiento bajo el protocolo `CASO_HUERFANOS` para el listado institucional de **239 funcionarios** correspondientes a 28 planteles educativos del **Municipio Obispo Ramos de Lora**:
+- **Diagnóstico Forense y Auditoría Cruzada vs RAC.xlsx:**
+  * **79 Huérfanos Legítimos Inexistentes:** Validados 100% en nómina central MPPE RAC con adscripción idéntica de plantel, e inyectados formalmente en Cloud Firestore en `cargos_personal/{dea}_{ci}` y `planteles/{dea}.personal_resumen` a lo largo de 28 instituciones educativas.
+  * **110 Preexistentes en Firebase (PROTEGIDOS):** Registros previamente activos preservados sin alteración ni duplicación (0% duplicados).
+  * **4 Casos con Discrepancia de Sede en RAC:** Adscritos en nómina ministerial a otros planteles (reservados para sinceración de traslado).
+  * **46 Casos en Observación:** No figuraban en la nómina central MPPE RAC (Madres cocineras CNAE comunales, contratos locales o validación de C.I.).
+- **Saneamientos Forenses Aplicados:**
+  * Corrección del código DEA del *Complejo Educativo María de Jesús Noguera de Torres* de `OD004411414` al canónico **`OD04411414`** (*UEB Guachicapazón N*), habilitando la inyección de sus 8 funcionarios validados.
+  * Saneamiento de cédula de *Janet Coromoto Pérez Rangel* (`15.031.739`).
+  * Identificación de cédula de *Chael Daicy Hernández Zambrano* (`23.715.037`).
+- **Acciones Realizadas:**
+  * 107 operaciones atómicas en Cloud Firestore ejecutadas en commit único (79 inyecciones en `cargos_personal` y 28 transformaciones atómicas en `planteles` actualizando `personal_resumen` e incrementando `total_personal`).
+  * Verificación exhaustiva: 0 colisiones, 0 duplicados generados.
+- **Comunicación Institucional:**
+  * Generado y entregado el informe oficial para WhatsApp utilizando la plantilla estandarizada CDCE Mérida (*Lic. Luis Pérez*).

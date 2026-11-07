@@ -6344,3 +6344,20 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 2. Inyección Cero-Cost: Ejecutado commit atómico de 62 operaciones (49 cargos_personal y 13 transforms en planteles).  
 > 3. Control Anti-Duplicados: Verificada la no duplicidad de los 28 preexistentes.  
 > 4. Comunicado Oficial: Entrega de la notificación estandarizada para WhatsApp bajo el formato requerido.
+### Intervención 178
+
+* **Fecha / Hora:** 2026-11-07 ~08:41 - 08:57 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Continuemos. Ok, vamos a usar el protocolo: CASO_HUERFANOS, Atento con duplicar personal en la base de datos de Firebase, concentrate en: codigo dea, cedulas y nombres... [Listado de 239 registros de Obispo Ramos de Lora]  
+> LUZ VERDE  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. Auditoría Forense y Cruce Ministerial RAC: Auditados los 239 registros (79 huérfanos legítimos confirmados, 110 preexistentes protegidos, 4 discrepancias de sede en RAC y 46 en observación).  
+> 2. Saneamiento Forense: Corrección de DEA canónico OD04411414 (María de Jesús Noguera) y saneamiento de cédulas de Janet Pérez (15031739) y Chael Hernández (23715037).  
+> 3. Inyección Atómica Dual: Ejecutado commit de 107 operaciones (79 cargos_personal y 28 planteles transforms) con HTTP 200.  
+> 4. Blindaje Anti-Duplicados: Verificada la no duplicidad en los 110 preexistentes.  
+> 5. Comunicado Oficial: Generación y entrega del reporte oficial estandarizado para WhatsApp.
