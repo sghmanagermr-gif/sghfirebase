@@ -6462,3 +6462,26 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 3. Inyección Atómica en Lotes: Ejecutadas 617 operaciones atómicas en Cloud Firestore divididas en 3 commits HTTP 200 (501 documentos en `cargos_personal/{dea}_{ci}` y 116 transformaciones atómicas `appendMissingElements` e `increment` en `planteles`).  
 > 4. Verificación Post-Inyección: Comprobada la presencia íntegra de expedientes y actualización de personal_resumen en planteles.  
 > 5. Comunicación Institucional: Generación del reporte completo en `huerfanos/reporte_whatsapp_libertador.txt` y entrega del comunicado oficial estructurado para WhatsApp.
+
+
+### Intervención 184
+
+* **Fecha / Hora:** 2026-11-07 ~19:00 - 19:40 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> acabo de descargar un archivo que no es que sea el gran archivo de la verdad, pero creo que no puede ayudar a en la coleccion planteles a actualizar los 15 registros con trabajadores legítimos. El archivo se llama C:\Proyectos\sgh-mr - firebase\nomina_acualizada\PlantelesMerida.xlsx  
+> [Informe para WhatsApp a la oficina de Nómina sobre el hallazgo y la solución]  
+> Estoy satisfecho. Antes de preparar y ejecutar la inyección atómica de los planteles, te pregunto ¿al hacerlo los únicos funcionarios de esos planteles serán los que registra el archivo nomina_acualizada\Nomina_Personal_Consolidado_Estadal_MERIDA_2026-11-07.xlsx?  
+> Estoy satisfecho. Entonces procede.  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. Análisis y Cruce de PlantelesMerida.xlsx: Comprobada la presencia al 100% de los 8 códigos DEA correspondientes a las filas observadas.  
+> 2. Aclaratoria de Cobertura de Personal: Demostrado que en el archivo general esos 8 colegios ya sumaban 129 trabajadores registrados (y 141 en nómina ministerial RAC), blindando la totalidad de sus nóminas institucionales.  
+> 3. Ejecución Atómica en Cloud Firestore: Ejecutado commit único de 25 operaciones HTTP 200:  
+>    - 8 planteles creados/actualizados en `planteles/{dea}` con epónimos, denominaciones, códigos estadísticos y 129 funcionarios en `personal_resumen`.  
+>    - 15 funcionarios actualizados con municipio y parroquia en `cargos_personal`.  
+>    - 2 registros dummy eliminados (`123` y `12345678`).  
+> 4. Resultado: Saneamiento definitivo de la cabecera del archivo de nómina estadal.

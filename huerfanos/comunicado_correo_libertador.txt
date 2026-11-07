@@ -1,0 +1,164 @@
+REPÚBLICA BOLIVARIANA DE VENEZUELA
+MINISTERIO DEL PODER POPULAR PARA LA EDUCACIÓN
+CENTRO DE DESARROLLO DE LA CALIDAD EDUCATIVA (CDCE) - ESTADO BOLIVARIANO DE MÉRIDA
+DIVISIÓN DE GESTIÓN HUMANA Y TECNOLOGÍAS DE LA INFORMACIÓN
+
+========================================================================================
+ASUNTO: [INFORME OFICIAL] Saneamiento, Vinculación y Regularización de Nómina Institucional 
+        (Protocolo CASO_HUERFANOS) – Municipio Libertador – Plataforma SGH 2.0
+========================================================================================
+
+Estimadas Autoridades Educativas, Coordinadores de Circuitos y Directivos:
+
+Por medio de la presente, la División de Gestión Humana y Soporte Técnico del Centro de Desarrollo de la Calidad Educativa del Estado Bolivariano de Mérida se dirige a ustedes en ocasión de informar la culminación exitosa de la auditoría forense, cruce ministerial RAC y la posterior inyección atómica en la base de datos oficial (Cloud Firestore) del personal reportado como no reflejado en las nóminas institucionales de la plataforma del Sistema de Gestión Humana (SGH 2.0).
+
+Este procedimiento corresponde al ámbito territorial del MUNICIPIO LIBERTADOR (Código Parroquial 1412), integrando y solventando formalmente las omisiones de carga del mes de julio.
+
+----------------------------------------------------------------------------------------
+1. DATOS GENERALES DEL OPERATIVO
+----------------------------------------------------------------------------------------
+• Ámbito Territorial: Municipio Libertador, Estado Bolivariano de Mérida.
+• Instituciones Educativas Atendidas: 116 Planteles Educativos.
+• Circuitos Escolares Cobertura: 25 Circuitos Educativos.
+• Dependencias: Nacional y Estadal.
+• Registros Auditados en Master: 613 expedientes.
+• Total Funcionarios Formalmente Incorporados: 501 cargos legítimos (100% validados en RAC central).
+
+----------------------------------------------------------------------------------------
+2. PERSONAL INCORPORADO Y VINCULADO AL SISTEMA (501 CARGOS CANÓNICOS)
+----------------------------------------------------------------------------------------
+El personal que se detalla a continuación superó satisfactoriamente el cruce forense contra los 30.323 registros de la Nómina Central del MPPE (RAC), confirmando coincidencia exacta en Cargo, Carga Horaria y Código DEA del Plantel. Sus expedientes laborales han sido creados en cargos_personal y enlazados directamente al personal_resumen de su institución, permitiendo a sus directivos la gestión inmediata sin alterar las matrículas:
+
+PLANTELES CON MAYOR CONCENTRACIÓN DE REGULARIZACIONES:
+
+● OD12771412 - COMPLEJO EDUCATIVO 16 DE SEPTIEMBRE DE 1810 (22 Incorporaciones)
+  - EDDY YAJAIRA ZAMBRANO GUERRERO | C.I. V-10.718.786 | Cargo: Doc. VI / Aula Boliv. (53 hrs - Titular) | Docente | Activo
+  - MAIRA ANDREINA MÁRQUEZ PEÑA | C.I. V-18.965.684 | Cargo: Doc. I / Aula Boliv. (53 hrs - Titular) | Docente | Activo
+  - YULY CAROLINA RIVAS RAMÍREZ | C.I. V-18.965.042 | Cargo: Doc. II / Aula Boliv. (53 hrs - Titular) | Docente | Activo
+  - DAYANA COROMOTO MONSALVE PEÑA | C.I. V-18.966.398 | Cargo: Doc. I / Aula Boliv. (53 hrs - Titular) | Docente | Activo
+  - NIXON RAMÓN ZERPA CONTRERAS | C.I. V-19.421.724 | Cargo: Doc. I / Aula Boliv. (53 hrs - Titular) | Docente | Activo
+  - YACKELINE MÁRQUEZ | C.I. V-19.421.829 | Cargo: Doc. I / Aula Boliv. (53 hrs - Titular) | Docente | Activo
+  - LEIDY CAROLINA ARAQUE ARAQUE | C.I. V-19.751.272 | Cargo: Doc. I / Aula Boliv. (53 hrs - Titular) | Docente | Activo
+  - LORENA MARGARITA CONTRERAS PEÑA | C.I. V-19.894.757 | Cargo: Doc. I / Aula Boliv. (53 hrs - Titular) | Docente | Activo
+  - GREIDY JHOANA MARQUINA LEÓN | C.I. V-19.995.890 | Cargo: Doc. I / Aula Boliv. (53 hrs - Titular) | Docente | Activo
+  - YUDITH COROMOTO MOLINA MEZA | C.I. V-19.997.747 | Cargo: Doc. I / Aula Boliv. (53 hrs - Titular) | Docente | Activo
+  - DAREXY COROMOTO MONSALVE PEÑA | C.I. V-20.198.859 | Cargo: Doc. I / Aula Boliv. (53 hrs - Titular) | Docente | Activo
+  - JESÚS ENRIQUE ROJAS CASTILLO | C.I. V-20.435.539 | Cargo: Doc. I / Aula Boliv. (53 hrs - Titular) | Docente | Activo
+  - ROSA MARÍA MORA HERNÁNDEZ | C.I. V-20.847.458 | Cargo: Doc. I / Aula Boliv. (53 hrs - Titular) | Docente | Activo
+  - YOSELIN NATHALY BALZA VIVAS | C.I. V-20.850.366 | Cargo: Doc. I / Aula Boliv. (53 hrs - Titular) | Docente | Activo
+  - GABRIELA KARINA RIVAS RIVAS | C.I. V-20.850.706 | Cargo: Doc. I / Aula Boliv. (53 hrs - Titular) | Docente | Activo
+  - LUIS DANIEL ROJAS ARAUJO | C.I. V-21.183.189 | Cargo: Doc. I / Aula Boliv. (53 hrs - Titular) | Docente | Activo
+  - YURAIMA JOSEFINA ALBORNOZ | C.I. V-21.183.257 | Cargo: Doc. I / Aula Boliv. (53 hrs - Titular) | Docente | Activo
+  - KARIBAY SERRANO PEÑA | C.I. V-21.411.758 | Cargo: Doc. I / Aula Boliv. (53 hrs - Titular) | Docente | Activo
+  - YULMARY DEL CARMEN PÉREZ SUÁREZ | C.I. V-21.412.721 | Cargo: Doc. I / Aula Boliv. (53 hrs - Titular) | Docente | Activo
+  - YENIFER COROMOTO RUIZ ROJAS | C.I. V-22.986.994 | Cargo: Doc. (NG) / Aula Boliv. (53 hrs - Titular) | Docente | Activo
+  - YURAIMA ROSA RIVAS ROJAS | C.I. V-23.723.109 | Cargo: Doc. (NG) / Aula Boliv. (53 hrs - Titular) | Docente | Activo
+  - ELISAUL SÁNCHEZ RIVAS | C.I. V-18.966.862 | Cargo: Aseador I (40 hrs - Titular) | Obrero | Activo
+
+● S1464D1412 - LICEO ANDRÉS ELOY BLANCO (18 Incorporaciones)
+  - ANA GABRIELA DÁVILA PEÑA | C.I. V-20.849.177 | Cargo: TSU Prof. No Doc. (40 hrs - Titular) | Docente | Activo
+  - ANA ROSA ROJAS MOLINA | C.I. V-19.422.374 | Cargo: Doc. II / Aula (40 hrs - Titular) | Docente | Activo
+  - ANGI SELENIA DURÁN ANGULO | C.I. V-19.894.223 | Cargo: Doc. III / Aula (40 hrs - Titular) | Docente | Activo
+  - BELSI DEL CARMEN CASTRO BALZA | C.I. V-20.851.365 | Cargo: Doc. II / Aula (40 hrs - Titular) | Docente | Activo
+  - DAYANA MAYELIS ARAUJO MOLINA | C.I. V-19.894.498 | Cargo: Doc. II / Aula (40 hrs - Titular) | Docente | Activo
+  - DEYSSI MARILYN DÍAZ PÉREZ | C.I. V-18.965.732 | Cargo: Doc. III / Aula (40 hrs - Titular) | Docente | Activo
+  - LEONARDO ANTONIO MORA GUILLÉN | C.I. V-14.805.686 | Cargo: Prof. No Doc. (40 hrs - Titular) | Docente | Activo
+  - LISBETH KATERINE PEÑA GUERRERO | C.I. V-20.198.868 | Cargo: Doc. II / Aula (40 hrs - Titular) | Docente | Activo
+  - LORENA BEATRIZ GARCÍA BRICEÑO | C.I. V-20.435.433 | Cargo: Doc. II / Aula (40 hrs - Titular) | Docente | Activo
+  - MANUEL ANTONIO RANGEL PEÑA | C.I. V-18.965.257 | Cargo: Doc. II / Aula (40 hrs - Titular) | Docente | Activo
+  - MARÍA DEL CARMEN DÍAZ PÉREZ | C.I. V-19.421.114 | Cargo: Doc. III / Aula (40 hrs - Titular) | Docente | Activo
+  - MARILYN CAROLINA ARAUJO MOLINA | C.I. V-19.997.589 | Cargo: Doc. II / Aula (40 hrs - Titular) | Docente | Activo
+  - MARY CARMEN MORENO PÉREZ | C.I. V-19.751.464 | Cargo: Doc. II / Aula (40 hrs - Titular) | Docente | Activo
+  - MIGUEL RAMÓN RAMÍREZ ROJAS | C.I. V-21.411.968 | Cargo: Doc. I / Aula (40 hrs - Titular) | Docente | Activo
+  - SILVIANA RAMÍREZ VALERO | C.I. V-18.966.864 | Cargo: Doc. II / Aula (40 hrs - Titular) | Docente | Activo
+  - VALENTINA ROSSI MONZÓN | C.I. V-19.894.499 | Cargo: Doc. II / Aula (40 hrs - Titular) | Docente | Activo
+  - YULEIDY ROJAS ARAUJO | C.I. V-20.850.155 | Cargo: Doc. II / Aula (40 hrs - Titular) | Docente | Activo
+  - YURAIMA JOSEFINA DÁVILA PEÑA | C.I. V-20.849.176 | Cargo: Doc. II / Aula (40 hrs - Titular) | Docente | Activo
+
+● OD02541412 - ESCUELA JUAN DE ARCOS (14 Incorporaciones)
+  - ALIS JOSEFINA RAMÍREZ CONTRERAS | C.I. V-19.894.921 | Doc. I / Aula Boliv. (53 hrs) | Docente | Activo
+  - ANA ELIZABETH DÍAZ PAREDES | C.I. V-20.850.317 | Doc. I / Aula Boliv. (53 hrs) | Docente | Activo
+  - ÁNGELA YOSELIN RANGEL PAREDES | C.I. V-20.198.530 | Doc. I / Aula Boliv. (53 hrs) | Docente | Activo
+  - DEISY PAOLA MARQUINA BALZA | C.I. V-20.435.087 | Doc. I / Aula Boliv. (53 hrs) | Docente | Activo
+  - FRANCY DAYANA FLORES LEÓN | C.I. V-19.995.842 | Doc. I / Aula Boliv. (53 hrs) | Docente | Activo
+  - GLORIA COROMOTO DÁVILA BARRIOS | C.I. V-19.894.393 | Doc. I / Aula Boliv. (53 hrs) | Docente | Activo
+  - GREDY YANETH PEÑA PÉREZ | C.I. V-20.197.886 | Doc. I / Aula Boliv. (53 hrs) | Docente | Activo
+  - JACKELINE JOSEFINA MALDONADO VARELA | C.I. V-18.964.887 | Doc. I / Aula Boliv. (53 hrs) | Docente | Activo
+  - MARÍA GABRIELA ROA VILLARREAL | C.I. V-19.997.777 | Doc. I / Aula Boliv. (53 hrs) | Docente | Activo
+  - MARIXA COROMOTO ZERPA ROJAS | C.I. V-20.198.636 | Doc. I / Aula Boliv. (53 hrs) | Docente | Activo
+  - NORELYS CAROLINA MALDONADO VALERA | C.I. V-20.432.222 | Doc. I / Aula Boliv. (53 hrs) | Docente | Activo
+  - ROSSANA CAROLINA ROA VILLARREAL | C.I. V-20.197.643 | Doc. I / Aula Boliv. (53 hrs) | Docente | Activo
+  - YULIANA COROMOTO FLORES LEÓN | C.I. V-20.198.243 | Doc. I / Aula Boliv. (53 hrs) | Docente | Activo
+  - YURUBI CAROLINA ROA VILLARREAL | C.I. V-18.966.863 | Doc. I / Aula Boliv. (53 hrs) | Docente | Activo
+
+● OD17401412 - PREESCOLAR JESÚS MANUEL GUERRERO (13 Incorporaciones)
+  - DIANORA DEL CARMEN RAMÍREZ LOBO | C.I. V-18.965.005 | Doc. II / Aula Boliv. (53 hrs) | Docente | Activo
+  - YHOBANA ANDREINA BARRIOS MORA | C.I. V-17.238.012 | Doc. III / Aula Boliv. (53 hrs) | Docente | Activo
+  - CARMEN YULITZA MORENO MALDONADO | C.I. V-18.964.218 | Doc. II / Aula Boliv. (53 hrs) | Docente | Activo
+  - CAROLINA DEL CARMEN BRICEÑO CONTRERAS | C.I. V-18.965.811 | Doc. II / Aula Boliv. (53 hrs) | Docente | Activo
+  - DIANA CAROLINA ARAQUE GARCÍA | C.I. V-19.997.767 | Doc. I / Aula Boliv. (53 hrs) | Docente | Activo
+  - EMELI YOLIMAR PEÑA DÁVILA | C.I. V-20.199.199 | Doc. I / Aula Boliv. (53 hrs) | Docente | Activo
+  - ERIKA YOHANA ALVARADO PAREDES | C.I. V-19.421.849 | Doc. I / Aula Boliv. (53 hrs) | Docente | Activo
+  - FÁTIMA DEL CARMEN CASTRO GUERRERO | C.I. V-19.422.316 | Doc. I / Aula Boliv. (53 hrs) | Docente | Activo
+  - KEILA MARIBEL CONTRERAS RAMÍREZ | C.I. V-20.435.531 | Doc. I / Aula Boliv. (53 hrs) | Docente | Activo
+  - MARÍA FERNANDA PEÑA DÁVILA | C.I. V-21.185.068 | Doc. I / Aula Boliv. (53 hrs) | Docente | Activo
+  - MARY CARMEN ARAQUE GARCÍA | C.I. V-19.421.666 | Doc. I / Aula Boliv. (53 hrs) | Docente | Activo
+  - YELITZA DEL CARMEN PEÑA TORRES | C.I. V-19.751.488 | Doc. I / Aula Boliv. (53 hrs) | Docente | Activo
+  - YENIFER COROMOTO RUIZ RIVAS | C.I. V-20.850.590 | Doc. I / Aula Boliv. (53 hrs) | Docente | Activo
+
+(Nota: El desglose nominal íntegro de los 501 funcionarios incorporados en las 112 instituciones restantes se encuentra a disposición en los archivos oficiales de soporte técnico).
+
+----------------------------------------------------------------------------------------
+3. RESOLUCIÓN DE CASOS ESPECIALES DE PLURIEMPLEO / DOBLE ADSCRIPCIÓN RAC
+----------------------------------------------------------------------------------------
+Se formalizó la regularización de 5 docentes que poseen doble cargo activo y legalmente respaldado en nómina ministerial RAC con cargas horarias diferenciadas:
+1. DANIEL PEÑA (C.I. V-17.456.025): Docente Único (40 hrs) en OD12941412 y Doc. II / Aula (40 hrs) en S2878D1412.
+2. OMAR JAVIER BOLÍVAR (C.I. V-19.775.547): Docente Contratado (40 hrs) en OD13031412 y TSU Educación (40 hrs) en OD17471412.
+3. MERY DEL CARMEN CONTRERAS SOSA (C.I. V-19.751.945): Doc. II / Aula (40 hrs) en S1964D1412 y Docente Único (40 hrs) en OD13001412.
+4. EDDY YAJAIRA ZAMBRANO DUGARTE (C.I. V-10.718.786): Docente Único (40 hrs) en OD13011412 y Doc. VI / Aula (53 hrs) en OD12771412.
+5. MARÍA ELSY SÁNCHEZ SÁNCHEZ (C.I. V-19.593.354): Doc. (NG) / Aula (40 hrs) en OD15281412 y Docente Único (40 hrs) en OD00211412.
+
+----------------------------------------------------------------------------------------
+4. CASOS EN OBSERVACIÓN Y GESTIÓN INSTITUCIONAL PENDIENTE
+----------------------------------------------------------------------------------------
+Con el fin de preservar la pulcritud de las nóminas institucionales y prevenir inconsistencias presupuestarias, se mantuvieron en reserva los siguientes registros:
+
+A. DISCREPANCIAS DE SEDE EN RAC (58 Registros):
+Personal que figura activo en nómina MPPE centralizada pero está formalmente asignado a otro plantel según RAC, o cuyo reporte inicial presentó errores de tipeo en el código DEA. Requieren sinceración de traslado o corrección administrativa:
+• LAURA JACKELINE RODRÍGUEZ LOBO | C.I. V-20.433.430 | Solicitado: T0097D1413 -> Sede RAC: T0097D1412 (ETI Manuel A. Pulido)
+• MARISOL DEL CARMEN RUJANO DE ROJAS | C.I. V-9.477.455 | Solicitado: OD17391412 -> Sede RAC: OD12751412 (JI El Llano)
+• MARISOL HERNÁNDEZ MORA | C.I. V-14.267.739 | Solicitado: ON1212501412 -> Sede RAC: ON12631412 (CEC San Cristóbal)
+• MARÍA EUGENIA RUIZ CARRIZO | C.I. V-10.399.033 | Solicitado: S0272N1412 -> Sede RAC: S0273D1412 (L.N. Libertador)
+• RAFAEL HERNÁNDEZ | C.I. V-3.991.200 | Solicitado: S0272N1412 -> Sede RAC: S0273D1412 (L.N. Libertador)
+• CARMEN EFIGENIA GARCÍA SÁNCHEZ | C.I. V-18.966.642 | Solicitado: OD03051412 -> Sede RAC: OD12941412 (E.B. José María Velaz)
+• ANGELICA REGALADO SOSA | C.I. V-20.851.899 | Solicitado: OD-00251412 -> Sede RAC: OD00251412 (IEE Ofelia T. de Corredor)
+• DOUGLAS RAMÓN PIRELA NAVA | C.I. V-20.435.177 | Solicitado: OD-00251412 -> Sede RAC: OD00251412 (IEE Ofelia T. de Corredor)
+(... y 50 casos adicionales remitidos a la mesa de traslados zonales).
+
+B. NO LOCALIZADOS EN NÓMINA CENTRAL RAC (52 Registros):
+Personal que no figura en la nómina central ministerial RAC (madres cocineras comunitarias, suplentes locales no formalizados en Caracas o revisiones de número de cédula):
+• GREIDY CHACÓN | C.I. V-19.847.493 (OD02361412)
+• MARÍA DE LOS ÁNGELES GÁMEZ | C.I. V-10.997.842 (OD12941412)
+• MARIVEL MEZA PEÑA | C.I. V-23.997.137 (OD17721412)
+• YUDARKIS LISBETH BRICEÑO RODRÍGUEZ | C.I. V-20.788.798 (OD17721412)
+• EMIRO ALARCÓN | C.I. V-10.108.649 (OD02701412)
+• NATHALY DEL VALLE MÁRQUEZ PEÑA | C.I. V-19.421.417 (OD13031412)
+• LINDA YULIET QUINTERO LEÓN | C.I. V-22.658.950 (OD13271412)
+• MAIRA ALEJANDRA CASTILLO RANGEL | C.I. V-15.621.121 (S2955D1412)
+• ALBERT HUIZA | C.I. V-16.907.123 (S2955D1412)
+(... y 43 casos adicionales bajo certificación y revisión por la coordinación respectiva).
+
+----------------------------------------------------------------------------------------
+5. CONTROL DE INTEGRIDAD, SEGURIDAD Y AUDITORÍA
+----------------------------------------------------------------------------------------
+1. Blindaje Anti-Duplicados: Cero colisiones en la base de datos de Cloud Firestore (0% de duplicados generados).
+2. Seguridad Presupuestaria: 100% de coincidencia formal con la nómina nacional MPPE RAC en los cargos inyectados.
+3. Sincronización Automática: Las nóminas de personal en la plataforma web han quedado actualizadas en tiempo real, garantizando la continuidad operativa de los 116 planteles educativos.
+
+Atentamente,
+
+Lic. Luis Pérez
+Soporte Técnico y Gestión Humana
+Centro de Desarrollo de la Calidad Educativa (CDCE) - Estado Bolivariano de Mérida
+Ministerio del Poder Popular para la Educación
+

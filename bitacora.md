@@ -4265,3 +4265,20 @@ Se procesó el requerimiento bajo el protocolo `CASO_HUERFANOS` para el listado 
   * Verificación exhaustiva: 100% de los 501 expedientes y 116 planteles verificados con éxito en base de datos.
 - **Comunicación Institucional:**
   * Generado el informe canónico oficial para WhatsApp archivado en `huerfanos/reporte_whatsapp_libertador.txt` (87.802 caracteres) y sintetizado para difusión directiva y zonal.
+
+
+## [Saneamiento Territorial y Maestro de Planteles] - 2026-11-07 (Sincronización de 8 Planteles, 129 Trabajadores Consolidados, 15 Actualizaciones Municipales y Depuración de Registros de Prueba)
+
+### Resumen Técnico
+Tras la descarga y análisis forense de la nómina consolidada estadal descargada (`Nomina_Personal_Consolidado_Estadal_MERIDA_2026-11-07.xlsx` con 24.865 registros), se diagnosticó la causa de las 17 filas en blanco al inicio del archivo y se procedió a su saneamiento atómico definitivo mediante el archivo maestro institucional `nomina_acualizada/PlantelesMerida.xlsx`:
+- **Diagnóstico Forense de las 17 Filas en Blanco:**
+  * Al ordenarse alfabéticamente por Municipio, los registros con dicho campo vacío flotaban al inicio (Filas 1 a 17).
+  * 2 registros correspondían a datos de prueba dummy (`123` y `12345678`).
+  * 15 registros correspondían a trabajadores legítimos de 8 planteles cuyas fichas institucionales no estaban pobladas en la colección `planteles`.
+  * El análisis integral descubrió que estos 8 planteles no solo tenían a esos 15 trabajadores, sino a **129 trabajadores en total** ya registrados en el sistema, asegurando la no pérdida de ningún expediente laboral.
+- **Acciones Realizadas:**
+  * **Actualización Atómica de 8 Planteles en `planteles/{dea}`:** Registrados con sus códigos oficiales, denominación, nuevo epónimo, municipio, parroquia, códigos de dependencia y estadísticos, consolidando a los 129 trabajadores en `personal_resumen` (`OD00611406`, `OD05041421`, `OD11201405`, `OD13921417`, `OD14561420`, `OD17721407`, `OD19090103`, `ON12421406`).
+  * **Actualización Territorial en `cargos_personal`:** Inyectados los campos canónicos `municipio` y `parroquia` a los 15 trabajadores observados.
+  * **Depuración de Registros Dummy:** Eliminados definitivamente de Firestore los documentos residuales `cargos_personal/123` y `cargos_personal/12345678`.
+  * **Transacción Atómica:** 25 operaciones ejecutadas en commit único HTTP 200 (`2026-11-07T23:38:20.521053Z`).
+- **Impacto Institucional:** La nómina estadal consolidada queda 100% libre de filas en blanco al inicio; los 129 trabajadores quedan agrupados y enriquecidos bajo sus planteles oficiales y municipios correspondientes.
