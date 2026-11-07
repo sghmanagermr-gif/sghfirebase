@@ -4197,3 +4197,25 @@ Se procesó el requerimiento bajo el protocolo `CASO_HUERFANOS` para el listado 
   * Preservación del 100% de los datos y bloqueo de colisión de identidad en C.I. `20.828.129`.
 - **Comunicación Institucional:**
   * Generado y entregado el informe oficial para WhatsApp utilizando la plantilla estandarizada requerida por la administración (Opción 1: *Personal No Reflejado en Plantel*).
+
+---
+
+## [Operación Forense] - 2026-11-07 (Operativo CASO_HUERFANOS: Municipio Cardenal Quintero - Inyección de 24 Huérfanos en 10 Planteles y Protección de 17 Preexistentes)
+
+### Resumen Técnico
+Se procesó el requerimiento bajo el protocolo `CASO_HUERFANOS` para el listado institucional de **57 funcionarios** reportados en 15 planteles educativos del **Municipio Cardenal Quintero** a partir del archivo `huerfanos/cardenalquintero.xlsx`:
+- **Normalización Global Previa de la Base de Datos:**
+  * Se ejecutó un saneamiento masivo sobre los 24.340 documentos de `cargos_personal` en Firebase, normalizando 1.408 expedientes que conservaban encabezados en mayúsculas (`CEDULA`, `CODIGO DEL PLANTEL`, etc.) a minúsculas canónicas (`cedula`, `codigo-plantel`, etc.), restituyendo la compatibilidad y detectabilidad en el Auditor de Cédulas y Expedientes del SGH.
+- **Diagnóstico Forense y Auditoría Cruzada vs RAC.xlsx:**
+  * **24 Huérfanos Legítimos Confirmados:** Validados al 100% en nómina central MPPE RAC con adscripción coincidente de plantel, e inyectados formalmente en Cloud Firestore en `cargos_personal/{dea}_{ci}` y `planteles/{dea}.personal_resumen` a lo largo de 10 instituciones educativas.
+  * **17 Preexistentes en Firebase (PROTEGIDOS CONTRA DUPLICACIÓN):** Registros previamente activos preservados sin alteración. Para el caso de María Josefina Mora Castro (C.I. `23.002.465`), se subsanó su no visibilidad en el plantel enlazando su expediente preexistente al `personal_resumen` de la *U.E.B. Las Piedras* (`OD17281408`) sin duplicar su registro laboral en `cargos_personal`.
+  * **16 Casos en Observación:** No figuran en la nómina ministerial centralizada RAC activa de ningún plantel de Mérida (Madres del SENIFA/CNAE comunales, personal contratado local o validación de C.I. ante Zona Educativa).
+- **Saneamientos Forenses Aplicados:**
+  * **C.I. 20.433.330 vs C.I. 23.002.465:** Aclaratoria forense de duplicidad aparente en el reporte. Isamar Vivianny Rivera Lobo es la titular legítima de `20.433.330` (*C.C. Juan Rodríguez Suárez*, Huérfano Confirmado). María Josefina Mora Castro (*U.E.B. Las Piedras*) fue reportada con la C.I. copiada de la fila 5, determinándose en RAC su C.I. real `23.002.465` (Preexistente Protegido).
+  * **Nisbedy Coromoto Peña Camacho (Fila 18):** Tipografía corregida de `204323345` (9 dígitos) a su C.I. legítima **`20.432.345`** (Docente en *U.E.B. Las Piedras*).
+  * **Luz Karine Peña de Angarita (Fila 21):** Tipografía corregida de `13098572` a su C.I. legítima **`13.098.575`** (Docente III en *J.I. Martha González*).
+- **Acciones Realizadas:**
+  * 35 operaciones atómicas en Cloud Firestore ejecutadas en commit único (24 inyecciones en `cargos_personal` y 11 transformaciones atómicas en `planteles` actualizando `personal_resumen` e incrementando `total_personal`).
+  * Verificación exhaustiva: 100% de los 24 huérfanos confirmados y reflejados; 0 duplicados generados.
+- **Comunicación Institucional:**
+  * Generado y entregado el informe oficial para WhatsApp utilizando la plantilla estandarizada CDCE Mérida (Opción 1: *Personal No Reflejado en Plantel*).

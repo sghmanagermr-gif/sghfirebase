@@ -6395,3 +6395,26 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 2. Blindaje Anti-Colisión Crítico: Detección de homonimia/error en C.I. 20.828.129 (reportada para Suleima Rangel, pero asignada legítimamente a Alfredo Rubio en Tovar). Expediente protegido contra sobreescritura.  
 > 3. Diagnóstico de Dependencia Estadal: 12 docentes clasificados en observación al no figurar en nómina nacional RAC por ser nómina directa de la Gobernación o nuevo ingreso.  
 > 4. Comunicación Institucional: Generación y entrega del reporte oficial estandarizado para WhatsApp bajo la nueva redacción oficial "Personal No Reflejado en Plantel".
+
+### Intervención 181
+
+* **Fecha / Hora:** 2026-11-07 ~11:00 - 11:56 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Continuemos. Ok, vamos a usar el protocolo: CASO_HUERFANOS, pero esta ves me lo enviaron en un excel que está en: huerfanos\cardenalquintero.xlsx. Atento con duplicar personal en la base de datos de Firebase...  
+> [Consultas e investigación de las capturas del Auditor de Cédulas sobre las C.I. 20.433.330 y 23.002.465, y solicitud de normalización masiva previa de claves mayúsculas a minúsculas en Firestore]  
+> luz verde  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. Normalización Global de Base de Datos: Recorrido y saneamiento de los 24.340 documentos de `cargos_personal` en Firebase, actualizando 1.408 documentos que conservaban encabezados en mayúsculas a claves canónicas en minúsculas (`cedula`, `codigo-plantel`, etc.).  
+> 2. Auditoría Forense y Cruce Ministerial RAC: Auditados los 57 registros de `huerfanos/cardenalquintero.xlsx` (24 huérfanos legítimos confirmados en 10 planteles, 17 preexistentes protegidos y 16 en observación no en RAC).  
+> 3. Saneamientos Forenses Críticos:  
+>    - Despeje de duplicidad en C.I. 20.433.330 (Isamar Rivera, titular legítima en C.C. Juan Rodríguez Suárez) vs C.I. 23.002.465 (María Josefina Mora Castro, Cocinera II en U.E.B. Las Piedras, preexistente protegido vinculado en `personal_resumen`).  
+>    - Tipografía en C.I. 20.432.345 (Nisbedy Peña, corregida de 9 a 8 dígitos).  
+>    - Tipografía en C.I. 13.098.575 (Luz Karine Peña, corregido dígito final).  
+> 4. Inyección Atómica Dual: Ejecutado commit de 35 operaciones (24 en `cargos_personal` y 11 transformaciones atómicas en `planteles` actualizando `personal_resumen` e incrementando `total_personal`).  
+> 5. Blindaje Anti-Duplicados: Verificada la no duplicidad en los 17 preexistentes y confirmación de los 24 expedientes inyectados.  
+> 6. Comunicación Institucional: Generación y entrega del reporte oficial para WhatsApp bajo la nomenclatura estandarizada "Personal No Reflejado en Plantel".

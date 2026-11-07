@@ -59,7 +59,7 @@ async function run() {
 
     if (res.status === 429) {
       console.warn('⚠️ Cuota diaria de lecturas de Firestore Spark alcanzada (429 RESOURCE_EXHAUSTED).');
-      console.warn('El script debe reanudarse al reinicio de la cuota (04:00 AM) o con Plan Blaze.');
+      console.warn('El script debe reanudarse al reinicio de la cuota o con Plan Blaze.');
       break;
     }
 
@@ -105,6 +105,30 @@ async function run() {
             fieldsToPatch['codigoPlantel'] = { stringValue: dea };
           }
 
+          const nom = f['nombre-apellido']?.stringValue || f.nombre?.stringValue || f.nombres?.stringValue || f['NOMBRE Y APELLIDO']?.stringValue;
+          if (nom) {
+            fieldsToPatch['nombre-apellido'] = { stringValue: nom };
+            fieldsToPatch['nombre'] = { stringValue: nom };
+            fieldsToPatch['nombres'] = { stringValue: nom };
+          }
+
+          const cargo = f.cargo?.stringValue || f.CARGO?.stringValue;
+          if (cargo) {
+            fieldsToPatch['cargo'] = { stringValue: cargo };
+          }
+
+          const tipo = f['tipo-personal']?.stringValue || f.tipoPersonal?.stringValue || f['TIPO PERSONAL']?.stringValue;
+          if (tipo) {
+            fieldsToPatch['tipo-personal'] = { stringValue: tipo };
+            fieldsToPatch['tipoPersonal'] = { stringValue: tipo };
+          }
+
+          const situacion = f['situacion-laboral']?.stringValue || f['SITUACIÓN DEL TRABAJADOR']?.stringValue || 'ACTIVO';
+          fieldsToPatch['situacion-laboral'] = { stringValue: situacion };
+
+          const dep = f.dependencia?.stringValue || f.DEPENDENCIA?.stringValue || 'NACIONAL';
+          fieldsToPatch['dependencia'] = { stringValue: dep };
+
           const fieldPaths = Object.keys(fieldsToPatch).map(k => k.includes('-') ? `\`${k}\`` : k);
 
           writes.push({
@@ -136,12 +160,14 @@ async function run() {
         console.error(`Error en commit página ${pageNum}:`, await commitRes.text());
       }
     } else {
-      console.log(`Página ${pageNum}: 300 documentos escaneados, 0 requirieron cambio.`);
+      if (pageNum % 10 === 0 || pageNum === 1) {
+        console.log(`Página ${pageNum}: ${totalEscaneados} documentos acumulados escaneados...`);
+      }
     }
 
     pageToken = data.nextPageToken || '';
     pageNum++;
-    await sleep(250); // Pausa preventiva anti-flood
+    await sleep(200); // Pausa preventiva anti-flood
   } while (pageToken);
 
   console.log('\n========================================================================');
@@ -152,4 +178,3 @@ async function run() {
 }
 
 run().catch(console.error);
-
