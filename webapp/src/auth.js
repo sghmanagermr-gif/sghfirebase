@@ -149,6 +149,7 @@ export function initAuth(auth, db, callbacks) {
          ));
          
          if (!isExp && !isMun) {
+            sessionStorage.removeItem('sgh_despliegue_config');
             const mensajeDespliegue = mun
                ? `El Sistema SGH aún <b>no está habilitado para el municipio</b> ${mun}. Por favor, manténgase atento a los canales oficiales.`
                : `El Sistema SGH aún <b>no está habilitado para su plantel</b>. Por favor, manténgase atento a los canales oficiales.`;
