@@ -4303,3 +4303,18 @@ Tras la sincronización de los 8 planteles, la nómina descargada redujo sus inc
 4. **Bumping SemVer a v2.30.3 y Despliegue:**
    - Actualizado en `package.json` e `index.html`.
    - Compilación exitosa con Vite y despliegue completado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+## [Protocolo CASO_HUERFANOS: Caso Yuleny Bernal Rangel - Palmira] - 2026-11-07 (Resolución de Desvinculación de S2855D1410 - Complejo Educativo Omar Gregorio Rivas)
+
+### Resumen Técnico
+Se procesó solicitud de regularización bajo el nuevo formato institucional para la trabajadora Yuleny Del Carmen Bernal Rangel (C.I. `19.529.390`) en el Complejo Educativo Omar Gregorio Rivas (`S2855D1410`), Parroquia Palmira, Municipio Julio César Salas.
+- **Diagnóstico Forense:**
+  * Coincidencia 100% en `RAC.xlsx` (Fila 10.768): Cargo `BACHILLER II` (Cód. RAC: `110000`, 37 hrs administrativas, Dependencia Nacional, Titular: `SI`, Antigüedad: 8 años). Sede oficial en RAC: `E B-PALMIRA` (`S2855D1410`).
+  * En la base de datos estadal (`Nomina_Personal_Consolidado_Estadal_MERIDA_2026-11-07.xlsx` fila 9635), figuraba registrada con todos sus datos biográficos pero con el campo `codigo-plantel` vacío y omitida en `personal_resumen` de la institución.
+- **Acciones Realizadas (Luz Verde Aprobada y Ejecutada):**
+  * Actualización en `cargos_personal/19529390` asignando `codigo-plantel: S2855D1410`, epónimo y denominación.
+  * Generación de clave canónica institucional `cargos_personal/S2855D1410_19529390`.
+  * Transformación atómica `appendMissingElements` en `planteles/S2855D1410.personal_resumen` e `increment` de `total_personal`.
+  * Transacción atómica completada con HTTP 200 (`2026-11-08T00:37:37Z`).
+  * 0% colisiones y duplicados. Reporte oficial emitido en formato canónico para WhatsApp.
+- **Resultado:** Aprobado con estado «SATISFECHO» por el administrador.
