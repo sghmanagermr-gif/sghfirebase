@@ -4318,3 +4318,23 @@ Se procesó solicitud de regularización bajo el nuevo formato institucional par
   * Transacción atómica completada con HTTP 200 (`2026-11-08T00:37:37Z`).
   * 0% colisiones y duplicados. Reporte oficial emitido en formato canónico para WhatsApp.
 - **Resultado:** Aprobado con estado «SATISFECHO» por el administrador.
+
+## [Protocolo CASO_HUERFANOS: Caso Samuel Robinson - Obispo Ramos de Lora] - 2026-11-07 (Regularización de 5 Huérfanos y Protección de 4 Preexistentes en OD04391414)
+
+### Resumen Técnico
+Se procesó solicitud institucional de regularización de 9 funcionarios para la **UEB Samuel Robinson** (`OD04391414`, Código Dependencia: `07951070`), Parroquia Santa Elena de Arenales, Municipio Obispo Ramos de Lora.
+- **Diagnóstico Forense (RAC.xlsx vs. Cloud Firestore):**
+  * **100% de coincidencia ministerial:** Los 9 funcionarios pertenecen oficialmente en RAC al plantel `OD04391414` bajo dependencia nacional y condición titular.
+  * **5 Huérfanos Legítimos Confirmados:** Omitidos de la base de datos de Firebase en julio:
+    - Luz Mary Arellano Rincón (C.I. `19.319.516`): Doc. IV / Aula Boliv. (53 hrs).
+    - Yohana Cecilia López de Mendoza (C.I. `19.383.373`): Doc. II / Aula Boliv. (53 hrs).
+    - Katherine Yamileth Arellano Díaz (C.I. `19.503.305`): Doc. II / Aula (40 hrs).
+    - Gabriela Carolina Roa (C.I. `19.865.117`): Doc. IV / Aula Boliv. (53 hrs).
+    - Francelina Pernía Vergara (C.I. `19.996.685`): Cocinero II (40 hrs).
+  * **4 Preexistentes Protegidos:** Maylu Elizabeth Arellano (C.I. `20.939.138`), Ana Yajaira Ramírez (C.I. `21.307.110`), Raquel Anahy Rivas Díaz (C.I. `21.307.567`) y Blanca Ligia Rincón de Arellano (C.I. `23.206.027`) ya contaban con expediente activo asignado a la institución. Se preservaron sin duplicidad (**0% duplicados**).
+- **Acciones Realizadas (Luz Verde Aprobada y Ejecutada):**
+  * Creación de 5 expedientes canónicos en `cargos_personal/OD04391414_{ci}` con metadatos completos del RAC (cargas horarias, UBCH, circuitos y funciones).
+  * Inyección atómica mediante `appendMissingElements` en `planteles/OD04391414.personal_resumen` e `increment` de 5 en `total_personal`.
+  * Transacción atómica completada con 6 operaciones y respuesta HTTP 200 (`2026-11-08T01:06:06Z`).
+  * Emisión de informe oficial consolidado para WhatsApp bajo plantilla canónica.
+- **Resultado:** Aprobado con estado «SATISFECHO» por el administrador.

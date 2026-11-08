@@ -4,6 +4,19 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.30.3 (7 de Noviembre de 2026)
+
+- **Blindaje Anti-Fantasmas en Nómina Excel, Gestión Administrativa y Eliminación Quirúrgica en Auditor:**
+  - **Filtro Anti-Fantasmas en Exportador a Excel (`webapp/src/admin.js`):**
+    - Se fortaleció la función de descarga de nómina consolidada para exigir obligatoriamente que cada registro cuente con nombre y apellido válidos ($\ge 2$ caracteres) y cédula legítima ($\ge 4$ dígitos), bloqueando de forma definitiva cualquier registro dummy o de prueba (`123`, `12345678`) y registros sin nombre.
+  - **Potenciación de la Aspiradora Inteligente de BD:**
+    - Criterio de saneamiento ampliado para barrer no solo registros totalmente vacíos, sino también registros con cédulas de prueba o registros sin nombre.
+  - **Botón «🗑️ Eliminar Expediente» en Auditor de Cédulas:**
+    - Incorporación de botón de eliminación directa con diálogo modal de confirmación en cada ficha del auditor, permitiendo a los administradores purgar anomalías directamente desde la interfaz.
+  - **Despliegue:** Compilación en Vite y despliegue completado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.30.1 (6 de Noviembre de 2026)
 
 - **Corrección de Cálculo de Matrícula Total y Subtotales Dinámicos en Memoria (Zero-Cost):**
