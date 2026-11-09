@@ -4548,3 +4548,34 @@ Se ejecutó con éxito rotundo en Cloud Firestore la migración en vivo correspo
     - Clave legada `23493717`: **HTTP 404 (Eliminada)**.
 
 - **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.
+
+
+## [Plan Maestro de Simetría SGH: Ejecución Exitosa en Vivo de Bloque Especial Planta / Zona Educativa] - 2026-11-09
+
+### Resumen Técnico
+Se ejecutó con éxito rotundo en Cloud Firestore la migración en vivo del **Bloque Especial Planta / Zona Educativa**, procesando a los 213 funcionarios activos adscritos a las oficinas centrales y divisiones ministeriales de la Zona Educativa N° 14 Mérida (`nomina_acualizada/RAC_zona.xlsx`), mediante el script maestro [`scripts/fase3_migracion_planta_zona.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/scripts/fase3_migracion_planta_zona.js).
+
+- **Métricas de Ejecución en la Nube:**
+  * **Operaciones Totales:** 426 operaciones atómicas ejecutadas en 2 lotes controlados (lote 1 de 400 ops, lote 2 de 26 ops) mediante la API REST `documents:commit`.
+  * **Escrituras Canónicas Simétricas de Planta:** 213 documentos creados/actualizados en `cargos_personal/{codigoDependencia}_{cedula}` con metadatos normalizados: `denominacion: "SEDE ADMINISTRATIVA"`, `municipio: "LIBERTADOR"`, `parroquia: "SAGRARIO"`, `estado: "MÉRIDA"`, `es_planta: true` y `simetria_homologada: true`.
+  * **Depuración Asimétrica Legada:** 213 documentos legados antiguos sueltos en `cargos_personal/{cedula}` eliminados de forma atómica.
+  * **Consumo de Cuotas:** 213 escrituras netas (1% de la cuota diaria gratuita de Spark), con 0 lecturas consumidas en Firestore.
+  * **Manifiesto de Ejecución:** Persistido en [`scratch/fase3_planta_commit_manifest.json`](file:///c:/Proyectos/sgh-mr%20-%20firebase/scratch/fase3_planta_commit_manifest.json).
+
+- **Decisiones Institucionales y Tratamiento Especial:**
+  * **Normalización Canónica de Gestión Humana (`001200339`):** El nombre de la división se estandarizó limpio como `DIVISIÓN DE GESTIÓN HUMANA` (eliminando cualquier paréntesis del título de la entidad).
+  * **Extracción Desacoplada de Oficinas:** El texto complementario que venía entre paréntesis en la fuente ministerial se extrajo de forma automática y se persistió en el nuevo campo institucional `oficina` (ej. `COORDINACION DE GESTION HUMANA / OFICINA DE NOMINA`, `OFICINA DE OBREROS`, `COORDINACION DE ASESORIA JURIDICA`).
+  * **Convivencia Armónica de Docentes Comisionados:** Para los 59 docentes adscritos originalmente a colegios pero que cumplen funciones en Zona Educativa, ambos cargos coexisten de forma simétrica: nombramiento escolar (`cargos_personal/{codigoDEA}_{cedula}`) y designación de planta (`cargos_personal/{codigoDependencia}_{cedula}`).
+
+- **Auditoría de Comprobación en Vivo:**
+  * Verificado mediante [`scripts/audit_planta.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/scripts/audit_planta.js).
+  * Caso Testigo Directora de Zona (Maurian Rosana Zamudia - CI 9384726):
+    - Ficha canónica `001200330_9384726`: **HTTP 200 (Activa, Dependencia: DIRECCION DE LA ZONA, Denominación: SEDE ADMINISTRATIVA, Es Planta: true)**.
+    - Clave legada suelta `9384726`: **HTTP 404 (Eliminada)**.
+  * Caso Testigo División de Gestión Humana (Hilsmary Manrrique - CI 11220183):
+    - Ficha canónica `001200339_11220183`: **HTTP 200 (Activa, División: DIVISIÓN DE GESTIÓN HUMANA, Oficina: COORDINACION DE GESTION HUMANA / OFICINA DE NOMINA)**.
+  * Caso Testigo Docente Comisionada (Isabel Medina Reyna - CI 5508116):
+    - Cargo en Planta `001200337_5508116`: **HTTP 200 (Activo)**.
+    - Cargo en Escuela `S1463D1401_5508116`: **HTTP 200 (Activo y protegido sin sobreescrituras)**.
+
+- **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.

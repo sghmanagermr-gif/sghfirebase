@@ -4,6 +4,23 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.32.1 (9 de Noviembre de 2026)
+
+- **Ejecución en Vivo de Bloque Especial Planta / Zona Educativa en Cloud Firestore (`RAC_zona.xlsx`):**
+  - **Homogeneización Simétrica de 213 Funcionarios Centrales:**
+    - Registro de 213 expedientes laborales bajo el estándar universal `{codigoDependencia}_{cedula}` (ej. `001200330_9384726` para el despacho de Zona Educativa).
+    - Asignación de entidad institucional `denominacion: "SEDE ADMINISTRATIVA"`, `municipio: "LIBERTADOR"`, `parroquia: "SAGRARIO"` y flag de control `es_planta: true`.
+  - **Saneamiento de División de Gestión Humana y Extracción de Oficinas:**
+    - Para la dependencia ministerial `001200339`, se normalizó el nombre canónico eliminando los paréntesis: **`DIVISIÓN DE GESTIÓN HUMANA`**.
+    - Las dependencias internas (Nómina, Obreros, Asesoría Jurídica, Asuntos Laborales, Evaluación, Tecnología, etc.) se desacoplaron e inyectaron al campo libre `oficina`.
+  - **Convivencia Armónica de Docentes en Comisión de Servicio:**
+    - Preservación sin colisión de los cargos de origen para 59 docentes comisionados a Zona Educativa, manteniendo activos tanto su nombramiento escolar (`{codigoDEA}_{cedula}`) como su asignación central (`{codigoDependencia}_{cedula}`).
+  - **Depuración Asimétrica Legada:**
+    - Eliminación de 213 claves legadas sueltas (`cargos_personal/{cedula}`).
+  - **Zero-Cost Shield:** Ejecutado en 2 lotes atómicos con HTTP 200, 0 lecturas consumidas y solo 213 escrituras (1% de la cuota diaria). Verificación en vivo exitosa con `scripts/audit_planta.js`.
+
+---
+
 ### v2.32.0 (9 de Noviembre de 2026)
 
 - **Plan Maestro de Simetría SGH: Ejecución de Bloque 1 en la Nube y Arquitectura para Personal de Planta:**

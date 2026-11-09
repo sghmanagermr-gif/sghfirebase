@@ -6833,3 +6833,37 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - Incremento de versión SemVer de `v2.31.1` a `v2.32.0`.  
 >    - Compilación exitosa del frontend con Vite (`npm --prefix webapp run build` en 857ms).  
 >    - Registro exhaustivo en `bitacora.md`, `conversaciones.md`, `versiones.md` y sincronización con GitHub (`git add .`, `git commit` y `git push origin main`).
+
+
+### Intervención 197
+
+* **Fecha / Hora:** 2026-11-09 ~15:15 - 15:20 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Estoy satisfecho  
+> Sí, ejecuta de una vez el Bloque Especial de Planta (213 funcionarios)"  
+> *(Posteriormente)*: "Estoy satisfecho."  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. Ejecución en Vivo del Bloque Especial Planta / Zona Educativa:  
+>    - Se ejecutó el script `scripts/fase3_migracion_planta_zona.js --execute` en Cloud Firestore.  
+>    - 426 operaciones atómicas procesadas en 2 lotes (400 y 26) mediante `documents:commit`, confirmadas con HTTP 200 OK.  
+>    - 213 expedientes de funcionarios de planta inscritos bajo clave universal `{codigoDependencia}_{cedula}` con denominación `SEDE ADMINISTRATIVA`, municipio `LIBERTADOR`, parroquia `SAGRARIO` y flag `es_planta: true`.  
+>    - 213 documentos legados asimétricos sueltos (`cargos_personal/{cedula}`) depurados.  
+>    - Consumo neto: 213 escrituras (1% de la cuota Spark diaria) y 0 lecturas.  
+> 2. Normalización de Gestión Humana y Extracción de Oficinas:  
+>    - División `001200339` normalizada limpia como `DIVISIÓN DE GESTIÓN HUMANA` (paréntesis eliminados).  
+>    - Oficinas y coordinaciones extraídas de forma automática al nuevo campo `oficina`.  
+> 3. Convivencia Armónica para 59 Docentes en Comisión de Servicio:  
+>    - Coexistencia simétrica garantizada sin colisiones: Cargo escolar (`{codigoDEA}_{cedula}`) y cargo de planta (`{codigoDependencia}_{cedula}`).  
+> 4. Auditoría en Vivo con `scripts/audit_planta.js`:  
+>    - Directora de Zona (`001200330_9384726`): HTTP 200 Activa. Clave vieja suelta: HTTP 404 Eliminada.  
+>    - Funcionario de Nómina (`001200339_11220183`): HTTP 200 Activo, División limpia `DIVISIÓN DE GESTIÓN HUMANA`, Oficina `COORDINACION DE GESTION HUMANA / OFICINA DE NOMINA`.  
+>    - Docente Comisionada (`5508116`): Planta (`001200337_5508116`) HTTP 200 y Escuela (`S1463D1401_5508116`) HTTP 200.  
+> 5. Actualización SemVer y Respaldo Git:  
+>    - Incremento a `v2.32.1`.  
+>    - Compilación limpia con Vite (610ms).  
+>    - Sincronización completa con GitHub (`git add .`, `git commit` y `git push origin main`).
