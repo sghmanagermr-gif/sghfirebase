@@ -4522,3 +4522,29 @@ Se realizó la auditoría forense del censo de personal centralizado en [`nomina
   * **Blindaje Territorial y Jurisdiccional:** Exclusión de las sedes administrativas de la vista del usuario `munadmin` de Libertador, quedando bajo la custodia y auditoría exclusiva de la Dirección de Zona / Gestión Humana (`zonadmin`) y los usuarios `plantadmin`.
 
 - **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.
+
+
+## [Plan Maestro de Simetría SGH: Ejecución Exitosa en Vivo de Bloque 1 (Eje Panamericano y Valle del Mocotíes)] - 2026-11-09
+
+### Resumen Técnico
+Se ejecutó con éxito rotundo en Cloud Firestore la migración en vivo correspondiente al **Bloque 1** del Plan Maestro de Simetría SGH, abarcando las instituciones educativas de los municipios del Eje Panamericano y Valle del Mocotíes (Alberto Adriani, Antonio Pinto Salinas, Andrés Bello, Caracciolo Parra Olmedo, Julio César Salas, Obispo Ramos de Lora, Rivas Dávila, Tovar, Zea y Tulio Febres Cordero).
+
+- **Métricas de Ejecución en la Nube:**
+  * **Operaciones Totales:** 22.164 operaciones atómicas ejecutadas en 56 lotes continuos de hasta 400 operaciones mediante `documents:commit`.
+  * **Escrituras Canónicas Simétricas:** 11.244 documentos creados/actualizados en `cargos_personal/{codigoDEA}_{cedula}` con los 45 campos normalizados (plantel, ubicación física, municipio canónico, parroquia oficial, etc.).
+  * **Depuración Asimétrica Legada:** 10.920 documentos antiguos sueltos en `cargos_personal/{cedula}` eliminados de forma atómica.
+  * **Consumo de Lecturas en Firestore:** **0 LECTURAS** (Zero-Cost Shield absoluto verificado en la consola de Firebase).
+  * **Consumo de Cuotas:** 100% dentro del límite gratuito de Spark (14k escrituras acumuladas en 24h frente al límite de 20k).
+  * **Manifiesto de Ejecución:** Persistido en [`scratch/fase3_bloque1_commit_manifest.json`](file:///c:/Proyectos/sgh-mr%20-%20firebase/scratch/fase3_bloque1_commit_manifest.json).
+
+- **Auditoría de Comprobación en Vivo:**
+  * Verificado mediante [`scripts/audit_bloque1.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/scripts/audit_bloque1.js).
+  * Caso Testigo de Pluriempleo (Yoneida Guerra - CI 15142594):
+    - Clave legada asimétrica `15142594`: **HTTP 404 (Eliminada)**.
+    - Cargo 1 canónico `OD12261410_15142594` (Escuela Braulio Belandria, Arapuey): **HTTP 200 (Activo y simétrico)**.
+    - Cargo 2 canónico `S3379N1410_15142594` (Liceo Emira Matheus, CCB Arapuey): **HTTP 200 (Activo y simétrico)**.
+  * Caso Testigo Tovar (Amador Morales Mora - CI 23493717):
+    - Cargo canónico `OD05041421_23493717`: **HTTP 200 (Activo con municipio TOVAR y parroquia TOVAR)**.
+    - Clave legada `23493717`: **HTTP 404 (Eliminada)**.
+
+- **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.

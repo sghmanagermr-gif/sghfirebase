@@ -93,6 +93,14 @@ function toCanonicalMun(str) {
 }
 
 // 3. Catálogo Maestro de Planteles
+function toFirestoreNum(val) {
+  const n = Number(val) || 0;
+  if (Number.isInteger(n)) {
+    return { integerValue: String(n) };
+  }
+  return { doubleValue: n };
+}
+
 console.log('1. Cargando Catálogo Maestro Unificado de Planteles...');
 const plantelesMaestros = new Map();
 
@@ -228,7 +236,7 @@ registrosSeleccionados.forEach(({ row: r, dea, ci, munCanon, plt }) => {
   const docFields = {
     cedula: { stringValue: ci },
     'cedula-identidad': { stringValue: ci },
-    CEDULA: { integerValue: Number(ci) },
+    CEDULA: toFirestoreNum(ci),
     nacionalidad: { stringValue: 'V' },
     'nombre-apellido': { stringValue: nombrePersona },
     'apellidos-nombres': { stringValue: nombrePersona },
@@ -256,9 +264,9 @@ registrosSeleccionados.forEach(({ row: r, dea, ci, munCanon, plt }) => {
     DEPENDENCIA: { stringValue: dep },
     titular: { stringValue: tit },
     TITULAR: { stringValue: tit },
-    'horas-recibo': { integerValue: hRec },
-    'horas-academicas': { integerValue: hAcad },
-    'horas-administrativas': { integerValue: hAdm },
+    'horas-recibo': toFirestoreNum(hRec),
+    'horas-academicas': toFirestoreNum(hAcad),
+    'horas-administrativas': toFirestoreNum(hAdm),
     'situacion-laboral': { stringValue: sit },
     'SITUACIÓN DEL TRABAJADOR': { stringValue: sit },
     correo: { stringValue: email },
@@ -266,9 +274,9 @@ registrosSeleccionados.forEach(({ row: r, dea, ci, munCanon, plt }) => {
     direccion: { stringValue: dir },
     genero: { stringValue: genero },
     'estado-civil': { stringValue: estadoCivil },
-    antiguedad: { integerValue: antiguedad },
+    antiguedad: toFirestoreNum(antiguedad),
     'fecha-ingreso': { stringValue: fIngreso },
-    edad: { integerValue: edad },
+    edad: toFirestoreNum(edad),
     ubch: { stringValue: ubch },
     'circuito-comunal': { stringValue: circuito },
     'centro-votacion': { stringValue: centroVot },
@@ -400,6 +408,7 @@ async function run() {
     const chunk = writesQueue.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE);
     console.log(`[Bloque ${targetBloque}] Enviando lote ${i + 1}/${totalBatches} (${chunk.length} operaciones)...`);
 
+    token = await ensureFreshToken();
     await commitWritesWithRetry(chunk, token);
     opsEnviadas += chunk.length;
     console.log(`✓ Lote ${i + 1}/${totalBatches} confirmado exitosamente (HTTP 200). Acumulado: ${opsEnviadas}/${writesQueue.length}`);
@@ -407,6 +416,21 @@ async function run() {
     // Pausa preventiva de 600ms entre lotes para descongestión
     await new Promise(r => setTimeout(r, 600));
   }
+
+  // Guardar manifiesto de ejecución real
+  const commitManifestPath = path.join('scratch', `fase3_bloque${targetBloque}_commit_manifest.json`);
+  const commitData = {
+    fecha: new Date().toISOString(),
+    bloque: targetBloque,
+    nombre_bloque: BLOQUES[targetBloque]?.nombre || 'TODOS',
+    total_registros_canónicos: registrosSeleccionados.length,
+    cedulas_legadas_depuradas: cedulasParaDepurar.size,
+    total_operaciones_ejecutadas: opsEnviadas,
+    total_lotes_confirmados: totalBatches,
+    estado: 'EXITOSO_HTTP_200'
+  };
+  fs.writeFileSync(commitManifestPath, JSON.stringify(commitData, null, 2), 'utf8');
+  console.log(`✓ Manifiesto de ejecución en vivo guardado en: ${commitManifestPath}`);
 
   console.log('\n====================================================================');
   console.log(`=== ¡MIGRACIÓN DE BLOQUE ${targetBloque} COMPLETADA CON ÉXITO ROTUNDO! ===`);

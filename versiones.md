@@ -4,6 +4,24 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.32.0 (9 de Noviembre de 2026)
+
+- **Plan Maestro de Simetría SGH: Ejecución de Bloque 1 en la Nube y Arquitectura para Personal de Planta:**
+  - **Alineación de Software WebApp (Fase 2):**
+    - Enlace forzoso de clave simétrica `{codigoDEA}_{cedula}` en cada guardado del asistente (`webapp/src/personalWizard.js`), con inyección automática de metadatos de escuela (`plantel`, `ubicacion-fisica`, canonical `municipio`, `parroquia`) y depuración transparente del documento legado `{cedula}`.
+    - Soporte en tiempo real en el Auditor de Cédulas (`webapp/src/admin.js`) con resolución de contingencia (`resolverDatosPlantel`) para visualización instantánea y homogénea de nombres de institución y ubicaciones tanto en tablas como en tarjetas individuales.
+  - **Ejecución en Vivo de Fase 3 (Bloque 1 - Eje Panamericano y Valle del Mocotíes):**
+    - Homogeneización en Cloud Firestore de **11.244 registros laborales** con clave universal `{codigoDEA}_{cedula}` mediante la API REST `documents:commit`.
+    - Depuración masiva y atómica de **10.920 documentos asimétricos legados** (`cargos_personal/{cedula}`).
+    - **Cero lecturas consumidas** en Firestore (Zero-Cost Shield), ejecutado en 56 lotes con 100% de éxito (HTTP 200) y respeto absoluto a la cuota Spark diaria.
+    - Auditoría de comprobación en vivo exitosa: Casos testigo comprobados con HTTP 200 en registros simétricos y HTTP 404 en claves antiguas depuradas.
+  - **Arquitectura para Personal de Planta / Zona Educativa (`RAC_zona.xlsx`):**
+    - Modelado de las 10 dependencias centrales bajo la denominación `SEDE ADMINISTRATIVA` con clave universal `{codigoDependencia}_{cedula}`.
+    - Definición del rol institucional `plantadmin` (jefes de división/coordinaciones) sin matrícula escolar, sin secciones y sin módulo de asistencia.
+    - Regla de normalización de nombres para código `001200339`: Denominación limpia `DIVISIÓN DE GESTIÓN HUMANA` (paréntesis eliminados) y extracción automática del texto interno al campo libre institucional `oficina`.
+
+---
+
 ### v2.31.1 (9 de Noviembre de 2026)
 
 - **Carga Masiva Global de Regularización RAC (1.891 Funcionarios en 23 Municipios) y Sincronización de Estadísticas Estadal:**

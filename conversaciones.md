@@ -6801,3 +6801,35 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - El nombre de la división principal se estandariza limpio como `DIVISIÓN DE GESTIÓN HUMANA` (u oficina ministerial correspondiente), eliminando los paréntesis del nombre institucional.  
 >    - El texto que venía entre paréntesis (ej. `COORDINACIÓN DE NÓMINA`, `OFICINA DE OBREROS`, `ASESORÍA JURÍDICA`, `ATENCIÓN AL CIUDADANO`, `EVALUACIÓN`) se extrae de forma automática y se asigna al campo institucional de texto libre `oficina`.  
 > 4. Registro y Respaldo Protocolar: Actualización física de `bitacora.md`, `conversaciones.md` y sincronización con GitHub.
+
+
+### Intervención 196
+
+* **Fecha / Hora:** 2026-11-09 ~14:55 - 15:05 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Estoy Satisfecho  
+> EJECUTAR_FASE3_SIMETRIA"  
+> *(Posteriormente)*: "Estoy satisfecho"  
+> *(Adjunta captura de pantalla oficial de la consola de Google Firebase: Métricas de Uso de Cloud Firestore en las últimas 24h: 25k lecturas acumuladas con 0 lecturas en la tarde, 14k escrituras acumuladas con el pico controlado del Bloque 1 dentro del margen de 20k, y 3.4k eliminaciones en progreso de consolidación).*  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. Ejecución en Vivo de la Fase 3 - Bloque 1 (Eje Panamericano y Valle del Mocotíes):  
+>    - Se lanzó y culminó el script maestro `scripts/fase3_migracion_simetria.js --bloque=1 --execute` a través de la API REST `documents:commit`.  
+>    - 22.164 operaciones atómicas ejecutadas en 56 lotes continuos de hasta 400 operaciones, todas confirmadas con HTTP 200 OK.  
+>    - 11.244 cargos de personal normalizados con su clave universal simétrica `{codigoDEA}_{cedula}` y metadatos canónicos de institución, municipio y parroquia.  
+>    - 10.920 documentos asimétricos legados sueltos (`cargos_personal/{cedula}`) eliminados de raíz.  
+>    - 0 lecturas consumidas en Firestore (Zero-Cost Shield absoluto).  
+> 2. Auditoría en Vivo de Comprobación:  
+>    - Mediante el script `scripts/audit_bloque1.js` se verificaron casos reales en la base de datos de producción:  
+>      * Caso testigo de pluriempleo Yoneida Guerra (CI `15142594`): Documento legado asimétrico eliminado con éxito (HTTP 404). Documentos canónicos simétricos `OD12261410_15142594` (Braulio Belandria) y `S3379N1410_15142594` (Liceo Emira Matheus) activos y perfectamente homologados (HTTP 200).  
+>      * Caso testigo Tovar (CI `23493717`): Documento canónico `OD05041421_23493717` activo con municipio TOVAR y parroquia TOVAR (HTTP 200); clave legada eliminada (HTTP 404).  
+> 3. Análisis de Métricas en Consola de Firebase:  
+>    - La gráfica aportada por el usuario confirma que la curva de lecturas permaneció completamente plana en cero durante la migración, y la curva de escrituras alcanzó 14k total diario (muy por debajo de la cuota límite gratuita de 20k).  
+> 4. Actualización de Versión y Respaldo:  
+>    - Incremento de versión SemVer de `v2.31.1` a `v2.32.0`.  
+>    - Compilación exitosa del frontend con Vite (`npm --prefix webapp run build` en 857ms).  
+>    - Registro exhaustivo en `bitacora.md`, `conversaciones.md`, `versiones.md` y sincronización con GitHub (`git add .`, `git commit` y `git push origin main`).
