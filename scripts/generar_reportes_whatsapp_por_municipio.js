@@ -162,3 +162,4 @@ fs.writeFileSync(masterPath, masterReportLines.join('\n'), 'utf8');
 
 console.log(`✓ Generados 23 reportes individuales en: ${outDir}`);
 console.log(`✓ Generado reporte maestro consolidado en: ${masterPath}`);
+

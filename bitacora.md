@@ -4427,3 +4427,34 @@ Se diseñó y ejecutó de forma masiva e impecable el despliegue técnico del pr
   * Generado el informe maestro consolidado en [`huerfanos/reporte_whatsapp_todos_los_municipios.txt`](file:///c:/Proyectos/sgh-mr%20-%20firebase/huerfanos/reporte_whatsapp_todos_los_municipios.txt).
 
 - **Resultado:** Aprobado con estado «SATISFECHO» por el administrador.
+
+
+## [Plan Maestro de Simetría SGH: Fase 1 - Laboratorio Local y Simulación en Seco] - 2026-11-09
+
+### Resumen Técnico
+Se diseñó y ejecutó de forma exhaustiva la **Fase 1 del Plan Maestro de Simetría en el SGH**, orientada a sanear y homogenizar la totalidad de los 26.756 registros de nómina activa para erradicar inconsistencias estructurales de identificadores (`{Cédula}` vs `{DEA}_{Cédula}`), nombres de planteles no especificados, omisiones de parroquias y variantes truncadas de municipios.
+
+- **Diagnóstico y Auditoría Forense de Calidad de Datos:**
+  * Evaluación de los 26.756 registros en la nómina consolidada:
+    - 21.799 registros (81,5%) con estructura de campos completa.
+    - 2.317 registros (8,6%) con código DEA pero sin nombre formal de plantel.
+    - 2.950 registros (11,0%) con nombres de municipios abreviados históricamente (`JULIO CESAR`, `CARACCIOLO PARRA`, `ANTONIO PINTO SALINA`, `TULIO FEBRES`).
+    - 17 registros puntuales con parroquia vacía o `N/R`.
+  * Censo de Claves y Pluriempleo:
+    - 25.153 personas (96,9%) con cargo único.
+    - 800 personas (3,1%) con pluriempleo legítimo (1.603 nombramientos), donde la coexistencia de claves simples `{CI}` y compuestas `{DEA}_{CI}` causaba asimetrías de consulta.
+
+- **Consolidación del Catálogo Maestro de Planteles (Fuente de Verdad):**
+  * Unificación de 1.238 instituciones educativas cruzando `bd_sgh.json`, `PlantelesMerida.xlsx` y `RAC.xlsx`.
+  * Normalización canónica de los 23 municipios oficiales de Mérida bajo la grafía estricta de `sgh_catalogos_muns` y asignación de parroquias normativas.
+
+- **Resultados de la Simulación en Seco (Fase 1 - Costo Cero Firebase):**
+  * Claves canónicas únicas generadas: 26.130 claves universales bajo estándar `{codigoDEA}_{cedula}`.
+  * Saneamiento de nombres de plantel: 2.170 instituciones recuperaron su nombre oficial (reducido a 147 casos correspondientes a personal de nómina central/administrativo y 2 registros de prueba a depurar).
+  * Saneamiento de municipios: 100% convertidos a grafía canónica oficial (0 discrepancias).
+  * Saneamiento de parroquias: 100% de cobertura asignada (0 registros en `N/R`).
+  * Validación del Caso Testigo (Yoneida Guerra C.I. 15.142.594): Ambos registros quedaron bajo formato idéntico `{DEA}_{CI}`, con sus planteles respectivos (`BRAULIO BELANDRIA` y `LICEO EMIRA MATHEUS`), municipio unificado `JULIO CÉSAR SALAS` y parroquia `ARAPUEY`.
+  * **Cero consumo de cuota:** 0 lecturas y 0 escrituras a Firebase (Plan Spark preservado al 100%).
+  * Manifiesto guardado en [`scratch/simetria_fase1_manifest.json`](file:///c:/Proyectos/sgh-mr%20-%20firebase/scratch/simetria_fase1_manifest.json).
+
+- **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.

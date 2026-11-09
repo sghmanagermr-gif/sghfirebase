@@ -6642,3 +6642,52 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - Generación de 23 reportes individuales en `huerfanos/reportes_whatsapp_por_municipio/` para envío directo a cada coordinación municipal.  
 >    - Generación del informe consolidado general en `huerfanos/reporte_whatsapp_todos_los_municipios.txt`.  
 > 7. Cierre Protocolar: Aprobado con estado «SATISFECHO» por el administrador.
+
+
+### Intervención 191
+
+* **Fecha / Hora:** 2026-11-09 ~10:03 - 11:13 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+> pasemos a otro caso. estoy auditando la cedula 15142594 y puedo observar varias cosas: en el Registro #2 (S3379N1410)  
+> - El plantel no lo especifica  
+> - Municipio y parroquia no se ve como el Registro #1 (OD12261410)  
+> - los ID del Documento son distintos.  
+> Quiero saber ¿por qué sale así? no debes modificar nada, solo responder a las preguntas  
+> Es inaceptable ese comportamiento del sistema. no hay simetria en el orden de los registros:  
+> - Los registros: o son identificados por cedula, o por {Código DEA}_{Cédula}; pero no es unos de una forma y otros de otra.  
+> - Todos los registros (funcionarios) deben tener sus campos simétricos plantel / ubicacion-fisica, entre otros campos que son datos únicos.  
+> - No es posible que registros (funcionarios) tengan uno u otro municipio.  
+> En resumen, todos los registros (funcionarios), deben contener en los campos que son datos propios, los datos que correspondan.  
+> Por favor ¿entiendes lo que quiero transmitir?  
+> Antes de preparar la propuesta, primero dime cuales con todos los datos recurrentes en el SGH, (creo que eso está en un archivo llamado: sgh_catalogos o sgh_catalogos_muns), no recuerdo en cual de esos. Pero quiero que me listes los datos recurrentes.  
+> Perfecto. ¿Cuándo podemos comenzar?. En la imagen te muestro como va la cuota hoy 9-11-26.  
+> Antes de dar inicio. ¿Es necesario inferir en todos los registros? O sea ¿Todos los registros de la base de datos Firebase están afectados?  
+> El enfoque me parece bien. Pero primero necesito saber ¿ese 81,5% que no necesita tocarse cuenta con la clave {DEA}_{Cédula} ???  
+> Es que el problema no es solo el Auditor de Cédulas, no seas tan cuadrado. Estoy tratando de entender con tus respuestas: de si este inconveniente afecta todo el sistema en general: registros con el formato viejo, registros con el formato compuesto; entre otros campos que merecen la atención.  
+> Por eso desde un comienzo llame esto como SIMETRÍA EN EL SGH.  
+> Si me explico bien, o hay algo que necesites te amplíe  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+> Ok. Entonces: ¿Ahora cuál es el plan de implementación?  
+> luz verde para iniciar la Fase 1 en local  
+> Sí, los resultados de esta Fase 1 son satisfactorios  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. Auditoría de Causa Raíz (C.I. 15.142.594 Yoneida Guerra): Explicación detallada del origen de la disparidad entre Registro #1 (nómina inicial simple con ID de cédula) y Registro #2 (pluriempleo nacional con ID compuesto `{DEA}_{CI}` e inconsistencia de campos vacíos).  
+> 2. Comprensión y Alineación del Principio de Simetría Institucional: Se reconoció y respaldó la exigencia de simetría estructural integral en toda la base de datos (clave universal única, datos de planteles completos y municipios unificados).  
+> 3. Desglose de Datos Recurrentes vs Datos Propios: Identificación y explicación de los catálogos maestros (`sgh_catalogos` y `sgh_catalogos_muns`).  
+> 4. Diagnóstico de Cuota Spark y Censo Forense de Calidad:  
+>    - Análisis del gráfico de cuota en Firestore (48k lecturas de 50k por pico del día anterior que expira a las 2:00 PM; 2.8k escrituras de 20k).  
+>    - Censo real sobre los 26.756 registros: 21.799 ya completos (81,5%), 2.317 sin nombre escrito de plantel, 2.950 con municipio abreviado y 17 sin parroquia; 25.153 con cargo único y 800 con pluriempleo legítimo.  
+> 5. Diseño del Plan Maestro de Simetría SGH en 4 Fases: Fase 1 (Laboratorio Local), Fase 2 (Software WebApp), Fase 3 (Migración por bloques territoriales en Firebase) y Fase 4 (Certificación Final).  
+> 6. Ejecución de Fase 1 (Luz Verde Aprobada):  
+>    - Construcción en memoria del catálogo unificado de 1.238 planteles con municipios y parroquias canónicas oficiales.  
+>    - Normalización al 100% de municipios abreviados (0 pendientes) y cobertura parroquial del 100% (0 pendientes).  
+>    - Saneamiento de nombres de escuela en 2.170 instituciones.  
+>    - Verificación exitosa del caso Yoneida Guerra (`OD12261410_15142594` y `S3379N1410_15142594` ambos simétricos con su plantel y parroquia).  
+>    - Cero consumo de cuota en Firebase (0 lecturas, 0 escrituras).  
+> 7. Cierre Protocolar: Aprobado con estado «SATISFACTORIO» por el administrador.
