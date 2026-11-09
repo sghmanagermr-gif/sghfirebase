@@ -2237,8 +2237,81 @@ export function initAdminDashboard(dbInstance, user) {
     "TULIO FEBRES", "ZEA"
   ];
 
-  let configActual = { municipios_activos: [], excepciones: [], modo_operacion: 'TOTAL' };
+  let configActual = { municipios_activos: [], excepciones: [], modo_operacion: 'TOTAL', despliegue_activo: true };
   const docRef = doc(db, 'configuracion', 'despliegue');
+
+  function actualizarUIMasterSwitch(activo) {
+    const card = document.getElementById('card-master-despliegue');
+    const icon = document.getElementById('icon-master-despliegue');
+    const title = document.getElementById('title-master-despliegue');
+    const badge = document.getElementById('badge-master-despliegue');
+    const desc = document.getElementById('desc-master-despliegue');
+    const lbl = document.getElementById('lbl-master-despliegue');
+    const chk = document.getElementById('chk-master-despliegue');
+    const slider = document.getElementById('slider-master-despliegue');
+    const knob = document.getElementById('knob-master-despliegue');
+
+    const estaActivo = (activo !== false);
+    if (chk) chk.checked = estaActivo;
+
+    if (estaActivo) {
+      if (card) {
+        card.style.borderColor = '#10b981';
+        card.style.background = '#f0fdf4';
+      }
+      if (icon) icon.textContent = '🟢';
+      if (title) {
+        title.textContent = 'Acceso al Sistema: ENCENDIDO (Abierto)';
+        title.style.color = '#065f46';
+      }
+      if (badge) {
+        badge.textContent = 'Activo';
+        badge.style.background = '#d1fae5';
+        badge.style.color = '#065f46';
+      }
+      if (desc) {
+        desc.textContent = 'Los municipios y planteles activos pueden ingresar normalmente según la selección establecida.';
+      }
+      if (lbl) {
+        lbl.textContent = 'ENCENDIDO';
+        lbl.style.color = '#10b981';
+      }
+      if (slider) slider.style.background = '#10B981';
+      if (knob) knob.style.left = '28px';
+    } else {
+      if (card) {
+        card.style.borderColor = '#f59e0b';
+        card.style.background = '#fffbeb';
+      }
+      if (icon) icon.textContent = '🛠️';
+      if (title) {
+        title.textContent = 'Acceso al Sistema: APAGADO (En Mantenimiento)';
+        title.style.color = '#b45309';
+      }
+      if (badge) {
+        badge.textContent = 'En Mantenimiento';
+        badge.style.background = '#fef3c7';
+        badge.style.color = '#92400e';
+      }
+      if (desc) {
+        desc.textContent = 'El acceso está suspendido para todos los directores y planteles. Se proyecta la pantalla de Mantenimiento Institucional.';
+      }
+      if (lbl) {
+        lbl.textContent = 'APAGADO';
+        lbl.style.color = '#d97706';
+      }
+      if (slider) slider.style.background = '#94a3b8';
+      if (knob) knob.style.left = '3px';
+    }
+  }
+
+  const chkMasterDespliegue = document.getElementById('chk-master-despliegue');
+  if (chkMasterDespliegue) {
+    chkMasterDespliegue.onchange = (e) => {
+      configActual.despliegue_activo = e.target.checked;
+      actualizarUIMasterSwitch(configActual.despliegue_activo);
+    };
+  }
 
   async function loadConfig() {
     try {
@@ -2255,7 +2328,9 @@ export function initAdminDashboard(dbInstance, user) {
       if (!configActual.municipios_activos) configActual.municipios_activos = [];
       if (!configActual.excepciones) configActual.excepciones = [];
       if (!configActual.modo_operacion) configActual.modo_operacion = 'TOTAL';
+      if (configActual.despliegue_activo === undefined) configActual.despliegue_activo = true;
       
+      actualizarUIMasterSwitch(configActual.despliegue_activo);
       renderGrid();
       renderExcepciones();
     } catch(err) {
@@ -2379,7 +2454,8 @@ export function initAdminDashboard(dbInstance, user) {
       await safeUpdateDoc(docRef, {
         municipios_activos: municipiosToSave,
         excepciones: configActual.excepciones,
-        modo_operacion: configActual.modo_operacion || 'TOTAL'
+        modo_operacion: configActual.modo_operacion || 'TOTAL',
+        despliegue_activo: configActual.despliegue_activo !== false
       });
       // Update cache
       sessionStorage.setItem('sgh_despliegue_config', JSON.stringify(configActual));

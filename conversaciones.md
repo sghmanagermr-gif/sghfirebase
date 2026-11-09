@@ -6485,3 +6485,95 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - 15 funcionarios actualizados con municipio y parroquia en `cargos_personal`.  
 >    - 2 registros dummy eliminados (`123` y `12345678`).  
 > 4. Resultado: Saneamiento definitivo de la cabecera del archivo de nómina estadal.
+
+
+### Intervención 185
+
+* **Fecha / Hora:** 2026-11-07 ~20:00 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Solicita depurar el registro de prueba `123` y blindar el archivo de exportación Excel de nómina para que no aparezcan registros fantasmas ni funcionarios sin nombre.
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. Blindaje de Exportador Excel (`webapp/src/admin.js`): Exigencia estricta de nombre legítimo ($\ge 2$ caracteres) y cédula válida ($\ge 4$ dígitos), bloqueando `123` y `12345678`.  
+> 2. Aspiradora Inteligente: Ampliación de criterio de detección para barrer registros de prueba y anómalos.  
+> 3. Botón «🗑️ Eliminar Expediente»: Incorporado en cada ficha del Auditor de Cédulas para purgas quirúrgicas directas en Firestore.  
+> 4. SemVer v2.30.3 y Despliegue en Firebase Hosting. Aprobado con estado «SATISFECHO».
+
+
+### Intervención 186
+
+* **Fecha / Hora:** 2026-11-07 ~20:30 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Protocolo CASO_HUERFANOS  
+> Formato nuevo de Reporte:  
+> Nombre del Plantel: Complejo Educativo Omar Gregorio Rivas  
+> Código DEA: S2855D1410  
+> Nombres Y Apellidos: Yuleny Del Carmen Bernal Rangel  
+> C.I. 19529390  
+> LUZ VERDE  
+> sATISFECHO  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. Diagnóstico Forense: 100% coincidencia en RAC (fila 10.768, Bachiller II, 37 hrs, Nacional, Titular). Sede oficial en RAC: `S2855D1410`. En BD estadal figuraba con `codigo-plantel` vacío.  
+> 2. Ejecución Atómica (Luz Verde): Actualizado `cargos_personal/19529390`, creado `cargos_personal/S2855D1410_19529390`, e inyectado en `planteles/S2855D1410.personal_resumen` mediante `appendMissingElements` e incremento de `total_personal` (commit HTTP 200).  
+> 3. Emisión de informe oficial de regularización para WhatsApp.
+
+
+### Intervención 187
+
+* **Fecha / Hora:** 2026-11-07 ~21:00 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Protocolo CASO_HUERFANOS  
+> Plantel O07951070  
+> Nombre del Plantel UEB SAMUEL ROBINSON  
+> Código DEA OD04391414  
+> 9 funcionarios reportados.  
+> LUZ VERDE  
+> SATISFECHO  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. Diagnóstico Forense: Los 9 funcionarios pertenecen oficialmente en RAC al plantel `OD04391414`. Se detectaron 5 huérfanos legítimos y 4 preexistentes protegidos (0% colisiones).  
+> 2. Ejecución Atómica (Luz Verde): Creación de 5 expedientes en `cargos_personal/OD04391414_{ci}` e inyección en `planteles/OD04391414.personal_resumen` e incremento de 5 en `total_personal` (commit HTTP 200).  
+> 3. Emisión de informe oficial para WhatsApp bajo plantilla canónica.
+
+
+### Intervención 188
+
+* **Fecha / Hora:** 2026-11-09 ~07:00 - 07:30 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> ¿Cuál es el mensaje que sale a los usuarios, cuando ningun municipio esta activo en el depliegue? o sea que no hay despliegue para ninguno. No debes cambiar nada. solo decirme el o los mensajes.  
+> [Adjunta fotografía de pantalla de espera del municipio JULIO CESAR]  
+> Solo responde si o no: ¿si el despliegue está deshabilitado para TODOS los municipios, o sea NO HAY DESPLIEGUE PARA NADIE. Puede haber un mensaje que se refiera a Sistema en mantenimiento o algo asi?  
+> Solo responde si o no. ¿Pero podría haberlo? ¿Cómo?  
+> Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa. Me gusta el interruptor manual. Dame detalles de como funcionaría ¿?  
+> Ok, si esta apagado ningun municipio entra al sistema, si esta encendido entran los municipios que esten activos. Es así?  
+> Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa. Deseo ese interruptor. No quiero que se presente algún otro problema. solo vas a trabajar con el sespliegue.  
+> Sí, satisfecho.  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. Auditoría de Mensajes de Despliegue: Identificado el flujo de sala de espera institucional donde se visualiza el mensaje municipal según los datos del usuario.  
+> 2. Análisis y Propuesta de Interruptor Maestro: Explicada la arquitectura tipo llave de paso general para modo mantenimiento sin desarmar la matriz municipal.  
+> 3. Implementación de Interruptor Maestro en Despliegue (`webapp/src/admin.js`, `webapp/index.html`):  
+>    - Incorporada tarjeta superior `#card-master-despliegue` con switch interactivo (🟢 ENCENDIDO: Sistema Activo / ⚪ APAGADO: Sistema en Mantenimiento).  
+>    - Persistencia en Cloud Firestore campo `despliegue_activo` en `configuracion/despliegue`.  
+> 4. Blindaje en Flujo de Seguridad (`webapp/src/auth.js`):  
+>    - Gatekeeper priorizado: al estar apagado (`despliegue_activo === false`), se proyecta pantalla *«Sistema en Mantenimiento»* a planteles y directores, invalidando caché para refresco instantáneo al encenderse.  
+>    - Administradores (`superadmin`, `admin`, `zonadmin`, `munadmin`) conservan acceso permanente para gestión.  
+> 5. Despliegue y Bumping SemVer: Elevado a versión **v2.31.0** y publicado exitosamente en Firebase Hosting (`https://sgh-merida.web.app`).  
+> 6. Cierre Protocolar: Aprobado con estado «SATISFECHO» por el administrador.

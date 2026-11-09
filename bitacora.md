@@ -4338,3 +4338,36 @@ Se procesó solicitud institucional de regularización de 9 funcionarios para la
   * Transacción atómica completada con 6 operaciones y respuesta HTTP 200 (`2026-11-08T01:06:06Z`).
   * Emisión de informe oficial consolidado para WhatsApp bajo plantilla canónica.
 - **Resultado:** Aprobado con estado «SATISFECHO» por el administrador.
+
+## [Despliegue e Infraestructura: Interruptor Maestro de Acceso y Modo Mantenimiento] - 2026-11-09 (SGH v2.31.0)
+
+### Resumen Técnico
+Se diseñó e implementó la arquitectura del **Interruptor Maestro de Acceso General y Modo Mantenimiento** para la plataforma SGH, permitiendo a la autoridad administrativa suspender el acceso general a todos los planteles del estado de forma centralizada sin desarmar la selección municipal ni perder la configuración existente.
+
+- **Diagnóstico y Requerimiento Institucional:**
+  * Ante la necesidad operativa de suspender temporalmente el acceso general de los directores por actualizaciones técnicas o cierres administrativos ("llave de paso general"), el sistema obligaba a desmarcar los 23 municipios uno por uno, con el riesgo de perder la trazabilidad de qué municipios ya estaban autorizados.
+  * Cuando ningún municipio estaba activo, los directores veían un mensaje restrictivo territorial (*"El Sistema SGH aún no está habilitado para el municipio..."*), generando dudas sobre el estado general de la plataforma.
+
+- **Acciones y Arquitectura Implementada (v2.31.0):**
+  1. **Modelo de Datos en Cloud Firestore (`configuracion/despliegue`):**
+     - Incorporado el campo booleano canónico `despliegue_activo` (por defecto `true`).
+     - Almacenamiento seguro y persistencia atómica mediante `safeUpdateDoc`.
+  2. **Interfaz de Control en Panel de Administración (`webapp/src/admin.js` e `index.html`):**
+     - Añadida tarjeta interactiva superior en la pestaña **🚀 Despliegue** (`#card-master-despliegue`) con selector visual animado:
+       * **🟢 ENCENDIDO (Activo / Abierto):** Fondo verde (`#f0fdf4`), borde `#10b981`, badge `ACTIVO`. Concede acceso regular según la selección municipal.
+       * **⚪ APAGADO (En Mantenimiento):** Fondo ámbar (`#fffbeb`), borde `#f59e0b`, badge `EN MANTENIMIENTO`. Pausa el acceso global.
+     - Preservación íntegra de la matriz `municipios_activos` y `excepciones` en memoria y base de datos durante los periodos de mantenimiento.
+  3. **Gatekeeper de Seguridad y Ruteo (`webapp/src/auth.js`):**
+     - Evaluación prioritaria de `despliegue.despliegue_activo === false` antes de la comprobación municipal o de excepciones para roles `plant` y `plaadmin`.
+     - Inyección del mensaje institucional en Sala de Espera (`#espera-view`):
+       * **Título:** *Sistema en Mantenimiento*
+       * **Mensaje:** *«El Sistema SGH se encuentra actualmente en labores de mantenimiento institucional y actualización técnica. Por favor, manténgase atento a los canales oficiales.»*
+       * **Botón:** *[ Cerrar Sesión ]* (`#btn-logout-espera`).
+     - Invalidación de caché local (`sessionStorage.removeItem('sgh_despliegue_config')`) para garantizar que al reactivar el sistema los directores accedan inmediatamente sin problemas de caché.
+     - Blindaje para roles administrativos (`superadmin`, `admin`, `zonadmin`, `munadmin`), quienes acceden sin restricciones al panel de control aún durante la ventana de mantenimiento.
+  4. **Control de Versiones y Despliegue:**
+     - Bumping SemVer a **v2.31.0** en `webapp/package.json` y `webapp/index.html`.
+     - Compilación limpia con Vite (33 módulos transformados, 0 errores).
+     - Despliegue completado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+- **Resultado:** Aprobado con estado «SATISFECHO» por el administrador.

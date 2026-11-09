@@ -138,6 +138,15 @@ export function initAuth(auth, db, callbacks) {
       if (userData.rol === 'plant' || userData.rol === 'plaadmin') {
          // --- GATE: DESPLIEGUE ---
          const despliegue = await getDespliegueConfig();
+
+         // INTERRUPTOR MAESTRO: Si el despliegue general está apagado (En Mantenimiento)
+         if (despliegue.despliegue_activo === false) {
+            sessionStorage.removeItem('sgh_despliegue_config');
+            const mensajeMantenimiento = `El Sistema SGH se encuentra actualmente en <b>labores de mantenimiento institucional y actualización técnica</b>. Por favor, manténgase atento a los canales oficiales.`;
+            onWait(mensajeMantenimiento, "Sistema en Mantenimiento");
+            return;
+         }
+
          const cod = userData.jerarquia?.plantel_codigo || userData.plantel_codigo;
          const mun = userData.jerarquia?.municipio || userData.municipio;
          const munNorm = normalizarMunicipio(mun);

@@ -4,6 +4,21 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.31.0 (9 de Noviembre de 2026)
+
+- **Interruptor Maestro de Despliegue General y Modo Mantenimiento Institucional:**
+  - **Interruptor Maestro en Panel de Administración (`webapp/src/admin.js` e `index.html`):**
+    - Se incorporó en la pestaña **🚀 Despliegue** un interruptor visual interactivo (`#card-master-despliegue`) tipo switch que permite al administrador activar o pausar el acceso al sistema para todos los directores y planteles en tiempo real.
+    - **Modo ENCENDIDO (Activo / Abierto):** Estado verde institucional. Habilita el ingreso de los directores conforme a la cuadrícula de municipios seleccionados.
+    - **Modo APAGADO (En Mantenimiento):** Estado ámbar preventivo. Suspende el acceso para la totalidad de los planteles y directores, sin desarmar ni perder los municipios previamente marcados.
+  - **Pantalla Oficial de Sistema en Mantenimiento (`webapp/src/auth.js`):**
+    - Gatekeeper de seguridad actualizado para verificar `despliegue_activo !== false`.
+    - Al estar apagado, los directores son dirigidos a la Sala de Espera con el mensaje oficial: *«El Sistema SGH se encuentra actualmente en labores de mantenimiento institucional y actualización técnica. Por favor, manténgase atento a los canales oficiales.»*
+    - Se preserva el acceso ininterrumpido para los roles administrativos (`superadmin`, `admin`, `zonadmin`, `munadmin`).
+  - **Despliegue:** Compilación limpia con Vite y despliegue completado a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.30.3 (7 de Noviembre de 2026)
 
 - **Blindaje Anti-Fantasmas en Nómina Excel, Gestión Administrativa y Eliminación Quirúrgica en Auditor:**
