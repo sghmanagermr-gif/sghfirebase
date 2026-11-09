@@ -6718,3 +6718,62 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - Se valida y felicita la medida preventiva de pausar el despliegue general (modo mantenimiento institucional) para congelar el consumo de directores.  
 >    - Se aclara que aunque el código local está 100% listo, las pruebas que consulten Firestore deben mantenerse mínimas o esperar a las 2:30 PM para no arriesgar las 2.000 lecturas restantes antes de la caída del pico.  
 > 4. Cierre Protocolar: Aprobado con estado «SATISFACTORIO» por el administrador.
+
+
+### Intervención 193
+
+* **Fecha / Hora:** 2026-11-09 ~13:58 - 14:08 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "¿Puedes hacer otra tarea, mientras se hacen las 2:30 PM para la Fase 3?"  
+> "deja ensamblado y probado el script de la Fase 3"  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. Ensamblaje del Script Maestro de Migración en la Nube (`scripts/fase3_migracion_simetria.js`):  
+>    - Estructuración de los 3 Bloques Territoriales: Bloque 1 (Eje Panamericano y Valle del Mocotíes - 11.244 registros), Bloque 2 (Eje Metropolitano y Pueblos del Sur - 13.121 registros) y Bloque 3 (Eje Páramo y Cierre General - 2.389 registros).  
+>    - Mecanismo de lotes de 400 operaciones por llamada atómica REST (`documents:commit`) con cero consumo de lecturas en Firestore.  
+>    - Depuración automática sincronizada: en la misma transacción donde se crea o actualiza `{codigoDEA}_{cedula}`, se programa la eliminación del documento legado `{cedula}` para erradicar registros asimétricos.  
+>    - Blindaje de red: `commitWritesWithRetry()` con reintentos exponenciales automáticos, refresco continuo de tokens OAuth (`ensureFreshToken`) y pausa de 600ms entre lotes.  
+> 2. Ejecución de Pruebas en Seco (Dry-Run):  
+>    - Validación al 100% en memoria de los 3 bloques con 0 errores y 0 consumo de cuota de Firebase.  
+>    - Generación de manifiestos técnicos en `scratch/fase3_bloque1_dryrun_manifest.json`, `scratch/fase3_bloque2_dryrun_manifest.json` y `scratch/fase3_bloque3_dryrun_manifest.json`.  
+> 3. Respaldo en GitHub: Commit `5d34e58` subido exitosamente a la rama `main`.
+
+
+### Intervención 194
+
+* **Fecha / Hora:** 2026-11-09 ~14:09 - 14:42 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Perfecto. Mientras tanto puedes hacer otra tarea? Si la respuesta es: Sí; ¿Con que nombre protocolo te aviso que la ejecutes?"  
+> "Estoy satisfecho  
+> 'Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa.'  
+> Hay un tema que no he entrado en detalles porque esperaba la aprobación de la Coordinadora de Gestión Humana y su oficina Nómina. Y es el personal que labora en los que llaman planta (las oficinas de zona educativa). ellos no tienen atención con estudiantes, porque su trabajo es netamente administrativo. Entonces se me ocurre crear un nuevo usuario (rol=plantadmin) que será una pantalla parecida a la del director, pero sin ciertos campos.  
+> En nomina_acualizada\RAC_zona.xlsx puedes observar su distribución. Verás que ellos no tienen codigo dea, sino un codigo dependencia. notaras también que geograficamente estan en el municipio Libertador, pero no tiene nada que ver con la responsabilidad del usuairio munadmin de Libertador. su observación y auditoria queda en mano de los usuarios zonadmin.  
+> En fin, necesito verifiques la información, y me des las posibles soluciones para estos nuevos registros."  
+> "Prefiero a opción A pero sin el campo de Asistencia."  
+> "en ese caso se registraría como plantadmin cada jefe de división con su codigo dependencia. creo que son 12 divisiones, o sea, 12 usuarios plantadmin"  
+> "Mencionaste algo importe y son las oficinas. muy bien pudiste identificar algunas oficinas, porque en su momento las insertaron entre parentesis, pero no todos lo hicieron, entonces es importante insertar un campo que sea para mencionar las oficinas, por ahora al libre alberdrío porque no las conozco todas para insertarlas en el archivo sgh_catalogos. Mas adelante que las tenga ya bien ordenadas las pasamos a un campo de selección.  
+> 'Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa.'  
+> Necesito que toda esta información que hemos conversado desde: 'Perfecto. Mientras tanto puedes hacer otra tarea? Si la respuesta es: Sí; ¿Con que nombre protocolo te aviso que la ejecutes?' hasta ahora sea guardada"  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. Protocolo de Disparo de Fase 3: Se estableció el nombre oficial `EJECUTAR_FASE3_SIMETRIA` (o `INICIAR BLOQUE 1` / `LUZ VERDE FASE 3`) para detonar la migración en vivo a partir de las 2:30 PM.  
+> 2. Lectura Completa de Guía y Normativas (`SKILL_sgh_firebase.md`): Revisión estricta de las reglas Zero-Cost, desacoplamiento, trazabilidad, registro obligatorio en `bitacora.md`, `conversaciones.md`, `versiones.md`, control SemVer, y comunicación no técnica.  
+> 3. Auditoría Forense de `nomina_acualizada\RAC_zona.xlsx` (Personal de Planta de Zona Educativa):  
+>    - Censo real: 213 funcionarios activos (118 Administrativos, 59 Docentes en funciones centrales, 35 Obreros).  
+>    - Diagnóstico de dependencias: 9 grandes códigos de dependencia ministerial (`001200330` a `001200341`), con subdivisiones internas de oficinas/coordinaciones en Gestión Interna (`001200339`).  
+>    - Particularidades institucionales confirmadas: Sin código DEA (utilizan código de dependencia), sin matrícula ni secciones de estudiantes, trabajo 100% administrativo/servicios, y ubicación geográfica en Libertador pero fuera de la jurisdicción del `munadmin` de Libertador (jurisdicción exclusiva de `zonadmin` y Gestión Humana).  
+> 4. Diseño y Aprobación de la Arquitectura para Planta (Opción A):  
+>    - Clave universal simétrica: `{Código Dependencia}_{Cédula}` (ej. `001200339_9384726`).  
+>    - Entidad institucional: Registradas en la base de datos como `denominacion: "SEDE ADMINISTRATIVA"`.  
+>    - Rol `plantadmin` (Jefes de División / Coordinaciones): Pantalla institucional adaptada sin matrícula escolar, sin secciones de estudio y **sin campo de asistencia**, enfocada exclusivamente en personal, expedientes, código RAC y horas administrativas.  
+>    - Inclusión de Campo de Texto Libre para Oficinas: Se incorpora el campo `oficina` / `coordinacion` como campo de texto libre provisional para capturar la oficina específica de cada funcionario hasta consolidar el catálogo normativo formal en `sgh_catalogos`.  
+>    - Blindaje Jurisdiccional: Filtro en la vista del `munadmin` de Libertador para excluir sedes administrativas, manteniéndolas bajo custodia exclusiva de `zonadmin` y los 12 usuarios `plantadmin`.  
+> 5. Registro Histórico y Respaldo: Preservación integral en `bitacora.md`, `conversaciones.md` y sincronización con GitHub.

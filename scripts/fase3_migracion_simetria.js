@@ -418,3 +418,4 @@ run().catch(err => {
   console.error('\n❌ ERROR EN FASE 3:', err);
   process.exit(1);
 });
+

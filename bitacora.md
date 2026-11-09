@@ -4482,3 +4482,40 @@ Se diseñó, programó y compiló exhaustivamente la **Fase 2 del Plan Maestro d
   * Preservación del Plan Spark: 0 lecturas y 0 escrituras a Firebase.
 
 - **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.
+
+
+## [Plan Maestro de Simetría SGH: Ensamblaje y Validación de Fase 3 en Seco] - 2026-11-09
+
+### Resumen Técnico
+Se diseñó, programó y probó en memoria de forma exhaustiva el script maestro de migración en la nube [`scripts/fase3_migracion_simetria.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/scripts/fase3_migracion_simetria.js), estructurado en 3 bloques territoriales para garantizar la simetría perpetua de los 26.754 registros de personal activo de Mérida en Cloud Firestore, con cero consumo de lecturas y control riguroso de cuotas Spark.
+
+- **Estructuración por Bloques Territoriales:**
+  * **Bloque 1 (Eje Panamericano y Valle del Mocotíes):** 11.244 registros de nómina | 10.920 cédulas únicas | 56 lotes de 400 operaciones. Manifiesto: [`scratch/fase3_bloque1_dryrun_manifest.json`](file:///c:/Proyectos/sgh-mr%20-%20firebase/scratch/fase3_bloque1_dryrun_manifest.json).
+  * **Bloque 2 (Eje Metropolitano y Pueblos del Sur):** 13.121 registros de nómina | 12.712 cédulas únicas | 65 lotes de 400 operaciones. Manifiesto: [`scratch/fase3_bloque2_dryrun_manifest.json`](file:///c:/Proyectos/sgh-mr%20-%20firebase/scratch/fase3_bloque2_dryrun_manifest.json).
+  * **Bloque 3 (Eje Páramo y Cierre General):** 2.389 registros de nómina | 2.319 cédulas únicas | 12 lotes de 400 operaciones. Manifiesto: [`scratch/fase3_bloque3_dryrun_manifest.json`](file:///c:/Proyectos/sgh-mr%20-%20firebase/scratch/fase3_bloque3_dryrun_manifest.json).
+
+- **Mecanismos de Protección y Robustez:**
+  * **Zero-Cost Shield:** Operaciones mediante la API REST `documents:commit` inyectando datos canónicos directamente desde la fuente de verdad consolidada. **0 lecturas de Firestore consumidas**.
+  * **Depuración Atómica Sincronizada:** Cada lote genera la creación/actualización del documento canónico `{codigoDEA}_{cedula}` y simultáneamente programa la eliminación del documento legado asimétrico `{cedula}`, extinguiendo las duplicidades históricas.
+  * **Resiliencia de Red:** Función `commitWritesWithRetry()` con hasta 4 reintentos exponenciales, refresco automático de tokens OAuth (`ensureFreshToken`) y pausas de 600ms entre lotes.
+
+- **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.
+
+
+## [Arquitectura Institucional de Personal de Planta y Nuevo Rol plantadmin (Zona Educativa)] - 2026-11-09
+
+### Resumen Técnico
+Se realizó la auditoría forense del censo de personal centralizado en [`nomina_acualizada/RAC_zona.xlsx`](file:///c:/Proyectos/sgh-mr%20-%20firebase/nomina_acualizada/RAC_zona.xlsx) y se definió la arquitectura funcional e institucional para incorporar al personal que labora en las oficinas de la Zona Educativa de Mérida (Planta Central).
+
+- **Auditoría Forense del Censo de Planta (213 Funcionarios Activos):**
+  * Desglose por tipo de personal: 118 Administrativos (55%), 59 Docentes en comisión de servicio/funciones técnicas de planta (28%), 35 Obreros (17%).
+  * 9 Códigos de Dependencia Ministerial: `001200330` (Dirección), `001200331` (Supervisión), `001200332` (Indígena), `001200334` (Especial), `001200337` (Comunidades Educativas), `001200338` (Investigación y Formación), `001200339` (Gestión Interna: concentra Nómina, Gestión Humana, Obreros, Administración, Asesoría Jurídica y Tecnología), `001200340` (Instalaciones y Logística) y `001200341` (Jóvenes y Adultos).
+
+- **Decisión Arquitectónica Aprobada (Modelo Sede Administrativa):**
+  * **Clave Universal Simétrica:** `{Código Dependencia}_{Cédula}` (ej. `001200339_9384726`), manteniendo la paridad formal con `{Código DEA}_{Cédula}`.
+  * **Entidad Institucional:** Registradas con `denominacion: "SEDE ADMINISTRATIVA"`.
+  * **Nuevo Rol `plantadmin` (Jefes de División / 12 Usuarios de Planta):** Pantalla institucional dedicada que oculta por completo matrícula escolar, secciones y planes de estudio, y **sin módulo de asistencia**. Concentrada exclusivamente en Personal, Expedientes, Códigos RAC, Horas Administrativas y Datos Personales/Contacto.
+  * **Incorporación de Campo de Texto Libre para Oficinas:** Se crea el campo `oficina` / `coordinacion` como campo de texto libre provisional para capturar la oficina o coordinación exacta de cada funcionario, previendo su posterior normalización en `sgh_catalogos`.
+  * **Blindaje Territorial y Jurisdiccional:** Exclusión de las sedes administrativas de la vista del usuario `munadmin` de Libertador, quedando bajo la custodia y auditoría exclusiva de la Dirección de Zona / Gestión Humana (`zonadmin`) y los usuarios `plantadmin`.
+
+- **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.
