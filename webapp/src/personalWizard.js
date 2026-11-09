@@ -1407,12 +1407,36 @@ export async function guardarPersonalInline() {
         }
     }
 
+    // Sincronizar datos recurrentes institucionales para simetría 100%
+    let infoPlantel = window.currentPlantelInfo || {};
+    if (!infoPlantel.municipio) {
+        const stPlantel = localStorage.getItem('plantelSeleccionado');
+        if (stPlantel) {
+            try { infoPlantel = { ...infoPlantel, ...JSON.parse(stPlantel) }; } catch (e) { }
+        }
+    }
+    const valDOM = (id) => document.getElementById(id)?.value?.trim() || '';
+    const escuelaNom = valDOM('inp-nombre-nominal') || infoPlantel['nombre-plantel']?.nominal || infoPlantel.denominacion || valDOM('inp-nombre-plantel') || empleadoActual.plantel || empleadoActual['ubicacion-fisica'] || '';
+    const escuelaMun = valDOM('inp-municipio') || infoPlantel.municipio || empleadoActual.municipio || '';
+    const escuelaPar = valDOM('inp-parroquia') || infoPlantel.parroquia || empleadoActual.parroquia || '';
+
     const payload = {
         ...empleadoActual,
         'codigo-plantel': dea,
         codigoDEA: dea,
         ultima_actualizacion: new Date().toISOString()
     };
+
+    if (escuelaNom) {
+        payload.plantel = escuelaNom;
+        payload['ubicacion-fisica'] = escuelaNom;
+    }
+    if (escuelaMun) {
+        payload.municipio = escuelaMun;
+    }
+    if (escuelaPar) {
+        payload.parroquia = escuelaPar;
+    }
 
     const isEditing = !!window._docIdEnEdicion;
     const isTraslado = !!window._esTraslado;
@@ -1469,23 +1493,20 @@ export async function guardarPersonalInline() {
     }
 
     try {
-        let docId = window._docIdEnEdicion;
-        if (cedulaCambio) {
-            docId = dea ? `${dea}_${newCedula}` : newCedula;
-        } else if (!docId) {
-            docId = dea ? (dea + '_' + payload.cedula) : payload.cedula;
-        }
+        // 🔒 Simetría Universal: Todo registro de funcionario se guarda bajo {DEA}_{Cédula}
+        const canonicalDocId = dea ? `${dea}_${newCedula || payload.cedula}` : (newCedula || payload.cedula);
+        const docId = canonicalDocId;
 
         const ref = doc(db, "cargos_personal", docId);
         await setDoc(ref, payload, { merge: true });
 
-        // Si la cédula cambió, eliminar el documento previo con la cédula errónea
-        if (cedulaCambio && window._docIdEnEdicion && window._docIdEnEdicion !== docId) {
+        // Si el documento previo tenía un ID diferente (ej. ID de solo cédula legado o cambio de cédula), eliminarlo para mantener simetría
+        if (window._docIdEnEdicion && window._docIdEnEdicion !== docId) {
             try {
                 await deleteDoc(doc(db, "cargos_personal", window._docIdEnEdicion));
-                console.log(`[SGH-Auditoria] Documento anterior ${window._docIdEnEdicion} eliminado tras corrección de cédula a ${newCedula}.`);
+                console.log(`[SGH-Simetría] Documento previo asimétrico ${window._docIdEnEdicion} migrado y depurado a ${docId}.`);
             } catch (eDelOld) {
-                console.warn("Aviso eliminando registro previo con cédula incorrecta:", eDelOld);
+                console.warn("Aviso eliminando registro previo asimétrico:", eDelOld);
             }
         }
 

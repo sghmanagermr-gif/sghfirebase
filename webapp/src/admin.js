@@ -5655,18 +5655,44 @@ export function initAdminDashboard(dbInstance, user) {
       const esDuplicado = docs.length > 1;
       let html = '';
 
+      // Helpers de Simetría SGH: resolución inteligente de datos de plantel y ubicación
+      const resolverDatosPlantel = (d) => {
+        let dea = d['codigo-plantel'] || d['codigoDEA'] || d['codigoPlantel'] || d['CODIGO DEL PLANTEL'] || d['CODIGO'] || '';
+        let escuela = d['ubicacion-fisica'] || d.plantel || d['UBICACIÓN FÍSICA'] || '';
+        let mun = d.municipio || '';
+        let par = d.parroquia || '';
+
+        if ((!escuela || escuela.includes('no especificado') || escuela.includes('no registrado') || !mun || mun === 'N/R' || !par || par === 'N/R') && dea && Array.isArray(currentPlanteles)) {
+          const match = currentPlanteles.find(p => (p.codigos?.plantel || p.codigoDEA || p.id) === dea);
+          if (match) {
+            if (!escuela || escuela.includes('no especificado') || escuela.includes('no registrado')) {
+              escuela = match['nombre-plantel']?.nominal || match.denominacion || match['nombre-plantel'] || dea;
+            }
+            if (!mun || mun === 'N/R') mun = match.municipio || '';
+            if (!par || par === 'N/R') par = match.parroquia || '';
+          }
+        }
+        return {
+          dea: dea || 'S/D',
+          escuela: escuela || 'Plantel Registrado',
+          municipio: mun || 'N/R',
+          parroquia: par || 'N/R'
+        };
+      };
+
       // Banner Superior de Estado
       if (!esDuplicado) {
         const d = docs[0];
-        const dea = d['codigo-plantel'] || d['codigoDEA'] || d['codigoPlantel'] || d['CODIGO DEL PLANTEL'] || d['CODIGO'] || 'S/D';
-        const escuela = d['ubicacion-fisica'] || d.plantel || d['UBICACIÓN FÍSICA'] || 'Plantel Registrado';
+        const infoP = resolverDatosPlantel(d);
+        const dea = infoP.dea;
+        const escuela = infoP.escuela;
         html += `
           <div style="background: linear-gradient(135deg, #065f46 0%, #047857 100%); color: white; padding: 16px 20px; border-radius: 10px; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-shadow: 0 4px 12px rgba(4,120,87,0.15);">
             <div style="display: flex; align-items: center; gap: 12px;">
               <div style="background: rgba(255,255,255,0.2); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">🟢</div>
               <div>
                 <h4 style="margin: 0; font-size: 1.1rem; color: #ffffff;">REGISTRO ÚNICO Y VÁLIDO</h4>
-                <p style="margin: 3px 0 0; font-size: 0.85rem; color: #a7f3d0;">Esta cédula figura registrada formalmente en <strong>1 sola institución</strong> (${dea} - ${escuela}).</p>
+                <p style="margin: 3px 0 0; font-size: 0.85rem; color: #a7f3d0;">Esta cédula figura registrada formalmente en <strong>1 sola institución</strong> (${dea} - ${escuela} — ${infoP.municipio} / ${infoP.parroquia}).</p>
               </div>
             </div>
             <span style="background: rgba(255,255,255,0.25); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;">Sin Duplicidad</span>
@@ -5702,7 +5728,7 @@ export function initAdminDashboard(dbInstance, user) {
                   <th style="padding: 10px 14px; color: #475569; width: 180px;">Parámetro</th>
                   ${docs.map((d, idx) => `
                     <th style="padding: 10px 14px; color: #0284c7; font-weight: bold; border-left: 1px solid #e2e8f0;">
-                      Registro #${idx + 1} (${d['codigo-plantel'] || d['codigoDEA'] || 'S/D'})
+                      Registro #${idx + 1} (${resolverDatosPlantel(d).dea})
                     </th>
                   `).join('')}
                 </tr>
@@ -5710,15 +5736,18 @@ export function initAdminDashboard(dbInstance, user) {
               <tbody>
                 <tr style="border-bottom: 1px solid #f1f5f9;">
                   <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">Plantel / Ubicación</td>
-                  ${docs.map(d => `<td style="padding: 10px 14px; color: #1e293b; border-left: 1px solid #f1f5f9; font-weight: 500;">${d['ubicacion-fisica'] || d.plantel || 'Plantel no especificado'}</td>`).join('')}
+                  ${docs.map(d => `<td style="padding: 10px 14px; color: #1e293b; border-left: 1px solid #f1f5f9; font-weight: 500;">${resolverDatosPlantel(d).escuela}</td>`).join('')}
                 </tr>
                 <tr style="border-bottom: 1px solid #f1f5f9;">
                   <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">Código DEA</td>
-                  ${docs.map(d => `<td style="padding: 10px 14px; font-family: monospace; font-weight: bold; color: #0284c7; border-left: 1px solid #f1f5f9;">${d['codigo-plantel'] || d['codigoDEA'] || 'N/A'}</td>`).join('')}
+                  ${docs.map(d => `<td style="padding: 10px 14px; font-family: monospace; font-weight: bold; color: #0284c7; border-left: 1px solid #f1f5f9;">${resolverDatosPlantel(d).dea}</td>`).join('')}
                 </tr>
                 <tr style="border-bottom: 1px solid #f1f5f9;">
                   <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">Municipio / Parroquia</td>
-                  ${docs.map(d => `<td style="padding: 10px 14px; color: #475569; border-left: 1px solid #f1f5f9;">${d.municipio || 'N/R'} — ${d.parroquia || 'N/R'}</td>`).join('')}
+                  ${docs.map(d => {
+                    const ip = resolverDatosPlantel(d);
+                    return `<td style="padding: 10px 14px; color: #475569; border-left: 1px solid #f1f5f9;"><strong>${ip.municipio}</strong> — ${ip.parroquia}</td>`;
+                  }).join('')}
                 </tr>
                 <tr style="border-bottom: 1px solid #f1f5f9;">
                   <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">Cargo / Código RAC</td>
@@ -5768,8 +5797,9 @@ export function initAdminDashboard(dbInstance, user) {
         const nombre = (d['nombre-apellido'] || d['apellidos-nombres'] || d.nombre || d['NOMBRE Y APELLIDO'] || 'Sin Nombre').toUpperCase();
         const ced = d['cedula-identidad'] || d.cedula || d.CEDULA || cedulaBuscada;
         const nac = d.nacionalidad || d.NACIONALIDAD || 'V';
-        const dea = d['codigo-plantel'] || d['codigoDEA'] || d['codigoPlantel'] || d['CODIGO DEL PLANTEL'] || d['CODIGO'] || 'S/D';
-        const escuela = d['ubicacion-fisica'] || d.plantel || d['UBICACIÓN FÍSICA'] || 'Plantel no registrado';
+        const infoP = resolverDatosPlantel(d);
+        const dea = infoP.dea;
+        const escuela = infoP.escuela;
         const cargo = d.cargo || d['descripcion-cargo'] || d['CARGO'] || 'DOCENTE';
         const codRac = d['codigo-rac'] || d['codigo-cargo'] || d['CODIGO RAC'] || 'S/C';
         const dep = d.dependencia || d['DEPENDENCIA'] || 'NACIONAL';
@@ -5813,7 +5843,7 @@ export function initAdminDashboard(dbInstance, user) {
                 </div>
                 <h3 style="margin: 0; color: #0f172a; font-size: 1.25rem;">${nombre}</h3>
                 <div style="color: #475569; font-size: 0.9rem; margin-top: 3px;">
-                  C.I: <strong style="font-family: monospace; color: #0284c7;">${nac}-${ced}</strong> | Plantel: <strong>${escuela}</strong> (DEA: <code style="color: #0369a1;">${dea}</code>)
+                  C.I: <strong style="font-family: monospace; color: #0284c7;">${nac}-${ced}</strong> | Plantel: <strong>${escuela}</strong> (DEA: <code style="color: #0369a1;">${dea}</code>) | Ubicación: <strong style="color: #047857;">${infoP.municipio} — ${infoP.parroquia}</strong>
                 </div>
               </div>
 

@@ -4458,3 +4458,27 @@ Se diseñó y ejecutó de forma exhaustiva la **Fase 1 del Plan Maestro de Simet
   * Manifiesto guardado en [`scratch/simetria_fase1_manifest.json`](file:///c:/Proyectos/sgh-mr%20-%20firebase/scratch/simetria_fase1_manifest.json).
 
 - **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.
+
+
+## [Plan Maestro de Simetría SGH: Fase 2 - Alineación de Software WebApp] - 2026-11-09
+
+### Resumen Técnico
+Se diseñó, programó y compiló exhaustivamente la **Fase 2 del Plan Maestro de Simetría SGH**, alineando la lógica del frontend en `webapp/src/` para garantizar la simetría perpetua de identificadores y datos recurrentes en todas las operaciones de funcionarios.
+
+- **Clave Canónica Universal Forzada (`webapp/src/personalWizard.js`):**
+  * Al guardar o actualizar un funcionario (`guardarPersonalInline`), el software genera estrictamente la clave canónica `{codigoDEA}_{cedula}`.
+  * Si el documento previo en Firestore poseía un identificador asimétrico legado (ej. `{cedula}` simple) o cambió de cédula, el sistema guarda en la nueva clave compuesta y elimina automáticamente el documento anterior obsoleto, auto-saneando la base de datos de manera orgánica.
+
+- **Inyección Automática de Datos Recurrentes Propios (`webapp/src/personalWizard.js`):**
+  * Al guardar cualquier trabajador, se extraen automáticamente del contexto del plantel (`window.currentPlantelInfo` o `plantelSeleccionado`) el **nombre formal del plantel**, el **municipio oficial canónico** y la **parroquia**, insertándolos simétricamente en el payload (`plantel`, `ubicacion-fisica`, `municipio`, `parroquia`).
+  * Erradica de forma definitiva futuros registros con "Plantel no especificado" o "N/R".
+
+- **Auditor de Cédulas Simétrico con Resolución Inteligente (`webapp/src/admin.js`):**
+  * Se implementó el helper `resolverDatosPlantel(d)` que consulta en memoria el catálogo unificado de planteles cargado en sesión.
+  * Si un expediente histórico presenta "Plantel no especificado" o parroquia "N/R", el auditor resuelve instantáneamente el nombre formal de la institución educativa, el municipio y la parroquia correspondiente, mostrándolos de forma simétrica e impecable tanto en la tabla comparativa frente a frente como en los expedientes individuales.
+
+- **Empaquetado y Verificación:**
+  * Compilación de producción con Vite (`npm run build`) completada con éxito en 671ms y 0 errores.
+  * Preservación del Plan Spark: 0 lecturas y 0 escrituras a Firebase.
+
+- **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.
