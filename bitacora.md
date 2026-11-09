@@ -4371,3 +4371,26 @@ Se diseñó e implementó la arquitectura del **Interruptor Maestro de Acceso Ge
      - Despliegue completado a Firebase Hosting (`https://sgh-merida.web.app`).
 
 - **Resultado:** Aprobado con estado «SATISFECHO» por el administrador.
+
+
+## [Protocolo CASO_HUERFANOS: Caso Justo Briceño] - 2026-11-09 (Regularización de 35 Huérfanos y Vinculación de 11 Preexistentes)
+
+### Resumen Técnico
+Se ejecutó con éxito el protocolo estandarizado `CASO_HUERFANOS` sobre el archivo de reporte [`huerfanos/justobriceno.xlsx`](file:///c:/Proyectos/sgh-mr%20-%20firebase/huerfanos/justobriceno.xlsx), correspondiente a 61 funcionarios en 13 planteles educativos del Municipio Justo Briceño, Estado Bolivariano de Mérida.
+
+- **Diagnóstico Forense (RAC.xlsx vs. Cloud Firestore):**
+  * **Cruce Ministerial:** Coincidencia oficial del 100% en la nómina central MPPE (`RAC.xlsx`, 30.324 registros) para 47 funcionarios.
+  * **35 Huérfanos Legítimos Confirmados:** Inexistentes en Firebase, con coincidencia exacta de código DEA, cargo, horas y estatus titular/contratado.
+  * **12 Preexistentes Protegidos (0% Colisiones):** 
+    - 1 funcionario ya activo con ficha institucional completa (`24583048` en `OD16351411`).
+    - 11 funcionarios ya contaban con documento en `cargos_personal`, pero habían sido omitidos de la lista de personal de sus colegios (`personal_resumen`).
+  * **14 Casos en Observación:** No figuraban en RAC ni en la nómina estadal (suplencias comunales, maternal o C.I. por validar). Resguardados sin alteración.
+  * **Saneamiento Tipográfico:** Corrección de código DEA `"0D01051411"` (con cero) a `OD01051411` (Complejo Educativo José María Vargas). Regularización de 4 "Madres Cocineras" con su cargo oficial RAC de `COCINERO` / Obrero.
+
+- **Acciones y Ejecución Atómica (Luz Verde Aprobada y Ejecutada):**
+  * Creación de 35 expedientes canónicos normalizados en `cargos_personal/{dea}_{ci}` con metadatos integrales del RAC (UBCH, circuito comunal, centro de votación, carga horaria y funciones).
+  * Inyección atómica mediante `appendMissingElements` en `planteles/{dea}.personal_resumen` de los 12 planteles involucrados (incorporando los 35 huérfanos y enlazando los 11 preexistentes sin duplicar su expediente base).
+  * Transacción completada en **lote único atómico de 47 operaciones con respuesta HTTP 200** (`2026-11-09T11:54:52.475331Z`).
+  * Emisión de informe oficial consolidado para WhatsApp bajo plantilla canónica en [`huerfanos/reporte_whatsapp_justobriceno.txt`](file:///c:/Proyectos/sgh-mr%20-%20firebase/huerfanos/reporte_whatsapp_justobriceno.txt).
+
+- **Resultado:** Aprobado con estado «SATISFECHO» por el administrador.
