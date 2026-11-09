@@ -4394,3 +4394,36 @@ Se ejecutó con éxito el protocolo estandarizado `CASO_HUERFANOS` sobre el arch
   * Emisión de informe oficial consolidado para WhatsApp bajo plantilla canónica en [`huerfanos/reporte_whatsapp_justobriceno.txt`](file:///c:/Proyectos/sgh-mr%20-%20firebase/huerfanos/reporte_whatsapp_justobriceno.txt).
 
 - **Resultado:** Aprobado con estado «SATISFECHO» por el administrador.
+
+
+## [Protocolo CASO_HUERFANOS: Carga Masiva Global RAC (1.891 Funcionarios en 23 Municipios)] - 2026-11-09 (SGH v2.31.1)
+
+### Resumen Técnico
+Se diseñó y ejecutó de forma masiva e impecable el despliegue técnico del protocolo `CASO_HUERFANOS` a nivel de todo el Estado Bolivariano de Mérida, incorporando en Cloud Firestore a la totalidad de los funcionarios activos de la nómina ministerial central (`RAC.xlsx`, 30.324 registros) que se encontraban pendientes de registro o regularización en el Sistema SGH.
+
+- **Diagnóstico y Cruce Global (RAC.xlsx vs. SGH Firebase):**
+  * Cruce de las 25.819 cédulas activas en nómina ministerial RAC contra los 24.110 registros vivos de Firebase.
+  * Detección de **1.893 registros huérfanos**, auditados y reducidos a **1.891 expedientes canónicos únicos** (resolviendo 1 caso con múltiple asignación dentro de la misma escuela a favor de su cargo docente superior).
+  * Cobertura territorial absoluta: **23 de 23 municipios** y **669 planteles educativos receptores**.
+  * Desglose del personal incorporado:
+    - **Docentes:** 1.361 funcionarios.
+    - **Obreros:** 428 funcionarios.
+    - **Administrativos:** 102 funcionarios.
+
+- **Arquitectura de Inyección y Control de Cuota (Zero-Cost Shield):**
+  * **2.560 operaciones atómicas de guardado** divididas en 7 lotes secuenciales de máximo 400 operaciones mediante Cloud Firestore REST API (`/documents:commit`).
+  * Creación de **1.891 documentos canónicos** en `cargos_personal/{dea}_{ci}` con metadatos ministeriales completos (código RAC, horas académicas/administrativas, dependencia Nacional/Estadal, condición titular/contratado, parroquia, UBCH, circuito comunal, centro de votación, teléfono, correo, etc.).
+  * Transformaciones atómicas no destructivas con `appendMissingElements` sobre el campo `personal_resumen` de los **669 planteles receptores**.
+  * **100% de éxito con respuesta HTTP 200 en los 7 lotes**, consumiendo únicamente el 12,8% de la cuota diaria del plan Spark de Firebase.
+
+- **Consolidación de Nómina y Sincronización de Pizarra:**
+  * Generación del nuevo respaldo maestro en Excel: [`nomina_acualizada/Nomina_Personal_Consolidado_Estadal_MERIDA_2026-11-09.xlsx`](file:///c:/Proyectos/sgh-mr%20-%20firebase/nomina_acualizada/Nomina_Personal_Consolidado_Estadal_MERIDA_2026-11-09.xlsx) con **26.756 registros totales y 25.953 personas activas**.
+  * Regeneración de la Ficha Resumen local (`webapp/public/resumen_estadisticas.json`) y sincronización atómica en Cloud Firestore (`estadisticas/resumen_global`) con los nuevos totales estadales y los aliases de los 23 municipios.
+  * Bumping de versión a **v2.31.1** en `package.json` e `index.html`.
+  * Compilación limpia con Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+
+- **Generación de Reportes Oficiales para WhatsApp:**
+  * Generados 23 reportes individuales por municipio en [`huerfanos/reportes_whatsapp_por_municipio/`](file:///c:/Proyectos/sgh-mr%20-%20firebase/huerfanos/reportes_whatsapp_por_municipio/).
+  * Generado el informe maestro consolidado en [`huerfanos/reporte_whatsapp_todos_los_municipios.txt`](file:///c:/Proyectos/sgh-mr%20-%20firebase/huerfanos/reporte_whatsapp_todos_los_municipios.txt).
+
+- **Resultado:** Aprobado con estado «SATISFECHO» por el administrador.

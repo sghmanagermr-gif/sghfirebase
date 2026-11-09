@@ -1,0 +1,67 @@
+*INFORME OFICIAL: FUNCIONARIOS REGULARIZADOS (CARGA MASIVA RAC)*
+*MUNICIPIO CARDENAL QUINTERO – ESTADO BOLIVARIANO DE MÉRIDA*
+
+Saludos cordiales. Se informa formalmente la incorporación y vinculación al Sistema SGH de los siguientes funcionarios que laboran en las instituciones del municipio y figuraban pendientes en nómina ministerial RAC:
+
+*DATOS RESUMEN:*
+• *Municipio:* CARDENAL QUINTERO
+• *Total Funcionarios Regularizados:* 19
+• *Planteles Educativos Atendidos:* 6
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+*DETALLE DE PERSONAL POR INSTITUCIÓN EDUCATIVA:*
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📍 *OD00881408 - G-E MARTHA GONZALEZ* (12):
+• *NIRIDA DEL VALLE UZCATEGUI* | C.I. V-14.588.652
+  _Cargo:_ DOC. VI / AULA BOLIV. (53 hrs - Titular) – _Tipo:_ DOCENTE (NACIONAL) – Activo(a)
+• *LISIRISMAR DE LOS AMGELES GONZALEZ SOTO* | C.I. V-19.785.240
+  _Cargo:_ DOC. I / AULA BOLIV. (53 hrs - Titular) – _Tipo:_ DOCENTE (NACIONAL) – Activo(a)
+• *MARIA CORINA ABILA TORO* | C.I. V-20.435.626
+  _Cargo:_ DOC. (NG) / AULA BOLIV. (53 hrs - Titular) – _Tipo:_ DOCENTE (NACIONAL) – Activo(a)
+• *YAMILET COROMOTO GONZÁLEZ ANDRADES* | C.I. V-20.012.687
+  _Cargo:_ DOC. I / AULA BOLIV. (53 hrs - Titular) – _Tipo:_ DOCENTE (NACIONAL) – Activo(a)
+• *SONIA CATHERINE SANTIAGO RAMÍREZ* | C.I. V-19.048.306
+  _Cargo:_ DOC. I / AULA BOLIV. (53 hrs - Titular) – _Tipo:_ DOCENTE (NACIONAL) – Activo(a)
+• *YURUBI DEL CARMEN CAMACHO JEREZ* | C.I. V-19.048.112
+  _Cargo:_ DOC. II / AULA BOLIV. (53 hrs - Titular) – _Tipo:_ DOCENTE (NACIONAL) – Activo(a)
+• *YUSMAIRA TRIVIÑO CAMACHO* | C.I. V-12.779.177
+  _Cargo:_ DOC. VI / AULA BOLIV. (53 hrs - Titular) – _Tipo:_ DOCENTE (NACIONAL) – Activo(a)
+• *BETZAIDA GISBELLY PÉREZ RAMÍREZ* | C.I. V-19.048.275
+  _Cargo:_ BACHILLER I (40 hrs - Titular) – _Tipo:_ ADMINISTRATIVO (NACIONAL) – Activo(a)
+• *KATHERIN DEL VALLE TORO PEREZ* | C.I. V-19.048.096
+  _Cargo:_ ENCUADERNADOR (40 hrs - Titular) – _Tipo:_ OBRERO (NACIONAL) – Activo(a)
+• *YSDALIS NAILET RIVAS IZARRA* | C.I. V-20.435.689
+  _Cargo:_ AYUDANTE DE ALMACEN (40 hrs - Titular) – _Tipo:_ OBRERO (NACIONAL) – Activo(a)
+• *ELIZABETH CAROLINA OSUNA MALPICA* | C.I. V-20.432.413
+  _Cargo:_ AYUDANTE DE ALMACEN (40 hrs - Titular) – _Tipo:_ OBRERO (NACIONAL) – Activo(a)
+• *KATIUSKA CASTRO MALPICA.* | C.I. V-20.435.645
+  _Cargo:_ COCINERO II (40 hrs - Titular) – _Tipo:_ OBRERO (NACIONAL) – Activo(a)
+
+📍 *OD03911408 - ESCUELA AUGUSTO MIJARES* (1):
+• *NERELYS KATERINE SANTIAGO CASTILLO* | C.I. V-19.517.873
+  _Cargo:_ DOCENTE I (40 hrs - Titular) – _Tipo:_ DOCENTE (ESTADAL) – Activo(a)
+
+📍 *OD03921408 - ESCUELA RIFINO BLANCO FOMBONA* (1):
+• *ANA JOSEFA GONZÁLEZ MONTOYA* | C.I. V-13.883.355
+  _Cargo:_ SUB-DIRECTOR V (0 hrs - Titular) – _Tipo:_ DOCENTE (ESTADAL) – Activo(a)
+
+📍 *OD17281408 - UEB LAS PIEDRAS* (1):
+• *MARIA BALZA* | C.I. V-19.144.705
+  _Cargo:_ DOC. IV / AULA (40 hrs - Titular) – _Tipo:_ DOCENTE (NACIONAL) – Activo(a)
+
+📍 *S0922D1408 - CC-JUAN RODRIGUEZ SUAREZ* (2):
+• *NORIS AUXILIADORA RIVAS SANTIAGO* | C.I. V-11.954.871
+  _Cargo:_ DOC. VI / AULA (40 hrs - Titular) – _Tipo:_ DOCENTE (NACIONAL) – Activo(a)
+• *JULIO CESAR MENESES MONTOYA* | C.I. V-25.643.513
+  _Cargo:_ DOC. I / AULA (40 hrs - Titular) – _Tipo:_ DOCENTE (NACIONAL) – Activo(a)
+
+📍 *S2994D1408 - LAS PIEDRAS* (2):
+• *NORBELIS YAMILETH HERRERA DORANTE* | C.I. V-16.189.589
+  _Cargo:_ COCINERO II (40 hrs - Titular) – _Tipo:_ OBRERO (NACIONAL) – Activo(a)
+• *MARIA FABIOLA PAREDES PAREDES* | C.I. V-12.837.033
+  _Cargo:_ COCINERO II (40 hrs - Titular) – _Tipo:_ OBRERO (NACIONAL) – Activo(a)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+*Dirección de Gestión Humana - CRDCE Mérida*
+_Sistema SGH Mérida v2.31.1_

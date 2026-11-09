@@ -4,6 +4,22 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.31.1 (9 de Noviembre de 2026)
+
+- **Carga Masiva Global de Regularización RAC (1.891 Funcionarios en 23 Municipios) y Sincronización de Estadísticas Estadal:**
+  - **Regularización Masiva en Cloud Firestore:**
+    - Incorporación de 1.891 expedientes digitales canónicos en `cargos_personal/{dea}_{ci}` con metadatos ministeriales completos del RAC (código RAC, horas, dependencia Nacional/Estadal, condición titular/contratado, UBCH, circuito comunal, centro de votación, teléfono, etc.).
+    - Vinculación atómica en `planteles/{dea}.personal_resumen` para 669 planteles educativos receptores de todo el estado Mérida mediante `appendMissingElements`, con preservación absoluta de los registros preexistentes.
+    - Ejecución en 7 lotes controlados de transacciones atómicas con 100% de éxito (HTTP 200) y consumo del 12,8% de la cuota diaria gratuita.
+  - **Sincronización de la Ficha Resumen y Pizarra Estatal (Zero-Cost Shield):**
+    - Actualización del archivo local `webapp/public/resumen_estadisticas.json` y de Firestore `estadisticas/resumen_global` con la realidad viva de la nómina: **26.756 cargos, 25.953 personas activas** (17.144 docentes, 1.630 administrativos, 7.836 obreros y 1.742 proyectados a jubilación).
+    - Preservación y mapeo de los aliases de los 23 municipios para consultas ultra-rápidas a costo cero.
+  - **Generación de Reportes WhatsApp por Municipio:**
+    - Emisión de 23 reportes individualizados por municipio en `huerfanos/reportes_whatsapp_por_municipio/` y consolidado general en `huerfanos/reporte_whatsapp_todos_los_municipios.txt`.
+  - **Despliegue:** Compilación limpia con Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.31.0 (9 de Noviembre de 2026)
 
 - **Interruptor Maestro de Despliegue General y Modo Mantenimiento Institucional:**
