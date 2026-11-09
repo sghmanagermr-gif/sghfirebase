@@ -4515,7 +4515,10 @@ Se realizó la auditoría forense del censo de personal centralizado en [`nomina
   * **Clave Universal Simétrica:** `{Código Dependencia}_{Cédula}` (ej. `001200339_9384726`), manteniendo la paridad formal con `{Código DEA}_{Cédula}`.
   * **Entidad Institucional:** Registradas con `denominacion: "SEDE ADMINISTRATIVA"`.
   * **Nuevo Rol `plantadmin` (Jefes de División / 12 Usuarios de Planta):** Pantalla institucional dedicada que oculta por completo matrícula escolar, secciones y planes de estudio, y **sin módulo de asistencia**. Concentrada exclusivamente en Personal, Expedientes, Códigos RAC, Horas Administrativas y Datos Personales/Contacto.
-  * **Incorporación de Campo de Texto Libre para Oficinas:** Se crea el campo `oficina` / `coordinacion` como campo de texto libre provisional para capturar la oficina o coordinación exacta de cada funcionario, previendo su posterior normalización en `sgh_catalogos`.
+  * **Normalización de Nombres de Dependencia y Extracción de Oficinas:**
+    - Para la dependencia `001200339`, se eliminan los paréntesis del nombre de división para dejar la denominación limpia: `DIVISIÓN DE GESTIÓN HUMANA`.
+    - El texto que figuraba entre paréntesis (ej. `COORDINACIÓN DE NÓMINA`, `OFICINA DE OBREROS`, `ASESORÍA JURÍDICA`, `ATENCIÓN AL CIUDADANO`, `EVALUACIÓN`) se extrae de forma automática y se almacena en el nuevo campo institucional `oficina` (texto libre provisional previo a catálogo en `sgh_catalogos`).
+  * **Ejecución Estratégica mediante Bloque Especial Planta:** Se aprueba procesar al personal de Zona Educativa en un lote quirúrgico independiente de apenas 213 escrituras (1% de la cuota diaria), preservando al 100% la pureza territorial del Bloque 1 (Eje Panamericano y Mocotíes - 11.244 registros).
   * **Blindaje Territorial y Jurisdiccional:** Exclusión de las sedes administrativas de la vista del usuario `munadmin` de Libertador, quedando bajo la custodia y auditoría exclusiva de la Dirección de Zona / Gestión Humana (`zonadmin`) y los usuarios `plantadmin`.
 
 - **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.

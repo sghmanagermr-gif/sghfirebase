@@ -6777,3 +6777,27 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - Inclusión de Campo de Texto Libre para Oficinas: Se incorpora el campo `oficina` / `coordinacion` como campo de texto libre provisional para capturar la oficina específica de cada funcionario hasta consolidar el catálogo normativo formal en `sgh_catalogos`.  
 >    - Blindaje Jurisdiccional: Filtro en la vista del `munadmin` de Libertador para excluir sedes administrativas, manteniéndolas bajo custodia exclusiva de `zonadmin` y los 12 usuarios `plantadmin`.  
 > 5. Registro Histórico y Respaldo: Preservación integral en `bitacora.md`, `conversaciones.md` y sincronización con GitHub.
+
+
+### Intervención 195
+
+* **Fecha / Hora:** 2026-11-09 ~14:45 - 14:52 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Perfecto. Se que ya estamos listos para iniciar la FASE 3, Pero quiesiera saber: Con los datos que tiene el archivo nomina_acualizada/RAC_zona.xlsx ¿podemos incluirla en la tarea?"  
+> "Me parece mejor la opción 1. Quiero aclarar que la division de GESTIÓN INTERNA ingresó sus oficinas entre parentesis, eso se debe omitir, debe quedar limpio DIVISIÓN DE GESTIÓN HUMANA.  
+> NOTA: El mensaje anterior y este debes dejarlo anotadO"  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. Cruce Forense de Cédulas (`RAC_zona.xlsx` vs Nómina Consolidada Actual):  
+>    - Diagnóstico de los 213 trabajadores de planta: 154 funcionarios son 100% nuevos en el SGH (administrativos y obreros centrales que no pertenecían a ningún colegio) y 59 funcionarios son docentes con nombramiento de origen en comisión de servicio de planta.  
+> 2. Decisión Estratégica Aprobada (Opción 1 - Bloque Especial Planta / Zona):  
+>    - Mantener el Bloque 1 (Eje Panamericano y Valle del Mocotíes) con sus 11.244 registros escolares sin alteraciones territoriales.  
+>    - Crear el Bloque Especial Planta dedicado para los 213 funcionarios de Zona Educativa en un lote quirúrgico independiente de apenas 213 escrituras (1% de la cuota diaria).  
+> 3. Regla de Limpieza y Extracción de Oficinas para Gestión Interna (`001200339`):  
+>    - El nombre de la división principal se estandariza limpio como `DIVISIÓN DE GESTIÓN HUMANA` (u oficina ministerial correspondiente), eliminando los paréntesis del nombre institucional.  
+>    - El texto que venía entre paréntesis (ej. `COORDINACIÓN DE NÓMINA`, `OFICINA DE OBREROS`, `ASESORÍA JURÍDICA`, `ATENCIÓN AL CIUDADANO`, `EVALUACIÓN`) se extrae de forma automática y se asigna al campo institucional de texto libre `oficina`.  
+> 4. Registro y Respaldo Protocolar: Actualización física de `bitacora.md`, `conversaciones.md` y sincronización con GitHub.
