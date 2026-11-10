@@ -4732,3 +4732,39 @@ Se realizó la estandarización y homogenización profunda de los 213 funcionari
   * Compilación con Vite limpia (621ms) y despliegue completado con éxito a Firebase Hosting (`https://sgh-merida.web.app`).
 
 - **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.
+
+
+## [v2.36.5] - 2026-11-10 (Saneamiento Integral de Claves Fantasma con Prefijo '_' y Regularización Canónica de DEA)
+
+### Resumen Técnico
+Se realizó la auditoría forense integral de la colección `cargos_personal` en Cloud Firestore tras reportarse una discrepancia comparativa en la plataforma web sobre la C.I. 19.047.873 (Marili Solena Rojas Ramírez), detectándose que 104 documentos habían sido creados con prefijo `_` debido a filas sin código DEA en la nómina consolidada estadal.
+
+- **Diagnóstico Forense de la Base de Datos:**
+  * **Población Afectada:** Exactamente 104 documentos en `cargos_personal` cuyo identificador iniciaba con guion bajo (`_{cedula}`) y cuyo campo `codigoDEA` estaba vacío (`""`).
+  * **Cruce con Nómina Oficial RAC:** Los 104 funcionarios figuran en `RAC.xlsx` con sus planteles y municipios correspondientes.
+  * **Clasificación:**
+    - **97 Duplicados Fantasma (93,3%):** Funcionarios que ya contaban con su expediente legítimo activo y completo `{codigoDEA}_{cedula}` en su escuela (ej. `OD02271418_19047873`). La clave `_{cedula}` representaba un duplicado residual sin institución que activaba la compuerta de discrepancia en el panel.
+    - **7 Huérfanos de Plantel (6,7%):** Funcionarios legítimos en RAC que únicamente tenían el documento `_{cedula}` en Firebase, requiriendo la formalización de su código DEA oficial.
+
+- **Acciones y Lógicas Inyectadas en Cloud Firestore:**
+  * **Fase 1 (Saneamiento Inmediato):** Eliminación atómica de los 104 documentos fantasma con prefijo `_`.
+  * **Fase 2 (Regularización Institucional):** Creación de 7 expedientes canónicos simétricos `{codigoDEA}_{cedula}` con metadatos completos de RAC:
+    1. `OD02891419_15753998` — Jual Quidea Zerpa León (EB 21 de Noviembre, Tabay, Santos Marquina).
+    2. `OD14121418_16019151` — Mayorlin del Valle Ramírez (EE Loma del Árbol, Bailadores, Rivas Dávila).
+    3. `OD14071418_19046863` — Yusneidy Alexandra Rodríguez Molina (EE Mesa Laguna, Bailadores, Rivas Dávila).
+    4. `OD00701418_18208693` — Isbelia Consuelo Contreras Belandria (EBR Br Apolonio Rosales, Bailadores, Rivas Dávila).
+    5. `OD14071418_20396864` — Dubelis Yaritza Márquez Rosales (EE Mesa Laguna, Bailadores, Rivas Dávila).
+    6. `OD14071418_20397710` — Yeilin Carolina Ramírez Velazco (EE Mesa Laguna, Bailadores, Rivas Dávila).
+    7. `S2855D1410_19529390` — Yuleny del Carmen Bernal Rangel (EB Palmira, Julio César Salas).
+  * **Actualización Canónica de Caso Testigo:** Homologación de campos con guiones en `OD02271418_19047873` (Marili Rojas) con 53 horas académicas de aula y sujeción a la Escuela Estadal José Gregorio Ramírez.
+
+- **Métricas de Operación y Escudo Zero-Cost:**
+  * **Operaciones Totales:** 112 operaciones atómicas (7 altas canónicas, 1 actualización canónica y 104 eliminaciones) procesadas en un único lote mediante `documents:commit`, confirmadas con HTTP 200 OK.
+  * **Auditoría Post-Vuelo:** Comprobado que la clave fantasma `_19047873` retorna 404 (eliminada), el expediente legítimo `OD02271418_19047873` retorna 200 (activo y único), y la consulta global de documentos con `codigoDEA == ""` retorna exactamente **0**.
+  * **Manifiesto:** Persistido en [`scratch/saneamiento_claves_fantasma_commit_manifest.json`](file:///c:/Proyectos/sgh-mr%20-%20firebase/scratch/saneamiento_claves_fantasma_commit_manifest.json).
+
+- **Control SemVer y Despliegue:**
+  * Incremento a **v2.36.5** en `package.json`, `index.html` y registro en `versiones.md`.
+  * Compilación con Vite limpia (1.50s) y despliegue exitoso a producción en Firebase Hosting (`https://sgh-merida.web.app`).
+
+- **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.

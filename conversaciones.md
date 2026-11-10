@@ -7086,3 +7086,44 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - Compilación con Vite limpia (621ms) y despliegue exitoso a producción en Firebase Hosting (`https://sgh-merida.web.app`). Sincronización completa con repositorio GitHub (`origin/main`).  
 > 6. **Cierre de Ciclo:**  
 >    - El usuario expresó su conformidad oficial: *"Entonces sí estoy satisfecho"*.
+
+
+---
+
+### Intervención 205
+
+* **Fecha / Hora:** 2026-11-10 ~11:54 - 17:01 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "correos_afectados: sghmartintovar@gmail.com, ee.obduliaj@gmail.com"  
+> "No sé si llamar a lo siguiente como problema pero quiero que audites en la base de datos de Firebase la cedula 19047873. De acuerdo a tu investigación, estableceré mi criterio" *(Adjunta captura de pantalla del panel SGH mostrando la vista 'Resumen Comparativo de Discrepancias' con Registro #1 OD02271418_19047873 vs Registro #2 _19047873 con código DEA S/D).*  
+> "ok, eso quiere decir que cuando ejecutaste la fase 3 de ese bloque, migraste n cantidad de registros con ese problema, y ahora navega sin control en internet. Antes de que hagas cualquier tontería, necesito verifiques en la base de datos si existe el mismo problema con otras cedulas, por favor. Y me das el resumen de lo que encuentres, para ver qué debemos hacer"  
+> "¿Vas a proceder con ambas fases?"  
+> "luz verde"  
+> "Sí, satisfecho"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. **Atención Inmediata al Protocolo `correos_afectados`:**  
+>    - Se verificaron y regularizaron las cuentas institucionales del Municipio Tovar: `sghmartintovar@gmail.com` (CEI Tovar / Martín Tovar y Tovar, `OD14891421`, con 31 trabajadores) y `ee.obduliaj@gmail.com` (Escuela Obdulia Jaimes de Medina / NER 015, `OD09721421`).  
+>    - Perfiles actualizados con estatus `APROBADO` y rol `plaadmin`. Generados enlaces OOB de restablecimiento de contraseña y redactados los mensajes protocolares listos para WhatsApp.  
+> 2. **Auditoría Forense de Caso Testigo (Marili Rojas - C.I. 19.047.873):**  
+>    - Se identificó la causa de la discrepancia: la docente es titular legítima en la Escuela Estadal José Gregorio Ramírez (`OD02271418`, Bailadores), pero existía un documento espurio `_19047873` originado por una fila con código DEA en blanco en el archivo de nómina consolidada del 09 de noviembre.  
+> 3. **Auditoría Forense Global de la Base de Datos:**  
+>    - Se escaneó la colección `cargos_personal` completa, identificando exactamente 104 documentos con `codigoDEA == ""` e ID iniciando con `_`.  
+>    - **97 casos (93,3%):** Duplicados fantasma cuyos titulares ya contaban con su expediente oficial `{codigoDEA}_{cedula}` activo en su respectiva escuela.  
+>    - **7 casos (6,7%):** Huérfanos de plantel que solo poseían el documento temporal `_{cedula}`, pero cuyos planteles oficiales figuraban plenamente en `RAC.xlsx`.  
+> 4. **Ejecución Conjunta y Saneamiento en Vivo (Luz Verde):**  
+>    - Mediante `scripts/sanear_registros_sin_dea.js --execute`, se procesó un lote de 112 operaciones atómicas en `documents:commit`:  
+>      * Altas canónicas de los 7 huérfanos vinculados a sus DEA oficiales: `OD02891419_15753998`, `OD14121418_16019151`, `OD14071418_19046863`, `OD00701418_18208693`, `OD14071418_20396864`, `OD14071418_20397710` y `S2855D1410_19529390`.  
+>      * Normalización de campos con guiones en `OD02271418_19047873`.  
+>      * Eliminación atómica de los 104 documentos fantasma con prefijo `_`.  
+> 5. **Verificación Post-Vuelo:**  
+>    - Cero documentos con `codigoDEA == ""` en Firestore. Cero discrepancias en el panel web.  
+> 6. **Control de Versiones y Despliegue en Vivo:**  
+>    - Elevación SemVer a **v2.36.5** en `package.json`, `index.html` y registro en `versiones.md`, `bitacora.md` y `conversaciones.md`.  
+>    - Compilación con Vite limpia (1.50s) y despliegue completado con éxito a producción en Firebase Hosting (`https://sgh-merida.web.app`). Sincronización completa con repositorio GitHub (`origin/main`).  
+> 7. **Cierre de Ciclo:**  
+>    - El usuario confirmó su total conformidad: *"Sí, satisfecho"*.

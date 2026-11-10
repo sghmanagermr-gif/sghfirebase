@@ -4,6 +4,31 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.36.5 (10 de Noviembre de 2026)
+
+- **Saneamiento General de Documentos Fantasma con Clave `_` y Regularización de DEA:**
+  - **Erradicación de Claves Fantasma Residuales:**
+    - Se identificaron y eliminaron de forma atómica los 104 documentos defectuosos que iniciaban con guion bajo (`_{cédula}`) originados por filas sin código DEA en la nómina consolidada.
+    - Se eliminaron 97 registros fantasma duplicados cuyos titulares (incluyendo el caso testigo de Marili Solena Rojas Ramírez, C.I. 19.047.873) ya contaban con su expediente oficial simétrico `{codigoDEA}_{cedula}` activo en su plantel.
+    - El módulo de discrepancias del SGH quedó 100% saneado, eliminando alertas espurias de doble asignación o dependencia no identificada (`S/D`).
+  - **Regularización Canónica de 7 Huérfanos de Plantel:**
+    - Se crearon los expedientes legítimos simétricos `{codigoDEA}_{cedula}` para los 7 trabajadores que no contaban con clave de plantel en Firebase, vinculándolos formalmente a sus instituciones oficiales según `RAC.xlsx`:
+      * Jual Quidea Zerpa León (15.753.998) ➔ EB 21 de Noviembre (`OD02891419`, Santos Marquina).
+      * Mayorlin del Valle Ramírez (16.019.151) ➔ EE Loma del Árbol (`OD14121418`, Rivas Dávila).
+      * Yusneidy Alexandra Rodríguez Molina (19.046.863) ➔ EE Mesa Laguna (`OD14071418`, Rivas Dávila).
+      * Isbelia Consuelo Contreras Belandria (18.208.693) ➔ EBR Br Apolonio Rosales (`OD00701418`, Rivas Dávila).
+      * Dubelis Yaritza Márquez Rosales (20.396.864) ➔ EE Mesa Laguna (`OD14071418`, Rivas Dávila).
+      * Yeilin Carolina Ramírez Velazco (20.397.710) ➔ EE Mesa Laguna (`OD14071418`, Rivas Dávila).
+      * Yuleny del Carmen Bernal Rangel (19.529.390) ➔ EB Palmira (`S2855D1410`, Julio César Salas).
+  - **Homologación Canónica de Caso Testigo (Marili Rojas):**
+    - Actualización integral del expediente `OD02271418_19047873` con nomenclatura canónica de campos con guiones (`horas-academicas: 53`, `codigoDEA: "OD02271418"`, `simetria_homologada: true`).
+  - **Despliegue y Verificación en Vivo:**
+    - Lote de 112 operaciones atómicas ejecutado en Cloud Firestore con HTTP 200 OK.
+    - Cero documentos con `codigoDEA == ""` en toda la base de datos de Firebase.
+    - Despliegue de versión v2.36.5 en Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.36.4 (10 de Noviembre de 2026)
 
 - **Estandarización Integral y Enriquecimiento de Planta Central (Zona Educativa - 213 Funcionarios y 9 Sedes):**
