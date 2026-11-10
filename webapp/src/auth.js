@@ -135,7 +135,7 @@ export function initAuth(auth, db, callbacks) {
 
 
 
-      if (userData.rol === 'plant' || userData.rol === 'plaadmin') {
+      if (userData.rol === 'plant' || userData.rol === 'plaadmin' || userData.rol === 'plantadmin') {
          // --- GATE: DESPLIEGUE ---
          const despliegue = await getDespliegueConfig();
 
@@ -144,6 +144,12 @@ export function initAuth(auth, db, callbacks) {
             sessionStorage.removeItem('sgh_despliegue_config');
             const mensajeMantenimiento = `El Sistema SGH se encuentra actualmente en <b>labores de mantenimiento institucional y actualización técnica</b>. Por favor, manténgase atento a los canales oficiales.`;
             onWait(mensajeMantenimiento, "Sistema en Mantenimiento");
+            return;
+         }
+
+         // Los usuarios plantadmin (Zona Educativa Central) tienen acceso institucional continuo
+         if (userData.rol === 'plantadmin') {
+            onLogin(userData);
             return;
          }
 

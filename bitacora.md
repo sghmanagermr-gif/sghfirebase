@@ -4579,3 +4579,30 @@ Se ejecutó con éxito rotundo en Cloud Firestore la migración en vivo del **Bl
     - Cargo en Escuela `S1463D1401_5508116`: **HTTP 200 (Activo y protegido sin sobreescrituras)**.
 
 - **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.
+
+
+## [Arquitectura e Implementación de Interfaz para Rol plantadmin (Zona Educativa)] - 2026-11-09
+
+### Resumen Técnico
+Se diseñó, programó y validó de forma integral la experiencia de usuario y la pantalla operativa para el nuevo rol **`plantadmin`** (Jefes de División y Coordinaciones de la Zona Educativa N° 14 Mérida), adaptando la estructura del sistema escolar al contexto netamente administrativo de las oficinas centrales.
+
+- **Registro de Sedes Administrativas en Base de Datos:**
+  * Mediante [`scripts/registrar_sedes_planta.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/scripts/registrar_sedes_planta.js), se registraron en Cloud Firestore los 9 despachos ministeriales (`001200330` a `001200341`) bajo `/planteles`, con `denominacion: "SEDE ADMINISTRATIVA"`, `dependencia: "NACIONAL"`, `municipio: "LIBERTADOR"`, `parroquia: "SAGRARIO"`, `es_planta: true` y el arreglo de su personal adscrito.
+
+- **Filtro Quirúrgico de Interfaz (Ocultamiento de Capas Pedagógicas):**
+  * **Cero Matrícula y Secciones:** En [`webapp/src/main.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/src/main.js), se inyectó una regla de coacción visual dinámica que oculta todos los bloques de matrícula estudiantil (inicial, primaria, media general, técnica, adultos, especial), planes de estudio y mallas curriculares cuando el usuario es `plantadmin` o el plantel es sede administrativa.
+  * **Cero Módulo de Asistencia:** Se eliminó por completo el control de asistencia para esta pantalla, cumpliendo con la directriz del administrador.
+  * **Adaptación de Cabecera:** Muestra la entidad como "Datos de la Sede Administrativa / División" y "Personal Registrado en la Sede Administrativa / División".
+
+- **Desacoplamiento y Gestión del Campo `Oficina`:**
+  * **Persistencia y Asistente:** En [`webapp/src/personalWizard.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/src/personalWizard.js) y [`webapp/index.html`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/index.html), se incorporó el campo `#wp-oficina` dentro del bloque `#container-oficina`.
+  * **Visualización en Tabla:** Inyección de distintivo visual `🏢 <Oficina>` debajo del nombre del funcionario en la tabla de personal existente.
+  * **Búsqueda Dinámica:** El buscador client-side `#buscador-personal` filtra de forma instantánea por oficina, nombre o cédula.
+  * **Exportación Excel:** Se añadió la columna `Oficina / Coordinación` al archivo XLSX generado por `exportarNominaExcel()`.
+
+- **Control de Acceso y Gobernanza en Panel de Administración:**
+  * En [`webapp/src/auth.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/src/auth.js): Se otorgó acceso directo e ininterrumpido a `plantadmin` (jurisdicción central exenta del cronograma municipal escolar).
+  * En [`webapp/src/admin.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/src/admin.js): Exclusión de `plantadmin` de la vista de `munadmin` de Libertador, asignando su control y auditoría exclusiva a `zonadmin` y `superadmin`. Barrera de autoridad única (máximo 1 usuario activo por código de dependencia).
+  * Compilación exitosa con Vite en 617ms.
+
+- **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.

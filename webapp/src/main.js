@@ -200,10 +200,11 @@ initAuth(auth, db, {
 
   onLogin: async (userData) => {
       window.sgh_user_data = userData;
-      if (userData.rol === 'plaadmin' || userData.rol === 'plant') {
-        const codPlantel = userData.jerarquia?.plantel_codigo;
+      if (userData.rol === 'plaadmin' || userData.rol === 'plant' || userData.rol === 'plantadmin') {
+        const codPlantel = userData.jerarquia?.plantel_codigo || userData.plantel_codigo || userData.codigo_dependencia;
         const dp = await findPlantel(codPlantel);
-        const nombrePlantel = dp ? (dp['nombre-plantel']?.nominal || dp.nombre_plantel || "Plantel") : "Plantel";
+        const esPlanta = userData.rol === 'plantadmin' || dp?.es_planta || dp?.denominacion === 'SEDE ADMINISTRATIVA';
+        const nombrePlantel = dp ? (dp['nombre-plantel']?.nominal || dp.nombre_plantel || (esPlanta ? "Sede Administrativa" : "Plantel")) : (esPlanta ? "Sede Administrativa" : "Plantel");
         if (userDisplayName) userDisplayName.textContent = `${codPlantel || ''} - ${nombrePlantel}`;
         if (codPlantel) {
           await checkPlantelData(codPlantel);
@@ -307,6 +308,40 @@ function initRecuperacionPerfil(authUser) {
                 }
                 jerarquia.plantel_codigo = deaUpper;
                 jerarquia.municipio = dp.municipio || dp.municipio_nombre || '';
+            } else if (rol === 'plantadmin') {
+                if (!dea) {
+                    if (errEl) {
+                        errEl.textContent = 'Por favor ingrese el Código de Dependencia Ministerial.';
+                        errEl.style.display = 'block';
+                    }
+                    return;
+                }
+                const dp = await findPlantel(dea);
+                if (!dp) {
+                    if (errEl) {
+                        errEl.textContent = 'El código de dependencia ministerial no existe en la base de datos.';
+                        errEl.style.display = 'block';
+                    }
+                    return;
+                }
+                const depUpper = dea.trim().toUpperCase();
+                const qPlant = query(
+                    collection(db, 'usuarios'),
+                    where('jerarquia.plantel_codigo', '==', depUpper)
+                );
+                const snapPlant = await getDocs(qPlant);
+                const titularPlant = snapPlant.docs.map(d => ({ id: d.id, ...d.data() }))
+                    .find(d => d.id !== authUser.uid && d.rol === 'plantadmin' && (d.estado_aprobacion === 'APROBADO' || d.estado_aprobacion === 'PENDIENTE'));
+                if (titularPlant) {
+                    if (errEl) {
+                        const estadoTxt = titularPlant.estado_aprobacion === 'APROBADO' ? 'activo y aprobado' : 'en revisión';
+                        errEl.innerHTML = `La dependencia <b>${depUpper}</b> ya cuenta con un Jefe de División ${estadoTxt} (<b>${titularPlant.nombre || titularPlant.email}</b>). No se permite duplicar usuarios por código de dependencia.`;
+                        errEl.style.display = 'block';
+                    }
+                    return;
+                }
+                jerarquia.plantel_codigo = depUpper;
+                jerarquia.municipio = 'LIBERTADOR';
             } else if (rol === 'munadmin') {
                 if (!mun) {
                     if (errEl) {
@@ -403,9 +438,13 @@ document.getElementById('reg-rol')?.addEventListener('change', (e) => {
     if(rol === 'munadmin') {
         document.getElementById('dynamic-munadmin').classList.remove('hidden');
         document.getElementById('reg-municipio').required = true;
-    } else if(rol === 'plaadmin') {
+    } else if(rol === 'plaadmin' || rol === 'plantadmin') {
         document.getElementById('dynamic-plaadmin').classList.remove('hidden');
         document.getElementById('reg-codigo-dea').required = true;
+        const inpDea = document.getElementById('reg-codigo-dea');
+        if (inpDea) {
+            inpDea.placeholder = rol === 'plantadmin' ? 'Código Dependencia Ministerial (Ej. 001200339)' : 'Código DEA del Plantel (Ej. OD01771401)';
+        }
     }
 });
 
@@ -632,14 +671,16 @@ document.getElementById('register-form')?.addEventListener('submit', async (e) =
     deaErr.style.display = 'none';
 
     try {
-        if(rol === 'plaadmin') {
+        if(rol === 'plaadmin' || rol === 'plantadmin') {
             const dp = await findPlantel(dea);
             if(!dp) {
-                deaErr.textContent = "El código DEA no existe en la base de datos.";
+                deaErr.textContent = rol === 'plantadmin' 
+                    ? "El código de dependencia ministerial no existe en la base de datos."
+                    : "El código DEA no existe en la base de datos.";
                 deaErr.style.display = 'block';
                 throw new Error("Invalid DEA");
             }
-            municipio = dp.municipio || dp.municipio_nombre;
+            municipio = dp.municipio || dp.municipio_nombre || (rol === 'plantadmin' ? 'LIBERTADOR' : '');
         }
 
         const cred = await createUserWithEmailAndPassword(auth, email, pwd);
@@ -705,6 +746,36 @@ document.getElementById('register-form')?.addEventListener('submit', async (e) =
             }
         }
 
+        // --- BARRERA INSTITUCIONAL: ÚNICO JEFE DE DIVISIÓN (plantadmin) ---
+        if (rol === 'plantadmin') {
+            const depUpper = dea.trim().toUpperCase();
+            const qPlant = query(
+                collection(db, 'usuarios'),
+                where('jerarquia.plantel_codigo', '==', depUpper)
+            );
+            const snapPlant = await getDocs(qPlant);
+            const titularPlant = snapPlant.docs.map(d => ({ id: d.id, ...d.data() }))
+                .find(d => d.id !== cred.user.uid && d.rol === 'plantadmin' && (d.estado_aprobacion === 'APROBADO' || d.estado_aprobacion === 'PENDIENTE'));
+
+            if (titularPlant) {
+                try {
+                    await cred.user.delete();
+                } catch(eDel) {
+                    console.warn("Aviso al eliminar cuenta duplicada en Auth:", eDel);
+                    await signOut(auth);
+                }
+                const estadoTxt = titularPlant.estado_aprobacion === 'APROBADO' ? 'activo y aprobado' : 'en proceso de validación';
+                const nombreTitular = titularPlant.nombre || 'otro funcionario';
+                const emailTitular = titularPlant.email ? ` (${titularPlant.email})` : '';
+                await showAlert(
+                    "Dependencia Ya Cuenta con Jefe de División",
+                    `La dependencia central con código <b>${depUpper}</b> ya cuenta con un Jefe de División ${estadoTxt}: <b>${nombreTitular}</b>${emailTitular}.<br><br>Por políticas institucionales, no se permite más de un usuario activo para el mismo código de dependencia. Si usted es el nuevo titular designado, por favor comuníquese con la Dirección de Zona o Gestión Humana.`,
+                    "warning"
+                );
+                return;
+            }
+        }
+
         // --- BARRERA INSTITUCIONAL: CÉDULA ÚNICA Y GESTIÓN MULTI-PLANTEL ---
         if (cedula) {
             const cleanCedula = cedula.trim().toUpperCase();
@@ -758,8 +829,8 @@ document.getElementById('register-form')?.addEventListener('submit', async (e) =
         let jerarquia = { estado: "MERIDA" };
         if(rol === 'munadmin') {
             jerarquia.municipio = municipio;
-        } else if(rol === 'plaadmin') {
-            jerarquia.municipio = municipio;
+        } else if(rol === 'plaadmin' || rol === 'plantadmin') {
+            jerarquia.municipio = municipio || (rol === 'plantadmin' ? 'LIBERTADOR' : '');
             jerarquia.plantel_codigo = dea;
         }
 
@@ -1929,7 +2000,26 @@ async function mostrarCandado(codigoDEA, dataParcial) {
         document.head.appendChild(styleTag);
     }
 
-    if (window._modoSupervision) {
+    const esPlantAdmin = window.sgh_user_data?.rol === 'plantadmin' || dataParcial?.es_planta || dataParcial?.denominacion === 'SEDE ADMINISTRATIVA';
+
+    if (esPlantAdmin) {
+        window._requierePaso1 = false;
+        styleTag.innerHTML = `
+            #banner-alerta-paso1-top { display: none !important; }
+            #contenedor-seleccion-planes { display: none !important; }
+            #mensaje-sin-planes { display: none !important; }
+            #contenedor-matricula { display: none !important; }
+            #contenedor-acciones-matricula { display: none !important; }
+            #banner-candado-paso1 { display: none !important; }
+            #btn-guardar-matricula { display: none !important; }
+            #btn-incorporar-traslado { display: none !important; }
+            #seccion-asistencia { display: none !important; }
+            #seccion-cuadratura { display: none !important; }
+            #container-carga-horaria-academica { display: none !important; }
+            #container-oficina { display: block !important; }
+            #seccion-personal-existente { display: block !important; }
+        `;
+    } else if (window._modoSupervision) {
         styleTag.innerHTML = `
             #btn-guardar-matricula { display: none !important; }
             #plantel-form input:not([readonly]), #plantel-form select { pointer-events: none !important; opacity: 0.7 !important; }
@@ -2046,6 +2136,37 @@ async function mostrarCandado(codigoDEA, dataParcial) {
           : (dp.nombre_plantel || (typeof dp['nombre-plantel'] === 'string' ? dp['nombre-plantel'] : '') || dp.nombre || '');
         document.getElementById('inp-nombre-nominal').value = nomVal;
         document.getElementById('inp-nuevo-eponimo').value = obtenerEponimoLimpioPlantel(dp);
+
+        const esPlantaInst = esPlantAdmin || dp.es_planta || dp.denominacion === 'SEDE ADMINISTRATIVA';
+        if (esPlantaInst) {
+            window._requierePaso1 = false;
+            if (styleTag) {
+                styleTag.innerHTML = `
+                    #banner-alerta-paso1-top { display: none !important; }
+                    #contenedor-seleccion-planes { display: none !important; }
+                    #mensaje-sin-planes { display: none !important; }
+                    #contenedor-matricula { display: none !important; }
+                    #contenedor-acciones-matricula { display: none !important; }
+                    #banner-candado-paso1 { display: none !important; }
+                    #btn-guardar-matricula { display: none !important; }
+                    #btn-incorporar-traslado { display: none !important; }
+                    #seccion-asistencia { display: none !important; }
+                    #seccion-cuadratura { display: none !important; }
+                    #container-carga-horaria-academica { display: none !important; }
+                    #container-oficina { display: block !important; }
+                    #seccion-personal-existente { display: block !important; }
+                `;
+            }
+            const tituloInst = document.querySelector('#plantel-form h3');
+            if (tituloInst) tituloInst.textContent = "Datos de la Sede Administrativa / División";
+            const tituloPers = document.querySelector('#seccion-personal-existente h2');
+            if (tituloPers) tituloPers.textContent = "Personal Registrado en la Sede Administrativa / División";
+
+            ['inp-matricula-total', 'inp-metros-cuadrados', 'inp-turnos-plantel', 'inp-niveles-modalidades'].forEach(cid => {
+                const el = document.getElementById(cid);
+                if (el && el.parentElement) el.parentElement.style.display = 'none';
+            });
+        }
 
         const selNivMod = document.getElementById('inp-niveles-modalidades');
         if (selNivMod) {
@@ -2455,7 +2576,19 @@ async function mostrarCandado(codigoDEA, dataParcial) {
         }
     }
 
-    if (modoDespliegue === 'SOLO_MATRICULA') {
+    if (esPlantAdmin || dp?.es_planta || dp?.denominacion === 'SEDE ADMINISTRATIVA') {
+        window._requierePaso1 = false;
+        const secPersonal = document.getElementById('seccion-personal-existente');
+        if (secPersonal) {
+            secPersonal.style.removeProperty('display');
+            secPersonal.style.display = 'block';
+        }
+        if (typeof window.cargarPersonalExistente === "function") {
+            window.cargarPersonalExistente(codigoDEA);
+        } else if (typeof window.mostrarFormularioPersonal === "function") {
+            window.mostrarFormularioPersonal(false);
+        }
+    } else if (modoDespliegue === 'SOLO_MATRICULA') {
         const secPersonal = document.getElementById('seccion-personal-existente');
         if (secPersonal) secPersonal.style.display = 'none';
         const secReg = document.getElementById('seccion-registro-personal');

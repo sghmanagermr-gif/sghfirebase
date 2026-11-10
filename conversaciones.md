@@ -6867,3 +6867,29 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - Incremento a `v2.32.1`.  
 >    - Compilación limpia con Vite (610ms).  
 >    - Sincronización completa con GitHub (`git add .`, `git commit` y `git push origin main`).
+
+
+### Intervención 198
+
+* **Fecha / Hora:** 2026-11-09 ~15:23 - 20:26 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "¿Cómo debo anunciarte mañana que hagas el proximo paso?"  
+> *(Posteriormente)*: "Ok perfecto. Ahora bien: ¿puedes hacer la pantalla que usará el usuario plantaadmin?"  
+> *(Posteriormente)*: "Procede"  
+> *(Posteriormente)*: "Si satisfactorios. Pero comensamos por la gallina y debiamos haber hecho primero el huevo jajaja  
+> Se necesita incorporar al proceso de registro a los plantadmin.  
+> ¿Cuál sería el plan?"  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. Protocolo de Ejecución para Bloque 2: Se estableció el comando oficial `EJECUTAR_BLOQUE2_METROPOLITANO` (o "Iniciar Bloque 2") para la jornada de mañana.  
+> 2. Registro de las 9 Sedes Administrativas en Firestore:  
+>    - Creación en `planteles/{codDep}` de las 9 dependencias ministeriales de Zona Educativa (`001200330` a `001200341`) con denominación `SEDE ADMINISTRATIVA`, municipio `LIBERTADOR`, parroquia `SAGRARIO` y su nómina precargada.  
+> 3. Construcción y Adaptación de la Interfaz para `plantadmin`:  
+>    - Ocultamiento de la capa escolar (cero matrícula, cero planes de estudio, cero asistencia).  
+>    - Desacoplamiento e inyección del campo editable `oficina` en formulario, tabla y exportación Excel.  
+>    - Blindaje de acceso central en `auth.js` y asignación de gobernanza exclusiva bajo `zonadmin` en `admin.js`.  
+> 4. Incremento SemVer a `v2.33.0`, compilación limpia en 617ms y sincronización Git.

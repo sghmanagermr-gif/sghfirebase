@@ -4,6 +4,26 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.33.0 (9 de Noviembre de 2026)
+
+- **Construcción y Adaptación de la Interfaz para Rol `plantadmin` (Planta Central / Zona Educativa):**
+  - **Registro de Sedes Administrativas en Firestore (`planteles/{codDep}`):**
+    - Creación de las 9 entidades institucionales de Zona Educativa Mérida con `denominacion: "SEDE ADMINISTRATIVA"`, `es_planta: true` y nómina precargada.
+  - **Filtro Quirúrgico de Planta en Pantalla Principal:**
+    - Supresión absoluta de campos de matrícula estudiantil (inicial, primaria, media, técnica, especial, adultos) y mallas curriculares escolares.
+    - Supresión estricta del módulo de asistencia escolar y cuadratura.
+    - Encabezado institucional adaptado: "Sede Administrativa / División" con municipio Libertador y parroquia Sagrario.
+  - **Manejo Desacoplado del Campo `Oficina`:**
+    - Incorporación del campo libre `Oficina / Coordinación / Dependencia Interna` en el formulario y asistente de personal (`#container-oficina` y `#wp-oficina`).
+    - Distintivo visual en la tabla de personal (`🏢 <Oficina>`).
+    - Búsqueda en vivo por oficina, nombre o cédula.
+    - Exportación a Excel con la columna oficial `Oficina / Coordinación`.
+  - **Gobernanza Institucional:**
+    - El rol `plantadmin` queda bajo la tutela y auditoría exclusiva de `zonadmin` (inmune y desvinculado del usuario municipal de Libertador).
+    - Protección de autoridad única (máximo 1 usuario activo por código de dependencia).
+
+---
+
 ### v2.32.1 (9 de Noviembre de 2026)
 
 - **Ejecución en Vivo de Bloque Especial Planta / Zona Educativa en Cloud Firestore (`RAC_zona.xlsx`):**

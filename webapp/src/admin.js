@@ -1315,8 +1315,8 @@ export function initAdminDashboard(dbInstance, user) {
           q = query(collection(db, 'usuarios'), where('rol', '==', 'plaadmin'), where('jerarquia.municipio', '==', userMunNorm));
         }
       } else if (isZon) {
-        // zonadmin consulta coordinadores municipales y directores
-        q = query(collection(db, 'usuarios'), where('rol', 'in', ['munadmin', 'plaadmin']));
+        // zonadmin consulta coordinadores municipales, directores y jefes de división (plantadmin)
+        q = query(collection(db, 'usuarios'), where('rol', 'in', ['munadmin', 'plaadmin', 'plantadmin']));
       } else {
         // superadmin consulta colección
         q = collection(db, 'usuarios');
@@ -1336,7 +1336,7 @@ export function initAdminDashboard(dbInstance, user) {
           const uMun = normalizarMunicipio(u.jerarquia?.municipio || u.municipio || '');
           if (u.rol !== 'plaadmin' || uMun !== userMunNorm) return;
         } else if (isZon) {
-          if (u.rol !== 'munadmin' && u.rol !== 'plaadmin') return;
+          if (u.rol !== 'munadmin' && u.rol !== 'plaadmin' && u.rol !== 'plantadmin') return;
         }
 
         // Evitar que un superadmin se borre a sí mismo accidentalmente o a otros admins
@@ -1553,8 +1553,9 @@ export function initAdminDashboard(dbInstance, user) {
     // Para zonadmin: solo munadmin (ya restringido en loadUsuariosList)
     const rolOrder = {
       'zonadmin': 1,
-      'munadmin': 2,
-      'plaadmin': 3
+      'plantadmin': 2,
+      'munadmin': 3,
+      'plaadmin': 4
     };
 
     filtrados.sort((a, b) => {
@@ -1582,6 +1583,14 @@ export function initAdminDashboard(dbInstance, user) {
         bg: 'linear-gradient(90deg, #ede9fe 0%, #f8fafc 100%)',
         border: '#c4b5fd',
         color: '#6d28d9'
+      },
+      'plantadmin': {
+        title: '🏛️ Jefes de División / Planta Central (Zona Educativa)',
+        tag: 'PLANTADMIN',
+        desc: 'Nivel Central / Sede Administrativa',
+        bg: 'linear-gradient(90deg, #f3e8ff 0%, #f8fafc 100%)',
+        border: '#d8b4fe',
+        color: '#7e22ce'
       },
       'munadmin': {
         title: '🏢 Coordinadores Municipales',
@@ -1855,9 +1864,16 @@ export function initAdminDashboard(dbInstance, user) {
     if (rol === 'munadmin') {
       if (containerEditRolMun) containerEditRolMun.style.display = 'block';
       if (containerEditRolDea) containerEditRolDea.style.display = 'none';
-    } else if (rol === 'plaadmin') {
+    } else if (rol === 'plaadmin' || rol === 'plantadmin') {
       if (containerEditRolMun) containerEditRolMun.style.display = 'block';
       if (containerEditRolDea) containerEditRolDea.style.display = 'block';
+      const lblDea = containerEditRolDea?.querySelector('label');
+      if (lblDea) {
+        lblDea.textContent = rol === 'plantadmin' ? 'Código de Dependencia Ministerial (Planta):' : 'Código DEA del Plantel:';
+      }
+      if (rol === 'plantadmin' && selEditRolMun && !selEditRolMun.value) {
+        selEditRolMun.value = 'LIBERTADOR';
+      }
     } else {
       if (containerEditRolMun) containerEditRolMun.style.display = 'none';
       if (containerEditRolDea) containerEditRolDea.style.display = 'none';
@@ -1951,29 +1967,31 @@ export function initAdminDashboard(dbInstance, user) {
         }
       }
 
-      if (nuevoRol === 'plaadmin' && !nuevoMun) {
-        showToast('Debe seleccionar el municipio al que pertenece el plantel.', 'error');
+      if ((nuevoRol === 'plaadmin' || nuevoRol === 'plantadmin') && !nuevoMun) {
+        showToast(nuevoRol === 'plantadmin' ? 'Debe seleccionar el municipio de la sede (LIBERTADOR).' : 'Debe seleccionar el municipio al que pertenece el plantel.', 'error');
         return;
       }
 
-      if (nuevoRol === 'plaadmin' && !nuevoDea) {
-        showToast('Debe ingresar el código DEA del plantel asignado.', 'error');
+      if ((nuevoRol === 'plaadmin' || nuevoRol === 'plantadmin') && !nuevoDea) {
+        showToast(nuevoRol === 'plantadmin' ? 'Debe ingresar el código de dependencia ministerial de la sede.' : 'Debe ingresar el código DEA del plantel asignado.', 'error');
         return;
       }
 
-      if (nuevoRol === 'plaadmin') {
-        const deaNorm = nuevoDea.trim().toUpperCase();
-        if (deaNorm) {
+      if (nuevoRol === 'plaadmin' || nuevoRol === 'plantadmin') {
+        const codNorm = nuevoDea.trim().toUpperCase();
+        if (codNorm) {
           const yaAprobado = usuariosLocales.find(x => 
             x.uid !== usuarioEditandoRol.uid && 
-            x.rol === 'plaadmin' && 
+            x.rol === nuevoRol && 
             x.estado_aprobacion === 'APROBADO' && 
-            (x.jerarquia?.plantel_codigo || '').trim().toUpperCase() === deaNorm
+            (x.jerarquia?.plantel_codigo || '').trim().toUpperCase() === codNorm
           );
           if (yaAprobado) {
+            const entNom = nuevoRol === 'plantadmin' ? 'Dependencia Ministerial' : 'Plantel Educativo';
+            const cargoNom = nuevoRol === 'plantadmin' ? 'Jefe de División' : 'Director';
             await showAlert(
-              "Plantel Ya Asignado",
-              `El plantel con código DEA <b>${deaNorm}</b> ya cuenta con un Director activo: <b>${yaAprobado.nombre}</b> (${yaAprobado.email}).<br><br>No se puede asignar más de un director activo por código DEA.`,
+              `${entNom} Ya Asignada`,
+              `La entidad con código <b>${codNorm}</b> ya cuenta con un ${cargoNom} activo: <b>${yaAprobado.nombre}</b> (${yaAprobado.email}).<br><br>No se puede asignar más de un usuario activo por código institucional.`,
               "warning"
             );
             return;
@@ -1988,8 +2006,8 @@ export function initAdminDashboard(dbInstance, user) {
         const uid = usuarioEditandoRol.uid;
         const jerarquia = {
           estado: 'MERIDA',
-          ...(nuevoMun ? { municipio: nuevoMun } : {}),
-          ...(nuevoRol === 'plaadmin' && nuevoDea ? { plantel_codigo: nuevoDea } : {})
+          ...(nuevoMun ? { municipio: nuevoMun } : (nuevoRol === 'plantadmin' ? { municipio: 'LIBERTADOR' } : {})),
+          ...((nuevoRol === 'plaadmin' || nuevoRol === 'plantadmin') && nuevoDea ? { plantel_codigo: nuevoDea } : {})
         };
 
         const updateData = {
