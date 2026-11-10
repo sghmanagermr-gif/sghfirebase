@@ -7001,4 +7001,6 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - Se enriqueció la cabecera de la nómina central (`#seccion-personal-existente`) para mostrar el nombre nominal de la división y su código ministerial (`🏛️ Personal Registrado — <Sede> (Cód. 001200330)`).  
 > 3. **Compilación y Despliegue en Vivo:**  
 >    - Incremento a `v2.35.1` en `package.json`, `index.html` y registro en `versiones.md`, `bitacora.md` y `conversaciones.md`.  
->    - Compilación de producción con Vite limpia (605ms) y despliegue exitoso en Firebase Hosting (`https://sgh-merida.web.app`).
+>    - Compilación de producción con Vite limpia (605ms) y despliegue exitoso en Firebase Hosting (`https://sgh-merida.web.app`).  
+> 4. **Aprobación Oficial:**  
+>    - El administrador confirmó la total satisfacción con la visual y el despliegue («Sí. Satisfactorios»). Base de código y hosting 100% sincronizados.

@@ -4674,4 +4674,4 @@ Se eliminó la barra blanca residual (`#card-plantel-form` / `#plantel-form`) qu
   * Incremento a versión **`v2.35.1`** en `package.json`, `index.html` y `versiones.md`.
   * Compilación con Vite limpia (605ms) y despliegue inmediato a producción en Firebase Hosting (`https://sgh-merida.web.app`).
 
-- **Resultado:** Desplegado en vivo y en espera de validación visual del administrador.
+- **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.
