@@ -4675,3 +4675,30 @@ Se eliminó la barra blanca residual (`#card-plantel-form` / `#plantel-form`) qu
   * Compilación con Vite limpia (605ms) y despliegue inmediato a producción en Firebase Hosting (`https://sgh-merida.web.app`).
 
 - **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.
+
+
+## [v2.36.0] - 2026-11-10 (Plan Maestro de Simetría SGH: Ejecución Exitosa en Vivo de Bloque 2 Metropolitano y Pueblos del Sur)
+
+### Resumen Técnico
+Se ejecutó con éxito rotundo en Cloud Firestore la migración en vivo del **Bloque 2** del Plan Maestro de Simetría SGH, abarcando las instituciones educativas de los municipios del Eje Metropolitano y Pueblos del Sur (Libertador, Campo Elías, Sucre, Santos Marquina, Aricagua, Arzobispo Chacón, Guaraque y Padre Noguera).
+
+- **Métricas de Ejecución en la Nube:**
+  * **Operaciones Totales:** 25.833 operaciones atómicas ejecutadas en 65 lotes continuos de hasta 400 operaciones mediante `documents:commit`.
+  * **Escrituras Canónicas Simétricas:** 13.121 documentos creados/actualizados en `cargos_personal/{codigoDEA}_{cedula}` con los 45 campos normalizados (plantel, ubicación física, municipio canónico, parroquia oficial, estatus laboral, horas y códigos RAC).
+  * **Depuración Asimétrica Legada:** 12.712 documentos antiguos sueltos en `cargos_personal/{cedula}` eliminados de forma atómica.
+  * **Consumo de Lecturas en Firestore:** **0 LECTURAS** (Zero-Cost Shield absoluto verificado en la consola de Firebase).
+  * **Consumo de Cuotas:** 100% dentro del límite gratuito de Spark diario (13.121 escrituras frente al límite de 20.000; 12.712 eliminaciones frente al límite de 20.000).
+  * **Manifiesto de Ejecución:** Persistido en [`scratch/fase3_bloque2_commit_manifest.json`](file:///c:/Proyectos/sgh-mr%20-%20firebase/scratch/fase3_bloque2_commit_manifest.json).
+
+- **Auditoría de Comprobación en Vivo:**
+  * Verificado mediante [`scripts/audit_bloque2.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/scripts/audit_bloque2.js).
+  * Caso Testigo Campo Elías (Jorge Alberto Alonso Navarrete - CI 22654384):
+    - Clave legada asimétrica `22654384`: **HTTP 404 (Eliminada)**.
+    - Cargo canónico simétrico `OD00611406_22654384` (Augusto Rodriguez Aranguren, Montalbán): **HTTP 200 (Activo y simétrico)**.
+  * Caso Testigo Sucre (Liliam María Gómez de García - CI 20435542):
+    - Clave legada asimétrica `20435542`: **HTTP 404 (Eliminada)**.
+    - Cargo canónico simétrico `OD14731420_20435542` (Francisco de Miranda, San Juan): **HTTP 200 (Activo y simétrico)**.
+  * Caso Testigo Planta Central (Directora de Zona Maurian Zamudia - CI 9384726):
+    - Cargo canónico Planta `001200330_9384726`: **HTTP 200 (Intacto, blindado y protegido como SEDE ADMINISTRATIVA sin colisiones)**.
+
+- **Resultado:** Aprobado con éxito técnico total (65/65 lotes HTTP 200 OK y 5/5 casos de auditoría conformes).

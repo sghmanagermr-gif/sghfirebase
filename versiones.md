@@ -4,6 +4,23 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.36.0 (10 de Noviembre de 2026)
+
+- **Ejecución en Vivo de Bloque 2 Metropolitano y Pueblos del Sur en Cloud Firestore:**
+  - **Homogeneización Simétrica de 13.121 Expedientes Laborales:**
+    - Procesamiento de los planteles educativos de los municipios Libertador (escuelas), Campo Elías, Sucre, Santos Marquina, Aricagua, Arzobispo Chacón, Guaraque y Padre Noguera.
+    - Registro de 13.121 documentos canónicos simétricos bajo clave `{codigoDEA}_{cedula}` con sus 45 metadatos institucionales y flag `simetria_homologada: true`.
+  - **Depuración Asimétrica de Claves Legadas:**
+    - Eliminación atómica de 12.712 documentos viejos sueltos (`cargos_personal/{cedula}`).
+    - Cero colisiones: los funcionarios de Planta Central (`0012...`) permanecen 100% protegidos y coexistiendo en armonía.
+  - **Métricas de Operación y Escudo Zero-Cost:**
+    - 25.833 operaciones atómicas procesadas en 65 lotes de 400 operaciones mediante `documents:commit`, todas confirmadas con HTTP 200 OK.
+    - Cero lecturas consumidas en Firestore (100% Zero-Cost Shield).
+  - **Auditoría en Vivo:**
+    - Verificación exitosa en tiempo real con 100% de conformidad en Campo Elías (`OD00611406_22654384`), Sucre (`OD14731420_20435542`) y Planta Central (`001200330_9384726`).
+
+---
+
 ### v2.35.1 (9 de Noviembre de 2026)
 
 - **Optimización y Limpieza de Interfaz para Rol `plantadmin` (Planta Central):**

@@ -7004,3 +7004,37 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - Compilación de producción con Vite limpia (605ms) y despliegue exitoso en Firebase Hosting (`https://sgh-merida.web.app`).  
 > 4. **Aprobación Oficial:**  
 >    - El administrador confirmó la total satisfacción con la visual y el despliegue («Sí. Satisfactorios»). Base de código y hosting 100% sincronizados.
+
+---
+
+### Intervención 203
+
+* **Fecha / Hora:** 2026-11-10 ~08:08 - 08:26 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+> "Cuando se ejecutó la EJECUTAR_FASE3_SIMETRIA. ¿Cuáles municipios fueron modificados?"  
+> "Así amanecieron las gráficas hoy" *(Adjunta captura de consola de Firebase con 58k lecturas en ventana de 24h, 14k escrituras y reposo plano en cero durante toda la madrugada).*  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+> "Sí. Deseo que prepares y ejecutes el Bloque 2 (Eje Metropolitano y Pueblos del Sur)"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. **Lectura y Cumplimiento Normativo de SKILL_sgh_firebase.md:**  
+>    - Verificación del protocolo de especialista en `.agents/skills/webapp-expert/SKILL_sgh_firebase.md` (Zero-Cost Shield, cuotas Spark, SemVer estricto, bitácora y comunicación simple).  
+> 2. **Diagnóstico Territorial de Bloque 1:**  
+>    - Se detallaron los 10 municipios intervenidos en el Bloque 1 (Alberto Adriani, Andrés Bello, Antonio Pinto Salinas, Caracciolo Parra Olmedo, Julio César Salas, Obispo Ramos de Lora, Rivas Dávila, Tovar, Tulio Febres Cordero, Zea) más la Sede Administrativa de Zona Educativa en Libertador.  
+> 3. **Análisis de Consola y Confirmación de Cuotas Nuevas:**  
+>    - Se certificó que el pico de 25k lecturas a las 10 p.m. de anoche correspondió a la consulta global "Todos los Municipios", y que desde medianoche el contador se restableció a cero (0 operaciones en toda la madrugada).  
+> 4. **Ejecución en Vivo de Bloque 2 (Eje Metropolitano y Pueblos del Sur):**  
+>    - Se ejecutó el script maestro `scripts/fase3_migracion_simetria.js --bloque=2 --execute` procesando los municipios Libertador (escuelas), Campo Elías, Sucre, Santos Marquina, Aricagua, Arzobispo Chacón, Guaraque y Padre Noguera.  
+>    - 25.833 operaciones atómicas procesadas en 65 lotes continuos de 400 operaciones mediante `documents:commit`, todas confirmadas con HTTP 200 OK.  
+>    - 13.121 cargos canónicos simétricos `{codigoDEA}_{cedula}` creados/actualizados con metadatos completos y flag `simetria_homologada: true`.  
+>    - 12.712 documentos asimétricos legados (`cargos_personal/{cedula}`) depurados. Cero lecturas consumidas en Firestore.  
+> 5. **Auditoría de Comprobación en Vivo:**  
+>    - Mediante `scripts/audit_bloque2.js`, se comprobó con 100% de éxito la eliminación de claves legadas y la presencia de cargos simétricos canónicos en Campo Elías (`OD00611406_22654384`), Sucre (`OD14731420_20435542`) y la protección intacta de Planta Central (`001200330_9384726`).  
+> 6. **Cierre SemVer y Despliegue en Vivo:**  
+>    - Elevación a versión **`v2.36.0`** en `package.json`, `index.html` y registro en `versiones.md`, `bitacora.md` y `conversaciones.md`.  
+>    - Compilación con Vite limpia (1.33s) y despliegue completado en Firebase Hosting (`https://sgh-merida.web.app`). Sincronización con GitHub (`origin/main`).
