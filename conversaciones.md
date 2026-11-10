@@ -7037,4 +7037,6 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - Mediante `scripts/audit_bloque2.js`, se comprobó con 100% de éxito la eliminación de claves legadas y la presencia de cargos simétricos canónicos en Campo Elías (`OD00611406_22654384`), Sucre (`OD14731420_20435542`) y la protección intacta de Planta Central (`001200330_9384726`).  
 > 6. **Cierre SemVer y Despliegue en Vivo:**  
 >    - Elevación a versión **`v2.36.0`** en `package.json`, `index.html` y registro en `versiones.md`, `bitacora.md` y `conversaciones.md`.  
->    - Compilación con Vite limpia (1.33s) y despliegue completado en Firebase Hosting (`https://sgh-merida.web.app`). Sincronización con GitHub (`origin/main`).
+>    - Compilación con Vite limpia (1.33s) y despliegue completado en Firebase Hosting (`https://sgh-merida.web.app`). Sincronización con GitHub (`origin/main`).  
+> 7. **Aprobación Oficial y Monitoreo de Gráficas:**  
+>    - El administrador confirmó plena satisfacción («Resultados satisfactorios») y aportó la captura de la consola post-ejecución, confirmando la estabilidad del sistema y el retraso habitual de agregación de métricas de Google Cloud.
