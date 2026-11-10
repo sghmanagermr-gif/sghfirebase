@@ -7040,3 +7040,49 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - Compilación con Vite limpia (1.33s) y despliegue completado en Firebase Hosting (`https://sgh-merida.web.app`). Sincronización con GitHub (`origin/main`).  
 > 7. **Aprobación Oficial y Monitoreo de Gráficas:**  
 >    - El administrador confirmó plena satisfacción («Resultados satisfactorios») y aportó la captura de la consola post-ejecución, confirmando la estabilidad del sistema y el retraso habitual de agregación de métricas de Google Cloud.
+
+
+---
+
+### Intervención 204
+
+* **Fecha / Hora:** 2026-11-10 ~10:00 - 11:26 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "ok en este tiempo que debemos esperar para el siguiente bloque, quiero conversar al respecto del Bloque Especial (Planta Central / Zona Educativa - 213 Funcionarios). En el documento nomina_acualizada\RAC_zona.xlsx se ve claramente los encabezados, y tu omitiste muchos de esos encabezados. Entonces, en esta ventana de tiempo que tenemos trabajemos con eso. Revisa exhaustivamente el documento nomina_acualizada\RAC_zona.xlsx y verifica los datos que trasladaste a la base de datos de firebase. No creo equivocarme; pero creo que omitiste mucha información, que según la estructura de la colección cargos_personal (que es la estructura correcta), falta información que está en el documento nomina_acualizada\RAC_zona.xlsx. No hagas ninguna modificación, sin antes darme una respuesta a esta situación."  
+> "Datos a considerar: COD ESTADO: NO, ESTADO: SI, MUNICIPIO: SI, PARROQUIA: SI, CODIGO DE DEPENDENCIA: SI, CODIGO ESTADISTICO: EN BLANCO, CODIGO DEL PLANTEL: EN BLANCO, NOMBRE DEL PLANTEL EN NOMINA: SI, NIVEL: EN BLANCO, MODALIDAD: EN BLANCO, UBICACIÓN GEOGRAFICA: URBANO, TURNOS QUE ATIENDE EL PLANTEL: MAÑANA Y TARDE (como está establecido en el sgh_catalogos), CODIGO RAC: SI, CARGO: SI, TIPO PERSONAL: SI, CEDULA: SI, NOMBRE Y APELLIDO: SI, FECHA DE INGRESO: SI, SEXO: SI, HORAS ACADEMICAS: SI (acá se coloca las horas que tiene el funcionario en recibo de pago), HORAS ADM: SI (acá se coloca las horas que tiene el funcionario en recibo de pago), TURNO QUE ATIENDE: MAÑANA Y TARDE (como está establecido en el sgh_catalogos), GRADO QUE IMPARTE EL DOCENTE: EN BLANCO, SECCIÓN: EN BLANCO, ESPECIALIDAD QUE IMPARTE EL DOCENTE: EN BLANCO, AÑO: EN BLANCO, SECCIONES: EN BLANCO, MATERIA QUE IMPARTE O ESPECIALIDAD: EN BLANCO, PERIODO O GRUPO: EN BLANCO, SITUACIÓN DEL TRABAJADOR: SI, OBSERVACIÓN: SI... Atento con lo de HORAS ACADEMICAS y HORAS ADMINISTRATIVAS... Responde qué entendiste, antes de tomar acciones de ejecución."  
+> "Perdón perdón. Cometí un error. Por eso es que hay que interactuar antes de accionar: COD ESTADO: NO, ESTADO: SI, MUNICIPIO: SI, PARROQUIA: SI, CODIGO DE DEPENDENCIA: SI, CODIGO ESTADISTICO: EN BLANCO, CODIGO DEL PLANTEL: EN BLANCO, NOMBRE DEL PLANTEL EN NOMINA: SI, NIVEL: EN BLANCO, MODALIDAD: EN BLANCO, UBICACIÓN GEOGRAFICA: URBANO, TURNOS QUE ATIENDE EL PLANTEL: MAÑANA Y TARDE -> Se guarda: 'DOBLE TURNO' (según sgh_catalogos). No van en los datos del funcionario, estos son datos exclusivos del plantel en este caso de la zona educativa. SEXO: F o M no. SEXO se iguala a como está en el sgh_catalogos. No seas tan cuadrado. Responde qué entendiste, antes de tomar acciones de ejecución."  
+> "Y esos Datos del Funcionario (Colección cargos_personal) ¿sabes qué campos van cada uno?"  
+> "No no no..., ningún También se guarda cedula-identidad y CEDULA para compatibilidad de búsquedas en el sistema. Creo que para eso se hizo la Parametrización. Para que solo hubiera un criterio... No veo que haya problema en seguir usando {codigoDEA}_{cedula} para todos. ¿Entiendes lo que te digo? Por eso es que primero hay que conversar."  
+> "Exactamente así."  
+> "Si de verdad hiciste lo que hiciste. ¿Por qué no veo nada con el usuario de GESTION HUMANA?" *(Adjunta captura de pantalla mostrando la WebApp v2.36.1 en División de Gestión Humana - Cód. 001200339 con el mensaje 'No hay personal registrado en este plantel').*  
+> "No estoy satisfecho, por lo siguiente. O me estás mintiendo, o no estás haciendo el trabajo como debe ser: Ejemplo caso 1: 14107188 MARINA SULBARAN... Datos como aparece en RAC_zona.xlsx: CODIGO RAC: 1124DB, CARGO: DOC. IV /AULA BOLIV, TIPO PERSONAL: DOCENTE, CEDULA: 14107188, NOMBRE Y APELLIDO: MARINA SULBARAN, FECHA DE INGRESO: 1/1/2005, SEXO: F, HORAS ACADEMICAS: N/A, HORAS ADM: 53,33, TURNO QUE ATIENDE: MAÑANA-TARDE, SITUACIÓN: ACTIVO, OBSERVACIÓN: COORDINADORA OFICINA GESTION HUMANA. Datos como aparece en SGH: CODIGO RAC: VACIO, CARGO: VACIO, FECHA DE INGRESO: VACIO, SEXO: FEM -> LO CORRECTO ES FEMENINO, HORAS ACADEMICAS: 53,33, HORAS ADM: 53,33, OBSERVACIÓN: VACIO... Entonces, no me agradan los resultados. ¿Qué me dices al respecto?"  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa. Cometí un error en mi mensaje anterior con el ejemplo HORAS ADM 53,33 lo correcto es vacío si en el documento RAC_zona.xlsx en HORAS ACADEMICAS y HORAS ADM dice N/A en Firebase debe ir vacío. Otra cosa, y mucho cuidado con esto... los encabezados de la tabla debe ajustarse a la parametrización, no lo contrario. Así que nada que si el sistema lee en singular y en plural... Todo dato que entra en la base de datos de Firebase debe mantener una sola parametrización. Para que el o los formularios de todo el SGH hable el mismo idioma. Antes de ejecutar cualquier acción, sin sesgo de complacencia, ¿me expliqué bien o hay algo que no concuerda?"  
+> "Sí. Estamos de acuerdo. (Hasta que en el futuro consiga un fallo). Procede."  
+> "¿Solo completaste la estandarización y actualización de la información en el sistema y en la base de datos de Firebase de la sede administrativa (División de Gestión Humana - 001200339)?"  
+> "Entonces sí estoy satisfecho"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. **Lectura Obligatoria de SKILL_sgh_firebase.md:**  
+>    - Se consultó y aplicó la directriz de Zero-Cost, comunicación simple no técnica, SemVer y bitácora estricta.  
+> 2. **Diagnóstico y Corrección Integral de UI (`webapp`):**  
+>    - **Consulta de Personal:** Se corrigió en `personalWizard.js` y `admin.js` la consulta para filtrar por `where('codigoDEA', '==', codigoDEA)` con fallback a `codigo-plantel`, resolviendo el mensaje de "No hay personal registrado" en sedes de Planta Central.  
+>    - **Formato de Fecha HTML5:** Conversión de fecha serial `01/01/2005` a `2005-01-01` (`YYYY-MM-DD`) para que el control `<input type="date">` del navegador precargue correctamente la fecha de ingreso.  
+>    - **Selector de Cargo y RAC:** Se implementó tolerancia a caracteres y espacios variables con inyección dinámica de opciones para evitar que cargos válidos como `DOC. IV /AULA BOLIV` y `1124DB` se mostraran en blanco.  
+>    - **Selector de Género:** Se homologaron las opciones del selector en `index.html` a `FEMENINO` y `MASCULINO`.  
+>    - **Unificación de Campo Observaciones:** El formulario precarga y guarda estrictamente en el campo canónico `observaciones`, erradicando el campo residual en singular `observacion`.  
+>    - **Protección de Carga Horaria para Planta Central:** Cuando el funcionario no atiende matrícula o es personal de oficina, las horas académicas permanecen en blanco si en el archivo original dice `N/A`, mientras que las horas administrativas reflejan su dedicación real (53,33 horas para Marina Sulbarán).  
+> 3. **Ejecución y Enriquecimiento Masivo de Planta Central en Firestore:**  
+>    - Mediante el script `scripts/enriquecer_planta_zona.js --execute`, se procesaron atómicamente los **213 funcionarios** de Planta Central y las **9 sedes administrativas** de la Zona Educativa.  
+>    - Lote de 222 operaciones atómicas en `documents:commit` ejecutado con éxito bajo Zero-Cost Shield (0 lecturas) y confirmado con HTTP 200 OK.  
+>    - Se auditó en vivo mediante API REST el expediente de la funcionaria Marina Sulbarán (`001200339_14107188`), comprobando conformidad 100%: horas académicas vacías, horas administrativas en 53,33, cargo `DOC. IV /AULA BOLIV`, RAC `1124DB`, fecha `01/01/2005`, sexo `FEMENINO` y observación canónica `COORDINADORA OFICINA GESTION HUMANA` sin campo singular residual.  
+> 4. **Aclaratoria sobre el Alcance Territorial Completo:**  
+>    - Se aclaró al usuario que la estandarización no se limitó a Gestión Humana (`001200339`), sino que abarcó a las 9 dependencias de la Zona Educativa (`001200330`, `001200331`, `001200332`, `001200334`, `001200337`, `001200338`, `001200339`, `001200340`, `001200341`) y sus 213 funcionarios.  
+> 5. **Control de Versiones y Despliegue en Vivo:**  
+>    - Elevación SemVer a **v2.36.4** en `package.json`, `index.html` y registro en `versiones.md`, `bitacora.md` y `conversaciones.md`.  
+>    - Compilación con Vite limpia (621ms) y despliegue exitoso a producción en Firebase Hosting (`https://sgh-merida.web.app`). Sincronización completa con repositorio GitHub (`origin/main`).  
+> 6. **Cierre de Ciclo:**  
+>    - El usuario expresó su conformidad oficial: *"Entonces sí estoy satisfecho"*.

@@ -4702,3 +4702,33 @@ Se ejecutó con éxito rotundo en Cloud Firestore la migración en vivo del **Bl
     - Cargo canónico Planta `001200330_9384726`: **HTTP 200 (Intacto, blindado y protegido como SEDE ADMINISTRATIVA sin colisiones)**.
 
 - **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.
+
+
+## [v2.36.4] - 2026-11-10 (Estandarización Integral y Enriquecimiento de Planta Central: 213 Funcionarios y 9 Sedes)
+
+### Resumen Técnico
+Se realizó la estandarización y homogenización profunda de los 213 funcionarios de Planta Central / Zona Educativa y sus 9 dependencias administrativas según el archivo de nómina oficial `nomina_acualizada/RAC_zona.xlsx` y las directrices institucionales de parametrización única en Cloud Firestore.
+
+- **Unificación de Criterio Canónico y Homologación de Datos:**
+  * **Estructura de Clave Universal:** Homogeneización bajo el patrón canónico `{codigoDEA}_{cedula}` (ej. `001200339_14107188` para División de Gestión Humana).
+  * **Erradicación de Redundancias y Duplicidades:** Se eliminaron campos duplicados en mayúsculas (`CEDULA`, `cedula-identidad`) y el campo en singular `observacion`. Todo el sistema y la base de datos se parametrizó bajo el campo canónico institucional `observaciones`.
+  * **Tratamiento de Carga Horaria y Dedicación:** Si el documento original presenta `N/A`, en Firebase y en los formularios queda estrictamente vacío (`""`), evitando la inyección de ceros o valores asumidos. Se reconoció la dedicación administrativa (53,33 horas en recibo y administración) para personal docente en comisión de servicio administrativo sin atención a matrícula (`atiende-matricula: "NO"`).
+  * **Datos Institucionales de Sedes (`planteles`):** Configuración de las 9 sedes administrativas con `ubicacion-geografica: "URBANO"`, `turno-plantel: "DOBLE TURNO"`, `turnos-plantel: "DOBLE TURNO"` y vaciado de campos de matrícula y códigos estadísticos.
+
+- **Correcciones Críticas en la WebApp (`webapp`):**
+  * **Consulta de Personal por Código DEA:** En [`webapp/src/personalWizard.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/src/personalWizard.js) y [`webapp/src/admin.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/src/admin.js), se actualizó la consulta en Firestore a `where('codigoDEA', '==', codigoDEA)` con fallback, resolviendo el problema donde la nómina de sedes administrativas aparecía vacía ("No hay personal registrado").
+  * **Compatibilidad con Input Fecha HTML5:** Conversión de formato serial `DD/MM/AAAA` a `YYYY-MM-DD` para asegurar la correcta precarga en el componente nativo de calendario `<input type="date">`.
+  * **Emparejamiento Inteligente de Cargos y Códigos RAC:** Inyección dinámica y tolerancia sintáctica para evitar que cargos con puntuación o espacios variables (ej. `DOC. IV /AULA BOLIV` / `1124DB`) quedasen deseleccionados.
+  * **Normalización del Selector de Género:** En [`webapp/index.html`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/index.html), se homologaron las opciones a `FEMENINO` y `MASCULINO`.
+
+- **Métricas de Ejecución y Consumo:**
+  * **Operaciones Totales:** 222 operaciones atómicas ejecutadas en un solo lote continuo mediante `documents:commit` (213 personal en `cargos_personal` y 9 sedes en `planteles`).
+  * **Consumo de Lecturas:** **0 LECTURAS** (Zero-Cost Shield absoluto).
+  * **Estado HTTP:** Confirmado 100% con HTTP 200 OK.
+  * **Manifiestos:** [`scratch/enriquecer_planta_dryrun_manifest.json`](file:///c:/Proyectos/sgh-mr%20-%20firebase/scratch/enriquecer_planta_dryrun_manifest.json) y [`scratch/enriquecer_planta_commit_manifest.json`](file:///c:/Proyectos/sgh-mr%20-%20firebase/scratch/enriquecer_planta_commit_manifest.json).
+
+- **Despliegue y Control SemVer:**
+  * Incremento de versión a **v2.36.4** en `package.json`, `index.html` y `versiones.md`.
+  * Compilación con Vite limpia (621ms) y despliegue completado con éxito a Firebase Hosting (`https://sgh-merida.web.app`).
+
+- **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.

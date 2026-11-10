@@ -4950,7 +4950,10 @@ export function initAdminDashboard(dbInstance, user) {
       } else {
         let snapPersonal;
         if (plantelCod) {
-          snapPersonal = await getDocs(query(collection(db, 'cargos_personal'), where('codigo-plantel', '==', plantelCod)));
+          snapPersonal = await getDocs(query(collection(db, 'cargos_personal'), where('codigoDEA', '==', plantelCod)));
+          if (snapPersonal.empty) {
+            snapPersonal = await getDocs(query(collection(db, 'cargos_personal'), where('codigo-plantel', '==', plantelCod)));
+          }
         } else if (isTodosMunicipios) {
           snapPersonal = await getDocs(collection(db, 'cargos_personal'));
         } else {
@@ -5419,8 +5422,12 @@ export function initAdminDashboard(dbInstance, user) {
       if (forceRefresh) {
         tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px; color: #64748b;">Cargando nómina desde Firestore...</td></tr>';
         try {
-          const q = query(collection(db, 'cargos_personal'), where('codigo-plantel', '==', codigoDEA));
-          const snap = await getDocs(q);
+          let q = query(collection(db, 'cargos_personal'), where('codigoDEA', '==', codigoDEA));
+          let snap = await getDocs(q);
+          if (snap.empty) {
+            q = query(collection(db, 'cargos_personal'), where('codigo-plantel', '==', codigoDEA));
+            snap = await getDocs(q);
+          }
           staffList = [];
           snap.forEach(d => {
             staffList.push({ id: d.id, ...d.data() });

@@ -656,8 +656,8 @@ function setSelectSmart(selectId, val) {
 
     // 2. Mapeos de equivalencias institucionales
     if (selectId === 'wp-genero') {
-        if (vUpper.startsWith('FEM')) { el.value = 'FEM'; return; }
-        if (vUpper.startsWith('MAS')) { el.value = 'MAS'; return; }
+        if (vUpper.startsWith('FEM') || vUpper === 'F') { el.value = 'FEMENINO'; return; }
+        if (vUpper.startsWith('MAS') || vUpper === 'M') { el.value = 'MASCULINO'; return; }
     }
 
     if (selectId === 'wp-instruccion') {
@@ -809,11 +809,15 @@ export function cargarEmpleadoEnFormulario(data, docId) {
 
     // Configuración retardada para sincronizar las cascadas dinámicas
     setTimeout(() => {
+        const cargoTarget = (data.cargo || '').trim();
+        const racTarget = (data['codigo-rac'] || data['codigo-cargo'] || '').trim();
+        const selCargo = document.getElementById('wp-cargo');
+        const selRac = document.getElementById('wp-codigo-rac');
+
         if (tipo === 'OBRERO' && dep === 'NACIONAL') {
             const selRango = document.getElementById('wp-subcategoria');
-            const racVal = data['codigo-rac'] || data['codigo-cargo'] || '';
             if (selRango) {
-                if (racVal) selRango.value = racVal;
+                if (racTarget) selRango.value = racTarget;
                 if (!selRango.value && data.subcategoria) {
                     for (let i = 0; i < selRango.options.length; i++) {
                         if (selRango.options[i].textContent.trim().toUpperCase() === data.subcategoria.trim().toUpperCase()) {
@@ -825,67 +829,152 @@ export function cargarEmpleadoEnFormulario(data, docId) {
                 selRango.dispatchEvent(new Event('change'));
             }
             setTimeout(() => {
-                setVal('wp-cargo', data.cargo || '');
-                setVal('wp-codigo-rac', racVal);
+                if (selCargo) {
+                    selCargo.disabled = false;
+                    let cMatched = false;
+                    for (let i = 0; i < selCargo.options.length; i++) {
+                        if (selCargo.options[i].value === cargoTarget) { selCargo.selectedIndex = i; cMatched = true; break; }
+                    }
+                    if (!cMatched && cargoTarget) {
+                        const opt = document.createElement('option');
+                        opt.value = cargoTarget;
+                        opt.textContent = cargoTarget;
+                        opt.selected = true;
+                        selCargo.appendChild(opt);
+                    }
+                }
+                if (selRac) {
+                    selRac.disabled = false;
+                    let rMatched = false;
+                    for (let i = 0; i < selRac.options.length; i++) {
+                        if (selRac.options[i].value === racTarget) {
+                            selRac.selectedIndex = i;
+                            rMatched = true;
+                            break;
+                        }
+                    }
+                    if (!racMatched && racTarget) {
+                        const optR = document.createElement('option');
+                        optR.value = racTarget;
+                        optR.textContent = racTarget;
+                        optR.selected = true;
+                        selRac.appendChild(optR);
+                    }
+                    selRac.value = racTarget;
+                }
             }, 30);
         } else {
-            const selCargo = document.getElementById('wp-cargo');
             if (selCargo) {
-                selCargo.value = data.cargo || '';
+                selCargo.disabled = false;
+                let cargoMatched = false;
+                const normTarget = cargoTarget.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+                for (let i = 0; i < selCargo.options.length; i++) {
+                    const optVal = (selCargo.options[i].value || '').trim();
+                    const optText = (selCargo.options[i].textContent || '').trim();
+                    const optNorm = optText.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+                    if (optVal === cargoTarget || (normTarget && optNorm === normTarget)) {
+                        selCargo.selectedIndex = i;
+                        cargoMatched = true;
+                        break;
+                    }
+                }
+                if (!cargoMatched && cargoTarget) {
+                    const opt = document.createElement('option');
+                    opt.value = cargoTarget;
+                    opt.textContent = cargoTarget;
+                    opt.selected = true;
+                    selCargo.appendChild(opt);
+                }
                 selCargo.dispatchEvent(new Event('change'));
             }
             setTimeout(() => {
-                setVal('wp-codigo-rac', data['codigo-rac'] || data['codigo-cargo'] || '');
-            }, 30);
+                if (selRac) {
+                    selRac.disabled = false;
+                    let racMatched = false;
+                    for (let i = 0; i < selRac.options.length; i++) {
+                        if (selRac.options[i].value === racTarget) {
+                            selRac.selectedIndex = i;
+                            racMatched = true;
+                            break;
+                        }
+                    }
+                    if (!racMatched && racTarget) {
+                        const optR = document.createElement('option');
+                        optR.value = racTarget;
+                        optR.textContent = racTarget;
+                        optR.selected = true;
+                        selRac.appendChild(optR);
+                    }
+                    selRac.value = racTarget;
+                }
+            }, 40);
         }
 
-        setVal('wp-titular', data.titular || '');
-        setVal('wp-horas-administrativas', data['horas-administrativas'] || '');
-        setVal('wp-fecha-ingreso', data['fecha-ingreso'] || '');
-        setVal('wp-antiguedad', data.antiguedad || '');
-        if (window.calcularAntiguedadUI && !data.antiguedad && data['fecha-ingreso']) {
+        setVal('wp-titular', data.titular || 'Titular');
+
+        // Conversión a formato ISO (YYYY-MM-DD) para que el navegador HTML5 renderice la fecha correctamente
+        let fIngreso = String(data['fecha-ingreso'] || '').trim();
+        if (fIngreso.includes('/')) {
+            const parts = fIngreso.split('/');
+            if (parts.length === 3) {
+                const dd = parts[0].padStart(2, '0');
+                const mm = parts[1].padStart(2, '0');
+                const yyyy = parts[2];
+                fIngreso = `${yyyy}-${mm}-${dd}`;
+            }
+        }
+        setVal('wp-fecha-ingreso', fIngreso);
+        if (window.calcularAntiguedadUI && !data.antiguedad && fIngreso) {
             window.calcularAntiguedadUI();
         }
-        setVal('wp-turnos-atiende', data['turnos-atiende'] || '');
+        setVal('wp-turnos-atiende', data['turnos-atiende'] || 'DOBLE TURNO');
 
-        const atiendeMat = data['atiende-matricula'] || (data['nivel-modalidad'] || (parseFloat(data['horas-academicas']) > 0) ? 'SI' : 'NO');
+        const esPlantaFormPersona = data.es_planta || window.sgh_user_data?.rol === 'plantadmin' || window.currentPlantelInfo?.es_planta || window.currentPlantelInfo?.denominacion === 'SEDE ADMINISTRATIVA';
+        const atiendeMat = esPlantaFormPersona ? 'NO' : (data['atiende-matricula'] || 'NO');
         setVal('wp-atiende-matricula', atiendeMat);
         const atiendeEl = document.getElementById('wp-atiende-matricula');
-        if (atiendeEl) atiendeEl.dataset.manualChanged = 'true';
+        if (atiendeEl) {
+            atiendeEl.value = atiendeMat;
+            atiendeEl.dataset.manualChanged = 'true';
+        }
         if (window.toggleMatriculaUI) window.toggleMatriculaUI();
 
         setVal('wp-nivel-modalidad', data['nivel-modalidad'] || '');
         setVal('wp-especialidad-imparte', data['especialidad-imparte'] || '');
 
-        const hAdminVal = (data['horas-administrativas'] !== undefined && data['horas-administrativas'] !== null && data['horas-administrativas'] !== '')
-            ? data['horas-administrativas']
-            : (atiendeMat === 'NO' ? (data['horas-recibo'] || 40) : 0);
+        // Carga horaria fiel a la base de datos
+        const rawHAdmin = data['horas-administrativas'];
+        const hAdminVal = (rawHAdmin !== undefined && rawHAdmin !== null && rawHAdmin !== '' && rawHAdmin !== 0)
+            ? rawHAdmin
+            : (atiendeMat === 'NO' ? (data['horas-recibo'] || '') : '');
         setVal('wp-horas-administrativas', hAdminVal);
 
-        const hAcadVal = (data['horas-academicas'] !== undefined && data['horas-academicas'] !== null && data['horas-academicas'] !== '')
-            ? data['horas-academicas']
-            : (atiendeMat === 'SI' ? 53.33 : 0);
+        const rawHAcad = data['horas-academicas'];
+        const hAcadVal = (rawHAcad !== undefined && rawHAcad !== null && rawHAcad !== '' && rawHAcad !== 0)
+            ? rawHAcad
+            : '';
         setVal('wp-horas-academicas', hAcadVal);
 
-        const hReciboVal = (data['horas-recibo'] !== undefined && data['horas-recibo'] !== null && data['horas-recibo'] !== '')
-            ? data['horas-recibo']
-            : (atiendeMat === 'SI' ? (parseFloat(hAcadVal || 0) + parseFloat(hAdminVal || 0)) : (hAdminVal || 40));
+        const rawHRecibo = data['horas-recibo'];
+        const hReciboVal = (rawHRecibo !== undefined && rawHRecibo !== null && rawHRecibo !== '' && rawHRecibo !== 0)
+            ? rawHRecibo
+            : ((hAcadVal !== '' || hAdminVal !== '') ? ((parseFloat(hAcadVal) || 0) + (parseFloat(hAdminVal) || 0)) : '');
         setVal('wp-horas-recibo', hReciboVal);
 
         const totalAsigVal = (parseFloat(hAcadVal) || 0) + (parseFloat(hAdminVal) || 0);
         const hProgVal = (data['horas-por-programar'] !== undefined && data['horas-por-programar'] !== null && data['horas-por-programar'] !== '')
             ? data['horas-por-programar']
-            : (atiendeMat === 'SI' ? Math.max(0, (parseFloat(hReciboVal) || 0) - totalAsigVal) : 0);
+            : (atiendeMat === 'SI' && hReciboVal !== '' ? Math.max(0, (parseFloat(hReciboVal) || 0) - totalAsigVal) : '');
         setVal('wp-horas-por-programar', hProgVal);
 
         // 3. Situación del Trabajador
         const selSit = document.getElementById('wp-situacion-laboral');
         if (selSit) {
-            selSit.value = data['situacion-laboral'] || '';
+            selSit.value = data['situacion-laboral'] || 'ACTIVO';
             selSit.dispatchEvent(new Event('change'));
         }
         setVal('wp-descripcion-situacion', data['descripcion-situacion'] || '');
-        setVal('wp-observaciones', data.observaciones || '');
+        setVal('wp-observaciones', data.observaciones || data.observacion || '');
 
         // 4. Bienestar Social
         setVal('wp-talla-camisa', data['talla-camisa'] || '');
@@ -1613,8 +1702,12 @@ async function cargarPersonalExistente(codigoDEA) {
 
     try {
         const dbInstance = getFirestore();
-        const q = query(collection(dbInstance, 'cargos_personal'), where('codigo-plantel', '==', codigoDEA));
-        const querySnapshot = await getDocs(q);
+        let q = query(collection(dbInstance, 'cargos_personal'), where('codigoDEA', '==', codigoDEA));
+        let querySnapshot = await getDocs(q);
+        if (querySnapshot.empty) {
+            const qFallback = query(collection(dbInstance, 'cargos_personal'), where('codigo-plantel', '==', codigoDEA));
+            querySnapshot = await getDocs(qFallback);
+        }
 
         tbody.innerHTML = '';
 
@@ -2191,9 +2284,9 @@ export function toggleMatriculaUI() {
         const inEsp = document.getElementById('wp-especialidad-imparte');
         if (inEsp) inEsp.value = '';
         const hAcad = document.getElementById('wp-horas-academicas');
-        if (hAcad) hAcad.value = '0';
+        if (hAcad) hAcad.value = '';
         const hProg = document.getElementById('wp-horas-por-programar');
-        if (hProg) hProg.value = '0';
+        if (hProg) hProg.value = '';
 
         const hRecibo = document.getElementById('wp-horas-recibo');
         const hAdmin = document.getElementById('wp-horas-administrativas');

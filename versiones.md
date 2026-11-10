@@ -4,6 +4,29 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.36.4 (10 de Noviembre de 2026)
+
+- **Estandarización Integral y Enriquecimiento de Planta Central (Zona Educativa - 213 Funcionarios y 9 Sedes):**
+  - **Homologación de Datos según RAC_zona.xlsx y Criterios Institucionales:**
+    - Carga fiel y exhaustiva de los 213 expedientes de las 9 sedes administrativas en la colección `cargos_personal` bajo la clave canónica simétrica `{codigoDEA}_{cedula}`.
+    - Carga de los atributos específicos para las 9 sedes en la colección `planteles` (`ubicacion-geografica: "URBANO"`, `turno-plantel: "DOBLE TURNO"`, `turnos-plantel: "DOBLE TURNO"`, códigos estadísticos y nivel/modalidad en blanco).
+  - **Unificación de Criterio de Parametrización en Base de Datos (Regla de Oro):**
+    - Eliminación de campos redundantes en mayúsculas (`CEDULA`, `cedula-identidad`) y erradicación del campo en singular `observacion`.
+    - Estandarización institucional absoluta bajo el campo unificado `observaciones` para todos los formularios y módulos del sistema.
+  - **Tratamiento Fiel de Cargas Horarias:**
+    - Enriquecimiento estricto: cuando el documento original indica `N/A`, en Firebase y en el formulario de la WebApp el campo de horas académicas o administrativas queda totalmente vacío (`""`), sin inventar ceros ni copiar indebidamente valores.
+    - Reconocimiento de dedicación administrativa (53,33 horas en recibo y administración) para personal docente en comisión de servicios de oficina sin atención directa de matrícula (`atiende-matricula: "NO"`).
+  - **Correcciones Críticas de Interfaz Web (`webapp`):**
+    - **Consulta Eficiente por Código DEA:** Corrección de la consulta en `personalWizard.js` y `admin.js` para usar `codigoDEA` indexado, permitiendo listar de inmediato los 86 funcionarios de División de Gestión Humana y del resto de las sedes.
+    - **Compatibilidad con Selector de Fecha HTML5:** Conversión bidireccional automática del formato de texto `DD/MM/AAAA` a `YYYY-MM-DD` para visualización nativa fluida en el navegador.
+    - **Emparejamiento Inteligente de Cargos y RAC:** Inyección dinámica y tolerancia a variaciones tipográficas en los selectores de Cargo y Código RAC para evitar deselecciones o campos vacíos.
+    - **Normalización de Selector de Género:** Opciones normalizadas a valores canónicos completos: `FEMENINO` y `MASCULINO`.
+  - **Ejecución y Despliegue en Vivo:**
+    - Lote de 222 operaciones atómicas en Cloud Firestore confirmado con HTTP 200 OK bajo Zero-Cost Shield.
+    - Compilación con Vite y despliegue exitoso en Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.36.0 (10 de Noviembre de 2026)
 
 - **Ejecución en Vivo de Bloque 2 Metropolitano y Pueblos del Sur en Cloud Firestore:**
