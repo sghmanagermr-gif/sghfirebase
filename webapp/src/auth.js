@@ -101,29 +101,31 @@ export function initAuth(auth, db, callbacks) {
          }
       }
 
-      // Doble Candado: Verificación de correo
-      // Si la cuenta ya fue formalmente APROBADA por el administrador en Firestore, se le concede acceso
+      // 1. Revisión de estado de aprobación general institucional
       const estaAprobado = userData.estado_aprobacion === 'APROBADO';
       const esRolEspecial = ['superadmin', 'admin', 'zonadmin'].includes(userData.rol);
 
-      if (!user.emailVerified && !esRolEspecial && !estaAprobado) {
-          onWait("Tu cuenta requiere verificación. Por favor, haz clic en el enlace que te enviamos al correo (<b>revisa tu carpeta de Spam</b> si no lo encuentras).", "Cuenta en Revisión");
-          return;
-      }
-
-      // 2. Revisión de estado de aprobación general
       if (userData.estado_aprobacion === 'PENDIENTE') {
-          onWait("Cuenta en revisión. Esperando validación de tu superior.", "Cuenta en Revisión");
+          const superiorTxt = userData.rol === 'plantadmin' 
+              ? 'la Dirección de Zona Educativa / Gestión Humana'
+              : (userData.rol === 'plaadmin' ? 'su Coordinador Municipal o Sala Técnica' : 'su superior');
+          onWait(`Su solicitud está registrada con éxito y se encuentra en espera de validación y aprobación por <b>${superiorTxt}</b>.<br><br>Una vez autorizada por el responsable en el sistema, su acceso quedará activo automáticamente.`, "Cuenta en Revisión");
           return;
       }
       if (userData.estado_aprobacion === 'RECHAZADO') {
-          onWait("Tu solicitud de acceso ha sido rechazada.", "Acceso Rechazado");
+          onWait("Tu solicitud de acceso ha sido rechazada por la autoridad institucional.", "Acceso Rechazado");
           return;
       }
 
       // Si tiene el campo y no es APROBADO ni los anteriores, es un estado desconocido
       if (userData.estado_aprobacion && userData.estado_aprobacion !== 'APROBADO') {
-          onWait("Tu cuenta tiene un estado desconocido: " + userData.estado_aprobacion, "Cuenta en Revisión");
+          onWait("Tu cuenta tiene un estado institucional desconocido: " + userData.estado_aprobacion, "Cuenta en Revisión");
+          return;
+      }
+
+      // 2. Doble Candado: Verificación de correo (solo para cuentas no aprobadas o no exentas)
+      if (!user.emailVerified && !esRolEspecial && !estaAprobado) {
+          onWait("Tu cuenta requiere verificación de correo. Si no recibiste el mensaje, puedes solicitar un reenvío o comunicarte con tu superior para su validación directa.", "Cuenta en Revisión");
           return;
       }
 

@@ -1651,6 +1651,10 @@ export function initAdminDashboard(dbInstance, user) {
           const codDea = u.jerarquia.plantel_codigo || u.codigo_plantel || 'S/D';
           const munPla = u.jerarquia.municipio || u.municipio || '';
           ubicacion = `Plantel: ${codDea}${munPla ? ' • ' + munPla : ''}`;
+        } else if (u.rol === 'plantadmin') {
+          const codDep = u.jerarquia.plantel_codigo || '001200330';
+          const nomDep = u.jerarquia.plantel_nombre || 'Sede Administrativa Central';
+          ubicacion = `🏛️ ${nomDep} (${codDep})`;
         } else if (u.jerarquia.municipio) {
           ubicacion = `Municipio: ${u.jerarquia.municipio}`;
         } else {
@@ -1664,6 +1668,8 @@ export function initAdminDashboard(dbInstance, user) {
       let roleBadgeHtml = '';
       if (u.rol === 'zonadmin') {
         roleBadgeHtml = `<span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; background: #ede9fe; color: #6d28d9; border: 1px solid #ddd6fe;">🏛️ ZONADMIN</span>`;
+      } else if (u.rol === 'plantadmin') {
+        roleBadgeHtml = `<span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; background: #f3e8ff; color: #7e22ce; border: 1px solid #d8b4fe;">🏛️ PLANTADMIN</span>`;
       } else if (u.rol === 'munadmin') {
         roleBadgeHtml = `<span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;">🏢 MUNADMIN</span>`;
       } else if (u.rol === 'plaadmin') {
@@ -1684,6 +1690,9 @@ export function initAdminDashboard(dbInstance, user) {
             ${(u.rol === 'munadmin' && !isAprobado && usuariosLocales.some(x => x.uid !== u.uid && x.rol === 'munadmin' && x.estado_aprobacion === 'APROBADO' && normalizarMunicipio(x.jerarquia?.municipio || x.municipio || '') === normalizarMunicipio(u.jerarquia?.municipio || u.municipio || ''))) 
               ? `<div style="font-size: 0.73rem; color: #b45309; font-weight: 600; margin-top: 4px; display: inline-flex; align-items: center; gap: 4px; background: #fffbeb; padding: 2px 6px; border-radius: 4px; border: 1px solid #fde68a;">⚠️ Municipio ya tiene coordinador activo</div>` 
               : ''}
+            ${(u.rol === 'plantadmin' && !isAprobado && (u.jerarquia?.plantel_codigo) && usuariosLocales.some(x => x.uid !== u.uid && x.rol === 'plantadmin' && x.estado_aprobacion === 'APROBADO' && (x.jerarquia?.plantel_codigo || '').trim().toUpperCase() === (u.jerarquia?.plantel_codigo || '').trim().toUpperCase())) 
+              ? `<div style="font-size: 0.73rem; color: #b45309; font-weight: 600; margin-top: 4px; display: inline-flex; align-items: center; gap: 4px; background: #fffbeb; padding: 2px 6px; border-radius: 4px; border: 1px solid #fde68a;">⚠️ Dependencia ya tiene jefe activo</div>` 
+              : ''}
             ${(u.rol === 'plaadmin' && !isAprobado && (u.jerarquia?.plantel_codigo) && usuariosLocales.some(x => x.uid !== u.uid && x.rol === 'plaadmin' && x.estado_aprobacion === 'APROBADO' && (x.jerarquia?.plantel_codigo || '').trim().toUpperCase() === (u.jerarquia?.plantel_codigo || '').trim().toUpperCase())) 
               ? `<div style="font-size: 0.73rem; color: #b45309; font-weight: 600; margin-top: 4px; display: inline-flex; align-items: center; gap: 4px; background: #fffbeb; padding: 2px 6px; border-radius: 4px; border: 1px solid #fde68a;">⚠️ Plantel ya tiene director activo</div>` 
               : ''}
@@ -1702,7 +1711,7 @@ export function initAdminDashboard(dbInstance, user) {
           <td style="padding: 15px 20px; text-align: right; display: flex; gap: 8px; justify-content: flex-end; align-items: center; flex-wrap: wrap;">
             ${(isSuperOrZon && u.rol !== 'superadmin' && u.rol !== 'admin') ? `<button class="btn-editar-rol btn-secondary" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.82rem; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 600; border-color: #6366f1; color: #4f46e5;" title="Modificar nombre, rol o adscripción institucional">✏️ Rol / Datos</button>` : ''}
             ${(u.rol === 'zonadmin' && (userData.rol === 'superadmin' || userData.rol === 'admin')) ? `<button class="btn-competencias" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.82rem; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 600;" title="Configurar módulos y permisos del panel">🔑 Competencias</button>` : ''}
-            ${!isAprobado ? `<button class="btn-aprobar" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.85rem; background: var(--success);">Aprobar</button>` : ''}
+            ${!isAprobado ? `<button class="btn-aprobar" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.85rem; background: var(--success);" title="Aprobar y activar acceso directo e inmediato al despacho">Aprobar Acceso</button>` : ''}
             <button class="btn-eliminar btn-secondary" data-uid="${u.uid}" style="width: auto; padding: 6px 12px; font-size: 0.85rem; border-color: var(--danger); color: var(--danger);">${isAprobado ? 'Eliminar' : 'Rechazar'}</button>
           </td>
         </tr>
@@ -1779,7 +1788,33 @@ export function initAdminDashboard(dbInstance, user) {
           }
         }
 
-        const conf = await showConfirm("¿Aprobar Acceso?", "El usuario tendrá permiso para ingresar al sistema.", "success");
+        // --- BARRERA ANTI-DUPLICADOS PLANTADMIN (JEFE DE DIVISIÓN) ---
+        if (userToApprove && userToApprove.rol === 'plantadmin') {
+          const depNorm = (userToApprove.jerarquia?.plantel_codigo || '').trim().toUpperCase();
+          if (depNorm) {
+            const yaAprobado = usuariosLocales.find(x => 
+              x.uid !== uid && 
+              x.rol === 'plantadmin' && 
+              x.estado_aprobacion === 'APROBADO' && 
+              (x.jerarquia?.plantel_codigo || '').trim().toUpperCase() === depNorm
+            );
+            if (yaAprobado) {
+              await showAlert(
+                "Dependencia Central Ya Asignada",
+                `La dependencia con código <b>${depNorm}</b> ya cuenta con un Jefe de División aprobado y activo: <b>${yaAprobado.nombre}</b> (${yaAprobado.email}).<br><br>No se permite tener dos jefes activos para la misma dependencia central. Si desea autorizar a este nuevo usuario, primero debe rechazar, eliminar o reasignar al titular actual.`,
+                "warning"
+              );
+              return;
+            }
+          }
+        }
+
+        const cargoTxt = userToApprove?.rol === 'plantadmin' ? 'Jefe de División' : (userToApprove?.rol === 'munadmin' ? 'Coordinador Municipal' : 'Director de Plantel');
+        const conf = await showConfirm(
+          "¿Aprobar Acceso Institucional?",
+          `¿Desea autorizar el acceso a <b>${userToApprove?.nombre || 'este usuario'}</b> (${cargoTxt})?<br><br><b>Nota:</b> Al aprobar, el usuario tendrá acceso inmediato y directo al sistema sin depender del correo de verificación.`,
+          "success"
+        );
         if(conf) {
           e.target.disabled = true;
           e.target.textContent = '...';

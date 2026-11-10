@@ -4,6 +4,23 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.34.0 (9 de Noviembre de 2026)
+
+- **Flujo Oficial de Registro y Sala de Espera para Jefes de División (`plantadmin`):**
+  - **Selector Desplegable Oficial en el Registro (`#dynamic-plantadmin`):**
+    - Al seleccionar el rol *Jefe de División / Planta Central (Zona Educativa)* en la vista de registro, el sistema presenta un menú desplegable con las 9 dependencias ministeriales oficiales, evitando la digitación manual de códigos numéricos de 9 dígitos.
+  - **Validación Anti-Duplicados y Jerarquía Automática:**
+    - Blindaje de autoridad única: restricción de un solo usuario activo o en revisión por código de dependencia central. En caso de existir un titular, el sistema notifica de inmediato su nombre y estatus.
+    - Autocompletado jerárquico canónico: `estado: 'MERIDA'`, `municipio: 'LIBERTADOR'`, `parroquia: 'SAGRARIO'` y vinculación al nombre oficial de la sede administrativa.
+  - **Enrutamiento Institucional y Sala de Espera:**
+    - Al enviar la solicitud, el usuario recibe un mensaje de confirmación adaptado a la Zona Educativa y es dirigido a la Sala de Espera ("Cuenta en Revisión").
+    - Se agregó el botón interactivo de **Reenviar Correo de Verificación** con temporizador de enfriamiento para solucionar incidentes con correos extraviados en Spam o enlaces caducados.
+    - Soporte completo para recuperación de perfil institucional (`#recup-box-planta`).
+  - **Gobernanza Administrativa:**
+    - Las solicitudes quedan visibles y gestionables con un solo clic exclusivamente para `zonadmin` y `superadmin`, manteniéndose invisibles para el coordinador municipal de Libertador.
+
+---
+
 ### v2.33.0 (9 de Noviembre de 2026)
 
 - **Construcción y Adaptación de la Interfaz para Rol `plantadmin` (Planta Central / Zona Educativa):**

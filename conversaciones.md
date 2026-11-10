@@ -6893,3 +6893,58 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - Desacoplamiento e inyección del campo editable `oficina` en formulario, tabla y exportación Excel.  
 >    - Blindaje de acceso central en `auth.js` y asignación de gobernanza exclusiva bajo `zonadmin` en `admin.js`.  
 > 4. Incremento SemVer a `v2.33.0`, compilación limpia en 617ms y sincronización Git.
+
+
+
+### Intervención 199
+
+* **Fecha / Hora:** 2026-11-09 ~20:34 - 20:45 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+> "Ok, estoy de acuerdo con el plan. lo probaré a ver si no tendré problemas con el correo de verificación como lo han tenido los directores de planteles. Procede"  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. **Lectura y Cumplimiento de Skill de Especialista:**  
+>    - Se leyó en su totalidad el archivo `.agents/skills/webapp-expert/SKILL_sgh_firebase.md` para acatar estrictamente todas sus directrices arquitectónicas, políticas Zero-Cost, control SemVer, apéndice de trampas UI y bitácora obligatoria.  
+> 2. **Menú Desplegable Oficial para `plantadmin` en Formulario de Registro:**  
+>    - En `webapp/index.html`, se incorporó `#dynamic-plantadmin` con selector directo de las 9 dependencias ministeriales oficiales de la Zona Educativa Mérida, eliminando la necesidad de tipear manualmente códigos de 9 dígitos.  
+> 3. **Solución Definitiva para Correos de Verificación Extraviados:**  
+>    - Se incorporó en la Sala de Espera (`#espera-view`) el bloque `#box-verificacion-reenvio` con el botón interactivo **Reenviar Correo de Verificación**. Cuenta con enfriamiento por cuenta regresiva (60 segundos) para evitar saturación de Firebase y permitir que directores y jefes reenvíen su enlace si cayó en Spam o caducó.  
+> 4. **Autocompletado Jerárquico y Blindaje Anti-Duplicados:**  
+>    - En `webapp/src/main.js`, validación estricta de 1 solo jefe activo o pendiente por dependencia ministerial.  
+>    - Auto-asignación institucional canónica: `estado: 'MERIDA'`, `municipio: 'LIBERTADOR'`, `parroquia: 'SAGRARIO'` y vinculación al nombre oficial de la sede.  
+>    - Mensajes y alertas personalizadas para Zona Educativa y Gestión Humana.  
+>    - Soporte completo en recuperación de perfil (`#recup-box-planta`).  
+> 5. **Incremento SemVer y Compilación:**  
+>    - Elevación de versión a `v2.34.0` en `package.json`, `index.html` y registro en `versiones.md`.  
+>    - Compilación de producción con Vite exitosa en 1.24s.
+
+
+
+### Intervención 200
+
+* **Fecha / Hora:** 2026-11-09 ~20:50 - 21:07 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+> "No sé si decir satisfactorio, porque pasan dos cosas. acabo de hacer un registro exitoso con un usuario plantaadmin, sin embargo ni en la carpta spam, ni en el Apartado Usuarios del Sistema, hay la manera de verificar y aprobar"  
+> *(Posteriormente)*: "Si observé al usuario plantadmin en el panel zonal, asi que los resultados son satisfactorios.  
+> Sin embargo me acabo de registrar con el usuario alfonsoiii75@gmail.com y la clave 123456789 para hacer las pruebas.., y resulta que me dice el login Credenciales invalidas 😠"  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. **Detección Inmediata de la Causa de "Credenciales Inválidas":**  
+>    - Se comprobó mediante la API de autenticación que la cuenta registrada originalmente fue `alfonsoiii_75@gmail.com` (**con guion bajo `_`**).  
+>    - Al intentar ingresar como `alfonsoiii75@gmail.com` (**sin guion bajo**), el proveedor de identidad responde lógicamente "Credenciales Inválidas" porque dicho usuario no existe. La contraseña `123456789` es 100% correcta para `alfonsoiii_75@gmail.com`.  
+> 2. **Blindaje de la Aprobación Institucional en el Panel:**  
+>    - Se ajustó el panel de Usuarios del Sistema (`webapp/src/admin.js`) para incorporar el filtro directo `🏛️ Jefes de Planta` y el botón **«Aprobar Acceso»** con confirmación explícita de que la aprobación formal por la Zona Educativa autoriza el acceso inmediato sin depender de la entrega del correo electrónico.  
+>    - Se inyectó la validación anti-duplicados para jefes de planta en la acción de aprobación.  
+> 3. **Actualización de Bitácora y Respaldo Git:**  
+>    - Registro formal en `bitacora.md` y `versiones.md` (v2.34.0).  
+>    - Sincronización completa a GitHub (`git add .`, `git commit` y `git push origin main`).

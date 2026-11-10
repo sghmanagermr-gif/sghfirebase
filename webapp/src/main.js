@@ -196,6 +196,51 @@ initAuth(auth, db, {
         boxRecup.style.display = 'none';
       }
     }
+
+    // Botón para reenviar correo de verificación si el usuario aún no lo ha confirmado
+    const boxReenvio = document.getElementById('box-verificacion-reenvio');
+    const btnReenviar = document.getElementById('btn-reenviar-verificacion');
+    if (boxReenvio) {
+      const msjLower = (mensaje || '').toLowerCase();
+      const requiereVerificacion = msjLower.includes('verificaci') || msjLower.includes('correo') || (auth.currentUser && !auth.currentUser.emailVerified);
+      boxReenvio.style.display = requiereVerificacion ? 'block' : 'none';
+
+      if (btnReenviar) {
+        btnReenviar.onclick = async () => {
+          if (!auth.currentUser) {
+            showToast('Por favor vuelva a iniciar sesión para reenviar la verificación.', 'warning');
+            return;
+          }
+          btnReenviar.disabled = true;
+          btnReenviar.innerHTML = '<i class="bi bi-hourglass-split"></i> Enviando...';
+          try {
+            await sendEmailVerification(auth.currentUser);
+            showToast('Correo de verificación reenviado exitosamente. Revise su bandeja y carpeta de Spam.', 'success');
+            let cuentaAtras = 60;
+            btnReenviar.innerHTML = `<i class="bi bi-clock"></i> Reintentar en ${cuentaAtras}s`;
+            const timerReenvio = setInterval(() => {
+              cuentaAtras--;
+              if (cuentaAtras <= 0) {
+                clearInterval(timerReenvio);
+                btnReenviar.disabled = false;
+                btnReenviar.innerHTML = '<i class="bi bi-envelope-arrow-up"></i> Reenviar Correo de Verificación';
+              } else {
+                btnReenviar.innerHTML = `<i class="bi bi-clock"></i> Reintentar en ${cuentaAtras}s`;
+              }
+            }, 1000);
+          } catch (eMail) {
+            console.error('Error reenviando verificación:', eMail);
+            if (eMail.code === 'auth/too-many-requests') {
+              showToast('Demasiadas solicitudes. Espere unos minutos antes de intentar de nuevo.', 'warning');
+            } else {
+              showToast('No se pudo reenviar el correo en este momento. Intente más tarde.', 'error');
+            }
+            btnReenviar.disabled = false;
+            btnReenviar.innerHTML = '<i class="bi bi-envelope-arrow-up"></i> Reenviar Correo de Verificación';
+          }
+        };
+      }
+    }
   },
 
   onLogin: async (userData) => {
@@ -226,8 +271,10 @@ initAuth(auth, db, {
 function initRecuperacionPerfil(authUser) {
     const rolSelect = document.getElementById('recup-rol');
     const boxDea = document.getElementById('recup-box-dea');
+    const boxPlanta = document.getElementById('recup-box-planta');
     const boxMun = document.getElementById('recup-box-mun');
     const selMun = document.getElementById('recup-municipio');
+    const selPlanta = document.getElementById('recup-dependencia-planta');
     const btnGuardar = document.getElementById('btn-completar-perfil');
     const errEl = document.getElementById('recup-error');
 
@@ -247,9 +294,15 @@ function initRecuperacionPerfil(authUser) {
         rolSelect.onchange = () => {
             if (rolSelect.value === 'munadmin') {
                 if (boxDea) boxDea.style.display = 'none';
+                if (boxPlanta) boxPlanta.style.display = 'none';
                 if (boxMun) boxMun.style.display = 'block';
+            } else if (rolSelect.value === 'plantadmin') {
+                if (boxDea) boxDea.style.display = 'none';
+                if (boxPlanta) boxPlanta.style.display = 'block';
+                if (boxMun) boxMun.style.display = 'none';
             } else {
                 if (boxDea) boxDea.style.display = 'block';
+                if (boxPlanta) boxPlanta.style.display = 'none';
                 if (boxMun) boxMun.style.display = 'none';
             }
         };
@@ -262,7 +315,10 @@ function initRecuperacionPerfil(authUser) {
             const cedula = (document.getElementById('recup-cedula')?.value || '').trim();
             const telefono = (document.getElementById('recup-telefono')?.value || '').trim();
             const rol = rolSelect ? rolSelect.value : 'plaadmin';
-            const dea = (document.getElementById('recup-dea')?.value || '').trim().toUpperCase();
+            let dea = (document.getElementById('recup-dea')?.value || '').trim().toUpperCase();
+            if (rol === 'plantadmin') {
+                dea = (selPlanta ? selPlanta.value : '').trim();
+            }
             const mun = selMun ? selMun.value : '';
 
             if (!nombre || !cedula) {
@@ -311,7 +367,7 @@ function initRecuperacionPerfil(authUser) {
             } else if (rol === 'plantadmin') {
                 if (!dea) {
                     if (errEl) {
-                        errEl.textContent = 'Por favor ingrese el Código de Dependencia Ministerial.';
+                        errEl.textContent = 'Por favor seleccione la división o dependencia central.';
                         errEl.style.display = 'block';
                     }
                     return;
@@ -319,7 +375,7 @@ function initRecuperacionPerfil(authUser) {
                 const dp = await findPlantel(dea);
                 if (!dp) {
                     if (errEl) {
-                        errEl.textContent = 'El código de dependencia ministerial no existe en la base de datos.';
+                        errEl.textContent = 'La dependencia central seleccionada no existe en la base de datos.';
                         errEl.style.display = 'block';
                     }
                     return;
@@ -342,6 +398,8 @@ function initRecuperacionPerfil(authUser) {
                 }
                 jerarquia.plantel_codigo = depUpper;
                 jerarquia.municipio = 'LIBERTADOR';
+                jerarquia.parroquia = 'SAGRARIO';
+                jerarquia.plantel_nombre = dp['nombre-plantel']?.nominal || dp.nombre_plantel || 'SEDE ADMINISTRATIVA';
             } else if (rol === 'munadmin') {
                 if (!mun) {
                     if (errEl) {
@@ -430,21 +488,26 @@ document.getElementById('link-go-login')?.addEventListener('click', () => {
 // Dynamic form fields for Registration
 document.getElementById('reg-rol')?.addEventListener('change', (e) => {
     const rol = e.target.value;
-    document.getElementById('dynamic-munadmin').classList.add('hidden');
-    document.getElementById('dynamic-plaadmin').classList.add('hidden');
-    document.getElementById('reg-municipio').required = false;
-    document.getElementById('reg-codigo-dea').required = false;
+    document.getElementById('dynamic-munadmin')?.classList.add('hidden');
+    document.getElementById('dynamic-plaadmin')?.classList.add('hidden');
+    document.getElementById('dynamic-plantadmin')?.classList.add('hidden');
+    if (document.getElementById('reg-municipio')) document.getElementById('reg-municipio').required = false;
+    if (document.getElementById('reg-codigo-dea')) document.getElementById('reg-codigo-dea').required = false;
+    if (document.getElementById('reg-dependencia-planta')) document.getElementById('reg-dependencia-planta').required = false;
 
     if(rol === 'munadmin') {
-        document.getElementById('dynamic-munadmin').classList.remove('hidden');
+        document.getElementById('dynamic-munadmin')?.classList.remove('hidden');
         document.getElementById('reg-municipio').required = true;
-    } else if(rol === 'plaadmin' || rol === 'plantadmin') {
-        document.getElementById('dynamic-plaadmin').classList.remove('hidden');
+    } else if(rol === 'plaadmin') {
+        document.getElementById('dynamic-plaadmin')?.classList.remove('hidden');
         document.getElementById('reg-codigo-dea').required = true;
         const inpDea = document.getElementById('reg-codigo-dea');
         if (inpDea) {
-            inpDea.placeholder = rol === 'plantadmin' ? 'Código Dependencia Ministerial (Ej. 001200339)' : 'Código DEA del Plantel (Ej. OD01771401)';
+            inpDea.placeholder = 'Código DEA del Plantel (Ej. OD01771401)';
         }
+    } else if(rol === 'plantadmin') {
+        document.getElementById('dynamic-plantadmin')?.classList.remove('hidden');
+        document.getElementById('reg-dependencia-planta').required = true;
     }
 });
 
@@ -666,21 +729,44 @@ document.getElementById('register-form')?.addEventListener('submit', async (e) =
     const pwd = document.getElementById('reg-password').value;
     const rol = document.getElementById('reg-rol').value;
     let municipio = document.getElementById('reg-municipio').value || "";
-    const dea = document.getElementById('reg-codigo-dea').value.trim().toUpperCase();
+    let dea = (document.getElementById('reg-codigo-dea')?.value || '').trim().toUpperCase();
+    if (rol === 'plantadmin') {
+        dea = (document.getElementById('reg-dependencia-planta')?.value || '').trim();
+    }
     const deaErr = document.getElementById('reg-dea-error');
-    deaErr.style.display = 'none';
+    if (deaErr) deaErr.style.display = 'none';
+    const plantaErr = document.getElementById('reg-planta-error');
+    if (plantaErr) plantaErr.style.display = 'none';
 
     try {
-        if(rol === 'plaadmin' || rol === 'plantadmin') {
-            const dp = await findPlantel(dea);
+        let dp = null;
+        if(rol === 'plaadmin') {
+            dp = await findPlantel(dea);
             if(!dp) {
-                deaErr.textContent = rol === 'plantadmin' 
-                    ? "El código de dependencia ministerial no existe en la base de datos."
-                    : "El código DEA no existe en la base de datos.";
-                deaErr.style.display = 'block';
+                if (deaErr) {
+                    deaErr.textContent = "El código DEA no existe en la base de datos.";
+                    deaErr.style.display = 'block';
+                }
                 throw new Error("Invalid DEA");
             }
-            municipio = dp.municipio || dp.municipio_nombre || (rol === 'plantadmin' ? 'LIBERTADOR' : '');
+            municipio = dp.municipio || dp.municipio_nombre || '';
+        } else if(rol === 'plantadmin') {
+            if (!dea) {
+                if (plantaErr) {
+                    plantaErr.textContent = "Debe seleccionar una división o dependencia central.";
+                    plantaErr.style.display = 'block';
+                }
+                throw new Error("Invalid Planta");
+            }
+            dp = await findPlantel(dea);
+            if(!dp) {
+                if (plantaErr) {
+                    plantaErr.textContent = "La dependencia central seleccionada no existe en la base de datos.";
+                    plantaErr.style.display = 'block';
+                }
+                throw new Error("Invalid Planta");
+            }
+            municipio = 'LIBERTADOR';
         }
 
         const cred = await createUserWithEmailAndPassword(auth, email, pwd);
@@ -832,6 +918,10 @@ document.getElementById('register-form')?.addEventListener('submit', async (e) =
         } else if(rol === 'plaadmin' || rol === 'plantadmin') {
             jerarquia.municipio = municipio || (rol === 'plantadmin' ? 'LIBERTADOR' : '');
             jerarquia.plantel_codigo = dea;
+            if (rol === 'plantadmin') {
+                jerarquia.parroquia = 'SAGRARIO';
+                jerarquia.plantel_nombre = dp?.['nombre-plantel']?.nominal || dp?.nombre_plantel || 'SEDE ADMINISTRATIVA';
+            }
         }
 
         // Blindaje Crítico: Guardar en Firestore ANTES del correo para que la cuenta nunca quede huérfana
@@ -853,11 +943,24 @@ document.getElementById('register-form')?.addEventListener('submit', async (e) =
             console.warn("Aviso al enviar verificación de correo:", mailErr);
         }
 
-        await showAlert("¡Registro Exitoso!", "Revise su correo en la <b>carpeta spam</b> para verificar su cuenta y comuníquese con el responsable de Sistema de gestión humana municipal <b>para la aprobación</b>.", "success");
+        if (rol === 'plantadmin') {
+            const nomDep = dp?.['nombre-plantel']?.nominal || dp?.nombre_plantel || "Dependencia Central";
+            await showAlert(
+                "¡Solicitud Enviada con Éxito!",
+                `Su registro para la <b>${nomDep}</b> ha sido recibido con éxito.<br><br>Su solicitud pasará a revisión de la <b>Dirección de Zona Educativa / Gestión Humana</b>. Una vez aprobada en el sistema, su acceso a la nómina y despacho quedará activo de forma inmediata.`,
+                "success"
+            );
+        } else {
+            await showAlert(
+                "¡Registro Exitoso!",
+                "Su solicitud ha sido registrada con éxito y está en espera de validación por su Coordinador Municipal. Una vez aprobada, su acceso quedará activo automáticamente.",
+                "success"
+            );
+        }
         await signOut(auth);
 
     } catch (error) {
-        if(error.message !== "Invalid DEA") {
+        if(error.message !== "Invalid DEA" && error.message !== "Invalid Planta") {
             console.error(error);
             if(error.code === 'auth/email-already-in-use') {
                 try {
@@ -883,14 +986,27 @@ document.getElementById('register-form')?.addEventListener('submit', async (e) =
                                 await showAlert("Plantel Ya Cuenta con Director", `El plantel con código DEA <b>${deaUpper}</b> ya cuenta con un director registrado.`, "warning");
                                 return;
                             }
+                        } else if (rol === 'plantadmin') {
+                            const depUpper = dea.trim().toUpperCase();
+                            const snapPlant = await getDocs(query(collection(db, 'usuarios'), where('jerarquia.plantel_codigo', '==', depUpper)));
+                            const titularPlant = snapPlant.docs.map(d => ({ id: d.id, ...d.data() })).find(d => d.id !== signInCred.user.uid && d.rol === 'plantadmin' && (d.estado_aprobacion === 'APROBADO' || d.estado_aprobacion === 'PENDIENTE'));
+                            if (titularPlant) {
+                                await signOut(auth);
+                                await showAlert("Dependencia Ya Cuenta con Jefe", `La dependencia central con código <b>${depUpper}</b> ya cuenta con un jefe de división registrado.`, "warning");
+                                return;
+                            }
                         }
 
                         let jerarquia = { estado: "MERIDA" };
                         if(rol === 'munadmin') {
                             jerarquia.municipio = municipio;
-                        } else if(rol === 'plaadmin') {
-                            jerarquia.municipio = municipio;
+                        } else if(rol === 'plaadmin' || rol === 'plantadmin') {
+                            jerarquia.municipio = municipio || (rol === 'plantadmin' ? 'LIBERTADOR' : '');
                             jerarquia.plantel_codigo = dea;
+                            if (rol === 'plantadmin') {
+                                jerarquia.parroquia = 'SAGRARIO';
+                                jerarquia.plantel_nombre = dp?.['nombre-plantel']?.nominal || dp?.nombre_plantel || 'SEDE ADMINISTRATIVA';
+                            }
                         }
                         await safeSetDoc(doc(db, 'usuarios', signInCred.user.uid), {
                             nombre,

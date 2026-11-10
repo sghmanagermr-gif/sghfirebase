@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SGH - v2.33.0</title>
+  <title>SGH - v2.34.0</title>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
@@ -100,6 +100,20 @@
             <div id="recup-box-dea">
               <input type="text" id="recup-dea" placeholder="Código DEA del Plantel (Ej: OD16551416) *" class="form-input" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.9rem; text-transform: uppercase;" />
             </div>
+            <div id="recup-box-planta" style="display: none;">
+              <select id="recup-dependencia-planta" class="form-input" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.9rem;">
+                <option value="" disabled selected>Seleccione la División o Dependencia Central *</option>
+                <option value="001200330">001200330 - DIRECCIÓN DE LA ZONA</option>
+                <option value="001200331">001200331 - DIVISIÓN DE SUPERVISIÓN Y EVALUACIÓN DE SISTEMAS EDUCATIVOS</option>
+                <option value="001200332">001200332 - DIVISIÓN DE EDUCACIÓN INDÍGENA</option>
+                <option value="001200334">001200334 - DIVISIÓN DE EDUCACIÓN ESPECIAL</option>
+                <option value="001200337">001200337 - DIVISIÓN DE COMUNIDADES EDUCATIVAS Y UNIÓN CON EL PUEBLO</option>
+                <option value="001200338">001200338 - DIVISIÓN DE INVESTIGACIÓN Y FORMACIÓN DOCENTE</option>
+                <option value="001200339">001200339 - DIVISIÓN DE GESTIÓN HUMANA</option>
+                <option value="001200340">001200340 - DIVISIÓN DE INSTALACIONES Y LOGÍSTICA</option>
+                <option value="001200341">001200341 - DIVISIÓN DE EDUCACIÓN DE JÓVENES, ADULTOS Y ADULTAS</option>
+              </select>
+            </div>
             <div id="recup-box-mun" style="display: none;">
               <select id="recup-municipio" class="form-input" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.9rem;">
                 <option value="">Seleccione Municipio *</option>
@@ -110,6 +124,15 @@
               Guardar Perfil y Enviar a Revisión
             </button>
           </div>
+        </div>
+        <div id="box-verificacion-reenvio" style="display: none; margin-bottom: 20px; padding: 14px; background: rgba(37, 99, 235, 0.06); border: 1px solid rgba(37, 99, 235, 0.25); border-radius: 12px; text-align: center;">
+          <p style="font-size: 0.84rem; color: #334155; margin-bottom: 10px; line-height: 1.4;">
+            ¿No encontró el correo o venció el enlace? Puede reenviarlo a su bandeja:
+          </p>
+          <button id="btn-reenviar-verificacion" type="button"
+            style="width: 100%; background: #2563eb; color: #ffffff; border: none; padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s;">
+            <i class="bi bi-envelope-arrow-up"></i> <span>Reenviar Correo de Verificación</span>
+          </button>
         </div>
         <button id="btn-logout-espera" class="btn-icon"
           style="width: 100%; background: transparent; border: 1px solid var(--glass-border); color: var(--text-muted);">Cerrar
@@ -124,7 +147,7 @@
           style="width: 110px; height: 110px; border-radius: 20px; object-fit: cover; box-shadow: 0 10px 25px rgba(0,0,0,0.2); margin-bottom: 18px;" />
         <h1
           style="color: var(--primary-color); margin-bottom: 5px; display: flex; align-items: baseline; justify-content: center; gap: 8px;">
-          SGH <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">v2.31.1</span></h1>
+          SGH <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">v2.34.0</span></h1>
         <p>Sistema de Gestión Humana - Estado Mérida</p>
         <form id="login-form">
           <input type="email" id="login-email" placeholder="Correo Electrónico" required autocomplete="email" />
@@ -212,6 +235,27 @@
             </div>
           </div>
 
+          <div id="dynamic-plantadmin" class="hidden">
+            <select id="reg-dependencia-planta" style="margin-bottom: 0;">
+              <option value="" disabled selected>Seleccione la División o Dependencia Central</option>
+              <option value="001200330">001200330 - DIRECCIÓN DE LA ZONA</option>
+              <option value="001200331">001200331 - DIVISIÓN DE SUPERVISIÓN Y EVALUACIÓN DE SISTEMAS EDUCATIVOS</option>
+              <option value="001200332">001200332 - DIVISIÓN DE EDUCACIÓN INDÍGENA</option>
+              <option value="001200334">001200334 - DIVISIÓN DE EDUCACIÓN ESPECIAL</option>
+              <option value="001200337">001200337 - DIVISIÓN DE COMUNIDADES EDUCATIVAS Y UNIÓN CON EL PUEBLO</option>
+              <option value="001200338">001200338 - DIVISIÓN DE INVESTIGACIÓN Y FORMACIÓN DOCENTE</option>
+              <option value="001200339">001200339 - DIVISIÓN DE GESTIÓN HUMANA</option>
+              <option value="001200340">001200340 - DIVISIÓN DE INSTALACIONES Y LOGÍSTICA</option>
+              <option value="001200341">001200341 - DIVISIÓN DE EDUCACIÓN DE JÓVENES, ADULTOS Y ADULTAS</option>
+            </select>
+            <div style="font-size: 0.78rem; color: #64748b; text-align: left; margin-top: 4px; margin-bottom: 12px; line-height: 1.3;">
+              ℹ️ Solo se admite un Jefe de División activo por dependencia central.
+            </div>
+            <div id="reg-planta-error"
+              style="color: var(--danger); font-size: 0.85rem; text-align: left; margin-bottom: 15px; display: none;">
+            </div>
+          </div>
+
           <input type="email" id="reg-email" placeholder="Correo Electrónico (Gmail)" required />
           <div class="password-container">
             <input type="password" id="reg-password" placeholder="Crear Contraseña (Min. 6 caracteres)" required
@@ -230,7 +274,7 @@
     <section id="dashboard-view" class="view">
       <nav class="navbar">
         <div class="nav-brand">
-          <span style="color: var(--primary-color);">SGH</span> v2.31.1
+          <span style="color: var(--primary-color);">SGH</span> v2.34.0
         </div>
         <div class="nav-user">
           <span id="user-display-name" style="font-weight: 500;">Cargando...</span>
@@ -293,7 +337,7 @@
         <img src="/sgh-logo.png" alt="SGH Logo"
           style="width: 32px; height: 32px; border-radius: 6px; object-fit: cover; box-shadow: 0 2px 6px rgba(0,0,0,0.15);" />
         <span style="color: var(--primary-color); font-weight: 700;">SGH</span> <span
-          style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">v2.33.0</span>
+          style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">v2.34.0</span>
       </div>
       <div class="nav-user" style="display: flex; gap: 10px; align-items: center;">
         <button id="btn-logout-lock" class="btn-icon"
@@ -1863,7 +1907,7 @@
             <h1
               style="color: var(--primary-color); font-size: 1.05rem; margin: 0; display: flex; align-items: center; gap: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
               SGH Panel <span id="admin-header-version-badge"
-                style="font-size: 0.72rem; font-weight: 600; color: var(--primary-color); background: rgba(37,99,235,0.1); padding: 2px 6px; border-radius: 10px;">v2.31.1</span>
+                style="font-size: 0.72rem; font-weight: 600; color: var(--primary-color); background: rgba(37,99,235,0.1); padding: 2px 6px; border-radius: 10px;">v2.34.0</span>
             </h1>
           </div>
         </div>
@@ -2177,6 +2221,7 @@
                 <select id="filter-rol-usuario" style="margin: 0; height: 42px; padding: 0 10px; font-size: 0.88rem; background: white; border-radius: 8px; border: 1px solid #cbd5e1; width: 100%; box-sizing: border-box; cursor: pointer;">
                   <option value="TODOS">Todos los roles</option>
                   <option value="zonadmin">🏛️ Zonadmin</option>
+                  <option value="plantadmin">🏛️ Jefes de Planta</option>
                   <option value="munadmin">🏢 Munadmin</option>
                   <option value="plaadmin">🏫 Directores</option>
                 </select>

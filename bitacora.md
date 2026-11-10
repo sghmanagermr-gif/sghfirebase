@@ -4606,3 +4606,32 @@ Se diseñó, programó y validó de forma integral la experiencia de usuario y l
   * Compilación exitosa con Vite en 617ms.
 
 - **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.
+
+
+## [Flujo Oficial de Registro, Aprobación Institucional y Sala de Espera para Rol plantadmin] - 2026-11-09
+
+### Resumen Técnico
+Se diseñó, programó y desplegó en producción el flujo completo de registro público, validación anti-duplicados y aprobación zonal para el rol **`plantadmin`** (Jefes de División de la Zona Educativa N° 14 Mérida), resolviendo la fricción histórica asociada a correos de verificación y garantizando la supremacía de la aprobación institucional del administrador.
+
+- **Selector Desplegable Oficial en el Registro (`#dynamic-plantadmin`):**
+  * En [`webapp/index.html`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/index.html) y [`webapp/src/main.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/src/main.js), se implementó el selector directo con las 9 dependencias ministeriales oficiales registradas en la base de datos (`001200330` a `001200341`), erradicando la digitación manual de códigos numéricos de 9 dígitos.
+  * Autocompletado canónico de jerarquía: `estado: 'MERIDA'`, `municipio: 'LIBERTADOR'`, `parroquia: 'SAGRARIO'` y vinculación al nombre nominal oficial de la dependencia central.
+
+- **Blindaje Institucional Anti-Duplicados:**
+  * Restricción estricta de un único Jefe de División activo o en revisión por código de dependencia central tanto en el registro de clientes como en el panel de aprobación administrativa.
+  * En caso de existir un titular previo, el sistema alerta de inmediato indicando nombre y correo del funcionario actual.
+
+- **Solución al Bloqueo por Correo de Verificación:**
+  * En [`webapp/src/auth.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/src/auth.js), se reordenó la jerarquía de validación de acceso: el estado `estado_aprobacion === 'PENDIENTE'` informa claramente que la cuenta está en espera de validación zonal y, al recibir la aprobación (`APROBADO`), **se desbloquea el acceso directo al sistema de forma inmediata sin depender de la entrega del correo de verificación**.
+  * En [`webapp/index.html`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/index.html) y [`webapp/src/main.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/src/main.js), se inyectó en la Sala de Espera el botón interactivo **«Reenviar Correo de Verificación»** con temporizador de enfriamiento de 60 segundos.
+
+- **Gobernanza Zonal y Panel de Administración:**
+  * En [`webapp/src/admin.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/src/admin.js): Incorporación del filtro directo `🏛️ Jefes de Planta` en `filter-rol-usuario`, distinción visual de ubicación `🏛️ <Nombre Sede> (<Código>)`, badge `🏛️ PLANTADMIN` y confirmación explícita de acceso inmediato al presionar **«Aprobar Acceso»**.
+  * Exclusión estricta de la vista municipal de Libertador (`munadmin`), manteniendo la aprobación centralizada bajo la tutela de `zonadmin` y `superadmin`.
+
+- **Control de Versiones y Verificación en Vivo:**
+  * Incremento a versión **`v2.34.0`** en `package.json`, `index.html` y `versiones.md`.
+  * Verificación en vivo: Registro exitoso confirmado en Firestore para `alfonsoiii_75@gmail.com` bajo el despacho `001200330 - DIRECCION DE LA ZONA`.
+  * Compilación limpia con Vite (693ms).
+
+- **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.
