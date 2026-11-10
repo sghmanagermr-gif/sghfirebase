@@ -4635,3 +4635,23 @@ Se diseñó, programó y desplegó en producción el flujo completo de registro 
   * Compilación limpia con Vite (693ms).
 
 - **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.
+
+
+## [v2.35.0] - 2026-11-09 (Control de Despliegue Exclusivo para Zona Educativa y Planta Central)
+
+### Resumen Técnico
+Se diseñó e implementó en el panel de Despliegue Global (`#admin-tab-despliegue`) la tarjeta institucional y switch dedicado para la **Zona Educativa / Planta Central** (`#card-planta-despliegue`). Esta mejora resuelve la limitación arquitectónica previa donde las sedes administrativas centrales (`001200330` a `001200341`) estaban supeditadas implícitamente al cronograma de activación municipal de las escuelas de Libertador.
+
+- **Tarjeta Institucional y Switch Dedicado en Despliegue:**
+  * En [`webapp/index.html`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/index.html), se inyectó la tarjeta `#card-planta-despliegue` con temática púrpura institucional (`#9333ea`), ícono representativo `🏛️`, badge de estado dinámico (`#badge-planta-despliegue`), switch `#chk-planta-despliegue` y texto explicativo del alcance ministerial.
+- **Desacoplamiento Operativo de Libertador:**
+  * En [`webapp/src/admin.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/src/admin.js), se asoció el switch al parámetro `planta_activa` en el documento maestro `configuracion/despliegue`. Permite al administrador suspender o habilitar las 9 divisiones centrales con total independencia del despliegue escolar de Libertador.
+- **Soporte de Excepciones Individuales para Dependencias Centrales:**
+  * El buscador e inyector de excepciones admite códigos ministeriales de 9 dígitos (`0012...`), renderizando automáticamente el ícono `🏛️` y el distintivo morado `PLANTA CENTRAL` en la tabla de excepciones permitidas.
+- **Compuerta de Seguridad y Enrutamiento Institucional:**
+  * En [`webapp/src/auth.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/src/auth.js), la compuerta de acceso para usuarios con rol `plantadmin` valida la condición `planta_activa !== false` o la presencia del código de dependencia en `excepciones`. En caso de pausa técnica, el usuario es guiado a la Sala de Espera con notificación institucional.
+- **Control de Versiones y Compilación:**
+  * Incremento a `v2.35.0` en `package.json`, `index.html` y registro en `versiones.md`.
+  * Compilación de producción con Vite limpia y validada (618ms).
+
+- **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.

@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SGH - v2.34.0</title>
+  <title>SGH - v2.35.0</title>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
@@ -147,7 +147,7 @@
           style="width: 110px; height: 110px; border-radius: 20px; object-fit: cover; box-shadow: 0 10px 25px rgba(0,0,0,0.2); margin-bottom: 18px;" />
         <h1
           style="color: var(--primary-color); margin-bottom: 5px; display: flex; align-items: baseline; justify-content: center; gap: 8px;">
-          SGH <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">v2.34.0</span></h1>
+          SGH <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">v2.35.0</span></h1>
         <p>Sistema de Gestión Humana - Estado Mérida</p>
         <form id="login-form">
           <input type="email" id="login-email" placeholder="Correo Electrónico" required autocomplete="email" />
@@ -274,7 +274,7 @@
     <section id="dashboard-view" class="view">
       <nav class="navbar">
         <div class="nav-brand">
-          <span style="color: var(--primary-color);">SGH</span> v2.34.0
+          <span style="color: var(--primary-color);">SGH</span> v2.35.0
         </div>
         <div class="nav-user">
           <span id="user-display-name" style="font-weight: 500;">Cargando...</span>
@@ -337,7 +337,7 @@
         <img src="/sgh-logo.png" alt="SGH Logo"
           style="width: 32px; height: 32px; border-radius: 6px; object-fit: cover; box-shadow: 0 2px 6px rgba(0,0,0,0.15);" />
         <span style="color: var(--primary-color); font-weight: 700;">SGH</span> <span
-          style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">v2.34.0</span>
+          style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">v2.35.0</span>
       </div>
       <div class="nav-user" style="display: flex; gap: 10px; align-items: center;">
         <button id="btn-logout-lock" class="btn-icon"
@@ -1907,7 +1907,7 @@
             <h1
               style="color: var(--primary-color); font-size: 1.05rem; margin: 0; display: flex; align-items: center; gap: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
               SGH Panel <span id="admin-header-version-badge"
-                style="font-size: 0.72rem; font-weight: 600; color: var(--primary-color); background: rgba(37,99,235,0.1); padding: 2px 6px; border-radius: 10px;">v2.34.0</span>
+                style="font-size: 0.72rem; font-weight: 600; color: var(--primary-color); background: rgba(37,99,235,0.1); padding: 2px 6px; border-radius: 10px;">v2.35.0</span>
             </h1>
           </div>
         </div>
@@ -2502,6 +2502,33 @@
             </div>
           </div>
 
+          <!-- INTERRUPTOR DE PLANTA CENTRAL / ZONA EDUCATIVA -->
+          <div id="card-planta-despliegue" style="background: #faf5ff; border: 2px solid #a855f7; border-radius: 12px; padding: 18px 22px; margin-bottom: 22px; display: flex; align-items: center; justify-content: space-between; gap: 15px; box-shadow: 0 2px 10px rgba(168,85,247,0.06); transition: all 0.3s ease;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <span id="icon-planta-despliegue" style="font-size: 2rem; line-height: 1; user-select: none;">🏛️</span>
+              <div>
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                  <h3 id="title-planta-despliegue" style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #581c87;">
+                    Zona Educativa / Planta Central (Sedes Administrativas)
+                  </h3>
+                  <span id="badge-planta-despliegue" style="background: #f3e8ff; color: #6b21a8; font-size: 0.75rem; font-weight: 700; padding: 2px 10px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Activo</span>
+                </div>
+                <p id="desc-planta-despliegue" style="margin: 4px 0 0 0; font-size: 0.85rem; color: #475569; line-height: 1.4;">
+                  Control de despliegue exclusivo para los 9 despachos centrales y jefes de división (plantadmin) de la Zona Educativa Mérida.
+                </p>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 12px; flex-shrink: 0;">
+              <span id="lbl-planta-despliegue" style="font-size: 0.85rem; font-weight: 700; color: #a855f7; user-select: none;">ENCENDIDO</span>
+              <label style="position:relative; display:inline-block; width:54px; height:28px; cursor:pointer; margin: 0;">
+                <input type="checkbox" id="chk-planta-despliegue" checked style="opacity:0;width:0;height:0;">
+                <span id="slider-planta-despliegue" style="position:absolute; top:0; left:0; right:0; bottom:0; background:#a855f7; border-radius:28px; transition:0.3s;"></span>
+                <span id="knob-planta-despliegue" style="position:absolute; top:2px; left:28px; width:24px; height:24px; background:#fff; border-radius:50%; transition:0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.25);"></span>
+              </label>
+            </div>
+          </div>
+
           <div
             style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
             <label
@@ -2528,10 +2555,10 @@
             style="display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:16px;"></div>
 
           <h3 style="margin-top: 40px; border-top: 1px solid var(--glass-border); padding-top: 20px;">Excepciones
-            Individuales por Plantel</h3>
+            Individuales por Plantel o Dependencia</h3>
           <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-            <input type="text" id="inp-new-excepcion" placeholder="Código DEA (Ej. OD01771401)"
-              style="max-width: 250px; background: white;">
+            <input type="text" id="inp-new-excepcion" placeholder="Código DEA o Dependencia (Ej. OD01771401 o 001200330)"
+              style="max-width: 320px; background: white;">
             <button id="btn-add-excepcion" style="width: auto;">Añadir Excepción</button>
           </div>
           <div id="excepciones-list" style="display: flex; flex-direction: column; gap: 10px;"></div>

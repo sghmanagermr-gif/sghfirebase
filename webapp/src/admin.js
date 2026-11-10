@@ -2366,6 +2366,79 @@ export function initAdminDashboard(dbInstance, user) {
     };
   }
 
+  function actualizarUIPlantaSwitch(activo) {
+    const card = document.getElementById('card-planta-despliegue');
+    const icon = document.getElementById('icon-planta-despliegue');
+    const title = document.getElementById('title-planta-despliegue');
+    const badge = document.getElementById('badge-planta-despliegue');
+    const desc = document.getElementById('desc-planta-despliegue');
+    const lbl = document.getElementById('lbl-planta-despliegue');
+    const chk = document.getElementById('chk-planta-despliegue');
+    const slider = document.getElementById('slider-planta-despliegue');
+    const knob = document.getElementById('knob-planta-despliegue');
+
+    const estaActivo = (activo !== false);
+    if (chk) chk.checked = estaActivo;
+
+    if (estaActivo) {
+      if (card) {
+        card.style.borderColor = '#a855f7';
+        card.style.background = '#faf5ff';
+      }
+      if (icon) icon.textContent = '🏛️';
+      if (title) {
+        title.textContent = 'Zona Educativa / Planta Central (Sedes Administrativas)';
+        title.style.color = '#581c87';
+      }
+      if (badge) {
+        badge.textContent = 'Activo';
+        badge.style.background = '#f3e8ff';
+        badge.style.color = '#6b21a8';
+      }
+      if (desc) {
+        desc.textContent = 'Los 9 despachos centrales y jefes de división (plantadmin) pueden ingresar y operar normalmente.';
+      }
+      if (lbl) {
+        lbl.textContent = 'ENCENDIDO';
+        lbl.style.color = '#a855f7';
+      }
+      if (slider) slider.style.background = '#a855f7';
+      if (knob) knob.style.left = '28px';
+    } else {
+      if (card) {
+        card.style.borderColor = '#f59e0b';
+        card.style.background = '#fffbeb';
+      }
+      if (icon) icon.textContent = '⏸️';
+      if (title) {
+        title.textContent = 'Zona Educativa / Planta Central (En Pausa)';
+        title.style.color = '#b45309';
+      }
+      if (badge) {
+        badge.textContent = 'En Pausa';
+        badge.style.background = '#fef3c7';
+        badge.style.color = '#92400e';
+      }
+      if (desc) {
+        desc.textContent = 'El acceso está temporalmente suspendido para los despachos centrales de Zona Educativa.';
+      }
+      if (lbl) {
+        lbl.textContent = 'APAGADO';
+        lbl.style.color = '#d97706';
+      }
+      if (slider) slider.style.background = '#94a3b8';
+      if (knob) knob.style.left = '3px';
+    }
+  }
+
+  const chkPlantaDespliegue = document.getElementById('chk-planta-despliegue');
+  if (chkPlantaDespliegue) {
+    chkPlantaDespliegue.onchange = (e) => {
+      configActual.planta_activa = e.target.checked;
+      actualizarUIPlantaSwitch(configActual.planta_activa);
+    };
+  }
+
   async function loadConfig() {
     try {
       const snap = await getDoc(docRef);
@@ -2382,8 +2455,10 @@ export function initAdminDashboard(dbInstance, user) {
       if (!configActual.excepciones) configActual.excepciones = [];
       if (!configActual.modo_operacion) configActual.modo_operacion = 'TOTAL';
       if (configActual.despliegue_activo === undefined) configActual.despliegue_activo = true;
+      if (configActual.planta_activa === undefined) configActual.planta_activa = true;
       
       actualizarUIMasterSwitch(configActual.despliegue_activo);
+      actualizarUIPlantaSwitch(configActual.planta_activa);
       renderGrid();
       renderExcepciones();
     } catch(err) {
@@ -2436,9 +2511,11 @@ export function initAdminDashboard(dbInstance, user) {
     }
     expList.innerHTML = configActual.excepciones.map(cod => {
       let nombrePlantel = '';
+      let isPlanta = cod.startsWith('0012');
       if (Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
         const p = currentPlanteles.find(x => x.id === cod || x.codigos?.plantel === cod);
         if (p) {
+          if (p.es_planta || p.denominacion === 'SEDE ADMINISTRATIVA') isPlanta = true;
           const ep = obtenerEponimoLimpioPlantel(p) || p['nombre-plantel']?.nominal || p.denominacion || '';
           if (ep) nombrePlantel = ` <span style="color:#64748b; font-weight:normal; font-size:0.88rem;">&bull; ${ep}</span>`;
         }
@@ -2447,13 +2524,14 @@ export function initAdminDashboard(dbInstance, user) {
       return `
       <div style="background:white; padding:12px 18px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; border:1px solid #e2e8f0; box-shadow:0 1px 3px rgba(0,0,0,0.04); gap:12px;">
         <div style="display:flex; align-items:center; gap:10px; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-          <span style="font-size:1.15rem; flex-shrink:0;">🏫</span>
+          <span style="font-size:1.15rem; flex-shrink:0;">${isPlanta ? '🏛️' : '🏫'}</span>
           <span style="font-weight:700; color:#1e293b; font-size:0.95rem; letter-spacing:0.3px;">${cod}</span>
           ${nombrePlantel}
+          ${isPlanta ? '<span style="font-size:0.75rem; background:#f3e8ff; color:#7e22ce; padding:2px 8px; border-radius:10px; font-weight:700;">PLANTA CENTRAL</span>' : ''}
         </div>
         <button type="button" class="btn-remove-exp" data-cod="${cod}" 
           style="width:auto !important; min-width:auto !important; flex-shrink:0 !important; margin:0 !important; background:#fee2e2; border:1px solid #fecaca; color:#dc2626; padding:6px 14px !important; border-radius:6px !important; font-weight:600; font-size:0.85rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:none !important; transition:all 0.2s;"
-          title="Eliminar excepción para este plantel">
+          title="Eliminar excepción para este código">
           <span>🗑️</span>
           <span>Eliminar</span>
         </button>
@@ -2504,11 +2582,17 @@ export function initAdminDashboard(dbInstance, user) {
       });
       const municipiosToSave = Array.from(setMuns);
 
+      const chkPlanta = document.getElementById('chk-planta-despliegue');
+      if (chkPlanta) {
+        configActual.planta_activa = chkPlanta.checked;
+      }
+
       await safeUpdateDoc(docRef, {
         municipios_activos: municipiosToSave,
         excepciones: configActual.excepciones,
         modo_operacion: configActual.modo_operacion || 'TOTAL',
-        despliegue_activo: configActual.despliegue_activo !== false
+        despliegue_activo: configActual.despliegue_activo !== false,
+        planta_activa: configActual.planta_activa !== false
       });
       // Update cache
       sessionStorage.setItem('sgh_despliegue_config', JSON.stringify(configActual));

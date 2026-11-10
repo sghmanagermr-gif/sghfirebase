@@ -4,6 +4,20 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.35.0 (9 de Noviembre de 2026)
+
+- **Control de Despliegue Exclusivo para Zona Educativa y Planta Central (`#admin-tab-despliegue`):**
+  - **Tarjeta Institucional Dedicada (`#card-planta-despliegue`):**
+    - Se incorporó en el panel de Despliegue Global, inmediatamente debajo del Switch Maestro, una tarjeta institucional con temática púrpura (`#9333ea`), ícono institucional (`🏛️`), badge de estado dinámico y switch de activación en tiempo real (`#chk-planta-despliegue`).
+  - **Desacoplamiento del Cronograma Municipal de Libertador:**
+    - Introducción del parámetro `planta_activa` en `configuracion/despliegue`, permitiendo que el despliegue de las dependencias administrativas de Zona Educativa opere con total autonomía respecto a las escuelas del municipio Libertador.
+  - **Compuerta de Seguridad y Enrutamiento (`webapp/src/auth.js`):**
+    - La puerta de enlace evalúa para el rol `plantadmin` la condición `planta_activa !== false` o su inclusión directa en `excepciones`. Si el módulo central está en pausa técnica, redirige cordialmente a la Sala de Espera institucional.
+  - **Soporte de Excepciones Individuales para Dependencias Centrales:**
+    - El buscador y tabla de excepciones admite códigos de dependencia (`001200330`–`001200341`), reconociéndolos automáticamente con el distintivo `🏛️ PLANTA CENTRAL`.
+
+---
+
 ### v2.34.0 (9 de Noviembre de 2026)
 
 - **Flujo Oficial de Registro y Sala de Espera para Jefes de División (`plantadmin`):**

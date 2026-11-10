@@ -149,8 +149,19 @@ export function initAuth(auth, db, callbacks) {
             return;
          }
 
-         // Los usuarios plantadmin (Zona Educativa Central) tienen acceso institucional continuo
+         // Control de Despliegue para Planta Central / Zona Educativa
          if (userData.rol === 'plantadmin') {
+            const codDep = userData.jerarquia?.plantel_codigo || userData.plantel_codigo;
+            const isExp = Boolean(codDep && despliegue.excepciones?.includes(codDep));
+            const isPlantaActiva = (despliegue.planta_activa !== false);
+
+            if (!isPlantaActiva && !isExp) {
+               sessionStorage.removeItem('sgh_despliegue_config');
+               const mensajeDespliegue = `El acceso para las dependencias de la <b>Planta Central / Zona Educativa</b> se encuentra temporalmente en pausa técnica. Por favor, manténgase atento a las instrucciones de la Dirección.`;
+               onWait(mensajeDespliegue, "Despliegue Institucional");
+               return;
+            }
+
             onLogin(userData);
             return;
          }

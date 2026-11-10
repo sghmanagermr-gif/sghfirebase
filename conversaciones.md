@@ -6948,3 +6948,30 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 3. **Actualización de Bitácora y Respaldo Git:**  
 >    - Registro formal en `bitacora.md` y `versiones.md` (v2.34.0).  
 >    - Sincronización completa a GitHub (`git add .`, `git commit` y `git push origin main`).
+
+---
+
+### Intervención 201
+
+* **Fecha / Hora:** 2026-11-09 ~21:15 - 21:26 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "Ok. Perfecto. Sigue habiendo un detalle: la Zona Educativa no aparece en el panel de Despliegue"  
+> *(Adjunto: Captura de pantalla de la consola de Firebase mostrando el Uso de Cloud Firestore al 9 de Noviembre: 29k lecturas, 14k escrituras, 11k eliminaciones, 0 tráfico nocturno).*  
+> "Los resultados son satisfactorios"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. **Control de Despliegue para Planta Central / Zona Educativa (`v2.35.0`):**  
+>    - En `webapp/index.html` y `webapp/src/admin.js`, se inyectó la tarjeta institucional `#card-planta-despliegue` con temática púrpura, badge interactivo y switch `#chk-planta-despliegue` conectado al campo `planta_activa` en Firestore (`configuracion/despliegue`).  
+>    - Desacoplamiento de las 9 dependencias ministeriales del cronograma de despliegue escolar de Libertador.  
+>    - Admisión de códigos ministeriales (`001200330` a `001200341`) en la tabla de excepciones con insignia `🏛️ PLANTA CENTRAL`.  
+>    - En `webapp/src/auth.js`, enrutamiento protector a Sala de Espera para el rol `plantadmin` cuando la Planta Central esté pausada.  
+> 2. **Diagnóstico y Certificación del Escudo Zero-Cost:**  
+>    - Verificación del gráfico de consumo de Firebase: Operaciones ejecutadas con 0 excedentes dentro de los límites Spark (29k/50k lecturas, 14k/20k escrituras, 11k/20k eliminaciones).  
+>    - Confirmación de tráfico en reposo total (0 operaciones a las 11 p.m.) y disponibilidad del 100% de la cuota renovada para la ejecución del Bloque 2 (Eje Metropolitano).  
+> 3. **Cierre SemVer y Sincronización:**  
+>    - Elevación a `v2.35.0` en `package.json`, `index.html` y documentación en `versiones.md`, `bitacora.md` y `conversaciones.md`.  
+>    - Compilación de producción con Vite exitosa en 618ms y push a GitHub (`origin main`).
