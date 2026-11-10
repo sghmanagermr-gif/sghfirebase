@@ -4768,3 +4768,68 @@ Se realizó la auditoría forense integral de la colección `cargos_personal` en
   * Compilación con Vite limpia (1.50s) y despliegue exitoso a producción en Firebase Hosting (`https://sgh-merida.web.app`).
 
 - **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.
+
+
+## [v2.36.6] - 2026-11-10 (Ampliación Integral del Auditor de Cédulas: 24 Datos Laborales en Resumen Comparativo de Discrepancias)
+
+### Resumen Técnico
+Se rediseñó y amplió exhaustivamente el módulo de auditoría de personal y la tabla comparativa de discrepancias (`Resumen Comparativo de Discrepancias`) en [`webapp/src/admin.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/src/admin.js) para presentar todos los datos laborales y de carga horaria frente a frente cuando una cédula presenta duplicidad o pluriempleo entre dos o más instituciones educativas.
+
+- **Parámetros Laborales Incorporados (24 campos en 5 categorías):**
+  * **1. Ubicación y Asignación Institucional:** Plantel/Ubicación física, Código DEA, Municipio/Parroquia, Ubicación Administrativa (código de 7 dígitos) y Oficina/Coordinación interna de sede.
+  * **2. Clasificación y Nombramiento:** Tipo de Personal (Docente, Administrativo, Obrero), Cargo Oficial, Código RAC, Rango/Grado de obrero, Dependencia (con indicador estilizado Estadal/Nacional), Condición (Titular/Contratado), Situación Laboral (con indicador de estado activo/inactivo), Descripción de situación laboral y Fecha de ingreso con cálculo automático de años de antigüedad.
+  * **3. Jornada, Matrícula y Dedicación:** Turnos que atiende, ¿Atiende Matrícula?, Nivel/Modalidad del plantel y Especialidad que imparte.
+  * **4. Desglose de Carga Horaria:** Horas según recibo de pago (H.DOC / H.ADM), Horas académicas en el plantel, Horas administrativas en el plantel, Horas por programar y Asignaturas distribuidas (con desglose de año, materia y horas pedagógicas extraídas de los planes 31059 / 31060).
+  * **5. Observaciones Institucionales y Control:** Observaciones completas del expediente y código ID del documento en Cloud Firestore.
+
+- **Impacto Operativo:**
+  * Permite al administrador y a las coordinaciones de nómina diagnosticar con precisión inmediata las diferencias contractuales, incompatibilidades o congruencias horarias en casos de doble cargo legítimo (como el caso testigo de Mercris Bravo C.I. 13.438.966 entre Doña Menca de Leoni y Ramón Celestino Contreras).
+
+- **Despliegue y Control SemVer:**
+  * Incremento de versión a **v2.36.6** en `package.json`, `index.html` y registro en `versiones.md`.
+  * Compilación con Vite limpia (665ms) y despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`).
+
+- **Resultado:** Aprobado y refinado en v2.36.7.
+
+
+## [v2.36.7] - 2026-11-10 (Reordenamiento Estricto de Tabla Comparativa de Discrepancias y Visibilidad Universal en Auditoría)
+
+### Resumen Técnico
+Atendiendo la solicitud de la máxima autoridad escolar y con el propósito de optimizar la ergonomía y cognición visual durante las auditorías de doble cargo o discrepancia, se reordenó de manera estricta la tabla comparativa y las fichas de auditoría en [`webapp/src/admin.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/src/admin.js) para calcar con exactitud 1 a 1 el orden de los campos del formulario de edición del director escolar:
+
+- **Visibilidad Universal de la Tabla Resumen:**
+  * Se suprimió la restricción que limitaba la tabla únicamente a casos con 2 o más registros. Ahora la tabla comparativa/resumen se renderiza de forma universal tanto para funcionarios con un único registro escolar (`Resumen de Auditoría Laboral`) como para casos de duplicidad (`Resumen Comparativo de Discrepancias`).
+
+- **Estructura y Secuencia Idéntica a la Ficha del Director:**
+  * **Identificación Contextual:** Plantel / Ubicación, Código DEA, Municipio / Parroquia.
+  * **2. Datos Laborales:**
+    1. `UBICACIÓN ADMINISTRATIVA`
+    2. `TIPO DE PERSONAL`
+    3. `DEPENDENCIA`
+    4. `CARGO`
+    5. `CÓDIGO RAC`
+    6. `TITULAR / INTERINO`
+    7. `FECHA DE INGRESO`
+    8. `ANTIGÜEDAD (AÑOS)` (con cálculo dinámico por fecha de ingreso ante valores no persistidos)
+    9. `TURNOS QUE ATIENDE`
+    10. `¿ATIENDE MATRÍCULA?`
+  * **🎓 Asignación Pedagógica y Carga Horaria (Frente a Alumnos):**
+    11. `NIVEL / MODALIDAD`
+    12. `ESPECIALIDAD IMPARTE`
+    13. `HORAS SEGÚN RECIBO (H.DOC / H.ADM)`
+    14. `HORAS ACADÉMICAS`
+    15. `HORAS ADMINISTRATIVAS`
+    16. `HORAS POR PROGRAMAR`
+    - Desglose de asignaturas académicas distribuidas en plantel.
+  * **3. Situación del Trabajador:**
+    17. `SITUACIÓN LABORAL`
+    18. `DESCRIPCIÓN`
+    19. `OBSERVACIONES`
+  * **👤 4. Expediente Personal y Contacto:** Teléfono, Correo, Nacimiento, Edad, Estado Civil, Género, Instrucción, Profesión, Dirección, Tallas, Salud y Discapacidad.
+  * **Control de Base de Datos:** `ID DEL DOCUMENTO`.
+
+- **Control SemVer y Despliegue en Vivo:**
+  * Incremento a **v2.36.7** en `package.json`, `index.html` y registro en `versiones.md`.
+  * Compilación con Vite limpia (666ms) y despliegue exitoso a producción en Firebase Hosting (`https://sgh-merida.web.app`).
+
+- **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.

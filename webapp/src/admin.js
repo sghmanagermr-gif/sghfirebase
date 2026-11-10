@@ -5859,75 +5859,240 @@ export function initAdminDashboard(dbInstance, user) {
             </span>
           </div>
         `;
-
-        // TABLA COMPARATIVA RESUMEN (FRENTE A FRENTE)
-        html += `
-          <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); overflow-x: auto;">
-            <h4 style="margin: 0 0 15px; color: #1e293b; font-size: 1rem; display: flex; align-items: center; gap: 8px;">
-              <span>📊</span> Resumen Comparativo de Discrepancias
-            </h4>
-            <table style="width: 100%; border-collapse: collapse; font-size: 0.86rem; text-align: left;">
-              <thead>
-                <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
-                  <th style="padding: 10px 14px; color: #475569; width: 180px;">Parámetro</th>
-                  ${docs.map((d, idx) => `
-                    <th style="padding: 10px 14px; color: #0284c7; font-weight: bold; border-left: 1px solid #e2e8f0;">
-                      Registro #${idx + 1} (${resolverDatosPlantel(d).dea})
-                    </th>
-                  `).join('')}
-                </tr>
-              </thead>
-              <tbody>
-                <tr style="border-bottom: 1px solid #f1f5f9;">
-                  <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">Plantel / Ubicación</td>
-                  ${docs.map(d => `<td style="padding: 10px 14px; color: #1e293b; border-left: 1px solid #f1f5f9; font-weight: 500;">${resolverDatosPlantel(d).escuela}</td>`).join('')}
-                </tr>
-                <tr style="border-bottom: 1px solid #f1f5f9;">
-                  <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">Código DEA</td>
-                  ${docs.map(d => `<td style="padding: 10px 14px; font-family: monospace; font-weight: bold; color: #0284c7; border-left: 1px solid #f1f5f9;">${resolverDatosPlantel(d).dea}</td>`).join('')}
-                </tr>
-                <tr style="border-bottom: 1px solid #f1f5f9;">
-                  <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">Municipio / Parroquia</td>
-                  ${docs.map(d => {
-                    const ip = resolverDatosPlantel(d);
-                    return `<td style="padding: 10px 14px; color: #475569; border-left: 1px solid #f1f5f9;"><strong>${ip.municipio}</strong> — ${ip.parroquia}</td>`;
-                  }).join('')}
-                </tr>
-                <tr style="border-bottom: 1px solid #f1f5f9;">
-                  <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">Cargo / Código RAC</td>
-                  ${docs.map(d => `<td style="padding: 10px 14px; color: #1e293b; border-left: 1px solid #f1f5f9;"><strong>${d.cargo || 'DOCENTE'}</strong> <span style="font-size: 0.78rem; color: #64748b;">(${d['codigo-rac'] || d['codigo-cargo'] || 'S/C'})</span></td>`).join('')}
-                </tr>
-                <tr style="border-bottom: 1px solid #f1f5f9;">
-                  <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">Horas de Nómina</td>
-                  ${docs.map(d => {
-                    const rec = d['horas-recibo'] ?? d.horasRecibo ?? 40;
-                    const acad = d['horas-academicas'] ?? d.horasAcademicas ?? 0;
-                    const adm = d['horas-administrativas'] ?? d.horasAdministrativas ?? 0;
-                    return `<td style="padding: 10px 14px; color: #1e293b; border-left: 1px solid #f1f5f9;"><strong>${rec} hrs</strong> (Acad: ${acad}h / Adm: ${adm}h)</td>`;
-                  }).join('')}
-                </tr>
-                <tr style="border-bottom: 1px solid #f1f5f9;">
-                  <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">Situación Laboral</td>
-                  ${docs.map(d => {
-                    const sit = (d['situacion-laboral'] || d.situacion || 'ACTIVO').toUpperCase();
-                    const colorBg = sit.includes('ACT') ? '#dcfce7' : '#fee2e2';
-                    const colorTxt = sit.includes('ACT') ? '#166534' : '#991b1b';
-                    return `<td style="padding: 10px 14px; border-left: 1px solid #f1f5f9;"><span style="background: ${colorBg}; color: ${colorTxt}; padding: 2px 8px; border-radius: 4px; font-size: 0.78rem; font-weight: bold;">${sit}</span></td>`;
-                  }).join('')}
-                </tr>
-                <tr style="border-bottom: 1px solid #f1f5f9;">
-                  <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">Dependencia / Condición</td>
-                  ${docs.map(d => `<td style="padding: 10px 14px; color: #475569; border-left: 1px solid #f1f5f9;">${d.dependencia || 'NACIONAL'} — Titular: <strong>${d.titular || 'SI'}</strong></td>`).join('')}
-                </tr>
-                <tr>
-                  <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">ID del Documento</td>
-                  ${docs.map(d => `<td style="padding: 10px 14px; font-family: monospace; font-size: 0.78rem; color: #64748b; border-left: 1px solid #f1f5f9;">${d.id}</td>`).join('')}
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        `;
       }
+
+      // TABLA RESUMEN DE AUDITORÍA LABORAL (FRENTE A FRENTE / REGISTRO OFICIAL)
+      const tituloTabla = esDuplicado
+        ? 'Resumen Comparativo de Discrepancias (Auditoría Laboral Completa)'
+        : 'Resumen de Auditoría Laboral (Datos Oficiales del Funcionario)';
+      const subBadgeTabla = esDuplicado
+        ? `Comparativa Integral de ${docs.length} Instituciones`
+        : `1 Institución Registrada (DEA: ${resolverDatosPlantel(docs[0]).dea})`;
+
+      html += `
+        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); overflow-x: auto;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+            <h4 style="margin: 0; color: #1e293b; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
+              <span>📊</span> ${tituloTabla}
+            </h4>
+            <span style="font-size: 0.8rem; background: #f1f5f9; color: #475569; padding: 4px 10px; border-radius: 6px; font-weight: 600;">
+              ${subBadgeTabla}
+            </span>
+          </div>
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.86rem; text-align: left;">
+            <thead>
+              <tr style="background: #f8fafc; border-bottom: 2px solid #cbd5e1;">
+                <th style="padding: 12px 14px; color: #334155; width: 220px; font-weight: 700; text-transform: uppercase; font-size: 0.78rem; letter-spacing: 0.5px;">Parámetro Laboral</th>
+                ${docs.map((d, idx) => {
+                  const infoPlantel = resolverDatosPlantel(d);
+                  const depTag = (d.dependencia || d['DEPENDENCIA'] || 'NACIONAL').toUpperCase();
+                  const depBg = depTag.includes('EST') ? '#ecfdf5' : '#eff6ff';
+                  const depTxt = depTag.includes('EST') ? '#047857' : '#1d4ed8';
+                  const depBorder = depTag.includes('EST') ? '#a7f3d0' : '#bfdbfe';
+                  const labelCol = esDuplicado ? `Registro #${idx + 1}` : 'Expediente Oficial';
+                  return `
+                    <th style="padding: 12px 14px; color: #0284c7; font-weight: bold; border-left: 2px solid #e2e8f0;">
+                      <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 3px;">
+                        <span>${labelCol}</span>
+                        <span style="background: ${depBg}; color: ${depTxt}; border: 1px solid ${depBorder}; font-size: 0.72rem; padding: 2px 7px; border-radius: 4px;">${depTag}</span>
+                      </div>
+                      <div style="font-size: 0.8rem; color: #64748b; font-weight: normal; font-family: monospace;">DEA: ${infoPlantel.dea}</div>
+                    </th>
+                  `;
+                }).join('')}
+              </tr>
+            </thead>
+            <tbody>
+              <!-- CONTEXTO INSTITUCIONAL -->
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">Plantel / Ubicación</td>
+                ${docs.map(d => `<td style="padding: 10px 14px; color: #1e293b; border-left: 1px solid #f1f5f9; font-weight: 600;">${resolverDatosPlantel(d).escuela}</td>`).join('')}
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">Código DEA</td>
+                ${docs.map(d => `<td style="padding: 10px 14px; font-family: monospace; font-weight: bold; color: #0284c7; border-left: 1px solid #f1f5f9;">${resolverDatosPlantel(d).dea}</td>`).join('')}
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">Municipio / Parroquia</td>
+                ${docs.map(d => {
+                  const ip = resolverDatosPlantel(d);
+                  return `<td style="padding: 10px 14px; color: #475569; border-left: 1px solid #f1f5f9;"><strong>${ip.municipio}</strong> — ${ip.parroquia}</td>`;
+                }).join('')}
+              </tr>
+
+              <!-- 2. DATOS LABORALES (ORDEN EXACTO FICHA DEL DIRECTOR) -->
+              <tr style="background: #f1f5f9; border-top: 2px solid #cbd5e1; border-bottom: 1.5px solid #cbd5e1;">
+                <td colspan="${docs.length + 1}" style="padding: 9px 14px; font-weight: 800; font-size: 0.85rem; color: #0f172a; letter-spacing: 0.5px;">
+                  2. Datos Laborales
+                </td>
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">UBICACIÓN ADMINISTRATIVA</td>
+                ${docs.map(d => `<td style="padding: 10px 14px; font-family: monospace; color: #334155; border-left: 1px solid #f1f5f9;">${d['ubicacion-administrativa'] || d['UBICACIÓN ADMINISTRATIVA'] || d.ubicacionAdministrativa || 'N/R'}</td>`).join('')}
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">TIPO DE PERSONAL</td>
+                ${docs.map(d => `<td style="padding: 10px 14px; color: #1e293b; border-left: 1px solid #f1f5f9; font-weight: 600;">${(d['tipo-personal'] || d['TIPO PERSONAL'] || d.tipoPersonal || 'DOCENTE').toUpperCase()}</td>`).join('')}
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">DEPENDENCIA</td>
+                ${docs.map(d => {
+                  const dep = (d.dependencia || d['DEPENDENCIA'] || 'NACIONAL').toUpperCase();
+                  const color = dep.includes('EST') ? '#059669' : '#2563eb';
+                  return `<td style="padding: 10px 14px; border-left: 1px solid #f1f5f9; font-weight: 700; color: ${color};">${dep}</td>`;
+                }).join('')}
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">CARGO</td>
+                ${docs.map(d => `<td style="padding: 10px 14px; color: #1e293b; border-left: 1px solid #f1f5f9;"><strong>${d.cargo || d['CARGO'] || d['descripcion-cargo'] || 'DOCENTE'}</strong></td>`).join('')}
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">CÓDIGO RAC</td>
+                ${docs.map(d => `<td style="padding: 10px 14px; font-family: monospace; font-weight: 600; color: #0284c7; border-left: 1px solid #f1f5f9;">${d['codigo-rac'] || d['codigo-cargo'] || d['CODIGO RAC'] || 'S/C'}</td>`).join('')}
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">TITULAR / INTERINO</td>
+                ${docs.map(d => {
+                  const rawTit = String(d.titular || d['TITULAR'] || d.condicion || 'Titular').trim();
+                  const esTit = rawTit.toUpperCase() === 'SI' || rawTit.toUpperCase() === 'TITULAR';
+                  const esInt = rawTit.toUpperCase() === 'NO' || rawTit.toUpperCase().includes('INT') || rawTit.toUpperCase().includes('CONT');
+                  const dispTit = esTit ? 'Titular' : (esInt ? 'Interino / Contratado' : rawTit);
+                  return `<td style="padding: 10px 14px; color: #334155; border-left: 1px solid #f1f5f9;"><strong>${dispTit}</strong></td>`;
+                }).join('')}
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">FECHA DE INGRESO</td>
+                ${docs.map(d => `<td style="padding: 10px 14px; color: #334155; border-left: 1px solid #f1f5f9;">${d['fecha-ingreso'] || d.fechaIngreso || d['FECHA DE INGRESO'] || 'N/R'}</td>`).join('')}
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">ANTIGÜEDAD (AÑOS)</td>
+                ${docs.map(d => {
+                  let ant = d.antiguedad ?? d['ANTIGUEDAD'] ?? d.antigüedad;
+                  if (ant === undefined || ant === null || ant === '') {
+                    const fIng = String(d['fecha-ingreso'] || d.fechaIngreso || d['FECHA DE INGRESO'] || '').trim();
+                    if (fIng) {
+                      let yyyy, mm, dd;
+                      if (fIng.includes('/')) {
+                        const parts = fIng.split('/');
+                        if (parts.length === 3) {
+                          dd = parseInt(parts[0], 10);
+                          mm = parseInt(parts[1], 10) - 1;
+                          yyyy = parseInt(parts[2], 10);
+                        }
+                      } else if (fIng.includes('-')) {
+                        const parts = fIng.split('-');
+                        if (parts.length === 3) {
+                          yyyy = parseInt(parts[0], 10);
+                          mm = parseInt(parts[1], 10) - 1;
+                          dd = parseInt(parts[2], 10);
+                        }
+                      }
+                      if (yyyy && !isNaN(yyyy)) {
+                        const hoy = new Date();
+                        ant = hoy.getFullYear() - yyyy;
+                        const mDiff = hoy.getMonth() - mm;
+                        if (mDiff < 0 || (mDiff === 0 && hoy.getDate() < dd)) ant--;
+                        ant = Math.max(0, ant);
+                      }
+                    }
+                  }
+                  return `<td style="padding: 10px 14px; color: #334155; border-left: 1px solid #f1f5f9;">${ant !== undefined && ant !== null && ant !== '' ? `${ant} años` : '0 años'}</td>`;
+                }).join('')}
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">TURNOS QUE ATIENDE</td>
+                ${docs.map(d => `<td style="padding: 10px 14px; color: #334155; border-left: 1px solid #f1f5f9;">${d['turnos-atiende'] || d.turnos || d['TURNOS QUE ATIENDE'] || 'MAÑANA'}</td>`).join('')}
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">¿ATIENDE MATRÍCULA?</td>
+                ${docs.map(d => {
+                  const mat = (d['atiende-matricula'] || d['ATIENDE MATRICUAL'] || 'NO').toUpperCase();
+                  const matBg = mat === 'SI' ? '#dbeafe' : '#f1f5f9';
+                  const matTxt = mat === 'SI' ? '#1e40af' : '#64748b';
+                  return `<td style="padding: 10px 14px; border-left: 1px solid #f1f5f9;"><span style="background: ${matBg}; color: ${matTxt}; padding: 2px 8px; border-radius: 4px; font-size: 0.78rem; font-weight: bold;">${mat}</span></td>`;
+                }).join('')}
+              </tr>
+
+              <!-- ASIGNACIÓN PEDAGÓGICA Y CARGA HORARIA -->
+              <tr style="background: #f0fdf4; border-top: 1.5px solid #bbf7d0; border-bottom: 1.5px solid #bbf7d0;">
+                <td colspan="${docs.length + 1}" style="padding: 8px 14px; font-weight: 700; font-size: 0.8rem; color: #166534; letter-spacing: 0.3px;">
+                  🎓 Asignación Pedagógica y Carga Horaria (Frente a Alumnos)
+                </td>
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">NIVEL / MODALIDAD</td>
+                ${docs.map(d => `<td style="padding: 10px 14px; color: #334155; border-left: 1px solid #f1f5f9;">${d['nivel-modalidad'] || d['nivel'] || d['NIVEL'] || 'N/R'}</td>`).join('')}
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">ESPECIALIDAD IMPARTE</td>
+                ${docs.map(d => `<td style="padding: 10px 14px; color: #334155; border-left: 1px solid #f1f5f9;">${d['especialidad-imparte'] || d['especialidad'] || d['ESPECIALIDAD'] || 'N/R'}</td>`).join('')}
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">HORAS SEGÚN RECIBO (H.DOC / H.ADM)</td>
+                ${docs.map(d => {
+                  const rec = d['horas-recibo'] ?? d.horasRecibo ?? d['HORAS ACADEMICAS'] ?? 40;
+                  const tp = (d['tipo-personal'] || d['TIPO PERSONAL'] || '').toUpperCase();
+                  const tag = tp === 'DOCENTE' ? 'H.DOC' : 'H.ADM';
+                  return `<td style="padding: 10px 14px; color: #1e293b; border-left: 1px solid #f1f5f9; font-weight: 700;">${rec} hrs <span style="font-size: 0.76rem; color: #64748b; font-weight: normal;">(${tag})</span></td>`;
+                }).join('')}
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">HORAS ACADÉMICAS</td>
+                ${docs.map(d => {
+                  const acad = d['horas-academicas'] ?? d.horasAcademicas ?? d['HORAS ACADEMICAS'] ?? 0;
+                  return `<td style="padding: 10px 14px; color: #0284c7; border-left: 1px solid #f1f5f9; font-weight: 700;">${acad} hrs</td>`;
+                }).join('')}
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">HORAS ADMINISTRATIVAS</td>
+                ${docs.map(d => {
+                  const adm = d['horas-administrativas'] ?? d.horasAdministrativas ?? d['HORAS ADMINISTRATIVAS'] ?? 0;
+                  return `<td style="padding: 10px 14px; color: #475569; border-left: 1px solid #f1f5f9; font-weight: 700;">${adm} hrs</td>`;
+                }).join('')}
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">HORAS POR PROGRAMAR</td>
+                ${docs.map(d => {
+                  const rec = Number(d['horas-recibo'] ?? d.horasRecibo ?? 40);
+                  const acad = Number(d['horas-academicas'] ?? d.horasAcademicas ?? 0);
+                  const adm = Number(d['horas-administrativas'] ?? d.horasAdministrativas ?? 0);
+                  const prog = d['horas-por-programar'] ?? Math.max(0, rec - (acad + adm));
+                  const color = prog > 0 ? '#b45309' : '#15803d';
+                  return `<td style="padding: 10px 14px; border-left: 1px solid #f1f5f9; font-weight: 700; color: ${color};">${prog} hrs</td>`;
+                }).join('')}
+              </tr>
+
+              <!-- 3. SITUACIÓN DEL TRABAJADOR -->
+              <tr style="background: #f1f5f9; border-top: 2px solid #cbd5e1; border-bottom: 1.5px solid #cbd5e1;">
+                <td colspan="${docs.length + 1}" style="padding: 9px 14px; font-weight: 800; font-size: 0.85rem; color: #0f172a; letter-spacing: 0.5px;">
+                  3. Situación del Trabajador
+                </td>
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">SITUACIÓN LABORAL</td>
+                ${docs.map(d => {
+                  const sit = (d['situacion-laboral'] || d.situacion || d['SITUACIÓN DEL TRABAJADOR'] || 'ACTIVO').toUpperCase();
+                  const colorBg = sit.includes('ACT') ? '#dcfce7' : '#fee2e2';
+                  const colorTxt = sit.includes('ACT') ? '#166534' : '#991b1b';
+                  return `<td style="padding: 10px 14px; border-left: 1px solid #f1f5f9;"><span style="background: ${colorBg}; color: ${colorTxt}; padding: 2px 8px; border-radius: 4px; font-size: 0.78rem; font-weight: bold;">${sit}</span></td>`;
+                }).join('')}
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">DESCRIPCIÓN</td>
+                ${docs.map(d => `<td style="padding: 10px 14px; color: #475569; border-left: 1px solid #f1f5f9; font-size: 0.82rem;">${d['descripcion-situacion'] || (String(d['situacion-laboral'] || '').toUpperCase().includes('ACT') ? 'PERSONAL QUE CUMPLE FUNCIONES EN EL PLANTEL' : 'Sin descripción')}</td>`).join('')}
+              </tr>
+              <tr style="border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">OBSERVACIONES</td>
+                ${docs.map(d => `<td style="padding: 10px 14px; color: #334155; font-size: 0.82rem; border-left: 1px solid #f1f5f9; line-height: 1.4;">${d.observaciones || d.observacion || d['OBSERVACIÓN'] || 'Sin observaciones registradas'}</td>`).join('')}
+              </tr>
+              <tr>
+                <td style="padding: 10px 14px; color: #64748b; font-weight: 600;">ID DEL DOCUMENTO</td>
+                ${docs.map(d => `<td style="padding: 10px 14px; font-family: monospace; font-size: 0.76rem; color: #64748b; border-left: 1px solid #f1f5f9;">${d.id}</td>`).join('')}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      `;
 
       // FICHAS COMPLETAS DETALLADAS (EXPEDIENTES INDIVIDUALES)
       html += `
@@ -5946,17 +6111,62 @@ export function initAdminDashboard(dbInstance, user) {
         const escuela = infoP.escuela;
         const cargo = d.cargo || d['descripcion-cargo'] || d['CARGO'] || 'DOCENTE';
         const codRac = d['codigo-rac'] || d['codigo-cargo'] || d['CODIGO RAC'] || 'S/C';
-        const dep = d.dependencia || d['DEPENDENCIA'] || 'NACIONAL';
-        const tipoPer = d['tipo-personal'] || d.tipoPersonal || d['TIPO PERSONAL'] || 'DOCENTE';
-        const sitLab = d['situacion-laboral'] || d.situacion || d['SITUACIÓN DEL TRABAJADOR'] || 'ACTIVO';
-        const tit = d.titular || d['TITULAR'] || 'SI';
+        const dep = (d.dependencia || d['DEPENDENCIA'] || 'NACIONAL').toUpperCase();
+        const tipoPer = (d['tipo-personal'] || d.tipoPersonal || d['TIPO PERSONAL'] || 'DOCENTE').toUpperCase();
+        const sitLab = (d['situacion-laboral'] || d.situacion || d['SITUACIÓN DEL TRABAJADOR'] || 'ACTIVO').toUpperCase();
+
+        const rawTit = String(d.titular || d['TITULAR'] || d.condicion || 'Titular').trim();
+        const esTit = rawTit.toUpperCase() === 'SI' || rawTit.toUpperCase() === 'TITULAR';
+        const esInt = rawTit.toUpperCase() === 'NO' || rawTit.toUpperCase().includes('INT') || rawTit.toUpperCase().includes('CONT');
+        const dispTit = esTit ? 'Titular' : (esInt ? 'Interino / Contratado' : rawTit);
+
+        const ubicacionAdmin = d['ubicacion-administrativa'] || d['UBICACIÓN ADMINISTRATIVA'] || d.ubicacionAdministrativa || 'N/R';
+        const fIngreso = d['fecha-ingreso'] || d.fechaIngreso || d['FECHA DE INGRESO'] || 'N/R';
+
+        let ant = d.antiguedad ?? d['ANTIGUEDAD'] ?? d.antigüedad;
+        if (ant === undefined || ant === null || ant === '') {
+          if (fIngreso && fIngreso !== 'N/R') {
+            let yyyy, mm, dd;
+            if (fIngreso.includes('/')) {
+              const parts = fIngreso.split('/');
+              if (parts.length === 3) {
+                dd = parseInt(parts[0], 10);
+                mm = parseInt(parts[1], 10) - 1;
+                yyyy = parseInt(parts[2], 10);
+              }
+            } else if (fIngreso.includes('-')) {
+              const parts = fIngreso.split('-');
+              if (parts.length === 3) {
+                yyyy = parseInt(parts[0], 10);
+                mm = parseInt(parts[1], 10) - 1;
+                dd = parseInt(parts[2], 10);
+              }
+            }
+            if (yyyy && !isNaN(yyyy)) {
+              const hoy = new Date();
+              ant = hoy.getFullYear() - yyyy;
+              const mDiff = hoy.getMonth() - mm;
+              if (mDiff < 0 || (mDiff === 0 && hoy.getDate() < dd)) ant--;
+              ant = Math.max(0, ant);
+            }
+          }
+        }
+        if (ant === undefined || ant === null || ant === '') ant = 0;
+
+        const turnos = d['turnos-atiende'] || d.turnos || d['TURNOS QUE ATIENDE'] || 'MAÑANA';
+        const matricula = (d['atiende-matricula'] || d['ATIENDE MATRICUAL'] || 'NO').toUpperCase();
+
+        const nivelModalidad = d['nivel-modalidad'] || d['nivel'] || d['NIVEL'] || 'N/R';
+        const especialidad = d['especialidad-imparte'] || d['especialidad'] || d['ESPECIALIDAD'] || 'N/R';
+
         const hrsRec = d['horas-recibo'] ?? d.horasRecibo ?? d['HORAS ACADEMICAS'] ?? 40;
+        const tag = tipoPer === 'DOCENTE' ? 'H.DOC' : 'H.ADM';
         const hrsAcad = d['horas-academicas'] ?? d.horasAcademicas ?? d['HORAS ACADEMICAS'] ?? 0;
         const hrsAdm = d['horas-administrativas'] ?? d.horasAdministrativas ?? d['HORAS ADMINISTRATIVAS'] ?? 0;
-        const ant = d.antiguedad ?? d['ANTIGUEDAD'] ?? 0;
-        const fIngreso = d['fecha-ingreso'] || d.fechaIngreso || d['FECHA DE INGRESO'] || 'N/R';
-        const turnos = d['turnos-atiende'] || d.turnos || d['TURNOS QUE ATIENDE'] || 'MAÑANA';
-        const matricula = d['atiende-matricula'] || d['ATIENDE MATRICUAL'] || 'NO';
+        const hrsProg = d['horas-por-programar'] ?? Math.max(0, Number(hrsRec) - (Number(hrsAcad) + Number(hrsAdm)));
+
+        const descSit = d['descripcion-situacion'] || (sitLab.includes('ACT') ? 'PERSONAL QUE CUMPLE FUNCIONES EN EL PLANTEL' : 'Sin descripción');
+        const obsCompleta = d.observaciones || d.observacion || d['OBSERVACIÓN'] || 'Sin observaciones registradas';
 
         // Carga horaria detallada
         const carga31059 = parsearCargaHoraria(d['31059']);
@@ -6012,31 +6222,52 @@ export function initAdminDashboard(dbInstance, user) {
             <!-- Cuerpo de Ficha en Secciones Claras -->
             <div style="padding: 22px; display: flex; flex-direction: column; gap: 20px;">
               
-              <!-- SECCIÓN 1: DATOS LABORALES Y HORAS -->
+              <!-- 2. DATOS LABORALES (ORDEN EXACTO FICHA DEL DIRECTOR) -->
               <div>
                 <h5 style="color: #0284c7; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 10px; display: flex; align-items: center; gap: 6px;">
-                  <span>💼</span> Datos Laborales y Condición
+                  <span>💼</span> 2. Datos Laborales
                 </h5>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; background: #f8fafc; padding: 14px 18px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.85rem;">
-                  <div><span style="color: #64748b;">Cargo Oficial:</span> <strong style="color: #1e293b; display: block;">${cargo}</strong></div>
-                  <div><span style="color: #64748b;">Código RAC:</span> <strong style="color: #1e293b; display: block; font-family: monospace;">${codRac}</strong></div>
-                  <div><span style="color: #64748b;">Tipo de Personal:</span> <strong style="color: #1e293b; display: block;">${tipoPer}</strong></div>
-                  <div><span style="color: #64748b;">Dependencia:</span> <strong style="color: #1e293b; display: block;">${dep}</strong></div>
-                  <div><span style="color: #64748b;">Condición:</span> <strong style="color: #1e293b; display: block;">${tit === 'SI' ? 'Titular' : 'Interino / Contratado'}</strong></div>
-                  <div><span style="color: #64748b;">Situación:</span> <strong style="color: ${sitLab.includes('ACT') ? '#16a34a' : '#dc2626'}; display: block;">${sitLab}</strong></div>
-                  <div><span style="color: #64748b;">Horas de Nómina:</span> <strong style="color: #1e293b; display: block;">${hrsRec} hrs (Acad: ${hrsAcad}h / Adm: ${hrsAdm}h)</strong></div>
-                  <div><span style="color: #64748b;">Antigüedad / Ingreso:</span> <strong style="color: #1e293b; display: block;">${ant} años (${fIngreso})</strong></div>
-                  <div><span style="color: #64748b;">Turno Atiende:</span> <strong style="color: #1e293b; display: block;">${turnos}</strong></div>
-                  <div><span style="color: #64748b;">Atiende Matrícula:</span> <strong style="color: #1e293b; display: block;">${matricula}</strong></div>
+                  <div><span style="color: #64748b;">UBICACIÓN ADMINISTRATIVA:</span> <strong style="color: #1e293b; display: block; font-family: monospace;">${ubicacionAdmin}</strong></div>
+                  <div><span style="color: #64748b;">TIPO DE PERSONAL:</span> <strong style="color: #1e293b; display: block;">${tipoPer}</strong></div>
+                  <div><span style="color: #64748b;">DEPENDENCIA:</span> <strong style="color: ${dep.includes('EST') ? '#059669' : '#2563eb'}; display: block;">${dep}</strong></div>
+                  <div><span style="color: #64748b;">CARGO:</span> <strong style="color: #1e293b; display: block;">${cargo}</strong></div>
+                  <div><span style="color: #64748b;">CÓDIGO RAC:</span> <strong style="color: #0284c7; display: block; font-family: monospace;">${codRac}</strong></div>
+                  <div><span style="color: #64748b;">TITULAR / INTERINO:</span> <strong style="color: #1e293b; display: block;">${dispTit}</strong></div>
+                  <div><span style="color: #64748b;">FECHA DE INGRESO:</span> <strong style="color: #1e293b; display: block;">${fIngreso}</strong></div>
+                  <div><span style="color: #64748b;">ANTIGÜEDAD (AÑOS):</span> <strong style="color: #1e293b; display: block;">${ant} años</strong></div>
+                  <div><span style="color: #64748b;">TURNOS QUE ATIENDE:</span> <strong style="color: #1e293b; display: block;">${turnos}</strong></div>
+                  <div><span style="color: #64748b;">¿ATIENDE MATRÍCULA?:</span> <strong style="color: #1e293b; display: block;">${matricula}</strong></div>
                 </div>
               </div>
 
-              <!-- SECCIÓN 2: CARGA HORARIA Y ASIGNATURAS DISTRIBUIDAS -->
-              <div>
-                <h5 style="color: #0284c7; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 10px; display: flex; align-items: center; gap: 6px;">
-                  <span>📚</span> Carga Horaria y Asignaturas Distribuidas
-                </h5>
-                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 18px;">
+              <!-- ASIGNACIÓN PEDAGÓGICA Y CARGA HORARIA (FRENTE A ALUMNOS) -->
+              <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 10px; padding: 16px 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                  <h5 style="color: #166534; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; margin: 0; display: flex; align-items: center; gap: 6px;">
+                    <span>🎓</span> Asignación Pedagógica y Carga Horaria (Frente a Alumnos)
+                  </h5>
+                  ${matricula === 'SI' ? `
+                    <span style="background: #dcfce7; color: #15803d; border: 1px solid #86efac; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 700;">
+                      Atención Directa de Matrícula
+                    </span>
+                  ` : ''}
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 14px; font-size: 0.85rem;">
+                  <div><span style="color: #15803d;">NIVEL / MODALIDAD:</span> <strong style="color: #14532d; display: block;">${nivelModalidad}</strong></div>
+                  <div><span style="color: #15803d;">ESPECIALIDAD IMPARTE:</span> <strong style="color: #14532d; display: block;">${especialidad}</strong></div>
+                  <div><span style="color: #15803d;">HORAS SEGÚN RECIBO:</span> <strong style="color: #14532d; display: block;">${hrsRec} hrs (${tag})</strong></div>
+                  <div><span style="color: #15803d;">HORAS ACADÉMICAS:</span> <strong style="color: #0284c7; display: block;">${hrsAcad} hrs</strong></div>
+                  <div><span style="color: #15803d;">HORAS ADMINISTRATIVAS:</span> <strong style="color: #475569; display: block;">${hrsAdm} hrs</strong></div>
+                  <div><span style="color: #15803d;">HORAS POR PROGRAMAR:</span> <strong style="color: ${hrsProg > 0 ? '#b45309' : '#15803d'}; display: block;">${hrsProg} hrs</strong></div>
+                </div>
+
+                <!-- Distribución Académica de Materias -->
+                <div style="background: white; border: 1px solid #dcfce7; border-radius: 8px; padding: 12px 16px;">
+                  <span style="font-size: 0.8rem; font-weight: 700; color: #166534; display: block; margin-bottom: 6px;">
+                    📚 Asignaturas Académicas Distribuidas en Plantel:
+                  </span>
                   ${materiasTotal.length > 0 ? `
                     <div style="display: flex; flex-wrap: wrap; gap: 8px;">
                       ${materiasTotal.map(m => `
@@ -6058,7 +6289,19 @@ export function initAdminDashboard(dbInstance, user) {
                 </div>
               </div>
 
-              <!-- SECCIÓN 3: DATOS PERSONALES, CONTACTO Y SALUD -->
+              <!-- 3. SITUACIÓN DEL TRABAJADOR -->
+              <div>
+                <h5 style="color: #0284c7; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 10px; display: flex; align-items: center; gap: 6px;">
+                  <span>📋</span> 3. Situación del Trabajador
+                </h5>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; background: #f8fafc; padding: 14px 18px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.85rem;">
+                  <div><span style="color: #64748b;">SITUACIÓN LABORAL:</span> <strong style="color: ${sitLab.includes('ACT') ? '#16a34a' : '#dc2626'}; display: block;">${sitLab}</strong></div>
+                  <div><span style="color: #64748b;">DESCRIPCIÓN:</span> <strong style="color: #334155; display: block;">${descSit}</strong></div>
+                  <div style="grid-column: 1 / -1;"><span style="color: #64748b;">OBSERVACIONES:</span> <strong style="color: #334155; display: block; font-weight: 500; line-height: 1.4;">${obsCompleta}</strong></div>
+                </div>
+              </div>
+
+              <!-- 4. EXPEDIENTE PERSONAL Y CONTACTO -->
               <div>
                 <h5 style="color: #0284c7; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 10px; display: flex; align-items: center; gap: 6px;">
                   <span>👤</span> Expediente Personal y Contacto
@@ -6074,13 +6317,6 @@ export function initAdminDashboard(dbInstance, user) {
                   <div><span style="color: #64748b;">Salud / Discapacidad:</span> <strong style="color: #1e293b; display: block;">${d['tipo-enfermedad'] || 'Ninguna'} (Disc: ${d.discapacidad || 'NO'})</strong></div>
                 </div>
               </div>
-
-              <!-- SECCIÓN 4: OBSERVACIONES -->
-              ${d.observaciones ? `
-                <div style="background: #fffbeb; border: 1px solid #fef3c7; border-left: 4px solid #f59e0b; padding: 12px 16px; border-radius: 6px; font-size: 0.85rem; color: #92400e;">
-                  <strong>📝 Observaciones del Expediente:</strong> ${d.observaciones}
-                </div>
-              ` : ''}
 
             </div>
           </div>

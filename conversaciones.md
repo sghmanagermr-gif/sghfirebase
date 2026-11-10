@@ -7127,3 +7127,136 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    - Compilación con Vite limpia (1.50s) y despliegue completado con éxito a producción en Firebase Hosting (`https://sgh-merida.web.app`). Sincronización completa con repositorio GitHub (`origin/main`).  
 > 7. **Cierre de Ciclo:**  
 >    - El usuario confirmó su total conformidad: *"Sí, satisfecho"*.
+
+---
+
+### Intervención 206
+
+* **Fecha / Hora:** 2026-11-10 ~17:06 - 17:26 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "¿Cuáles fueron los municipios parametrizados en el bloque 2?"  
+> "protocolo CASO_HUERFANOS:
+Escuela Profesor Antonio Morales:
+Personal que faltan en el RAC:
+Vigilantes:
+1.Jose Gregorio Rivas Torres C.I 10239422
+2.Fernando José Carrasquero Araujo C.I 12499150
+Aseadoras:
+1. María Euqueria Rivas Dávila C.I 14656023
+2. Eldi Isabel Camelo de Uzcategui 14250783
+3. Yoseimy Iranuth Molero Villalobos 17326129
+Escuela Ramón Moreno Viloria: YACKELINE DURAN ESPINOZA 23218007 Obrero
+Jardín de infancia pascual Ignacio Villasmil: Carmen Olimpia Avendaño Zerpa Cédula 12549386 Obrero
+Jardín de Infancia pascual Ignacio Villasmil: Argelia del Carmen Avendaño moreno, cédula: 15142422, obrero
+Preescolar Simón Rodríguez Anexo Luis Pérez: Maribel de Carmen Hernández Bracho CI 17437763 Personal obrero
+Escuela Jesús Manuel Santander Ramírez: personal que Falta en el RAC Asesora Ydelma Pérez C.I. 9198769
+Creo que solo 2 están en el RAC.xlsx"  
+> "Si no hay nada que inyectar en Firestore, entonces solo tienes luz verde para darme el mensaje whatsapp. más nada"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. **Resolución de Consulta de Bloque 2:**  
+>    - Se detallaron los 8 municipios migrados en el Bloque 2 (Eje Metropolitano: Libertador, Campo Elías, Sucre, Santos Marquina; Eje Pueblos del Sur: Aricagua, Arzobispo Chacón, Guaraque, Padre Noguera; 13.121 registros).  
+> 2. **Auditoría Forense CASO_HUERFANOS (Caracciolo Parra Olmedo):**  
+>    - Se identificaron los 5 planteles educativos correspondientes a las parroquias Tucaní y Florencio Ramírez (`OD01101407`, `OD04191407`, `OD17441407`, `OD04171407`, `OD04151407`).  
+>    - Se contrastaron exhaustivamente los 10 funcionarios reportados contra la nómina central `RAC.xlsx` (30.323 registros), la nómina consolidada estadal y `cargos_personal` en Firebase.  
+>    - **Detección Crítica de Conflicto de Cédula:** Se confirmó que las cédulas 12.549.386 y 15.142.422 (reportadas como obreras en el J.I. Pascual Ignacio Villasmil) pertenecen en RAC a las docentes Daisy Faria y Liset Ascanio (Docentes IV de Aula). Se evitó la usurpación de identidad y daño a las docentes legítimas.  
+>    - Los 8 casos restantes correspondieron a personal obrero/vigilancia comunal o institucional sin código RAC ministerial activo.  
+> 3. **Ejecución y Resguardo de Integridad:**  
+>    - 0 escrituras en Firestore (cero alteraciones y Zero-Cost absoluto).  
+> 4. **Entrega de FASE 2:**  
+>    - Emisión del comunicado canónico oficial formateado para difusión vía WhatsApp a las autoridades y directivos del CDCE de Caracciolo Parra Olmedo.
+
+---
+
+### Intervención 207
+
+* **Fecha / Hora:** 2026-11-10 ~17:33 - 18:15 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "A veces no termino de entender yo mismo el funcionamiento del sistema en relación a los dobles cargos: el funcionario 13438966 aparece en ambas instituciones, sin embargo al momento de actualizar uno u otro no lo permite por cuestion de carga horaria. ¿Cuál es la lógica para que de la opción de poderlos modificar, sin que el sistema rechaze la actualización? Así yo podré entender y decirte si debe haber correctivos o no" *(Adjunta captura del Resumen Comparativo de Discrepancias para Mercris María Bravo de Pirela entre Doña Menca de Leoni OD00471414 y Ramón Celestino Contreras OD17601407)*.  
+> "¿o sea que es muy probable que el funcionario esté registrado en uno o ambos planteles con el nivel INICIAL y/o PRIMARIA, y entonces el sistema aplica el candado? Bueno creo que así lo estoy entendiendo"  
+> "Por ahora no. Tengo que analizar eso con el jefe de nomina. Pero si por favor necesito que se amplie la información que da el auditor de cedulas. Actualmente el auditor solo informa lo siguiente: Plantel / Ubicación, Código DEA, Municipio / Parroquia, Cargo / Código RAC, Horas de Nómina, Situación Laboral, Dependencia / Condición y ID del Documento. Se puede ver que se mencionas algunos datos laborales. Quiero que se aprecien todos los datos laborales. ¿Sabes cuáles son todos los datos laborales?"  
+> "Sí por favor"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. **Diagnóstico y Explicación del Candado de Carga Horaria:**  
+>    - Se analizó el caso testigo de Mercris Bravo (C.I. 13.438.966), quien posee un Doble Cargo legítimo: Cargo Estadal en Doña Menca de Leoni (`OD00471414`) y Cargo Nacional en Ramón Celestino Contreras (`OD17601407`).  
+>    - Se explicó que el validador actual acumula ciegamente las horas de ambos cargos (40h + 36h = 76h) contra un único contrato, disparando los candados de «docente concentrado en básica» y «exceso de carga acumulada sobre 56 horas».  
+>    - Se presentó la propuesta de validación independiente por dependencia para su futura evaluación con la jefatura de nómina.  
+> 2. **Ampliación Integral del Auditor de Cédulas (Resumen Comparativo de Discrepancias):**  
+>    - Se rediseñó la tabla comparativa en `webapp/src/admin.js` incorporando los **24 parámetros laborales y de carga horaria** agrupados en 5 categorías visuales:  
+>      * *Ubicación y Asignación:* Plantel, Código DEA, Municipio/Parroquia, Ubicación Administrativa y Oficina/Coordinación.  
+>      * *Clasificación y Nombramiento:* Tipo de personal, Cargo oficial, Código RAC, Rango de obrero, Dependencia (con etiquetas destacadas Estadal/Nacional), Condición (Titular/Contratado), Situación laboral y Fecha de ingreso con antigüedad.  
+>      * *Jornada y Dedicación:* Turnos que atiende, ¿Atiende matrícula?, Nivel/Modalidad y Especialidad que imparte.  
+>      * *Desglose de Carga Horaria:* Horas según recibo (H.DOC / H.ADM), Horas académicas en plantel, Horas administrativas en plantel, Horas por programar y Asignaturas distribuidas desglosadas por año y materia.  
+>      * *Observaciones y Control:* Observaciones institucionales y número de ID en Firebase.  
+> 3. **Control SemVer y Despliegue en Vivo:**  
+>    - Elevación SemVer a **v2.36.6** en `package.json`, `index.html`, `versiones.md` y `bitacora.md`.  
+>    - Compilación limpia con Vite (665ms) y despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`).  
+>    - Sincronización pendiente para confirmación de satisfacción del administrador.
+
+---
+
+### Intervención 208
+
+* **Fecha / Hora:** 2026-11-10 ~18:31 - 18:38 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "NO VALE, NECESITO QUE APAREZCAN LOS DATOS LABORALES EN EL ORDEN COMO ESTAN EN LA FICHA DEL DIRECTOR:" *(Adjunta capturas de pantalla de la ficha del director mostrando las secciones 2. Datos Laborales, Asignación Pedagógica y Carga Horaria Frente a Alumnos, y 3. Situación del Trabajador)*.
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. **Reestructuración de la Tabla Comparativa de Discrepancias:**  
+>    - Se alineó la secuencia y titulación de filas en `webapp/src/admin.js` para reflejar con exactitud 1 a 1 la estructura visual del formulario del director escolar:  
+>      * Identificadores de ubicación iniciales: Plantel / Ubicación, Código DEA, Municipio / Parroquia.  
+>      * Sección `2. Datos Laborales`: Ubicación Administrativa, Tipo de Personal, Dependencia, Cargo, Código RAC, Titular / Interino, Fecha de Ingreso, Antigüedad (Años) [con cálculo automático de calendario], Turnos que Atiende y ¿Atiende Matrícula?.  
+>      * Sub-sección destacada `🎓 Asignación Pedagógica y Carga Horaria (Frente a Alumnos)`: Nivel / Modalidad, Especialidad Imparte, Horas según Recibo (H.DOC / H.ADM), Horas Académicas, Horas Administrativas y Horas por Programar.  
+>      * Sección `3. Situación del Trabajador`: Situación Laboral, Descripción y Observaciones.  
+>      * Registro de control: ID del Documento en Firebase.  
+> 2. **Control SemVer y Compilación:**  
+>    - Elevación a versión **v2.36.7** en `package.json` e `index.html`.  
+>    - Compilación limpia de producción con Vite (673ms) sin errores.  
+> 3. **Despliegue Operativo:**  
+>    - Publicación exitosa en Firebase Hosting (`https://sgh-merida.web.app`).  
+> 4. **Pregunta Protocolar:**  
+>    - Notificación al administrador solicitando validación con `Ctrl + F5` y consulta de satisfacción protocolar.
+
+---
+
+### Intervención 209
+
+* **Fecha / Hora:** 2026-11-10 ~18:52 - 19:00 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "No estoy satisfecho. Porque como puedes observar en la imagen. no veo los datos completos del funcionario. Como supuestamente los reflejas en la lista que me compartes del Nuevo Orden del Resumen Comparativo. Tampoco se ve la carga horaria, etc. En fin el Nuevo Orden del Resumen Comparativo no aparece como lo describes" *(Adjunta captura de pantalla de la consulta de Franklin Ramón Erazo Ramos V-15595250 en Liceo Bolivariano Río Frío OD17601407 mostrando la ficha individual con los bloques antiguos)*.
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. **Diagnóstico Inmediato de la Discrepancia Visual:**  
+>    - Se identificó que la tabla resumen estaba condicionada exclusivamente a casos de duplicidad (`esDuplicado == true`), por lo que al consultar funcionarios con una sola institución (como Franklin Erazo) la tabla no se renderizaba y solo se mostraba la tarjeta inferior con el esquema anterior resumido.  
+> 2. **Universalización del Resumen de Auditoría Laboral:**  
+>    - Se habilitó la renderización incondicional de la tabla comparativa/resumen:  
+>      * Para funcionarios únicos: Se titula `📊 Resumen de Auditoría Laboral (Datos Oficiales del Funcionario)`.  
+>      * Para duplicados/multi-plantel: Se titula `📊 Resumen Comparativo de Discrepancias (Auditoría Laboral Completa)`.  
+> 3. **Reestructuración Integral de Fichas Institucionales Detalladas:**  
+>    - Se rediseñaron las fichas detalladas inferiores para seguir con exactitud 1 a 1 los bloques y campos de la ficha del director:  
+>      * `💼 2. Datos Laborales`: Ubicación Administrativa, Tipo de Personal, Dependencia, Cargo, Código RAC, Titular/Interino, Fecha de Ingreso, Antigüedad (Años), Turnos que Atiende y ¿Atiende Matrícula?.  
+>      * `🎓 Asignación Pedagógica y Carga Horaria (Frente a Alumnos)`: Nivel/Modalidad, Especialidad Imparte, Horas según Recibo, Horas Académicas, Horas Administrativas, Horas por Programar y Asignaturas Académicas Distribuidas.  
+>      * `📋 3. Situación del Trabajador`: Situación Laboral, Descripción y Observaciones.  
+>      * `👤 4. Expediente Personal y Contacto`: Datos personales de contacto y salud.  
+> 4. **Compilación y Despliegue en Vivo:**  
+>    - Compilación con Vite limpia (666ms) y despliegue exitoso a producción en Firebase Hosting (`https://sgh-merida.web.app`).  
+> 5. **Pregunta Protocolar:**  
+>    - Notificación al administrador y consulta de satisfacción protocolar.  
+>    - **Confirmación del Administrador:** «Si satisfactorios». Procedimiento cerrado y sincronizado con repositorio remoto.

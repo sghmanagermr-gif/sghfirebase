@@ -4,6 +4,45 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.36.7 (10 de Noviembre de 2026)
+
+- **Reordenamiento Estricto del Resumen Comparativo de Discrepancias y Visibilidad Universal en Auditoría:**
+  - **Activación Universal de la Tabla de Resumen Laboral:**
+    - Se eliminó la restricción condicional que ocultaba la tabla comparativa cuando el funcionario figuraba en una sola institución. A partir de esta versión, la tabla se renderiza siempre:
+      * En funcionarios con registro único: Como `Resumen de Auditoría Laboral (Datos Oficiales del Funcionario)`.
+      * En casos de pluriempleo o multi-plantel: Como `Resumen Comparativo de Discrepancias (Auditoría Laboral Completa)`.
+  - **Homologación 1 a 1 de la Secuencia de Campos según la Ficha del Director:**
+    - Tanto en la tabla resumen como en las fichas institucionales individuales (`Expediente Completo del Funcionario` / `Expedientes Detallados por Institución`), todos los campos se muestran exactamente en el orden del formulario del director:
+      1. *Contexto Inicial:* Plantel / Ubicación, Código DEA, Municipio / Parroquia.
+      2. *2. Datos Laborales:* Ubicación Administrativa, Tipo de Personal, Dependencia, Cargo, Código RAC, Titular / Interino, Fecha de Ingreso, Antigüedad (Años) con cómputo automático de calendario, Turnos que Atiende y ¿Atiende Matrícula?.
+      3. *🎓 Asignación Pedagógica y Carga Horaria (Frente a Alumnos):* Nivel / Modalidad, Especialidad Imparte, Horas según Recibo (H.DOC / H.ADM), Horas Académicas, Horas Administrativas, Horas por Programar y desglose de Asignaturas Académicas Distribuidas.
+      4. *3. Situación del Trabajador:* Situación Laboral, Descripción y Observaciones.
+      5. *👤 Expediente Personal y Contacto:* Teléfono, Correo, Nacimiento/Edad, Estado Civil/Género, Instrucción/Profesión, Dirección, Tallas y Salud/Discapacidad.
+      6. *Control de Base de Datos:* ID del Documento en Cloud Firestore.
+  - **Despliegue y Control SemVer:**
+    - Incremento a **v2.36.7** en `package.json`, `index.html` y compilación limpia con Vite (666ms).
+    - Despliegue operativo inmediato en Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
+### v2.36.6 (10 de Noviembre de 2026)
+
+- **Ampliación Integral del Auditor de Cédulas y Resumen Comparativo de Discrepancias:**
+  - **Evolución del Panel Comparativo Frente a Frente:**
+    - La tabla del «Resumen Comparativo de Discrepancias» se expandió de 8 parámetros básicos a la totalidad de los **24 datos laborales y de carga horaria** del SGH organizados en 5 categorías visuales:
+      1. *Ubicación y Asignación Institucional:* Plantel, Código DEA, Municipio/Parroquia, Ubicación Administrativa (código de 7 dígitos) y Oficina/Coordinación interna.
+      2. *Clasificación y Nombramiento:* Tipo de personal, Cargo oficial, Código RAC, Rango/Grado de obrero, Dependencia (con etiquetas destacadas Estadal/Nacional), Condición (Titular/Contratado), Situación laboral con descripción detallada y Fecha de ingreso con cálculo de antigüedad.
+      3. *Jornada, Matrícula y Dedicación:* Turnos que atiende, ¿Atiende matrícula?, Nivel/Modalidad y Especialidad que imparte.
+      4. *Desglose de Carga Horaria:* Horas de recibo (H.DOC / H.ADM), Horas académicas en plantel, Horas administrativas en plantel, Horas por programar y Asignaturas distribuidas (con año, materia y horas desglosadas).
+      5. *Observaciones y Control:* Observaciones institucionales y número de ID del documento en Cloud Firestore.
+  - **Mejora en la Detección y Análisis de Casos de Pluriempleo:**
+    - Permite a las autoridades contrastar de manera inmediata los expedientes de funcionarios con doble cargo legítimo (Nacional vs. Estadal) o detectar incompatibilidades horarias sin recurrir a consultas manuales externas.
+  - **Despliegue y Control SemVer:**
+    - Elevación SemVer a **v2.36.6** en `package.json`, `index.html` y compilación limpia con Vite (665ms).
+    - Despliegue operativo exitoso en producción en Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.36.5 (10 de Noviembre de 2026)
 
 - **Saneamiento General de Documentos Fantasma con Clave `_` y Regularización de DEA:**
