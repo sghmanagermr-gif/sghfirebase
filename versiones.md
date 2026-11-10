@@ -4,6 +4,17 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.35.1 (9 de Noviembre de 2026)
+
+- **Optimización y Limpieza de Interfaz para Rol `plantadmin` (Planta Central):**
+  - **Supresión Definitiva del Cascarón Escolar Residual (`#card-plantel-form`):**
+    - Se ocultó por completo el contenedor `#card-plantel-form` (formulario de matrícula y datos escolares) para usuarios con rol `plantadmin` o planteles con denominación `SEDE ADMINISTRATIVA`.
+    - Blindaje condicional estricto: la supresión aplica exclusivamente a sedes administrativas, garantizando que la pantalla del Director de Plantel (`plaadmin`) permanezca 100% visible, intacta y operativa.
+  - **Cabecera Institucional en Nómina de Planta Central:**
+    - Se adaptó el encabezado de la nómina para reflejar dinámicamente el nombre y código de la dependencia ministerial (ej. `🏛️ Personal Registrado — DIRECCION DE LA ZONA (Cód. 001200330)`), ofreciendo una interfaz pulcra y profesional.
+
+---
+
 ### v2.35.0 (9 de Noviembre de 2026)
 
 - **Control de Despliegue Exclusivo para Zona Educativa y Planta Central (`#admin-tab-despliegue`):**

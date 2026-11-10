@@ -6975,3 +6975,30 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 3. **Cierre SemVer y Sincronización:**  
 >    - Elevación a `v2.35.0` en `package.json`, `index.html` y documentación en `versiones.md`, `bitacora.md` y `conversaciones.md`.  
 >    - Compilación de producción con Vite exitosa en 618ms y push a GitHub (`origin main`).
+
+---
+
+### Intervención 202
+
+* **Fecha / Hora:** 2026-11-09 ~21:28 - 21:46 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> "por favor puedes subir la última versión a Firebase?"  
+> "Sí son satisfecho.  
+> Ahora, ve la imagen.  
+> hay como una barra blanca que es id="plantel-form". ¿Eso debería estar allí?"  
+> "Si retirar esa barra blanca no afectará la pantalla del director, sí, procede"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. **Diagnóstico del Cascarón Residual (`#plantel-form`):**  
+>    - Se identificó que la barra blanca correspondía al marco exterior del formulario de matrícula de planteles escolares (`#plantel-form`), cuyos campos internos habían sido apagados para `plantadmin` pero su contenedor seguía ocupando espacio en el DOM.  
+> 2. **Supresión Aislada y Protección al Director de Plantel (`v2.35.1`):**  
+>    - En `webapp/index.html` y `webapp/src/main.js`, se asignó el ID `#card-plantel-form` al contenedor y se condicionó su ocultamiento exclusivamente a usuarios con rol `plantadmin` o denominación `SEDE ADMINISTRATIVA`.  
+>    - Para los Directores de Plantel (`plaadmin`), se garantiza por defecto la visibilidad total e inalterada del formulario escolar.  
+>    - Se enriqueció la cabecera de la nómina central (`#seccion-personal-existente`) para mostrar el nombre nominal de la división y su código ministerial (`🏛️ Personal Registrado — <Sede> (Cód. 001200330)`).  
+> 3. **Compilación y Despliegue en Vivo:**  
+>    - Incremento a `v2.35.1` en `package.json`, `index.html` y registro en `versiones.md`, `bitacora.md` y `conversaciones.md`.  
+>    - Compilación de producción con Vite limpia (605ms) y despliegue exitoso en Firebase Hosting (`https://sgh-merida.web.app`).

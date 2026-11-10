@@ -2121,6 +2121,8 @@ async function mostrarCandado(codigoDEA, dataParcial) {
     if (esPlantAdmin) {
         window._requierePaso1 = false;
         styleTag.innerHTML = `
+            #card-plantel-form { display: none !important; }
+            #plantel-form { display: none !important; }
             #banner-alerta-paso1-top { display: none !important; }
             #contenedor-seleccion-planes { display: none !important; }
             #mensaje-sin-planes { display: none !important; }
@@ -2135,6 +2137,8 @@ async function mostrarCandado(codigoDEA, dataParcial) {
             #container-oficina { display: block !important; }
             #seccion-personal-existente { display: block !important; }
         `;
+        const cardPF = document.getElementById('card-plantel-form');
+        if (cardPF) cardPF.style.display = 'none';
     } else if (window._modoSupervision) {
         styleTag.innerHTML = `
             #btn-guardar-matricula { display: none !important; }
@@ -2258,6 +2262,8 @@ async function mostrarCandado(codigoDEA, dataParcial) {
             window._requierePaso1 = false;
             if (styleTag) {
                 styleTag.innerHTML = `
+                    #card-plantel-form { display: none !important; }
+                    #plantel-form { display: none !important; }
                     #banner-alerta-paso1-top { display: none !important; }
                     #contenedor-seleccion-planes { display: none !important; }
                     #mensaje-sin-planes { display: none !important; }
@@ -2273,15 +2279,22 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                     #seccion-personal-existente { display: block !important; }
                 `;
             }
-            const tituloInst = document.querySelector('#plantel-form h3');
-            if (tituloInst) tituloInst.textContent = "Datos de la Sede Administrativa / División";
+            const cardPF = document.getElementById('card-plantel-form');
+            if (cardPF) cardPF.style.display = 'none';
+
             const tituloPers = document.querySelector('#seccion-personal-existente h2');
-            if (tituloPers) tituloPers.textContent = "Personal Registrado en la Sede Administrativa / División";
+            if (tituloPers) {
+                const nomSede = dp?.['nombre-plantel']?.nominal || dp?.nombre_plantel || dp?.denominacion || 'Sede Administrativa';
+                tituloPers.innerHTML = `🏛️ Personal Registrado &mdash; <span style="color: var(--primary-color);">${nomSede}</span> <span style="font-size: 0.85rem; font-weight: 500; color: #64748b; background: rgba(0,0,0,0.05); padding: 3px 8px; border-radius: 6px; margin-left: 6px;">Cód. ${codigoDEA}</span>`;
+            }
 
             ['inp-matricula-total', 'inp-metros-cuadrados', 'inp-turnos-plantel', 'inp-niveles-modalidades'].forEach(cid => {
                 const el = document.getElementById(cid);
                 if (el && el.parentElement) el.parentElement.style.display = 'none';
             });
+        } else {
+            const cardPF = document.getElementById('card-plantel-form');
+            if (cardPF) cardPF.style.removeProperty('display');
         }
 
         const selNivMod = document.getElementById('inp-niveles-modalidades');
@@ -2692,8 +2705,12 @@ async function mostrarCandado(codigoDEA, dataParcial) {
         }
     }
 
+    const cardPFInit = document.getElementById('card-plantel-form');
+    if (cardPFInit) cardPFInit.style.removeProperty('display');
+
     if (esPlantAdmin || dp?.es_planta || dp?.denominacion === 'SEDE ADMINISTRATIVA') {
         window._requierePaso1 = false;
+        if (cardPFInit) cardPFInit.style.display = 'none';
         const secPersonal = document.getElementById('seccion-personal-existente');
         if (secPersonal) {
             secPersonal.style.removeProperty('display');

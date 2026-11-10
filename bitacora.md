@@ -4655,3 +4655,23 @@ Se diseñó e implementó en el panel de Despliegue Global (`#admin-tab-desplieg
   * Compilación de producción con Vite limpia y validada (618ms).
 
 - **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.
+
+
+## [v2.35.1] - 2026-11-09 (Optimización y Limpieza Visual de Interfaz para Planta Central)
+
+### Resumen Técnico
+Se eliminó la barra blanca residual (`#card-plantel-form` / `#plantel-form`) que aparecía entre la barra de navegación y la nómina institucional al iniciar sesión con el rol **`plantadmin`**. Se aseguró un aislamiento condicional estricto para que esta supresión aplique de manera exclusiva a sedes administrativas, preservando al 100% la visibilidad y funcionamiento del formulario escolar para los Directores de Plantel (`plaadmin`).
+
+- **Supresión Quirúrgica del Cascarón Escolar (`#card-plantel-form`):**
+  * En [`webapp/index.html`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/index.html), se asignó el identificador `#card-plantel-form` a la tarjeta contenedora del formulario escolar.
+  * En [`webapp/src/main.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/src/main.js), tanto en la inyección de estilos dinámicos como en la lógica DOM de `mostrarCandado()`, se fuerza `display: none !important` para `#card-plantel-form` y `#plantel-form` cuando el usuario es `plantadmin` o la entidad es sede administrativa.
+  * Para los Directores de Plantel (`plaadmin`), se garantiza por defecto la remoción de la propiedad `display`, manteniendo visible e intacto su formulario de matrícula.
+
+- **Encabezado Institucional Dinámico en Nómina:**
+  * Se configuró el título de `#seccion-personal-existente` para mostrar de forma personalizada y destacada la dependencia ministerial en sesión: `🏛️ Personal Registrado — <Nombre de la División> (Cód. 001200330)`.
+
+- **Control de Versiones y Despliegue en Vivo:**
+  * Incremento a versión **`v2.35.1`** en `package.json`, `index.html` y `versiones.md`.
+  * Compilación con Vite limpia (605ms) y despliegue inmediato a producción en Firebase Hosting (`https://sgh-merida.web.app`).
+
+- **Resultado:** Desplegado en vivo y en espera de validación visual del administrador.
