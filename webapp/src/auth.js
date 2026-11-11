@@ -9,12 +9,17 @@ export function initAuth(auth, db, callbacks) {
   let despliegueConfig = null;
 
   async function getDespliegueConfig() {
-    if (despliegueConfig) return despliegueConfig;
+    if (despliegueConfig && despliegueConfig.despliegue_activo !== false) return despliegueConfig;
     
     const sessionConfig = sessionStorage.getItem('sgh_despliegue_config');
     if (sessionConfig) {
-      despliegueConfig = JSON.parse(sessionConfig);
-      return despliegueConfig;
+      try {
+        const parsed = JSON.parse(sessionConfig);
+        if (parsed && parsed.despliegue_activo !== false) {
+          despliegueConfig = parsed;
+          return despliegueConfig;
+        }
+      } catch(e) {}
     }
     
     try {
@@ -144,6 +149,7 @@ export function initAuth(auth, db, callbacks) {
          // INTERRUPTOR MAESTRO: Si el despliegue general está apagado (En Mantenimiento)
          if (despliegue.despliegue_activo === false) {
             sessionStorage.removeItem('sgh_despliegue_config');
+            despliegueConfig = null;
             const mensajeMantenimiento = `El Sistema SGH se encuentra actualmente en <b>labores de mantenimiento institucional y actualización técnica</b>. Por favor, manténgase atento a los canales oficiales.`;
             onWait(mensajeMantenimiento, "Sistema en Mantenimiento");
             return;
@@ -157,6 +163,7 @@ export function initAuth(auth, db, callbacks) {
 
             if (!isPlantaActiva && !isExp) {
                sessionStorage.removeItem('sgh_despliegue_config');
+               despliegueConfig = null;
                const mensajeDespliegue = `El acceso para las dependencias de la <b>Planta Central / Zona Educativa</b> se encuentra temporalmente en pausa técnica. Por favor, manténgase atento a las instrucciones de la Dirección.`;
                onWait(mensajeDespliegue, "Despliegue Institucional");
                return;
@@ -178,6 +185,7 @@ export function initAuth(auth, db, callbacks) {
          
          if (!isExp && !isMun) {
             sessionStorage.removeItem('sgh_despliegue_config');
+            despliegueConfig = null;
             const mensajeDespliegue = mun
                ? `El Sistema SGH aún <b>no está habilitado para el municipio</b> ${mun}. Por favor, manténgase atento a los canales oficiales.`
                : `El Sistema SGH aún <b>no está habilitado para su plantel</b>. Por favor, manténgase atento a los canales oficiales.`;

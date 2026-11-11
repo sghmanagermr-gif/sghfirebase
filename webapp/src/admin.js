@@ -608,6 +608,7 @@ export function initAdminDashboard(dbInstance, user) {
          const targetElem = document.getElementById(targetId);
          if (targetElem) targetElem.classList.add('active');
          if (targetId === 'admin-tab-planteles') { loadPlanteles(); }
+         if (targetId === 'admin-tab-despliegue') { loadConfig(); }
          if (targetId === 'admin-tab-planes' && typeof catalogosGlobal !== 'undefined' && (!catalogosGlobal['planes-estudio'] || Object.keys(catalogosGlobal['planes-estudio']).length === 0)) { loadCatalogos(); }
          if (targetId === 'admin-tab-listas') { 
             const lista = button.getAttribute('data-lista');
@@ -2586,6 +2587,11 @@ export function initAdminDashboard(dbInstance, user) {
         getVariantesMunicipio(m).forEach(v => setMuns.add(v));
       });
       const municipiosToSave = Array.from(setMuns);
+
+      const chkMaster = document.getElementById('chk-master-despliegue');
+      if (chkMaster) {
+        configActual.despliegue_activo = chkMaster.checked;
+      }
 
       const chkPlanta = document.getElementById('chk-planta-despliegue');
       if (chkPlanta) {
