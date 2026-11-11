@@ -7526,3 +7526,126 @@ Creo que solo 2 están en el RAC.xlsx"
 > 2. Actualización de `versiones.md`, `bitacora.md` y `conversaciones.md`.
 > 3. Sincronización y respaldo en GitHub (`origin main`).
 > 4. Se suministraron las frases exactas para reanudar el trabajo una vez que se renueve la cuota de Firebase: *"Continúa con la parametrización"* o *"Continúa con el Bloque 2 y el Bloque 3"*.
+
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Debo aclararte que el archivo nomina_acualizada\Nomina_Personal_Consolidado_Estadal_MERIDA_2026-11-11.xlsx fue descargado del SGH v2.36.8 y el archivo nomina_acualizada\RAC.xlsx, es el respaldo del la jornada de julio con SGH v1... Te aclaro eso para que entiendas que el archivo nomina no proviene de caracas; el cotejo de ambos archivos pertenencen al mismo proyecto distintas versiones. Es para que así entiendas y generes el o los mensajes coherentemente... No involucres a Personal de Planta Central / Zona Educativa... La responsable de Gestion Humana del Municipio Libertador solo debe ver única y exclusivamente al personal de los planteles..."
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se acogió la directriz institucional con estricto rigor:
+> 1. Se estableció con absoluta claridad que la comparativa es interna entre SGH v1 (RAC de julio) y SGH v2 (Nómina actual descargada del sistema).
+> 2. Se aislaron por completo todas las sedes administrativas y dependencias de Planta Central / Zona Educativa (`0012...`), asegurando que los reportes municipales solo contengan planteles educativos.
+> 3. Se extrajeron con precisión los 52 casos de funcionarios de Libertador cuyas fechas de nacimiento no se habían migrado, generando el payload de restauración `scratch/52_fechas_restauracion.json`.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Pasemos a otro tema. Se sigue teniendo problemas con los doble cargos... El director del plantel OD02261402 va a realizar modificaciones del funcionario ENEIDA MARGARITA TRUJILLO GUILLEN (C.I. 12299348)... Pero al guardar las modificaciones te aparece el mensaje de validación de carga horaria (Doble plantel en Educación Básica)... Deseas que preparemos ese ajuste en la regla del sistema para que contemple turnos contrarios (Mañana vs Tarde, Mañana vs nocturno, tarde vs nocturno)... Y los docentes de media si es solo por horas..."
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se reprogramó la lógica de validación de carga horaria y concentración docente en `webapp/src/personalWizard.js`:
+> 1. **Compatibilidad por Turnos Contrarios (`sonTurnosCoincidentes`):** Se permitió que docentes de Educación Básica (Inicial y Primaria) puedan laborar en dos instituciones educativas siempre y cuando sus turnos no coincidan (Mañana vs. Tarde, Mañana vs. Nocturno o Tarde vs. Nocturno).
+> 2. **Exención de Carga Horaria para Educación Media:** Se flexibilizó el tope para docentes de Media General y Media Técnica hasta 56 horas académicas distribuidas por horas pedagógicas.
+> 3. Se compiló la aplicación, se desplegó a producción en Firebase Hosting y se versionó como `v2.37.0` (Commit `8738b32`).
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Así como la auditoría que hiciste con el municipio Libertador, necedito lo haga con el municipio Antonio Pinto Salinas. También manifiestan que hay campos como fecha de nacimiento, dirección etc que no esta en SGH. Audita los documentos nomina.xlsx y rac.xlsx, a ver si sucedió lo mismo que en libertador"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se realizó la auditoría técnica integral de Antonio Pinto Salinas (65 planteles escolares, 1.024 trabajadores):
+> 1. **Direcciones de Habitación:** Se demostró que la afirmación de que "se borraron las direcciones" era 100% falsa: 1.024 de 1.024 trabajadores (el 100%) tienen su dirección guardada en la base de datos. Se añadieron fallbacks defensivos en `personalWizard.js` para asegurar que el formulario web siempre las muestre en pantalla.
+> 2. **Fechas de Nacimiento:** 1.018 de 1.024 tienen su fecha intacta (99,4%). Solo 4 casos legítimos requerían restauración desde el RAC de julio.
+> 3. **Consolidación:** Se agregaron las 4 fechas al paquete general, conformando el paquete `scratch/56_fechas_restauracion.json` (52 de Libertador + 4 de Antonio Pinto Salinas).
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Estoy muy frustrado con los ajustes que estás realizando en la bse de datos de Firestore con lo de la parametrización. El municipio Campo Elias me está reclamando que hay funcionarios que fueron ingresados en el RAC de julio en ambas dependencias NACIONAL y ESTADAL, y en el SGH solo aparece en una. Entonces por favor ravisa el municipio campo elias cruzando los archivos correspondientes RAC y nomina."
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se realizó el cruce exhaustivo para Campo Elías aclarando el origen del problema:
+> 1. En la versión anterior (SGH v1), los registros se guardaban bajo la cédula simple (`cargos_personal/{cedula}`). Quienes tenían dos cargos sufrían una colisión donde el cargo Estadal sobreescribía al cargo Nacional.
+> 2. Al auditar RAC vs Nómina V2, se identificaron **37 funcionarios con doble dependencia** en julio. 6 ya aparecían completos en V2 y **31 tenían omitido su segundo cargo** (30 Nacionales y 1 Estadal).
+> 3. Se extrajeron de `RAC.xlsx` todos los metadatos completos de esos 31 cargos (horas, código RAC, cargo oficial, plantel) y se generó el paquete canónico `scratch/31_cargos_campo_elias_restauracion.json` bajo la clave `{codigoDEA}_{cedula}` para que ambos cargos coexistan sin colisión.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Esa respuesta me da la razón que en su momento omitiste registros de doble cargo. Así que ahora vas hacer el mismo procedimiento con Alberto Adriani. Deben haber aproximadamente entre 25 a 30 casos"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se auditó el Municipio Alberto Adriani (3.469 registros en RAC vs 3.449 en V2):
+> 1. Se aclaró que en Alberto Adriani no existían 25 a 30 casos de doble dependencia como en Campo Elías porque su estructura de nómina es **89,3% Nacional** (3.098 trabajadores) y apenas 10,7% Estadal (371 trabajadores en 33 planteles), lo que reduce drásticamente las plazas estadales concurrentes.
+> 2. Se identificaron con exactitud **5 casos de doble cargo**: 1 ya activo en ambos planteles (Masyer Díaz) y **4 con su segundo cargo omitido**, más **1 caso de doble cargo Nacional intermunicipal** (José Yoel Zambrano, Alberto Adriani / Sucre).
+> 3. Se extrajeron y prepararon los 5 cargos en `scratch/cargos_alberto_adriani_restauracion.json`.
+> 4. Se identificó adicionalmente que 12 docentes del liceo técnico OD16041401 tenían 35 filas repetidas en RAC por renglones de asignaturas de Media General/Técnica, las cuales fueron debidamente consolidadas.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "ok ahora con el municipio ANDRES BELLO"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se realizó el cruce fila por fila de Andrés Bello (La Azulita, 545 registros en RAC vs 551 en V2):
+> 1. La nómina Estadal total resultó idéntica (exactamente 169 trabajadores en ambos archivos).
+> 2. Se encontraron **4 docentes con doble dependencia en julio**:
+>    - Eneida Trujillo (C.I. 12.299.348): Ya activa en ambos planteles.
+>    - Gregoria Vielma (C.I. 12.347.794): Faltaba su cargo Estadal en OD05571402.
+>    - Nubla Suárez (C.I. 11.224.476): Faltaba su cargo Nacional en OD02681402.
+>    - Alba Paternina (C.I. 14.963.668): Faltaban ambos cargos (Nacional OD02661402 y Estadal OD05601402).
+> 3. Se agregó adicionalmente a Anayleth La Cruz (C.I. 17.895.277, plaza estadal en OD05601402).
+> 4. Se generó el paquete de inyección con los 5 cargos en `scratch/cargos_andres_bello_restauracion.json`.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Antes de continuar con el siguiente Municipio. ¿Cuántos procesos de inyección hay pendientes? ... 4 nada más..., ¿y los de las FASES de SIMETRIA (parametrización) bloque 3 ya se hicieron? ... ¿Las últimas inyecciones no perjudican a las primeras o viceversa? ... Ok deja eso refrendado en conversaciones para que no haya problemas"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se refrendó en la bitácora institucional y en este registro la auditoría de procesos pendientes y el dictamen técnico de no colisión:
+> 
+> **1. Inventario Total de Procesos Pendientes en Base de Datos (Esperando apertura de cuota diaria):**
+> - **Cierre de Bloque 2 (Pueblos del Sur / Sucre):** 452 expedientes en los últimos 3 lotes (Lotes 62, 63 y 64) salvaguardados en `scratch/estado_progreso_bloque_2.json`.
+> - **Fase 3 - Bloque 3 (Eje Páramo):** 100% pendiente de ejecución en vivo. Comprende 2.336 expedientes en 12 lotes para los municipios Cardenal Quintero, Miranda, Pueblo Llano, Rangel y Justo Briceño.
+> - **Inyección de Doble Cargo / Cargos Omitidos:** 41 cargos completos (31 de Campo Elías, 5 de Alberto Adriani y 5 de Andrés Bello).
+> - **Actualización de Fechas de Nacimiento:** 56 docentes (52 de Libertador y 4 de Antonio Pinto Salinas).
+> - **Total Global:** ~2.885 escrituras atómicas (dentro del límite de 20.000 de la cuota diaria gratuita de Firebase).
+> 
+> **2. Dictamen de No Colisión y Compatibilidad Absoluta:**
+> Se certificó que ninguna inyección perjudica a la otra debido a tres principios de arquitectura activa:
+> - **Clave Canónica por Plantel (`{codigoDEA}_{cedula}`):** Los documentos son independientes y aislados; dos cargos del mismo docente coexisten como archivos distintos en Firestore.
+> - **Independencia Territorial:** El remanente de Bloque 2 es exclusivo de Sucre; el Bloque 3 es exclusivo del Páramo; y los dobles cargos pertenecen a Campo Elías, Alberto Adriani y Andrés Bello. No hay solapamiento ni pisado de datos entre municipios.
+> - **Máscara Quirúrgica (`updateMask`):** Las actualizaciones de fechas de nacimiento solo modifican fecha y edad, sin alterar datos laborales o de carga horaria.
+> - **Preservación Nativa en Bloque 3:** El script maestro de Bloque 3 mapea desde `RAC.xlsx` generando claves por DEA, por lo que los docentes del Páramo con doble plantel nacerán simétricos automáticamente.
