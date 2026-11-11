@@ -7763,6 +7763,30 @@ Creo que solo 2 están en el RAC.xlsx"
 > 4. **Fechas de Nacimiento Recuperadas:** Se identificaron 4 funcionarios en planteles de Guaraque que no tenían fecha de nacimiento en V2 pero sí existían en el RAC (Marilú Molina Montilva, Nohelia Ramírez Molina, Anni Maribel Contreras García y José Humberto Contreras Contreras). Fueron incorporadas al consolidado global (`scratch/105_fechas_restauracion.json`).
 > 5. **Diagnóstico Final de Guaraque:** 0 cargos omitidos. No requiere paquete de restauración de cargos.
 
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "JULIO CESAR SALAS"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se realizó la auditoría integral del Municipio Julio César Salas (Arapuey) cruzando RAC (Julio) vs Nómina V2:
+> 1. **Cifras Globales:** 479 registros en RAC vs 499 en Nómina V2 (RAC: 292 Nacionales, 187 Estadales; V2: 284 Nacionales, 215 Estadales).
+> 2. **Casos de Doble Dependencia en Julio (6 casos identificados):**
+>    - **Mario Gerardo Ramírez Moreno (C.I. 15.942.671):** Activo con ambos cargos en el SGH (OD01021410 y OD12301410).
+>    - **Rosmery Paola Vergara Abreu (C.I. 17.436.056):** Activa con ambos cargos en el SGH (Nacional OD01021410 y Estadal OD12281410).
+>    - **Beatriz Coromoto Quevedo Hernández (C.I. 13.825.307):** Activa con ambos cargos en el SGH (Nacional OD01021410 y Estadal OD12241410).
+>    - **Katiuska Jackeline Rojas Salas (C.I. 19.383.323):** Activa con ambos cargos en el SGH (Nacional OD17131410 y Estadal OD12241410).
+>    - **Yoneida Coromoto Guerra (C.I. 15.142.594):** Activa con ambos cargos en el SGH (Nacional S3379N1410 y Estadal OD12261410).
+>    - **Yerinell Alimar Rivas Guillén (C.I. 14.438.447):** Tenía cargo Nacional en S2855D1410 (E.B. Palmira, Docente IV, 40 hrs, Titular con 20 años de servicio) y cargo Estadal en OD12161410 (Escuela Santa Cruz, Docente Único). En V2 solo se conservó su plaza estadal; su cargo titular nacional en S2855D1410 fue **omitido por colisión de clave `{ci}`**.
+> 3. **Paquete de Restauración Generado:** Se estructuró el cargo nacional de Yerinell Rivas Guillén en `scratch/cargos_julio_cesar_salas_restauracion.json` con sus 40 horas, código RAC 1124DI y titularidad, listo para inyección atómica.
+> 4. **Fechas de Nacimiento Recuperadas:** Se identificó a la trabajadora María Emilia Briceño de Mercado (C.I. 11.848.192, nacida el 08/09/1967, 59 años) en el J.I. Roberto Picón Lares, sumándose al consolidado general (`scratch/106_fechas_restauracion.json`).
+> 5. **Movimientos Administrativos:** Lenin Alberto Paredes Paredes (C.I. 12.832.463) fue trasladado al L.N. Libertador en Mérida, donde permanece activo. Se corrigió un error de tipeo en la cédula de la cocinera Yohana Andreina Convita Pérez (de 26259023 a 26259013).
+
+
 
 
 
