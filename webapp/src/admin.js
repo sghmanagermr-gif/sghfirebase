@@ -3174,6 +3174,8 @@ export function initAdminDashboard(dbInstance, user) {
         if (userMunNorm) {
           const pMunNorm = normalizarMunicipio(data.municipio || '');
           if (pMunNorm !== userMunNorm) return;
+          // Exclusión estricta de Planta Central / Zona Educativa para coordinaciones municipales
+          if (data.es_planta || data.denominacion === 'SEDE ADMINISTRATIVA' || doc.id.startsWith('0012')) return;
         }
         currentPlanteles.push({ id: doc.id, ...data });
       });
@@ -5015,6 +5017,12 @@ export function initAdminDashboard(dbInstance, user) {
         .filter(emp => {
           const codPl = (emp['codigo-plantel'] || emp.codigoDEA || '').toString().trim().toUpperCase();
           if (codPl.startsWith('DEMO')) return false;
+          // Si es munadmin, excluir estrictamente dependencias de Planta Central / Zona Educativa
+          if (isMunAdmin) {
+            if (codPl.startsWith('0012')) return false;
+            const pInfo = plantelesMap.get(codPl) || {};
+            if (pInfo.es_planta || pInfo.denominacion === 'SEDE ADMINISTRATIVA') return false;
+          }
           const ced = (emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÉDULA'] || '').toString().trim();
           const nom = (emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || emp['APELLIDOS Y NOMBRES'] || emp['NOMBRE Y APELLIDO'] || '').toString().trim();
           // Blindaje anti-fantasmas: Descartar si no tiene nombre o si es un registro dummy/inválido

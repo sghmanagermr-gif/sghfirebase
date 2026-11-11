@@ -455,6 +455,12 @@ export async function initCascadaPersonal() {
         if (window.calcularHorasUI) window.calcularHorasUI();
     };
     selDep.onchange = () => actualizarCascada();
+    const selTurnos = document.getElementById('wp-turnos-atiende');
+    if (selTurnos) {
+        selTurnos.onchange = () => {
+            if (window.calcularHorasUI) window.calcularHorasUI(false);
+        };
+    }
     actualizarCascada();
 }
 
@@ -1376,7 +1382,7 @@ export async function guardarPersonalInline() {
                 ? `<div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px; margin: 12px 0;">
                     <strong style="color: #334155; display: block; margin-bottom: 6px; font-size: 0.88rem;">Horas comprometidas en otros planteles:</strong>
                     <ul style="margin: 0; padding-left: 18px; color: #475569; font-size: 0.85rem; line-height: 1.5;">
-                        ${resHoras.desglose.map(d => `<li><strong>${d.plantel}</strong>: ${d.horas} hrs (${d.cargo} - ${d.nivel || 'N/A'})</li>`).join('')}
+                        ${resHoras.desglose.map(d => `<li><strong>${d.plantel}</strong>: ${d.horas} hrs (${d.cargo} - ${d.nivel || 'N/A'} - Turno: ${d.turno || 'N/A'})</li>`).join('')}
                     </ul>
                     <div style="margin-top: 8px; font-weight: 700; color: #1e293b; font-size: 0.85rem;">Total en otros planteles: ${resHoras.horasOtros} hrs</div>
                    </div>`
@@ -1855,11 +1861,37 @@ document.addEventListener('DOMContentLoaded', () => {
     initCascadaPersonal();
 });
 
+// --- Función de Normalización y Comparación de Turnos Institucionales ---
+export function sonTurnosCoincidentes(t1, t2) {
+    const s1 = (t1 || '').toUpperCase().trim();
+    const s2 = (t2 || '').toUpperCase().trim();
+    if (!s1 || !s2) return false;
+
+    // Si ambos son exactamente iguales (ej. MAÑANA vs MAÑANA, TARDE vs TARDE, NOCTURNO vs NOCTURNO)
+    if (s1 === s2) return true;
+
+    // Doble turno, jornada integral o dedicación completa ocupan mañana y tarde
+    const esDoble1 = s1.includes('DOBLE') || s1.includes('INTEGRAL') || s1.includes('COMPLETO') || (s1.includes('MAÑANA') && s1.includes('TARDE'));
+    const esDoble2 = s2.includes('DOBLE') || s2.includes('INTEGRAL') || s2.includes('COMPLETO') || (s2.includes('MAÑANA') && s2.includes('TARDE'));
+
+    if (esDoble1 && (s2.includes('MAÑANA') || s2.includes('TARDE') || esDoble2)) return true;
+    if (esDoble2 && (s1.includes('MAÑANA') || s1.includes('TARDE') || esDoble1)) return true;
+
+    // Mismo turno detectado por subcadena clave
+    if (s1.includes('MAÑANA') && s2.includes('MAÑANA')) return true;
+    if (s1.includes('TARDE') && s2.includes('TARDE')) return true;
+    if (s1.includes('NOCTURNO') && s2.includes('NOCTURNO')) return true;
+    if (s1.includes('SABATINO') && s2.includes('SABATINO')) return true;
+
+    return false;
+}
+
 // --- Escudo de Carga Horaria Acumulada, Validación de Recibo y Topes Institucionales ---
 export async function verificarTopeHorasDocente(forzarConsulta = false) {
     const atiendeMat = (document.getElementById('wp-atiende-matricula')?.value || 'NO').toUpperCase();
     const tipoPersonal = (document.getElementById('wp-tipo-personal')?.value || '').toUpperCase();
     const nivelSel = (document.getElementById('wp-nivel-modalidad')?.value || '').toUpperCase();
+    const turnoInp = (document.getElementById('wp-turnos-atiende')?.value || '').toUpperCase().trim();
     const inpHoras = document.getElementById('wp-horas-academicas');
     const inpHRecibo = document.getElementById('wp-horas-recibo');
     const inpAdmin = document.getElementById('wp-horas-administrativas');
@@ -1958,8 +1990,11 @@ export async function verificarTopeHorasDocente(forzarConsulta = false) {
     }
 
     let horasOtros = 0;
+    let horasOtrosCoincidentes = 0;
     let tieneBasicaOtro = false;
     let tieneMediaOtro = false;
+    let hayConflictoTurno = false;
+    let conflictoTurnoInfo = null;
     const desglose = [];
     const cargosList = (cleanCed && window._cacheCargosPorCedula[cleanCed]) ? window._cacheCargosPorCedula[cleanCed] : [];
 
@@ -1970,6 +2005,8 @@ export async function verificarTopeHorasDocente(forzarConsulta = false) {
         if (!window._docIdEnEdicion && cDea === deaActual && c.id === `${deaActual}_${cleanCed}`) return;
 
         const h = parseFloat(c['horas-academicas'] || c['HORAS ACADEMICAS']) || 0;
+        const cTurno = (c['turnos-atiende'] || c['TURNOS QUE ATIENDE'] || c.turno || '').toUpperCase().trim();
+
         if (h > 0) {
             const nMod = (c['nivel-modalidad'] || '').toUpperCase();
             if (nMod.includes('MEDIA')) {
@@ -1978,36 +2015,61 @@ export async function verificarTopeHorasDocente(forzarConsulta = false) {
                 tieneBasicaOtro = true;
             }
             horasOtros += h;
+
+            const coinciden = sonTurnosCoincidentes(turnoInp, cTurno);
+            if (coinciden) {
+                hayConflictoTurno = true;
+                horasOtrosCoincidentes += h;
+                if (!conflictoTurnoInfo) {
+                    conflictoTurnoInfo = {
+                        plantel: cDea || 'OTRO PLANTEL',
+                        horas: h,
+                        cargo: c.cargo || c['codigo-cargo'] || 'DOCENTE',
+                        nivel: nMod,
+                        turno: cTurno || 'MISMO TURNO'
+                    };
+                }
+            }
+
             desglose.push({
                 plantel: cDea || 'OTRO PLANTEL',
                 horas: h,
                 cargo: c.cargo || c['codigo-cargo'] || 'DOCENTE',
-                nivel: nMod
+                nivel: nMod,
+                turno: cTurno || 'NO ESPECIFICADO',
+                coincideTurno: coinciden
             });
         }
     });
 
     const tope = esMedia ? 56 : 53.33;
     const etiqueta = esMedia ? 'Educación Media (Tope: 56 Horas)' : 'Educación Básica (Inicial/Primaria: 53.33 Horas)';
+    const totalMismoTurno = horasOtrosCoincidentes + horasInp;
     const total = horasOtros + horasInp;
-    const disp = Math.max(0, tope - horasOtros);
+    const disp = Math.max(0, tope - horasOtrosCoincidentes);
 
     let excede = false;
     let mensajeError = '';
     let motivoBloqueo = '';
 
-    if (esMedia && tieneBasicaOtro) {
+    // 1. Conflicto directo de turnos coincidentes (solapamiento de horario)
+    if (hayConflictoTurno && (esBasica || tieneBasicaOtro)) {
+        excede = true;
+        motivoBloqueo = 'TURNO_COINCIDENTE';
+        mensajeError = `⚠️ <strong>Conflicto de Horario / Turno coincidente:</strong> El docente ya tiene asignadas <strong>${conflictoTurnoInfo.horas} hrs</strong> en el turno <strong>${conflictoTurnoInfo.turno}</strong> en el plantel <strong>${conflictoTurnoInfo.plantel}</strong> (${conflictoTurnoInfo.cargo}). La normativa prohíbe atender matrícula simultáneamente en dos planteles durante el mismo turno.`;
+    } else if (hayConflictoTurno && esMedia && tieneMediaOtro && totalMismoTurno > (tope + 0.01)) {
+        excede = true;
+        motivoBloqueo = 'TOTAL_SUPERA_TOPE_TURNO';
+        const exceso = (totalMismoTurno - tope).toFixed(2);
+        mensajeError = `⚠️ <strong>Exceso de carga acumulada en el mismo turno:</strong> Total ${totalMismoTurno} hrs (${horasOtrosCoincidentes} hrs en otro plantel + ${horasInp} hrs aquí en turno ${turnoInp}). Excede el tope legal de ${tope} hrs por ${exceso} hrs.`;
+    } else if (hayConflictoTurno && esMedia && tieneBasicaOtro) {
         excede = true;
         motivoBloqueo = 'INCOMPATIBILIDAD_REGIMEN';
-        mensajeError = `⚠️ <strong>Incompatibilidad de régimen:</strong> El funcionario ya tiene horas asignadas en Educación Básica en otro plantel. La normativa del MPPE no permite que un docente imparta simultáneamente en Básica y Media.`;
-    } else if (esBasica && tieneMediaOtro) {
+        mensajeError = `⚠️ <strong>Incompatibilidad de régimen en el mismo turno:</strong> El funcionario ya tiene horas asignadas en Educación Básica en el turno ${conflictoTurnoInfo.turno} en otro plantel. No puede impartir clases simultáneamente en Básica y Media en el mismo turno.`;
+    } else if (hayConflictoTurno && esBasica && tieneMediaOtro) {
         excede = true;
         motivoBloqueo = 'INCOMPATIBILIDAD_REGIMEN';
-        mensajeError = `⚠️ <strong>Incompatibilidad de régimen:</strong> El funcionario ya tiene horas asignadas en Educación Media en otro plantel. La normativa del MPPE no permite que un docente de Media imparta simultáneamente en Básica.`;
-    } else if (esBasica && horasOtros > 0) {
-        excede = true;
-        motivoBloqueo = 'BASICA_CONCENTRADA';
-        mensajeError = `⚠️ <strong>Doble plantel en Educación Básica:</strong> El docente de Básica (Inicial/Primaria) debe estar concentrado en un solo plantel con 53.33 horas. Actualmente ya tiene ${horasOtros} hrs asignadas en otro plantel.`;
+        mensajeError = `⚠️ <strong>Incompatibilidad de régimen en el mismo turno:</strong> El funcionario ya tiene horas asignadas en Educación Media en el turno ${conflictoTurnoInfo.turno} en otro plantel. No puede impartir clases simultáneamente en Básica y Media en el mismo turno.`;
     } else if (horasRecibo > 0 && totalAsignadasPlantel > (horasRecibo + 0.01)) {
         excede = true;
         motivoBloqueo = 'EXCEDE_RECIBO';
@@ -2016,11 +2078,11 @@ export async function verificarTopeHorasDocente(forzarConsulta = false) {
         excede = true;
         motivoBloqueo = 'RECIBO_SUPERA_TOPE';
         mensajeError = `⚠️ <strong>Tope legal excedido:</strong> El recibo de pago (<strong>${horasRecibo} hrs</strong>) excede el tope máximo legal de <strong>${tope} hrs</strong> para ${etiqueta}.`;
-    } else if (total > (tope + 0.01)) {
+    } else if (!hayConflictoTurno && horasOtros > 0 && total > 106.66) {
+        // Límite de seguridad institucional para pluriempleo en turnos alternos (máximo 2 cargos completos de 53.33)
         excede = true;
-        motivoBloqueo = 'TOTAL_SUPERA_TOPE';
-        const exceso = (total - tope).toFixed(2);
-        mensajeError = `⚠️ <strong>Exceso de carga acumulada:</strong> Total ${total} hrs (${horasOtros} hrs en otro plantel + ${horasInp} hrs aquí). Excede el tope legal de ${tope} hrs por ${exceso} hrs.`;
+        motivoBloqueo = 'PLURIEMPLEO_EXCESIVO';
+        mensajeError = `⚠️ <strong>Tope de pluriempleo excedido:</strong> La carga total acumulada (${total} hrs) supera el límite máximo institucional permitido para doble turno (106.66 hrs).`;
     }
 
     if (helpEl) {
@@ -2037,11 +2099,16 @@ export async function verificarTopeHorasDocente(forzarConsulta = false) {
             if (inpHRecibo) inpHRecibo.style.borderColor = '';
             if (inpAdmin) inpAdmin.style.borderColor = '';
 
-            if (esBasica) {
+            if (horasOtros > 0 && !hayConflictoTurno) {
                 helpEl.style.color = '#15803d';
                 helpEl.style.background = '#f0fdf4';
                 helpEl.style.borderColor = '#bbf7d0';
-                helpEl.innerHTML = `✅ <strong>Educación Básica (Inicial / Primaria):</strong> Carga horaria única de <strong>53.33 hrs</strong> según nómina ministerial (un solo plantel). Horas por programar: <strong>0</strong>.`;
+                helpEl.innerHTML = `✅ <strong>Pluriempleo / Turnos Compatibles:</strong> Docente activo en turno <strong>${turnoInp || 'ACTUAL'}</strong> en este plantel (<strong>${horasInp} hrs</strong>) y turno no coincidente en otro plantel (<strong>${horasOtros} hrs</strong>). Validación exitosa sin solapamiento de horario.`;
+            } else if (esBasica) {
+                helpEl.style.color = '#15803d';
+                helpEl.style.background = '#f0fdf4';
+                helpEl.style.borderColor = '#bbf7d0';
+                helpEl.innerHTML = `✅ <strong>Educación Básica (Inicial / Primaria):</strong> Carga horaria única de <strong>${totalAsignadasPlantel} hrs</strong> según nómina ministerial (un solo plantel). Horas por programar: <strong>0</strong>.`;
             } else if (esMedia) {
                 helpEl.style.color = '#0369a1';
                 helpEl.style.background = '#f0f9ff';
