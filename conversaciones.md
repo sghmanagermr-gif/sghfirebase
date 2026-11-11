@@ -7260,3 +7260,141 @@ Creo que solo 2 están en el RAC.xlsx"
 > 5. **Pregunta Protocolar:**  
 >    - Notificación al administrador y consulta de satisfacción protocolar.  
 >    - **Confirmación del Administrador:** «Si satisfactorios». Procedimiento cerrado y sincronizado con repositorio remoto.
+
+### Sesión de Trabajo — 2026-11-10 (Enriquecimiento Maestro de Datos Omitidos y Blindaje de Simetría)
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Estoy un poco descontento. o mejor dicho muy descontento. La primeras faces de parametrización me hantraido muchos dolores de cabeza. Y es porque haz omitido mucha información al momento de migrar. Los directores de todos los municipios afectados por la fase 1 y 2 dices que ahora los funcionarios aparecen con datos faltantes. La idea de automatizar las cosas es precisamente hacer las labores con más tranquilidad; y al hacer una migración así lo que se espera es que se haga eficientemente. Analiza los datos que haz migrado en las primeras faces, y verifica si falta información por migrar. No te voy a comentar los datos que me han dicho que faltan, para ver si tu logras atinar. Dame un reporte de la falla, y veremos como resolver este problema"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se realizó una auditoría forense integral comparando las 59 columnas de la Nómina Consolidada y las 89 columnas de `RAC.xlsx` contra el script de migración inicial.  
+> 1. **Hallazgo de Causa Raíz:** El script inicial solo mapeó 26 campos básicos, omitiendo más de 30 campos con información real.  
+> 2. **Campos Omitidos Identificados:** Ubicación Administrativa (7 dígitos), Turnos que Atiende, Atiende Matrícula, Nivel/Modalidad, Especialidad que Imparte, Horas por Programar, Observaciones, Fecha y Lugar de Nacimiento, Nivel de Instrucción, Profesión/Título, Teléfonos fijo/oficina, Subcategoría, Tallas (camisa, pantalón, zapato), Actividades deportivas/culturales, Tipo/Condición/Material de vivienda, Enfermedad, Medicamento y Discapacidad.  
+> 3. **Alcance:** Afectación estimada en ~24.365 expedientes de los Bloques 1 y 2.  
+> 4. **Documento Generado:** Se elaboró el artefacto formal `reporte_campos_omitidos_bloque1_y_2.md` con el inventario detallado de fallas y opciones de remediación.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "¿y sabes que debes contruir el script con los criterios de la parametrización? ¿y que sin importar lo que digan las columnas el script respeta la estructura de la base de datos firebase? ¿Sabes cuales son esos criterios? No quiero mas sorpresas"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se ratificaron y desglosaron los 5 criterios inquebrantables de parametrización y arquitectura en Firebase:  
+> 1. **Llave Simétrica Canónica Universal:** `cargos_personal/{codigoDEA}_{cedula}` (prohibidas las claves huérfanas o cédulas planas).  
+> 2. **Nomenclatura Canónica Lower-Kebab-Case:** Mapeo estricto a las claves esperadas por la WebApp (`ubicacion-administrativa`, `turnos-atiende`, `instruccion`, etc.).  
+> 3. **Tipado Numérico Nativo:** Horas y cifras almacenadas como valores numéricos reales (`integerValue` o `doubleValue`), jamás texto ni valores `NaN`.  
+> 4. **Actualización Quirúrgica (`updateMask`):** Enriquecimiento exclusivo de campos faltantes sin sobreescribir ni destruir datos previamente validados o modificados por directores.  
+> 5. **Protocolo Zero-Cost Shield:** 0 lecturas en Firestore, procesamiento en memoria local y validación previa obligatoria mediante simulación en seco (Dry-Run).
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "en la hoja PERSONAL del documento RAC.xlsx hay dos columnas con el encabezado DEPENDENCIA, uno le pertenece al plantel, el otro al empleado. Necesito que mapees la hoja PERSONAL, los encabezados del documento RAC.xlsx, para que me digas cuales son los datos correspondientes al trabajador"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se realizó el mapeo forense de las 89 columnas de la hoja PERSONAL de `RAC.xlsx`:  
+> 1. **Diferenciación de las dos columnas de DEPENDENCIA:**  
+>    * **Columna 24 (Índice 24):** `DEPENDENCIA` del **Plantel / Institución** (describe la escuela: Nacional, Estadal, etc.).  
+>    * **Columna 30 (Índice 30):** `DEPENDENCIA` del **Trabajador / Nómina** (describe el patrono pagador del funcionario).  
+>    * **Auditoría:** Se detectaron 840 casos donde difieren (ej. docentes nacionales laborando en escuelas estadales). Se fijó la Columna 30 como regla canónica para el expediente laboral.  
+> 2. **Desglose de los 76 campos pertenecientes al trabajador:** Clasificados en Identificación personal, Datos laborales/condición, Asignación pedagógica/carga horaria (incluyendo distribución en planes Maternal, Primaria y 31059 a 49001), Bienestar social/salud/vivienda y Datos territoriales/electorales.  
+> 3. **Aislamiento de las 13 columnas del plantel:** Estado, Municipio, Parroquia, Ubicación Física, DEA, Dependencia del plantel (Col 24), Ubicación geográfica, Nivel, Modalidad y Turnos del plantel.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Antes de decir que tu respuesta está bien. los planes de estudio ya están en firebase en la coleccion de planes de estudio. ¿Si o NO?"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Respuesta categórica: **NO.** En Firebase no existe una colección independiente llamada `planes_estudio`.  
+> Se explicó su ubicación real en la arquitectura:  
+> 1. Como Catálogo Maestro Global: En el documento único `sistema/catalogos_maestros` (mapa `planes_estudio`) y en el módulo de código `catalogosPlanes.js`.  
+> 2. Como Planes Institucionales: En cada documento de escuela `planteles/{codigoDEA}` bajo el campo `planes-estudio`.  
+> 3. En la hoja PERSONAL del RAC: Las columnas 44 a 72 representan la distribución de horas de clase del docente por plan, no la entidad del plan en sí.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa. Excelente. Ahora si puedo decir que tienes la ruta correcta. Debo hacerte preguntas capciosas para que te des cuenta por ti mismo, la respuesta requerida. Ahora que tienes ese panorama, como estructurarías el script"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se leyó íntegramente `.agents/skills/webapp-expert/SKILL_sgh_firebase.md` adoptando sus directrices de Zero-Cost, desacoplamiento, trazabilidad y comunicación sin código. Se presentó la estructura en 5 fases: Carga local a costo cero, Normalización y regla de Columna 30, Construcción quirúrgica (`updateMask`), Empaquetado en lotes de 400 y Protocolo de Doble Modo (Dry-Run vs Ejecución).
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Pareceira que estas claro en lo que vas hacer. recuerda que eso sucedio en los bloques 1 y 2. Pero obviamente cuando le toque al bloque 3 debe suceder lo mismo. ¿Si me entiendes?"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se confirmó la comprensión absoluta del requerimiento: un único script maestro unificado con selector `--bloque=1|2|3|all`. Para Bloques 1 y 2 funciona como enriquecedor quirúrgico de los campos faltantes, y para el Bloque 3 ejecutará la migración completa desde el primer segundo con los 76 campos, garantizando homogeneidad en todo el estado Mérida.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Luz verde"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se construyó el script maestro `scripts/fase3_migracion_maestra_unificada.js` y se ejecutaron las simulaciones en seco (Dry-Run) con 0 lecturas en Firestore:  
+> * **Bloque 1 (10 Municipios):** 10.831 expedientes a enriquecer, 10.749 depuraciones legadas, 54 lotes calculados. Muestras auditadas de docente y obrero verificadas con 29 campos protegidos por `updateMask`.  
+> * **Bloque 2 (8 Municipios):** 12.652 expedientes a enriquecer, 12.499 depuraciones legadas, 63 lotes calculados. Muestras auditadas verificadas.  
+> * Manifiestos de auditoría guardados en `scratch/dryrun_maestro_bloque_1.json` y `scratch/dryrun_maestro_bloque_2.json`.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Chequea la base de datos Firestore, para garantizar que los datos serán recibidos. Si es positivo, comienza con el bloque 1"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. **Prueba de Conexión y Escritura:** Se ejecutó un commit de prueba a Firestore con renovación de token OAuth; respuesta HTTP 200 confirmada exitosamente.  
+> 2. **Inicio de Producción Bloque 1:** Se lanzó la ejecución real en Firestore.  
+> 3. **Avance Exitoso:** Los lotes 1 al 9 (3.600 expedientes) se procesaron y confirmaron con HTTP 200 en Firestore.  
+> 4. **Tope de Cuota Diaria (Status 429 - Quota Exceeded):** En el lote 10, Google Firebase limitó las escrituras al alcanzar el límite diario de 20.000 operaciones por proyecto del plan gratuito (Spark Tier), acumulado por las migraciones matutinas y vespertinas de más de 40.000 operaciones.  
+> 5. **Blindaje y Optimización de Retoma:**  
+>    * Se guardó el estado persistente en `scratch/estado_progreso_bloque_1.json` registrando los 3.600 expedientes completados.  
+>    * Se eliminaron las 10.749 operaciones de borrado asimétrico redundantes (ya ejecutadas previamente), reduciendo a la mitad la cuota requerida.  
+>    * Se redujo el tamaño de lote a 200 operaciones con pausas de 1.5s y espera exponencial ante saturación.  
+>    * El script quedó preparado con reanudación automática para retomar exactamente en el registro 3.601 (Lote 19) tan pronto se reinicie el contador diario de cuota de Google (medianoche PST / ~3:30 AM hora Venezuela).
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "ok, guarda este mensaje en conversaciones por si hay un corte del servicio electrico"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Registro histórico volcado de forma íntegra e indeleble en `conversaciones.md` para proteger la memoria operativa ante eventuales contingencias o cortes eléctricos.
