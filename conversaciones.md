@@ -7811,3 +7811,17 @@ Creo que solo 2 están en el RAC.xlsx"
 
 
 
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Después que revisaras el último municipio que te solicité JUSTO BRICEÑO y antes de continuar con en siguiente municipio, hay algo que me está llamando la atención ¿Con todos lo municipios que se han revisado, solo te estás enfocando en fecha de nacimiento? Ojalá y no, y que estes revisando que si en los expedientes en SGH hay campos vacios, se rellenen con lo que hay en RAC. Es solo una curiosidad"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se aclaró y consolidó formalmente el plan integral de restauración:
+> 1. **Cargos Omitidos / Doble Cargo (Inyección de Ficha Completa):** Los cargos omitidos por colisiones de cédula (Campo Elías: 31, Alberto Adriani: 5, Andrés Bello: 5, Antonio Pinto Salinas: 1, Caracciolo Parra: 2, Julio César Salas: 1, Justo Briceño: 1) NO se recuperan solo con fecha, sino con la **totalidad de sus más de 35 campos** (laborales, cargas horarias, códigos RAC, turnos, matrícula, datos personales, tallas, vivienda y comunidad).
+> 2. **Expedientes Existentes con Campos Vacíos (Enriquecimiento Integral):** Se explicó que la fecha de nacimiento servía como termómetro diagnóstico. En respuesta inmediata, se procesó el universo completo de los 149 expedientes detectados hasta ahora, estructurando el payload `scratch/expedientes_enriquecimiento_integral.json` para que, mediante máscara atómica (`updateMask`), se pueblen simultáneamente todos sus campos faltantes desde el RAC: lugar de nacimiento, nivel de instrucción, profesión, turnos que atiende, atiende matrícula, tallas completas (camisa, pantalón, zapato), dirección, teléfonos, correo, tipo de vivienda, material, condición, UBCH, circuito comunal y centro de votación.
