@@ -7705,4 +7705,26 @@ Creo que solo 2 están en el RAC.xlsx"
 > 4. **Fechas de Nacimiento:** 100% de los funcionarios históricos de RAC tienen su fecha de nacimiento completa en V2 (0 faltantes a restaurar). Los 8 nuevos ingresos obreros/cocineros no estaban en el RAC de julio.
 > 5. **Diagnóstico Final de Arzobispo Chacón:** 0 cargos omitidos. No se requiere paquete de restauración.
 
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "CARACCIOLO PARRA"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se ejecutó la auditoría detallada del Municipio Caracciolo Parra Olmedo (Tucaní) cruzando RAC (Julio) vs Nómina V2:
+> 1. **Cifras Globales:** 655 registros en RAC vs 654 en Nómina V2 (RAC: 427 Nacionales, 228 Estadales; V2: 430 Nacionales, 224 Estadales).
+> 2. **Casos de Doble Dependencia en Julio (4 casos identificados):**
+>    - **Mercris Bravo (C.I. 13.438.966):** Activa en ambos planteles (Nacional en OD17601407 y Estadal en OD00471414 de Obispo Ramos de Lora).
+>    - **Gabriela del Carmen Rivera González (C.I. 14.927.416):** Activa en ambos planteles (Nacional en S1064D1407 y Estadal en OD03591407 de El Charal).
+>    - **Astrid Dugarte Hernández (C.I. 18.620.228):** Poseía cargo Nacional en S1064D1407 (Liceo Vicente Campo Elías, Docente NG, 40 hrs tarde) y cargo Estadal en OD03591407 (El Charal, Docente Contratado, 40 hrs mañana). En V2 solo se conservó su plaza estadal; se omitió su plaza nacional en S1064D1407 por colisión de clave `{ci}`.
+>    - **María Zolia Ramírez Altuve (C.I. 16.038.302):** Poseía cargo Nacional en S1064D1407 (Liceo Vicente Campo Elías, Docente II, 40 hrs) y cargo Estadal en OD03591407 (El Charal, Docente IV, 40 hrs). En V2 solo se conservó su plaza estadal; se omitió su plaza nacional en S1064D1407 por colisión de clave `{ci}`.
+> 3. **Paquete de Restauración Generado:** Se estructuraron los 2 cargos nacionales omitidos en `scratch/cargos_caracciolo_parra_restauracion.json` listos para inyección atómica por clave `{codigoDEA}_{cedula}`.
+> 4. **Fechas de Nacimiento Recuperadas:** Se identificaron 2 docentes que tenían su fecha en el RAC pero estaban vacías en V2 (Alba Marina Infante López, C.I. 10.903.170, nacida el 03/07/1971, y María Zoraida Altuve, C.I. 11.220.517, nacida el 02/10/1965), incorporándose al consolidado general `scratch/58_fechas_restauracion.json`.
+> 5. **Depuración de Cédulas:** Se identificaron 4 funcionarios cuyos números de cédula fueron corregidos legalmente en V2 respecto al RAC de julio (Freddy Istan Ávila, Ruberxy Salas, Daisy Farias y Liset Ascanio).
+
+
 
