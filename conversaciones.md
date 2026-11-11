@@ -7377,15 +7377,33 @@ Creo que solo 2 están en el RAC.xlsx"
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
-> 1. **Prueba de Conexión y Escritura:** Se ejecutó un commit de prueba a Firestore con renovación de token OAuth; respuesta HTTP 200 confirmada exitosamente.  
-> 2. **Inicio de Producción Bloque 1:** Se lanzó la ejecución real en Firestore.  
-> 3. **Avance Exitoso:** Los lotes 1 al 9 (3.600 expedientes) se procesaron y confirmaron con HTTP 200 en Firestore.  
-> 4. **Tope de Cuota Diaria (Status 429 - Quota Exceeded):** En el lote 10, Google Firebase limitó las escrituras al alcanzar el límite diario de 20.000 operaciones por proyecto del plan gratuito (Spark Tier), acumulado por las migraciones matutinas y vespertinas de más de 40.000 operaciones.  
-> 5. **Blindaje y Optimización de Retoma:**  
->    * Se guardó el estado persistente en `scratch/estado_progreso_bloque_1.json` registrando los 3.600 expedientes completados.  
->    * Se eliminaron las 10.749 operaciones de borrado asimétrico redundantes (ya ejecutadas previamente), reduciendo a la mitad la cuota requerida.  
->    * Se redujo el tamaño de lote a 200 operaciones con pausas de 1.5s y espera exponencial ante saturación.  
->    * El script quedó preparado con reanudación automática para retomar exactamente en el registro 3.601 (Lote 19) tan pronto se reinicie el contador diario de cuota de Google (medianoche PST / ~3:30 AM hora Venezuela).
+> Se alcanzó a procesar y confirmar con éxito un primer avance de **3.600 expedientes** en el Bloque 1 (los primeros 9 lotes ya están en Firestore con sus datos completos). 
+> 
+> Sin embargo, al llegar al lote 10, Google Firebase activó la pausa de cuota diaria (*Status 429 - Quota exceeded*).
+> 
+> ---
+> 
+> ### Diagnóstico de la situación
+> 
+> 1. **El límite del plan gratuito (Spark Tier):**  
+>    Google Firebase en su plan gratuito permite **20.000 operaciones de escritura al día por proyecto**. Como hoy se ejecutaron las migraciones del Bloque 1, del Bloque 2, el saneamiento de sedes y ahora estos primeros 3.600 registros, el proyecto acumuló más de 40.000 operaciones en el día, tocando el techo diario de Google.
+> 
+> 2. **Lo que ya se logró y no se pierde:**  
+>    * **3.600 funcionarios del Bloque 1** ya quedaron completamente enriquecidos en la nube.  
+>    * El script guardó automáticamente un punto de control en `scratch/estado_progreso_bloque_1.json`.
+> 
+> 3. **Optimizaciones que ya dejé listas:**  
+>    * **Eliminé los borrados redundantes:** En el primer intento estábamos intentando borrar 10.749 cédulas legadas que ya se habían borrado en la mañana. Al quitarlas, ahorramos 10.749 operaciones para no gastar cuota en vano.  
+>    * **Reanudación automática:** El script está configurado para que al reiniciarse comience directamente en el **registro 3.601 (Lote 19)**, sin repetir a los que ya recibieron los datos.  
+>    * **Tamaño de lote reducido y pausas:** Bajamos los paquetes de 400 a 200 con pausas de 1.5 segundos para evitar alertas del regulador de Google.
+> 
+> ---
+> 
+> ### Próximo paso
+> 
+> El contador de cuota diaria de Google Firebase se reinicia automáticamente cada 24 horas (a medianoche hora del Pacífico, aproximadamente **3:30 AM - 4:00 AM hora de Venezuela**).
+> 
+> Apenas se reinicie la cuota, ejecutaremos el script: retomará desde el registro 3.601, completará los 7.231 registros restantes del Bloque 1 y continuará con el Bloque 2 de forma limpia y definitiva.
 
 ---
 
@@ -7397,4 +7415,4 @@ Creo que solo 2 están en el RAC.xlsx"
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
-> Registro histórico volcado de forma íntegra e indeleble en `conversaciones.md` para proteger la memoria operativa ante eventuales contingencias o cortes eléctricos.
+> Mensaje respaldado de forma textual, literal e íntegra en `conversaciones.md` junto con los puntos de control en `scratch/` y sincronizado en el repositorio remoto GitHub.
