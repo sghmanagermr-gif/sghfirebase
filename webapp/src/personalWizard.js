@@ -755,13 +755,13 @@ export function cargarEmpleadoEnFormulario(data, docId) {
     }
 
     setVal('wp-nombres', nom);
-    setVal('wp-lugar-nacimiento', data['lugar-nacimiento'] || '');
-    setVal('wp-nacimiento', data['fecha-nacimiento'] || data.nacimiento || '');
-    setVal('wp-edad', data.edad || '');
-    if (window.calcularEdadUI && !data.edad && data['fecha-nacimiento']) {
+    setVal('wp-lugar-nacimiento', data['lugar-nacimiento'] || data['LUGAR DE NACIMIENTO'] || '');
+    setVal('wp-nacimiento', data['fecha-nacimiento'] || data.nacimiento || data['FECHA DE NACIMIENTO'] || '');
+    setVal('wp-edad', data.edad || data.EDAD || '');
+    if (window.calcularEdadUI && !data.edad && (data['fecha-nacimiento'] || data['FECHA DE NACIMIENTO'])) {
         window.calcularEdadUI();
     }
-    setSelectSmart('wp-genero', data.genero || '');
+    setSelectSmart('wp-genero', data.genero || data.GENERO || '');
 
     // Desglose de Teléfonos
     const setTel = (prefId, numId, fullVal) => {
@@ -781,15 +781,15 @@ export function cargarEmpleadoEnFormulario(data, docId) {
         if (nEl) nEl.value = num;
     };
 
-    setTel('wp-prefijo-hab', 'wp-tel-habitacion', data['tel-habitacion'] || '');
-    setTel('wp-prefijo-cel', 'wp-tel-celular', data['tel-celular'] || '');
-    setTel('wp-prefijo-ofi', 'wp-tel-oficina', data['tel-oficina'] || '');
+    setTel('wp-prefijo-hab', 'wp-tel-habitacion', data['tel-habitacion'] || data['telefono-habitacion'] || data['TELEFONO HABITACION'] || '');
+    setTel('wp-prefijo-cel', 'wp-tel-celular', data['tel-celular'] || data['telefono-celular'] || data['TELEFONO CELULAR'] || '');
+    setTel('wp-prefijo-ofi', 'wp-tel-oficina', data['tel-oficina'] || data['telefono-oficina'] || data['TELEFONO OFICINA'] || '');
 
-    setVal('wp-correo', data.correo || '');
-    setSelectSmart('wp-estado-civil', data['estado-civil'] || '');
-    setVal('wp-direccion', data.direccion || '');
+    setVal('wp-correo', data.correo || data['correo-electronico'] || data['CORREO ELECTRONICO'] || '');
+    setSelectSmart('wp-estado-civil', data['estado-civil'] || data['ESTADO CIVIL'] || '');
+    setVal('wp-direccion', data.direccion || data['DIRECCION'] || data['direccion-habitacion'] || '');
     setSelectSmart('wp-instruccion', data.instruccion || data['nivel-instruccion'] || data['nivel_instruccion'] || data['NIVEL DE INSTRUCCIÓN'] || data['NIVEL DE INSTRUCCION'] || '');
-    setVal('wp-profesion', data.profesion || '');
+    setVal('wp-profesion', data.profesion || data['PROFESIÓN'] || data['profesion-titulo'] || '');
 
     // 2. Datos Laborales
     setVal('wp-ubicacion-administrativa', data['ubicacion-administrativa'] || '');
