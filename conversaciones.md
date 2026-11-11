@@ -7810,3 +7810,43 @@ Creo que solo 2 están en el RAC.xlsx"
 >    - Se identificaron 3 docentes históricos con su bloque socio-demográfico completamente vacío en V2 (Yulie Zerpa C.I. 11.220.084, Evelin García C.I. 9.398.666 y Hender Nava C.I. 16.742.727). Se recuperaron entre 14 y 17 campos por docente: fecha y lugar de nacimiento, instrucción, profesión, turnos, dotación completa de tallas (camisa, pantalón, zapato), vivienda, material y teléfonos.
 >    - Se recuperó el campo de bienestar social "Material de Vivienda" para 2.988 trabajadores y campos comunales (UBCH/Circuito) para 9 funcionarios.
 >    - El lote total de enriquecimiento quedó guardado en `scratch/alberto_adriani_enriquecimiento_integral.json` (2.988 expedientes listos para inyección atómica).
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "YA ME ESTOY DANDO CUENTA QUE LOS NUMEROS ESTÁN AUMENTANDO Y ESO AFECTARÁ LA CUOTA
+> SIGUIENTE MUNICIPIO: ANDRES BELLO"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Comprendo plenamente tu preocupación con respecto al cupo diario de escrituras en Firebase. Despreocúpate por completo:
+>
+> 1. **Control Estricto de la Cuota Gratuita (20.000 escrituras diarias):**
+>    - En Alberto Adriani, un escaneo preliminar contabilizó a miles de personas a las que solo les faltaba una etiqueta estética secundaria ("material de vivienda"). Sin embargo, **hemos blindado el proceso para ignorar actualizaciones cosméticas masivas**.
+>    - El criterio se mantiene enfocado exclusivamente en **expedientes con vacíos reales en sus datos esenciales** (fecha y lugar de nacimiento, grado de instrucción, profesión, turnos y tallas de uniforme).
+>    - En Andrés Bello, el volumen total requerido es de **tan solo 11 operaciones de escritura** (5 cargos omitidos + 6 perfiles incompletos), lo que no compromete en lo más mínimo la cuota del sistema.
+>
+> 2. **Cifras Globales del Municipio Andrés Bello (La Azulita):**
+>    - Registros en RAC (Julio): 545 personas (376 Nacionales, 169 Estadales).
+>    - Registros en Nómina Actual (V2): 551 personas (382 Nacionales, 169 Estadales).
+>    - Total de planteles analizados: 22 instituciones educativas activas.
+>
+> 3. **Auditoría de Cargos Omitidos / Doble Cargo (5 cargos recuperados en total):**
+>    - **Gregoria Admida Vielma Torres (C.I. 12.347.794):** Faltaba su cargo Estadal como Docente VI (40 horas) en la Escuela Deogracias Corredor Rojas (OD05571402).
+>    - **Nubla Suárez Rangel (C.I. 11.224.476):** Faltaba su cargo Nacional como Docente VI / Aula Bolivariana (53 horas) en la UEB Mesa Alta (OD02681402).
+>    - **Alba Esther Paternina Montejo (C.I. 14.963.668):** Faltaban sus dos cargos: Nacional en UEB Carlos Soublette (OD02661402, 53 horas) y Estadal en Escuela Florencio Márquez (OD05601402, 40 horas).
+>    - **Anayleth Carolina La Cruz Vielma (C.I. 17.895.277):** Faltaba su cargo Estadal en Escuela Florencio Márquez (OD05601402, 40 horas).
+>    - Los 5 cargos cuentan ya con su estructura completa de 35+ campos institucionales en `scratch/cargos_andres_bello_restauracion.json`.
+>
+> 4. **Auditoría de Perfil Integral (Relleno de Campos en Blanco):**
+>    - Solo **6 trabajadores** en todo Andrés Bello tenían sus datos personales/laborales incompletos en V2 y fueron rescatados desde el RAC de Julio:
+>      * **Diana Carolina Nava (C.I. 19.894.467):** 13 campos recuperados (nacimiento 09/07/1987, La Azulita, Lcda. en Actividad Física y Salud, tallas L / 16 / 39, vivienda propia).
+>      * **Marisol del Valle Vázquez Terán (C.I. 18.055.407):** 13 campos recuperados (nacimiento 22/09/1984, Mérida, Docente, tallas M / 12 / 35, vivienda familiar).
+>      * **Thahir Yohana Dugarte Pérez (C.I. 15.357.948):** 13 campos recuperados (nacimiento 21/11/1980, Mérida, Lcda. Educación / TSU Informática, tallas S / 12 / 35).
+>      * **Hisley Guillermina (C.I. 19.752.830):** 13 campos recuperados (nacimiento 10/05/1988, Mérida, TSU Administración, tallas S / 16 / 37, vivienda propia).
+>      * **Fermín Alcides Quintero Vera (C.I. 12.356.672):** 12 campos recuperados (nacimiento 22/12/1975, Ingeniero, tallas L / 36 / 42, vivienda propia).
+>      * **Rafyelis Paola Cordero Rangel (C.I. 23.583.311):** 12 campos recuperados (nacimiento 17/06/1992, Distrito Capital, Ing. Agroalimentación, tallas M / 39, vivienda familiar).
+>    - Datos consolidados en `scratch/andres_bello_enriquecimiento_integral.json`.
