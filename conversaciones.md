@@ -7696,19 +7696,118 @@ Creo que solo 2 están en el RAC.xlsx"
 > **Respuesta del Agente:**  
 > Se realizó la auditoría integral del Municipio Arzobispo Chacón (Canaguá y pueblos del sur) cruzando RAC (Julio) vs Nómina V2:
 > 1. **Cifras Globales:** 698 registros en RAC vs 703 en Nómina V2 (RAC: 424 Nac, 274 Est -incluyendo 10 registros estadales sin tag explícito en RAC-; V2: 423 Nac, 280 Est).
-> 2. **Comportamiento de Planteles:** Existen exactamente 76 planteles en ambos archivos. 72 planteles coinciden matemát
-... [truncated for diff preview]
+> 2. **Comportamiento de Planteles:** Existen exactamente 76 planteles en ambos archivos. 72 planteles coinciden matemáticamente al 100%. Las únicas 4 variaciones corresponden a movimientos administrativos auditados:
+>    - Liceo Padre Manuel Varela (S1828D1405): 19 en RAC vs 18 en V2 (-1). José Luis Escalona Sosa (C.I. 17.895.345) fue trasladado al C.E. 16 de Septiembre en Libertador (OD12771412), donde permanece activo.
+>    - E.E. El Playón (OD11291405): 10 en RAC vs 8 en V2 (-2). Se depuraron 2 filas duplicadas idénticas de Docente I de la docente Susana Durán (C.I. 20.395.928), preservando su plaza real de Docente III.
+>    - E.E. Río Arriba (OD11141405): 16 en RAC vs 22 en V2 (+6 nuevos obreros/cocineros estadales).
+>    - E.E. El Viento (OD01351405): 13 en RAC vs 15 en V2 (+2 nuevas aseadoras estadales).
+> 3. **Casos de Doble Dependencia / Doble Cargo:** Cero (0) casos de doble dependencia (Nacional + Estadal) en RAC. Ningún funcionario de Arzobispo Chacón posee cargos omitidos en el SGH.
+> 4. **Fechas de Nacimiento:** 100% de los funcionarios históricos de RAC tienen su fecha de nacimiento completa en V2 (0 faltantes a restaurar). Los 8 nuevos ingresos obreros/cocineros no estaban en el RAC de julio.
+> 5. **Diagnóstico Final de Arzobispo Chacón:** 0 cargos omitidos. No se requiere paquete de restauración.
 
 ---
 
 * **Emisor:** Usuario (Super Administrador)
 
 > **Mensaje del Usuario:**  
-> "Después que revisaras el último municipio que te solicité JUSTO BRICEÑO y antes de continuar con en siguiente municipio, hay algo que me está llamando la atención ¿Con todos lo municipios que se han revisado, solo te estás enfocando en fecha de nacimiento? Ojalá y no, y que estes revisando que si en los expedientes en SGH hay campos vacios, se rellenen con lo que hay en RAC. Es solo una curiosidad"
+> "CARACCIOLO PARRA"
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
-> Se aclaró y consolidó formalmente el plan integral de restauración:
-> 1. **Cargos Omitidos / Doble Cargo (Inyección de Ficha Completa):** Los cargos omitidos por colisiones de cédula (Campo Elías: 31, Alberto Adriani: 5, Andrés Bello: 5, Antonio Pinto Salinas: 1, Caracciolo Parra: 2, Julio César Salas: 1, Justo Briceño: 1) NO se recuperan solo con fecha, sino con la **totalidad de sus más de 35 campos** (laborales, cargas horarias, códigos RAC, turnos, matrícula, datos personales, tallas, vivienda y comunidad).
-> 2. **Expedientes Existentes con Campos Vacíos (Enriquecimiento Integral):** Se explicó que la fecha de nacimiento servía como termómetro diagnóstico. En respuesta inmediata, se procesó el universo completo de los 149 expedientes detectados hasta ahora, estructurando el payload `scratch/expedientes_enriquecimiento_integral.json` para que, mediante máscara atómica (`updateMask`), se pueblen simultáneamente todos sus campos faltantes desde el RAC: lugar de nacimiento, nivel de instrucción, profesión, turnos que atiende, atiende matrícula, tallas completas (camisa, pantalón, zapato), dirección, teléfonos, correo, tipo de vivienda, material, condición, UBCH, circuito comunal y centro de votación.
+> Se ejecutó la auditoría detallada del Municipio Caracciolo Parra Olmedo (Tucaní) cruzando RAC (Julio) vs Nómina V2:
+> 1. **Cifras Globales:** 655 registros en RAC vs 654 en Nómina V2 (RAC: 427 Nacionales, 228 Estadales; V2: 430 Nacionales, 224 Estadales).
+> 2. **Casos de Doble Dependencia en Julio (4 casos identificados):**
+>    - **Mercris Bravo (C.I. 13.438.966):** Activa en ambos planteles (Nacional en OD17601407 y Estadal en OD00471414 de Obispo Ramos de Lora).
+>    - **Gabriela del Carmen Rivera González (C.I. 14.927.416):** Activa en ambos planteles (Nacional en S1064D1407 y Estadal en OD03591407 de El Charal).
+>    - **Astrid Dugarte Hernández (C.I. 18.620.228):** Poseía cargo Nacional en S1064D1407 (Liceo Vicente Campo Elías, Docente NG, 40 hrs tarde) y cargo Estadal en OD03591407 (El Charal, Docente Contratado, 40 hrs mañana). En V2 solo se conservó su plaza estadal; se omitió su plaza nacional en S1064D1407 por colisión de clave `{ci}`.
+>    - **María Zolia Ramírez Altuve (C.I. 16.038.302):** Poseía cargo Nacional en S1064D1407 (Liceo Vicente Campo Elías, Docente II, 40 hrs) y cargo Estadal en OD03591407 (El Charal, Docente IV, 40 hrs). En V2 solo se conservó su plaza estadal; se omitió su plaza nacional en S1064D1407 por colisión de clave `{ci}`.
+> 3. **Paquete de Restauración Generado:** Se estructuraron los 2 cargos nacionales omitidos en `scratch/cargos_caracciolo_parra_restauracion.json` listos para inyección atómica por clave `{codigoDEA}_{cedula}`.
+> 4. **Fechas de Nacimiento Recuperadas:** Se identificaron 2 docentes que tenían su fecha en el RAC pero estaban vacías en V2 (Alba Marina Infante López, C.I. 10.903.170, nacida el 03/07/1971, y María Zoraida Altuve, C.I. 11.220.517, nacida el 02/10/1965), incorporándose al consolidado general `scratch/58_fechas_restauracion.json`.
+> 5. **Depuración de Cédulas:** Se identificaron 4 funcionarios cuyos números de cédula fueron corregidos legalmente en V2 respecto al RAC de julio (Freddy Istan Ávila, Ruberxy Salas, Daisy Farias y Liset Ascanio).
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "CARDENAL QUINTERO"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se ejecutó la auditoría del Municipio Cardenal Quintero (Santo Domingo - Eje Páramo) cruzando RAC (Julio) vs Nómina V2:
+> 1. **Cifras Globales:** 366 registros en RAC vs 369 en Nómina V2 (RAC: 301 Nacionales, 63 Estadales, 2 sin tag = 65 Est; V2: 306 Nacionales, 63 Estadales).
+> 2. **Comportamiento en los 19 Planteles:** 15 planteles idénticos al 100%. Las variaciones corresponden a movimientos administrativos:
+>    - Rosa Siomary Peña Barrios (C.I. 8.042.020) fue trasladada a Campo Elías (OD17611406), donde está activa.
+>    - Isa Rangel Romero (C.I. 13.062.827) fue trasladada a Libertador (S2869D1412), donde está activa.
+>    - Se incorporaron 4 nuevos registros en V2 en los planteles Martha González, Mitisús y Juan Rodríguez Suárez.
+> 3. **Casos de Doble Dependencia / Doble Cargo:** Cero (0) casos en el RAC de julio. Ningún trabajador de Cardenal Quintero poseía múltiple plaza; por ende, hay **0 cargos omitidos en el SGH**.
+> 4. **Gran Hallazgo en Fechas de Nacimiento:** Se identificaron **43 trabajadores** en la nómina actual cuyas fechas de nacimiento estaban en blanco en V2 pero sí existían de forma completa y exacta en el RAC de julio.
+> 5. **Paquete de Fechas Generado:** Se construyó el payload con las 43 fechas en `scratch/cardenal_quintero_43_fechas.json` y se integraron al consolidado global de actualización (`scratch/101_fechas_restauracion.json`), alcanzando 101 expedientes listos para completar fechas mediante máscara atómica.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "GUARAQUE"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se ejecutó la auditoría minuciosa del Municipio Guaraque (Pueblos del Sur) cruzando RAC (Julio) vs Nómina V2:
+> 1. **Cifras Globales:** 478 registros en RAC vs 507 en Nómina V2 (RAC: 369 Nacionales, 109 Estadales -incluyendo 8 sin tag explícito-; V2: 374 Nacionales, 133 Estadales).
+> 2. **Preservación Total del Personal:** Cero (0) trabajadores omitidos del RAC. El 100% de los 478 trabajadores de julio están activos en el SGH. Tres funcionarios tuvieron reubicaciones dentro del mismo municipio (José Humberto Contreras, Marilú Molina y Anni Maribel Contreras) y se incorporaron 32 nuevos ingresos (26 estadales y 6 nacionales).
+> 3. **Casos de Doble Dependencia / Doble Cargo:** Cero (0) casos en el RAC de julio. Ningún trabajador de Guaraque poseía múltiple cargo; por ende, hay **0 cargos omitidos en el SGH**.
+> 4. **Fechas de Nacimiento Recuperadas:** Se identificaron 4 funcionarios en planteles de Guaraque que no tenían fecha de nacimiento en V2 pero sí existían en el RAC (Marilú Molina Montilva, Nohelia Ramírez Molina, Anni Maribel Contreras García y José Humberto Contreras Contreras). Fueron incorporadas al consolidado global (`scratch/105_fechas_restauracion.json`).
+> 5. **Diagnóstico Final de Guaraque:** 0 cargos omitidos. No requiere paquete de restauración de cargos.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "JULIO CESAR SALAS"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se realizó la auditoría integral del Municipio Julio César Salas (Arapuey) cruzando RAC (Julio) vs Nómina V2:
+> 1. **Cifras Globales:** 479 registros en RAC vs 499 en Nómina V2 (RAC: 292 Nacionales, 187 Estadales; V2: 284 Nacionales, 215 Estadales).
+> 2. **Casos de Doble Dependencia en Julio (6 casos identificados):**
+>    - **Mario Gerardo Ramírez Moreno (C.I. 15.942.671):** Activo con ambos cargos en el SGH (OD01021410 y OD12301410).
+>    - **Rosmery Paola Vergara Abreu (C.I. 17.436.056):** Activa con ambos cargos en el SGH (Nacional OD01021410 y Estadal OD12281410).
+>    - **Beatriz Coromoto Quevedo Hernández (C.I. 13.825.307):** Activa con ambos cargos en el SGH (Nacional OD01021410 y Estadal OD12241410).
+>    - **Katiuska Jackeline Rojas Salas (C.I. 19.383.323):** Activa con ambos cargos en el SGH (Nacional OD17131410 y Estadal OD12241410).
+>    - **Yoneida Coromoto Guerra (C.I. 15.142.594):** Activa con ambos cargos en el SGH (Nacional S3379N1410 y Estadal OD12261410).
+>    - **Yerinell Alimar Rivas Guillén (C.I. 14.438.447):** Tenía cargo Nacional en S2855D1410 (E.B. Palmira, Docente IV, 40 hrs, Titular con 20 años de servicio) y cargo Estadal en OD12161410 (Escuela Santa Cruz, Docente Único). En V2 solo se conservó su plaza estadal; su cargo titular nacional en S2855D1410 fue **omitido por colisión de clave `{ci}`**.
+> 3. **Paquete de Restauración Generado:** Se estructuró el cargo nacional de Yerinell Rivas Guillén en `scratch/cargos_julio_cesar_salas_restauracion.json` con sus 40 horas, código RAC 1124DI y titularidad, listo para inyección atómica.
+> 4. **Fechas de Nacimiento Recuperadas:** Se identificó a la trabajadora María Emilia Briceño de Mercado (C.I. 11.848.192, nacida el 08/09/1967, 59 años) en el J.I. Roberto Picón Lares, sumándose al consolidado general (`scratch/106_fechas_restauracion.json`).
+> 5. **Movimientos Administrativos:** Lenin Alberto Paredes Paredes (C.I. 12.832.463) fue trasladado al L.N. Libertador en Mérida, donde permanece activo. Se corrigió un error de tipeo en la cédula de la cocinera Yohana Andreina Convita Pérez (de 26259023 a 26259013).
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "JUSTO BRICEÑO"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se realizó la auditoría detallada del Municipio Justo Briceño (Torondoy / San Cristóbal de Torondoy) cruzando RAC (Julio) vs Nómina V2:
+> 1. **Cifras Globales:** 260 registros en RAC vs 260 en Nómina V2 (RAC: 150 Nacionales, 110 Estadales; V2: 151 Nacionales, 109 Estadales).
+> 2. **Comportamiento en los 20 Planteles:** 17 planteles idénticos al 100%. Solo 3 planteles variaron por causas auditadas (depuración de un duplicado de Ana Hilda Villarreal en OD01061411; incorporación de 2 fichas en OD00971411; y omisión del cargo estadal en OD09651411).
+> 3. **Casos de Doble Dependencia (2 casos identificados):**
+>    - **Mileidy Josefina Rubio Guillén (C.I. 17.027.105):** Activa con ambos cargos en el SGH (Nacional en OD00971411 y Estadal en OD05231411).
+>    - **Wilmer Alexander Salcedo Andrade (C.I. 12.549.669):** Poseía cargo Nacional en OD17491411 (Liceo San Cristóbal, Docente I Aula, 40 hrs) y cargo Estadal en OD09651411 (El Niguas, Docente IV, 33 hrs, Titular con 26 años de servicio). En V2 solo se conservó su plaza nacional; su cargo titular estadal en OD09651411 fue **omitido por colisión de clave `{ci}`**.
+> 4. **Paquete de Restauración Generado:** Se estructuró el cargo estadal de Wilmer Salcedo Andrade en `scratch/cargos_justo_briceno_restauracion.json` con sus 33 horas, código RAC D-0021 y 26 años de antigüedad, listo para inyección atómica.
+> 5. **Fechas de Nacimiento Recuperadas (43 casos):** Se identificaron 43 trabajadores en V2 sin fecha de nacimiento, cuyos datos completos y exactos existían en el RAC de julio. Se generó `scratch/justo_briceno_43_fechas.json` y se sumaron al consolidado global (`scratch/149_fechas_restauracion.json`), que ahora alcanza 149 expedientes listos.
+
+
+
+
+
+
+
