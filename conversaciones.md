@@ -7786,6 +7786,26 @@ Creo que solo 2 están en el RAC.xlsx"
 > 4. **Fechas de Nacimiento Recuperadas:** Se identificó a la trabajadora María Emilia Briceño de Mercado (C.I. 11.848.192, nacida el 08/09/1967, 59 años) en el J.I. Roberto Picón Lares, sumándose al consolidado general (`scratch/106_fechas_restauracion.json`).
 > 5. **Movimientos Administrativos:** Lenin Alberto Paredes Paredes (C.I. 12.832.463) fue trasladado al L.N. Libertador en Mérida, donde permanece activo. Se corrigió un error de tipeo en la cédula de la cocinera Yohana Andreina Convita Pérez (de 26259023 a 26259013).
 
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "JUSTO BRICEÑO"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se realizó la auditoría detallada del Municipio Justo Briceño (Torondoy / San Cristóbal de Torondoy) cruzando RAC (Julio) vs Nómina V2:
+> 1. **Cifras Globales:** 260 registros en RAC vs 260 en Nómina V2 (RAC: 150 Nacionales, 110 Estadales; V2: 151 Nacionales, 109 Estadales).
+> 2. **Comportamiento en los 20 Planteles:** 17 planteles idénticos al 100%. Solo 3 planteles variaron por causas auditadas (depuración de un duplicado de Ana Hilda Villarreal en OD01061411; incorporación de 2 fichas en OD00971411; y omisión del cargo estadal en OD09651411).
+> 3. **Casos de Doble Dependencia (2 casos identificados):**
+>    - **Mileidy Josefina Rubio Guillén (C.I. 17.027.105):** Activa con ambos cargos en el SGH (Nacional en OD00971411 y Estadal en OD05231411).
+>    - **Wilmer Alexander Salcedo Andrade (C.I. 12.549.669):** Poseía cargo Nacional en OD17491411 (Liceo San Cristóbal, Docente I Aula, 40 hrs) y cargo Estadal en OD09651411 (El Niguas, Docente IV, 33 hrs, Titular con 26 años de servicio). En V2 solo se conservó su plaza nacional; su cargo titular estadal en OD09651411 fue **omitido por colisión de clave `{ci}`**.
+> 4. **Paquete de Restauración Generado:** Se estructuró el cargo estadal de Wilmer Salcedo Andrade en `scratch/cargos_justo_briceno_restauracion.json` con sus 33 horas, código RAC D-0021 y 26 años de antigüedad, listo para inyección atómica.
+> 5. **Fechas de Nacimiento Recuperadas (43 casos):** Se identificaron 43 trabajadores en V2 sin fecha de nacimiento, cuyos datos completos y exactos existían en el RAC de julio. Se generó `scratch/justo_briceno_43_fechas.json` y se sumaron al consolidado global (`scratch/149_fechas_restauracion.json`), que ahora alcanza 149 expedientes listos.
+
+
 
 
 
