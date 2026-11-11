@@ -4833,3 +4833,29 @@ Atendiendo la solicitud de la máxima autoridad escolar y con el propósito de o
   * Compilación con Vite limpia (666ms) y despliegue exitoso a producción en Firebase Hosting (`https://sgh-merida.web.app`).
 
 - **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.
+
+
+## [v2.36.8] - 2026-11-11 (Enriquecimiento Masivo de Expedientes Fase 3, 23.031 Registros y Parser Inteligente de Excepciones)
+
+### Resumen Técnico
+Se diseñó, validó y ejecutó el motor maestro de migración y enriquecimiento masivo Fase 3 ([`scripts/fase3_migracion_maestra_unificada.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/scripts/fase3_migracion_maestra_unificada.js)), subsanando integralmente las omisiones de campos laborales y personales heredadas de fases previas. El proceso se ejecutó bajo el estándar institucional Zero-Cost (0 lecturas a la base de datos) y con protección quirúrgica mediante `updateMask` para no alterar campos previamente validados o modificados por directores escolares. Adicionalmente, se integraron los planteles al 100% del Municipio Sucre al régimen de excepciones y se optimizó el panel de administración para admitir pegado múltiple de planteles.
+
+### Logros y Arquitectura Operativa
+1. **Enriquecimiento de 23.031 Expedientes en Cloud Firestore:**
+   - **Bloque 1 (Eje Panamericano y Valle del Mocotíes):** 100% completado (10.831 expedientes en 10 municipios).
+   - **Bloque 2 (Eje Metropolitano y Pueblos del Sur):** 95.3% completado (12.200 expedientes en 8 municipios). Estado de pausa por cuota diaria en Lote 62 salvaguardado en `scratch/estado_progreso_bloque_2.json`.
+   - **Campos Enriquecidos (29 campos clave):** `ubicacion-administrativa`, `dependencia`, `turnos-atiende`, `atiende-matricula`, `nivel-modalidad`, `especialidad-imparte`, `horas-por-programar`, `fecha-nacimiento`, `instruccion`, `profesion`, tallas (camisa, pantalón, calzado), salud, tipo de vivienda, discapacidad, entre otros.
+   - **Mapeo Canónico de Dependencia:** Se garantizó la separación estricta entre la dependencia del plantel (Col 24 RAC) y la dependencia de nómina del funcionario (Col 30 RAC), resolviendo 840 discrepancias.
+
+2. **Gestión de Excepciones de Despliegue (Municipio Sucre):**
+   - Inyección directa de 60 códigos DEA del Municipio Sucre completados al 100% en el documento maestro `configuracion/despliegue`.
+   - **Optimización de UI en [`webapp/src/admin.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/src/admin.js):** Se reprogramó el manejador del botón de añadir excepciones (`btnAddExp.onclick`) con un analizador de expresiones regulares (`/[\s,]+/`), permitiendo al usuario pegar listados masivos de códigos DEA separados por espacios o saltos de línea y registrándolos como elementos individuales en un solo clic.
+
+3. **Archivos Modificados:**
+   - [`scripts/fase3_migracion_maestra_unificada.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/scripts/fase3_migracion_maestra_unificada.js): Motor unificado de enriquecimiento por bloques con soporte de estado y reanudación limpia.
+   - [`webapp/src/admin.js`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/src/admin.js): Parser inteligente de códigos DEA múltiples para excepciones de despliegue.
+   - [`webapp/package.json`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/package.json): Actualización de versión a `2.36.8`.
+   - [`webapp/index.html`](file:///c:/Proyectos/sgh-mr%20-%20firebase/webapp/index.html): Actualización de identificadores de versión a `v2.36.8`.
+   - [`versiones.md`](file:///c:/Proyectos/sgh-mr%20-%20firebase/versiones.md): Registro cronológico de la versión 2.36.8.
+
+- **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.

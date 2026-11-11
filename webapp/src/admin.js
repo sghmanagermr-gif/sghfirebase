@@ -2556,9 +2556,14 @@ export function initAdminDashboard(dbInstance, user) {
   };
 
   btnAddExp.onclick = () => {
-    const val = inpNewExp.value.trim().toUpperCase();
-    if (val && !configActual.excepciones.includes(val)) {
-      configActual.excepciones.push(val);
+    const rawVal = inpNewExp.value.trim().toUpperCase();
+    if (rawVal) {
+      const items = rawVal.split(/[\s,]+/).map(s => s.trim()).filter(Boolean);
+      items.forEach(val => {
+        if (!configActual.excepciones.includes(val)) {
+          configActual.excepciones.push(val);
+        }
+      });
       inpNewExp.value = '';
       renderExcepciones();
     }

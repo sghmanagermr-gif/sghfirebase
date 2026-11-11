@@ -4,6 +4,23 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.36.8 (11 de Noviembre de 2026)
+
+- **Enriquecimiento Integral de Expedientes Laborales (Fase 3) y Carga Masiva Inteligente de Excepciones:**
+  - **Avance Histórico de Enriquecimiento Maestro de Personal:**
+    - Se ejecutó el motor unificado de migración (`scripts/fase3_migracion_maestra_unificada.js`), blindado con `updateMask` para enriquecer 29 campos laborales y personales sin sobrescribir ninguna edición previa realizada por los directores.
+    - **Bloque 1 (Eje Panamericano y Valle del Mocotíes - 10 municipios):** 100% completado (10.831 de 10.831 expedientes enriquecidos).
+    - **Bloque 2 (Eje Metropolitano y Pueblos del Sur - 8 municipios):** 95.3% completado (12.200 de 12.652 expedientes enriquecidos).
+    - **Total Consolidado:** 23.031 expedientes 100% homologados y listos en Cloud Firestore bajo el principio Zero-Cost (cero lecturas consumidas).
+  - **Inyección y Procesamiento Inteligente de Excepciones de Despliegue:**
+    - Se inyectaron en el documento de configuración de despliegue (`configuracion/despliegue`) los 60 códigos DEA pertenecientes al Municipio Sucre cuyos planteles se encuentran 100% listos y auditados.
+    - **Mejora en la Interfaz de Administración (`admin.js`):** El panel de control de excepciones ahora cuenta con procesamiento automático de texto masivo. Al pegar un listado de códigos DEA separados por saltos de línea, espacios o comas, el sistema los separa e incorpora instantáneamente de manera individual, evitando el ingreso manual uno por uno.
+  - **Control SemVer y Despliegue en Vivo:**
+    - Incremento a **v2.36.8** en `package.json`, `index.html` y compilación optimizada con Vite.
+    - Despliegue operativo inmediato en Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
 ### v2.36.7 (10 de Noviembre de 2026)
 
 - **Reordenamiento Estricto del Resumen Comparativo de Discrepancias y Visibilidad Universal en Auditoría:**
