@@ -3043,6 +3043,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
 
 * **Confirmación del Usuario:**
+
 > sí, estoy satisfecho
 
 ---
@@ -3074,6 +3075,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
 
 * **Confirmación del Usuario:**
+
 > Sï estoy satisfecho
 
 ---
@@ -3131,6 +3133,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
 
 * **Confirmación del Usuario:**
+
 > Perfecto, ahora si estoy satisfecho
 
 ---
@@ -3149,6 +3152,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Guía Didáctica Integral de Uso y Registro en el Sistema SGH desde Cero:  
+>
 > 1. Cumplimiento estricto de lectura de `SKILL_sgh_firebase.md`.  
 > 2. Elaboración del Manual Práctico paso a paso en lenguaje llano:  
 >    * **Paso 0:** Acceso a `https://sgh-merida.web.app` e inicio de sesión.  
@@ -3163,6 +3167,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
 
 * **Confirmación del Usuario:**
+
 > Sí, los resultados son satisfactorios
 
 ---
@@ -3180,6 +3185,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Análisis Integral de Grabación y Generación de Minuta Institucional en Documento Word (.docx):  
+>
 > 1. Inspección y análisis del archivo `Video\2026-10-30 11-49-30.mp4` (duración: 1 hora, 57 minutos y 46 segundos), correspondiente al taller de inducción municipal impartido por el Lic. Luis Alfonso Pérez (`sghcdcez14019@gmail.com`) mediante videollamada de WhatsApp Desktop para directores del Municipio Santos Marquina sobre la versión `v2.20.1` en producción.  
 > 2. Estructuración formal de la minuta: Membrete oficial MPPE / CDCE Mérida, ficha técnica completa, objetivo general, desarrollo cronológico en 6 fases (Apertura con diapositivas de `Manual Práctico.pptx`, Solicitud de acceso y aprobación, Demostración del candado de matrícula y traslados, Sesión interactiva de preguntas y notas de planteles sin director, Prueba real en vivo con la Escuela Estado Apure OD14311419 y Pizarra Municipal en tiempo real), acuerdos y bloque de firmas.  
 > 3. Generación del documento Word estilizado y corporativo:  
@@ -3189,6 +3195,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
 
 * **Confirmación del Usuario:**
+
 > Sí, los resultados son satisfactorios
 
 ---
@@ -3215,8 +3222,6 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > 3. Compilación limpia con Vite (`npm run build`) y despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión parche `v2.20.2`.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
 
-
-
 ---
 
 ### Intervención 34
@@ -3226,14 +3231,14 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Mensaje del Usuario:**  
 > "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
->  
+> 
 > En estos días hiciste un cambio para mejorar la experiencia del usuario en telefonos moviles. y ahora me estoy dando cuenta que el boton salir del sistema no está. ¿Qué habrá ocurrido?
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Diagnóstico Explicativo y Solución Definitiva para el Botón de Salida en Teléfonos Móviles (v2.20.3):  
->  
+> 
 > 1. **Lectura obligatoria:** Cumplimiento estricto de lectura inicial de `SKILL_sgh_firebase.md`.  
 > 2. **¿Qué ocurrió con el botón Salir del Sistema en celulares? (Explicación llana):**  
 >    * Al realizar las optimizaciones para teléfonos móviles en la versión `v2.19.3` para eliminar el molesto desplazamiento lateral y las franjas blancas a la derecha, se aplicó una regla de contención estricta (`overflow-x: hidden`).  
@@ -3255,7 +3260,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Mensaje del Usuario:**  
 > Sí satisfecho.  
->  
+> 
 > Ahora estoy detectando un inconveneinte, estoy registrado con una usuario munadmin y en la pizarra veo que los datos mostrados son estadales.., lo lógico es que el usuario superadmin y zonadmin vea las cantidades estadales; y los municipales solo las cantidades de sus municipios. ¿Cómo lo puedes arreglar?  
 > *(Imagen adjunta de la Pizarra Estadal con usuario LUIS ALFONSO PEREZ, avatar ZA, 19 usuarios, 1,221 planteles, 23,288 personal y 2,010 estudiantes)*
 
@@ -3263,7 +3268,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Diagnóstico Explicativo y Solución Completa para la Pizarra Municipal y Gestión de Roles (v2.20.4):  
->  
+> 
 > 1. **Lectura obligatoria:** Cumplimiento de verificación de `SKILL_sgh_firebase.md`.  
 > 2. **¿Por qué aparecían las cantidades estadales en su cuenta? (Explicación llana):**  
 >    * Al analizar la captura que compartió, en la esquina superior derecha se observaba el distintivo circular azul **«ZA»** (que significa *ZonAdmin / Responsable Zonal Estadal*) junto a su nombre LUIS ALFONSO PEREZ.  
@@ -3285,14 +3290,14 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Usuario (Administrador)
 
 > **Mensaje del Usuario:**  
-> esta imagen Whatsapp*** me la envía el responsable municipal del JULIO CESAR SALAS, y se nota que ve las cantidades estadal. como puedes ver en la imagen ***0001.png JULIO CESAR SALAS es munadmin  
+> esta imagen Whatsapp***me la envía el responsable municipal del JULIO CESAR SALAS, y se nota que ve las cantidades estadal. como puedes ver en la imagen***0001.png JULIO CESAR SALAS es munadmin  
 > *(Imagen adjunta de la pantalla del responsable de Julio César Salas mostrando Pizarra Municipal - JULIO CESAR SALAS en v2.20.3 con 1,221 escuelas, 23,288 empleados y 0 en matrícula)*
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Diagnóstico Explicativo y Solución Definitiva para Municipios con Nombres Compuestos y Blindaje de Pizarra (v2.20.5):  
->  
+> 
 > 1. **Lectura obligatoria:** Verificación de `SKILL_sgh_firebase.md`.  
 > 2. **¿Por qué el responsable de Julio César Salas veía las cantidades estadales? (Explicación llana):**  
 >    * Al revisar la foto que le enviaron, en la pestaña del navegador de esa computadora se observa la versión anterior **`v2.20.3`**.  
@@ -3317,13 +3322,13 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > Esta imagen me la envía un usuario ¿qué significa?  
 > *(Imagen adjunta de teléfono móvil mostrando «Cuenta en Revisión: Tu cuenta fue creada pero falta el perfil. Contacta soporte.»)*  
 > Como ves en la imagen, en la base de datos están sus datos  
-> *(Imagen adjunta de Firestore mostrando el documento de Mileidy Rubio, cedula 17027105, email gestionhumanajb2026@gmail.com, rol munadmin, municipio JUSTO BRICEÑO, estado_aprobacion: APROBADO)*
+> *(Imagen adjunta de Firestore mostrando el documento de Mileidy Rubio, cedula 17027105, email <gestionhumanajb2026@gmail.com>, rol munadmin, municipio JUSTO BRICEÑO, estado_aprobacion: APROBADO)*
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Diagnóstico Explicativo y Solución del Puente de Auto-Recuperación de Perfil (v2.20.6):  
->  
+> 
 > 1. **Lectura obligatoria:** Verificación de `SKILL_sgh_firebase.md`.  
 > 2. **¿Qué significa y por qué le aparecía ese mensaje? (Explicación llana):**  
 >    * Usando una analogía simple: imagínese un casillero y una llave. Cuando la usuaria (Mileidy Rubio, Coordinadora de Justo Briceño) inició sesión, el sistema de seguridad le asignó un código de llave digital en la nube (`UID`).  
@@ -3346,9 +3351,9 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Mensaje del Usuario:**  
 > Cuando el usuario me diga que entró te daré la respuesta. Mientras tanto  
->  
+> 
 > "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
->  
+> 
 > Lo que ves en la imagen me da miedo. a penas van 93 registro y a parecer hay un tope de 250, y son alrededor de 2000 usuarios que deben registrarse. Eso me da miedo.  
 > *(Imagen adjunta de la consola de Firebase Authentication > Usuarios, señalando en rojo la barra inferior: «Filas por página: 250 ▼ 1 - 93 of 93»)*
 
@@ -3356,7 +3361,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Aclaratoria Arquitectónica y Tranquilidad sobre Capacidad de Usuarios en Firebase:  
->  
+> 
 > 1. **Lectura obligatoria:** Verificación de `SKILL_sgh_firebase.md`.  
 > 2. **Tranquilidad absoluta: No hay límite de 250 usuarios.**  
 > 3. **¿Qué significa «Filas por página: 250»? (Explicación llana):**  
@@ -3383,15 +3388,10 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Confirmación de Éxito y Cierre de Ciclo Institucional (v2.20.6):  
->  
+> 
 > 1. **Validación en Producción:** Confirmación de acceso exitoso de la Coordinadora Municipal de Justo Briceño (Lic. Mileidy Rubio) tras la auto-revinculación transparente de su perfil en `sgh-merida.web.app`.  
 > 2. **Cumplimiento de Protocolo Skill 5:** Registro histórico formal en `bitacora.md`, actualización de `conversaciones.md` y respaldo integral con commit y push hacia el repositorio remoto de GitHub (`origin main`).  
 > 3. **Estatus del Sistema:** El sistema opera de manera óptima, robusta y con capacidad ilimitada a costo cero para todo el personal educativo del Estado Mérida.
-
-
-
-
-
 
 ---
 
@@ -3402,30 +3402,29 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Mensaje del Usuario:**  
 > "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
->  
+> 
 > necesito un buscador de usuarios en los roles superadmin, zonadmin y munadmin; por nombre, cedula, codigo plantel, correo
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Implementación del Buscador Integral de Usuarios Multi-Criterio (v2.21.0):  
->  
+> 
 > 1. **Lectura obligatoria:** Verificación de `SKILL_sgh_firebase.md`.  
 > 2. **Solución Implementada (Explicación llana):**  
 >    * **Buscador en Tiempo Real:** En el apartado de *Usuarios del Sistema*, se integró una barra de búsqueda inteligente (`#inp-buscar-usuario`) disponible para los roles **Superadmin**, **Zonadmin** y **Munadmin**.  
 >    * **Búsqueda Cruzada Instantánea:** Permite escribir y encontrar de inmediato a cualquier usuario filtrando simultáneamente por:  
->      - **Nombre** o apellido del funcionario.  
->      - **Cédula de Identidad** (escribiendo el número con o sin puntos).  
->      - **Código de Plantel (DEA)** para ubicar de inmediato al director de una escuela específica.  
->      - **Correo electrónico**.  
->      - **Municipio**.  
+>      * **Nombre** o apellido del funcionario.  
+>      * **Cédula de Identidad** (escribiendo el número con o sin puntos).  
+>      * **Código de Plantel (DEA)** para ubicar de inmediato al director de una escuela específica.  
+>      * **Correo electrónico**.  
+>      * **Municipio**.  
 >    * **Botón de Limpieza (`✕`):** Al escribir aparece una cruz que permite borrar la búsqueda y volver a ver la lista completa con un solo clic.  
 >    * **Ampliación para Coordinadores Zonales (`zonadmin`):** Ahora los directivos zonales pueden supervisar tanto a coordinadores municipales como a directores de planteles de todo el estado, permitiéndoles buscar escuelas por código DEA.  
 >    * **Ubicación Enriquecida:** En la tabla, los planteles muestran su código DEA acompañado del nombre del municipio para una rápida identificación visual.  
 >    * **Cero Costo y Máxima Velocidad:** El filtrado opera directamente en la memoria del navegador (0 segundos de espera y 0 lecturas adicionales a la base de datos).  
 > 3. **Control SemVer y Despliegue:** Incremento a `v2.21.0`, compilado limpio con Vite y desplegado en producción en Firebase Hosting (`https://sgh-merida.web.app`).  
 > 4. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -3442,7 +3441,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Implementación de Cabecera Fija (Sticky Header) y Navegación Flotante (v2.21.1):  
->  
+> 
 > 1. **Lectura obligatoria:** Verificación de `SKILL_sgh_firebase.md`.  
 > 2. **Solución Implementada (Explicación llana):**  
 >    * **Cabecera Anclada en Pantalla (Sticky):** Se fijó la barra superior del panel (`#admin-header`). Ahora, al desplazarse hacia abajo en la Pizarra o en las tablas de planteles y usuarios, la cabecera permanece siempre visible en el borde superior de la pantalla.  
@@ -3451,7 +3450,6 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    * **Menú Lateral Móvil Coordinado:** El menú hamburguesa lateral (`#admin-sidebar`) se fijó a la altura de la vista activa, permitiendo que al abrirlo desde cualquier parte del recorrido vertical, aparezca en pantalla sin desajustes.  
 > 3. **Control SemVer y Despliegue:** Incremento de versión a `v2.21.1`, compilación limpia en Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).  
 > 4. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -3462,7 +3460,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Mensaje del Usuario:**  
 > Estoy satisfecho.  
->  
+> 
 > Ahora que hablas de celular, al entrar con un usuario que su nombre y en este caso el nombre del municipio es largo, tanto el boton hamburgueza como el de salir no se ven. mi sugerecia, que el nombre disminuya de tamaño según longitud  
 > *(Video adjunto en formato mp4 mostrando la pantalla de teléfono móvil con el header desbordado y los extremos ocultos)*
 
@@ -3470,7 +3468,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Solución al Desborde de Cabecera Móvil y Adaptabilidad Tipográfica Dinámica (v2.21.2):  
->  
+> 
 > 1. **Lectura obligatoria:** Verificación de `SKILL_sgh_firebase.md`.  
 > 2. **Solución Implementada (Explicación llana):**  
 >    * **Ajuste Automático del Tamaño de Letra (Su Sugerencia):** Se implementó una regla inteligente que mide cuántas letras tiene la combinación de *Nombre + Municipio*. Si el nombre es largo (como en municipios compuestos), el sistema reduce de inmediato el tamaño de la letra de forma proporcional para que quepa cómodamente en la pantalla.  
@@ -3479,7 +3477,6 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    * **Optimización en Teléfonos Compactos:** En pantallas de menos de 440px de ancho, se oculta la pequeña pastilla de versión del encabezado para regalarle 45 píxeles adicionales al nombre y al botón de salida.  
 > 3. **Control SemVer y Despliegue:** Incremento de versión a `v2.21.2`, compilación limpia en Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).  
 > 4. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -3495,11 +3492,10 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Cierre de Ciclo Institucional (v2.21.2):  
->  
+> 
 > 1. **Confirmación de Éxito:** Se valida la plena satisfacción del Administrador con respecto a la adaptabilidad tipográfica proporcional del perfil del usuario y el blindaje anti-desborde horizontal en celulares para la versión `v2.21.2`.  
 > 2. **Cumplimiento Protocolar Skill 5:** Registro histórico formal en `bitacora.md`, actualización de `conversaciones.md` y respaldo integral con commit y push hacia el repositorio remoto de GitHub (`origin main`).  
 > 3. **Estatus del Sistema:** La WebApp en `https://sgh-merida.web.app` opera de forma impecable, con cabecera fija y visualización responsive óptima en todos los dispositivos móviles y de escritorio.
-
 
 ---
 
@@ -3509,37 +3505,36 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Usuario (Administrador)
 
 > **Mensaje del Usuario:**  
-> Imagen WhatsApp Image 2026-10-31 at 15.48.44.jpeg Este usuario (en este caso un plaadmin) ha ingresado 3 veces con el mismo correo liceopedrojosegonzalez2026@gmail.com; actualmente se ve en Firestore Captura.PNG. En muy tedioso buscarlo en la pantalla Captura0001.PNG  
+> Imagen WhatsApp Image 2026-10-31 at 15.48.44.jpeg Este usuario (en este caso un plaadmin) ha ingresado 3 veces con el mismo correo <liceopedrojosegonzalez2026@gmail.com>; actualmente se ve en Firestore Captura.PNG. En muy tedioso buscarlo en la pantalla Captura0001.PNG  
 > ¿Que estará pasando? ¿Se podrá conseguir en la pantalla de la colección de usuarios? Ayer creo que pasó lo mismo con otro usuario y pensé que esto no volvería a suceder  
-> *(3 imágenes adjuntas: pantalla de teléfono móvil indicando "Cuenta en Revisión: Tu cuenta fue creada pero falta el perfil. Contacta soporte.", captura de Firebase Authentication mostrando el usuario liceopedrojosegonzalez2026@gmail.com con UID s2AoGlhA..., y captura de Cloud Firestore con documentos alfanuméricos)*
+> *(3 imágenes adjuntas: pantalla de teléfono móvil indicando "Cuenta en Revisión: Tu cuenta fue creada pero falta el perfil. Contacta soporte.", captura de Firebase Authentication mostrando el usuario <liceopedrojosegonzalez2026@gmail.com> con UID s2AoGlhA..., y captura de Cloud Firestore con documentos alfanuméricos)*
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Diagnóstico Integral, Explicación en Lenguaje Sencillo y Solución Definitiva (v2.21.3):  
->  
+> 
 > 1. **Lectura obligatoria:** Verificación de `SKILL_sgh_firebase.md` antes de cualquier acción.  
 > 2. **Explicación Clara y Sencilla (Analogía de la Llave y la Ficha):**  
 >    * **La Llave vs. La Ficha:** En Firebase existen dos sistemas diferentes:  
->      - **Authentication (Captura.PNG):** Es el *Llavero*. Solo guarda el correo y la contraseña para dar acceso.  
->      - **Firestore (Captura0001.PNG):** Es el *Archivero de Fichas*. Guarda el expediente completo (Nombre, Cédula, Teléfono, Rol `plaadmin` y a qué Plantel pertenece).  
+>      * **Authentication (Captura.PNG):** Es el *Llavero*. Solo guarda el correo y la contraseña para dar acceso.  
+>      * **Firestore (Captura0001.PNG):** Es el *Archivero de Fichas*. Guarda el expediente completo (Nombre, Cédula, Teléfono, Rol `plaadmin` y a qué Plantel pertenece).  
 >    * **¿Qué pasó exactamente con este usuario?**  
->      - El usuario tiene la *Llave* en Authentication (por eso su correo y clave funcionan).  
->      - Pero su *Ficha* en Firestore nunca llegó a guardarse (quedó huérfana durante el registro debido a la inestabilidad de la conexión 3G en Pueblo Llano).  
->      - Por eso el teléfono le decía: *«Tu cuenta fue creada pero falta el perfil»*.  
+>      * El usuario tiene la *Llave* en Authentication (por eso su correo y clave funcionan).  
+>      * Pero su *Ficha* en Firestore nunca llegó a guardarse (quedó huérfana durante el registro debido a la inestabilidad de la conexión 3G en Pueblo Llano).  
+>      * Por eso el teléfono le decía: *«Tu cuenta fue creada pero falta el perfil»*.  
 >    * **¿Por qué en Firestore (Captura0001.PNG) es tan tedioso buscarlo y no aparece con Ctrl+F?**  
->      - Porque en la consola web de Firestore solo se ven códigos alfanuméricos raros (ej. `OpUaNavkVSPMia...`), no los correos. Y como su ficha no se había creado, ¡realmente no estaba allí!  
->      - Para buscar usuarios de forma cómoda y rápida no es necesario entrar a Firebase: para eso creamos en la versión `v2.21.0` el **Buscador de Usuarios** dentro del propio sistema SGH (`https://sgh-merida.web.app`), donde al escribir *"pedro"*, *"gonzalez"* o el código DEA, aparece de inmediato con su estatus y botón de aprobación.  
+>      * Porque en la consola web de Firestore solo se ven códigos alfanuméricos raros (ej. `OpUaNavkVSPMia...`), no los correos. Y como su ficha no se había creado, ¡realmente no estaba allí!  
+>      * Para buscar usuarios de forma cómoda y rápida no es necesario entrar a Firebase: para eso creamos en la versión `v2.21.0` el **Buscador de Usuarios** dentro del propio sistema SGH (`https://sgh-merida.web.app`), donde al escribir *"pedro"*, *"gonzalez"* o el código DEA, aparece de inmediato con su estatus y botón de aprobación.  
 >    * **¿Por qué pasó esto si ayer se resolvió con otro usuario (Mileidy Rubio)?**  
->      - El caso de ayer era una discordancia de códigos (la ficha de Mileidy sí existía y el sistema la revinculó solo).  
->      - El caso del Liceo Pedro José González era una cuenta que se quedó a mitad de camino y no tenía ficha creada.  
+>      * El caso de ayer era una discordancia de códigos (la ficha de Mileidy sí existía y el sistema la revinculó solo).  
+>      * El caso del Liceo Pedro José González era una cuenta que se quedó a mitad de camino y no tenía ficha creada.  
 > 3. **Soluciones Implementadas de Inmediato:**  
 >    * **Ficha Creada y Acceso Aprobado:** Se generó la ficha institucional de `liceopedrojosegonzalez2026@gmail.com` vinculada a su cuenta oficial, asignada al Liceo Pedro José González (Pueblo Llano, DEA `OD16551416`), con estatus **APROBADO** y con su plantel habilitado en el sistema. El Director ya puede ingresar directamente desde su celular.  
 >    * **Asistente Inteligente de Auto-Completado de Perfil (`#box-completar-perfil`):** Si a cualquier usuario en el futuro le llegara a ocurrir lo mismo, el sistema ya no lo deja bloqueado en un callejón sin salida. Le presenta una tarjeta clara para ingresar su Nombre, Cédula, Rol y Plantel, guardando su ficha de inmediato para aprobación.  
 >    * **Auto-Recuperación en el Registro:** Si un usuario con cuenta huérfana intenta volver a registrarse, el sistema lo detecta, completa su ficha y le notifica con éxito en lugar de bloquearlo con *"El correo ya está en uso"*.  
 > 4. **Control SemVer y Despliegue:** Incremento a `v2.21.3`, compilación limpia en Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).  
 > 5. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -3550,26 +3545,25 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Mensaje del Usuario:**  
 > estoy satisfecho.  
->  
+> 
 > Me parece bien el boton nuevo ROL. ¿se puede tambien modificar el nombre del usuario?
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Incorporación de Edición de Nombre, Cédula y Teléfono en la Gestión de Usuarios (v2.22.0):  
->  
+> 
 > 1. **Lectura obligatoria:** Verificación de `SKILL_sgh_firebase.md`.  
 > 2. **Solución Implementada (Explicación llana):**  
 >    * **¡Sí, totalmente!** Aprovechamos exactamente ese mismo botón de acción y lo convertimos en **«✏️ Rol / Datos»**.  
 >    * Ahora, al hacer clic en dicho botón frente a cualquier usuario, la ventana le permite modificar:  
->      - **Nombre Completo del Usuario:** Para corregir errores ortográficos, nombres incompletos o actualizar funcionarios.  
->      - **Cédula de Identidad:** Para corregir números o completar usuarios que se registraron sin cédula.  
->      - **Teléfono de Contacto:** Para mantener actualizado el contacto del director o coordinador.  
->      - **Rol, Municipio y Código DEA:** Toda la configuración institucional que ya tenía disponible.  
+>      * **Nombre Completo del Usuario:** Para corregir errores ortográficos, nombres incompletos o actualizar funcionarios.  
+>      * **Cédula de Identidad:** Para corregir números o completar usuarios que se registraron sin cédula.  
+>      * **Teléfono de Contacto:** Para mantener actualizado el contacto del director o coordinador.  
+>      * **Rol, Municipio y Código DEA:** Toda la configuración institucional que ya tenía disponible.  
 >    * Al presionar el botón azul **«Guardar Cambios»**, los datos se guardan de inmediato en la base de datos y la lista se actualiza al instante en su pantalla sin necesidad de recargar.  
 > 3. **Control SemVer y Despliegue:** Incremento a `v2.22.0`, compilación limpia en Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).  
 > 4. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -3585,7 +3579,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Implementación del Escudo Institucional Anti-Duplicados para Coordinadores Municipales (v2.22.1):  
->  
+> 
 > 1. **Lectura obligatoria:** Verificación de `SKILL_sgh_firebase.md`.  
 > 2. **Solución Implementada (Explicación llana):**  
 >    * **El Candado de Municipio Único:** En el estado Mérida solo existe un Coordinador Municipal por cada uno de los 23 municipios. Se instaló una barrera en 4 niveles de seguridad:  
@@ -3595,7 +3589,6 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >      4. **Aviso Visual Preventivo:** En la lista de usuarios, si hay solicitudes pendientes de un municipio que ya tiene titular activo (como la cuenta secundaria de Rivas Dávila), aparece una etiqueta amarilla preventiva: *«⚠️ Municipio ya tiene coordinador activo»*.  
 > 3. **Control SemVer y Despliegue:** Incremento a `v2.22.1`, compilación limpia en Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).  
 > 4. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -3611,11 +3604,10 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Cierre de Ciclo Institucional (v2.22.1):  
->  
+> 
 > 1. **Confirmación de Éxito:** Se valida la plena satisfacción del Administrador con respecto a la implementación del Escudo Institucional Anti-Duplicados para Coordinadores Municipales (`munadmin`) en la versión `v2.22.1`.  
 > 2. **Cumplimiento Protocolar Skill 5:** Registro histórico formal en `bitacora.md`, actualización de `versiones.md`, registro cronológico textual íntegro en `conversaciones.md` y respaldo automático con commit y push hacia el repositorio remoto de GitHub (`origin main`).  
 > 3. **Estatus del Sistema:** La WebApp en `https://sgh-merida.web.app` opera con integridad total de datos, blindaje estricto de titularidad municipal única para los 23 municipios, cabecera fija y edición completa de perfiles institucionales.
-
 
 ---
 
@@ -3632,7 +3624,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Corrección Visual y Alineación Perfecta del Botón Limpiar en el Buscador (v2.22.2):  
->  
+> 
 > 1. **Lectura obligatoria:** Verificación de `SKILL_sgh_firebase.md`.  
 > 2. **Diagnóstico (Explicación llana):**  
 >    * Al escribir en el buscador, una regla general de botones hacía que la `✕` intentara ocupar todo el ancho del campo y se parara justo en el centro del texto que usted estaba escribiendo, viéndose incómoda y tapando las letras.  
@@ -3642,7 +3634,6 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    * **Efecto al Tocarlo:** Al pasar el ratón o tocarlo con el dedo, resalta suavemente para indicar que puede borrar la búsqueda de un solo toque. Funciona igual de limpio tanto en computadoras como en teléfonos móviles.  
 > 4. **Control SemVer y Despliegue:** Incremento a `v2.22.2`, compilación limpia en Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).  
 > 5. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -3658,11 +3649,10 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Cierre de Ciclo Institucional (v2.22.2):  
->  
+> 
 > 1. **Confirmación de Éxito:** Se valida la plena satisfacción del Administrador respecto a la optimización estética, diseño circular y alineación precisa del botón de limpieza (`✕`) en el buscador de usuarios para la versión `v2.22.2`.  
 > 2. **Cumplimiento Protocolar Skill 5:** Registro histórico formal en `bitacora.md`, actualización de `versiones.md`, registro cronológico textual íntegro en `conversaciones.md` y respaldo automático con commit y push hacia el repositorio remoto de GitHub (`origin main`).  
 > 3. **Estatus del Sistema:** La WebApp en `https://sgh-merida.web.app` opera con total fluidez visual, campo de búsqueda limpio y ergonómico en PC y móviles, blindaje municipal estricto y edición completa de datos institucionales.
-
 
 ---
 
@@ -3678,7 +3668,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Implementación del Botón y Módulo de Descarga del Catálogo Institucional de Planteles a Excel (.xlsx) para Superadmin, Zonadmin y Munadmin (v2.23.0):  
->  
+> 
 > 1. **Lectura obligatoria de directrices:** Cumplimiento de `SKILL_sgh_firebase.md` (Filosofía Zero-Cost, control SemVer v2.23.0 y comunicación en lenguaje llano).  
 > 2. **Explicación llana y sencilla:**  
 >    * Se creó una nueva herramienta interactiva para que las autoridades zonales y los coordinadores municipales puedan descargar de manera inmediata la información completa de los planteles educativos en un archivo Excel (`.xlsx`) limpio y ordenado.  
@@ -3692,7 +3682,6 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    * **Costo Cero (Zero-Cost):** El archivo se construye directamente en la computadora o celular del usuario aprovechando los datos que ya están en pantalla, sin gastar cuota de lecturas de la base de datos de Firebase.  
 > 3. **Control SemVer y Despliegue:** Versión actualizada a `v2.23.0`, compilada en Vite en 685 ms y desplegada en Firebase Hosting (`https://sgh-merida.web.app`).  
 > 4. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -3740,7 +3729,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Implementación del Blindaje Estricto Zero-Cost y Erradicación de Fuga de Lecturas en Validación de Usuarios y Planteles (v2.23.1):  
->  
+> 
 > 1. **Lectura obligatoria y estricta:** Se leyó íntegramente de principio a fin el archivo `c:\Proyectos\sgh-mr - firebase\.agents\skills\webapp-expert\SKILL_sgh_firebase.md`, aplicando con rigor absoluto la Regla de Oro 1 de la Skill 4 (Modelado Hiper-Eficiente y Cero Lecturas Basura), la Regla de Oro 10 (Control SemVer PARCHE a v2.23.1), la Skill 5 (Gestor de Memoria y Respaldo Git) y la Skill 6 (Comunicación empática y llana sin código en el chat).  
 > 2. **Solución Técnica Aplicada:**  
 >    * **Eliminación del canal en vivo (`onSnapshot`):** Se apagó la antena reactiva permanente que re-descargaba la lista entera de usuarios en cada parpadeo de la red móvil de los 16 usuarios conectados.  
@@ -3750,7 +3739,6 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >    * **Caché Estadal de Planteles:** Se blindó la consulta de los 1.159 planteles en `sessionStorage` para Superadmin y Zonadmin.  
 > 3. **Control SemVer y Despliegue:** Versión actualizada a `v2.23.1`, compilada en Vite (708 ms) y publicada en Firebase Hosting (`https://sgh-merida.web.app`).  
 > 4. **Pregunta protocolar de cierre:** ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -3766,7 +3754,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Cierre de Ciclo Institucional (v2.23.1):  
->  
+> 
 > 1. **Validación de Plena Satisfacción:** Se ratifica la aprobación explícita y conformidad del Administrador respecto a la resolución definitiva del incidente de lecturas en Firestore y la activación del Blindaje Estricto Zero-Cost en la versión `v2.23.1`.  
 > 2. **Cumplimiento Protocolar Skill 5:** Respaldo documental formal registrado en `bitacora.md`, `versiones.md` y en este historial íntegro `conversaciones.md`, con sincronización automática mediante commit y push hacia el repositorio central de GitHub (`origin main`).  
 > 3. **Estatus Operativo del Sistema:** La plataforma en `https://sgh-merida.web.app` opera con integridad total, libre de antenas continuas (`onSnapshot`), con consultas acotadas por municipio para los coordinadores, botón manual de refresco, descarga de planteles en Excel, y preservación estricta de las cuotas gratuitas del Plan Spark de Firebase.
@@ -3780,14 +3768,14 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Mensaje del Usuario:**  
 > "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
->  
+> 
 > ¿Ese boton de descargar planteles agotaría la cuota si muchos en corto tiempo hacen descargas?
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Explicación Institucional Clara y Directa (Skill 6 y Zero-Cost):  
->  
+> 
 > 1. **Lectura Obligatoria Inicial:** Se leyó íntegramente de principio a fin el archivo `SKILL_sgh_firebase.md` de `webapp-expert` antes de ejecutar cualquier acción.  
 > 2. **Respuesta Clara y Tranquilizadora:** **NO, rotundamente NO agota la cuota.**  
 >    * **Analogía de la Fotocopiadora:** Cuando usted abre la sección de planteles, el sistema ya trajo la lista y la tiene "en la mesa de trabajo" (en la memoria de su navegador/celular). Cuando hace clic en "Descargar Planteles", el navegador genera el archivo Excel directamente en el procesador de su equipo usando esa información que ya tiene a la mano; **no va a la base de datos central a pedir nada**. Es como sacar fotocopias de un papel que ya tiene en su escritorio en vez de pedirle al mensajero que vaya a buscarlo a otra oficina.  
@@ -3804,13 +3792,14 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Mensaje del Usuario:**  
 > "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
->  
+> 
 > ¿puedes verificar si el plantel OD12551412 está en la base de datos sin afectar el ZeroCost?
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Se dio lectura estricta y completa al archivo `SKILL_sgh_firebase.md` y se ejecutó la auditoría con garantía Zero-Cost:  
+>
 > 1. En la base de datos activa de Firestore (`planteles`): NO figuraba cargado.  
 > 2. En el archivo histórico maestro institucional (`bd_sgh.json`): SÍ existía plenamente identificado como "CENTRO DE REHABILITACION DE LENGUAJE" (Nuevo Epónimo: CENTRO DE REHABILITACION DEL LENGUAJE), adscrito al Municipio Libertador, Parroquia Mariano Picón Salas, dependencia Nacional (Cód. 6490063), Cód. Estadístico 141676.  
 > 3. En la colección `cargos_personal`: se corroboró que sus 20 trabajadores (incluido su Director Encargado, Prof. Deifilio Contreras Rivas, C.I. 11.461.168) ya se encontraban activos esperando el enlace del plantel.  
@@ -3830,6 +3819,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Alta Institucional Exitosa y Habilitación Inmediata de Jornada (v2.23.3):  
+>
 > 1. **Alta en Firestore:** Se creó el documento `planteles/OD12551412` con todos sus datos oficiales (Nuevo Epónimo: "CENTRO DE REHABILITACION DEL LENGUAJE", Parroquia Mariano Picón Salas, Municipio Libertador, Doble Turno, Educación Especial) mediante llamada directa autorizada con costo de 1 escritura y 0 lecturas (Zero-Cost blindado).  
 > 2. **Habilitación Operativa:** El Director Encargado (Prof. Deifilio Contreras Rivas) ya puede registrarse de inmediato con el código `OD12551412` sin bloqueos. Sus 20 trabajadores en nómina se vincularán de forma automática.  
 > 3. **Control SemVer y Despliegue:** Incremento a `v2.23.3`, compilado y desplegado a producción en Firebase Hosting (`https://sgh-merida.web.app`). Respaldo protocolar en `bitacora.md`, `versiones.md` y sincronización con GitHub (`origin main`).  
@@ -3850,6 +3840,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Explicación Institucional Pedagógica (Skill 6):  
+>
 > 1. Se aclaró que técnicamente ocurrió porque la barrera anti-duplicados previa solo cubría a los municipios (`munadmin`), no a los planteles (`plaadmin`).  
 > 2. Se explicaron los riesgos de sobrescritura de nómina y duplicidad de perfiles.  
 > 3. Se indicó la acción inmediata en el panel (eliminar el correo secundario para dejar solo el oficial) y se consultó la autorización para implementar la barrera anti-duplicados para directores.
@@ -3868,6 +3859,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Activación de la Barrera Institucional Anti-Duplicados para Directores y Validación de Cédula Única (v2.24.0):  
+>
 > 1. **Blindaje en Registro:** Se activó la validación estricta por código DEA y por cédula de identidad en `#register-form`, destruyendo cuentas temporales de Auth si el plantel o cédula ya están tomados. Se protegió también la sala de espera y la auto-recuperación de cuentas.  
 > 2. **Blindaje en Panel de Control:** El botón de aprobación (`btn-aprobar`) y el editor de roles (`Rol / Datos`) bloquean la asignación de directores duplicados en el mismo DEA (0 lecturas, validado en memoria local). Se añadieron distintivos visuales en la tabla resaltando duplicados existentes en color rojo (`⚠️ Cuenta duplicada para el mismo DEA`).  
 > 3. **Nota de Orientación:** Se añadió la nota *"ℹ️ Solo se admite un Director activo por código DEA"* en el formulario.  
@@ -3888,6 +3880,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Auditoría Zero-Cost de Plantel Privado `PD12461412`:  
+>
 > 1. **Identificación:** Se identificó como el Colegio "NATIVIDAD NIÑO" (Privado, Parroquia Domingo Peña, Municipio Libertador).  
 > 2. **Resultado Huérfanos:** Tiene cero (0) personal huérfano, dado que las instituciones privadas no cuentan con personal en nómina RAC del MPPE.
 
@@ -3907,6 +3900,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Diagnóstico de Cuota Spark y Rescate Administrativo:  
+>
 > 1. Se identificó el límite diario de Google Spark (100 correos diarios para todo el proyecto) alcanzado por múltiples intentos de directores.  
 > 2. Se generó de inmediato el enlace administrativo oficial de restablecimiento de contraseña para la cuenta afectada (`munijuliocesarsalaspiconlares@gmail.com`) sin consumir cuota de correos.
 
@@ -3919,13 +3913,14 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Mensaje del Usuario:**  
 > Dos preguntas:  
-> Primero: ¿Este enlace https://sgh-merida.firebaseapp.com/__/auth/action?mode=resetPassword&oobCode=104W1wh... me sirve para todos los que están intentando recuperar contraseña an este momento? **porque son varios**  
+> Primero: ¿Este enlace <https://sgh-merida.firebaseapp.com/__/auth/action?mode=resetPassword&oobCode=104W1wh>... me sirve para todos los que están intentando recuperar contraseña an este momento? **porque son varios**  
 > Segundo: Con tu mensaje anterior me estas diciendo que e¿liminaremos el paso de verificación de correo? (así podrán ingresar hasta correos falsos)
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Clarificación Institucional y Pedagógica (Skill 6):  
+>
 > 1. **Pregunta 1:** NO, el enlace no sirve para todos; es una llave criptográfica única, personal e intransferible vinculada a la cuenta de Silvia Pérez y de un solo uso. Cada director requiere su propio enlace individual.  
 > 2. **Pregunta 2:** NO se eliminará jamás la verificación de correo; es el filtro de seguridad indispensable para evitar correos falsos. Se explicó cómo prevenir el agotamiento de cuota mediante temporizadores en botones y rescates administrativos.
 
@@ -3944,6 +3939,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Auditoría Zero-Cost del Plantel `OD15991423`:  
+>
 > 1. **Identificación:** Se identificó en `bd_sgh.json` como Instituto de Educación Especial (IEE) "MILAGROS DEL VALLE RONDÓN" (Municipio Zea, Parroquia Zea, Dependencia Nacional Cód. 6490527, Cód. Estadístico 142016).  
 > 2. **Resultado Huérfanos:** NO tiene personal huérfano (0 registros en `huerfanos.csv` y 0 registros en nóminas nacionales).  
 > 3. Se ofreció dar de alta al plantel en Firestore en cuanto el director lo requiera.
@@ -3963,6 +3959,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Respuesta Afirmativa ("SÍ"):  
+>
 > 1. Se detalló cómo el sistema recorre todos los inputs de alumnos con la clase `.mat-input` en tiempo real y suma acumulativamente Maternal + Preescolar + Primaria (grados 1-6) + Media General + Media Técnica (+ Especial/Adultos si aplican).  
 > 2. Se ratificó que las casillas de cantidad de secciones no se mezclan con los alumnos y que al guardar se consolida el total en Firestore.
 
@@ -3975,13 +3972,14 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Mensaje del Usuario:**  
 > Perfecto gracias. El usuario superadmin necesito que tenga privilegios de toda clase. como ejemplo particular, estoy tratando de editar los datos de un plantel y el boton editar no funciona: index-CGSd-a7b.js:434 Uncaught ReferenceError: isMunAdmin is not defined  
->     at wt (index-CGSd-a7b.js:434:849)  
->     at e.onclick (index-CGSd-a7b.js:416:327)
+> at wt (index-CGSd-a7b.js:434:849)  
+> at e.onclick (index-CGSd-a7b.js:416:327)
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Corrección de Alcance Léxico y Consolidación de Privilegios Plenos de Superadmin (v2.24.1):  
+>
 > 1. **Causa Raíz:** La variable `isMunAdmin` estaba encapsulada únicamente dentro de `configurarInterfazPorRol()`, quedando indefinida al invocar `openPlantelModal` desde el botón "✏️ Editar" de la tabla de planteles.  
 > 2. **Corrección Técnica:** Se declararon `isMunAdmin`, `isZonAdmin` e `isSuperAdmin` al nivel superior de `initAdminDashboard` en `webapp/src/admin.js`, así como de forma explícita en `openPlantelModal` y `formPlantel.submit`.  
 > 3. **Ratificación de Privilegios:** Se aseguró que el rol `superadmin` tenga libertad plena para editar cualquier plantel del estado Mérida, alterar códigos DEA, municipios, parroquias, dependencias y planes de estudio, así como crear y eliminar planteles sin restricciones.  
@@ -4003,6 +4001,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Planificación de Escuela Laboratorio / Sandbox (Skill 6):  
+>
 > 1. Se validó la necesidad operativa de contar con un plantel de pruebas idéntico al del director para dar soporte en tiempo real por WhatsApp sin alterar la base de datos real.  
 > 2. Se propuso la arquitectura de un plantel demo (`DEMO140000`) con bandera de exclusión en métricas (`es_demo: true`) y se solicitaron el correo y contraseña deseados.
 
@@ -4014,20 +4013,20 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Usuario (Administrador)
 
 > **Mensaje del Usuario:**  
-> alfonsozere@gmail.com  
+> <alfonsozere@gmail.com>  
 > clave: america2000
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Creación de la Escuela Laboratorio y Usuario Director Sandbox (v2.25.0):  
+>
 > 1. **Alta en Auth:** Creación de cuenta `alfonsozere@gmail.com` con correo verificado administrativamente (0 consumo de cuota de correo Spark).  
 > 2. **Alta de Usuario en Firestore:** Documento `usuarios/1P9RI6NwNCQWFlQJ4VLstAgwxix1` aprobado con rol `plaadmin`, vinculado al plantel `DEMO140000`.  
 > 3. **Alta de Plantel Ficticio en Firestore:** Documento `planteles/DEMO140000` ("PLANTEL EXPERIMENTAL PILOTO SGH", Municipio Libertador, Parroquia Sagrario) habilitado con Inicial, Primaria, Media General y Técnica.  
 > 4. **Aislamiento Estadístico:** Se blindaron `verificarPlantelTieneMatricula`, las exportaciones de Excel de planteles y nóminas, y se ocultó de la vista de coordinadores municipales para garantizar 0 impacto en las estadísticas oficiales de Mérida.  
 > 5. **Control SemVer y Despliegue:** Versión elevada a `v2.25.0` (MENOR), compilada en Vite (734 ms) y desplegada a producción en Firebase Hosting (`https://sgh-merida.web.app`). Sincronización con GitHub (`origin main`).  
 > 6. **Pregunta Protocolar de Cierre:** ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -4043,6 +4042,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Propuesta de Inyección de Combo de Personal de Prueba Multicargo:  
+>
 > 1. Se recomendó inyectar 5 perfiles muestra con cédulas de prueba (`99000001` a `99000005`) abarcando Docente Aula, Docente Media Horas, Secretaria, Obrero y Cocinera CNAE.  
 > 2. Se planteó precargar una matrícula piloto de 30 estudiantes para desbloquear la tabla de personal de inmediato sin forzar la carga de matrícula.
 
@@ -4061,6 +4061,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Generación de Enlace Directo Out-of-Band y Ejecución de Inyección:  
+>
 > 1. Se identificó el correo afectado (`munijuliocesarsalaspiconlares@gmail.com`) y se generó su enlace de recuperación out-of-band sin consumo de cuota de correo de Firebase.  
 > 2. Se inyectaron en segundo plano los 5 registros de personal demo en `cargos_personal` y se sincronizó `planteles/DEMO140000` con la matrícula de muestra.
 
@@ -4078,9 +4079,11 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Confirmación y Verificación de la Pantalla del Director Demo:  
+>
 > 1. Confirmación de que los 5 funcionarios ficticios y la matrícula de prueba quedaron 100% inyectados y sincronizados en `DEMO140000`.  
 > 2. Indicación clara de recargar la pantalla de `alfonsozere@gmail.com` para interactuar con la tabla de personal y todas las herramientas de director.  
 > 3. Pregunta protocolar de cierre.
+>
 ---
 
 ### Intervención 71
@@ -4096,11 +4099,13 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Diagnóstico y Corrección de Sumatoria y Persistencia de Matrícula (v2.25.1):  
+>
 > 1. **Análisis del Video:** Se extrajeron los fotogramas del video confirmando que al cargar Maternal (1 FEM + 1 MAS = 2) y Preescolar (1 FEM = 1), el badge "Total Inicial" sumaba 3 correctamente, pero tras guardar, el campo superior *"Matrícula (Total Calculada)"* se reajustaba a 2 omitiendo los alumnos de Maternal.  
 > 2. **Causa Raíz:** Discrepancia tipográfica interna en `webapp/src/main.js` entre la clave de persistencia `materna` y la variable de cómputo `maternal`, causando que Maternal se evaluara como 0 al consolidar `sumFem` y `sumMas` hacia Firestore.  
 > 3. **Corrección Implementada:** Soporte dual `maternal || materna` en lectura, guardado y cálculo consolidado; y sincronización directa en vivo de `matTotal = totIni + totPri + sumMg + sumMt + totEsp + totAdu`.  
 > 4. **Despliegue y SemVer:** Versión elevada a `v2.25.1` (PATCH), compilada en Vite (687 ms) y desplegada a Firebase Hosting (`https://sgh-merida.web.app`). Sincronización con GitHub (`origin main`).  
 > 5. **Pregunta Protocolar de Cierre:** ¿Los resultados fueron satisfactorios?
+>
 ---
 
 ### Intervención 72
@@ -4116,10 +4121,12 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Detección de Caché Móvil en Teléfono y Despliegue de Cabeceras Anti-Caché:  
+>
 > 1. **Diagnóstico del Video:** En la cabecera del video enviado se evidencia que el navegador móvil aún ejecutaba la versión antigua `SGH v2.25.0` (grabado a las 14:20), ejecutando el código previo al hotfix sin refrescar el bundle de Vite.  
 > 2. **Blindaje de Cabeceras:** Se configuró en `webapp/firebase.json` la directiva `Cache-Control: no-cache, no-store, must-revalidate` para todas las rutas HTML, asegurando que los teléfonos móviles descarguen de inmediato la versión activa `v2.25.1`.  
 > 3. **Instrucción de Recarga:** Se explicó al usuario cómo cerrar pestaña o recargar para ver la versión `v2.25.1` en la cabecera, tras lo cual la persistencia de Maternal guardará los totales completos de inmediato.  
 > 4. **Pregunta Protocolar de Cierre:** ¿Los resultados fueron satisfactorios?
+>
 ---
 
 ### Intervención 73
@@ -4136,6 +4143,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Lectura Estricta de Habilidades y Propuesta de Solución (Skill 6):  
+>
 > 1. Se confirmó la lectura íntegra de `SKILL_sgh_firebase.md` de `webapp-expert`.  
 > 2. Se presentó el diagnóstico en lenguaje claro y sin código: el candado de cédula única bloqueaba a los directores encargados al intentar registrar su segundo o tercer plantel.  
 > 3. Se propusieron dos alternativas: la Opción 1 (permitir misma cédula si el código DEA es diferente) y la Opción 2 (cuenta única con menú de escuelas). Se recomendó la Opción 1 por apegarse al flujo ya informado por WhatsApp.
@@ -4154,11 +4162,11 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Implementación de Soporte Multi-Plantel para Directores (v2.26.0):  
+>
 > 1. Se adaptó la barrera institucional de cédula en `webapp/src/main.js` para autorizar registros de un mismo director (`plaadmin`) en planteles distintos (`deaUpper`).  
 > 2. Se mantuvo el candado de un único director por plantel y un único coordinador por municipio.  
 > 3. Se incrementó la versión a `v2.26.0` (MENOR), se compiló en Vite (708 ms) y se desplegó a producción en Firebase Hosting (`https://sgh-merida.web.app`). Sincronización con GitHub (`origin main`).  
 > 4. Pregunta protocolar de cierre.
-
 
 ---
 
@@ -4180,6 +4188,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Diagnóstico de Auditoría y Propuesta de Alta (Skill 6):  
+>
 > 1. `OD13071412` (Aura Marina Saavedra de Torres, Libertador): Plantel de dependencia municipal; posee 0 registros en la nómina del RAC y 0 en huérfanos. Se recomendó confirmar el DEA o cargarlo manualmente.  
 > 2. `OD13471413` (Escuela Estadal José Audelino Delgado Castellano, Piñango - Miranda): Positivo con 4 trabajadores registrados en nómina oficial del RAC.  
 > 3. `OD00901413` (Francisca Sánchez de Palmi, Piñango - Miranda): Positivo con 5 trabajadores registrados en nómina oficial del RAC. Se destacó que la Directora Carmen Teresa Araujo Delgado (V-15920318) está a cargo de ambas instituciones.  
@@ -4199,13 +4208,13 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Ejecución de Alta y Carga de Nóminas (v2.26.1):  
+>
 > 1. Se renovó el token de autenticación administrativa de forma segura.  
 > 2. Se inyectaron exitosamente en Firestore (`cargos_personal`) los 9 expedientes oficiales completos correspondientes a la Escuela José Audelino Delgado Castellano (4 cargos) y Francisca Sánchez de Palmi (5 cargos).  
 > 3. Se crearon los documentos oficiales de ambos planteles en `planteles/` con sus datos estadísticos, planes de estudio y el resumen de personal precargado.  
 > 4. Se actualizaron los catálogos institucionales `bd_sgh.json` y `webapp/public/bd_sgh.json`.  
 > 5. Se incrementó la versión a `v2.26.1` (PATCH), se compiló el frontend en Vite (1.30s) y se sincronizó el avance mediante commit y push a `origin main`.  
 > 6. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -4216,21 +4225,21 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Mensaje del Usuario:**  
 > correos_afectados  
-> pedagogicomutus2023@gmail.com  
-> direccionlmpspueblollano@gmail.com  
-> liceonicolasa@gmail.com  
-> liceopedrojosegonzalez2026@gmail.com  
-> jardinffc1493@gmail.com  
-> mariaisabelb683@gmail.com  
+> <pedagogicomutus2023@gmail.com>  
+> <direccionlmpspueblollano@gmail.com>  
+> <liceonicolasa@gmail.com>  
+> <liceopedrojosegonzalez2026@gmail.com>  
+> <jardinffc1493@gmail.com>  
+> <mariaisabelb683@gmail.com>  
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Diagnóstico, Verificación y Generación de Enlaces de Restablecimiento Out-of-Band (Skill 6):  
+>
 > 1. Se auditaron los 6 correos en Firebase Authentication, confirmando que las 6 cuentas ya se encontraban creadas. Todas corresponden a planteles educativos del Municipio Pueblo Llano.  
 > 2. Se actualizó el estado de todas a `emailVerified: true` vía Identity Toolkit REST, eliminando de raíz la barrera de verificación de correo para permitir el ingreso directo.  
 > 3. Se generaron los 6 enlaces oficiales y seguros de asignación de contraseña listos para compartir por WhatsApp con cada director o responsable.
-
 
 ---
 
@@ -4248,7 +4257,6 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > Mensajes Individuales Listos para Copiar y Pegar en WhatsApp (Skill 6):  
 > Se prepararon 6 bloques de texto independientes con formato nativo de WhatsApp (asteriscos para negrita, saltos de línea limpios y enlaces en texto plano sin markdown) para que el Administrador pueda copiar y enviar a cada director de Pueblo Llano con un solo clic.
 
-
 ---
 
 ### Intervención 79
@@ -4258,16 +4266,16 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Mensaje del Usuario:**  
 > correos_afectados  
-> gestionhumanapadrenoguera@gmail.com  
+> <gestionhumanapadrenoguera@gmail.com>  
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Verificación y Enlace Out-of-Band para Padre Noguera (Skill 6):  
+>
 > 1. Se confirmó la existencia de la cuenta en Firebase Auth (UID: `6j0wxTkvk5OmnxuJICkVxTJ2mMy1`).  
 > 2. Se actualizó el estado a `emailVerified: true` para desbloquear el acceso institucional.  
 > 3. Se generó el enlace seguro de restablecimiento de contraseña y se preparó el mensaje listo para enviar por WhatsApp.
-
 
 ---
 
@@ -4318,6 +4326,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Aplicación del Hotfix v2.26.2 (Skill 6):  
+>
 > 1. Se modificó el guardado del modal de planteles en `webapp/src/admin.js`, agregando `{ merge: true }` y protección con fallback para documentos no inicializados.  
 > 2. Se incrementó la versión a `v2.26.2` (PATCH), se compiló en Vite (745 ms) y se sincronizó el repositorio mediante commit y push a `origin main`.  
 > 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
@@ -4353,6 +4362,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > **Respuesta del Agente:**  
 > Comparativa de Opciones (Manual vs. Cascada Automática - Skill 6):  
 > Se detalló que cada funcionario en la nómina también está vinculado por el código DEA. Se presentaron dos alternativas:  
+>
 > 1. Opción 1: Reasignación manual de cada funcionario desde el panel.  
 > 2. Opción 2: Migración en cascada automática, donde al editar el DEA del colegio, el sistema en un solo movimiento busca todo su personal y directores y los traslada al nuevo código de forma transparente.
 
@@ -4370,13 +4380,69 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Implementación de la Migración en Cascada (v2.27.0 - Skill 6):  
+>
 > 1. Se programó en `webapp/src/admin.js` la función `migrarEnCascadaCodigoDEA` que, al cambiar el código DEA de cualquier colegio, actualiza en un solo paso:  
->    - Todos los funcionarios de la nómina en `cargos_personal` con sus nuevas llaves compuestas `${deaNuevo}_${cedula}`.  
->    - El listado resumen de personal en la ficha del plantel.  
->    - La vinculación de los directores registrados en `usuarios`.  
+>    * Todos los funcionarios de la nómina en `cargos_personal` con sus nuevas llaves compuestas `${deaNuevo}_${cedula}`.  
+>    * El listado resumen de personal en la ficha del plantel.  
+>    * La vinculación de los directores registrados en `usuarios`.  
 > 2. Se incrementó la versión a `v2.27.0` (MENOR), se compiló limpiamente en Vite (782 ms) y se sincronizó el repositorio en GitHub (`origin main`).  
 > 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
 
+---
+
+### Intervención 86
+
+* **Fecha / Hora:** 2026-11-02 ~21:05 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> doy F5 y Shift+F5 al navegador y no cambia a la versión 2.27.0  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Despliegue de Producción a Firebase Hosting (Skill 6):  
+> Se explicó que los archivos ya estaban compilados localmente y se ejecutó el despliegue directo a la nube (`npx firebase-tools deploy --only hosting`). Una vez liberada la versión en el servidor web (`sgh-merida.web.app`), se invitó al usuario a refrescar la página.
+
+---
+
+### Intervención 87
+
+* **Fecha / Hora:** 2026-11-02 ~21:13 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> Ya hice el cambio. estoy esperando que el director se conecte y me diga si sí se realizó el cambio. Otra cosa. ¿Que significa el siguiente mensaje? sale despues que se vallida el login: ... 429 Too Many Requests runAggregationQuery / Casos con: Utiliza un formato que coincida con el solicitado. ¿qué está sucediendo? / ¿es correcto que ubicación administrativa sea opcional?  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Explicación Teórica Didáctica (Skill 6):  
+>
+> 1. Error 429: Se explicó que corresponde al medidor de lecturas gratuitas diarias del plan Spark de Firebase (50.000 lecturas/día), que no detiene el funcionamiento general y se reinicia cada madrugada.  
+> 2. Formato Solicitado: Se explicó que es una validación nativa del navegador cuando el celular no tiene exactamente 7 dígitos o la ubicación administrativa tiene 6 dígitos o letras.  
+> 3. Se confirmó que la ubicación administrativa es opcional y se acordó mantener el comportamiento actual según lo indicado por el usuario.
+
+---
+
+### Intervención 88
+
+* **Fecha / Hora:** 2026-11-02 ~21:25 (Hora Local)
+* **Emisor:** Usuario (Administrador)
+
+> **Mensaje del Usuario:**  
+> por favor necesito que en el apartado de usuarios del sistema pueda filtrar por municipio. a veces necesito verificar algunos usuario en municipios especificos y me toca revizar una lista larga de usuarios.  
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Implementación del Filtro de Municipios en Usuarios (v2.28.0 - Skill 6):  
+>
+> 1. Se incorporó el selector `#filter-municipio-usuario` en la barra de herramientas de la tabla de usuarios (`webapp/index.html`).  
+> 2. Se pobló automáticamente con los 23 municipios de Mérida y se activó solo para roles estadales (`superadmin` y `zonadmin`).  
+> 3. Se integró la lógica de filtrado reactivo en `renderUsuariosList` en `webapp/src/admin.js`, permitiendo filtrar conjuntamente con el rol, estado y buscador.  
+> 4. Se elevó la versión a `v2.28.0`, se compiló en Vite (776 ms), se desplegó a Firebase Hosting (`https://sgh-merida.web.app`) y se sincronizó con GitHub.  
+> 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
 
 ---
 
@@ -4408,6 +4474,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Explicación Teórica Didáctica (Skill 6):  
+>
 > 1. Error 429: Se explicó que corresponde al medidor de lecturas gratuitas diarias del plan Spark de Firebase (50.000 lecturas/día), que no detiene el funcionamiento general y se reinicia cada madrugada.  
 > 2. Formato Solicitado: Se explicó que es una validación nativa del navegador cuando el celular no tiene exactamente 7 dígitos o la ubicación administrativa tiene 6 dígitos o letras.  
 > 3. Se confirmó que la ubicación administrativa es opcional y se acordó mantener el comportamiento actual según lo indicado por el usuario.
@@ -4426,67 +4493,12 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Implementación del Filtro de Municipios en Usuarios (v2.28.0 - Skill 6):  
+>
 > 1. Se incorporó el selector `#filter-municipio-usuario` en la barra de herramientas de la tabla de usuarios (`webapp/index.html`).  
 > 2. Se pobló automáticamente con los 23 municipios de Mérida y se activó solo para roles estadales (`superadmin` y `zonadmin`).  
 > 3. Se integró la lógica de filtrado reactivo en `renderUsuariosList` en `webapp/src/admin.js`, permitiendo filtrar conjuntamente con el rol, estado y buscador.  
 > 4. Se elevó la versión a `v2.28.0`, se compiló en Vite (776 ms), se desplegó a Firebase Hosting (`https://sgh-merida.web.app`) y se sincronizó con GitHub.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
-
----
-
-### Intervención 86
-
-* **Fecha / Hora:** 2026-11-02 ~21:05 (Hora Local)
-* **Emisor:** Usuario (Administrador)
-
-> **Mensaje del Usuario:**  
-> doy F5 y Shift+F5 al navegador y no cambia a la versión 2.27.0  
-
-* **Emisor:** Agente (Antigravity)
-
-> **Respuesta del Agente:**  
-> Despliegue de Producción a Firebase Hosting (Skill 6):  
-> Se explicó que los archivos ya estaban compilados localmente y se ejecutó el despliegue directo a la nube (`npx firebase-tools deploy --only hosting`). Una vez liberada la versión en el servidor web (`sgh-merida.web.app`), se invitó al usuario a refrescar la página.
-
----
-
-### Intervención 87
-
-* **Fecha / Hora:** 2026-11-02 ~21:13 (Hora Local)
-* **Emisor:** Usuario (Administrador)
-
-> **Mensaje del Usuario:**  
-> Ya hice el cambio. estoy esperando que el director se conecte y me diga si sí se realizó el cambio. Otra cosa. ¿Que significa el siguiente mensaje? sale despues que se vallida el login: ... 429 Too Many Requests runAggregationQuery / Casos con: Utiliza un formato que coincida con el solicitado. ¿qué está sucediendo? / ¿es correcto que ubicación administrativa sea opcional?  
-
-* **Emisor:** Agente (Antigravity)
-
-> **Respuesta del Agente:**  
-> Explicación Teórica Didáctica (Skill 6):  
-> 1. Error 429: Se explicó que corresponde al medidor de lecturas gratuitas diarias del plan Spark de Firebase (50.000 lecturas/día), que no detiene el funcionamiento general y se reinicia cada madrugada.  
-> 2. Formato Solicitado: Se explicó que es una validación nativa del navegador cuando el celular no tiene exactamente 7 dígitos o la ubicación administrativa tiene 6 dígitos o letras.  
-> 3. Se confirmó que la ubicación administrativa es opcional y se acordó mantener el comportamiento actual según lo indicado por el usuario.
-
----
-
-### Intervención 88
-
-* **Fecha / Hora:** 2026-11-02 ~21:25 (Hora Local)
-* **Emisor:** Usuario (Administrador)
-
-> **Mensaje del Usuario:**  
-> por favor necesito que en el apartado de usuarios del sistema pueda filtrar por municipio. a veces necesito verificar algunos usuario en municipios especificos y me toca revizar una lista larga de usuarios.  
-
-* **Emisor:** Agente (Antigravity)
-
-> **Respuesta del Agente:**  
-> Implementación del Filtro de Municipios en Usuarios (v2.28.0 - Skill 6):  
-> 1. Se incorporó el selector `#filter-municipio-usuario` en la barra de herramientas de la tabla de usuarios (`webapp/index.html`).  
-> 2. Se pobló automáticamente con los 23 municipios de Mérida y se activó solo para roles estadales (`superadmin` y `zonadmin`).  
-> 3. Se integró la lógica de filtrado reactivo en `renderUsuariosList` en `webapp/src/admin.js`, permitiendo filtrar conjuntamente con el rol, estado y buscador.  
-> 4. Se elevó la versión a `v2.28.0`, se compiló en Vite (776 ms), se desplegó a Firebase Hosting (`https://sgh-merida.web.app`) y se sincronizó con GitHub.  
-> 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -4507,6 +4519,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Implementación de Corrección de Cédulas y Blindaje Anti-Colados (v2.29.0 - Skill 6):  
+>
 > 1. Se leyó y verificó `SKILL_sgh_firebase.md` de `webapp-expert`.  
 > 2. Se habilitó la edición de la cédula (`wp-cedula`) al modificar personal en `webapp/src/personalWizard.js`. Si la cédula es corregida, el sistema verifica colisiones, crea el expediente nuevo `${dea}_${newCedula}`, elimina el registro con la cédula errada anterior y sincroniza la lista del plantel.  
 > 3. Se blindó el formulario: permanece oculto (`display: none`) por defecto, solo se abre al pulsar "Editar" o "Traslado", y al hacer clic en "Actualizar Empleado" o "Cancelar", se cierra y oculta de inmediato devolviendo al director a la tabla de personal existente.  
@@ -4529,13 +4542,13 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Alta Institucional de OD13281412 y Carga de Personal Huérfano (v2.29.1 - Skill 6):  
+>
 > 1. Se verificó el archivo maestro `RAC ESTADO MERIDA - PERSONAL.csv` y se confirmaron 11 empleados adscritos a la Escuela Elpidio Brandtt Meléndez (`OD13281412`), Parroquia El Morro, Municipio Libertador (9 docentes estadales y 2 cocineras CNAE).  
 > 2. Se dio de alta el documento `planteles/OD13281412` en Firestore con su resumen `personal_resumen` poblado con los 11 trabajadores.  
 > 3. Se crearon los 11 expedientes en `cargos_personal` con la llave compuesta `OD13281412_${cedula}`, dejando a la Directora Yanelys Ruiz Peña (C.I. 23.583.693) lista para asociarse en el sistema.  
 > 4. Se actualizaron los catálogos estáticos `bd_sgh.json` y `webapp/public/bd_sgh.json`.  
 > 5. Se elevó la versión a `v2.29.1`, se compiló con Vite (696 ms), se desplegó en Firebase Hosting (`https://sgh-merida.web.app`) y se sincronizó con GitHub.  
 > 6. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -4551,12 +4564,12 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Diagnóstico y Solución de Acceso para Antonio Pinto Salinas / Salina (v2.29.2 - Skill 6):  
+>
 > 1. Diagnóstico de Causa Raíz: En los perfiles de los directores en Firestore y la base de datos geográfica oficial el municipio está registrado en singular (`ANTONIO PINTO SALINA`), mientras que en la matriz de botones del panel de despliegue se guardaba en plural (`ANTONIO PINTO SALINAS`). La validación estricta en el inicio de sesión impedía el acceso por la discrepancia de la última letra.  
 > 2. Solución en Vivo: Se actualizó de inmediato en caliente el documento `configuracion/despliegue` de Firestore agregando `ANTONIO PINTO SALINA` y los demás alias conocidos para permitir el acceso inmediato de los 40 directores.  
 > 3. Blindaje en Código: En `webapp/src/auth.js` se implementó `normalizarMunicipio()` para comparar canónicamente el municipio del usuario contra los activos; y en `webapp/src/admin.js` se sincronizan todas las variantes (`getVariantesMunicipio()`) al guardar.  
 > 4. Se elevó la versión a `v2.29.2`, se compiló con Vite (829 ms), se desplegó en Firebase Hosting (`https://sgh-merida.web.app`) y se sincronizó con GitHub.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -4567,21 +4580,21 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Mensaje del Usuario:**  
 > correos_afectados  
-> rafaelrondonpena86@gmail.com  
-> e.e.pascualignaciovillasmil@gmail.com  
-> e.e.tucanicito01@gmail.com  
-> l.b.riofrio04@gmail.com  
+> <rafaelrondonpena86@gmail.com>  
+> <e.e.pascualignaciovillasmil@gmail.com>  
+> <e.e.tucanicito01@gmail.com>  
+> <l.b.riofrio04@gmail.com>  
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Diagnóstico, Verificación, Enlaces Out-of-Band y Carga de 108 Funcionarios (Skill 6):  
+>
 > 1. Auditoría de Cuentas: Se confirmaron las cuentas de `rafaelrondonpena86@gmail.com` y `e.e.tucanicito01@gmail.com`, forzando `emailVerified: true`.  
 > 2. Resolución de Discrepancias de Correo: Para Pascual Ignacio Villasmil, se habilitó tanto `e.e.pascualignaciovillasmil01@gmail.com` como `e.e.pascualignaciovillasmil@gmail.com`. Para `l.b.riofrio04@gmail.com` (Liceo Rio Frío), se dio de alta la cuenta en Auth y Firestore como `plaadmin` aprobada.  
 > 3. Enlaces Out-of-Band: Se generaron los 4 enlaces seguros de restablecimiento de contraseña listos para entregar por WhatsApp.  
 > 4. Inyección de Personal Huérfano: Se detectó que estos 4 planteles tenían su nómina en 0 dentro de Firestore a pesar de tener 108 trabajadores en el RAC oficial. Se cargaron los 108 expedientes en `cargos_personal` y sus `personal_resumen` en `planteles` (28 en Rafael Rondón Peña, 14 en Tucanicito, 48 en Pascual Ignacio Villasmil y 18 en Liceo Rio Frío).  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -4597,11 +4610,11 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Auditoría de Huérfanos en Planteles OD15991423 y OD02211423 (Skill 6):  
+>
 > 1. Identificación: Ambos códigos pertenecen al Municipio Zea (Parroquia Zea) bajo dependencia Nacional en el catálogo `bd_sgh.json`: IEE "Milagros del Valle Rondón" (`OD15991423`) y Escuela Bolivariana "Santa Bárbara" (`OD02211423`).  
 > 2. Resultado de Huérfanos: Ambos planteles presentan cero (0) trabajadores huérfanos tras auditar exhaustivamente `huerfanos.csv`, la nómina oficial `RAC ESTADO MERIDA - PERSONAL.csv` y `Personal_Nacional.xlsx`.  
 > 3. Estado en Base de Datos: Ninguno de los dos cuenta con personal cargado ni ha sido dado de alta en Firestore `planteles` aún.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -4617,12 +4630,12 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Auditoría de Huérfanos para Plantel OD03541414 (Skill 6):  
+>
 > 1. Diagnóstico Afirmativo: SÍ tiene huérfanos. Se confirmaron exactamente 7 trabajadores adscritos en `huerfanos.csv` y en el censo maestro `RAC ESTADO MERIDA - PERSONAL.csv`.  
 > 2. Identificación Institucional: Escuela Gabriel Marciano Parra, ubicada en Santa Elena de Arenales, Municipio Obispo Ramos de Lora, de dependencia Estadal y nivel Primaria.  
 > 3. Detalle de los 7 Funcionarios: 6 docentes estadales (Elvia Contreras, Emigley Vergara, Yulimar Araque, Andreina Araque, Carlos Parra, Dania Parra) y 1 cocinera escolar nacional (Ana Julia Quintero).  
 > 4. Estado en Base de Datos: El plantel no existe aún en `planteles` ni en `bd_sgh.json` ni en `cargos_personal`. Script de alta institucional preparado listo para ejecutar ante la autorización del usuario.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -4638,12 +4651,12 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Alta Institucional y Activación de 7 Funcionarios Huérfanos para OD03541414 (v2.29.3 - Skill 6):  
+>
 > 1. Alta Institucional: Se creó el documento `planteles/OD03541414` (Escuela Gabriel Marciano Parra, Santa Elena de Arenales, Obispo Ramos de Lora) con dependencia Estadal y nivel Primaria.  
 > 2. Inyección de Personal: Se crearon los 7 expedientes en `cargos_personal` con la llave compuesta `OD03541414_${cedula}` y se pobló su array `personal_resumen` en el documento del plantel.  
 > 3. Catálogos Geográficos: Se sincronizaron `bd_sgh.json` y `webapp/public/bd_sgh.json` con el nuevo plantel.  
 > 4. SemVer y Despliegue: Se elevó la versión a `v2.29.3`, se compiló en Vite (718 ms), se desplegó en Firebase Hosting (`https://sgh-merida.web.app`) y se respaldó en GitHub.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -4660,11 +4673,12 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Diagnóstico Explicativo y Propuestas de Solución (Skill 6):  
+>
 > 1. Comprensión del Video: Se analizó el video y audio completo. La escuela tiene 13 secciones reales en Primaria (1ro a 6to con 2 secciones A y B cada uno, excepto 3er grado que tiene 3 secciones: A, B y C).  
 > 2. Causa Raíz: El sistema anterior repartía las secciones de forma fija y secuencial desde 1er grado. Para que apareciera 3er Grado C, los directores tuvieron que declarar 15 secciones artificialmente. Al guardar y volver a ingresar, el sistema contaba únicamente las 13 secciones con datos cargados, sobrescribía el total a 13 y recortaba la visualización de 3er Grado C, ocultando a los 26 alumnos registrados.  
 > 3. Soluciones Propuestas:  
->    - Opción 1 (Estructural / Recomendada): Configuración de secciones independiente por cada grado (1º a 6º), idéntico a Media General. Elimina trucos, se ajusta a la realidad de cada plantel y garantiza persistencia total.  
->    - Opción 2 (Parche Inmediato): Modificar la lectura/recuperación para que no recorte el total de secciones a 13 ni oculte secciones si tienen datos guardados.  
+>    * Opción 1 (Estructural / Recomendada): Configuración de secciones independiente por cada grado (1º a 6º), idéntico a Media General. Elimina trucos, se ajusta a la realidad de cada plantel y garantiza persistencia total.  
+>    * Opción 2 (Parche Inmediato): Modificar la lectura/recuperación para que no recorte el total de secciones a 13 ni oculte secciones si tienen datos guardados.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
 
 ---
@@ -4681,12 +4695,12 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Implementación de la Opción 1 en Local (v2.29.4 - Skill 6):  
+>
 > 1. Interfaz de Primaria Actualizada: Se incorporaron 6 casillas independientes (1er a 6to Grado) en `webapp/index.html`, permitiendo declarar con exactitud las secciones de cada grado sin inventar secciones vacías ni usar trucos. El total de secciones se calcula y refleja automáticamente en pantalla.  
 > 2. Lógica Dinámica y Persistencia: En `webapp/src/main.js`, `_renderCajasPrimaria` genera exactamente las secciones correspondientes a cada grado (por ejemplo: si 3er grado tiene 3 secciones, dibuja A, B y C; y si los demás tienen 2, solo dibuja A y B). Al guardar en Firestore, se registran las secciones por grado en `secciones-planes.21000`. Al recargar, el cargador respeta y recupera la configuración exacta sin recortar secciones ni ocultar estudiantes.  
 > 3. Pruebas Automatizadas en Local: Se ejecutó una prueba completa con Playwright simulando el caso exacto del video (13 secciones en total, 3 secciones en 3er Grado, 26 alumnos en 3er Grado C, recarga de página y retrocompatibilidad), superando todas las validaciones con 100% de éxito.  
 > 4. Instrucciones para Prueba Local: Se indica al usuario cómo iniciar y probar el sistema en su navegador localmente (`npm run dev` o `npm run preview` en el puerto local) antes de autorizar el despliegue a Firebase.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -4702,12 +4716,12 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Flexibilización del Campo Horas Administrativas (Skill 6):  
+>
 > 1. Eliminación de Obligatoriedad en Interfaz: Se retiró el asterisco rojo de campo requerido de la etiqueta `Horas Administrativas (en este Plantel)` tanto en `webapp/index.html` como en los modificadores dinámicos de texto en `webapp/src/personalWizard.js`.  
 > 2. Desbloqueo en Validación de Formulario: Se eliminó la validación que exigía obligatoriamente que `wp-horas-administrativas` fuera mayor a 0 al guardar personal no docente o sin aula. Ahora el campo puede quedar vacío o en 0 sin bloquear el guardado. Si el usuario ingresa un valor positivo, únicamente se verifica que no supere las horas según recibo.  
 > 3. Compilación y Preparación Local: Se recompiló el frontend localmente en Vite. Listo para prueba inmediata en local.  
 > 4. Quedamos a la espera del video explicativo del usuario para atender con total precisión el módulo de secciones de Primaria.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -4724,14 +4738,14 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Diagnóstico de Causa Raíz y Corrección Definitiva (Skill 6):  
+>
 > 1. Análisis del Video y Causa Exacta: Al configurar 1 sección en un grado, el sistema asigna la letra `U` (Sección Única). Al recargar la página, el lector de datos interpretaba la letra `U` por su posición alfabética (letra 21 del abecedario: 85 - 64 = 21). Por ello, convertía automáticamente cada sección única en 21 secciones (1º: 21, 2º: 21, 4º: 21, 5º: 21), sumando exactamente los 89 que aparecían en el video.  
 > 2. Solución Aplicada:  
->    - Se estableció `secciones-planes.21000` como la fuente de verdad prioritaria para los grados declarados.  
->    - Se ajustó el decodificador para que la letra `U` siempre represente exactamente 1 sección (`maxLetraIdx = 1`), nunca 21.  
->    - Se aseguró el mapeo automático bidireccional entre la casilla `primaria-gU` y los datos guardados en Firestore.  
+>    * Se estableció `secciones-planes.21000` como la fuente de verdad prioritaria para los grados declarados.  
+>    * Se ajustó el decodificador para que la letra `U` siempre represente exactamente 1 sección (`maxLetraIdx = 1`), nunca 21.  
+>    * Se aseguró el mapeo automático bidireccional entre la casilla `primaria-gU` y los datos guardados en Firestore.  
 > 3. Validación Automatizada: Se ejecutó la prueba con Playwright reproduciendo el escenario idéntico del video (1, 1, 3, 1, 1, 2 = 9 secciones y 185 alumnos). Al simular logout y login, los 6 grados conservaron sus valores exactos, el total se mantuvo en 9 y los alumnos de 1º U y 3º C se recuperaron al 100%.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -4748,13 +4762,13 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Claridad Absoluta sobre la Carga de Planteles Típicos y Despliegue v2.29.4 (Skill 6):  
+>
 > 1. Respuesta Categórica y Honesta: Los planteles típicos/regulares NO tendrán que cargar absolutamente nada de nuevo. Al entrar a la aplicación en Firebase, encontrarán toda su información 100% intacta, estructurada y en las casillas correspondientes.  
 > 2. Explicación Técnica y Retrocompatibilidad: El nuevo cargador fue programado con compatibilidad dual: si un plantel guardó su matrícula con el esquema tradicional (por ejemplo, 6 secciones con sección única 'U' o 12 secciones con 'A' y 'B'), el sistema reconoce automáticamente esa estructura, asigna las secciones correspondientes a cada grado y rellena los varones y hembras sin pérdidas ni alteraciones.  
 > 3. Prueba de Verificación Ejecutada: Se probó mediante simulación en navegador tanto una escuela típica de 6 secciones como una de 12 secciones con datos de la base de datos previa, confirmando que ambas se abren de inmediato con su conteo y casillas exactas sin requerir intervención del usuario.  
 > 4. Despliegue Oficial en Producción: Se compiló el proyecto con Vite y se desplegó exitosamente a Firebase Hosting (`https://sgh-merida.web.app`) bajo la versión **v2.29.4**.  
 > 5. Sincronización en GitHub: Cambios respaldados y subidos al repositorio remoto (`origin main`).  
 > 6. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -4770,9 +4784,9 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Cierre Formal del Hito v2.29.4:  
+>
 > 1. Conformidad Institucional: El usuario manifiesta plena satisfacción con la implementación de la configuración granular de secciones por grado en Educación Primaria, la corrección del decodificador de sección única 'U' (solución al desborde de 89 secciones / 21 por grado), la flexibilización de horas administrativas y la preservación del 100% de los datos de planteles típicos en Firebase Hosting.  
 > 2. Estado Operativo: Sistema en producción en `https://sgh-merida.web.app` y repositorio sincronizado en GitHub `main`. Disponibilidad plena para el siguiente requerimiento o auditoría institucional.
-
 
 ---
 
@@ -4790,14 +4804,14 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Auditoría, Conciliación e Inyección Inmediata de Nómina para S2959D1421 (Skill 6):  
+>
 > 1. Diagnóstico de Funcionario y Plantel: Se localizó a **Nayibel Iratsuy Flores Rodriguez** (C.I. **V-22.523.646**) como Docente II de Aula titular (Código RAC `1122DI`), estatus ACTIVO, perteneciente a la **Escuela Básica Nacional "Amanías Avendaño" (`S2959D1421`)**, Parroquia El Llano, Municipio Tovar.  
 > 2. Causa Raíz Identificada: La nómina oficial completa de este plantel nacional (94 trabajadores del censo RAC y 1 docente adicional registrada en la nómina nacional = 95 funcionarios en total) no había sido transferida a las colecciones activas de Firebase (`cargos_personal` y `planteles`), razón por la cual el director no los visualizaba al iniciar sesión.  
 > 3. Inyección Atómica en Firestore: Tras la autorización expresa del usuario ("Cárgalos"), se inyectaron exitosamente al 100%:  
->    - Creación y actualización de `planteles/S2959D1421` con sus datos institucionales y su array `personal_resumen` con los 95 trabajadores.  
->    - Inyección de los 95 expedientes individuales completos en `cargos_personal` bajo la llave compuesta `S2959D1421_${cedula}` (55 docentes, 4 administrativos y 36 obreros).  
+>    * Creación y actualización de `planteles/S2959D1421` con sus datos institucionales y su array `personal_resumen` con los 95 trabajadores.  
+>    * Inyección de los 95 expedientes individuales completos en `cargos_personal` bajo la llave compuesta `S2959D1421_${cedula}` (55 docentes, 4 administrativos y 36 obreros).  
 > 4. Instrucción Operativa para el Director: El director solo debe recargar la página en su navegador (`F5` o Ctrl+R) para ver de inmediato a Nayibel Flores y a los 94 trabajadores restantes en su tabla de personal.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -4819,18 +4833,15 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Saneamiento y Separación Canónica de Identidades Colisionadas (Skill 6):  
+>
 > 1. Confirmación de Causa Raíz: La teoría del usuario fue 100% acertada. En la migración inicial del censo RAC a Firestore, ocurrió una errata de transcripción de un dígito entre números vecinos (el `4` por el `7`), registrando a Irma Ruiz con la cédula de Cleidy Salas y solapando su identidad.  
 > 2. Ejecución Atómica en Firestore:  
->    - **Cleidy Yohana Salas Marquez (V-19.047.594):** Expediente restaurado en `cargos_personal/OD15181423_19047594` como Docente I / Aula Boliv. en el NER 23 de Zea (`OD15181423`), con carga de 53 horas y datos de contacto oficiales.  
->    - **Irma Coromoto Ruiz (V-19.047.597):** Expediente reubicado en `cargos_personal/OD01941409_19047597` como Cocinero II en la Esc. Mesa de Quintero de Guaraque (`OD01941409`).  
->    - **Eliminación del Residuo Espurio:** Se eliminó de raíz el documento `OD01941409_19047594`, liberando la cédula `19047594` de cualquier colisión o falso positivo.  
->    - **Verificación de Planteles:** Sincronizados los metadatos de ambas instituciones en `planteles/OD15181423` y `planteles/OD01941409`.  
+>    * **Cleidy Yohana Salas Marquez (V-19.047.594):** Expediente restaurado en `cargos_personal/OD15181423_19047594` como Docente I / Aula Boliv. en el NER 23 de Zea (`OD15181423`), con carga de 53 horas y datos de contacto oficiales.  
+>    * **Irma Coromoto Ruiz (V-19.047.597):** Expediente reubicado en `cargos_personal/OD01941409_19047597` como Cocinero II en la Esc. Mesa de Quintero de Guaraque (`OD01941409`).  
+>    * **Eliminación del Residuo Espurio:** Se eliminó de raíz el documento `OD01941409_19047594`, liberando la cédula `19047594` de cualquier colisión o falso positivo.  
+>    * **Verificación de Planteles:** Sincronizados los metadatos de ambas instituciones en `planteles/OD15181423` y `planteles/OD01941409`.  
 > 3. Resultado Final: Al consultar la cédula `19047594`, el sistema retorna única y exclusivamente a **Cleidy Yohana Salas Márquez** (Zea); y al consultar `19047597`, retorna a **Irma Coromoto Ruiz** (Guaraque).  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
-
-
-
 
 ---
 
@@ -4840,17 +4851,18 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Usuario (Administrador)
 
 > **Mensaje del Usuario:**  
-> correos_afectados = eebjoseeustorgiorivas@gmail.com  
+> correos_afectados = <eebjoseeustorgiorivas@gmail.com>  
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Protocolo de Regularización, Sincronización de Plantel y Entrega de Acceso Directo (Skill 6):  
+>
 > 1. Verificación y Vinculación Institucional: Se identificó la cuenta oficial asociada al correo `eebjoseeustorgiorivas@gmail.com` con UID `XlMpha6TgWNHueXl6hmmSSBCj1i2`. Dicha cuenta pertenece a la **Escuela Estadal Básica "El Rincón" / Epónimo "José Eustorgio Rivas" (Código DEA `OD11441405`)**, ubicada en la Parroquia Canaguá, Municipio Arzobispo Chacón (Dependencia Estadal, Código Estadístico 140273).  
 > 2. Activación y Permisos de Director: Se actualizó el perfil en `usuarios/XlMpha6TgWNHueXl6hmmSSBCj1i2` otorgando rol de Administrador de Plantel (`plaadmin`), estatus `APROBADO` y jerarquía territorial correspondiente.  
 > 3. Carga Integral de Nómina Oficial: Se inyectaron exitosamente al 100% los 25 trabajadores censados en el RAC Estadal para esta institución (docentes y obreros):  
->    - Actualización de metadatos y arreglo consolidado `personal_resumen` en `planteles/OD11441405`.  
->    - Inyección de los 25 expedientes individuales completos en la colección `cargos_personal` (`OD11441405_${cedula}`) con sus cargas horarias y datos administrativos oficiales.  
+>    * Actualización de metadatos y arreglo consolidado `personal_resumen` en `planteles/OD11441405`.  
+>    * Inyección de los 25 expedientes individuales completos en la colección `cargos_personal` (`OD11441405_${cedula}`) con sus cargas horarias y datos administrativos oficiales.  
 > 4. Enlace Seguro de Restablecimiento: Se generó un enlace directo oficial de restablecimiento de contraseña para entrega al director del plantel vía WhatsApp.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
 
@@ -4862,17 +4874,18 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Usuario (Administrador)
 
 > **Mensaje del Usuario:**  
-> mensaje de Whatsapp para este correo_afectado escuelajoseebertocanderonalbar@gmail.com  
+> mensaje de Whatsapp para este correo_afectado <escuelajoseebertocanderonalbar@gmail.com>  
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Auditoría, Regularización Institucional y Redacción de Mensaje Oficial (Skill 6):  
+>
 > 1. Detección y Validación de Cuenta: Se identificó que la cuenta registrada en Firebase Authentication bajo el epónimo institucional corresponde a `escuelajoseebertocalderonalbar@gmail.com` (con "l" de Calderón, UID `sjSku9olPOMlcKt3QGaFthub7Ys2`), perteneciente a la **Escuela Estadal Básica "El Vergel" / "José Eberto Calderón Albarrán" (Código DEA `OD03381417`)**, Municipio Rangel (Mucuchíes).  
 > 2. Sincronización Integral:  
->    - Perfil directivo en `usuarios/sjSku9olPOMlcKt3QGaFthub7Ys2` actualizado con rol `plaadmin`, estatus `APROBADO` y jerarquía oficial.  
->    - Plantel `planteles/OD03381417` sincronizado con metadatos y arreglo `personal_resumen`.  
->    - Inyección de los 6 trabajadores adscritos (5 docentes y 1 cocinera) en la colección `cargos_personal` (`OD03381417_${cedula}`).  
+>    * Perfil directivo en `usuarios/sjSku9olPOMlcKt3QGaFthub7Ys2` actualizado con rol `plaadmin`, estatus `APROBADO` y jerarquía oficial.  
+>    * Plantel `planteles/OD03381417` sincronizado con metadatos y arreglo `personal_resumen`.  
+>    * Inyección de los 6 trabajadores adscritos (5 docentes y 1 cocinera) en la colección `cargos_personal` (`OD03381417_${cedula}`).  
 > 3. Emisión de Enlace Seguro y Mensaje de WhatsApp: Se generó el enlace oficial out-of-band de restablecimiento de contraseña y se redactó el formato institucional listo para copiar y enviar por WhatsApp a la directiva del plantel.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
 
@@ -4884,12 +4897,13 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Usuario (Administrador)
 
 > **Mensaje del Usuario:**  
-> Ahora para este correo_afectado: lenderm884@gmail.com  
+> Ahora para este correo_afectado: <lenderm884@gmail.com>  
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Regularización de Acceso, Sincronización de Plantel y Mensaje WhatsApp (Skill 6):  
+>
 > 1. Identificación y Verificación Institucional: La cuenta oficial `lenderm884@gmail.com` (UID `7PpNfgt2BRQZCJ4BKn3LevcZOln1`) pertenece al **Instituto de Educación Especial "Lender Molina" (Código DEA `OD16551415`)**, ubicado en la Parroquia Santa María de Caparo, Municipio Padre Noguera (Dependencia Nacional, Código Estadístico 142214, Código Dependencia 7950168).  
 > 2. Activación de Perfil Directivo: Actualizado el documento en `usuarios/7PpNfgt2BRQZCJ4BKn3LevcZOln1` con rol `plaadmin`, estatus `APROBADO` y jerarquía territorial de Padre Noguera.  
 > 3. Alta y Configuración de Plantel: Sincronizado `planteles/OD16551415` con sus datos oficiales y notas institucionales de adscripción.  
@@ -4904,12 +4918,13 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Usuario (Administrador)
 
 > **Mensaje del Usuario:**  
-> la siguiente empleada 20849329	V	ANDREA ESTEFANIA PARRA PEÑA no aparece en el SGH pero si aparece en el RAC ESTADO MERIDA  
+> la siguiente empleada 20849329 V ANDREA ESTEFANIA PARRA PEÑA no aparece en el SGH pero si aparece en el RAC ESTADO MERIDA  
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Auditoría y Diagnóstico de Funcionario y Plantel (Skill 6):  
+>
 > 1. Identificación y Verificación Oficial: Se localizó a **Andrea Estefania Parra Peña** (C.I. **V-20.849.329**) en el censo RAC como Docente III de Aula Bolivariana titular (Código RAC `1163DB`), estatus ACTIVO, con carga de 53 horas (Primer Grado Sección U), adscrita al **Complejo Educativo "UEB La Mucuy Baja" / Epónimo "Laureano Maldonado" (Código DEA `OD14321419`)**, Parroquia Tabay, Municipio Santos Marquina (Dependencia Nacional).  
 > 2. Diagnóstico de Causa Raíz: La nómina de este plantel nacional (conformada por 25 trabajadores: 16 docentes, 3 administrativos y 6 obreros) permanecía en los archivos fuente del RAC y no había sido volcada aún a las colecciones activas de Firebase (`cargos_personal` y `planteles/OD14321419`), razón por la cual no es retornada en las búsquedas del SGH.  
 > 3. Plan de Solución Inmediata: Se dispone del script automatizado para inyectar de manera atómica al 100% los 25 expedientes de la nómina en `cargos_personal` y actualizar `planteles/OD14321419` con su resumen de personal, dejando habilitada a Andrea Parra y a toda la institución.  
@@ -4929,9 +4944,10 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Inyección Atómica de Nómina y Regularización Directiva para OD14321419 (Skill 6):  
+>
 > 1. Inyección de Nómina Oficial al 100%: Con la autorización del Administrador ("si procede"), se procesaron e inyectaron de forma atómica en Firestore los 25 trabajadores de la institución:  
->    - Actualización y alta de metadatos en `planteles/OD14321419` (Complejo Educativo "UEB La Mucuy Baja" / Epónimo "Laureano Maldonado", Parroquia Tabay, Municipio Santos Marquina) con su arreglo `personal_resumen` de 25 funcionarios.  
->    - Creación de los 25 expedientes individuales completos en `cargos_personal/OD14321419_${cedula}` (16 docentes incluyendo a Andrea Parra C.I. V-20.849.329, 3 administrativos y 6 obreros).  
+>    * Actualización y alta de metadatos en `planteles/OD14321419` (Complejo Educativo "UEB La Mucuy Baja" / Epónimo "Laureano Maldonado", Parroquia Tabay, Municipio Santos Marquina) con su arreglo `personal_resumen` de 25 funcionarios.  
+>    * Creación de los 25 expedientes individuales completos en `cargos_personal/OD14321419_${cedula}` (16 docentes incluyendo a Andrea Parra C.I. V-20.849.329, 3 administrativos y 6 obreros).  
 > 2. Sincronización de Cuenta Directiva: Se detectó la cuenta institucional en sesión activa `ueblamucuybaja@gmail.com` (UID `ZNEgg7DjoNUbKDiU2PGs4FGXKVp2`) y se sincronizó su perfil en `usuarios/ZNEgg7DjoNUbKDiU2PGs4FGXKVp2` con estatus `APROBADO` y rol `plaadmin`.  
 > 3. Instrucción Operativa para el Director: La dirección del plantel solo debe recargar la página (F5 o Ctrl+R) para visualizar de inmediato a Andrea Estefania Parra Peña y a la nómina completa en pantalla.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
@@ -4950,11 +4966,12 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Implementación del Filtro por Correo Electrónico y Elevación a v2.29.5 (Skill 6):  
+>
 > 1. Diagnóstico y Optimización Integral: Se identificó que la coincidencia por correo en el módulo de usuarios requería normalización para capturar todas las variantes de almacenamiento (`email`, `correo`, `correo_electronico`), y que al buscar identificadores únicos (como correos o cédulas completas) los filtros secundarios de estado o municipio no debían ocultar al usuario.  
 > 2. Mejoras Aplicadas en el Sistema:  
->    - En `Usuarios del Sistema` (`webapp/src/admin.js`): Búsqueda multi-criterio robusta por correo, nombre, cédula, código DEA y municipio, con visualización segura y soporte ante cualquier nomenclatura.  
->    - En `Personal del Plantel` (`webapp/src/personalWizard.js`): El buscador de la nómina ahora también evalúa el correo electrónico de cada funcionario en tiempo real además del nombre y la cédula.  
->    - En `Interfaz de Usuario` (`webapp/index.html`): Textos de ayuda (*placeholders*) actualizados indicando la búsqueda por correo en ambos buscadores.  
+>    * En `Usuarios del Sistema` (`webapp/src/admin.js`): Búsqueda multi-criterio robusta por correo, nombre, cédula, código DEA y municipio, con visualización segura y soporte ante cualquier nomenclatura.  
+>    * En `Personal del Plantel` (`webapp/src/personalWizard.js`): El buscador de la nómina ahora también evalúa el correo electrónico de cada funcionario en tiempo real además del nombre y la cédula.  
+>    * En `Interfaz de Usuario` (`webapp/index.html`): Textos de ayuda (*placeholders*) actualizados indicando la búsqueda por correo en ambos buscadores.  
 > 3. Control de Calidad y Compilación: Compilación de producción con Vite exitosa en 1.11s. Elevación a la versión `v2.29.5`.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
 
@@ -4966,17 +4983,18 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Usuario (Administrador)
 
 > **Mensaje del Usuario:**  
-> Mensaje para correo_afectado: escuelapatriciozerpa@gmail.com  
+> Mensaje para correo_afectado: <escuelapatriciozerpa@gmail.com>  
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Regularización de Acceso, Carga de Nómina y Mensaje WhatsApp (Skill 6):  
+>
 > 1. Identificación y Verificación Institucional: La cuenta `escuelapatriciozerpa@gmail.com` (UID `DaObGDJBiuWuTcN7jLapJB7avC53`) pertenece a la **Escuela Estadal Básica "Misintá" / Epónimo "Patricio Zerpa" (Código DEA `OD03371417`)**, ubicada en la Parroquia Mucuchíes, Municipio Rangel (Dependencia Estadal, Código Estadístico 140771).  
 > 2. Activación de Perfil Directivo: Actualizado el perfil en `usuarios/DaObGDJBiuWuTcN7jLapJB7avC53` otorgando rol de Administrador de Plantel (`plaadmin`), estatus `APROBADO` y jerarquía territorial correspondiente.  
 > 3. Carga Integral de Nómina: Se inyectaron exitosamente al 100% los 13 trabajadores censados para esta institución (12 docentes estadales y 1 cocinera nacional):  
->    - Actualización de metadatos y arreglo `personal_resumen` en `planteles/OD03371417`.  
->    - Inyección de los 13 expedientes completos en `cargos_personal/OD03371417_${cedula}`.  
+>    * Actualización de metadatos y arreglo `personal_resumen` en `planteles/OD03371417`.  
+>    * Inyección de los 13 expedientes completos en `cargos_personal/OD03371417_${cedula}`.  
 > 4. Emisión de Credencial OOB y Redacción de WhatsApp: Generado enlace seguro de restablecimiento de contraseña y confección de mensaje protocolar para la dirección del plantel.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
 
@@ -4994,6 +5012,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Despliegue Exitoso a Producción de la Versión v2.29.5 en Firebase Hosting (Skill 6):  
+>
 > 1. Compilación de Producción: Compilado con Vite en 716 ms sin errores.  
 > 2. Despliegue Oficial en Hosting: Publicado con éxito en Firebase Hosting para el proyecto institucional `sgh-merida`.  
 > 3. Disponibilidad Inmediata: La versión `v2.29.5` se encuentra activa en producción en `https://sgh-merida.web.app`, incorporando la búsqueda en tiempo real por correo electrónico tanto en Usuarios del Sistema como en la Nómina de Personal.  
@@ -5015,8 +5034,9 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Diagnóstico y Contexto Integral del Sistema de Verificación de Correos y Métricas de Servidor (Skill 6):  
+>
 > 1. Lectura Previa Obligatoria: Leído y procesado en su totalidad el archivo `SKILL_sgh_firebase.md` antes de emitir cualquier diagnóstico.  
-> 2. Diagnóstico del Envío de Correos: Se explica en lenguaje llano por qué los correos automáticos no llegan a la bandeja ni a spam (remitente no autenticado noreply@sgh-merida.firebaseapp.com descartado silenciosamente por pasarelas de correo, y cupo diario del plan Spark gratuito).  
+> 2. Diagnóstico del Envío de Correos: Se explica en lenguaje llano por qué los correos automáticos no llegan a la bandeja ni a spam (remitente no autenticado <noreply@sgh-merida.firebaseapp.com> descartado silenciosamente por pasarelas de correo, y cupo diario del plan Spark gratuito).  
 > 3. El Mecanismo de Salvaguarda (Bypass de Aprobación): Se aclara que el registro en base de datos nunca se detiene y que al marcar la cuenta como 'APROBADO', el sistema suprime automáticamente la necesidad de validar el correo.  
 > 4. Canal de Contingencia (WhatsApp OOB): Respaldo directo mediante enlaces seguros vía mensajería instantánea.  
 > 5. Interpretación de la Captura Adjunta: Aclaratoria de que las métricas corresponden al motor de base de datos Firestore (125k lecturas acumuladas del 3 de nov) y que el ciclo de consumo se reinició fresco y despejado para la jornada del 4 de nov.  
@@ -5036,6 +5056,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Ocultamiento Preventivo de Recuperación de Contraseña y Despliegue de la Versión v2.29.6 (Skill 6):  
+>
 > 1. Modificación de Interfaz: Invisibilizado el enlace "¿Olvidaste tu contraseña?" en el formulario de inicio de sesión (`webapp/index.html`) aplicando `display: none !important;`.  
 > 2. Estabilidad de Código Preservada: Los controladores de eventos en `webapp/src/main.js` se mantienen intactos y seguros sin generar errores ni advertencias de consola.  
 > 3. Control SemVer: Incremento de versión de parche a `v2.29.6` en `webapp/package.json` e `webapp/index.html`.  
@@ -5056,6 +5077,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Protocolo de Aprobación, Registro Histórico y Respaldo en Repositorio Remoto (Skill 5 y Skill 6):  
+>
 > 1. Verificación de Conformidad: Recibida confirmación explícita de satisfacción del Administrador.  
 > 2. Registro en Bitácora Institucional: Actualizado el archivo físico \`bitacora.md\` documentando la versión \`v2.29.6\`, la decisión arquitectónica de protección del cupo diario de correos del plan Spark de Firebase y el flujo de asistencia asistida por WhatsApp.  
 > 3. Registro en Historial de Versiones: Registrada la versión \`v2.29.6\` en \`versiones.md\`.  
@@ -5077,11 +5099,12 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Auditoría Forense de Veracidad sobre 81 Funcionarios del Municipio Tovar y Plan de Acción (Skill 6):  
+>
 > 1. Auditoría Forense de Base de Datos: Cruce exhaustivo de las 81 cédulas contra \`RAC ESTADO MERIDA - PERSONAL.csv\`, \`RAC ESTADO MERIDA - PLANTELES.csv\`, \`huerfanos.csv\` y Cloud Firestore.  
 > 2. Desmontaje de Mitos y Verificación de Veracidad:  
->    - Categoría 1 (Confirmados en RAC en su Mismo Plantel): 68 funcionarios (84%) sí están registrados oficialmente. Los directores no los veían porque sus planteles tenían nóminas pendientes de inyección en SGH o cometieron errores de un dígito al tipear la cédula o código DEA.  
->    - Categoría 2 (Confirmados en RAC en Otro Plantel): 11 funcionarios (14%) poseen adscripción formal en otro código DEA (compartimiento de horas como en Liceo Alí Hernández, comisiones de servicio o escuelas fusionadas como Ananías Avendaño).  
->    - Categoría 3 (Verdaderos Huérfanos / No en RAC): Solo 2 funcionarios (2%) no figuran en ninguna base regional (Enny Johanna Rojas Torres en Monseñor Moreno y Maryory Lluiseth Rondón Iriarte en Don Tomás Labrador Ramírez).  
+>    * Categoría 1 (Confirmados en RAC en su Mismo Plantel): 68 funcionarios (84%) sí están registrados oficialmente. Los directores no los veían porque sus planteles tenían nóminas pendientes de inyección en SGH o cometieron errores de un dígito al tipear la cédula o código DEA.  
+>    * Categoría 2 (Confirmados en RAC en Otro Plantel): 11 funcionarios (14%) poseen adscripción formal en otro código DEA (compartimiento de horas como en Liceo Alí Hernández, comisiones de servicio o escuelas fusionadas como Ananías Avendaño).  
+>    * Categoría 3 (Verdaderos Huérfanos / No en RAC): Solo 2 funcionarios (2%) no figuran en ninguna base regional (Enny Johanna Rojas Torres en Monseñor Moreno y Maryory Lluiseth Rondón Iriarte en Don Tomás Labrador Ramírez).  
 > 3. Hallazgos Forenses de Errores de Tipeo: Resueltas discrepancias numéricas en Leonor de la Guerra, Félix Román Duque, Don Tomás Labrador Ramírez, Santa Juana, San Isidro y Jesús Alveiro Bustamante Ramírez.  
 > 4. Plan de Trabajo en 3 Fases: Propuesta estructurada de inyección inmediata de los 68 confirmados, conciliación de los 11 compartidos y regularización de los 2 verdaderos huérfanos.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
@@ -5104,6 +5127,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Clarificación y Validación Estructurada en Tres Puntos (Skill 6):  
+>
 > 1. Validación del Punto 1 (Los 68): Confirmado. Existen y son legítimos en el RAC en sus mismas escuelas; la razón por la que no aparecen en SGH 2.29.6 es porque su nómina aún no ha sido inyectada en la base de datos web.  
 > 2. Validación y Matiz del Punto 2 (Los 11): Confirmado en la escuela que los reclama. Están en el RAC pero asignados formalmente a otro plantel (horas compartidas o escuelas fusionadas). En SGH 2.29.6 no figuran en la escuela donde están trabajando físicamente hoy.  
 > 3. Validación del Punto 3 (Los 2): Exactamente así. No existen en el RAC ni en SGH 2.29.6; son los únicos dos verdaderos huérfanos que requieren verificación de credenciales.  
@@ -5123,11 +5147,12 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Plan Técnico y Operativo para la Inyección de 79 Funcionarios en Firebase (Skill 6):  
+>
 > 1. Viabilidad y Costo Cero: Se confirma la total viabilidad a costo cero (consumo estimado de ~98 escrituras de las 20.000 disponibles diariamente en el plan Spark).  
 > 2. Metodología de Carga en 3 Pasos:  
->    - Extracción y corrección: Obtención de expedientes completos desde el RAC aplicando las cédulas y códigos DEA subsanados en la auditoría.  
->    - Destino y vinculación de horas: Los 68 se asignan a su plantel natural; los 11 (horas compartidas) se asocian al plantel donde laboran actualmente preservando nota de su adscripción original.  
->    - Inyección atómica dual: Creación simultánea del expediente en `cargos_personal` y actualización de la lista rápida `personal_resumen` en `planteles`.  
+>    * Extracción y corrección: Obtención de expedientes completos desde el RAC aplicando las cédulas y códigos DEA subsanados en la auditoría.  
+>    * Destino y vinculación de horas: Los 68 se asignan a su plantel natural; los 11 (horas compartidas) se asocian al plantel donde laboran actualmente preservando nota de su adscripción original.  
+>    * Inyección atómica dual: Creación simultánea del expediente en `cargos_personal` y actualización de la lista rápida `personal_resumen` en `planteles`.  
 > 3. Solicitud de autorización de ejecución al Administrador.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
 
@@ -5146,12 +5171,13 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Alineación Estricta al Principio de Veracidad y Legalidad del RAC Estado Mérida (Skill 6):  
+>
 > 1. Comprensión Total de la Directriz: Se ratifica y adopta sin reservas la instrucción del Administrador. Queda prohibido asociar funcionarios a planteles por meros reclamos verbales o cargas horarias no formalizadas en el RAC.  
 > 2. Regla Universal Aplicada a los 79 Funcionarios (68 + 11): Los 79 funcionarios serán inyectados en SGH v2.29.6 estrictamente en el código DEA del plantel que dicta el documento oficial \`RAC ESTADO MERIDA - PERSONAL.csv\`.  
 > 3. Destino Oficial de los 11 Casos:  
->    - Profesores del Alí Hernández se insertan en sus planteles oficiales: \`S1067D1421\` (José Nucete Sardi), \`S0271D1421\` (Félix Román Duque) y \`OD17651418\` (Liceo La Playa).  
->    - Casos de Don Tomás Labrador y Ciudad Tovar se cargan bajo su DEA oficial del RAC (\`OD02201421\`, \`ON14941421\`, \`OD02211403\`, \`OD02911421\` y \`ON14991421\`).  
->    - Norma Guerrero se asigna a su DEA oficial \`ON15731418\`.  
+>    * Profesores del Alí Hernández se insertan en sus planteles oficiales: \`S1067D1421\` (José Nucete Sardi), \`S0271D1421\` (Félix Román Duque) y \`OD17651418\` (Liceo La Playa).  
+>    * Casos de Don Tomás Labrador y Ciudad Tovar se cargan bajo su DEA oficial del RAC (\`OD02201421\`, \`ON14941421\`, \`OD02211403\`, \`OD02911421\` y \`ON14991421\`).  
+>    * Norma Guerrero se asigna a su DEA oficial \`ON15731418\`.  
 > 4. Solicitud de confirmación final para iniciar la inyección técnica masiva en Firestore a costo cero.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
 
@@ -5169,11 +5195,12 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Ejecución Exitosa de Inyección Masiva de 79 Funcionarios en Firebase (Skill 6):  
+>
 > 1. Inyección de Expedientes (Fase 1): Creados exitosamente los 79 documentos individuales en la colección \`cargos_personal\` (79/79 exitosos, 0 fallos), cargados con sus fichas completas extraídas del RAC (identidad, datos de contacto, cargos, asignación horaria y fechas).  
 > 2. Actualización de Planteles (Fase 2): Creados y sincronizados los 24 planteles oficiales en la colección \`planteles\`, consolidando sus listas visibles \`personal_resumen\` y contadores de nómina.  
 > 3. Adscripción Estricta al RAC Cumplida:  
->    - Profesores con horas en Alí Hernández quedan asentados legalmente en José Nucete Sardi (\`S1067D1421\`), Félix Román Duque (\`S0271D1421\`) y Liceo La Playa (\`OD17651418\`).  
->    - Personal de Jesús Alveiro Bustamante (\`OD02161421\`), Leonor de la Guerra (\`OD09661421\`), Santa Juana (\`OD05081421\`), San Isidro (\`OD05091421\`), Don Tomás Labrador (\`OD02201421\`) y demás planteles 100% operativos.  
+>    * Profesores con horas en Alí Hernández quedan asentados legalmente en José Nucete Sardi (\`S1067D1421\`), Félix Román Duque (\`S0271D1421\`) y Liceo La Playa (\`OD17651418\`).  
+>    * Personal de Jesús Alveiro Bustamante (\`OD02161421\`), Leonor de la Guerra (\`OD09661421\`), Santa Juana (\`OD05081421\`), San Isidro (\`OD05091421\`), Don Tomás Labrador (\`OD02201421\`) y demás planteles 100% operativos.  
 > 4. Verificación en Vivo: Comprobada la persistencia en tiempo real en Firestore.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
 
@@ -5191,18 +5218,19 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Identificación Detallada de los Dos Funcionarios Excluidos por Falta de Registro Oficial (Skill 6):  
+>
 > 1. Primer Funcionario:  
->    - Nombre: Enny Johanna Rojas Torres  
->    - Cédula reportada: 13.965.858  
->    - Plantel solicitante: Escuela Monseñor Moreno (DEA \`OD02281421\`)  
->    - Cargo reportado: Docente  
->    - Diagnóstico de auditoría: No existe registro en el RAC oficial ni por cédula ni por apellidos.  
+>    * Nombre: Enny Johanna Rojas Torres  
+>    * Cédula reportada: 13.965.858  
+>    * Plantel solicitante: Escuela Monseñor Moreno (DEA \`OD02281421\`)  
+>    * Cargo reportado: Docente  
+>    * Diagnóstico de auditoría: No existe registro en el RAC oficial ni por cédula ni por apellidos.  
 > 2. Segundo Funcionario:  
->    - Nombre: Maryory Lluiseth Rondón Iriarte  
->    - Cédula reportada: 21.330.126  
->    - Plantel solicitante: Escuela Don Tomás Labrador Ramírez (DEA \`OD02201421\`)  
->    - Cargo reportado: Docente / Personal  
->    - Diagnóstico de auditoría: No existe registro en el RAC oficial del estado.  
+>    * Nombre: Maryory Lluiseth Rondón Iriarte  
+>    * Cédula reportada: 21.330.126  
+>    * Plantel solicitante: Escuela Don Tomás Labrador Ramírez (DEA \`OD02201421\`)  
+>    * Cargo reportado: Docente / Personal  
+>    * Diagnóstico de auditoría: No existe registro en el RAC oficial del estado.  
 > 3. Recomendación de Gestión: Solicitar a las direcciones copia en físico/digital de la cédula de identidad y constancia de designación o contrato para verificar si hubo un error al transcribir el número o si corresponden a nuevos ingresos pendientes de inclusión ministerial.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
 
@@ -5220,6 +5248,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Entrega del Listado Consolidado por Plantel de los 79 Funcionarios Inyectados (Skill 6):  
+>
 > 1. Reporte Oficial Ordenado: Despliegue estructurado de los 24 planteles receptores en orden alfabético, detallando nombre institucional, código DEA, dependencia territorial y nómina con Cédula, Nombres Completos y Cargo Oficial RAC.  
 > 2. Total Cuadrado: 79 funcionarios cargados al 100% en Firestore.  
 > 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
@@ -5238,6 +5267,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Entrega del Listado Adaptado a Formato de Mensajería WhatsApp (Skill 6):  
+>
 > 1. Formateo Especial para WhatsApp: Estructurado sin tablas, utilizando viñetas limpias (•), resaltado con negritas WhatsApp (`*texto*`), encabezados con emojis (📍) y orden alfabético por plantel.  
 > 2. Contenido Completo y Exacto: 79 funcionarios en 24 planteles con Cédula, Nombres y Cargo Oficial del RAC.  
 > 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
@@ -5257,6 +5287,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Protocolo de Aprobación, Registro en Bitácora y Establecimiento de Nombre Clave Operativo (Skill 5 y Skill 6):  
+>
 > 1. Registro Obligatorio: Confirmada la satisfacción del Administrador, se actualizó la memoria histórica en \`bitacora.md\` y \`conversaciones.md\`.  
 > 2. Respaldo Remoto en Git / GitHub: Ejecución de commit institucional y sincronización a \`origin main\`.  
 > 3. Propuesta de Nombre Clave: Se define el comando clave \`CASO_HUERFANOS\` (o \`LOTE_HUERFANOS\`) para que el Administrador transmita futuros listados desordenados de directores activando de forma inmediata la auditoría forense, corrección de tipeo, conciliación RAC e inyección en Firestore.  
@@ -5276,14 +5307,14 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Activación Inmediata de Protocolo CASO_HUERFANOS y Auditoría Forense Lote 2 (Skill 6):  
+>
 > 1. Recepción y Homologación Territorial: El lote corresponde al Municipio Julio César Salas (código parroquial 1410: Arapuey y Palmira), no a Miranda. Se auditaron 95 funcionarios distribuidos en 21 planteles.  
 > 2. Resultados del Cruce contra RAC Estado Mérida:  
->    - Grupo 1 (Confirmados en RAC en su Mismo Plantel): 73 funcionarios (77%). Subsanados 4 errores graves de tipeo de cédula cometidos por los directores (María Senaida Araujo CI 18.864.222, José Yoel Moreno CI 23.593.459, Angélica María Montilla CI 20.040.481 y Yudith Gregoria Ramírez CI 17.696.935).  
->    - Grupo 2 (Confirmados en RAC en Otro Plantel): 3 funcionarios (Katiuska Rojas asignada en RAC a OD12241410, Beatriz Quevedo asignada a OD12241410 y Mario Gerardo Ramírez asignado a OD12301410).  
->    - Grupo 3 (Verdaderos Huérfanos / No en RAC): 19 funcionarios que no figuran en las nóminas regionales de julio.  
+>    * Grupo 1 (Confirmados en RAC en su Mismo Plantel): 73 funcionarios (77%). Subsanados 4 errores graves de tipeo de cédula cometidos por los directores (María Senaida Araujo CI 18.864.222, José Yoel Moreno CI 23.593.459, Angélica María Montilla CI 20.040.481 y Yudith Gregoria Ramírez CI 17.696.935).  
+>    * Grupo 2 (Confirmados en RAC en Otro Plantel): 3 funcionarios (Katiuska Rojas asignada en RAC a OD12241410, Beatriz Quevedo asignada a OD12241410 y Mario Gerardo Ramírez asignado a OD12301410).  
+>    * Grupo 3 (Verdaderos Huérfanos / No en RAC): 19 funcionarios que no figuran en las nóminas regionales de julio.  
 > 3. Propuesta Operativa de Inyección: Se presenta el balance al Administrador y se solicita luz verde para inyectar los 76 funcionarios confirmados (73 + 3) a costo cero en sus planteles oficiales según el RAC.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -5300,15 +5331,15 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Ejecución de Inyección y Entrega de Formato para WhatsApp (Skill 5 y Skill 6):  
+>
 > 1. Inyección Exitosa en Cloud Firestore:  
->    - Se inyectaron los 76 expedientes confirmados en la colección `cargos_personal` con la estructura de 42 atributos del RAC Estado Mérida.  
->    - Se actualizaron e inicializaron 17 documentos de planteles en la colección `planteles`, sincronizando `personal_resumen` y contadores `total_personal`. Cero errores de ejecución y consumo mínimo dentro de la cuota gratuita (Spark Plan).  
+>    * Se inyectaron los 76 expedientes confirmados en la colección `cargos_personal` con la estructura de 42 atributos del RAC Estado Mérida.  
+>    * Se actualizaron e inicializaron 17 documentos de planteles en la colección `planteles`, sincronizando `personal_resumen` y contadores `total_personal`. Cero errores de ejecución y consumo mínimo dentro de la cuota gratuita (Spark Plan).  
 > 2. Formato de Comunicación WhatsApp (Sin Tablas):  
->    - Se redacta el mensaje estructurado con viñetas, negritas y emojis listo para copiar y pegar.  
->    - Parte 1: 76 funcionarios agrupados en sus 17 planteles oficiales según el RAC, indicando correcciones de cédula subsanadas y reubicaciones legales.  
->    - Parte 2: 19 funcionarios no localizados en RAC agrupados por plantel reportado, con instrucciones para consignar cédula y contrato/designación ante Gestión Humana.  
+>    * Se redacta el mensaje estructurado con viñetas, negritas y emojis listo para copiar y pegar.  
+>    * Parte 1: 76 funcionarios agrupados en sus 17 planteles oficiales según el RAC, indicando correcciones de cédula subsanadas y reubicaciones legales.  
+>    * Parte 2: 19 funcionarios no localizados en RAC agrupados por plantel reportado, con instrucciones para consignar cédula y contrato/designación ante Gestión Humana.  
 > 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -5318,19 +5349,19 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Usuario (Administrador)
 
 > **Mensaje del Usuario:**  
-> correos_afectados: eb21denoviembre@gmail.com  
+> correos_afectados: <eb21denoviembre@gmail.com>  
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Protocolo de Regularización, Sincronización de Plantel y Enlace Seguro de Acceso (Skill 5 y Skill 6):  
+>
 > 1. Verificación Institucional: Cuenta `eb21denoviembre@gmail.com` vinculada a la Directora **Magaly Calderón Dugarte** (C.I. 15.174.192), al frente de la **E.B. 21 de Noviembre / Epónimo "Leopoldina Albornoz" (Código DEA `OD02891419`)**, ubicada en la Parroquia Tabay, Municipio Santos Marquina (Dependencia Nacional, Código Estadístico 140802).  
 > 2. Sincronización Integral de Nómina Oficial RAC (35 Funcionarios):  
->    - Se actualizó el documento institucional `planteles/OD02891419` incorporando el arreglo `personal_resumen` y fijando `total_personal: 35`.  
->    - Se inyectaron exitosamente al 100% los 35 expedientes completos en `cargos_personal/OD02891419_${cedula}` con los 42 atributos oficiales del RAC.  
+>    * Se actualizó el documento institucional `planteles/OD02891419` incorporando el arreglo `personal_resumen` y fijando `total_personal: 35`.  
+>    * Se inyectaron exitosamente al 100% los 35 expedientes completos en `cargos_personal/OD02891419_${cedula}` con los 42 atributos oficiales del RAC.  
 > 3. Enlace Directo Out-of-Band (OOB): Se generó enlace oficial seguro para restablecimiento inmediato de contraseña vía WhatsApp sin depender del buzón de correo.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -5340,19 +5371,19 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Usuario (Administrador)
 
 > **Mensaje del Usuario:**  
-> correos_afectados: uebsimonacorredordepico1@gmail.com  
+> correos_afectados: <uebsimonacorredordepico1@gmail.com>  
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Protocolo de Regularización, Sincronización de Plantel y Enlace Seguro de Acceso (Skill 5 y Skill 6):  
+>
 > 1. Verificación Institucional: Cuenta `uebsimonacorredordepico1@gmail.com` vinculada a la Directora **Magdalena Mendoza** (C.I. 10.903.909), al frente de la **E.B. Los Aráquez / Epónimo "Simona Corredor de Picón" (Código DEA `OD14831420`)**, ubicada en la Parroquia Lagunillas, Municipio Sucre (Dependencia Nacional, Código Estadístico 140887).  
 > 2. Sincronización Integral de Nómina Oficial RAC (29 Funcionarios):  
->    - Se actualizó el documento institucional `planteles/OD14831420` incorporando el arreglo consolidado `personal_resumen` y fijando `total_personal: 29`.  
->    - Se inyectaron exitosamente al 100% los 29 expedientes completos en `cargos_personal/OD14831420_${cedula}` con los 42 atributos oficiales del RAC.  
+>    * Se actualizó el documento institucional `planteles/OD14831420` incorporando el arreglo consolidado `personal_resumen` y fijando `total_personal: 29`.  
+>    * Se inyectaron exitosamente al 100% los 29 expedientes completos en `cargos_personal/OD14831420_${cedula}` con los 42 atributos oficiales del RAC.  
 > 3. Enlace Directo Out-of-Band (OOB): Se generó enlace oficial seguro para restablecimiento inmediato de contraseña vía WhatsApp sin depender del servidor de correo.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -5362,22 +5393,22 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Usuario (Administrador)
 
 > **Mensaje del Usuario:**  
-> correos_afectados:   
-> escuelafranciscomiranda88@gmail.com, escuelamariabriseno@gmail.com  
+> correos_afectados:
+> <escuelafranciscomiranda88@gmail.com>, <escuelamariabriseno@gmail.com>  
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Protocolo de Regularización, Sincronización de Planteles y Enlaces Seguros de Acceso (Skill 5 y Skill 6):  
+>
 > 1. Verificación Institucional: Ambas cuentas pertenecen a la misma docente directiva, **Prof. Beatriz del Carmen Rivas Terán** (C.I. 18.149.517, Tel. 0416-3464131), en la Parroquia Piñango, Municipio Miranda:  
->    - Cuenta 1 (`escuelafranciscomiranda88@gmail.com`): Asignada a la **Escuela Ezequiel Zamora (Código DEA `OD13501413`)**.  
->    - Cuenta 2 (`escuelamariabriseno@gmail.com`): Asignada a la **Escuela Simón Bolívar (Código DEA `OD13551413`)**.  
+>    * Cuenta 1 (`escuelafranciscomiranda88@gmail.com`): Asignada a la **Escuela Ezequiel Zamora (Código DEA `OD13501413`)**.  
+>    * Cuenta 2 (`escuelamariabriseno@gmail.com`): Asignada a la **Escuela Simón Bolívar (Código DEA `OD13551413`)**.  
 > 2. Sincronización Integral de Nóminas Oficiales RAC:  
->    - *Plantel OD13501413:* Actualizado con los 2 trabajadores oficiales en `personal_resumen` e inyectados 2 documentos en `cargos_personal`.  
->    - *Plantel OD13551413:* Actualizado con los 8 trabajadores oficiales en `personal_resumen` e inyectados 8 documentos en `cargos_personal` (incluyendo la ficha de la Directora Beatriz Rivas).  
+>    * *Plantel OD13501413:* Actualizado con los 2 trabajadores oficiales en `personal_resumen` e inyectados 2 documentos en `cargos_personal`.  
+>    * *Plantel OD13551413:* Actualizado con los 8 trabajadores oficiales en `personal_resumen` e inyectados 8 documentos en `cargos_personal` (incluyendo la ficha de la Directora Beatriz Rivas).  
 > 3. Enlaces Directos Out-of-Band (OOB): Generados y entregados enlaces seguros oficiales individuales para restablecimiento inmediato vía WhatsApp sin depender de bandejas de correo.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -5393,16 +5424,16 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Activación de Protocolo CASO_HUERFANOS y Auditoría Forense Lote 3 (Skill 5 y Skill 6):  
+>
 > 1. Recepción y Homologación Territorial: El lote corresponde al **Municipio Rangel** (código parroquial 1417: Mucuchíes, Cacute, San Rafael, Mucurubá). Se auditaron 30 funcionarios en 8 planteles.  
 > 2. Resultados del Cruce contra RAC Estado Mérida:  
->    - Grupo 1 (Confirmados en RAC en su Mismo Plantel): 23 funcionarios (76.7%).  
->    - Grupo 2 (Confirmados en RAC en Otro Plantel de Nómina): 1 funcionaria (Edelmira del Carmen Rivas Díaz, CI 11.953.660, solicitada en OD13981417 pero asignada oficialmente en RAC a ON00401417 Liceo Nocturno Mucuchíes).  
->    - Subsanación de Error de Tipeo: Jhemireet Cristina Erazo Rangel reportada erróneamente con CI 19.592.973, rescatada y autenticada con su cédula oficial RAC **19.592.573** (OD03331417).  
->    - Grupo 3 (Verdaderos Huérfanos / No en RAC): 6 funcionarios (Betzy Sánchez en OD15461417; Eneida Parra, Ana Luisa Rangel, Yohana Rangel y Judith Santiago en OD03161417; y aseadora CI 15.516.052 en OD13981417).  
+>    * Grupo 1 (Confirmados en RAC en su Mismo Plantel): 23 funcionarios (76.7%).  
+>    * Grupo 2 (Confirmados en RAC en Otro Plantel de Nómina): 1 funcionaria (Edelmira del Carmen Rivas Díaz, CI 11.953.660, solicitada en OD13981417 pero asignada oficialmente en RAC a ON00401417 Liceo Nocturno Mucuchíes).  
+>    * Subsanación de Error de Tipeo: Jhemireet Cristina Erazo Rangel reportada erróneamente con CI 19.592.973, rescatada y autenticada con su cédula oficial RAC **19.592.573** (OD03331417).  
+>    * Grupo 3 (Verdaderos Huérfanos / No en RAC): 6 funcionarios (Betzy Sánchez en OD15461417; Eneida Parra, Ana Luisa Rangel, Yohana Rangel y Judith Santiago en OD03161417; y aseadora CI 15.516.052 en OD13981417).  
 > 3. Balance Consolidado: 24 confirmados para inyección y 6 para regularización documental.  
 > 4. Solicitud de Luz Verde para inyección y entrega del formato de WhatsApp.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -5418,15 +5449,15 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Ejecución de Inyección Lote 3 y Entrega de Formato para WhatsApp (Skill 5 y Skill 6):  
+>
 > 1. Inyección Exitosa en Cloud Firestore:  
->    - Se inyectaron al 100% los 24 expedientes confirmados en la colección `cargos_personal` con la estructura de 42 atributos del RAC Estado Mérida.  
->    - Se actualizaron 6 documentos de planteles en la colección `planteles`, sincronizando `personal_resumen` y contadores `total_personal` (cero errores, consumo dentro del cupo gratuito Spark).  
+>    * Se inyectaron al 100% los 24 expedientes confirmados en la colección `cargos_personal` con la estructura de 42 atributos del RAC Estado Mérida.  
+>    * Se actualizaron 6 documentos de planteles en la colección `planteles`, sincronizando `personal_resumen` y contadores `total_personal` (cero errores, consumo dentro del cupo gratuito Spark).  
 > 2. Formato de Comunicación WhatsApp (Sin Tablas):  
->    - Mensaje redactado con viñetas, negritas y emojis listo para copiar y pegar.  
->    - Parte 1: 24 funcionarios registrados en sus 6 planteles oficiales según nómina RAC, con corrección de cédula de Jhemireet Erazo (19.592.573) y adscripción oficial de Edelmira Rivas (Liceo Nocturno Mucuchíes).  
->    - Parte 2: 6 funcionarios pendientes por consignar recaudos ante Gestión Humana.  
+>    * Mensaje redactado con viñetas, negritas y emojis listo para copiar y pegar.  
+>    * Parte 1: 24 funcionarios registrados en sus 6 planteles oficiales según nómina RAC, con corrección de cédula de Jhemireet Erazo (19.592.573) y adscripción oficial de Edelmira Rivas (Liceo Nocturno Mucuchíes).  
+>    * Parte 2: 6 funcionarios pendientes por consignar recaudos ante Gestión Humana.  
 > 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -5443,17 +5474,17 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Protocolo de Control de Calidad Estricto, Verificación Anti-Duplicidad y Auditoría Forense Lote 4 (Skill 5 y Skill 6):  
+>
 > 1. Verificación Exhaustiva Anti-Duplicados en Cloud Firestore: Se ejecutó consulta directa sobre la base de datos en vivo (`sgh-merida`). Las 7 cédulas a incorporar **NO existen actualmente en ninguna parte de `cargos_personal` ni en `planteles`** (cero riesgo de duplicidad).  
 > 2. Detección Forense del Origen de "Datos Cruzados":  
->    - La dirección reportó a Fran David Calderón (Vigilante) con C.I. incompleta `194863.` en la "Escuela José Eberto Calderón Albarrán" bajo el código DEA `OD13981417`.  
->    - En el maestro oficial del RAC y de Planteles (`migracion/RAC ESTADO MERIDA - PLANTELES.csv`), `OD13981417` pertenece a la **Escuela José Natividad Rivas Sánchez** (San Rafael). La "Escuela José Eberto Calderón" (El Vergel, Mucuchíes) posee el código DEA oficial **`OD03381417`**.  
->    - Se detecta que los directores confunden y cruzan los códigos DEA de sus instituciones al reportar. El funcionario tampoco existe en el RAC y tiene cédula truncada, por lo que **NO se inyecta** para evitar corromper los datos de la institución vecina.  
+>    * La dirección reportó a Fran David Calderón (Vigilante) con C.I. incompleta `194863.` en la "Escuela José Eberto Calderón Albarrán" bajo el código DEA `OD13981417`.  
+>    * En el maestro oficial del RAC y de Planteles (`migracion/RAC ESTADO MERIDA - PLANTELES.csv`), `OD13981417` pertenece a la **Escuela José Natividad Rivas Sánchez** (San Rafael). La "Escuela José Eberto Calderón" (El Vergel, Mucuchíes) posee el código DEA oficial **`OD03381417`**.  
+>    * Se detecta que los directores confunden y cruzan los códigos DEA de sus instituciones al reportar. El funcionario tampoco existe en el RAC y tiene cédula truncada, por lo que **NO se inyecta** para evitar corromper los datos de la institución vecina.  
 > 3. Balance del Lote 4:  
->    - 7 Confirmados al 100% en RAC y limpios de duplicados (3 en OD03391417 y 4 en S2905D1417).  
->    - 1 Caso retenido por cédula incompleta y DEA discordante (Fran David Calderón).  
+>    * 7 Confirmados al 100% en RAC y limpios de duplicados (3 en OD03391417 y 4 en S2905D1417).  
+>    * 1 Caso retenido por cédula incompleta y DEA discordante (Fran David Calderón).  
 > 4. Solicitud de Luz Verde para inyección segura y entrega de mensaje para WhatsApp.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -5469,16 +5500,16 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Ejecución de Inyección Lote 4 y Entrega de Formato para WhatsApp (Skill 5 y Skill 6):  
+>
 > 1. Inyección Exitosa en Cloud Firestore:  
->    - Se inyectaron al 100% los 7 expedientes confirmados en la colección `cargos_personal` con el esquema oficial de 42 atributos del RAC Estado Mérida.  
->    - Se actualizaron los 2 planteles destino en la colección `planteles`: `OD03391417` (Escuela José Grimaldo Lobo) y `S2905D1417` (Complejo Educativo Gilberto Benítez Lobo), sincronizando `personal_resumen` y contadores `total_personal`.  
->    - Cero duplicados generados y cero registros cruzados. El caso con DEA discordante y cédula incompleta (Fran David Calderón en OD13981417 / OD03381417) quedó retenido fuera de la base de datos.  
+>    * Se inyectaron al 100% los 7 expedientes confirmados en la colección `cargos_personal` con el esquema oficial de 42 atributos del RAC Estado Mérida.  
+>    * Se actualizaron los 2 planteles destino en la colección `planteles`: `OD03391417` (Escuela José Grimaldo Lobo) y `S2905D1417` (Complejo Educativo Gilberto Benítez Lobo), sincronizando `personal_resumen` y contadores `total_personal`.  
+>    * Cero duplicados generados y cero registros cruzados. El caso con DEA discordante y cédula incompleta (Fran David Calderón en OD13981417 / OD03381417) quedó retenido fuera de la base de datos.  
 > 2. Formato de Comunicación WhatsApp (Sin Tablas):  
->    - Mensaje redactado con viñetas, negritas y emojis listo para copiar y enviar a los directores del Municipio Rangel.  
->    - Parte 1: 7 funcionarios verificados y registrados en sus 2 planteles oficiales.  
->    - Parte 2: 1 caso pendiente por aclarar cédula y código DEA oficial con recaudos ante Gestión Humana.  
+>    * Mensaje redactado con viñetas, negritas y emojis listo para copiar y enviar a los directores del Municipio Rangel.  
+>    * Parte 1: 7 funcionarios verificados y registrados en sus 2 planteles oficiales.  
+>    * Parte 2: 1 caso pendiente por aclarar cédula y código DEA oficial con recaudos ante Gestión Humana.  
 > 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -5497,10 +5528,10 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Aprobación de Resultados y Actualización de Directriz de Formato WhatsApp (Skill 5 y Skill 6):  
+>
 > 1. Confirmación de Satisfacción: Registrada la conformidad del Administrador respecto al Lote 4.  
 > 2. Nueva Regla de Formato para WhatsApp: Se suprime de forma permanente el párrafo de "INSTRUCCIÓN" sobre consignar recaudos ante Gestión Humana en la Parte 2 del mensaje de WhatsApp.  
 > 3. En espera activa del siguiente lote bajo el protocolo `CASO_HUERFANOS`.
-
 
 ---
 
@@ -5518,17 +5549,17 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Protocolo de Control de Calidad y Auditoría Forense Lote 5 (Skill 5 y Skill 6):  
+>
 > 1. Verificación e Identificación Institucional:  
->    - Plantel: **Escuela La Vega de Tabay / Epónimo "Diolys María Paredes" (Código DEA `OD14281419`)**, Parroquia Tabay, Municipio Santos Marquina.  
->    - Ambas funcionarias figuran en el maestro oficial `RAC ESTADO MERIDA - PERSONAL.csv` adscritas exactamente a este código DEA `OD14281419`:  
+>    * Plantel: **Escuela La Vega de Tabay / Epónimo "Diolys María Paredes" (Código DEA `OD14281419`)**, Parroquia Tabay, Municipio Santos Marquina.  
+>    * Ambas funcionarias figuran en el maestro oficial `RAC ESTADO MERIDA - PERSONAL.csv` adscritas exactamente a este código DEA `OD14281419`:  
 >      * Yenny Karina Andrade Moreno (C.I. 19.592.468 - Cocinero II, recibo 8991N).  
 >      * María Jesús Ramírez Hernández (C.I. 20.434.134 - Docente Único).  
 > 2. Verificación Anti-Duplicados en Firestore:  
->    - Se consultó en vivo la colección `cargos_personal` y el arreglo `personal_resumen` de `planteles/OD14281419`: ninguna de las dos cédulas existe previamente en la base de datos (0 duplicados).  
+>    * Se consultó en vivo la colección `cargos_personal` y el arreglo `personal_resumen` de `planteles/OD14281419`: ninguna de las dos cédulas existe previamente en la base de datos (0 duplicados).  
 > 3. Cumplimiento de Formato WhatsApp: Se suprime de manera estricta el párrafo de instrucción en la Parte 2.  
 > 4. Solicitud de Luz Verde para inyección.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -5545,14 +5576,14 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Ejecución de Inyección Lote 5 y Entrega de Formato para WhatsApp (Skill 5 y Skill 6):  
+>
 > 1. Inyección Exitosa en Cloud Firestore:  
->    - Se inyectaron al 100% los 2 expedientes en la colección `cargos_personal` (`OD14281419_19592468` y `OD14281419_20434134`) con los 42 atributos institucionales del RAC.  
->    - Se actualizó el plantel `planteles/OD14281419` (*La Vega de Tabay / Diolys María Paredes*), incrementando su nómina de 12 a 14 trabajadores en `personal_resumen`.  
->    - Cero duplicados generados.  
+>    * Se inyectaron al 100% los 2 expedientes en la colección `cargos_personal` (`OD14281419_19592468` y `OD14281419_20434134`) con los 42 atributos institucionales del RAC.  
+>    * Se actualizó el plantel `planteles/OD14281419` (*La Vega de Tabay / Diolys María Paredes*), incrementando su nómina de 12 a 14 trabajadores en `personal_resumen`.  
+>    * Cero duplicados generados.  
 > 2. Formato de Comunicación WhatsApp:  
->    - Mensaje entregado con viñetas, negritas y emojis, omitiendo permanentemente el párrafo de instrucción en la Parte 2 según la directriz institucional.  
+>    * Mensaje entregado con viñetas, negritas y emojis, omitiendo permanentemente el párrafo de instrucción en la Parte 2 según la directriz institucional.  
 > 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -5566,31 +5597,32 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > Código DEA: OD14211418  
 > institución: ESCUELA DR. MISAEL ROSALES  
 > Cédula y nombres del Funcionario  
+>
 > * V - 19.848.470 María Isabel Pereira Moreno  
 > * V - 20.395.518 Nohelia Andreina Vivas Vivas  
 > * V- 20.218.551 Luis Gerardo Belandria Mora  
 > * V- 20.396.223 Ana Gabriel Pérez Pereira  
 > * V- 18.809.454 Grisel Dairis Vivas Gutiérrez  
-> * V- 20.829.672 Domingo Alberto Arellano Carrero   
+> * V- 20.829.672 Domingo Alberto Arellano Carrero
 > * V- 23.493.571 Oscar Cuadros Espinel  
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Protocolo de Control de Calidad y Auditoría Forense Lote 6 Consolidado (Skill 5 y Skill 6):  
+>
 > 1. Verificación e Identificación de los 7 Casos Agregados:  
->    - Plantel: **Escuela Dr. Misael Rosales (Código DEA `OD14211418`)**, Municipio Rivas Dávila.  
->    - 100% de coincidencia en el RAC regional: los 7 funcionarios pertenecen exactamente a la Escuela Dr. Misael Rosales.  
->    - Rescate forense por error de tipeo en cédula: Grisel Dairis Vivas Gutiérrez (reportada con CI 18.809.454) corregida a su cédula oficial en RAC **V-18.209.454** (Aseador II, titular, código RAC 8032N).  
+>    * Plantel: **Escuela Dr. Misael Rosales (Código DEA `OD14211418`)**, Municipio Rivas Dávila.  
+>    * 100% de coincidencia en el RAC regional: los 7 funcionarios pertenecen exactamente a la Escuela Dr. Misael Rosales.  
+>    * Rescate forense por error de tipeo en cédula: Grisel Dairis Vivas Gutiérrez (reportada con CI 18.809.454) corregida a su cédula oficial en RAC **V-18.209.454** (Aseador II, titular, código RAC 8032N).  
 > 2. Verificación Anti-Duplicados en Firestore:  
->    - Se consultaron los 7 casos contra la colección `cargos_personal` y `personal_resumen` de `OD14211418` (que poseía 4 funcionarios preexistentes). Cero duplicados detectados.  
+>    * Se consultaron los 7 casos contra la colección `cargos_personal` y `personal_resumen` de `OD14211418` (que poseía 4 funcionarios preexistentes). Cero duplicados detectados.  
 > 3. Balance Consolidado Lote 6 (Municipio Rivas Dávila):  
->    - Total reportados: 54 casos en 9 planteles.  
->    - Confirmados en RAC: 39 funcionarios con 42 atributos institucionales.  
->    - No localizados en RAC (Huérfanos puros): 15 funcionarios.  
+>    * Total reportados: 54 casos en 9 planteles.  
+>    * Confirmados en RAC: 39 funcionarios con 42 atributos institucionales.  
+>    * No localizados en RAC (Huérfanos puros): 15 funcionarios.  
 > 4. Solicitud de Luz Verde para inyección segura de los 39 funcionarios en los 9 planteles.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -5606,9 +5638,10 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Ejecución de Inyección Lote 6 y Entrega de Formato para WhatsApp (Skill 5 y Skill 6):  
+>
 > 1. Inyección Exitosa en Cloud Firestore:  
->    - Se inyectaron al 100% los 39 expedientes individuales en la colección `cargos_personal` (`${dea}_${cedula}`) con el esquema de 42 atributos del RAC Estado Mérida.  
->    - Se actualizaron los 9 planteles destino en la colección `planteles`:  
+>    * Se inyectaron al 100% los 39 expedientes individuales en la colección `cargos_personal` (`${dea}_${cedula}`) con el esquema de 42 atributos del RAC Estado Mérida.  
+>    * Se actualizaron los 9 planteles destino en la colección `planteles`:  
 >      * `OD08191418` (Escuela Víctor Evencio Castillo): +6 funcionarios (Total: 25).  
 >      * `OD14221418` (Escuela Zaida Mora): +1 funcionario (Total: 20).  
 >      * `OD14061418` (Escuela Rita Verdi): +3 funcionarios (Total: 15).  
@@ -5618,11 +5651,10 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 >      * `OD00701418` (Complejo Educativo Br. Apolonio Rosales): +12 funcionarios (Total: 60).  
 >      * `OD01921418` (Escuela Flor de Maldonado): +4 funcionarios (Total: 54).  
 >      * `OD14211418` (Escuela Dr. Misael Rosales): +7 funcionarios (Total: 11).  
->    - Cero duplicados generados y cero registros cruzados en la base de datos de producción.  
+>    * Cero duplicados generados y cero registros cruzados en la base de datos de producción.  
 > 2. Formato de Comunicación WhatsApp:  
->    - Mensaje entregado con viñetas, negritas y emojis, omitiendo permanentemente el párrafo de instrucción en la Parte 2 según la directriz institucional.  
+>    * Mensaje entregado con viñetas, negritas y emojis, omitiendo permanentemente el párrafo de instrucción en la Parte 2 según la directriz institucional.  
 > 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -5634,26 +5666,26 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > **Mensaje del Usuario:**  
 > CASO_HUERFANOS  
 > Nombre del Plantel: Complejo Educativo Omar Gregorio Rivas  
-> Código DEA: S2855D1410   
+> Código DEA: S2855D1410
 > CI. Nombres y Apellidos Docentes:  
-> CI Nombres Y Apellidos ADM.:   
-> ✅Yuleny Del Carmen Bernal Rangel   
+> CI Nombres Y Apellidos ADM.:
+> ✅Yuleny Del Carmen Bernal Rangel
 > C. I 19529390  
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Protocolo de Control de Calidad y Auditoría Forense Lote 7 (Skill 5 y Skill 6):  
+>
 > 1. Verificación e Identificación Institucional:  
->    - Plantel: **Complejo Educativo Omar Gregorio Rivas / E.B. Palmira (Código DEA `S2855D1410`)**, Municipio Julio César Salas.  
->    - Coincidencia exacta al 100% en el maestro oficial `RAC ESTADO MERIDA - PERSONAL.csv`:  
+>    * Plantel: **Complejo Educativo Omar Gregorio Rivas / E.B. Palmira (Código DEA `S2855D1410`)**, Municipio Julio César Salas.  
+>    * Coincidencia exacta al 100% en el maestro oficial `RAC ESTADO MERIDA - PERSONAL.csv`:  
 >      * Yuleny Del Carmen Bernal Rangel (C.I. 19.529.390): Tipo Personal Administrativo, Cargo Bachiller II (Código RAC `110000`), 37 horas administrativas semanales, condición titular activo, adscrita exactamente a `S2855D1410`.  
 > 2. Verificación Anti-Duplicados en Firestore:  
->    - Se consultó en vivo la colección `cargos_personal` y el arreglo `personal_resumen` de `planteles/S2855D1410` (que contaba con 8 funcionarios): ninguna coincidencia previa (0 duplicados).  
+>    * Se consultó en vivo la colección `cargos_personal` y el arreglo `personal_resumen` de `planteles/S2855D1410` (que contaba con 8 funcionarios): ninguna coincidencia previa (0 duplicados).  
 > 3. Formato WhatsApp: Generado mensaje listo para copiar omitiendo de forma definitiva el párrafo de instrucción sobre recaudos.  
 > 4. Solicitud de Luz Verde para inyección segura.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -5669,13 +5701,13 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Ejecución de Inyección Lote 7 y Entrega de Formato para WhatsApp (Skill 5 y Skill 6):  
+>
 > 1. Inyección Exitosa en Cloud Firestore:  
->    - Creado documento `cargos_personal/S2855D1410_19529390` con los 42 atributos del RAC regional del Estado Mérida.  
->    - Actualizado el documento `planteles/S2855D1410` (*Complejo Educativo Omar Gregorio Rivas*), incorporando a la trabajadora en `personal_resumen` y elevando el contador `total_personal` de 8 a 9 funcionarios.  
->    - Cero duplicados generados.  
+>    * Creado documento `cargos_personal/S2855D1410_19529390` con los 42 atributos del RAC regional del Estado Mérida.  
+>    * Actualizado el documento `planteles/S2855D1410` (*Complejo Educativo Omar Gregorio Rivas*), incorporando a la trabajadora en `personal_resumen` y elevando el contador `total_personal` de 8 a 9 funcionarios.  
+>    * Cero duplicados generados.  
 > 2. Formato de Comunicación WhatsApp: Mensaje entregado con viñetas, negritas y emojis listo para enviar a directivos.  
 > 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -5691,20 +5723,20 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Rectificación Institucional y Aplicación de Regla Estricta Anti-Traslados (Skill 5 y Skill 6):  
+>
 > 1. Principio Institucional Ratificado:  
->    - Se prohíbe de manera absoluta asumir o procesar traslados en el SGH si el funcionario no figura formalmente en la nómina RAC del plantel consultado. Los traslados corresponden con exclusividad a la Dirección de Gestión Humana mediante resolución administrativa.  
+>    * Se prohíbe de manera absoluta asumir o procesar traslados en el SGH si el funcionario no figura formalmente en la nómina RAC del plantel consultado. Los traslados corresponden con exclusividad a la Dirección de Gestión Humana mediante resolución administrativa.  
 > 2. Reclasificación del Reporte para el Plantel **OD02341419 (J.I. Estado Apure)**:  
->    - **Personal Legítimo a Incorporar (3 funcionarios con coincidencia exacta de adscripción en RAC):**  
+>    * **Personal Legítimo a Incorporar (3 funcionarios con coincidencia exacta de adscripción en RAC):**  
 >      * Anakary Alarcón Peña (C.I. 23.583.051 - Receptor Informador).  
 >      * Mercedes Liliana Moreno Maldonado (C.I. 19.145.913 - Cocinero).  
 >      * María Daniela Zerpa Dugarte (C.I. 20.849.548 - Cocinero II).  
->    - **Personal Retenido para Reporte de Adscripción Oficial (2 funcionarios NO transferidos):**  
+>    * **Personal Retenido para Reporte de Adscripción Oficial (2 funcionarios NO transferidos):**  
 >      * Natacha Andreina Albornoz Dugarte (C.I. 27.310.028) -> Adscrita oficialmente en RAC a `OD17621419` (J.I. 21 de Noviembre, Santos Marquina).  
 >      * Florely Hasmar Reinoza Villarreal (C.I. 17.129.554) -> Adscrita oficialmente en RAC a `OD02551412` (J.I. Vicente Dávila, Libertador).  
 > 3. Formato WhatsApp: Mensaje rectificado separando claramente a los 3 funcionarios adscritos de los 2 casos retenidos en su sede de origen.  
 > 4. Solicitud de Luz Verde para inyección estricta de los 3 funcionarios legítimos.  
 > 5. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -5720,13 +5752,13 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Ejecución de Inyección Estricta Lote 8 y Entrega de Formato para WhatsApp (Skill 5 y Skill 6):  
+>
 > 1. Inyección Exitosa en Cloud Firestore:  
->    - Creados 3 expedientes individuales en la colección `cargos_personal` (`OD02341419_23583051`, `OD02341419_19145913`, `OD02341419_20849548`) con el esquema de 42 atributos del RAC regional del Estado Mérida.  
->    - Actualizado el documento `planteles/OD02341419` (*J.I. Estado Apure*), inicializando su plantilla `personal_resumen` de 0 a 3 funcionarios activos.  
->    - Cero duplicados y cero traslados indebidos. Las 2 funcionarias adscritas a otros planteles se mantuvieron intactas en sus sedes oficiales de origen.  
+>    * Creados 3 expedientes individuales en la colección `cargos_personal` (`OD02341419_23583051`, `OD02341419_19145913`, `OD02341419_20849548`) con el esquema de 42 atributos del RAC regional del Estado Mérida.  
+>    * Actualizado el documento `planteles/OD02341419` (*J.I. Estado Apure*), inicializando su plantilla `personal_resumen` de 0 a 3 funcionarios activos.  
+>    * Cero duplicados y cero traslados indebidos. Las 2 funcionarias adscritas a otros planteles se mantuvieron intactas en sus sedes oficiales de origen.  
 > 2. Formato de Comunicación WhatsApp: Mensaje entregado listo para su difusión a directivos.  
 > 3. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -5737,25 +5769,26 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Mensaje del Usuario:**  
 > El director de la escuela OD14281419 me dice que sigue sin ver los funcionarios que le fueron tramitado:  
+>
 > * V-19.592.468 - YENNY KARINA ANDRADE MORENO - COCINERO II  
 > * V-20.434.134 - MARIA JESUS RAMIREZ HERNANDEZ - DOCENTE UNICO  
-> Tu me dijiste que ya los habías subido a Firebase.   
+> Tu me dijiste que ya los habías subido a Firebase.
 > Desde el usuario municipal de santos marquina se corroboró por medio de la ficha que ciertamente los funcionarios no están. ¿Qué me puedes decir al respecto?  
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Diagnóstico Forense y Corrección en Caliente de Visibilidad en Firestore (Skill 5 y Skill 6):  
+>
 > 1. Diagnóstico de Causa Raíz Técnica:  
->    - **Discrepancia en Llave de Consulta:** La aplicación web (`personalWizard.js` línea 1590 y `admin.js` línea 5101) ejecuta estrictamente `where('codigo-plantel', '==', codigoDEA)`. En la inyección previa se había almacenado la llave en camelCase (`codigoPlantel`), provocando que Firestore ignorara los documentos en la consulta del director y del supervisor.  
->    - **Discrepancia en Ficha Municipal:** En `planteles/OD14281419` se guardó la propiedad en plural (`nombres`) en vez de la esperada por la ficha (`nombre`).  
->    - **Caché en Memoria del Navegador:** Los usuarios mantenían cargada la sesión previa sin recarga forzada.  
+>    * **Discrepancia en Llave de Consulta:** La aplicación web (`personalWizard.js` línea 1590 y `admin.js` línea 5101) ejecuta estrictamente `where('codigo-plantel', '==', codigoDEA)`. En la inyección previa se había almacenado la llave en camelCase (`codigoPlantel`), provocando que Firestore ignorara los documentos en la consulta del director y del supervisor.  
+>    * **Discrepancia en Ficha Municipal:** En `planteles/OD14281419` se guardó la propiedad en plural (`nombres`) en vez de la esperada por la ficha (`nombre`).  
+>    * **Caché en Memoria del Navegador:** Los usuarios mantenían cargada la sesión previa sin recarga forzada.  
 > 2. Corrección Inmediata Aplicada en Firestore (`scratch/fix_od14281419.js`):  
->    - Actualizados ambos documentos en `cargos_personal` con esquema integral dual (kebab-case y camelCase): `codigo-plantel`, `codigoDEA`, `codigoPlantel`, `nombre-apellido`, `nombre`, `cedula-identidad`, `tipo-personal`, `situacion-laboral`.  
->    - Actualizado `planteles/OD14281419` con sus 14 funcionarias normalizadas en `personal_resumen` y `total_personal: 14`.  
+>    * Actualizados ambos documentos en `cargos_personal` con esquema integral dual (kebab-case y camelCase): `codigo-plantel`, `codigoDEA`, `codigoPlantel`, `nombre-apellido`, `nombre`, `cedula-identidad`, `tipo-personal`, `situacion-laboral`.  
+>    * Actualizado `planteles/OD14281419` con sus 14 funcionarias normalizadas en `personal_resumen` y `total_personal: 14`.  
 > 3. Instrucción al Usuario: Se orientó a solicitar al Director y al Supervisor la recarga forzada con `Ctrl + F5` para refrescar la memoria del navegador.  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -5771,10 +5804,10 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Conformidad Registrada y Prevención Arquitectónica (Skill 5 y Skill 6):  
+>
 > 1. Aprobación y Satisfacción: Se documenta la satisfacción del Administrador con la resolución efectiva de la visibilidad de los funcionarios en la plataforma.  
 > 2. Aprendizaje y Mejora Estructural: Se estandariza el generador de inyecciones para que nunca más se omitan las llaves canónicas en kebab-case (`codigo-plantel`, `codigoDEA`, `nombre-apellido`, `nombre`) requeridas por el frontend, garantizando compatibilidad absoluta y transparencia en tiempo real.  
 > 3. En espera activa de los siguientes requerimientos o casos de huérfanos.
-
 
 ---
 
@@ -5791,19 +5824,19 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Diagnóstico de Causa Raíz y Corrección de Persistencia/Caché en Edición de Planteles (v2.29.7):  
+>
 > 1. Diagnóstico Técnico:  
->    - La actualización en Firestore (`updateDoc`) se completaba en Google Cloud, pero `admin.js` llamaba a `loadPlanteles()`, la cual leía de inmediato la copia estática en `sessionStorage` (`sgh_cache_planteles_ESTADAL` y municipales), sobreescribiendo los datos recién editados con la versión vieja en la memoria del navegador.  
->    - `window._cacheSupervision` retenía el objeto desactualizado en la ficha de supervisión.  
->    - Nombres guardados en formato plano histórico no cargaban en `p-nominal` al abrir el modal.  
+>    * La actualización en Firestore (`updateDoc`) se completaba en Google Cloud, pero `admin.js` llamaba a `loadPlanteles()`, la cual leía de inmediato la copia estática en `sessionStorage` (`sgh_cache_planteles_ESTADAL` y municipales), sobreescribiendo los datos recién editados con la versión vieja en la memoria del navegador.  
+>    * `window._cacheSupervision` retenía el objeto desactualizado en la ficha de supervisión.  
+>    * Nombres guardados en formato plano histórico no cargaban en `p-nominal` al abrir el modal.  
 > 2. Corrección Integral:  
->    - Actualización directa de `currentPlanteles` en memoria tras guardar, purga y refresco de `sessionStorage`.  
->    - Invalidación de caché en `_cacheSupervision` y soporte de `forzarSync` en `loadPlanteles()`.  
->    - Adición del botón `🔄 Sincronizar` en la barra de herramientas de planteles (`index.html`).  
->    - Normalización de selectores con fallbacks multi-formato para nombres y códigos DEA.  
->    - Elevación de versión a SemVer `v2.29.7` en `package.json` y en las 5 interfaces de `index.html`.  
+>    * Actualización directa de `currentPlanteles` en memoria tras guardar, purga y refresco de `sessionStorage`.  
+>    * Invalidación de caché en `_cacheSupervision` y soporte de `forzarSync` en `loadPlanteles()`.  
+>    * Adición del botón `🔄 Sincronizar` en la barra de herramientas de planteles (`index.html`).  
+>    * Normalización de selectores con fallbacks multi-formato para nombres y códigos DEA.  
+>    * Elevación de versión a SemVer `v2.29.7` en `package.json` y en las 5 interfaces de `index.html`.  
 > 3. Despliegue: Compilación exitosa en Vite y despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`).  
 > 4. Pregunta protocolar de cierre: ¿Los resultados fueron satisfactorios?
-
 
 ---
 
@@ -5833,16 +5866,16 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Auditoría Forense y Rescate Exclusivo Anti-Duplicados en Escuela Roberto Picón Lares OD01021410 (Skill 5 y Skill 6):  
+>
 > 1. Auditoría Cruzada RAC vs Firebase:  
->    - Se detectó que 3 de los 4 docentes ya existían en Firebase asociados a funciones directivas/enlaces en otros planteles: Beatriz Quevedo (OD12241410), Mario Ramírez (OD12301410) y Rosmery Vergara (OD12281410).  
->    - En estricto cumplimiento de la orden del usuario de no duplicar personal, se protegieron y se mantuvieron intactos sin alteración.  
->    - Se confirmó que Isbelys Alejandra Gómez Rodríguez (C.I. 19.383.306) era la única huérfana absoluta (0 registros en Firebase, validada al 100% en RAC como TSU en Educación de aula integrada).  
+>    * Se detectó que 3 de los 4 docentes ya existían en Firebase asociados a funciones directivas/enlaces en otros planteles: Beatriz Quevedo (OD12241410), Mario Ramírez (OD12301410) y Rosmery Vergara (OD12281410).  
+>    * En estricto cumplimiento de la orden del usuario de no duplicar personal, se protegieron y se mantuvieron intactos sin alteración.  
+>    * Se confirmó que Isbelys Alejandra Gómez Rodríguez (C.I. 19.383.306) era la única huérfana absoluta (0 registros en Firebase, validada al 100% en RAC como TSU en Educación de aula integrada).  
 > 2. Inyección Ejecutada:  
->    - Creado `cargos_personal/OD01021410_19383306` con esquema dual canónico (40 hrs, Titular, Nacional).  
->    - Actualizado `planteles/OD01021410` incorporándola a `personal_resumen` (elevando nómina de 54 a 55).  
+>    * Creado `cargos_personal/OD01021410_19383306` con esquema dual canónico (40 hrs, Titular, Nacional).  
+>    * Actualizado `planteles/OD01021410` incorporándola a `personal_resumen` (elevando nómina de 54 a 55).  
 > 3. Documentación y Difusión:  
->    - Actualizados `versiones.md`, `bitacora.md`, `conversaciones.md` y generado el reporte institucional de WhatsApp.
-
+>    * Actualizados `versiones.md`, `bitacora.md`, `conversaciones.md` y generado el reporte institucional de WhatsApp.
 
 ---
 
@@ -5867,16 +5900,16 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Auditoría Forense y Rescate Exclusivo Anti-Duplicados en Municipio Julio César Salas (Skill 5 y Skill 6):  
+>
 > 1. Auditoría Cruzada y Prevención de Duplicados:  
->    - Yoneida Guerra (15.142.594) y Yuleny Bernal (19.529.390) ya existían y estaban activas en Firebase; se mantuvieron intactas sin duplicación.  
->    - Dairy Moreno (20.352.557) y Oriannys Labastida (29.994.198) no figuraban en nómina ministerial RAC; se dejaron registradas para trámite del CDCE.  
->    - Se identificaron 3 funcionarias huérfanas validadas al 100% en RAC que no existían en Firebase: Yoeliys Rodríguez (19.713.568) y Milagros Villarreal (18.864.994) en `S3379N1410`, y Sulay Moreno Blanco (18.615.107) en `OD17141410`.  
+>    * Yoneida Guerra (15.142.594) y Yuleny Bernal (19.529.390) ya existían y estaban activas en Firebase; se mantuvieron intactas sin duplicación.  
+>    * Dairy Moreno (20.352.557) y Oriannys Labastida (29.994.198) no figuraban en nómina ministerial RAC; se dejaron registradas para trámite del CDCE.  
+>    * Se identificaron 3 funcionarias huérfanas validadas al 100% en RAC que no existían en Firebase: Yoeliys Rodríguez (19.713.568) y Milagros Villarreal (18.864.994) en `S3379N1410`, y Sulay Moreno Blanco (18.615.107) en `OD17141410`.  
 > 2. Inyecciones Ejecutadas:  
->    - Creados 3 expedientes individuales en `cargos_personal` con esquema dual exhaustivo.  
->    - Actualizados `planteles/S3379N1410` (de 8 a 10) y `planteles/OD17141410` (de 2 a 3).  
+>    * Creados 3 expedientes individuales en `cargos_personal` con esquema dual exhaustivo.  
+>    * Actualizados `planteles/S3379N1410` (de 8 a 10) y `planteles/OD17141410` (de 2 a 3).  
 > 3. Documentación y Entrega:  
->    - Actualizados `bitacora.md`, `conversaciones.md` y entregado el mensaje oficial estructurado para WhatsApp.
-
+>    * Actualizados `bitacora.md`, `conversaciones.md` y entregado el mensaje oficial estructurado para WhatsApp.
 
 ---
 
@@ -5905,16 +5938,16 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Auditoría Forense y Rescate Exclusivo Anti-Duplicados en Municipio Andrés Bello (Skill 5 y Skill 6):  
+>
 > 1. Auditoría Cruzada RAC vs Firebase:  
->    - Se verificó que todos los 8 funcionarios pertenecen a La Azulita (Municipio Andrés Bello).  
->    - 6 funcionarios validados en RAC para CB La Azulita (`S1465D1402`) y 1 funcionaria para Complejo Educativo Jesús Manuel Nava (`OD05511402`), todos con 0 registros previos en Firebase.  
->    - Luz Enyd Claro Sánchez fue localizada en RAC bajo la C.I. 12.654.339 (código 1163DI) en IEE 22 de Febrero (`OD16191402`), constatando que ya se encontraba registrada en Firebase con expediente completo, por lo cual se protegió y no se duplicó.  
+>    * Se verificó que todos los 8 funcionarios pertenecen a La Azulita (Municipio Andrés Bello).  
+>    * 6 funcionarios validados en RAC para CB La Azulita (`S1465D1402`) y 1 funcionaria para Complejo Educativo Jesús Manuel Nava (`OD05511402`), todos con 0 registros previos en Firebase.  
+>    * Luz Enyd Claro Sánchez fue localizada en RAC bajo la C.I. 12.654.339 (código 1163DI) en IEE 22 de Febrero (`OD16191402`), constatando que ya se encontraba registrada en Firebase con expediente completo, por lo cual se protegió y no se duplicó.  
 > 2. Inyección Ejecutada:  
->    - Creados 7 expedientes en `cargos_personal` con esquema dual exhaustivo (kebab-case y camelCase).  
->    - Actualizados `planteles/S1465D1402` (de 39 a 45 funcionarios) y `planteles/OD05511402` (de 12 a 13 funcionarios).  
+>    * Creados 7 expedientes en `cargos_personal` con esquema dual exhaustivo (kebab-case y camelCase).  
+>    * Actualizados `planteles/S1465D1402` (de 39 a 45 funcionarios) y `planteles/OD05511402` (de 12 a 13 funcionarios).  
 > 3. Documentación y Entrega:  
->    - Actualizados `bitacora.md`, `conversaciones.md` y entregado el mensaje oficial estructurado para WhatsApp.
-
+>    * Actualizados `bitacora.md`, `conversaciones.md` y entregado el mensaje oficial estructurado para WhatsApp.
 
 ---
 
@@ -5939,20 +5972,20 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Arquitectura, Diseño e Implementación del Módulo Auditor de Cédula y Expedientes (SGH v2.30.0 - Zero-Cost):  
+>
 > 1. Análisis Técnico y Viabilidad Zero-Cost:  
->    - Se demostró que cargar 26.000 funcionarios en bloque agotaría la cuota diaria gratuita de 50.000 lecturas en 2 recargas.  
->    - En contraste, la consulta quirúrgica por cédula con filtro indexado (`where('cedula', 'in', [...])`) consume únicamente 1 o 2 lecturas por búsqueda, garantizando viabilidad permanente y costo cero absoluto.  
+>    * Se demostró que cargar 26.000 funcionarios en bloque agotaría la cuota diaria gratuita de 50.000 lecturas en 2 recargas.  
+>    * En contraste, la consulta quirúrgica por cédula con filtro indexado (`where('cedula', 'in', [...])`) consume únicamente 1 o 2 lecturas por búsqueda, garantizando viabilidad permanente y costo cero absoluto.  
 > 2. Desarrollo e Integración en Producción:  
->    - Creado en `webapp/index.html` el botón lateral `🔍 Auditor de Cédula` y la pestaña de administración `#admin-tab-auditor-cedula`.  
->    - Implementada en `webapp/src/admin.js` la lógica reactiva `setupAuditorCedula()`:  
+>    * Creado en `webapp/index.html` el botón lateral `🔍 Auditor de Cédula` y la pestaña de administración `#admin-tab-auditor-cedula`.  
+>    * Implementada en `webapp/src/admin.js` la lógica reactiva `setupAuditorCedula()`:  
 >      * Detección automática de registros únicos vs registros duplicados en diferentes planteles.  
 >      * Generación de tabla comparativa frente a frente con parámetros clave (Plantel, DEA, Municipio, Cargo, Horas, Situación, Dependencia).  
 >      * Generación de expedientes institucionales completos con desglose de carga horaria (planes 31059, 31060 o primaria), expediente personal, contacto, dotación, salud y observaciones.  
 >      * Botones de navegación directa a la ficha de la escuela (`abrirFichaAuditoria`) y al modo supervisión (`iniciarSupervisionPlantel`).  
 > 3. Control de Versiones SemVer y Despliegue:  
->    - Elevada la versión a SemVer MENOR `v2.30.0` en `package.json` y en las 5 interfaces de `index.html`.  
->    - Compilación exitosa en Vite (819ms) y despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`).
-
+>    * Elevada la versión a SemVer MENOR `v2.30.0` en `package.json` y en las 5 interfaces de `index.html`.  
+>    * Compilación exitosa en Vite (819ms) y despliegue a producción en Firebase Hosting (`https://sgh-merida.web.app`).
 
 ---
 
@@ -5972,10 +6005,10 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Auditoría Forense y Rescate Exclusivo Anti-Duplicados en Aguas Caliente OD14291419 (Skill 5 y Skill 6):  
+>
 > 1. Auditoría Cruzada RAC vs Firebase: Ambas funcionarias pertenecen al plantel `OD14291419` (Aguas Caliente, Santos Marquina) y poseían 0 registros en Firebase.  
 > 2. Inyección Ejecutada: Creados expedientes `OD14291419_20849050` y `OD14291419_23722629` con esquema dual canónico y nómina de `planteles/OD14291419` actualizada de 3 a 5 funcionarios.  
 > 3. Reporte Institucional: Emitido el mensaje oficial para WhatsApp.
-
 
 ---
 
@@ -5985,7 +6018,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Usuario (Administrador)
 
 > **Mensaje del Usuario:**  
-> correos_afectados escuelaemprendimientodaysimba@gmail.com  
+> correos_afectados <escuelaemprendimientodaysimba@gmail.com>  
 > [...]  
 > estoy satisfecho  
 
@@ -5993,12 +6026,10 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Protocolo de Regularización, Sincronización Institucional y Enlace Seguro OOB (Skill 5 y Skill 6):  
+>
 > 1. Verificación y Normalización: Cuenta `escuelaemprendimientodaysimba@gmail.com` vinculada a la Escuela para el Emprendimiento Daysi Matilde Bravo Álvarez (`ON13841414`), Santa Elena de Arenales, Obispo Ramos de Lora.  
 > 2. Estado de Acceso y Nómina: Cuenta Auth verificada (`emailVerified: true`), perfil `plaadmin` aprobado, metadatos canónicos corregidos en `planteles/ON13841414` y nómina de 4 docentes confirmada y operativa al 100% en `cargos_personal`.  
 > 3. Enlace Directo OOB y Mensaje WhatsApp: Generado enlace seguro de restablecimiento y redactado mensaje protocolar listo para enviar al director.
-
-
-
 
 ---
 
@@ -6020,10 +6051,10 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Ejecución Operativa CASO_HUERFANOS Lote 21:  
+>
 > 1. Inyección de 33 funcionarios activos en cargos_personal con esquema dual y preservación histórica del caso fallecido (Livia García C.I. 8.086.564).  
 > 2. Sincronización de personal_resumen en los planteles correspondientes (OD15211423, S1361D1423, OD05141421, OD05151421).  
 > 3. Cero duplicados y preservación de cuota Zero-Cost.
-
 
 ---
 
@@ -6041,10 +6072,10 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Despliegue de Hotfix v2.30.1:  
+>
 > 1. Diagnóstico: Detección de fallos en event bubbling sobre #contenedor-matricula, clave "vacantes" en iteración de grados y pérdida de valores al cambiar de sección U a múltiples.  
 > 2. Solución: Implementación de recalcularMatriculaTotalUI() en memoria volátil de cliente (Zero-Cost), calculando en tiempo real subtotales por nivel y total general con preservación bidireccional U <-> A.  
 > 3. Despliegue a Firebase Hosting exitoso en v2.30.1.
-
 
 ---
 
@@ -6054,16 +6085,16 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Usuario (Administrador)
 
 > **Mensaje del Usuario:**  
-> correos_afectados: ee.obduliaj@gmail.com escuelagonzalomoraaraque@gmail.com  
+> correos_afectados: <ee.obduliaj@gmail.com> <escuelagonzalomoraaraque@gmail.com>  
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Protocolo correos_afectados ejecutado:  
-> 1. ee.obduliaj@gmail.com: Activado emailVerified en Auth, perfil en usuarios/ aprobado con DEA OD09721421, docente Elena Yusmery Rivas Ruiz (14.401.318) inyectada en cargos_personal y sincronizada en planteles/OD09721421. Enlace OOB generado.  
-> 2. escuelagonzalomoraaraque@gmail.com: Perfil homologado con DEA OD10571403, nómina de 5 funcionarios confirmada y enlace OOB generado.  
+>
+> 1. <ee.obduliaj@gmail.com>: Activado emailVerified en Auth, perfil en usuarios/ aprobado con DEA OD09721421, docente Elena Yusmery Rivas Ruiz (14.401.318) inyectada en cargos_personal y sincronizada en planteles/OD09721421. Enlace OOB generado.  
+> 2. <escuelagonzalomoraaraque@gmail.com>: Perfil homologado con DEA OD10571403, nómina de 5 funcionarios confirmada y enlace OOB generado.  
 > 3. Mensajes protocolares listos para WhatsApp.
-
 
 ---
 
@@ -6073,16 +6104,16 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Usuario (Administrador)
 
 > **Mensaje del Usuario:**  
-> correo_afectado: escuelajme@gmail.com  
+> correo_afectado: <escuelajme@gmail.com>  
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Protocolo correo_afectado ejecutado para Escuela José María España (OD04831403):  
+>
 > 1. Identificación y Auth: Activado emailVerified en Auth (UID IlGMbdzJZxSNojvwviP483toKIk1), perfil aprobado con rol plaadmin.  
 > 2. Conciliación Anti-Duplicados: Enriquecidos los 5 expedientes preexistentes en cargos_personal con llaves duales sin duplicar documentos. Actualizado personal_resumen en planteles/OD04831403.  
 > 3. Enlace OOB generado y mensaje institucional listo para WhatsApp.
-
 
 ---
 
@@ -6099,7 +6130,6 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Lectura integral de SKILL_sgh_firebase.md confirmada. Alineación absoluta con RAC.xlsx como fuente única de verdad oficial (hojas PERSONAL con 30.324 registros y PLANTELES con 1.252 registros). Sincronizados los archivos de consulta rápida en migracion/.
-
 
 ---
 
@@ -6120,10 +6150,10 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Auditoría Forense y Conciliación Operativa de Tulio Febres Cordero:  
+>
 > 1. Auditoría: Evaluados 58 trabajadores en 19 planteles. 0 duplicados en Firebase. 53 validados directos, 1 corrección de cédula (Grilmer Ramírez a 20.749.627), 2 correcciones de DEA (ETA Don Luis Zambrano a OD17071422), 2 observados excluidos (Marisol Pérez y Luz Olivar).  
 > 2. Inyección: Creados 56 expedientes en cargos_personal y actualizadas las nóminas de 18 planteles en planteles/ sin alterar matrículas.  
 > 3. Comunicado oficial entregado en sintaxis nativa de WhatsApp.
-
 
 ---
 
@@ -6142,10 +6172,12 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Auditoría Forense y Conciliación Operativa de Tovar:  
+>
 > 1. Control Anti-Duplicados: 16 trabajadores preexistentes detectados y protegidos intactos sin duplicar en Firebase.  
 > 2. Conciliación Oficial: 43 funcionarios legítimos confirmados e inyectados en cargos_personal y en personal_resumen de 10 planteles sede.  
 > 3. Casos Observados: 6 de dependencia nacional en Claudio Vivas, 2 conflicto DEA en RAC, 1 no encontrada.  
 > 4. Comunicado e informe general entregado en sintaxis nativa de WhatsApp.
+>
 ### Intervención 167
 
 * **Fecha / Hora:** 2026-11-06 ~13:15 - 13:32 (Hora Local)
@@ -6160,12 +6192,14 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Auditoría Forense y Habilitación de Sede NER 559 Amador Morales Mora (OD05041421):  
+>
 > 1. Diagnóstico: Comprobación de ausencia de la sede OD05041421 en Firebase debido a omisión ministerial en la hoja PLANTELES de RAC.xlsx.  
 > 2. Control Anti-Duplicados: Verificación exhaustiva de 0 duplicados en cargos_personal y en los 1.165 planteles de Firebase.  
 > 3. Habilitación de Sede: Creado documento canónico planteles/OD05041421 con epónimo ministerial NER 559 - AMADOR MORALES MORA.  
 > 4. Inyección de Expedientes: Inyectados los expedientes individuales de Sandra Gutiérrez (18.579.171) e Isamar Contreras (23.493.717) con esquema dual y homologación ministerial.  
 > 5. Sincronización Institucional: Nómina de la sede actualizada con total_personal: 2.  
 > 6. Informe Oficial: Generado reporte institucional en sintaxis nativa de WhatsApp.
+>
 ### Intervención 168
 
 * **Fecha / Hora:** 2026-11-06 ~13:48 - 14:15 (Hora Local)
@@ -6181,9 +6215,11 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Validación y Auditoría de Integridad:  
+>
 > 1. Validación de Criterio: Confirmación de que el protocolo CASO_HUERFANOS aplica estrictamente para personal inexistente en Firebase. Al estar los 11 ya registrados en Firebase, el saldo formal de huérfanos es 0.  
 > 2. Política Anti-Duplicados: Cero modificaciones a la base de datos para preservar la integridad de los expedientes.  
 > 3. Informe Institucional: Entrega del comunicado oficial para WhatsApp en sintaxis nativa certificando que el personal ya está activo en el sistema.
+>
 ### Intervención 169
 
 * **Fecha / Hora:** 2026-11-06 ~14:17 - 14:32 (Hora Local)
@@ -6198,11 +6234,13 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Auditoría de Consistencia y Habilitación de Sede S2004D1421:  
+>
 > 1. Auditoría de Esquema: Comprobación contra el código fuente de webapp/src/personalWizard.js de que todos los valores (códigos 8990N/8991N, situaciones laborales, estado civil y tallas) coinciden al 100% con los selectores predeterminados del SGH.  
 > 2. Habilitación de Sede: Creado documento planteles/S2004D1421 (Colegio Fe y Alegría).  
 > 3. Inyección de Expedientes: Inyectados 6 expedientes individuales de cocineras en cargos_personal con adscripción administrativa CNAE 1200764.  
 > 4. Sincronización Institucional: Nómina de la sede actualizada con total_personal: 6.  
 > 5. Informe Oficial: Generado reporte institucional en sintaxis nativa de WhatsApp.
+>
 ### Intervención 170
 
 * **Fecha / Hora:** 2026-11-06 ~14:32 - 14:45 (Hora Local)
@@ -6216,12 +6254,14 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 
 > **Respuesta del Agente:**  
 > Auditoría Forense y Habilitación de Sede PD00141421:  
+>
 > 1. Diagnóstico: Detección y rescate de las filas 7, 8 y 9 desde el búfer de autorecuperación de Excel (tovar.xlsb) retenidas en el equipo del usuario.  
 > 2. Control Anti-Duplicados: Verificación de 0 duplicados en Firebase para las 3 funcionarias.  
 > 3. Habilitación de Sede: Creación de documento planteles/PD00141421 (Colegio Hermana Felisa Elustondo Fe y Alegría).  
 > 4. Inyección de Expedientes: Inyectados los 3 expedientes en cargos_personal con adscripción CNAE / Nacional.  
 > 5. Sincronización Institucional: Nómina de la sede actualizada con total_personal: 3.  
 > 6. Informe Oficial: Generado reporte institucional en sintaxis nativa de WhatsApp.
+>
 ### Intervención 171
 
 * **Fecha / Hora:** 2026-11-06 ~14:46 - 15:02 (Hora Local)
@@ -6237,27 +6277,31 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Auditoría Forense y Control Anti-Duplicados: Verificados los 16 registros contra Firebase y RAC.xlsx. Identificados 3 preexistentes resguardados (0 duplicados), 8 huérfanos legítimos confirmados y 5 casos en observación.  
 > 2. Autorización Institucional: Recibida luz verde del usuario.  
 > 3. Inyección y Regularización: Inyectados 8 expedientes en cargos_personal y actualizadas las nóminas en planteles/ para OD02821421, OD09731421, S0271D1421 y OD14881421.  
 > 4. Verificación Post-Vuelo: Verificada lectura 200 OK de los 8 expedientes y consistencia de nóminas institucionales.  
 > 5. Informe Oficial: Readecuación del comunicado oficial para WhatsApp bajo la plantilla canónica estandarizada del CDCE Mérida.
+>
 ### Intervención 172
 
 * **Fecha / Hora:** 2026-11-06 ~15:05 - 15:15 (Hora Local)
 * **Emisor:** Usuario (Administrador)
 
 > **Mensaje del Usuario:**  
-> correos_afectados: sghmartintovar@gmail.com  
+> correos_afectados: <sghmartintovar@gmail.com>  
 > Satisfactorio. Continuemos  
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
 > Protocolo correos_afectados ejecutado para CEI Tovar / Martín Tovar y Tovar (OD14891421):  
+>
 > 1. Identificación y Auth: Validado correo verificado en Auth (UID C9pCDb8wmHd2hZtb82qTf5txAM23), perfil aprobado en usuarios/ con rol plaadmin.  
 > 2. Sincronización Anti-Duplicados: Enriquecidos y mapeados los 31 expedientes preexistentes en cargos_personal/OD14891421_{cedula} sin crear duplicados. Actualizada la ficha institucional en planteles/OD14891421 con total_personal: 31 y personal_resumen completo.  
 > 3. Enlace OOB generado y entregado junto con el mensaje institucional para WhatsApp.
+>
 ### Intervención 173
 
 * **Fecha / Hora:** 2026-11-06 ~15:15 - 15:43 (Hora Local)
@@ -6272,11 +6316,13 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Auditoría Forense y Diagnóstico de Plataforma: Identificada la causa exacta de la discrepancia en el video (registros legados con encabezados en mayúsculas invisibles para la consulta web y registros sin código DEA asignado).  
 > 2. Regularización y Normalización: Inyectados 3 huérfanos legítimos (Vilma León, Jessica Valero y Maryuri Andrade), corregida adscripción de Ivonne Méndez y normalizados los 4 funcionarios con llaves en mayúsculas (Keila Salcedo, Cristhian Parra, Carmen Andrade, Edis Andrade).  
 > 3. Sincronización Institucional: Nómina de `planteles/S1539D1419` actualizada a 11 trabajadores en `personal_resumen`.  
 > 4. Verificación Zero-Defects: Simulada la consulta del Auditor de Cédula de la web confirmando 100% de registros válidos verdes.  
 > 5. Comunicado Oficial: Entrega del informe oficial para WhatsApp.
+>
 ### Intervención 174
 
 * **Fecha / Hora:** 2026-11-06 ~15:44 - 15:58 (Hora Local)
@@ -6289,10 +6335,12 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Auditoría Forense y Validación RAC: Confirmada Daniuska Raibeth Echeverría Lacruz (21.305.064) adscrita en nómina central ministerial a OD05671402.  
 > 2. Control Anti-Duplicados: Localizado documento legado cargos_personal/21305064; actualizado in-situ para garantizar 0 duplicados sin crear documentos redundantes.  
 > 3. Sincronización Institucional: Incorporada a personal_resumen de planteles/OD05671402 mediante transformación atómica del servidor (total_personal incrementado a 5).  
 > 4. Comunicado Oficial: Entrega de la notificación estandarizada para WhatsApp.
+>
 ### Intervención 175
 
 * **Fecha / Hora:** 2026-11-06 ~16:07 - 16:27 (Hora Local)
@@ -6307,11 +6355,13 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Diagnóstico de Plataforma: Demostrado al usuario por qué el Auditor de Cédula arrojaba "Funcionario No Registrado" en los 6 casos (documentos legados del 11 de agosto con llaves en mayúsculas).  
 > 2. Ejecución Opción 1: Inyectados los 8 huérfanos legítimos con clave compuesta `{dea}_{ci}` y normalizados in-situ los 6 expedientes preexistentes agregándoles `cedula` en minúscula (0% duplicados).  
 > 3. Sincronización Institucional: Nóminas de los planteles actualizadas mediante transformaciones atómicas en `personal_resumen`.  
 > 4. Verificación Zero-Defects: Comprobada la no existencia de duplicados (0 colisiones).  
 > 5. Comunicado Oficial: Entrega del informe oficial para WhatsApp bajo la plantilla estandarizada preferida por el usuario.
+>
 ### Intervención 176
 
 * **Fecha / Hora:** 2026-11-06 ~16:30 - 16:37 (Hora Local)
@@ -6324,10 +6374,12 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Diagnóstico Cuantitativo: Determinados 24.209 documentos en cargos_personal (22.800 con cedula en minúscula y aprox. 1.409 legados con CEDULA o identificados por ID).  
 > 2. Blindaje Frontend en 4 Capas: Actualizados webapp/src/admin.js y webapp/src/personalWizard.js con cascada de búsqueda (cedula -> cedula-identidad -> CEDULA -> ID directo).  
 > 3. Herramienta Backend: Desarrollado scripts/normalizar_cedulas_mayusculas.js para ejecución de barrido masivo.  
 > 4. Verificación de Build: Compilación de producción validada exitosamente.
+>
 ### Intervención 177
 
 * **Fecha / Hora:** 2026-11-06 ~16:41 - 16:50 (Hora Local)
@@ -6340,10 +6392,12 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Auditoría Forense y Validación RAC: Auditados los 95 registros de pueblollano.xlsx (49 huérfanos legítimos confirmados, 28 preexistentes protegidos, 4 discrepancias de sede en RAC y 14 en observación).  
 > 2. Inyección Cero-Cost: Ejecutado commit atómico de 62 operaciones (49 cargos_personal y 13 transforms en planteles).  
 > 3. Control Anti-Duplicados: Verificada la no duplicidad de los 28 preexistentes.  
 > 4. Comunicado Oficial: Entrega de la notificación estandarizada para WhatsApp bajo el formato requerido.
+>
 ### Intervención 178
 
 * **Fecha / Hora:** 2026-11-07 ~08:41 - 08:57 (Hora Local)
@@ -6356,11 +6410,13 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Auditoría Forense y Cruce Ministerial RAC: Auditados los 239 registros (79 huérfanos legítimos confirmados, 110 preexistentes protegidos, 4 discrepancias de sede en RAC y 46 en observación).  
 > 2. Saneamiento Forense: Corrección de DEA canónico OD04411414 (María de Jesús Noguera) y saneamiento de cédulas de Janet Pérez (15031739) y Chael Hernández (23715037).  
 > 3. Inyección Atómica Dual: Ejecutado commit de 107 operaciones (79 cargos_personal y 28 planteles transforms) con HTTP 200.  
 > 4. Blindaje Anti-Duplicados: Verificada la no duplicidad en los 110 preexistentes.  
 > 5. Comunicado Oficial: Generación y entrega del reporte oficial estandarizado para WhatsApp.
+>
 ### Intervención 179
 
 * **Fecha / Hora:** 2026-11-07 ~09:01 - 09:07 (Hora Local)
@@ -6373,6 +6429,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Auditoría Forense y Cruce Ministerial RAC: Auditados los 31 registros (7 huérfanos legítimos confirmados, 11 preexistentes protegidos y 13 en observación).  
 > 2. Saneamiento Forense: Identificación del DEA canónico OD13971417 para la Escuela Juan Ramón Lobo.  
 > 3. Inyección Atómica Dual: Ejecutado commit de 11 operaciones (7 cargos_personal y 4 planteles transforms) con HTTP 200.  
@@ -6391,6 +6448,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Auditoría Forense y Cruce Ministerial RAC: Auditados los 13 docentes en 3 instituciones estadales (OD16201403, OD10501403, OD10671403).  
 > 2. Blindaje Anti-Colisión Crítico: Detección de homonimia/error en C.I. 20.828.129 (reportada para Suleima Rangel, pero asignada legítimamente a Alfredo Rubio en Tovar). Expediente protegido contra sobreescritura.  
 > 3. Diagnóstico de Dependencia Estadal: 12 docentes clasificados en observación al no figurar en nómina nacional RAC por ser nómina directa de la Gobernación o nuevo ingreso.  
@@ -6409,12 +6467,13 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Normalización Global de Base de Datos: Recorrido y saneamiento de los 24.340 documentos de `cargos_personal` en Firebase, actualizando 1.408 documentos que conservaban encabezados en mayúsculas a claves canónicas en minúsculas (`cedula`, `codigo-plantel`, etc.).  
 > 2. Auditoría Forense y Cruce Ministerial RAC: Auditados los 57 registros de `huerfanos/cardenalquintero.xlsx` (24 huérfanos legítimos confirmados en 10 planteles, 17 preexistentes protegidos y 16 en observación no en RAC).  
 > 3. Saneamientos Forenses Críticos:  
->    - Despeje de duplicidad en C.I. 20.433.330 (Isamar Rivera, titular legítima en C.C. Juan Rodríguez Suárez) vs C.I. 23.002.465 (María Josefina Mora Castro, Cocinera II en U.E.B. Las Piedras, preexistente protegido vinculado en `personal_resumen`).  
->    - Tipografía en C.I. 20.432.345 (Nisbedy Peña, corregida de 9 a 8 dígitos).  
->    - Tipografía en C.I. 13.098.575 (Luz Karine Peña, corregido dígito final).  
+>    * Despeje de duplicidad en C.I. 20.433.330 (Isamar Rivera, titular legítima en C.C. Juan Rodríguez Suárez) vs C.I. 23.002.465 (María Josefina Mora Castro, Cocinera II en U.E.B. Las Piedras, preexistente protegido vinculado en `personal_resumen`).  
+>    * Tipografía en C.I. 20.432.345 (Nisbedy Peña, corregida de 9 a 8 dígitos).  
+>    * Tipografía en C.I. 13.098.575 (Luz Karine Peña, corregido dígito final).  
 > 4. Inyección Atómica Dual: Ejecutado commit de 35 operaciones (24 en `cargos_personal` y 11 transformaciones atómicas en `planteles` actualizando `personal_resumen` e incrementando `total_personal`).  
 > 5. Blindaje Anti-Duplicados: Verificada la no duplicidad en los 17 preexistentes y confirmación de los 24 expedientes inyectados.  
 > 6. Comunicación Institucional: Generación y entrega del reporte oficial para WhatsApp bajo la nomenclatura estandarizada "Personal No Reflejado en Plantel".
@@ -6432,13 +6491,13 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Auditoría Forense y Cruce Ministerial RAC: Auditados los 9 funcionarios reportados en 5 instituciones de Julio César Salas.  
 > 2. Resolución de Doble Cargo / Pluriempleo Legítimo: 4 docentes (Beatriz Quevedo, Mario Ramírez, Rosmery Vergara en OD01021410 y Yoneida Guerra en S3379N1410) identificados con doble cargo Nacional + Estadal en RAC. Preservados sus cargos estadales e incorporados con clave compuesta `{dea}_{ci}`.  
 > 3. Blindaje de Preexistentes: Kasandra Castro (23718147) vinculada formalmente a `personal_resumen` de OD17141410 sin duplicar su expediente de cargo. Yuleny Bernal (19529390) confirmada 100% activa en S2855D1410.  
 > 4. Inyección Atómica Dual: Ejecutado commit de 8 operaciones en Cloud Firestore (5 en `cargos_personal` y 3 en `planteles` actualizando `personal_resumen` e incrementando `total_personal`).  
 > 5. Documentación de Parametrización: Redacción y almacenamiento de `Parametrización del protocolo CASO_HUERFANOS.md` en la raíz del proyecto y como artefacto oficial.  
 > 6. Comunicación Institucional: Generación y entrega del reporte para WhatsApp bajo el modelo canónico estandarizado del CDCE Mérida.
-
 
 ### Intervención 183
 
@@ -6453,16 +6512,16 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Compilación y Auditoría Forense: Integrados los 613 registros de `huerfanos/libertador.xlsx` y cruzados exhaustivamente contra los 30.323 registros de `RAC.xlsx` y Cloud Firestore.  
 > 2. Clasificación Forense:  
->    - 503 Huérfanos Confirmados en RAC (501 expedientes canónicos únicos, resolviendo 2 duplicados de origen).  
->    - 5 casos de pluriempleo legítimo / doble cargo RAC incorporados en planteles independientes con claves compuestas.  
->    - 0 preexistentes protegidos.  
->    - 58 discrepancias de sede y 52 en observación resguardados sin alterar la BD.  
+>    * 503 Huérfanos Confirmados en RAC (501 expedientes canónicos únicos, resolviendo 2 duplicados de origen).  
+>    * 5 casos de pluriempleo legítimo / doble cargo RAC incorporados en planteles independientes con claves compuestas.  
+>    * 0 preexistentes protegidos.  
+>    * 58 discrepancias de sede y 52 en observación resguardados sin alterar la BD.  
 > 3. Inyección Atómica en Lotes: Ejecutadas 617 operaciones atómicas en Cloud Firestore divididas en 3 commits HTTP 200 (501 documentos en `cargos_personal/{dea}_{ci}` y 116 transformaciones atómicas `appendMissingElements` e `increment` en `planteles`).  
 > 4. Verificación Post-Inyección: Comprobada la presencia íntegra de expedientes y actualización de personal_resumen en planteles.  
 > 5. Comunicación Institucional: Generación del reporte completo en `huerfanos/reporte_whatsapp_libertador.txt` y entrega del comunicado oficial estructurado para WhatsApp.
-
 
 ### Intervención 184
 
@@ -6478,14 +6537,14 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Análisis y Cruce de PlantelesMerida.xlsx: Comprobada la presencia al 100% de los 8 códigos DEA correspondientes a las filas observadas.  
 > 2. Aclaratoria de Cobertura de Personal: Demostrado que en el archivo general esos 8 colegios ya sumaban 129 trabajadores registrados (y 141 en nómina ministerial RAC), blindando la totalidad de sus nóminas institucionales.  
 > 3. Ejecución Atómica en Cloud Firestore: Ejecutado commit único de 25 operaciones HTTP 200:  
->    - 8 planteles creados/actualizados en `planteles/{dea}` con epónimos, denominaciones, códigos estadísticos y 129 funcionarios en `personal_resumen`.  
->    - 15 funcionarios actualizados con municipio y parroquia en `cargos_personal`.  
->    - 2 registros dummy eliminados (`123` y `12345678`).  
+>    * 8 planteles creados/actualizados en `planteles/{dea}` con epónimos, denominaciones, códigos estadísticos y 129 funcionarios en `personal_resumen`.  
+>    * 15 funcionarios actualizados con municipio y parroquia en `cargos_personal`.  
+>    * 2 registros dummy eliminados (`123` y `12345678`).  
 > 4. Resultado: Saneamiento definitivo de la cabecera del archivo de nómina estadal.
-
 
 ### Intervención 185
 
@@ -6498,11 +6557,11 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Blindaje de Exportador Excel (`webapp/src/admin.js`): Exigencia estricta de nombre legítimo ($\ge 2$ caracteres) y cédula válida ($\ge 4$ dígitos), bloqueando `123` y `12345678`.  
 > 2. Aspiradora Inteligente: Ampliación de criterio de detección para barrer registros de prueba y anómalos.  
 > 3. Botón «🗑️ Eliminar Expediente»: Incorporado en cada ficha del Auditor de Cédulas para purgas quirúrgicas directas en Firestore.  
 > 4. SemVer v2.30.3 y Despliegue en Firebase Hosting. Aprobado con estado «SATISFECHO».
-
 
 ### Intervención 186
 
@@ -6522,10 +6581,10 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Diagnóstico Forense: 100% coincidencia en RAC (fila 10.768, Bachiller II, 37 hrs, Nacional, Titular). Sede oficial en RAC: `S2855D1410`. En BD estadal figuraba con `codigo-plantel` vacío.  
 > 2. Ejecución Atómica (Luz Verde): Actualizado `cargos_personal/19529390`, creado `cargos_personal/S2855D1410_19529390`, e inyectado en `planteles/S2855D1410.personal_resumen` mediante `appendMissingElements` e incremento de `total_personal` (commit HTTP 200).  
 > 3. Emisión de informe oficial de regularización para WhatsApp.
-
 
 ### Intervención 187
 
@@ -6544,10 +6603,10 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Diagnóstico Forense: Los 9 funcionarios pertenecen oficialmente en RAC al plantel `OD04391414`. Se detectaron 5 huérfanos legítimos y 4 preexistentes protegidos (0% colisiones).  
 > 2. Ejecución Atómica (Luz Verde): Creación de 5 expedientes en `cargos_personal/OD04391414_{ci}` e inyección en `planteles/OD04391414.personal_resumen` e incremento de 5 en `total_personal` (commit HTTP 200).  
 > 3. Emisión de informe oficial para WhatsApp bajo plantilla canónica.
-
 
 ### Intervención 188
 
@@ -6567,17 +6626,17 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Auditoría de Mensajes de Despliegue: Identificado el flujo de sala de espera institucional donde se visualiza el mensaje municipal según los datos del usuario.  
 > 2. Análisis y Propuesta de Interruptor Maestro: Explicada la arquitectura tipo llave de paso general para modo mantenimiento sin desarmar la matriz municipal.  
 > 3. Implementación de Interruptor Maestro en Despliegue (`webapp/src/admin.js`, `webapp/index.html`):  
->    - Incorporada tarjeta superior `#card-master-despliegue` con switch interactivo (🟢 ENCENDIDO: Sistema Activo / ⚪ APAGADO: Sistema en Mantenimiento).  
->    - Persistencia en Cloud Firestore campo `despliegue_activo` en `configuracion/despliegue`.  
+>    * Incorporada tarjeta superior `#card-master-despliegue` con switch interactivo (🟢 ENCENDIDO: Sistema Activo / ⚪ APAGADO: Sistema en Mantenimiento).  
+>    * Persistencia en Cloud Firestore campo `despliegue_activo` en `configuracion/despliegue`.  
 > 4. Blindaje en Flujo de Seguridad (`webapp/src/auth.js`):  
->    - Gatekeeper priorizado: al estar apagado (`despliegue_activo === false`), se proyecta pantalla *«Sistema en Mantenimiento»* a planteles y directores, invalidando caché para refresco instantáneo al encenderse.  
->    - Administradores (`superadmin`, `admin`, `zonadmin`, `munadmin`) conservan acceso permanente para gestión.  
+>    * Gatekeeper priorizado: al estar apagado (`despliegue_activo === false`), se proyecta pantalla *«Sistema en Mantenimiento»* a planteles y directores, invalidando caché para refresco instantáneo al encenderse.  
+>    * Administradores (`superadmin`, `admin`, `zonadmin`, `munadmin`) conservan acceso permanente para gestión.  
 > 5. Despliegue y Bumping SemVer: Elevado a versión **v2.31.0** y publicado exitosamente en Firebase Hosting (`https://sgh-merida.web.app`).  
 > 6. Cierre Protocolar: Aprobado con estado «SATISFECHO» por el administrador.
-
 
 ### Intervención 189
 
@@ -6592,20 +6651,20 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Fase 1 (Diagnóstico Forense): Cruce de los 61 registros de `huerfanos/justobriceno.xlsx` contra `RAC.xlsx` (30.324 filas) y Cloud Firestore.  
->    - 35 Huérfanos Confirmados en RAC (100% coincidencia de cargo, horas y código DEA).  
->    - 12 Preexistentes Protegidos (1 activo en plantel y 11 con expediente en Firebase que requerían integración a la nómina institucional).  
->    - 0 Discrepancias de sede.  
->    - 14 En Observación (no ubicados en nómina central MPPE ni estadal).  
->    - Saneamiento tipográfico de "0D01051411" a `OD01051411` y regularización de 4 "Madres Cocineras" como personal obrero RAC.  
+>    * 35 Huérfanos Confirmados en RAC (100% coincidencia de cargo, horas y código DEA).  
+>    * 12 Preexistentes Protegidos (1 activo en plantel y 11 con expediente en Firebase que requerían integración a la nómina institucional).  
+>    * 0 Discrepancias de sede.  
+>    * 14 En Observación (no ubicados en nómina central MPPE ni estadal).  
+>    * Saneamiento tipográfico de "0D01051411" a `OD01051411` y regularización de 4 "Madres Cocineras" como personal obrero RAC.  
 > 2. Solicitud de confirmación protocolar de Fase 1 (luz verde).  
 > 3. Fase 2 (Ejecución Atómica con Luz Verde):  
->    - 35 documentos creados en `cargos_personal/{dea}_{ci}` con metadatos completos.  
->    - 12 planteles actualizados mediante `appendMissingElements` en `personal_resumen` (incorporando los 35 huérfanos y enlazando los 11 preexistentes, 0% duplicados).  
->    - Commit atómico único de 47 operaciones completado con respuesta HTTP 200 (`2026-11-09T11:54:52.475331Z`).  
+>    * 35 documentos creados en `cargos_personal/{dea}_{ci}` con metadatos completos.  
+>    * 12 planteles actualizados mediante `appendMissingElements` en `personal_resumen` (incorporando los 35 huérfanos y enlazando los 11 preexistentes, 0% duplicados).  
+>    * Commit atómico único de 47 operaciones completado con respuesta HTTP 200 (`2026-11-09T11:54:52.475331Z`).  
 > 4. Comunicación Institucional: Generación y entrega del comunicado oficial unificado para difusión por WhatsApp en `huerfanos/reporte_whatsapp_justobriceno.txt`.  
 > 5. Cierre Protocolar: Aprobado con estado «SATISFACTORIOS» por el administrador.
-
 
 ### Intervención 190
 
@@ -6627,22 +6686,22 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Auditoría Cruzada Global RAC vs Firebase: Cruce completo de las 25.819 cédulas activas del RAC ministerial contra las 24.110 cédulas vivas en Firebase, identificando 1.893 funcionarios huérfanos en los 23 municipios.  
 > 2. Aclaratoria Técnica de Métricas (23.288 vs 24.110): Se explicó detalladamente la diferencia entre la Ficha Resumen fija de la Pizarra (corte inicial de septiembre de 23.288 trabajadores) y la nómina viva en Firebase de noviembre (24.110 cédulas únicas tras las regularizaciones previas de 822 personas).  
 > 3. Evaluación de Viabilidad y Cuota: Confirmación afirmativa categórica (SÍ), demostrando que la carga masiva no desordena lo existente al usar claves únicas independientes por funcionario y transformaciones `appendMissingElements` en planteles, consumiendo apenas el 12,8% de la cuota diaria (2.560 operaciones de 20.000).  
 > 4. Ejecución Masiva Global (Luz Verde):  
->    - 1.891 expedientes canónicos creados en `cargos_personal/{dea}_{ci}` con metadatos ministeriales completos del RAC (código RAC, horas, dependencia, UBCH, circuito comunal, centro de votación, dirección, contacto).  
->    - 669 planteles educativos receptores actualizados mediante transformaciones atómicas `appendMissingElements` en `personal_resumen`.  
->    - Ejecución exitosa en 7 lotes secuenciales de transacciones atómicas con 100% de éxito (HTTP 200) y cero colisiones.  
+>    * 1.891 expedientes canónicos creados en `cargos_personal/{dea}_{ci}` con metadatos ministeriales completos del RAC (código RAC, horas, dependencia, UBCH, circuito comunal, centro de votación, dirección, contacto).  
+>    * 669 planteles educativos receptores actualizados mediante transformaciones atómicas `appendMissingElements` en `personal_resumen`.  
+>    * Ejecución exitosa en 7 lotes secuenciales de transacciones atómicas con 100% de éxito (HTTP 200) y cero colisiones.  
 > 5. Respaldo y Sincronización Estadal:  
->    - Generación del archivo consolidado `nomina_acualizada/Nomina_Personal_Consolidado_Estadal_MERIDA_2026-11-09.xlsx` (26.756 registros y 25.953 cédulas activas).  
->    - Actualización de `webapp/public/resumen_estadisticas.json` y de Firestore `estadisticas/resumen_global` con los nuevos totales estadales (17.144 docentes, 1.630 administrativos, 7.836 obreros, 1.742 jubilables y 1.224 planteles).  
->    - Bumping de versión a **v2.31.1**, compilación limpia con Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).  
+>    * Generación del archivo consolidado `nomina_acualizada/Nomina_Personal_Consolidado_Estadal_MERIDA_2026-11-09.xlsx` (26.756 registros y 25.953 cédulas activas).  
+>    * Actualización de `webapp/public/resumen_estadisticas.json` y de Firestore `estadisticas/resumen_global` con los nuevos totales estadales (17.144 docentes, 1.630 administrativos, 7.836 obreros, 1.742 jubilables y 1.224 planteles).  
+>    * Bumping de versión a **v2.31.1**, compilación limpia con Vite y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).  
 > 6. Reportes Oficiales WhatsApp Solicitados:  
->    - Generación de 23 reportes individuales en `huerfanos/reportes_whatsapp_por_municipio/` para envío directo a cada coordinación municipal.  
->    - Generación del informe consolidado general en `huerfanos/reporte_whatsapp_todos_los_municipios.txt`.  
+>    * Generación de 23 reportes individuales en `huerfanos/reportes_whatsapp_por_municipio/` para envío directo a cada coordinación municipal.  
+>    * Generación del informe consolidado general en `huerfanos/reporte_whatsapp_todos_los_municipios.txt`.  
 > 7. Cierre Protocolar: Aprobado con estado «SATISFECHO» por el administrador.
-
 
 ### Intervención 191
 
@@ -6652,14 +6711,15 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > **Mensaje del Usuario:**  
 > "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
 > pasemos a otro caso. estoy auditando la cedula 15142594 y puedo observar varias cosas: en el Registro #2 (S3379N1410)  
-> - El plantel no lo especifica  
-> - Municipio y parroquia no se ve como el Registro #1 (OD12261410)  
-> - los ID del Documento son distintos.  
+>
+> * El plantel no lo especifica  
+> * Municipio y parroquia no se ve como el Registro #1 (OD12261410)  
+> * los ID del Documento son distintos.  
 > Quiero saber ¿por qué sale así? no debes modificar nada, solo responder a las preguntas  
 > Es inaceptable ese comportamiento del sistema. no hay simetria en el orden de los registros:  
-> - Los registros: o son identificados por cedula, o por {Código DEA}_{Cédula}; pero no es unos de una forma y otros de otra.  
-> - Todos los registros (funcionarios) deben tener sus campos simétricos plantel / ubicacion-fisica, entre otros campos que son datos únicos.  
-> - No es posible que registros (funcionarios) tengan uno u otro municipio.  
+> * Los registros: o son identificados por cedula, o por {Código DEA}_{Cédula}; pero no es unos de una forma y otros de otra.  
+> * Todos los registros (funcionarios) deben tener sus campos simétricos plantel / ubicacion-fisica, entre otros campos que son datos únicos.  
+> * No es posible que registros (funcionarios) tengan uno u otro municipio.  
 > En resumen, todos los registros (funcionarios), deben contener en los campos que son datos propios, los datos que correspondan.  
 > Por favor ¿entiendes lo que quiero transmitir?  
 > Antes de preparar la propuesta, primero dime cuales con todos los datos recurrentes en el SGH, (creo que eso está en un archivo llamado: sgh_catalogos o sgh_catalogos_muns), no recuerdo en cual de esos. Pero quiero que me listes los datos recurrentes.  
@@ -6677,21 +6737,21 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Auditoría de Causa Raíz (C.I. 15.142.594 Yoneida Guerra): Explicación detallada del origen de la disparidad entre Registro #1 (nómina inicial simple con ID de cédula) y Registro #2 (pluriempleo nacional con ID compuesto `{DEA}_{CI}` e inconsistencia de campos vacíos).  
 > 2. Comprensión y Alineación del Principio de Simetría Institucional: Se reconoció y respaldó la exigencia de simetría estructural integral en toda la base de datos (clave universal única, datos de planteles completos y municipios unificados).  
 > 3. Desglose de Datos Recurrentes vs Datos Propios: Identificación y explicación de los catálogos maestros (`sgh_catalogos` y `sgh_catalogos_muns`).  
 > 4. Diagnóstico de Cuota Spark y Censo Forense de Calidad:  
->    - Análisis del gráfico de cuota en Firestore (48k lecturas de 50k por pico del día anterior que expira a las 2:00 PM; 2.8k escrituras de 20k).  
->    - Censo real sobre los 26.756 registros: 21.799 ya completos (81,5%), 2.317 sin nombre escrito de plantel, 2.950 con municipio abreviado y 17 sin parroquia; 25.153 con cargo único y 800 con pluriempleo legítimo.  
+>    * Análisis del gráfico de cuota en Firestore (48k lecturas de 50k por pico del día anterior que expira a las 2:00 PM; 2.8k escrituras de 20k).  
+>    * Censo real sobre los 26.756 registros: 21.799 ya completos (81,5%), 2.317 sin nombre escrito de plantel, 2.950 con municipio abreviado y 17 sin parroquia; 25.153 con cargo único y 800 con pluriempleo legítimo.  
 > 5. Diseño del Plan Maestro de Simetría SGH en 4 Fases: Fase 1 (Laboratorio Local), Fase 2 (Software WebApp), Fase 3 (Migración por bloques territoriales en Firebase) y Fase 4 (Certificación Final).  
 > 6. Ejecución de Fase 1 (Luz Verde Aprobada):  
->    - Construcción en memoria del catálogo unificado de 1.238 planteles con municipios y parroquias canónicas oficiales.  
->    - Normalización al 100% de municipios abreviados (0 pendientes) y cobertura parroquial del 100% (0 pendientes).  
->    - Saneamiento de nombres de escuela en 2.170 instituciones.  
->    - Verificación exitosa del caso Yoneida Guerra (`OD12261410_15142594` y `S3379N1410_15142594` ambos simétricos con su plantel y parroquia).  
->    - Cero consumo de cuota en Firebase (0 lecturas, 0 escrituras).  
+>    * Construcción en memoria del catálogo unificado de 1.238 planteles con municipios y parroquias canónicas oficiales.  
+>    * Normalización al 100% de municipios abreviados (0 pendientes) y cobertura parroquial del 100% (0 pendientes).  
+>    * Saneamiento de nombres de escuela en 2.170 instituciones.  
+>    * Verificación exitosa del caso Yoneida Guerra (`OD12261410_15142594` y `S3379N1410_15142594` ambos simétricos con su plantel y parroquia).  
+>    * Cero consumo de cuota en Firebase (0 lecturas, 0 escrituras).  
 > 7. Cierre Protocolar: Aprobado con estado «SATISFACTORIO» por el administrador.
-
 
 ### Intervención 192
 
@@ -6707,18 +6767,18 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Diagnóstico de la Cuota Spark y Expiración del Pico:  
->    - Se explicó con precisión que las 48k lecturas registradas obedecen a la ventana móvil de 24 horas originada por el pico de 26k lecturas del domingo a las 2:00 PM.  
->    - Dicho pico caduca hoy lunes entre 2:00 PM y 2:30 PM, reduciendo automáticamente las lecturas a ~22k y restituyendo el margen seguro de más de 25k lecturas.  
+>    * Se explicó con precisión que las 48k lecturas registradas obedecen a la ventana móvil de 24 horas originada por el pico de 26k lecturas del domingo a las 2:00 PM.  
+>    * Dicho pico caduca hoy lunes entre 2:00 PM y 2:30 PM, reduciendo automáticamente las lecturas a ~22k y restituyendo el margen seguro de más de 25k lecturas.  
 > 2. Ejecución y Cierre de la Fase 2 (Alineación de Software WebApp):  
->    - Modificación de `webapp/src/personalWizard.js`: forzado de clave universal `{codigoDEA}_{cedula}` con migración y depuración automática de documentos legados asimétricos; inyección de datos recurrentes de plantel, municipio canónico y parroquia.  
->    - Modificación de `webapp/src/admin.js`: implementación de resolución inteligente en tiempo real para el Auditor de Cédulas, garantizando simetría total en la comparativa y fichas.  
->    - Compilación limpia con Vite (`npm run build`, 0 errores).  
+>    * Modificación de `webapp/src/personalWizard.js`: forzado de clave universal `{codigoDEA}_{cedula}` con migración y depuración automática de documentos legados asimétricos; inyección de datos recurrentes de plantel, municipio canónico y parroquia.  
+>    * Modificación de `webapp/src/admin.js`: implementación de resolución inteligente en tiempo real para el Auditor de Cédulas, garantizando simetría total en la comparativa y fichas.  
+>    * Compilación limpia con Vite (`npm run build`, 0 errores).  
 > 3. Orientación sobre Pruebas en Local y Despliegue Pausado:  
->    - Se valida y felicita la medida preventiva de pausar el despliegue general (modo mantenimiento institucional) para congelar el consumo de directores.  
->    - Se aclara que aunque el código local está 100% listo, las pruebas que consulten Firestore deben mantenerse mínimas o esperar a las 2:30 PM para no arriesgar las 2.000 lecturas restantes antes de la caída del pico.  
+>    * Se valida y felicita la medida preventiva de pausar el despliegue general (modo mantenimiento institucional) para congelar el consumo de directores.  
+>    * Se aclara que aunque el código local está 100% listo, las pruebas que consulten Firestore deben mantenerse mínimas o esperar a las 2:30 PM para no arriesgar las 2.000 lecturas restantes antes de la caída del pico.  
 > 4. Cierre Protocolar: Aprobado con estado «SATISFACTORIO» por el administrador.
-
 
 ### Intervención 193
 
@@ -6732,16 +6792,16 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Ensamblaje del Script Maestro de Migración en la Nube (`scripts/fase3_migracion_simetria.js`):  
->    - Estructuración de los 3 Bloques Territoriales: Bloque 1 (Eje Panamericano y Valle del Mocotíes - 11.244 registros), Bloque 2 (Eje Metropolitano y Pueblos del Sur - 13.121 registros) y Bloque 3 (Eje Páramo y Cierre General - 2.389 registros).  
->    - Mecanismo de lotes de 400 operaciones por llamada atómica REST (`documents:commit`) con cero consumo de lecturas en Firestore.  
->    - Depuración automática sincronizada: en la misma transacción donde se crea o actualiza `{codigoDEA}_{cedula}`, se programa la eliminación del documento legado `{cedula}` para erradicar registros asimétricos.  
->    - Blindaje de red: `commitWritesWithRetry()` con reintentos exponenciales automáticos, refresco continuo de tokens OAuth (`ensureFreshToken`) y pausa de 600ms entre lotes.  
+>    * Estructuración de los 3 Bloques Territoriales: Bloque 1 (Eje Panamericano y Valle del Mocotíes - 11.244 registros), Bloque 2 (Eje Metropolitano y Pueblos del Sur - 13.121 registros) y Bloque 3 (Eje Páramo y Cierre General - 2.389 registros).  
+>    * Mecanismo de lotes de 400 operaciones por llamada atómica REST (`documents:commit`) con cero consumo de lecturas en Firestore.  
+>    * Depuración automática sincronizada: en la misma transacción donde se crea o actualiza `{codigoDEA}_{cedula}`, se programa la eliminación del documento legado `{cedula}` para erradicar registros asimétricos.  
+>    * Blindaje de red: `commitWritesWithRetry()` con reintentos exponenciales automáticos, refresco continuo de tokens OAuth (`ensureFreshToken`) y pausa de 600ms entre lotes.  
 > 2. Ejecución de Pruebas en Seco (Dry-Run):  
->    - Validación al 100% en memoria de los 3 bloques con 0 errores y 0 consumo de cuota de Firebase.  
->    - Generación de manifiestos técnicos en `scratch/fase3_bloque1_dryrun_manifest.json`, `scratch/fase3_bloque2_dryrun_manifest.json` y `scratch/fase3_bloque3_dryrun_manifest.json`.  
+>    * Validación al 100% en memoria de los 3 bloques con 0 errores y 0 consumo de cuota de Firebase.  
+>    * Generación de manifiestos técnicos en `scratch/fase3_bloque1_dryrun_manifest.json`, `scratch/fase3_bloque2_dryrun_manifest.json` y `scratch/fase3_bloque3_dryrun_manifest.json`.  
 > 3. Respaldo en GitHub: Commit `5d34e58` subido exitosamente a la rama `main`.
-
 
 ### Intervención 194
 
@@ -6764,20 +6824,20 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Protocolo de Disparo de Fase 3: Se estableció el nombre oficial `EJECUTAR_FASE3_SIMETRIA` (o `INICIAR BLOQUE 1` / `LUZ VERDE FASE 3`) para detonar la migración en vivo a partir de las 2:30 PM.  
 > 2. Lectura Completa de Guía y Normativas (`SKILL_sgh_firebase.md`): Revisión estricta de las reglas Zero-Cost, desacoplamiento, trazabilidad, registro obligatorio en `bitacora.md`, `conversaciones.md`, `versiones.md`, control SemVer, y comunicación no técnica.  
 > 3. Auditoría Forense de `nomina_acualizada\RAC_zona.xlsx` (Personal de Planta de Zona Educativa):  
->    - Censo real: 213 funcionarios activos (118 Administrativos, 59 Docentes en funciones centrales, 35 Obreros).  
->    - Diagnóstico de dependencias: 9 grandes códigos de dependencia ministerial (`001200330` a `001200341`), con subdivisiones internas de oficinas/coordinaciones en Gestión Interna (`001200339`).  
->    - Particularidades institucionales confirmadas: Sin código DEA (utilizan código de dependencia), sin matrícula ni secciones de estudiantes, trabajo 100% administrativo/servicios, y ubicación geográfica en Libertador pero fuera de la jurisdicción del `munadmin` de Libertador (jurisdicción exclusiva de `zonadmin` y Gestión Humana).  
+>    * Censo real: 213 funcionarios activos (118 Administrativos, 59 Docentes en funciones centrales, 35 Obreros).  
+>    * Diagnóstico de dependencias: 9 grandes códigos de dependencia ministerial (`001200330` a `001200341`), con subdivisiones internas de oficinas/coordinaciones en Gestión Interna (`001200339`).  
+>    * Particularidades institucionales confirmadas: Sin código DEA (utilizan código de dependencia), sin matrícula ni secciones de estudiantes, trabajo 100% administrativo/servicios, y ubicación geográfica en Libertador pero fuera de la jurisdicción del `munadmin` de Libertador (jurisdicción exclusiva de `zonadmin` y Gestión Humana).  
 > 4. Diseño y Aprobación de la Arquitectura para Planta (Opción A):  
->    - Clave universal simétrica: `{Código Dependencia}_{Cédula}` (ej. `001200339_9384726`).  
->    - Entidad institucional: Registradas en la base de datos como `denominacion: "SEDE ADMINISTRATIVA"`.  
->    - Rol `plantadmin` (Jefes de División / Coordinaciones): Pantalla institucional adaptada sin matrícula escolar, sin secciones de estudio y **sin campo de asistencia**, enfocada exclusivamente en personal, expedientes, código RAC y horas administrativas.  
->    - Inclusión de Campo de Texto Libre para Oficinas: Se incorpora el campo `oficina` / `coordinacion` como campo de texto libre provisional para capturar la oficina específica de cada funcionario hasta consolidar el catálogo normativo formal en `sgh_catalogos`.  
->    - Blindaje Jurisdiccional: Filtro en la vista del `munadmin` de Libertador para excluir sedes administrativas, manteniéndolas bajo custodia exclusiva de `zonadmin` y los 12 usuarios `plantadmin`.  
+>    * Clave universal simétrica: `{Código Dependencia}_{Cédula}` (ej. `001200339_9384726`).  
+>    * Entidad institucional: Registradas en la base de datos como `denominacion: "SEDE ADMINISTRATIVA"`.  
+>    * Rol `plantadmin` (Jefes de División / Coordinaciones): Pantalla institucional adaptada sin matrícula escolar, sin secciones de estudio y **sin campo de asistencia**, enfocada exclusivamente en personal, expedientes, código RAC y horas administrativas.  
+>    * Inclusión de Campo de Texto Libre para Oficinas: Se incorpora el campo `oficina` / `coordinacion` como campo de texto libre provisional para capturar la oficina específica de cada funcionario hasta consolidar el catálogo normativo formal en `sgh_catalogos`.  
+>    * Blindaje Jurisdiccional: Filtro en la vista del `munadmin` de Libertador para excluir sedes administrativas, manteniéndolas bajo custodia exclusiva de `zonadmin` y los 12 usuarios `plantadmin`.  
 > 5. Registro Histórico y Respaldo: Preservación integral en `bitacora.md`, `conversaciones.md` y sincronización con GitHub.
-
 
 ### Intervención 195
 
@@ -6792,16 +6852,16 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Cruce Forense de Cédulas (`RAC_zona.xlsx` vs Nómina Consolidada Actual):  
->    - Diagnóstico de los 213 trabajadores de planta: 154 funcionarios son 100% nuevos en el SGH (administrativos y obreros centrales que no pertenecían a ningún colegio) y 59 funcionarios son docentes con nombramiento de origen en comisión de servicio de planta.  
+>    * Diagnóstico de los 213 trabajadores de planta: 154 funcionarios son 100% nuevos en el SGH (administrativos y obreros centrales que no pertenecían a ningún colegio) y 59 funcionarios son docentes con nombramiento de origen en comisión de servicio de planta.  
 > 2. Decisión Estratégica Aprobada (Opción 1 - Bloque Especial Planta / Zona):  
->    - Mantener el Bloque 1 (Eje Panamericano y Valle del Mocotíes) con sus 11.244 registros escolares sin alteraciones territoriales.  
->    - Crear el Bloque Especial Planta dedicado para los 213 funcionarios de Zona Educativa en un lote quirúrgico independiente de apenas 213 escrituras (1% de la cuota diaria).  
+>    * Mantener el Bloque 1 (Eje Panamericano y Valle del Mocotíes) con sus 11.244 registros escolares sin alteraciones territoriales.  
+>    * Crear el Bloque Especial Planta dedicado para los 213 funcionarios de Zona Educativa en un lote quirúrgico independiente de apenas 213 escrituras (1% de la cuota diaria).  
 > 3. Regla de Limpieza y Extracción de Oficinas para Gestión Interna (`001200339`):  
->    - El nombre de la división principal se estandariza limpio como `DIVISIÓN DE GESTIÓN HUMANA` (u oficina ministerial correspondiente), eliminando los paréntesis del nombre institucional.  
->    - El texto que venía entre paréntesis (ej. `COORDINACIÓN DE NÓMINA`, `OFICINA DE OBREROS`, `ASESORÍA JURÍDICA`, `ATENCIÓN AL CIUDADANO`, `EVALUACIÓN`) se extrae de forma automática y se asigna al campo institucional de texto libre `oficina`.  
+>    * El nombre de la división principal se estandariza limpio como `DIVISIÓN DE GESTIÓN HUMANA` (u oficina ministerial correspondiente), eliminando los paréntesis del nombre institucional.  
+>    * El texto que venía entre paréntesis (ej. `COORDINACIÓN DE NÓMINA`, `OFICINA DE OBREROS`, `ASESORÍA JURÍDICA`, `ATENCIÓN AL CIUDADANO`, `EVALUACIÓN`) se extrae de forma automática y se asigna al campo institucional de texto libre `oficina`.  
 > 4. Registro y Respaldo Protocolar: Actualización física de `bitacora.md`, `conversaciones.md` y sincronización con GitHub.
-
 
 ### Intervención 196
 
@@ -6817,23 +6877,23 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Ejecución en Vivo de la Fase 3 - Bloque 1 (Eje Panamericano y Valle del Mocotíes):  
->    - Se lanzó y culminó el script maestro `scripts/fase3_migracion_simetria.js --bloque=1 --execute` a través de la API REST `documents:commit`.  
->    - 22.164 operaciones atómicas ejecutadas en 56 lotes continuos de hasta 400 operaciones, todas confirmadas con HTTP 200 OK.  
->    - 11.244 cargos de personal normalizados con su clave universal simétrica `{codigoDEA}_{cedula}` y metadatos canónicos de institución, municipio y parroquia.  
->    - 10.920 documentos asimétricos legados sueltos (`cargos_personal/{cedula}`) eliminados de raíz.  
->    - 0 lecturas consumidas en Firestore (Zero-Cost Shield absoluto).  
+>    * Se lanzó y culminó el script maestro `scripts/fase3_migracion_simetria.js --bloque=1 --execute` a través de la API REST `documents:commit`.  
+>    * 22.164 operaciones atómicas ejecutadas en 56 lotes continuos de hasta 400 operaciones, todas confirmadas con HTTP 200 OK.  
+>    * 11.244 cargos de personal normalizados con su clave universal simétrica `{codigoDEA}_{cedula}` y metadatos canónicos de institución, municipio y parroquia.  
+>    * 10.920 documentos asimétricos legados sueltos (`cargos_personal/{cedula}`) eliminados de raíz.  
+>    * 0 lecturas consumidas en Firestore (Zero-Cost Shield absoluto).  
 > 2. Auditoría en Vivo de Comprobación:  
->    - Mediante el script `scripts/audit_bloque1.js` se verificaron casos reales en la base de datos de producción:  
+>    * Mediante el script `scripts/audit_bloque1.js` se verificaron casos reales en la base de datos de producción:  
 >      * Caso testigo de pluriempleo Yoneida Guerra (CI `15142594`): Documento legado asimétrico eliminado con éxito (HTTP 404). Documentos canónicos simétricos `OD12261410_15142594` (Braulio Belandria) y `S3379N1410_15142594` (Liceo Emira Matheus) activos y perfectamente homologados (HTTP 200).  
 >      * Caso testigo Tovar (CI `23493717`): Documento canónico `OD05041421_23493717` activo con municipio TOVAR y parroquia TOVAR (HTTP 200); clave legada eliminada (HTTP 404).  
 > 3. Análisis de Métricas en Consola de Firebase:  
->    - La gráfica aportada por el usuario confirma que la curva de lecturas permaneció completamente plana en cero durante la migración, y la curva de escrituras alcanzó 14k total diario (muy por debajo de la cuota límite gratuita de 20k).  
+>    * La gráfica aportada por el usuario confirma que la curva de lecturas permaneció completamente plana en cero durante la migración, y la curva de escrituras alcanzó 14k total diario (muy por debajo de la cuota límite gratuita de 20k).  
 > 4. Actualización de Versión y Respaldo:  
->    - Incremento de versión SemVer de `v2.31.1` a `v2.32.0`.  
->    - Compilación exitosa del frontend con Vite (`npm --prefix webapp run build` en 857ms).  
->    - Registro exhaustivo en `bitacora.md`, `conversaciones.md`, `versiones.md` y sincronización con GitHub (`git add .`, `git commit` y `git push origin main`).
-
+>    * Incremento de versión SemVer de `v2.31.1` a `v2.32.0`.  
+>    * Compilación exitosa del frontend con Vite (`npm --prefix webapp run build` en 857ms).  
+>    * Registro exhaustivo en `bitacora.md`, `conversaciones.md`, `versiones.md` y sincronización con GitHub (`git add .`, `git commit` y `git push origin main`).
 
 ### Intervención 197
 
@@ -6848,26 +6908,26 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Ejecución en Vivo del Bloque Especial Planta / Zona Educativa:  
->    - Se ejecutó el script `scripts/fase3_migracion_planta_zona.js --execute` en Cloud Firestore.  
->    - 426 operaciones atómicas procesadas en 2 lotes (400 y 26) mediante `documents:commit`, confirmadas con HTTP 200 OK.  
->    - 213 expedientes de funcionarios de planta inscritos bajo clave universal `{codigoDependencia}_{cedula}` con denominación `SEDE ADMINISTRATIVA`, municipio `LIBERTADOR`, parroquia `SAGRARIO` y flag `es_planta: true`.  
->    - 213 documentos legados asimétricos sueltos (`cargos_personal/{cedula}`) depurados.  
->    - Consumo neto: 213 escrituras (1% de la cuota Spark diaria) y 0 lecturas.  
+>    * Se ejecutó el script `scripts/fase3_migracion_planta_zona.js --execute` en Cloud Firestore.  
+>    * 426 operaciones atómicas procesadas en 2 lotes (400 y 26) mediante `documents:commit`, confirmadas con HTTP 200 OK.  
+>    * 213 expedientes de funcionarios de planta inscritos bajo clave universal `{codigoDependencia}_{cedula}` con denominación `SEDE ADMINISTRATIVA`, municipio `LIBERTADOR`, parroquia `SAGRARIO` y flag `es_planta: true`.  
+>    * 213 documentos legados asimétricos sueltos (`cargos_personal/{cedula}`) depurados.  
+>    * Consumo neto: 213 escrituras (1% de la cuota Spark diaria) y 0 lecturas.  
 > 2. Normalización de Gestión Humana y Extracción de Oficinas:  
->    - División `001200339` normalizada limpia como `DIVISIÓN DE GESTIÓN HUMANA` (paréntesis eliminados).  
->    - Oficinas y coordinaciones extraídas de forma automática al nuevo campo `oficina`.  
+>    * División `001200339` normalizada limpia como `DIVISIÓN DE GESTIÓN HUMANA` (paréntesis eliminados).  
+>    * Oficinas y coordinaciones extraídas de forma automática al nuevo campo `oficina`.  
 > 3. Convivencia Armónica para 59 Docentes en Comisión de Servicio:  
->    - Coexistencia simétrica garantizada sin colisiones: Cargo escolar (`{codigoDEA}_{cedula}`) y cargo de planta (`{codigoDependencia}_{cedula}`).  
+>    * Coexistencia simétrica garantizada sin colisiones: Cargo escolar (`{codigoDEA}_{cedula}`) y cargo de planta (`{codigoDependencia}_{cedula}`).  
 > 4. Auditoría en Vivo con `scripts/audit_planta.js`:  
->    - Directora de Zona (`001200330_9384726`): HTTP 200 Activa. Clave vieja suelta: HTTP 404 Eliminada.  
->    - Funcionario de Nómina (`001200339_11220183`): HTTP 200 Activo, División limpia `DIVISIÓN DE GESTIÓN HUMANA`, Oficina `COORDINACION DE GESTION HUMANA / OFICINA DE NOMINA`.  
->    - Docente Comisionada (`5508116`): Planta (`001200337_5508116`) HTTP 200 y Escuela (`S1463D1401_5508116`) HTTP 200.  
+>    * Directora de Zona (`001200330_9384726`): HTTP 200 Activa. Clave vieja suelta: HTTP 404 Eliminada.  
+>    * Funcionario de Nómina (`001200339_11220183`): HTTP 200 Activo, División limpia `DIVISIÓN DE GESTIÓN HUMANA`, Oficina `COORDINACION DE GESTION HUMANA / OFICINA DE NOMINA`.  
+>    * Docente Comisionada (`5508116`): Planta (`001200337_5508116`) HTTP 200 y Escuela (`S1463D1401_5508116`) HTTP 200.  
 > 5. Actualización SemVer y Respaldo Git:  
->    - Incremento a `v2.32.1`.  
->    - Compilación limpia con Vite (610ms).  
->    - Sincronización completa con GitHub (`git add .`, `git commit` y `git push origin main`).
-
+>    * Incremento a `v2.32.1`.  
+>    * Compilación limpia con Vite (610ms).  
+>    * Sincronización completa con GitHub (`git add .`, `git commit` y `git push origin main`).
 
 ### Intervención 198
 
@@ -6885,16 +6945,15 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. Protocolo de Ejecución para Bloque 2: Se estableció el comando oficial `EJECUTAR_BLOQUE2_METROPOLITANO` (o "Iniciar Bloque 2") para la jornada de mañana.  
 > 2. Registro de las 9 Sedes Administrativas en Firestore:  
->    - Creación en `planteles/{codDep}` de las 9 dependencias ministeriales de Zona Educativa (`001200330` a `001200341`) con denominación `SEDE ADMINISTRATIVA`, municipio `LIBERTADOR`, parroquia `SAGRARIO` y su nómina precargada.  
+>    * Creación en `planteles/{codDep}` de las 9 dependencias ministeriales de Zona Educativa (`001200330` a `001200341`) con denominación `SEDE ADMINISTRATIVA`, municipio `LIBERTADOR`, parroquia `SAGRARIO` y su nómina precargada.  
 > 3. Construcción y Adaptación de la Interfaz para `plantadmin`:  
->    - Ocultamiento de la capa escolar (cero matrícula, cero planes de estudio, cero asistencia).  
->    - Desacoplamiento e inyección del campo editable `oficina` en formulario, tabla y exportación Excel.  
->    - Blindaje de acceso central en `auth.js` y asignación de gobernanza exclusiva bajo `zonadmin` en `admin.js`.  
+>    * Ocultamiento de la capa escolar (cero matrícula, cero planes de estudio, cero asistencia).  
+>    * Desacoplamiento e inyección del campo editable `oficina` en formulario, tabla y exportación Excel.  
+>    * Blindaje de acceso central en `auth.js` y asignación de gobernanza exclusiva bajo `zonadmin` en `admin.js`.  
 > 4. Incremento SemVer a `v2.33.0`, compilación limpia en 617ms y sincronización Git.
-
-
 
 ### Intervención 199
 
@@ -6908,22 +6967,21 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. **Lectura y Cumplimiento de Skill de Especialista:**  
->    - Se leyó en su totalidad el archivo `.agents/skills/webapp-expert/SKILL_sgh_firebase.md` para acatar estrictamente todas sus directrices arquitectónicas, políticas Zero-Cost, control SemVer, apéndice de trampas UI y bitácora obligatoria.  
+>    * Se leyó en su totalidad el archivo `.agents/skills/webapp-expert/SKILL_sgh_firebase.md` para acatar estrictamente todas sus directrices arquitectónicas, políticas Zero-Cost, control SemVer, apéndice de trampas UI y bitácora obligatoria.  
 > 2. **Menú Desplegable Oficial para `plantadmin` en Formulario de Registro:**  
->    - En `webapp/index.html`, se incorporó `#dynamic-plantadmin` con selector directo de las 9 dependencias ministeriales oficiales de la Zona Educativa Mérida, eliminando la necesidad de tipear manualmente códigos de 9 dígitos.  
+>    * En `webapp/index.html`, se incorporó `#dynamic-plantadmin` con selector directo de las 9 dependencias ministeriales oficiales de la Zona Educativa Mérida, eliminando la necesidad de tipear manualmente códigos de 9 dígitos.  
 > 3. **Solución Definitiva para Correos de Verificación Extraviados:**  
->    - Se incorporó en la Sala de Espera (`#espera-view`) el bloque `#box-verificacion-reenvio` con el botón interactivo **Reenviar Correo de Verificación**. Cuenta con enfriamiento por cuenta regresiva (60 segundos) para evitar saturación de Firebase y permitir que directores y jefes reenvíen su enlace si cayó en Spam o caducó.  
+>    * Se incorporó en la Sala de Espera (`#espera-view`) el bloque `#box-verificacion-reenvio` con el botón interactivo **Reenviar Correo de Verificación**. Cuenta con enfriamiento por cuenta regresiva (60 segundos) para evitar saturación de Firebase y permitir que directores y jefes reenvíen su enlace si cayó en Spam o caducó.  
 > 4. **Autocompletado Jerárquico y Blindaje Anti-Duplicados:**  
->    - En `webapp/src/main.js`, validación estricta de 1 solo jefe activo o pendiente por dependencia ministerial.  
->    - Auto-asignación institucional canónica: `estado: 'MERIDA'`, `municipio: 'LIBERTADOR'`, `parroquia: 'SAGRARIO'` y vinculación al nombre oficial de la sede.  
->    - Mensajes y alertas personalizadas para Zona Educativa y Gestión Humana.  
->    - Soporte completo en recuperación de perfil (`#recup-box-planta`).  
+>    * En `webapp/src/main.js`, validación estricta de 1 solo jefe activo o pendiente por dependencia ministerial.  
+>    * Auto-asignación institucional canónica: `estado: 'MERIDA'`, `municipio: 'LIBERTADOR'`, `parroquia: 'SAGRARIO'` y vinculación al nombre oficial de la sede.  
+>    * Mensajes y alertas personalizadas para Zona Educativa y Gestión Humana.  
+>    * Soporte completo en recuperación de perfil (`#recup-box-planta`).  
 > 5. **Incremento SemVer y Compilación:**  
->    - Elevación de versión a `v2.34.0` en `package.json`, `index.html` y registro en `versiones.md`.  
->    - Compilación de producción con Vite exitosa en 1.24s.
-
-
+>    * Elevación de versión a `v2.34.0` en `package.json`, `index.html` y registro en `versiones.md`.  
+>    * Compilación de producción con Vite exitosa en 1.24s.
 
 ### Intervención 200
 
@@ -6934,20 +6992,21 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 > "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
 > "No sé si decir satisfactorio, porque pasan dos cosas. acabo de hacer un registro exitoso con un usuario plantaadmin, sin embargo ni en la carpta spam, ni en el Apartado Usuarios del Sistema, hay la manera de verificar y aprobar"  
 > *(Posteriormente)*: "Si observé al usuario plantadmin en el panel zonal, asi que los resultados son satisfactorios.  
-> Sin embargo me acabo de registrar con el usuario alfonsoiii75@gmail.com y la clave 123456789 para hacer las pruebas.., y resulta que me dice el login Credenciales invalidas 😠"  
+> Sin embargo me acabo de registrar con el usuario <alfonsoiii75@gmail.com> y la clave 123456789 para hacer las pruebas.., y resulta que me dice el login Credenciales invalidas 😠"  
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. **Detección Inmediata de la Causa de "Credenciales Inválidas":**  
->    - Se comprobó mediante la API de autenticación que la cuenta registrada originalmente fue `alfonsoiii_75@gmail.com` (**con guion bajo `_`**).  
->    - Al intentar ingresar como `alfonsoiii75@gmail.com` (**sin guion bajo**), el proveedor de identidad responde lógicamente "Credenciales Inválidas" porque dicho usuario no existe. La contraseña `123456789` es 100% correcta para `alfonsoiii_75@gmail.com`.  
+>    * Se comprobó mediante la API de autenticación que la cuenta registrada originalmente fue `alfonsoiii_75@gmail.com` (**con guion bajo `_`**).  
+>    * Al intentar ingresar como `alfonsoiii75@gmail.com` (**sin guion bajo**), el proveedor de identidad responde lógicamente "Credenciales Inválidas" porque dicho usuario no existe. La contraseña `123456789` es 100% correcta para `alfonsoiii_75@gmail.com`.  
 > 2. **Blindaje de la Aprobación Institucional en el Panel:**  
->    - Se ajustó el panel de Usuarios del Sistema (`webapp/src/admin.js`) para incorporar el filtro directo `🏛️ Jefes de Planta` y el botón **«Aprobar Acceso»** con confirmación explícita de que la aprobación formal por la Zona Educativa autoriza el acceso inmediato sin depender de la entrega del correo electrónico.  
->    - Se inyectó la validación anti-duplicados para jefes de planta en la acción de aprobación.  
+>    * Se ajustó el panel de Usuarios del Sistema (`webapp/src/admin.js`) para incorporar el filtro directo `🏛️ Jefes de Planta` y el botón **«Aprobar Acceso»** con confirmación explícita de que la aprobación formal por la Zona Educativa autoriza el acceso inmediato sin depender de la entrega del correo electrónico.  
+>    * Se inyectó la validación anti-duplicados para jefes de planta en la acción de aprobación.  
 > 3. **Actualización de Bitácora y Respaldo Git:**  
->    - Registro formal en `bitacora.md` y `versiones.md` (v2.34.0).  
->    - Sincronización completa a GitHub (`git add .`, `git commit` y `git push origin main`).
+>    * Registro formal en `bitacora.md` y `versiones.md` (v2.34.0).  
+>    * Sincronización completa a GitHub (`git add .`, `git commit` y `git push origin main`).
 
 ---
 
@@ -6964,17 +7023,18 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. **Control de Despliegue para Planta Central / Zona Educativa (`v2.35.0`):**  
->    - En `webapp/index.html` y `webapp/src/admin.js`, se inyectó la tarjeta institucional `#card-planta-despliegue` con temática púrpura, badge interactivo y switch `#chk-planta-despliegue` conectado al campo `planta_activa` en Firestore (`configuracion/despliegue`).  
->    - Desacoplamiento de las 9 dependencias ministeriales del cronograma de despliegue escolar de Libertador.  
->    - Admisión de códigos ministeriales (`001200330` a `001200341`) en la tabla de excepciones con insignia `🏛️ PLANTA CENTRAL`.  
->    - En `webapp/src/auth.js`, enrutamiento protector a Sala de Espera para el rol `plantadmin` cuando la Planta Central esté pausada.  
+>    * En `webapp/index.html` y `webapp/src/admin.js`, se inyectó la tarjeta institucional `#card-planta-despliegue` con temática púrpura, badge interactivo y switch `#chk-planta-despliegue` conectado al campo `planta_activa` en Firestore (`configuracion/despliegue`).  
+>    * Desacoplamiento de las 9 dependencias ministeriales del cronograma de despliegue escolar de Libertador.  
+>    * Admisión de códigos ministeriales (`001200330` a `001200341`) en la tabla de excepciones con insignia `🏛️ PLANTA CENTRAL`.  
+>    * En `webapp/src/auth.js`, enrutamiento protector a Sala de Espera para el rol `plantadmin` cuando la Planta Central esté pausada.  
 > 2. **Diagnóstico y Certificación del Escudo Zero-Cost:**  
->    - Verificación del gráfico de consumo de Firebase: Operaciones ejecutadas con 0 excedentes dentro de los límites Spark (29k/50k lecturas, 14k/20k escrituras, 11k/20k eliminaciones).  
->    - Confirmación de tráfico en reposo total (0 operaciones a las 11 p.m.) y disponibilidad del 100% de la cuota renovada para la ejecución del Bloque 2 (Eje Metropolitano).  
+>    * Verificación del gráfico de consumo de Firebase: Operaciones ejecutadas con 0 excedentes dentro de los límites Spark (29k/50k lecturas, 14k/20k escrituras, 11k/20k eliminaciones).  
+>    * Confirmación de tráfico en reposo total (0 operaciones a las 11 p.m.) y disponibilidad del 100% de la cuota renovada para la ejecución del Bloque 2 (Eje Metropolitano).  
 > 3. **Cierre SemVer y Sincronización:**  
->    - Elevación a `v2.35.0` en `package.json`, `index.html` y documentación en `versiones.md`, `bitacora.md` y `conversaciones.md`.  
->    - Compilación de producción con Vite exitosa en 618ms y push a GitHub (`origin main`).
+>    * Elevación a `v2.35.0` en `package.json`, `index.html` y documentación en `versiones.md`, `bitacora.md` y `conversaciones.md`.  
+>    * Compilación de producción con Vite exitosa en 618ms y push a GitHub (`origin main`).
 
 ---
 
@@ -6993,17 +7053,18 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. **Diagnóstico del Cascarón Residual (`#plantel-form`):**  
->    - Se identificó que la barra blanca correspondía al marco exterior del formulario de matrícula de planteles escolares (`#plantel-form`), cuyos campos internos habían sido apagados para `plantadmin` pero su contenedor seguía ocupando espacio en el DOM.  
+>    * Se identificó que la barra blanca correspondía al marco exterior del formulario de matrícula de planteles escolares (`#plantel-form`), cuyos campos internos habían sido apagados para `plantadmin` pero su contenedor seguía ocupando espacio en el DOM.  
 > 2. **Supresión Aislada y Protección al Director de Plantel (`v2.35.1`):**  
->    - En `webapp/index.html` y `webapp/src/main.js`, se asignó el ID `#card-plantel-form` al contenedor y se condicionó su ocultamiento exclusivamente a usuarios con rol `plantadmin` o denominación `SEDE ADMINISTRATIVA`.  
->    - Para los Directores de Plantel (`plaadmin`), se garantiza por defecto la visibilidad total e inalterada del formulario escolar.  
->    - Se enriqueció la cabecera de la nómina central (`#seccion-personal-existente`) para mostrar el nombre nominal de la división y su código ministerial (`🏛️ Personal Registrado — <Sede> (Cód. 001200330)`).  
+>    * En `webapp/index.html` y `webapp/src/main.js`, se asignó el ID `#card-plantel-form` al contenedor y se condicionó su ocultamiento exclusivamente a usuarios con rol `plantadmin` o denominación `SEDE ADMINISTRATIVA`.  
+>    * Para los Directores de Plantel (`plaadmin`), se garantiza por defecto la visibilidad total e inalterada del formulario escolar.  
+>    * Se enriqueció la cabecera de la nómina central (`#seccion-personal-existente`) para mostrar el nombre nominal de la división y su código ministerial (`🏛️ Personal Registrado — <Sede> (Cód. 001200330)`).  
 > 3. **Compilación y Despliegue en Vivo:**  
->    - Incremento a `v2.35.1` en `package.json`, `index.html` y registro en `versiones.md`, `bitacora.md` y `conversaciones.md`.  
->    - Compilación de producción con Vite limpia (605ms) y despliegue exitoso en Firebase Hosting (`https://sgh-merida.web.app`).  
+>    * Incremento a `v2.35.1` en `package.json`, `index.html` y registro en `versiones.md`, `bitacora.md` y `conversaciones.md`.  
+>    * Compilación de producción con Vite limpia (605ms) y despliegue exitoso en Firebase Hosting (`https://sgh-merida.web.app`).  
 > 4. **Aprobación Oficial:**  
->    - El administrador confirmó la total satisfacción con la visual y el despliegue («Sí. Satisfactorios»). Base de código y hosting 100% sincronizados.
+>    * El administrador confirmó la total satisfacción con la visual y el despliegue («Sí. Satisfactorios»). Base de código y hosting 100% sincronizados.
 
 ---
 
@@ -7022,25 +7083,25 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. **Lectura y Cumplimiento Normativo de SKILL_sgh_firebase.md:**  
->    - Verificación del protocolo de especialista en `.agents/skills/webapp-expert/SKILL_sgh_firebase.md` (Zero-Cost Shield, cuotas Spark, SemVer estricto, bitácora y comunicación simple).  
+>    * Verificación del protocolo de especialista en `.agents/skills/webapp-expert/SKILL_sgh_firebase.md` (Zero-Cost Shield, cuotas Spark, SemVer estricto, bitácora y comunicación simple).  
 > 2. **Diagnóstico Territorial de Bloque 1:**  
->    - Se detallaron los 10 municipios intervenidos en el Bloque 1 (Alberto Adriani, Andrés Bello, Antonio Pinto Salinas, Caracciolo Parra Olmedo, Julio César Salas, Obispo Ramos de Lora, Rivas Dávila, Tovar, Tulio Febres Cordero, Zea) más la Sede Administrativa de Zona Educativa en Libertador.  
+>    * Se detallaron los 10 municipios intervenidos en el Bloque 1 (Alberto Adriani, Andrés Bello, Antonio Pinto Salinas, Caracciolo Parra Olmedo, Julio César Salas, Obispo Ramos de Lora, Rivas Dávila, Tovar, Tulio Febres Cordero, Zea) más la Sede Administrativa de Zona Educativa en Libertador.  
 > 3. **Análisis de Consola y Confirmación de Cuotas Nuevas:**  
->    - Se certificó que el pico de 25k lecturas a las 10 p.m. de anoche correspondió a la consulta global "Todos los Municipios", y que desde medianoche el contador se restableció a cero (0 operaciones en toda la madrugada).  
+>    * Se certificó que el pico de 25k lecturas a las 10 p.m. de anoche correspondió a la consulta global "Todos los Municipios", y que desde medianoche el contador se restableció a cero (0 operaciones en toda la madrugada).  
 > 4. **Ejecución en Vivo de Bloque 2 (Eje Metropolitano y Pueblos del Sur):**  
->    - Se ejecutó el script maestro `scripts/fase3_migracion_simetria.js --bloque=2 --execute` procesando los municipios Libertador (escuelas), Campo Elías, Sucre, Santos Marquina, Aricagua, Arzobispo Chacón, Guaraque y Padre Noguera.  
->    - 25.833 operaciones atómicas procesadas en 65 lotes continuos de 400 operaciones mediante `documents:commit`, todas confirmadas con HTTP 200 OK.  
->    - 13.121 cargos canónicos simétricos `{codigoDEA}_{cedula}` creados/actualizados con metadatos completos y flag `simetria_homologada: true`.  
->    - 12.712 documentos asimétricos legados (`cargos_personal/{cedula}`) depurados. Cero lecturas consumidas en Firestore.  
+>    * Se ejecutó el script maestro `scripts/fase3_migracion_simetria.js --bloque=2 --execute` procesando los municipios Libertador (escuelas), Campo Elías, Sucre, Santos Marquina, Aricagua, Arzobispo Chacón, Guaraque y Padre Noguera.  
+>    * 25.833 operaciones atómicas procesadas en 65 lotes continuos de 400 operaciones mediante `documents:commit`, todas confirmadas con HTTP 200 OK.  
+>    * 13.121 cargos canónicos simétricos `{codigoDEA}_{cedula}` creados/actualizados con metadatos completos y flag `simetria_homologada: true`.  
+>    * 12.712 documentos asimétricos legados (`cargos_personal/{cedula}`) depurados. Cero lecturas consumidas en Firestore.  
 > 5. **Auditoría de Comprobación en Vivo:**  
->    - Mediante `scripts/audit_bloque2.js`, se comprobó con 100% de éxito la eliminación de claves legadas y la presencia de cargos simétricos canónicos en Campo Elías (`OD00611406_22654384`), Sucre (`OD14731420_20435542`) y la protección intacta de Planta Central (`001200330_9384726`).  
+>    * Mediante `scripts/audit_bloque2.js`, se comprobó con 100% de éxito la eliminación de claves legadas y la presencia de cargos simétricos canónicos en Campo Elías (`OD00611406_22654384`), Sucre (`OD14731420_20435542`) y la protección intacta de Planta Central (`001200330_9384726`).  
 > 6. **Cierre SemVer y Despliegue en Vivo:**  
->    - Elevación a versión **`v2.36.0`** en `package.json`, `index.html` y registro en `versiones.md`, `bitacora.md` y `conversaciones.md`.  
->    - Compilación con Vite limpia (1.33s) y despliegue completado en Firebase Hosting (`https://sgh-merida.web.app`). Sincronización con GitHub (`origin/main`).  
+>    * Elevación a versión **`v2.36.0`** en `package.json`, `index.html` y registro en `versiones.md`, `bitacora.md` y `conversaciones.md`.  
+>    * Compilación con Vite limpia (1.33s) y despliegue completado en Firebase Hosting (`https://sgh-merida.web.app`). Sincronización con GitHub (`origin/main`).  
 > 7. **Aprobación Oficial y Monitoreo de Gráficas:**  
->    - El administrador confirmó plena satisfacción («Resultados satisfactorios») y aportó la captura de la consola post-ejecución, confirmando la estabilidad del sistema y el retraso habitual de agregación de métricas de Google Cloud.
-
+>    * El administrador confirmó plena satisfacción («Resultados satisfactorios») y aportó la captura de la consola post-ejecución, confirmando la estabilidad del sistema y el retraso habitual de agregación de métricas de Google Cloud.
 
 ---
 
@@ -7066,27 +7127,27 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. **Lectura Obligatoria de SKILL_sgh_firebase.md:**  
->    - Se consultó y aplicó la directriz de Zero-Cost, comunicación simple no técnica, SemVer y bitácora estricta.  
+>    * Se consultó y aplicó la directriz de Zero-Cost, comunicación simple no técnica, SemVer y bitácora estricta.  
 > 2. **Diagnóstico y Corrección Integral de UI (`webapp`):**  
->    - **Consulta de Personal:** Se corrigió en `personalWizard.js` y `admin.js` la consulta para filtrar por `where('codigoDEA', '==', codigoDEA)` con fallback a `codigo-plantel`, resolviendo el mensaje de "No hay personal registrado" en sedes de Planta Central.  
->    - **Formato de Fecha HTML5:** Conversión de fecha serial `01/01/2005` a `2005-01-01` (`YYYY-MM-DD`) para que el control `<input type="date">` del navegador precargue correctamente la fecha de ingreso.  
->    - **Selector de Cargo y RAC:** Se implementó tolerancia a caracteres y espacios variables con inyección dinámica de opciones para evitar que cargos válidos como `DOC. IV /AULA BOLIV` y `1124DB` se mostraran en blanco.  
->    - **Selector de Género:** Se homologaron las opciones del selector en `index.html` a `FEMENINO` y `MASCULINO`.  
->    - **Unificación de Campo Observaciones:** El formulario precarga y guarda estrictamente en el campo canónico `observaciones`, erradicando el campo residual en singular `observacion`.  
->    - **Protección de Carga Horaria para Planta Central:** Cuando el funcionario no atiende matrícula o es personal de oficina, las horas académicas permanecen en blanco si en el archivo original dice `N/A`, mientras que las horas administrativas reflejan su dedicación real (53,33 horas para Marina Sulbarán).  
+>    * **Consulta de Personal:** Se corrigió en `personalWizard.js` y `admin.js` la consulta para filtrar por `where('codigoDEA', '==', codigoDEA)` con fallback a `codigo-plantel`, resolviendo el mensaje de "No hay personal registrado" en sedes de Planta Central.  
+>    * **Formato de Fecha HTML5:** Conversión de fecha serial `01/01/2005` a `2005-01-01` (`YYYY-MM-DD`) para que el control `<input type="date">` del navegador precargue correctamente la fecha de ingreso.  
+>    * **Selector de Cargo y RAC:** Se implementó tolerancia a caracteres y espacios variables con inyección dinámica de opciones para evitar que cargos válidos como `DOC. IV /AULA BOLIV` y `1124DB` se mostraran en blanco.  
+>    * **Selector de Género:** Se homologaron las opciones del selector en `index.html` a `FEMENINO` y `MASCULINO`.  
+>    * **Unificación de Campo Observaciones:** El formulario precarga y guarda estrictamente en el campo canónico `observaciones`, erradicando el campo residual en singular `observacion`.  
+>    * **Protección de Carga Horaria para Planta Central:** Cuando el funcionario no atiende matrícula o es personal de oficina, las horas académicas permanecen en blanco si en el archivo original dice `N/A`, mientras que las horas administrativas reflejan su dedicación real (53,33 horas para Marina Sulbarán).  
 > 3. **Ejecución y Enriquecimiento Masivo de Planta Central en Firestore:**  
->    - Mediante el script `scripts/enriquecer_planta_zona.js --execute`, se procesaron atómicamente los **213 funcionarios** de Planta Central y las **9 sedes administrativas** de la Zona Educativa.  
->    - Lote de 222 operaciones atómicas en `documents:commit` ejecutado con éxito bajo Zero-Cost Shield (0 lecturas) y confirmado con HTTP 200 OK.  
->    - Se auditó en vivo mediante API REST el expediente de la funcionaria Marina Sulbarán (`001200339_14107188`), comprobando conformidad 100%: horas académicas vacías, horas administrativas en 53,33, cargo `DOC. IV /AULA BOLIV`, RAC `1124DB`, fecha `01/01/2005`, sexo `FEMENINO` y observación canónica `COORDINADORA OFICINA GESTION HUMANA` sin campo singular residual.  
+>    * Mediante el script `scripts/enriquecer_planta_zona.js --execute`, se procesaron atómicamente los **213 funcionarios** de Planta Central y las **9 sedes administrativas** de la Zona Educativa.  
+>    * Lote de 222 operaciones atómicas en `documents:commit` ejecutado con éxito bajo Zero-Cost Shield (0 lecturas) y confirmado con HTTP 200 OK.  
+>    * Se auditó en vivo mediante API REST el expediente de la funcionaria Marina Sulbarán (`001200339_14107188`), comprobando conformidad 100%: horas académicas vacías, horas administrativas en 53,33, cargo `DOC. IV /AULA BOLIV`, RAC `1124DB`, fecha `01/01/2005`, sexo `FEMENINO` y observación canónica `COORDINADORA OFICINA GESTION HUMANA` sin campo singular residual.  
 > 4. **Aclaratoria sobre el Alcance Territorial Completo:**  
->    - Se aclaró al usuario que la estandarización no se limitó a Gestión Humana (`001200339`), sino que abarcó a las 9 dependencias de la Zona Educativa (`001200330`, `001200331`, `001200332`, `001200334`, `001200337`, `001200338`, `001200339`, `001200340`, `001200341`) y sus 213 funcionarios.  
+>    * Se aclaró al usuario que la estandarización no se limitó a Gestión Humana (`001200339`), sino que abarcó a las 9 dependencias de la Zona Educativa (`001200330`, `001200331`, `001200332`, `001200334`, `001200337`, `001200338`, `001200339`, `001200340`, `001200341`) y sus 213 funcionarios.  
 > 5. **Control de Versiones y Despliegue en Vivo:**  
->    - Elevación SemVer a **v2.36.4** en `package.json`, `index.html` y registro en `versiones.md`, `bitacora.md` y `conversaciones.md`.  
->    - Compilación con Vite limpia (621ms) y despliegue exitoso a producción en Firebase Hosting (`https://sgh-merida.web.app`). Sincronización completa con repositorio GitHub (`origin/main`).  
+>    * Elevación SemVer a **v2.36.4** en `package.json`, `index.html` y registro en `versiones.md`, `bitacora.md` y `conversaciones.md`.  
+>    * Compilación con Vite limpia (621ms) y despliegue exitoso a producción en Firebase Hosting (`https://sgh-merida.web.app`). Sincronización completa con repositorio GitHub (`origin/main`).  
 > 6. **Cierre de Ciclo:**  
->    - El usuario expresó su conformidad oficial: *"Entonces sí estoy satisfecho"*.
-
+>    * El usuario expresó su conformidad oficial: *"Entonces sí estoy satisfecho"*.
 
 ---
 
@@ -7096,7 +7157,7 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Usuario (Administrador)
 
 > **Mensaje del Usuario:**  
-> "correos_afectados: sghmartintovar@gmail.com, ee.obduliaj@gmail.com"  
+> "correos_afectados: <sghmartintovar@gmail.com>, <ee.obduliaj@gmail.com>"  
 > "No sé si llamar a lo siguiente como problema pero quiero que audites en la base de datos de Firebase la cedula 19047873. De acuerdo a tu investigación, estableceré mi criterio" *(Adjunta captura de pantalla del panel SGH mostrando la vista 'Resumen Comparativo de Discrepancias' con Registro #1 OD02271418_19047873 vs Registro #2 _19047873 con código DEA S/D).*  
 > "ok, eso quiere decir que cuando ejecutaste la fase 3 de ese bloque, migraste n cantidad de registros con ese problema, y ahora navega sin control en internet. Antes de que hagas cualquier tontería, necesito verifiques en la base de datos si existe el mismo problema con otras cedulas, por favor. Y me das el resumen de lo que encuentres, para ver qué debemos hacer"  
 > "¿Vas a proceder con ambas fases?"  
@@ -7106,27 +7167,28 @@ pm run build) y se desplegó a Firebase Hosting (sgh-merida.web.app).
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. **Atención Inmediata al Protocolo `correos_afectados`:**  
->    - Se verificaron y regularizaron las cuentas institucionales del Municipio Tovar: `sghmartintovar@gmail.com` (CEI Tovar / Martín Tovar y Tovar, `OD14891421`, con 31 trabajadores) y `ee.obduliaj@gmail.com` (Escuela Obdulia Jaimes de Medina / NER 015, `OD09721421`).  
->    - Perfiles actualizados con estatus `APROBADO` y rol `plaadmin`. Generados enlaces OOB de restablecimiento de contraseña y redactados los mensajes protocolares listos para WhatsApp.  
+>    * Se verificaron y regularizaron las cuentas institucionales del Municipio Tovar: `sghmartintovar@gmail.com` (CEI Tovar / Martín Tovar y Tovar, `OD14891421`, con 31 trabajadores) y `ee.obduliaj@gmail.com` (Escuela Obdulia Jaimes de Medina / NER 015, `OD09721421`).  
+>    * Perfiles actualizados con estatus `APROBADO` y rol `plaadmin`. Generados enlaces OOB de restablecimiento de contraseña y redactados los mensajes protocolares listos para WhatsApp.  
 > 2. **Auditoría Forense de Caso Testigo (Marili Rojas - C.I. 19.047.873):**  
->    - Se identificó la causa de la discrepancia: la docente es titular legítima en la Escuela Estadal José Gregorio Ramírez (`OD02271418`, Bailadores), pero existía un documento espurio `_19047873` originado por una fila con código DEA en blanco en el archivo de nómina consolidada del 09 de noviembre.  
+>    * Se identificó la causa de la discrepancia: la docente es titular legítima en la Escuela Estadal José Gregorio Ramírez (`OD02271418`, Bailadores), pero existía un documento espurio `_19047873` originado por una fila con código DEA en blanco en el archivo de nómina consolidada del 09 de noviembre.  
 > 3. **Auditoría Forense Global de la Base de Datos:**  
->    - Se escaneó la colección `cargos_personal` completa, identificando exactamente 104 documentos con `codigoDEA == ""` e ID iniciando con `_`.  
->    - **97 casos (93,3%):** Duplicados fantasma cuyos titulares ya contaban con su expediente oficial `{codigoDEA}_{cedula}` activo en su respectiva escuela.  
->    - **7 casos (6,7%):** Huérfanos de plantel que solo poseían el documento temporal `_{cedula}`, pero cuyos planteles oficiales figuraban plenamente en `RAC.xlsx`.  
+>    * Se escaneó la colección `cargos_personal` completa, identificando exactamente 104 documentos con `codigoDEA == ""` e ID iniciando con `_`.  
+>    * **97 casos (93,3%):** Duplicados fantasma cuyos titulares ya contaban con su expediente oficial `{codigoDEA}_{cedula}` activo en su respectiva escuela.  
+>    * **7 casos (6,7%):** Huérfanos de plantel que solo poseían el documento temporal `_{cedula}`, pero cuyos planteles oficiales figuraban plenamente en `RAC.xlsx`.  
 > 4. **Ejecución Conjunta y Saneamiento en Vivo (Luz Verde):**  
->    - Mediante `scripts/sanear_registros_sin_dea.js --execute`, se procesó un lote de 112 operaciones atómicas en `documents:commit`:  
+>    * Mediante `scripts/sanear_registros_sin_dea.js --execute`, se procesó un lote de 112 operaciones atómicas en `documents:commit`:  
 >      * Altas canónicas de los 7 huérfanos vinculados a sus DEA oficiales: `OD02891419_15753998`, `OD14121418_16019151`, `OD14071418_19046863`, `OD00701418_18208693`, `OD14071418_20396864`, `OD14071418_20397710` y `S2855D1410_19529390`.  
 >      * Normalización de campos con guiones en `OD02271418_19047873`.  
 >      * Eliminación atómica de los 104 documentos fantasma con prefijo `_`.  
 > 5. **Verificación Post-Vuelo:**  
->    - Cero documentos con `codigoDEA == ""` en Firestore. Cero discrepancias en el panel web.  
+>    * Cero documentos con `codigoDEA == ""` en Firestore. Cero discrepancias en el panel web.  
 > 6. **Control de Versiones y Despliegue en Vivo:**  
->    - Elevación SemVer a **v2.36.5** en `package.json`, `index.html` y registro en `versiones.md`, `bitacora.md` y `conversaciones.md`.  
->    - Compilación con Vite limpia (1.50s) y despliegue completado con éxito a producción en Firebase Hosting (`https://sgh-merida.web.app`). Sincronización completa con repositorio GitHub (`origin/main`).  
+>    * Elevación SemVer a **v2.36.5** en `package.json`, `index.html` y registro en `versiones.md`, `bitacora.md` y `conversaciones.md`.  
+>    * Compilación con Vite limpia (1.50s) y despliegue completado con éxito a producción en Firebase Hosting (`https://sgh-merida.web.app`). Sincronización completa con repositorio GitHub (`origin/main`).  
 > 7. **Cierre de Ciclo:**  
->    - El usuario confirmó su total conformidad: *"Sí, satisfecho"*.
+>    * El usuario confirmó su total conformidad: *"Sí, satisfecho"*.
 
 ---
 
@@ -7144,6 +7206,7 @@ Vigilantes:
 1.Jose Gregorio Rivas Torres C.I 10239422
 2.Fernando José Carrasquero Araujo C.I 12499150
 Aseadoras:
+
 1. María Euqueria Rivas Dávila C.I 14656023
 2. Eldi Isabel Camelo de Uzcategui 14250783
 3. Yoseimy Iranuth Molero Villalobos 17326129
@@ -7153,22 +7216,24 @@ Jardín de Infancia pascual Ignacio Villasmil: Argelia del Carmen Avendaño more
 Preescolar Simón Rodríguez Anexo Luis Pérez: Maribel de Carmen Hernández Bracho CI 17437763 Personal obrero
 Escuela Jesús Manuel Santander Ramírez: personal que Falta en el RAC Asesora Ydelma Pérez C.I. 9198769
 Creo que solo 2 están en el RAC.xlsx"  
+
 > "Si no hay nada que inyectar en Firestore, entonces solo tienes luz verde para darme el mensaje whatsapp. más nada"
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. **Resolución de Consulta de Bloque 2:**  
->    - Se detallaron los 8 municipios migrados en el Bloque 2 (Eje Metropolitano: Libertador, Campo Elías, Sucre, Santos Marquina; Eje Pueblos del Sur: Aricagua, Arzobispo Chacón, Guaraque, Padre Noguera; 13.121 registros).  
+>    * Se detallaron los 8 municipios migrados en el Bloque 2 (Eje Metropolitano: Libertador, Campo Elías, Sucre, Santos Marquina; Eje Pueblos del Sur: Aricagua, Arzobispo Chacón, Guaraque, Padre Noguera; 13.121 registros).  
 > 2. **Auditoría Forense CASO_HUERFANOS (Caracciolo Parra Olmedo):**  
->    - Se identificaron los 5 planteles educativos correspondientes a las parroquias Tucaní y Florencio Ramírez (`OD01101407`, `OD04191407`, `OD17441407`, `OD04171407`, `OD04151407`).  
->    - Se contrastaron exhaustivamente los 10 funcionarios reportados contra la nómina central `RAC.xlsx` (30.323 registros), la nómina consolidada estadal y `cargos_personal` en Firebase.  
->    - **Detección Crítica de Conflicto de Cédula:** Se confirmó que las cédulas 12.549.386 y 15.142.422 (reportadas como obreras en el J.I. Pascual Ignacio Villasmil) pertenecen en RAC a las docentes Daisy Faria y Liset Ascanio (Docentes IV de Aula). Se evitó la usurpación de identidad y daño a las docentes legítimas.  
->    - Los 8 casos restantes correspondieron a personal obrero/vigilancia comunal o institucional sin código RAC ministerial activo.  
+>    * Se identificaron los 5 planteles educativos correspondientes a las parroquias Tucaní y Florencio Ramírez (`OD01101407`, `OD04191407`, `OD17441407`, `OD04171407`, `OD04151407`).  
+>    * Se contrastaron exhaustivamente los 10 funcionarios reportados contra la nómina central `RAC.xlsx` (30.323 registros), la nómina consolidada estadal y `cargos_personal` en Firebase.  
+>    * **Detección Crítica de Conflicto de Cédula:** Se confirmó que las cédulas 12.549.386 y 15.142.422 (reportadas como obreras en el J.I. Pascual Ignacio Villasmil) pertenecen en RAC a las docentes Daisy Faria y Liset Ascanio (Docentes IV de Aula). Se evitó la usurpación de identidad y daño a las docentes legítimas.  
+>    * Los 8 casos restantes correspondieron a personal obrero/vigilancia comunal o institucional sin código RAC ministerial activo.  
 > 3. **Ejecución y Resguardo de Integridad:**  
->    - 0 escrituras en Firestore (cero alteraciones y Zero-Cost absoluto).  
+>    * 0 escrituras en Firestore (cero alteraciones y Zero-Cost absoluto).  
 > 4. **Entrega de FASE 2:**  
->    - Emisión del comunicado canónico oficial formateado para difusión vía WhatsApp a las autoridades y directivos del CDCE de Caracciolo Parra Olmedo.
+>    * Emisión del comunicado canónico oficial formateado para difusión vía WhatsApp a las autoridades y directivos del CDCE de Caracciolo Parra Olmedo.
 
 ---
 
@@ -7186,21 +7251,22 @@ Creo que solo 2 están en el RAC.xlsx"
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. **Diagnóstico y Explicación del Candado de Carga Horaria:**  
->    - Se analizó el caso testigo de Mercris Bravo (C.I. 13.438.966), quien posee un Doble Cargo legítimo: Cargo Estadal en Doña Menca de Leoni (`OD00471414`) y Cargo Nacional en Ramón Celestino Contreras (`OD17601407`).  
->    - Se explicó que el validador actual acumula ciegamente las horas de ambos cargos (40h + 36h = 76h) contra un único contrato, disparando los candados de «docente concentrado en básica» y «exceso de carga acumulada sobre 56 horas».  
->    - Se presentó la propuesta de validación independiente por dependencia para su futura evaluación con la jefatura de nómina.  
+>    * Se analizó el caso testigo de Mercris Bravo (C.I. 13.438.966), quien posee un Doble Cargo legítimo: Cargo Estadal en Doña Menca de Leoni (`OD00471414`) y Cargo Nacional en Ramón Celestino Contreras (`OD17601407`).  
+>    * Se explicó que el validador actual acumula ciegamente las horas de ambos cargos (40h + 36h = 76h) contra un único contrato, disparando los candados de «docente concentrado en básica» y «exceso de carga acumulada sobre 56 horas».  
+>    * Se presentó la propuesta de validación independiente por dependencia para su futura evaluación con la jefatura de nómina.  
 > 2. **Ampliación Integral del Auditor de Cédulas (Resumen Comparativo de Discrepancias):**  
->    - Se rediseñó la tabla comparativa en `webapp/src/admin.js` incorporando los **24 parámetros laborales y de carga horaria** agrupados en 5 categorías visuales:  
+>    * Se rediseñó la tabla comparativa en `webapp/src/admin.js` incorporando los **24 parámetros laborales y de carga horaria** agrupados en 5 categorías visuales:  
 >      * *Ubicación y Asignación:* Plantel, Código DEA, Municipio/Parroquia, Ubicación Administrativa y Oficina/Coordinación.  
 >      * *Clasificación y Nombramiento:* Tipo de personal, Cargo oficial, Código RAC, Rango de obrero, Dependencia (con etiquetas destacadas Estadal/Nacional), Condición (Titular/Contratado), Situación laboral y Fecha de ingreso con antigüedad.  
 >      * *Jornada y Dedicación:* Turnos que atiende, ¿Atiende matrícula?, Nivel/Modalidad y Especialidad que imparte.  
 >      * *Desglose de Carga Horaria:* Horas según recibo (H.DOC / H.ADM), Horas académicas en plantel, Horas administrativas en plantel, Horas por programar y Asignaturas distribuidas desglosadas por año y materia.  
 >      * *Observaciones y Control:* Observaciones institucionales y número de ID en Firebase.  
 > 3. **Control SemVer y Despliegue en Vivo:**  
->    - Elevación SemVer a **v2.36.6** en `package.json`, `index.html`, `versiones.md` y `bitacora.md`.  
->    - Compilación limpia con Vite (665ms) y despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`).  
->    - Sincronización pendiente para confirmación de satisfacción del administrador.
+>    * Elevación SemVer a **v2.36.6** en `package.json`, `index.html`, `versiones.md` y `bitacora.md`.  
+>    * Compilación limpia con Vite (665ms) y despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`).  
+>    * Sincronización pendiente para confirmación de satisfacción del administrador.
 
 ---
 
@@ -7215,20 +7281,21 @@ Creo que solo 2 están en el RAC.xlsx"
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. **Reestructuración de la Tabla Comparativa de Discrepancias:**  
->    - Se alineó la secuencia y titulación de filas en `webapp/src/admin.js` para reflejar con exactitud 1 a 1 la estructura visual del formulario del director escolar:  
+>    * Se alineó la secuencia y titulación de filas en `webapp/src/admin.js` para reflejar con exactitud 1 a 1 la estructura visual del formulario del director escolar:  
 >      * Identificadores de ubicación iniciales: Plantel / Ubicación, Código DEA, Municipio / Parroquia.  
 >      * Sección `2. Datos Laborales`: Ubicación Administrativa, Tipo de Personal, Dependencia, Cargo, Código RAC, Titular / Interino, Fecha de Ingreso, Antigüedad (Años) [con cálculo automático de calendario], Turnos que Atiende y ¿Atiende Matrícula?.  
 >      * Sub-sección destacada `🎓 Asignación Pedagógica y Carga Horaria (Frente a Alumnos)`: Nivel / Modalidad, Especialidad Imparte, Horas según Recibo (H.DOC / H.ADM), Horas Académicas, Horas Administrativas y Horas por Programar.  
 >      * Sección `3. Situación del Trabajador`: Situación Laboral, Descripción y Observaciones.  
 >      * Registro de control: ID del Documento en Firebase.  
 > 2. **Control SemVer y Compilación:**  
->    - Elevación a versión **v2.36.7** en `package.json` e `index.html`.  
->    - Compilación limpia de producción con Vite (673ms) sin errores.  
+>    * Elevación a versión **v2.36.7** en `package.json` e `index.html`.  
+>    * Compilación limpia de producción con Vite (673ms) sin errores.  
 > 3. **Despliegue Operativo:**  
->    - Publicación exitosa en Firebase Hosting (`https://sgh-merida.web.app`).  
+>    * Publicación exitosa en Firebase Hosting (`https://sgh-merida.web.app`).  
 > 4. **Pregunta Protocolar:**  
->    - Notificación al administrador solicitando validación con `Ctrl + F5` y consulta de satisfacción protocolar.
+>    * Notificación al administrador solicitando validación con `Ctrl + F5` y consulta de satisfacción protocolar.
 
 ---
 
@@ -7243,23 +7310,24 @@ Creo que solo 2 están en el RAC.xlsx"
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. **Diagnóstico Inmediato de la Discrepancia Visual:**  
->    - Se identificó que la tabla resumen estaba condicionada exclusivamente a casos de duplicidad (`esDuplicado == true`), por lo que al consultar funcionarios con una sola institución (como Franklin Erazo) la tabla no se renderizaba y solo se mostraba la tarjeta inferior con el esquema anterior resumido.  
+>    * Se identificó que la tabla resumen estaba condicionada exclusivamente a casos de duplicidad (`esDuplicado == true`), por lo que al consultar funcionarios con una sola institución (como Franklin Erazo) la tabla no se renderizaba y solo se mostraba la tarjeta inferior con el esquema anterior resumido.  
 > 2. **Universalización del Resumen de Auditoría Laboral:**  
->    - Se habilitó la renderización incondicional de la tabla comparativa/resumen:  
+>    * Se habilitó la renderización incondicional de la tabla comparativa/resumen:  
 >      * Para funcionarios únicos: Se titula `📊 Resumen de Auditoría Laboral (Datos Oficiales del Funcionario)`.  
 >      * Para duplicados/multi-plantel: Se titula `📊 Resumen Comparativo de Discrepancias (Auditoría Laboral Completa)`.  
 > 3. **Reestructuración Integral de Fichas Institucionales Detalladas:**  
->    - Se rediseñaron las fichas detalladas inferiores para seguir con exactitud 1 a 1 los bloques y campos de la ficha del director:  
+>    * Se rediseñaron las fichas detalladas inferiores para seguir con exactitud 1 a 1 los bloques y campos de la ficha del director:  
 >      * `💼 2. Datos Laborales`: Ubicación Administrativa, Tipo de Personal, Dependencia, Cargo, Código RAC, Titular/Interino, Fecha de Ingreso, Antigüedad (Años), Turnos que Atiende y ¿Atiende Matrícula?.  
 >      * `🎓 Asignación Pedagógica y Carga Horaria (Frente a Alumnos)`: Nivel/Modalidad, Especialidad Imparte, Horas según Recibo, Horas Académicas, Horas Administrativas, Horas por Programar y Asignaturas Académicas Distribuidas.  
 >      * `📋 3. Situación del Trabajador`: Situación Laboral, Descripción y Observaciones.  
 >      * `👤 4. Expediente Personal y Contacto`: Datos personales de contacto y salud.  
 > 4. **Compilación y Despliegue en Vivo:**  
->    - Compilación con Vite limpia (666ms) y despliegue exitoso a producción en Firebase Hosting (`https://sgh-merida.web.app`).  
+>    * Compilación con Vite limpia (666ms) y despliegue exitoso a producción en Firebase Hosting (`https://sgh-merida.web.app`).  
 > 5. **Pregunta Protocolar:**  
->    - Notificación al administrador y consulta de satisfacción protocolar.  
->    - **Confirmación del Administrador:** «Si satisfactorios». Procedimiento cerrado y sincronizado con repositorio remoto.
+>    * Notificación al administrador y consulta de satisfacción protocolar.  
+>    * **Confirmación del Administrador:** «Si satisfactorios». Procedimiento cerrado y sincronizado con repositorio remoto.
 
 ### Sesión de Trabajo — 2026-11-10 (Enriquecimiento Maestro de Datos Omitidos y Blindaje de Simetría)
 
@@ -7272,6 +7340,7 @@ Creo que solo 2 están en el RAC.xlsx"
 
 > **Respuesta del Agente:**  
 > Se realizó una auditoría forense integral comparando las 59 columnas de la Nómina Consolidada y las 89 columnas de `RAC.xlsx` contra el script de migración inicial.  
+>
 > 1. **Hallazgo de Causa Raíz:** El script inicial solo mapeó 26 campos básicos, omitiendo más de 30 campos con información real.  
 > 2. **Campos Omitidos Identificados:** Ubicación Administrativa (7 dígitos), Turnos que Atiende, Atiende Matrícula, Nivel/Modalidad, Especialidad que Imparte, Horas por Programar, Observaciones, Fecha y Lugar de Nacimiento, Nivel de Instrucción, Profesión/Título, Teléfonos fijo/oficina, Subcategoría, Tallas (camisa, pantalón, zapato), Actividades deportivas/culturales, Tipo/Condición/Material de vivienda, Enfermedad, Medicamento y Discapacidad.  
 > 3. **Alcance:** Afectación estimada en ~24.365 expedientes de los Bloques 1 y 2.  
@@ -7288,6 +7357,7 @@ Creo que solo 2 están en el RAC.xlsx"
 
 > **Respuesta del Agente:**  
 > Se ratificaron y desglosaron los 5 criterios inquebrantables de parametrización y arquitectura en Firebase:  
+>
 > 1. **Llave Simétrica Canónica Universal:** `cargos_personal/{codigoDEA}_{cedula}` (prohibidas las claves huérfanas o cédulas planas).  
 > 2. **Nomenclatura Canónica Lower-Kebab-Case:** Mapeo estricto a las claves esperadas por la WebApp (`ubicacion-administrativa`, `turnos-atiende`, `instruccion`, etc.).  
 > 3. **Tipado Numérico Nativo:** Horas y cifras almacenadas como valores numéricos reales (`integerValue` o `doubleValue`), jamás texto ni valores `NaN`.  
@@ -7305,6 +7375,7 @@ Creo que solo 2 están en el RAC.xlsx"
 
 > **Respuesta del Agente:**  
 > Se realizó el mapeo forense de las 89 columnas de la hoja PERSONAL de `RAC.xlsx`:  
+>
 > 1. **Diferenciación de las dos columnas de DEPENDENCIA:**  
 >    * **Columna 24 (Índice 24):** `DEPENDENCIA` del **Plantel / Institución** (describe la escuela: Nacional, Estadal, etc.).  
 >    * **Columna 30 (Índice 30):** `DEPENDENCIA` del **Trabajador / Nómina** (describe el patrono pagador del funcionario).  
@@ -7324,6 +7395,7 @@ Creo que solo 2 están en el RAC.xlsx"
 > **Respuesta del Agente:**  
 > Respuesta categórica: **NO.** En Firebase no existe una colección independiente llamada `planes_estudio`.  
 > Se explicó su ubicación real en la arquitectura:  
+>
 > 1. Como Catálogo Maestro Global: En el documento único `sistema/catalogos_maestros` (mapa `planes_estudio`) y en el módulo de código `catalogosPlanes.js`.  
 > 2. Como Planes Institucionales: En cada documento de escuela `planteles/{codigoDEA}` bajo el campo `planes-estudio`.  
 > 3. En la hoja PERSONAL del RAC: Las columnas 44 a 72 representan la distribución de horas de clase del docente por plan, no la entidad del plan en sí.
@@ -7363,6 +7435,7 @@ Creo que solo 2 están en el RAC.xlsx"
 
 > **Respuesta del Agente:**  
 > Se construyó el script maestro `scripts/fase3_migracion_maestra_unificada.js` y se ejecutaron las simulaciones en seco (Dry-Run) con 0 lecturas en Firestore:  
+>
 > * **Bloque 1 (10 Municipios):** 10.831 expedientes a enriquecer, 10.749 depuraciones legadas, 54 lotes calculados. Muestras auditadas de docente y obrero verificadas con 29 campos protegidos por `updateMask`.  
 > * **Bloque 2 (8 Municipios):** 12.652 expedientes a enriquecer, 12.499 depuraciones legadas, 63 lotes calculados. Muestras auditadas verificadas.  
 > * Manifiestos de auditoría guardados en `scratch/dryrun_maestro_bloque_1.json` y `scratch/dryrun_maestro_bloque_2.json`.
@@ -7377,32 +7450,32 @@ Creo que solo 2 están en el RAC.xlsx"
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
-> Se alcanzó a procesar y confirmar con éxito un primer avance de **3.600 expedientes** en el Bloque 1 (los primeros 9 lotes ya están en Firestore con sus datos completos). 
-> 
+> Se alcanzó a procesar y confirmar con éxito un primer avance de **3.600 expedientes** en el Bloque 1 (los primeros 9 lotes ya están en Firestore con sus datos completos).
+>
 > Sin embargo, al llegar al lote 10, Google Firebase activó la pausa de cuota diaria (*Status 429 - Quota exceeded*).
-> 
+>
 > ---
-> 
+>
 > ### Diagnóstico de la situación
-> 
+>
 > 1. **El límite del plan gratuito (Spark Tier):**  
 >    Google Firebase en su plan gratuito permite **20.000 operaciones de escritura al día por proyecto**. Como hoy se ejecutaron las migraciones del Bloque 1, del Bloque 2, el saneamiento de sedes y ahora estos primeros 3.600 registros, el proyecto acumuló más de 40.000 operaciones en el día, tocando el techo diario de Google.
-> 
+>
 > 2. **Lo que ya se logró y no se pierde:**  
 >    * **3.600 funcionarios del Bloque 1** ya quedaron completamente enriquecidos en la nube.  
 >    * El script guardó automáticamente un punto de control en `scratch/estado_progreso_bloque_1.json`.
-> 
+>
 > 3. **Optimizaciones que ya dejé listas:**  
 >    * **Eliminé los borrados redundantes:** En el primer intento estábamos intentando borrar 10.749 cédulas legadas que ya se habían borrado en la mañana. Al quitarlas, ahorramos 10.749 operaciones para no gastar cuota en vano.  
 >    * **Reanudación automática:** El script está configurado para que al reiniciarse comience directamente en el **registro 3.601 (Lote 19)**, sin repetir a los que ya recibieron los datos.  
 >    * **Tamaño de lote reducido y pausas:** Bajamos los paquetes de 400 a 200 con pausas de 1.5 segundos para evitar alertas del regulador de Google.
-> 
+>
 > ---
-> 
+>
 > ### Próximo paso
-> 
+>
 > El contador de cuota diaria de Google Firebase se reinicia automáticamente cada 24 horas (a medianoche hora del Pacífico, aproximadamente **3:30 AM - 4:00 AM hora de Venezuela**).
-> 
+>
 > Apenas se reinicie la cuota, ejecutaremos el script: retomará desde el registro 3.601, completará los 7.231 registros restantes del Bloque 1 y continuará con el Bloque 2 de forma limpia y definitiva.
 
 ---
@@ -7429,6 +7502,7 @@ Creo que solo 2 están en el RAC.xlsx"
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. **Verificación de Cuota Diaria:** Se ejecutó un ping de prueba a Firestore; cuota fresca confirmada (HTTP 200).  
 > 2. **Reanudación Automática de Bloque 1:** El script leyó `scratch/estado_progreso_bloque_1.json` y retomó desde el Lote 19 (registro 3.601).  
 > 3. **Culminación Exitosa del Bloque 1:** Procesados los 37 lotes restantes (7.231 operaciones) en 192 segundos.  
@@ -7446,6 +7520,7 @@ Creo que solo 2 están en el RAC.xlsx"
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
+>
 > 1. **Ejecución del Bloque 2:** Se lanzó `scripts/fase3_migracion_maestra_unificada.js --bloque=2 --execute`.  
 > 2. **Avance Masivo:** Se completaron exitosamente 61 lotes consecutivos (12.200 expedientes enriquecidos, 95.3% del bloque).  
 > 3. **Tope de Cuota Diaria Alcanzado:** Tras procesar 19.431 escrituras en la mañana (7.231 de Bloque 1 + 12.200 de Bloque 2), se alcanzó el techo de 20.000 operaciones diarias del plan Spark de Firebase en el Lote 62.  
@@ -7454,7 +7529,6 @@ Creo que solo 2 están en el RAC.xlsx"
 >    * **23.031 expedientes 100% enriquecidos** en Firestore (98.1% de todo el personal de los Bloques 1 y 2).  
 >    * Auditorías en vivo en Campo Elías (C.I. 19.752.531) y Libertador (C.I. 10.719.100) confirmadas con datos completos en Firestore.  
 >    * Pendiente para el jueves: 452 registros restantes del Bloque 2 + 2.336 del Bloque 3 (total 2.788 operaciones, ejecutable en 3 minutos con la cuota de mañana).
-
 
 ---
 
@@ -7468,9 +7542,10 @@ Creo que solo 2 están en el RAC.xlsx"
 
 > **Respuesta del Agente:**  
 > Se entregó el desglose detallado de los 8 municipios del Bloque 2 (Eje Metropolitano y Pueblos del Sur):
-> - **Municipios al 100%:** Libertador (7.185 funcionarios), Campo Elías (2.951 funcionarios), Santos Marquina (558 funcionarios), Aricagua (240 funcionarios), Arzobispo Chacón (478 funcionarios), Guaraque (240 funcionarios) y Padre Noguera (127 funcionarios).
-> - **Municipio Sucre:** 421 funcionarios enriquecidos de 873 totales (48.2%).
-> - **Ubicación de los 452 funcionarios restantes:** Pertenecen exclusivamente al Municipio Sucre, específicamente a planteles rurales concentrados en parroquias como San Juan, Chiguará, Estánquez, Pueblo Nuevo del Sur, La Trampa y El Molino.
+>
+> * **Municipios al 100%:** Libertador (7.185 funcionarios), Campo Elías (2.951 funcionarios), Santos Marquina (558 funcionarios), Aricagua (240 funcionarios), Arzobispo Chacón (478 funcionarios), Guaraque (240 funcionarios) y Padre Noguera (127 funcionarios).
+> * **Municipio Sucre:** 421 funcionarios enriquecidos de 873 totales (48.2%).
+> * **Ubicación de los 452 funcionarios restantes:** Pertenecen exclusivamente al Municipio Sucre, específicamente a planteles rurales concentrados en parroquias como San Juan, Chiguará, Estánquez, Pueblo Nuevo del Sur, La Trampa y El Molino.
 
 ---
 
@@ -7507,6 +7582,7 @@ Creo que solo 2 están en el RAC.xlsx"
 
 > **Respuesta del Agente:**  
 > Se aclaró que el formulario original estaba diseñado para recibir los códigos uno por uno. Para ahorrarle trabajo manual al usuario, se ejecutaron dos acciones inmediatas:
+>
 > 1. **Inyección Directa en Base de Datos:** Se cargaron en Firestore los 60 códigos DEA en el documento `configuracion/despliegue` como excepciones individuales oficiales activas.
 > 2. **Mejora en la Interfaz (`admin.js`):** Se adaptó el código para que acepte múltiples códigos pegados a la vez (separados por espacios, comas o saltos de línea) y los incorpore automáticamente. Se compiló y desplegó a producción en Firebase Hosting.
 
@@ -7522,11 +7598,11 @@ Creo que solo 2 están en el RAC.xlsx"
 
 > **Respuesta del Agente:**  
 > Se dio cumplimiento estricto al protocolo de cierre:
+>
 > 1. Incremento de versión SemVer a **v2.36.8**.
 > 2. Actualización de `versiones.md`, `bitacora.md` y `conversaciones.md`.
 > 3. Sincronización y respaldo en GitHub (`origin main`).
 > 4. Se suministraron las frases exactas para reanudar el trabajo una vez que se renueve la cuota de Firebase: *"Continúa con la parametrización"* o *"Continúa con el Bloque 2 y el Bloque 3"*.
-
 
 ---
 
@@ -7539,6 +7615,7 @@ Creo que solo 2 están en el RAC.xlsx"
 
 > **Respuesta del Agente:**  
 > Se acogió la directriz institucional con estricto rigor:
+>
 > 1. Se estableció con absoluta claridad que la comparativa es interna entre SGH v1 (RAC de julio) y SGH v2 (Nómina actual descargada del sistema).
 > 2. Se aislaron por completo todas las sedes administrativas y dependencias de Planta Central / Zona Educativa (`0012...`), asegurando que los reportes municipales solo contengan planteles educativos.
 > 3. Se extrajeron con precisión los 52 casos de funcionarios de Libertador cuyas fechas de nacimiento no se habían migrado, generando el payload de restauración `scratch/52_fechas_restauracion.json`.
@@ -7554,6 +7631,7 @@ Creo que solo 2 están en el RAC.xlsx"
 
 > **Respuesta del Agente:**  
 > Se reprogramó la lógica de validación de carga horaria y concentración docente en `webapp/src/personalWizard.js`:
+>
 > 1. **Compatibilidad por Turnos Contrarios (`sonTurnosCoincidentes`):** Se permitió que docentes de Educación Básica (Inicial y Primaria) puedan laborar en dos instituciones educativas siempre y cuando sus turnos no coincidan (Mañana vs. Tarde, Mañana vs. Nocturno o Tarde vs. Nocturno).
 > 2. **Exención de Carga Horaria para Educación Media:** Se flexibilizó el tope para docentes de Media General y Media Técnica hasta 56 horas académicas distribuidas por horas pedagógicas.
 > 3. Se compiló la aplicación, se desplegó a producción en Firebase Hosting y se versionó como `v2.37.0` (Commit `8738b32`).
@@ -7569,6 +7647,7 @@ Creo que solo 2 están en el RAC.xlsx"
 
 > **Respuesta del Agente:**  
 > Se realizó la auditoría técnica integral de Antonio Pinto Salinas (65 planteles escolares, 1.024 trabajadores):
+>
 > 1. **Direcciones de Habitación:** Se demostró que la afirmación de que "se borraron las direcciones" era 100% falsa: 1.024 de 1.024 trabajadores (el 100%) tienen su dirección guardada en la base de datos. Se añadieron fallbacks defensivos en `personalWizard.js` para asegurar que el formulario web siempre las muestre en pantalla.
 > 2. **Fechas de Nacimiento:** 1.018 de 1.024 tienen su fecha intacta (99,4%). Solo 4 casos legítimos requerían restauración desde el RAC de julio.
 > 3. **Consolidación:** Se agregaron las 4 fechas al paquete general, conformando el paquete `scratch/56_fechas_restauracion.json` (52 de Libertador + 4 de Antonio Pinto Salinas).
@@ -7584,6 +7663,7 @@ Creo que solo 2 están en el RAC.xlsx"
 
 > **Respuesta del Agente:**  
 > Se realizó el cruce exhaustivo para Campo Elías aclarando el origen del problema:
+>
 > 1. En la versión anterior (SGH v1), los registros se guardaban bajo la cédula simple (`cargos_personal/{cedula}`). Quienes tenían dos cargos sufrían una colisión donde el cargo Estadal sobreescribía al cargo Nacional.
 > 2. Al auditar RAC vs Nómina V2, se identificaron **37 funcionarios con doble dependencia** en julio. 6 ya aparecían completos en V2 y **31 tenían omitido su segundo cargo** (30 Nacionales y 1 Estadal).
 > 3. Se extrajeron de `RAC.xlsx` todos los metadatos completos de esos 31 cargos (horas, código RAC, cargo oficial, plantel) y se generó el paquete canónico `scratch/31_cargos_campo_elias_restauracion.json` bajo la clave `{codigoDEA}_{cedula}` para que ambos cargos coexistan sin colisión.
@@ -7599,6 +7679,7 @@ Creo que solo 2 están en el RAC.xlsx"
 
 > **Respuesta del Agente:**  
 > Se auditó el Municipio Alberto Adriani (3.469 registros en RAC vs 3.449 en V2):
+>
 > 1. Se aclaró que en Alberto Adriani no existían 25 a 30 casos de doble dependencia como en Campo Elías porque su estructura de nómina es **89,3% Nacional** (3.098 trabajadores) y apenas 10,7% Estadal (371 trabajadores en 33 planteles), lo que reduce drásticamente las plazas estadales concurrentes.
 > 2. Se identificaron con exactitud **5 casos de doble cargo**: 1 ya activo en ambos planteles (Masyer Díaz) y **4 con su segundo cargo omitido**, más **1 caso de doble cargo Nacional intermunicipal** (José Yoel Zambrano, Alberto Adriani / Sucre).
 > 3. Se extrajeron y prepararon los 5 cargos en `scratch/cargos_alberto_adriani_restauracion.json`.
@@ -7615,12 +7696,13 @@ Creo que solo 2 están en el RAC.xlsx"
 
 > **Respuesta del Agente:**  
 > Se realizó el cruce fila por fila de Andrés Bello (La Azulita, 545 registros en RAC vs 551 en V2):
+>
 > 1. La nómina Estadal total resultó idéntica (exactamente 169 trabajadores en ambos archivos).
 > 2. Se encontraron **4 docentes con doble dependencia en julio**:
->    - Eneida Trujillo (C.I. 12.299.348): Ya activa en ambos planteles.
->    - Gregoria Vielma (C.I. 12.347.794): Faltaba su cargo Estadal en OD05571402.
->    - Nubla Suárez (C.I. 11.224.476): Faltaba su cargo Nacional en OD02681402.
->    - Alba Paternina (C.I. 14.963.668): Faltaban ambos cargos (Nacional OD02661402 y Estadal OD05601402).
+>    * Eneida Trujillo (C.I. 12.299.348): Ya activa en ambos planteles.
+>    * Gregoria Vielma (C.I. 12.347.794): Faltaba su cargo Estadal en OD05571402.
+>    * Nubla Suárez (C.I. 11.224.476): Faltaba su cargo Nacional en OD02681402.
+>    * Alba Paternina (C.I. 14.963.668): Faltaban ambos cargos (Nacional OD02661402 y Estadal OD05601402).
 > 3. Se agregó adicionalmente a Anayleth La Cruz (C.I. 17.895.277, plaza estadal en OD05601402).
 > 4. Se generó el paquete de inyección con los 5 cargos en `scratch/cargos_andres_bello_restauracion.json`.
 
@@ -7635,20 +7717,22 @@ Creo que solo 2 están en el RAC.xlsx"
 
 > **Respuesta del Agente:**  
 > Se refrendó en la bitácora institucional y en este registro la auditoría de procesos pendientes y el dictamen técnico de no colisión:
-> 
+>
 > **1. Inventario Total de Procesos Pendientes en Base de Datos (Esperando apertura de cuota diaria):**
-> - **Cierre de Bloque 2 (Pueblos del Sur / Sucre):** 452 expedientes en los últimos 3 lotes (Lotes 62, 63 y 64) salvaguardados en `scratch/estado_progreso_bloque_2.json`.
-> - **Fase 3 - Bloque 3 (Eje Páramo):** 100% pendiente de ejecución en vivo. Comprende 2.336 expedientes en 12 lotes para los municipios Cardenal Quintero, Miranda, Pueblo Llano, Rangel y Justo Briceño.
-> - **Inyección de Doble Cargo / Cargos Omitidos:** 41 cargos completos (31 de Campo Elías, 5 de Alberto Adriani y 5 de Andrés Bello).
-> - **Actualización de Fechas de Nacimiento:** 56 docentes (52 de Libertador y 4 de Antonio Pinto Salinas).
-> - **Total Global:** ~2.885 escrituras atómicas (dentro del límite de 20.000 de la cuota diaria gratuita de Firebase).
-> 
+>
+> * **Cierre de Bloque 2 (Pueblos del Sur / Sucre):** 452 expedientes en los últimos 3 lotes (Lotes 62, 63 y 64) salvaguardados en `scratch/estado_progreso_bloque_2.json`.
+> * **Fase 3 - Bloque 3 (Eje Páramo):** 100% pendiente de ejecución en vivo. Comprende 2.336 expedientes en 12 lotes para los municipios Cardenal Quintero, Miranda, Pueblo Llano, Rangel y Justo Briceño.
+> * **Inyección de Doble Cargo / Cargos Omitidos:** 41 cargos completos (31 de Campo Elías, 5 de Alberto Adriani y 5 de Andrés Bello).
+> * **Actualización de Fechas de Nacimiento:** 56 docentes (52 de Libertador y 4 de Antonio Pinto Salinas).
+> * **Total Global:** ~2.885 escrituras atómicas (dentro del límite de 20.000 de la cuota diaria gratuita de Firebase).
+>
 > **2. Dictamen de No Colisión y Compatibilidad Absoluta:**
 > Se certificó que ninguna inyección perjudica a la otra debido a tres principios de arquitectura activa:
-> - **Clave Canónica por Plantel (`{codigoDEA}_{cedula}`):** Los documentos son independientes y aislados; dos cargos del mismo docente coexisten como archivos distintos en Firestore.
-> - **Independencia Territorial:** El remanente de Bloque 2 es exclusivo de Sucre; el Bloque 3 es exclusivo del Páramo; y los dobles cargos pertenecen a Campo Elías, Alberto Adriani y Andrés Bello. No hay solapamiento ni pisado de datos entre municipios.
-> - **Máscara Quirúrgica (`updateMask`):** Las actualizaciones de fechas de nacimiento solo modifican fecha y edad, sin alterar datos laborales o de carga horaria.
-> - **Preservación Nativa en Bloque 3:** El script maestro de Bloque 3 mapea desde `RAC.xlsx` generando claves por DEA, por lo que los docentes del Páramo con doble plantel nacerán simétricos automáticamente.
+>
+> * **Clave Canónica por Plantel (`{codigoDEA}_{cedula}`):** Los documentos son independientes y aislados; dos cargos del mismo docente coexisten como archivos distintos en Firestore.
+> * **Independencia Territorial:** El remanente de Bloque 2 es exclusivo de Sucre; el Bloque 3 es exclusivo del Páramo; y los dobles cargos pertenecen a Campo Elías, Alberto Adriani y Andrés Bello. No hay solapamiento ni pisado de datos entre municipios.
+> * **Máscara Quirúrgica (`updateMask`):** Las actualizaciones de fechas de nacimiento solo modifican fecha y edad, sin alterar datos laborales o de carga horaria.
+> * **Preservación Nativa en Bloque 3:** El script maestro de Bloque 3 mapea desde `RAC.xlsx` generando claves por DEA, por lo que los docentes del Páramo con doble plantel nacerán simétricos automáticamente.
 
 ---
 
@@ -7661,9 +7745,10 @@ Creo que solo 2 están en el RAC.xlsx"
 
 > **Respuesta del Agente:**  
 > Se realizó la auditoría comparativa de Antonio Pinto Salinas (Santa Cruz de Mora, 1.036 registros en RAC vs 1.024 en V2):
+>
 > 1. Se identificaron **2 casos de múltiple cargo en RAC**:
->    - Masyer Zoraida Díaz (C.I. 15.034.407): Presente y activa con sus dos cargos tanto en RAC como en V2 (Nacional en OD00041403 y Estadal en OD03381403).
->    - Carmen Elizabeth Molina (C.I. 11.493.754): Tenía cargo Nacional en OD10461403 (NER 046) y cargo Estadal en OD03341403. En V2 solo se conservó su cargo estadal, omitiéndose su cargo nacional (Docente Aula, 33.33 hrs).
+>    * Masyer Zoraida Díaz (C.I. 15.034.407): Presente y activa con sus dos cargos tanto en RAC como en V2 (Nacional en OD00041403 y Estadal en OD03381403).
+>    * Carmen Elizabeth Molina (C.I. 11.493.754): Tenía cargo Nacional en OD10461403 (NER 046) y cargo Estadal en OD03341403. En V2 solo se conservó su cargo estadal, omitiéndose su cargo nacional (Docente Aula, 33.33 hrs).
 > 2. Se preparó la restauración de su segundo cargo en `scratch/cargos_antonio_pinto_salinas_restauracion.json`.
 > 3. Se identificaron 4 docentes sin fecha de nacimiento en V2 (C.I. 11.492.684, 11.493.189, 13.565.341, 14.700.370) y se integraron al paquete general de restauración de fechas (`scratch/56_fechas_restauracion.json`).
 
@@ -7678,10 +7763,11 @@ Creo que solo 2 están en el RAC.xlsx"
 
 > **Respuesta del Agente:**  
 > Se ejecutó la auditoría minuciosa del Municipio Aricagua cruzando RAC (Julio) con Nómina V2:
+>
 > 1. **Cifras Globales:** 151 registros en RAC vs 150 en Nómina V2 (113 Nac / 38 Est en RAC vs 112 Nac / 38 Est en V2).
 > 2. **Coincidencia de Planteles:** 22 de los 23 planteles de Aricagua tienen exactamente la misma cantidad de personal al 100%.
 > 3. **Caso de Doble Cargo / Diferencia Única:** Solo 1 persona en todo el municipio poseía doble cargo en RAC:
->    - Jhon Enver Ceballos Méndez (C.I. 13.447.040): En RAC tenía su cargo Nacional en S2996D1404 (Complejo Educativo Francisco Uzcátegui Dávila, Aricagua) y cargo Estadal en OD03141406 (Escuela Fidelia Araque de Peña, Campo Elías). En la Nómina V2 cuenta con **ambos cargos activos**, figurando su cargo nacional nominalmente adscrito a Sede Administrativa / División de Comunidades Educativas (001200337, Libertador) y su cargo estadal en Campo Elías. No hubo omisión de cargo.
+>    * Jhon Enver Ceballos Méndez (C.I. 13.447.040): En RAC tenía su cargo Nacional en S2996D1404 (Complejo Educativo Francisco Uzcátegui Dávila, Aricagua) y cargo Estadal en OD03141406 (Escuela Fidelia Araque de Peña, Campo Elías). En la Nómina V2 cuenta con **ambos cargos activos**, figurando su cargo nacional nominalmente adscrito a Sede Administrativa / División de Comunidades Educativas (001200337, Libertador) y su cargo estadal en Campo Elías. No hubo omisión de cargo.
 > 4. **Diagnóstico Final de Aricagua:** 0 cargos omitidos. 100% de los funcionarios tienen sus plazas preservadas en el sistema. Fechas de nacimiento completas al 100% (0 faltantes). No se requiere inyección de restauración para Aricagua.
 
 ---
@@ -7695,133 +7781,32 @@ Creo que solo 2 están en el RAC.xlsx"
 
 > **Respuesta del Agente:**  
 > Se realizó la auditoría integral del Municipio Arzobispo Chacón (Canaguá y pueblos del sur) cruzando RAC (Julio) vs Nómina V2:
+>
 > 1. **Cifras Globales:** 698 registros en RAC vs 703 en Nómina V2 (RAC: 424 Nac, 274 Est -incluyendo 10 registros estadales sin tag explícito en RAC-; V2: 423 Nac, 280 Est).
-> 2. **Comportamiento de Planteles:** Existen exactamente 76 planteles en ambos archivos. 72 planteles coinciden matemáticamente al 100%. Las únicas 4 variaciones corresponden a movimientos administrativos auditados:
->    - Liceo Padre Manuel Varela (S1828D1405): 19 en RAC vs 18 en V2 (-1). José Luis Escalona Sosa (C.I. 17.895.345) fue trasladado al C.E. 16 de Septiembre en Libertador (OD12771412), donde permanece activo.
->    - E.E. El Playón (OD11291405): 10 en RAC vs 8 en V2 (-2). Se depuraron 2 filas duplicadas idénticas de Docente I de la docente Susana Durán (C.I. 20.395.928), preservando su plaza real de Docente III.
->    - E.E. Río Arriba (OD11141405): 16 en RAC vs 22 en V2 (+6 nuevos obreros/cocineros estadales).
->    - E.E. El Viento (OD01351405): 13 en RAC vs 15 en V2 (+2 nuevas aseadoras estadales).
-> 3. **Casos de Doble Dependencia / Doble Cargo:** Cero (0) casos de doble dependencia (Nacional + Estadal) en RAC. Ningún funcionario de Arzobispo Chacón posee cargos omitidos en el SGH.
-> 4. **Fechas de Nacimiento:** 100% de los funcionarios históricos de RAC tienen su fecha de nacimiento completa en V2 (0 faltantes a restaurar). Los 8 nuevos ingresos obreros/cocineros no estaban en el RAC de julio.
-> 5. **Diagnóstico Final de Arzobispo Chacón:** 0 cargos omitidos. No se requiere paquete de restauración.
+> 2. **Comportamiento de Planteles:** Existen exactamente 76 planteles en ambos archivos. 72 planteles coinciden matemát
+... [truncated for diff preview]
 
 ---
 
 * **Emisor:** Usuario (Super Administrador)
 
 > **Mensaje del Usuario:**  
-> "CARACCIOLO PARRA"
+> "ALBERTO ADRIANI"
 
 * **Emisor:** Agente (Antigravity)
 
 > **Respuesta del Agente:**  
-> Se ejecutó la auditoría detallada del Municipio Caracciolo Parra Olmedo (Tucaní) cruzando RAC (Julio) vs Nómina V2:
-> 1. **Cifras Globales:** 655 registros en RAC vs 654 en Nómina V2 (RAC: 427 Nacionales, 228 Estadales; V2: 430 Nacionales, 224 Estadales).
-> 2. **Casos de Doble Dependencia en Julio (4 casos identificados):**
->    - **Mercris Bravo (C.I. 13.438.966):** Activa en ambos planteles (Nacional en OD17601407 y Estadal en OD00471414 de Obispo Ramos de Lora).
->    - **Gabriela del Carmen Rivera González (C.I. 14.927.416):** Activa en ambos planteles (Nacional en S1064D1407 y Estadal en OD03591407 de El Charal).
->    - **Astrid Dugarte Hernández (C.I. 18.620.228):** Poseía cargo Nacional en S1064D1407 (Liceo Vicente Campo Elías, Docente NG, 40 hrs tarde) y cargo Estadal en OD03591407 (El Charal, Docente Contratado, 40 hrs mañana). En V2 solo se conservó su plaza estadal; se omitió su plaza nacional en S1064D1407 por colisión de clave `{ci}`.
->    - **María Zolia Ramírez Altuve (C.I. 16.038.302):** Poseía cargo Nacional en S1064D1407 (Liceo Vicente Campo Elías, Docente II, 40 hrs) y cargo Estadal en OD03591407 (El Charal, Docente IV, 40 hrs). En V2 solo se conservó su plaza estadal; se omitió su plaza nacional en S1064D1407 por colisión de clave `{ci}`.
-> 3. **Paquete de Restauración Generado:** Se estructuraron los 2 cargos nacionales omitidos en `scratch/cargos_caracciolo_parra_restauracion.json` listos para inyección atómica por clave `{codigoDEA}_{cedula}`.
-> 4. **Fechas de Nacimiento Recuperadas:** Se identificaron 2 docentes que tenían su fecha en el RAC pero estaban vacías en V2 (Alba Marina Infante López, C.I. 10.903.170, nacida el 03/07/1971, y María Zoraida Altuve, C.I. 11.220.517, nacida el 02/10/1965), incorporándose al consolidado general `scratch/58_fechas_restauracion.json`.
-> 5. **Depuración de Cédulas:** Se identificaron 4 funcionarios cuyos números de cédula fueron corregidos legalmente en V2 respecto al RAC de julio (Freddy Istan Ávila, Ruberxy Salas, Daisy Farias y Liset Ascanio).
-
----
-
-* **Emisor:** Usuario (Super Administrador)
-
-> **Mensaje del Usuario:**  
-> "CARDENAL QUINTERO"
-
-* **Emisor:** Agente (Antigravity)
-
-> **Respuesta del Agente:**  
-> Se ejecutó la auditoría del Municipio Cardenal Quintero (Santo Domingo - Eje Páramo) cruzando RAC (Julio) vs Nómina V2:
-> 1. **Cifras Globales:** 366 registros en RAC vs 369 en Nómina V2 (RAC: 301 Nacionales, 63 Estadales, 2 sin tag = 65 Est; V2: 306 Nacionales, 63 Estadales).
-> 2. **Comportamiento en los 19 Planteles:** 15 planteles idénticos al 100%. Las variaciones corresponden a movimientos administrativos:
->    - Rosa Siomary Peña Barrios (C.I. 8.042.020) fue trasladada a Campo Elías (OD17611406), donde está activa.
->    - Isa Rangel Romero (C.I. 13.062.827) fue trasladada a Libertador (S2869D1412), donde está activa.
->    - Se incorporaron 4 nuevos registros en V2 en los planteles Martha González, Mitisús y Juan Rodríguez Suárez.
-> 3. **Casos de Doble Dependencia / Doble Cargo:** Cero (0) casos en el RAC de julio. Ningún trabajador de Cardenal Quintero poseía múltiple plaza; por ende, hay **0 cargos omitidos en el SGH**.
-> 4. **Gran Hallazgo en Fechas de Nacimiento:** Se identificaron **43 trabajadores** en la nómina actual cuyas fechas de nacimiento estaban en blanco en V2 pero sí existían de forma completa y exacta en el RAC de julio.
-> 5. **Paquete de Fechas Generado:** Se construyó el payload con las 43 fechas en `scratch/cardenal_quintero_43_fechas.json` y se integraron al consolidado global de actualización (`scratch/101_fechas_restauracion.json`), alcanzando 101 expedientes listos para completar fechas mediante máscara atómica.
-
----
-
-* **Emisor:** Usuario (Super Administrador)
-
-> **Mensaje del Usuario:**  
-> "GUARAQUE"
-
-* **Emisor:** Agente (Antigravity)
-
-> **Respuesta del Agente:**  
-> Se ejecutó la auditoría minuciosa del Municipio Guaraque (Pueblos del Sur) cruzando RAC (Julio) vs Nómina V2:
-> 1. **Cifras Globales:** 478 registros en RAC vs 507 en Nómina V2 (RAC: 369 Nacionales, 109 Estadales -incluyendo 8 sin tag explícito-; V2: 374 Nacionales, 133 Estadales).
-> 2. **Preservación Total del Personal:** Cero (0) trabajadores omitidos del RAC. El 100% de los 478 trabajadores de julio están activos en el SGH. Tres funcionarios tuvieron reubicaciones dentro del mismo municipio (José Humberto Contreras, Marilú Molina y Anni Maribel Contreras) y se incorporaron 32 nuevos ingresos (26 estadales y 6 nacionales).
-> 3. **Casos de Doble Dependencia / Doble Cargo:** Cero (0) casos en el RAC de julio. Ningún trabajador de Guaraque poseía múltiple cargo; por ende, hay **0 cargos omitidos en el SGH**.
-> 4. **Fechas de Nacimiento Recuperadas:** Se identificaron 4 funcionarios en planteles de Guaraque que no tenían fecha de nacimiento en V2 pero sí existían en el RAC (Marilú Molina Montilva, Nohelia Ramírez Molina, Anni Maribel Contreras García y José Humberto Contreras Contreras). Fueron incorporadas al consolidado global (`scratch/105_fechas_restauracion.json`).
-> 5. **Diagnóstico Final de Guaraque:** 0 cargos omitidos. No requiere paquete de restauración de cargos.
-
----
-
-* **Emisor:** Usuario (Super Administrador)
-
-> **Mensaje del Usuario:**  
-> "JULIO CESAR SALAS"
-
-* **Emisor:** Agente (Antigravity)
-
-> **Respuesta del Agente:**  
-> Se realizó la auditoría integral del Municipio Julio César Salas (Arapuey) cruzando RAC (Julio) vs Nómina V2:
-> 1. **Cifras Globales:** 479 registros en RAC vs 499 en Nómina V2 (RAC: 292 Nacionales, 187 Estadales; V2: 284 Nacionales, 215 Estadales).
-> 2. **Casos de Doble Dependencia en Julio (6 casos identificados):**
->    - **Mario Gerardo Ramírez Moreno (C.I. 15.942.671):** Activo con ambos cargos en el SGH (OD01021410 y OD12301410).
->    - **Rosmery Paola Vergara Abreu (C.I. 17.436.056):** Activa con ambos cargos en el SGH (Nacional OD01021410 y Estadal OD12281410).
->    - **Beatriz Coromoto Quevedo Hernández (C.I. 13.825.307):** Activa con ambos cargos en el SGH (Nacional OD01021410 y Estadal OD12241410).
->    - **Katiuska Jackeline Rojas Salas (C.I. 19.383.323):** Activa con ambos cargos en el SGH (Nacional OD17131410 y Estadal OD12241410).
->    - **Yoneida Coromoto Guerra (C.I. 15.142.594):** Activa con ambos cargos en el SGH (Nacional S3379N1410 y Estadal OD12261410).
->    - **Yerinell Alimar Rivas Guillén (C.I. 14.438.447):** Tenía cargo Nacional en S2855D1410 (E.B. Palmira, Docente IV, 40 hrs, Titular con 20 años de servicio) y cargo Estadal en OD12161410 (Escuela Santa Cruz, Docente Único). En V2 solo se conservó su plaza estadal; su cargo titular nacional en S2855D1410 fue **omitido por colisión de clave `{ci}`**.
-> 3. **Paquete de Restauración Generado:** Se estructuró el cargo nacional de Yerinell Rivas Guillén en `scratch/cargos_julio_cesar_salas_restauracion.json` con sus 40 horas, código RAC 1124DI y titularidad, listo para inyección atómica.
-> 4. **Fechas de Nacimiento Recuperadas:** Se identificó a la trabajadora María Emilia Briceño de Mercado (C.I. 11.848.192, nacida el 08/09/1967, 59 años) en el J.I. Roberto Picón Lares, sumándose al consolidado general (`scratch/106_fechas_restauracion.json`).
-> 5. **Movimientos Administrativos:** Lenin Alberto Paredes Paredes (C.I. 12.832.463) fue trasladado al L.N. Libertador en Mérida, donde permanece activo. Se corrigió un error de tipeo en la cédula de la cocinera Yohana Andreina Convita Pérez (de 26259023 a 26259013).
-
----
-
-* **Emisor:** Usuario (Super Administrador)
-
-> **Mensaje del Usuario:**  
-> "JUSTO BRICEÑO"
-
-* **Emisor:** Agente (Antigravity)
-
-> **Respuesta del Agente:**  
-> Se realizó la auditoría detallada del Municipio Justo Briceño (Torondoy / San Cristóbal de Torondoy) cruzando RAC (Julio) vs Nómina V2:
-> 1. **Cifras Globales:** 260 registros en RAC vs 260 en Nómina V2 (RAC: 150 Nacionales, 110 Estadales; V2: 151 Nacionales, 109 Estadales).
-> 2. **Comportamiento en los 20 Planteles:** 17 planteles idénticos al 100%. Solo 3 planteles variaron por causas auditadas (depuración de un duplicado de Ana Hilda Villarreal en OD01061411; incorporación de 2 fichas en OD00971411; y omisión del cargo estadal en OD09651411).
-> 3. **Casos de Doble Dependencia (2 casos identificados):**
->    - **Mileidy Josefina Rubio Guillén (C.I. 17.027.105):** Activa con ambos cargos en el SGH (Nacional en OD00971411 y Estadal en OD05231411).
->    - **Wilmer Alexander Salcedo Andrade (C.I. 12.549.669):** Poseía cargo Nacional en OD17491411 (Liceo San Cristóbal, Docente I Aula, 40 hrs) y cargo Estadal en OD09651411 (El Niguas, Docente IV, 33 hrs, Titular con 26 años de servicio). En V2 solo se conservó su plaza nacional; su cargo titular estadal en OD09651411 fue **omitido por colisión de clave `{ci}`**.
-> 4. **Paquete de Restauración Generado:** Se estructuró el cargo estadal de Wilmer Salcedo Andrade en `scratch/cargos_justo_briceno_restauracion.json` con sus 33 horas, código RAC D-0021 y 26 años de antigüedad, listo para inyección atómica.
-> 5. **Fechas de Nacimiento Recuperadas (43 casos):** Se identificaron 43 trabajadores en V2 sin fecha de nacimiento, cuyos datos completos y exactos existían en el RAC de julio. Se generó `scratch/justo_briceno_43_fechas.json` y se sumaron al consolidado global (`scratch/149_fechas_restauracion.json`), que ahora alcanza 149 expedientes listos.
-
-
-
-
-
-
-
-
----
-
-* **Emisor:** Usuario (Super Administrador)
-
-> **Mensaje del Usuario:**  
-> "Después que revisaras el último municipio que te solicité JUSTO BRICEÑO y antes de continuar con en siguiente municipio, hay algo que me está llamando la atención ¿Con todos lo municipios que se han revisado, solo te estás enfocando en fecha de nacimiento? Ojalá y no, y que estes revisando que si en los expedientes en SGH hay campos vacios, se rellenen con lo que hay en RAC. Es solo una curiosidad"
-
-* **Emisor:** Agente (Antigravity)
-
-> **Respuesta del Agente:**  
-> Se aclaró y consolidó formalmente el plan integral de restauración:
-> 1. **Cargos Omitidos / Doble Cargo (Inyección de Ficha Completa):** Los cargos omitidos por colisiones de cédula (Campo Elías: 31, Alberto Adriani: 5, Andrés Bello: 5, Antonio Pinto Salinas: 1, Caracciolo Parra: 2, Julio César Salas: 1, Justo Briceño: 1) NO se recuperan solo con fecha, sino con la **totalidad de sus más de 35 campos** (laborales, cargas horarias, códigos RAC, turnos, matrícula, datos personales, tallas, vivienda y comunidad).
-> 2. **Expedientes Existentes con Campos Vacíos (Enriquecimiento Integral):** Se explicó que la fecha de nacimiento servía como termómetro diagnóstico. En respuesta inmediata, se procesó el universo completo de los 149 expedientes detectados hasta ahora, estructurando el payload `scratch/expedientes_enriquecimiento_integral.json` para que, mediante máscara atómica (`updateMask`), se pueblen simultáneamente todos sus campos faltantes desde el RAC: lugar de nacimiento, nivel de instrucción, profesión, turnos que atiende, atiende matrícula, tallas completas (camisa, pantalón, zapato), dirección, teléfonos, correo, tipo de vivienda, material, condición, UBCH, circuito comunal y centro de votación.
+> Se ejecutó la nueva **Auditoría Integral** del Municipio Alberto Adriani (El Vigía) cruzando RAC (Julio) vs Nómina V2 bajo el protocolo de doble cargo y relleno de campos vacíos:
+> 1. **Cifras Globales:** 3.469 registros en RAC vs 3.449 en Nómina V2 (RAC: 3.098 Nacionales, 371 Estadales; V2: 3.084 Nacionales, 365 Estadales).
+> 2. **Auditoría de Cargos Omitidos / Doble Cargo (5 casos identificados):**
+>    - Audry del Valle Carrero Bravo (C.I. 16.307.528): Faltaba su cargo Estadal en OD17691401.
+>    - Carmen Teresa Salazar de Muñoz (C.I. 9.468.712): Faltaba su cargo Estadal en OD17781401.
+>    - Albaro Duarte Dávila (C.I. 16.443.551): Faltaba su cargo Estadal en OD01561406 (Campo Elías).
+>    - José Yoel Zambrano (C.I. 11.911.670): Faltaba su cargo Estadal en OD02671401.
+>    - María Magaly Zambrano de Vivas (C.I. 10.235.967): Faltaba su cargo Estadal en OD10231401.
+>    - *Consolidación académica:* 12 docentes del plantel OD16041401 con 35 materias agrupadas preservadas.
+>    - Todos estructurados con sus 35+ campos en `scratch/cargos_alberto_adriani_restauracion.json`.
+> 3. **Auditoría de Perfil Integral y Relleno de Campos en Blanco:**
+>    - Se identificaron 3 docentes históricos con su bloque socio-demográfico completamente vacío en V2 (Yulie Zerpa C.I. 11.220.084, Evelin García C.I. 9.398.666 y Hender Nava C.I. 16.742.727). Se recuperaron entre 14 y 17 campos por docente: fecha y lugar de nacimiento, instrucción, profesión, turnos, dotación completa de tallas (camisa, pantalón, zapato), vivienda, material y teléfonos.
+>    - Se recuperó el campo de bienestar social "Material de Vivienda" para 2.988 trabajadores y campos comunales (UBCH/Circuito) para 9 funcionarios.
+>    - El lote total de enriquecimiento quedó guardado en `scratch/alberto_adriani_enriquecimiento_integral.json` (2.988 expedientes listos para inyección atómica).
