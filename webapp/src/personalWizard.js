@@ -2048,38 +2048,40 @@ export async function verificarTopeHorasDocente(forzarConsulta = false) {
     const total = horasOtros + horasInp;
     const disp = Math.max(0, tope - horasOtrosCoincidentes);
 
+    const esSoloMedia = esMedia && !tieneBasicaOtro;
+    const involucraBasica = esBasica || tieneBasicaOtro;
+
     let excede = false;
     let mensajeError = '';
     let motivoBloqueo = '';
 
-    // 1. Conflicto directo de turnos coincidentes (solapamiento de horario)
-    if (hayConflictoTurno && (esBasica || tieneBasicaOtro)) {
+    // 1. En Educación Básica (aula concentrada) o Régimen Mixto Básica-Media: Bloqueo estricto por turno coincidente
+    if (involucraBasica && hayConflictoTurno) {
         excede = true;
         motivoBloqueo = 'TURNO_COINCIDENTE';
-        mensajeError = `⚠️ <strong>Conflicto de Horario / Turno coincidente:</strong> El docente ya tiene asignadas <strong>${conflictoTurnoInfo.horas} hrs</strong> en el turno <strong>${conflictoTurnoInfo.turno}</strong> en el plantel <strong>${conflictoTurnoInfo.plantel}</strong> (${conflictoTurnoInfo.cargo}). La normativa prohíbe atender matrícula simultáneamente en dos planteles durante el mismo turno.`;
-    } else if (hayConflictoTurno && esMedia && tieneMediaOtro && totalMismoTurno > (tope + 0.01)) {
+        mensajeError = `⚠️ <strong>Conflicto de Horario / Turno coincidente en Educación Básica:</strong> El docente ya tiene asignadas <strong>${conflictoTurnoInfo.horas} hrs</strong> en el turno <strong>${conflictoTurnoInfo.turno}</strong> en el plantel <strong>${conflictoTurnoInfo.plantel}</strong> (${conflictoTurnoInfo.cargo}). La docencia de aula en Básica no permite atender dos planteles simultáneamente en el mismo turno.`;
+    } 
+    // 2. En Educación Media: Los turnos NO bloquean (docente por horas puede impartir en la mañana en 2 liceos). Se valida el tope legal acumulado de 56 horas
+    else if (esSoloMedia && total > (tope + 0.01)) {
         excede = true;
-        motivoBloqueo = 'TOTAL_SUPERA_TOPE_TURNO';
-        const exceso = (totalMismoTurno - tope).toFixed(2);
-        mensajeError = `⚠️ <strong>Exceso de carga acumulada en el mismo turno:</strong> Total ${totalMismoTurno} hrs (${horasOtrosCoincidentes} hrs en otro plantel + ${horasInp} hrs aquí en turno ${turnoInp}). Excede el tope legal de ${tope} hrs por ${exceso} hrs.`;
-    } else if (hayConflictoTurno && esMedia && tieneBasicaOtro) {
-        excede = true;
-        motivoBloqueo = 'INCOMPATIBILIDAD_REGIMEN';
-        mensajeError = `⚠️ <strong>Incompatibilidad de régimen en el mismo turno:</strong> El funcionario ya tiene horas asignadas en Educación Básica en el turno ${conflictoTurnoInfo.turno} en otro plantel. No puede impartir clases simultáneamente en Básica y Media en el mismo turno.`;
-    } else if (hayConflictoTurno && esBasica && tieneMediaOtro) {
-        excede = true;
-        motivoBloqueo = 'INCOMPATIBILIDAD_REGIMEN';
-        mensajeError = `⚠️ <strong>Incompatibilidad de régimen en el mismo turno:</strong> El funcionario ya tiene horas asignadas en Educación Media en el turno ${conflictoTurnoInfo.turno} en otro plantel. No puede impartir clases simultáneamente en Básica y Media en el mismo turno.`;
-    } else if (horasRecibo > 0 && totalAsignadasPlantel > (horasRecibo + 0.01)) {
+        motivoBloqueo = 'MEDIA_TOTAL_SUPERA_TOPE';
+        const exceso = (total - tope).toFixed(2);
+        mensajeError = `⚠️ <strong>Tope legal en Educación Media excedido:</strong> Total acumulado: <strong>${total} hrs</strong> (${horasOtros} hrs en otros liceos + ${horasInp} hrs aquí). La normativa del MPPE establece un tope máximo de <strong>56 horas académicas</strong> para docentes por horas. Exceso: ${exceso} hrs.`;
+    } 
+    // 3. Horas asignadas en este plantel vs Recibo de este plantel
+    else if (horasRecibo > 0 && totalAsignadasPlantel > (horasRecibo + 0.01)) {
         excede = true;
         motivoBloqueo = 'EXCEDE_RECIBO';
         mensajeError = `⚠️ <strong>Incoherencia horaria:</strong> La suma de Horas Académicas (<strong>${horasInp} hrs</strong>) y Horas Administrativas (<strong>${horasAdmin} hrs</strong>) en este plantel (<strong>${totalAsignadasPlantel} hrs</strong>) supera las Horas según Recibo de Pago (<strong>${horasRecibo} hrs</strong>).`;
-    } else if (horasRecibo > (tope + 0.01)) {
+    } 
+    // 4. Recibo supera el tope legal del cargo
+    else if (horasRecibo > (tope + 0.01)) {
         excede = true;
         motivoBloqueo = 'RECIBO_SUPERA_TOPE';
         mensajeError = `⚠️ <strong>Tope legal excedido:</strong> El recibo de pago (<strong>${horasRecibo} hrs</strong>) excede el tope máximo legal de <strong>${tope} hrs</strong> para ${etiqueta}.`;
-    } else if (!hayConflictoTurno && horasOtros > 0 && total > 106.66) {
-        // Límite de seguridad institucional para pluriempleo en turnos alternos (máximo 2 cargos completos de 53.33)
+    } 
+    // 5. Límite de seguridad institucional para pluriempleo en turnos alternos (máximo 2 cargos completos de 53.33)
+    else if (!hayConflictoTurno && horasOtros > 0 && total > 106.66) {
         excede = true;
         motivoBloqueo = 'PLURIEMPLEO_EXCESIVO';
         mensajeError = `⚠️ <strong>Tope de pluriempleo excedido:</strong> La carga total acumulada (${total} hrs) supera el límite máximo institucional permitido para doble turno (106.66 hrs).`;
@@ -2099,7 +2101,18 @@ export async function verificarTopeHorasDocente(forzarConsulta = false) {
             if (inpHRecibo) inpHRecibo.style.borderColor = '';
             if (inpAdmin) inpAdmin.style.borderColor = '';
 
-            if (horasOtros > 0 && !hayConflictoTurno) {
+            if (esSoloMedia) {
+                helpEl.style.color = '#0369a1';
+                helpEl.style.background = '#f0f9ff';
+                helpEl.style.borderColor = '#bae6fd';
+                const textoOtros = horasOtros > 0 ? ` (+ ${horasOtros} hrs en otros liceos)` : '';
+                const tagRecibo = (tipoPersonal === 'DOCENTE') ? 'H.DOC' : 'H.ADM';
+                if (horasAdmin > 0) {
+                    helpEl.innerHTML = `✅ <strong>Educación Media (Horas Compartidas):</strong> Recibo: <strong>${horasRecibo || 0} hrs</strong> (${tagRecibo}) | Asignadas aquí: <strong>${totalAsignadasPlantel} hrs</strong> (${horasInp} acad + ${horasAdmin} adm)${textoOtros} | <strong>Carga Total Media: ${total} hrs</strong> (Tope legal: 56 hrs).`;
+                } else {
+                    helpEl.innerHTML = `✅ <strong>Educación Media (Docente por Horas):</strong> Recibo: <strong>${horasRecibo || 0} hrs</strong> (${tagRecibo}) | En este Liceo: <strong>${horasInp} hrs</strong>${textoOtros} | <strong>Carga Total Media: ${total} hrs</strong> (Tope: 56 hrs). Horas por Programar: <strong>${horasPorProg} hrs</strong>.`;
+                }
+            } else if (horasOtros > 0 && !hayConflictoTurno) {
                 helpEl.style.color = '#15803d';
                 helpEl.style.background = '#f0fdf4';
                 helpEl.style.borderColor = '#bbf7d0';
