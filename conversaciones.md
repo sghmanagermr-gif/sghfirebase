@@ -7649,3 +7649,38 @@ Creo que solo 2 están en el RAC.xlsx"
 > - **Independencia Territorial:** El remanente de Bloque 2 es exclusivo de Sucre; el Bloque 3 es exclusivo del Páramo; y los dobles cargos pertenecen a Campo Elías, Alberto Adriani y Andrés Bello. No hay solapamiento ni pisado de datos entre municipios.
 > - **Máscara Quirúrgica (`updateMask`):** Las actualizaciones de fechas de nacimiento solo modifican fecha y edad, sin alterar datos laborales o de carga horaria.
 > - **Preservación Nativa en Bloque 3:** El script maestro de Bloque 3 mapea desde `RAC.xlsx` generando claves por DEA, por lo que los docentes del Páramo con doble plantel nacerán simétricos automáticamente.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Antonio Pinto Salinas"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se realizó la auditoría comparativa de Antonio Pinto Salinas (Santa Cruz de Mora, 1.036 registros en RAC vs 1.024 en V2):
+> 1. Se identificaron **2 casos de múltiple cargo en RAC**:
+>    - Masyer Zoraida Díaz (C.I. 15.034.407): Presente y activa con sus dos cargos tanto en RAC como en V2 (Nacional en OD00041403 y Estadal en OD03381403).
+>    - Carmen Elizabeth Molina (C.I. 11.493.754): Tenía cargo Nacional en OD10461403 (NER 046) y cargo Estadal en OD03341403. En V2 solo se conservó su cargo estadal, omitiéndose su cargo nacional (Docente Aula, 33.33 hrs).
+> 2. Se preparó la restauración de su segundo cargo en `scratch/cargos_antonio_pinto_salinas_restauracion.json`.
+> 3. Se identificaron 4 docentes sin fecha de nacimiento en V2 (C.I. 11.492.684, 11.493.189, 13.565.341, 14.700.370) y se integraron al paquete general de restauración de fechas (`scratch/56_fechas_restauracion.json`).
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Aricagua"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se ejecutó la auditoría minuciosa del Municipio Aricagua cruzando RAC (Julio) con Nómina V2:
+> 1. **Cifras Globales:** 151 registros en RAC vs 150 en Nómina V2 (113 Nac / 38 Est en RAC vs 112 Nac / 38 Est en V2).
+> 2. **Coincidencia de Planteles:** 22 de los 23 planteles de Aricagua tienen exactamente la misma cantidad de personal al 100%.
+> 3. **Caso de Doble Cargo / Diferencia Única:** Solo 1 persona en todo el municipio poseía doble cargo en RAC:
+>    - Jhon Enver Ceballos Méndez (C.I. 13.447.040): En RAC tenía su cargo Nacional en S2996D1404 (Complejo Educativo Francisco Uzcátegui Dávila, Aricagua) y cargo Estadal en OD03141406 (Escuela Fidelia Araque de Peña, Campo Elías). En la Nómina V2 cuenta con **ambos cargos activos**, figurando su cargo nacional nominalmente adscrito a Sede Administrativa / División de Comunidades Educativas (001200337, Libertador) y su cargo estadal en Campo Elías. No hubo omisión de cargo.
+> 4. **Diagnóstico Final de Aricagua:** 0 cargos omitidos. 100% de los funcionarios tienen sus plazas preservadas en el sistema. Fechas de nacimiento completas al 100% (0 faltantes). No se requiere inyección de restauración para Aricagua.
+
