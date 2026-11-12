@@ -8748,3 +8748,72 @@ Creo que solo 2 están en el RAC.xlsx"
 > 2. La consistencia total lograda en la base de datos de producción de Firebase Firestore (`sgh-merida`) con 3.837 operaciones ejecutadas de forma atómica y sin fallas.
 > 3. La preservación irrestricta de la cuota diaria gratuita y la integridad de los datos laborales y personales de todo el personal docente, administrativo y obrero.
 > 4. La total disposición operativa para continuar avanzando en las siguientes fases y requerimientos que la Dirección General del SGH disponga.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Ubica **solo** en el archivo RAC.xlsx NO EN EL ARCHIVO NOMINA.XLSX, en que plantel se encuentras las siguientes cedulas  
+> 16678906  
+> 11466284  
+> 15588570  
+> 15594114  
+> 15295565  
+> 13425237  
+> 15588570  
+> 11318527  
+> 10237811"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se realizó la búsqueda estricta y exclusiva dentro del archivo institucional **RAC.xlsx** (hoja `PERSONAL`), confirmando que todo el personal consultado pertenece al **Municipio Andrés Bello (La Azulita)**.
+>
+> A continuación se detalla la ubicación física (plantel), código DEA y datos laborales oficiales para cada cédula:
+>
+> 1. **C.I. 16678906 - YURAIMA DEL CARMEN ALBARRAN RANGEL**
+>    - **Plantel (Ubicación Física):** ESCUELA JOSE FELIX RIBAS
+>    - **Código DEA:** OD05521402
+>    - **Municipio / Parroquia:** Andrés Bello / La Azulita
+>    - **Cargo:** DOCENTE IV (Dependencia Estadal)
+>
+> 2. **C.I. 11466284 - ADA NOHELY ECHEVERRIA GOMEZ**
+>    - **Plantel (Ubicación Física):** ESCUELA GRAN MARISCAL DE AYACUCHO
+>    - **Código DEA:** OD05581402
+>    - **Municipio / Parroquia:** Andrés Bello / La Azulita
+>    - **Cargo:** DOCENTE III (Dependencia Estadal)
+>
+> 3. **C.I. 15588570 (Listada 2 veces):**
+>    - **Estado en RAC.xlsx:** No se encuentra registrada con esta numeración exacta.
+>    - **Aclaratoria por proximidad en el municipio:** En Andrés Bello figura la cédula **13558570** a nombre de **Yudith Nava Camacho**, en el plantel **EPE HERMINIA ROSAS** (DEA: DN10371402, Cargo: Maestra de Labores).
+>
+> 4. **C.I. 15594114 - LUZ YULENY PUNETES DE PUENTES**
+>    - **Plantel (Ubicación Física):** COMPLEJO EDUCATIVO JESUS MANUEL NAVA
+>    - **Código DEA:** OD05511402
+>    - **Municipio / Parroquia:** Andrés Bello / La Azulita
+>    - **Cargo:** DOCENTE CONTRATADO (Dependencia Estadal)
+>
+> 5. **C.I. 15295565 - MARIA ISABEL ROLDAN JIMENEZ**
+>    - **Plantel (Ubicación Física):** CB LA AZULITA
+>    - **Código DEA:** S1465D1402
+>    - **Municipio / Parroquia:** Andrés Bello / La Azulita
+>    - **Cargo:** DOC. IV / AULA (Dependencia Nacional - Comisión de Servicio)
+>
+> 6. **C.I. 13425237 - SUSANA DEL VALLE LUNA GONZALEZ**
+>    - **Plantel (Ubicación Física):** GE RAFAEL MARIA TORRES
+>    - **Código DEA:** OD02261402
+>    - **Municipio / Parroquia:** Andrés Bello / La Azulita
+>    - **Cargo:** DOC. II / AULA (Dependencia Nacional)
+>
+> 7. **C.I. 11318527 - BEATRIZ JOSEFINA ABREU DE TORRES**
+>    - **Plantel (Ubicación Física):** GE RAFAEL MARIA TORRES
+>    - **Código DEA:** OD02261402
+>    - **Municipio / Parroquia:** Andrés Bello / La Azulita
+>    - **Cargo:** DOC. VI / AULA (Dependencia Nacional)
+>
+> 8. **C.I. 10237811 - JOSE BERNARDO LUZARDO PAREDES**
+>    - **Plantel (Ubicación Física):** ETA SIMON BOLIVAR
+>    - **Código DEA:** T0703D1402
+>    - **Municipio / Parroquia:** Andrés Bello / La Azulita
+>    - **Cargo:** TSU II (Dependencia Nacional)
