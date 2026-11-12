@@ -7850,3 +7850,36 @@ Creo que solo 2 están en el RAC.xlsx"
 >      * **Fermín Alcides Quintero Vera (C.I. 12.356.672):** 12 campos recuperados (nacimiento 22/12/1975, Ingeniero, tallas L / 36 / 42, vivienda propia).
 >      * **Rafyelis Paola Cordero Rangel (C.I. 23.583.311):** 12 campos recuperados (nacimiento 17/06/1992, Distrito Capital, Ing. Agroalimentación, tallas M / 39, vivienda familiar).
 >    - Datos consolidados en `scratch/andres_bello_enriquecimiento_integral.json`.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "ANTONIO PINTO SALINAS"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se ejecutó la **Auditoría Integral** del Municipio Antonio Pinto Salinas (Santa Cruz de Mora) cruzando RAC (Julio) vs Nómina Actual (V2) bajo el protocolo estricto de doble cargo y perfil integral:
+>
+> 1. **Cifras Globales:**
+>    - Registros en RAC (Julio): 1.036 trabajadores (778 Nacionales, 245 Estadales, 13 clasificados internamente).
+>    - Registros en Nómina Actual (V2): 1.024 trabajadores (787 Nacionales, 237 Estadales).
+>    - Total planteles analizados: 48 instituciones educativas.
+>
+> 2. **Auditoría de Cargos Omitidos / Doble Cargo (1 cargo recuperado):**
+>    - **Carmen Elizabeth Molina (C.I. 24.192.743):**
+>      * En V2 cuenta con su cargo Estadal en la Escuela Básica San Rafael del Guayabal (OD00421403).
+>      * Omitido en V2: Su cargo Nacional como Docente I (36 horas) en el C.E.I.B. Doña María Antonia Pulido (ON10461403).
+>      * Estructurado con sus 35+ campos institucionales en `scratch/cargos_antonio_pinto_salinas_restauracion.json`.
+>
+> 3. **Auditoría de Perfil Integral (Relleno de Campos en Blanco):**
+>    - De los 1.024 trabajadores de la nómina actual, **únicamente 3 expedientes** tenían vacíos sus bloques personales/laborales y pudieron ser rescatados desde el RAC de Julio:
+>      * **Luz Marina Sánchez Calderón (C.I. 17.140.166 - OD00411403):** Se recuperan 13 datos (fecha 27/08/1982, Tovar, Nivel Superior, tallas XL / 16 / 39, apartamento de familiar).
+>      * **Yuleima Xiomara Ramírez Escalante (C.I. 15.075.035 - OD10681403):** Se recuperan 12 datos (fecha 24/01/1982, El Vigía, Licenciada en Educación, tallas L / 39, vivienda de familiar).
+>      * **Norma Josefina Rangel Aponcio (C.I. 8.714.529 - OD17011403):** Se recuperan 13 datos (fecha 02/08/1969, Santa Cruz de Mora, Licenciada, tallas M / 30 / 35, casa propia).
+>    - Estructurados en `scratch/antonio_pinto_salinas_enriquecimiento_integral.json`.
+>
+> 4. **Impacto en Cuota de Firebase:**
+>    - En Antonio Pinto Salinas se requieren **tan solo 4 escrituras atómicas en total** (1 cargo omitido + 3 perfiles completados), manteniendo el consumo de cuota perfectamente resguardado.
