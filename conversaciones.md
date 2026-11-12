@@ -9100,3 +9100,28 @@ Creo que solo 2 están en el RAC.xlsx"
 >
 > **Lic. Luis Alfonso Pérez**  
 > *Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)*
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Muy bien. Ajustemos detalles:  
+> No coloques los titulos: Resumen breve, Despedida  
+> Este título: Porcentaje del 90% de los campos llenos, cambiarlo por: Porcentaje de los campos llenos  
+> Y además los informes guardalos en una carpeta llamada informes_nov_2026 en formato .txt  
+> Todo esto ajustes que queden refrendado en bitacora y conversaciones junto con: Opción 1: En Vivo directamente desde Firebase Firestore Que quede refrendado en la bitacora y conversaciones junto con la estructura"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se acogieron y **refrendaron plenamente en `bitacora.md` y `conversaciones.md`** todos los ajustes requeridos por el Super Administrador para las auditorías municipales del SGH v2.37.1:
+>
+> 1. **Fuente de Datos Confirmada:** **Opción 1: En Vivo directamente desde Cloud Firestore (`sgh-merida`)**, consultando en tiempo real las colecciones `cargos_personal` y `planteles`.
+> 2. **Depuración de Títulos de la Estructura:**
+>    - Se eliminan los encabezados explícitos "Resumen breve" y "Despedida", integrando sus párrafos directamente en prosa fluida.
+>    - Se renombra oficialmente el título a: **"Porcentaje de los campos llenos"**.
+> 3. **Almacenamiento Físico de Informes:**
+>    - Se creó la carpeta institucional `informes_nov_2026/`.
+>    - Se generó y guardó el primer informe ajustado: `informes_nov_2026/informe_alberto_adriani.txt`.
+>    - Todos los municipios siguientes se archivarán de forma automática en dicha carpeta bajo el mismo formato `.txt`.

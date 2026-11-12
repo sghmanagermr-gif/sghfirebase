@@ -4865,18 +4865,19 @@ Se diseñó, validó y ejecutó el motor maestro de migración y enriquecimiento
 ### Resumen Técnico
 A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y refrenda institucionalmente la estructura y plantilla estándar de reporte para la Auditoría Integral y Progresiva de los 23 Municipios del Estado Bolivariano de Mérida. Dicha auditoría evaluará la cobertura de datos, consistencia horaria, turnos y congruencia de la situación laboral frente a las observaciones institucionales.
 
-### Estructura Canónica de Reporte por Municipio:
+### Estructura Canónica y Ajustes de Presentación por Municipio:
 1. **Título:** `Informe preliminar de la jornada de actualización del SGH v2.37.1`
-2. **Saludo Institucional**
-3. **Resumen breve:** Síntesis del estado general y avances del municipio.
+2. **Saludo Institucional:** Párrafo de apertura (sin encabezado).
+3. **Resumen Ejecutivo:** Párrafo descriptivo del estado general (sin el título "Resumen breve").
 4. **Municipio auditado:** Nombre oficial de la entidad municipal.
 5. **Cantidad de planteles:** Total de instituciones, desglosadas en Nacional, Estadal, Municipal y Subvencionado.
 6. **Cantidad de personal:** Total de trabajadores, desglosado por tipo de personal (Docente, Administrativo y Obrero) y por dependencia de nómina (Nacional y Estadal).
-7. **Porcentaje del 90% de los campos llenos:** Métrica de integridad de datos en los expedientes laborales.
-8. **Coherencia en horas y turno:** Verificación de correspondencia entre horas según recibo, horas académicas asignadas y compatibilidad de turnos (mañana, tarde, integral, nocturno).
-9. **Coherencia en Situación Laboral con respecto a las observaciones:** Cotejo entre la condición administrativa (Activo, Incapacitado, Reposo, Adecuación Laboral, Comisión de Servicio, etc.) y las notas u observaciones institucionales registradas.
-10. **Despedida Institucional**
-11. **Firma:** `Lic. Luis Alfonso Pérez - Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)`
+7. **Porcentaje de los campos llenos:** Métrica oficial de completitud de datos (expedientes con >= 90% de campos llenos y margen residual).
+8. **Coherencia en horas y turno:** Verificación de correspondencia entre horas según recibo, horas académicas asignadas y compatibilidad de turnos.
+9. **Coherencia en Situación Laboral con respecto a las observaciones:** Cotejo entre condición administrativa y notas institucionales registradas.
+10. **Despedida Institucional:** Párrafo de cierre (sin el título "Despedida").
+11. **Firma Oficial:** `Lic. Luis Alfonso Pérez - Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)`
 
-- **Fuente de Datos Oficial Ratificada:** **Opción 1: En Vivo directamente desde Cloud Firestore (`sgh-merida`)**. Las auditorías consultarán en tiempo real las colecciones vivas `cargos_personal` y `planteles` municipio a municipio para capturar los avances de directores escolares en la jornada de actualización, manteniendo un consumo seguro y protegido de cuota diaria (apenas 1% a 2% por municipio).
+- **Fuente de Datos Oficial Ratificada:** **Opción 1: En Vivo directamente desde Cloud Firestore (`sgh-merida`)**. Las auditorías consultan en tiempo real las colecciones vivas `cargos_personal` y `planteles` municipio a municipio para capturar los avances reales de los directores escolares en la jornada de actualización, manteniendo un consumo seguro y protegido de cuota diaria (apenas 1% a 2% por municipio).
+- **Almacenamiento Físico de Archivos:** Cada informe municipal generado se resguardará obligatoriamente en la carpeta `informes_nov_2026/` en formato de texto plano (`.txt`).
 - **Compromiso Institucional:** Esta estructura y fuente de datos se mantendrán de forma estricta, homogénea e inalterable a lo largo de cada una de las auditorías municipales solicitadas.

@@ -1,0 +1,49 @@
+Informe preliminar de la jornada de actualización del SGH v2.37.1
+
+Estimado Administrador y Equipo Directivo del SGH:
+
+Reciban un cordial y fraterno saludo institucional. En cumplimiento de las directrices emanadas para el seguimiento y control de calidad de la plataforma, presento a continuación el informe preliminar correspondiente al proceso de auditoría y supervisión de datos en el Municipio Alberto Adriani.
+
+El Municipio Alberto Adriani constituye el eje educativo y demográfico de mayor volumen de la Zona Panamericana de Mérida. Tras la jornada masiva de enriquecimiento integral y homologación simétrica, el municipio exhibe un extraordinario nivel de solidez estructural, con una completitud de expedientes superior al 98% y una consistencia horaria del 97,80%, reflejando un orden administrativo óptimo entre el personal adscrito a dependencias nacionales y estadales.
+
+Municipio auditado
+ALBERTO ADRIANI (El Vigía)
+
+Cantidad de planteles
+• Total de planteles: 120 instituciones educativas
+• Nacional: 89 planteles
+• Estadal: 31 planteles
+• Municipal: 0 planteles
+• Subvencionado: 0 planteles
+
+Cantidad de personal
+• Total de funcionarios registrados: 3.449 trabajadores
+• Personal Docente: 2.147
+  - Nacional: 1.826 docentes
+  - Estadal: 321 docentes
+• Personal Administrativo: 153
+  - Nacional: 153 administrativos
+  - Estadal: 0 administrativos
+• Personal Obrero: 1.149
+  - Nacional: 1.105 obreros
+  - Estadal: 44 obreros
+• Consolidado por Dependencia: 3.084 Nacionales (89,42%) y 365 Estadales (10,58%).
+
+Porcentaje de los campos llenos
+• Nivel de completitud: 98,32% de los funcionarios cumplen con tener el 90% o más de sus campos totalmente diligenciados (3.391 de los 3.449 expedientes).
+• Margen residual: Apenas 58 registros (1,68%) presentan datos secundarios pendientes por afinar directamente en los planteles (principalmente tallas de uniformes o detalles sociodemográficos de vivienda).
+
+Coherencia en horas y turno
+• Índice de coherencia: 97,80% (3.373 funcionarios cuentan con sincronización exacta y armónica entre las horas de recibo de nómina y los turnos atendidos).
+• Observación técnica: Se detectaron 76 casos (2,20%) donde la carga de horas académicas en aula difiere ligeramente de la asignación formal de recibo o requiere ajuste en turnos rotativos por parte de los directores en el sistema.
+
+Coherencia en Situación Laboral con respecto a las observaciones
+• Índice de coherencia: 100,00% (3.449 funcionarios).
+• Diagnóstico institucional: Existe una concordancia perfecta entre el estatus laboral registrado (Activo, Adecuación Laboral, Comisión de Servicio y Trámite de Jubilación) y las observaciones oficiales asentadas en el expediente, sin contradicciones administrativas ni registros anómalos.
+
+Reiterando el compromiso institucional de garantizar la máxima transparencia, exactitud y confiabilidad en la gestión del talento humano del magisterio merideño, quedo atento para recibir las instrucciones y proceder con el siguiente municipio.
+
+Atentamente,
+
+Lic. Luis Alfonso Pérez
+Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)
