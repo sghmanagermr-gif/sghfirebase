@@ -8829,3 +8829,29 @@ Creo que solo 2 están en el RAC.xlsx"
 
 > **Respuesta del Agente:**  
 > Se entregó la información consolidada en formato optimizado para mensajería instantánea (WhatsApp), con viñetas, emojis y resaltado de datos clave (Nombre, Plantel, Código DEA y Cargo) para facilitar su reenvío operativo inmediato.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Dime que puede estar sucediendo con el movil. Acoto que ya lo reinicié, borré las cookies, borré cache, etc. No tengo problemas cuando voy a auditar una cedula en la pc; pero cuando lo hago desde el movil se ve como en la imagen (nunca pasa nada). Esto está sucediendo desde ayer en la tarde, cuando se comenzó a ejecutar lo de la parametrización. Por favor primero dame una respuesta teórica"  
+> *(Adjunta captura de pantalla del módulo Auditor de Cédulas en navegador móvil Chrome con spinner de carga girando indefinidamente).*
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se presentó al Super Administrador el **diagnóstico teórico integral** sobre la discrepancia de comportamiento entre la PC (ejecución inmediata) y el dispositivo móvil (bucle de carga infinito en el spinner):
+>
+> 1. **Mecanismo de Conexión de Firestore (Protocolo WebChannel vs. Red Móvil):**
+>    - A diferencia de una página web tradicional que hace peticiones HTTP puntuales de ida y vuelta, Firebase Firestore utiliza túneles persistentes bidireccionales (*WebChannel / HTTP streaming*).
+>    - En redes móviles (especialmente bajo fluctuaciones de cobertura 3G/H+ o velocidades bajas como los 60 B/s visibles en la captura), las antenas de las operadoras móviles cierran silenciosamente estos canales por inactividad o pérdida de paquetes (*half-open TCP connection*). El navegador móvil no recibe un paquete de cierre formal, por lo que cree que sigue conectado esperando la respuesta.
+>
+> 2. **Inexistencia de Timeout por Defecto en las Promesas del SDK:**
+>    - En el código JavaScript del cliente, la función `getDocs()` queda a la espera de la resolución del canal. Al no existir un temporizador forzado (*timeout*), la promesa nunca se cumple ni genera error, impidiendo que el código alcance la cláusula `finally` que oculta el spinner giratorio.
+>
+> 3. **Gestión de Memoria y Tokens de Sesión en Móviles (`browserSessionPersistence`):**
+>    - En computadoras de escritorio, `sessionStorage` opera con acceso directo y constante. En Android, el sistema operativo congela y fragmenta las pestañas en segundo plano para ahorrar batería y RAM, lo que puede provocar que el mecanismo de refrescamiento del token de autenticación quede en pausa o bloqueado si la red móvil no responde con rapidez.
+>
+> 4. **Impacto Teórico de la Parametrización (Crecimiento de la Base de Datos):**
+>    - Al migrar y homologar los 23 municipios (más de 23.000 expedientes), las consultas indexadas requieren un handshake de validación de seguridad más robusto. En la PC, con baja latencia y fibra óptica, este proceso tarda milisegundos; en el móvil, una latencia alta provoca que la negociación del socket se desborde antes de iniciar la transferencia de datos.
