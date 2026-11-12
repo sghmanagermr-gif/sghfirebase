@@ -8817,3 +8817,15 @@ Creo que solo 2 están en el RAC.xlsx"
 >    - **Código DEA:** T0703D1402
 >    - **Municipio / Parroquia:** Andrés Bello / La Azulita
 >    - **Cargo:** TSU II (Dependencia Nacional)
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Perfecto, por favor dame la respuesta en formato whatsapp"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se entregó la información consolidada en formato optimizado para mensajería instantánea (WhatsApp), con viñetas, emojis y resaltado de datos clave (Nombre, Plantel, Código DEA y Cargo) para facilitar su reenvío operativo inmediato.
