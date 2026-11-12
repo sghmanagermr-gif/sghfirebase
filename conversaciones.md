@@ -9125,3 +9125,32 @@ Creo que solo 2 están en el RAC.xlsx"
 >    - Se creó la carpeta institucional `informes_nov_2026/`.
 >    - Se generó y guardó el primer informe ajustado: `informes_nov_2026/informe_alberto_adriani.txt`.
 >    - Todos los municipios siguientes se archivarán de forma automática en dicha carpeta bajo el mismo formato `.txt`.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Ok un ajuste más y que quede refrendado junto con: Opción 1: En Vivo directamente desde Firebase Firestore Que quede refrendado en la bitacora y conversaciones junto con la estructura.  
+> Loa que antes era Resumen breve ahora que diga Reseña"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se refrendó formalmente en **`bitacora.md`** y en **`conversaciones.md`** la incorporación definitiva del título **"Reseña"** dentro de la estructura institucional de auditoría municipal del SGH v2.37.1:
+>
+> 1. **Fuente de Datos Oficial Ratificada:**  
+>    - **Opción 1: En Vivo directamente desde Cloud Firestore (`sgh-merida`)**, consultando en tiempo real las colecciones `cargos_personal` y `planteles`.
+> 2. **Esquema Institucional Definitivo:**  
+>    - **Título:** `Informe preliminar de la jornada de actualización del SGH v2.37.1`
+>    - **Saludo:** Apertura institucional.
+>    - **Reseña:** Síntesis ejecutiva, histórica y de contexto del municipio.
+>    - **Municipio auditado:** Nombre oficial de la entidad.
+>    - **Cantidad de planteles:** Total, Nacional, Estadal, Municipal y Subvencionado.
+>    - **Cantidad de personal:** Total, Docente, Administrativo y Obrero, discriminado por dependencia: Nacional y Estadal.
+>    - **Porcentaje de los campos llenos:** Métrica oficial de completitud (>= 90% y margen residual).
+>    - **Coherencia en horas y turno:** Sincronización entre horas de recibo y turnos atendidos.
+>    - **Coherencia en Situación Laboral con respecto a las observaciones:** Concordancia administrativa.
+>    - **Despedida:** Párrafo de cierre institucional (sin título).
+>    - **Firma Oficial:** `Lic. Luis Alfonso Pérez - Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)`
+> 3. **Almacenamiento Físico Permanente:** Cada informe se guarda automáticamente en la carpeta `informes_nov_2026/` en formato de texto plano (`.txt`). Se actualizó `informes_nov_2026/informe_alberto_adriani.txt` con el nuevo título de Reseña.
