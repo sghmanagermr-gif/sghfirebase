@@ -8880,3 +8880,24 @@ Creo que solo 2 están en el RAC.xlsx"
 >
 > 3. **Ausencia de un Temporizador de Corte (*Timeout*) en el Código:**
 >    - La función del auditor no cuenta actualmente con un temporizador que fuerce la ruptura de la espera (`Promise.race` con timeout). Si el canal local o de red se detiene, la función jamás llega al bloque `finally` que oculta el spinner, quedando la animación girando de forma indefinida.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa.  
+> Ese temporizador de corte automático y forzar a que el buscador consulte directamente al servidor sin pasar por los bloqueos de la memoria local del teléfono: ¿Afecta el Zero Cost?"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se dio lectura estricta y obligatoria al archivo institucional `SKILL_sgh_firebase.md` (Skill 1 a Skill 6 y Apéndice de Lecciones Críticas de UI).
+>
+> Se respondió con total contundencia y claridad técnica al Super Administrador:
+> 1. **El temporizador de corte (Timeout) NO afecta el Zero-Cost en lo absoluto:** Es una función de control de interfaz de usuario local que opera en el navegador del cliente mediante JavaScript. No realiza peticiones adicionales ni consume cuota de lectura en Firebase (0 lecturas).
+> 2. **La consulta directa quirúrgica al servidor NO compromete el límite gratuito:**
+>    - La Regla de Oro N° 1 de la Skill 4 prohíbe consultas globales indiscriminadas que descarguen colecciones completas.
+>    - El módulo de Auditor de Cédula realiza una búsqueda ultra-específica indexada (`where cedula in ...`), consumiendo exclusivamente **1 lectura por cargo encontrado** (1 lectura para cargo único, 2 para doble cargo).
+>    - Frente al cupo diario de 50.000 lecturas gratuitas que otorga Firebase Spark Plan, una auditoría representa apenas el 0,002% del margen disponible.
+>    - Por lo tanto, blindar el módulo con un temporizador y evitar el cerrojo de la caché local móvil preserva al 100% la filosofía Zero-Cost.
