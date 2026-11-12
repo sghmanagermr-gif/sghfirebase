@@ -8922,3 +8922,25 @@ Creo que solo 2 están en el RAC.xlsx"
 > - Se integró un temporizador de ruptura de 6 segundos (`Promise.race`) para evitar que el indicador de carga (*spinner*) se congele indefinidamente.
 > - Se incrementó la versión a **v2.37.1** en `package.json` e `index.html`.
 > - Se compiló exitosamente con Vite y se desplegó en producción en Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Solo responde, no ejecutes nada.  
+> Si te pido hacer una auditoria por municipio del SGH en cuestión de avances en cantidades de funcionarios con todos sus campos llenos, coherencia en horas y turnos, y coherencia en su situación laboras con respecto a las observaciones de las mismas: ¿Se consume mucha cuota Firebase?"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se brindó la respuesta técnica y estratégica con apego estricto a la directriz de solo responder sin ejecutar:
+>
+> 1. **Si se realiza Municipio por Municipio en vivo contra Firestore:**  
+>    - **Consumo muy bajo y seguro:** Cada municipio promedio tiene entre 300 y 1.500 funcionarios. Consultar un municipio consume entre 300 y 1.500 lecturas de las 50.000 gratuitas que otorga Firebase diariamente (apenas un 0,6% a 3% del cupo diario). Se puede auditar municipio a municipio con total tranquilidad.
+>
+> 2. **Si se audita todo el estado completo (23 municipios) de un solo golpe en vivo:**  
+>    - Requeriría leer los ~26.000 expedientes consolidados de una sola vez, consumiendo aproximadamente el **52% del cupo diario** de lecturas (26.000 de 50.000). Aunque es técnicamente viable porque cabe en el límite, compromete más de la mitad de la cuota del día.
+>
+> 3. **La Estrategia Maestra Zero-Cost (Consumo CERO de Firebase):**  
+>    - Al disponer en local de los conjuntos de datos maestros homologados al 100% que reflejan con total simetría la base de datos tras la ejecución reciente, podemos realizar toda la auditoría algorítmica de campos vacíos, coherencia horaria y situación laboral directamente sobre los datos consolidados con **0 lecturas consumidas de Firebase (100% Zero-Cost)**.
