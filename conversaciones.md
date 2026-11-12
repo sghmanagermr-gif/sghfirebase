@@ -8638,3 +8638,26 @@ Creo que solo 2 están en el RAC.xlsx"
 > 3. **Impacto en Cuota Gratuita de Firebase:**
 >    - Inyección directa de Doble Cargo (123) + Perfiles Enriquecidos (926) = **1.049 escrituras atómicas en total para todo el estado**.
 >    - Sumado al remanente de Bloque 2 (452 escrituras), da **1.501 escrituras**, representando apenas el 7.5% del cupo diario de 20.000 operaciones de Firestore, manteniendo la cuota diaria en resguardo absoluto.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Ok, ¿Cuál será la palabra o frase clave para la ejecución?"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se establecieron y refrendaron en la bitácora institucional las frases clave de activación para la ejecución en base de datos una vez abierta la cuota diaria:
+>
+> 1. **Para ejecutar la Auditoría Integral de los 23 Municipios (1.049 escrituras):**
+>    - Frase clave: **"EJECUTAR AUDITORÍA INTEGRAL ESTATAL"** (o **"EJECUTAR RESTAURACIÓN Y ENRIQUECIMIENTO"**).
+>    - Inyecta de forma atómica los 123 dobles cargos omitidos y los 926 perfiles enriquecidos en los 23 municipios.
+>
+> 2. **Para ejecutar los Bloques Pendientes de Parametrización:**
+>    - Frase clave: **"EJECUTAR CIERRE BLOQUE 2"** (inyección de los 452 registros restantes de Sucre).
+>    - Frase clave: **"EJECUTAR BLOQUE 3"** (inyección del Eje Páramo: Cardenal Quintero, Miranda, Pueblo Llano, Rangel y Justo Briceño).
+>
+> 3. **Para la orden maestra unificada:**
+>    - Frase clave: **"LUZ VERDE PARA LA EJECUCIÓN"** o **"PROCEDER CON LA EJECUCIÓN"**.
