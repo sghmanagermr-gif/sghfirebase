@@ -1,5 +1,5 @@
 import { safeSetDoc, safeUpdateDoc, safeAddDoc } from './dbUtils.js';
-import { doc, getDoc, setDoc, updateDoc, collection, query, where, getCountFromServer, getDocs, onSnapshot, deleteDoc, deleteField } from 'firebase/firestore';
+import { doc, getDoc, getDocFromServer, setDoc, updateDoc, collection, query, where, getCountFromServer, getDocs, getDocsFromServer, onSnapshot, deleteDoc, deleteField } from 'firebase/firestore';
 import * as XLSX from 'xlsx';
 import { showToast, showAlert } from './uiUtils.js';
 import { getMunicipios, getParroquias, normalizarMunicipio, getVariantesMunicipio } from './geografia.js';
@@ -5711,14 +5711,42 @@ export function initAdminDashboard(dbInstance, user) {
         const numCedula = parseInt(cleanCedula, 10);
         const variantesNum = !isNaN(numCedula) ? [...variantes, numCedula] : variantes;
         
+        // Helper anti-bloqueo con Timeout de seguridad de 6 segundos para dispositivos móviles
+        const ejecutarConTimeout = (promise, ms = 6000) => {
+          let timerId;
+          const timeoutPromise = new Promise((_, reject) => {
+            timerId = setTimeout(() => reject(new Error("Tiempo de espera agotado en el dispositivo.")), ms);
+          });
+          return Promise.race([promise, timeoutPromise]).finally(() => clearTimeout(timerId));
+        };
+
+        // Función de consulta directa al servidor (bypass de IndexedDB local) con fallback seguro
+        const consultarDocsSeguro = async (qRef) => {
+          try {
+            return await ejecutarConTimeout(getDocsFromServer(qRef), 5000);
+          } catch (eServidor) {
+            console.warn("Consulta getDocsFromServer falló o timeout, intentando getDocs estándar:", eServidor);
+            return await ejecutarConTimeout(getDocs(qRef), 4000);
+          }
+        };
+
+        const consultarDocSeguro = async (dRef) => {
+          try {
+            return await ejecutarConTimeout(getDocFromServer(dRef), 5000);
+          } catch (eServidor) {
+            console.warn("Consulta getDocFromServer falló o timeout, intentando getDoc estándar:", eServidor);
+            return await ejecutarConTimeout(getDoc(dRef), 4000);
+          }
+        };
+
         // 1. Consulta directa a cargos_personal por cedula en minúscula
-        let snap = await getDocs(query(collection(db, 'cargos_personal'), where('cedula', 'in', variantes)));
+        let snap = await consultarDocsSeguro(query(collection(db, 'cargos_personal'), where('cedula', 'in', variantes)));
         let docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
         if (docs.length === 0) {
           // 2. Búsqueda de respaldo por cedula-identidad
           try {
-            const snap2 = await getDocs(query(collection(db, 'cargos_personal'), where('cedula-identidad', 'in', variantes)));
+            const snap2 = await consultarDocsSeguro(query(collection(db, 'cargos_personal'), where('cedula-identidad', 'in', variantes)));
             docs = snap2.docs.map(d => ({ id: d.id, ...d.data() }));
           } catch (e2) {
             console.warn("Fallo búsqueda cedula-identidad:", e2);
@@ -5728,7 +5756,7 @@ export function initAdminDashboard(dbInstance, user) {
         if (docs.length === 0) {
           // 3. Búsqueda de respaldo por campo histórico CEDULA (mayúscula/numérico)
           try {
-            const snap3 = await getDocs(query(collection(db, 'cargos_personal'), where('CEDULA', 'in', variantesNum)));
+            const snap3 = await consultarDocsSeguro(query(collection(db, 'cargos_personal'), where('CEDULA', 'in', variantesNum)));
             docs = snap3.docs.map(d => ({ id: d.id, ...d.data() }));
           } catch (e3) {
             console.warn("Fallo búsqueda CEDULA:", e3);
@@ -5738,7 +5766,7 @@ export function initAdminDashboard(dbInstance, user) {
         if (docs.length === 0) {
           // 4. Búsqueda directa por ID de documento (por si el expediente legado usa la cédula como ID)
           try {
-            const snapDoc = await getDoc(doc(db, 'cargos_personal', cleanCedula));
+            const snapDoc = await consultarDocSeguro(doc(db, 'cargos_personal', cleanCedula));
             if (snapDoc.exists()) {
               docs = [{ id: snapDoc.id, ...snapDoc.data() }];
             }

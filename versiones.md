@@ -4,6 +4,16 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.37.1 (12 de Noviembre de 2026)
+
+- **Optimización Anti-Bloqueo del Auditor Quirúrgico de Cédulas en Dispositivos Móviles:**
+  - **Consultas Directas al Servidor (`getDocsFromServer`):** Se blindó el módulo de auditoría de cédulas para realizar consultas directas al backend en la nube, haciendo bypass de los bloqueos de cola local en IndexedDB que ocurrían en navegadores móviles tras la parametrización estatal masiva.
+  - **Temporizador de Seguridad (*Timeout Fallback*):** Se inyectó un controlador de tiempo límite de 6 segundos (`Promise.race`) que previene bucles de carga infinitos en pantallas móviles, garantizando que el círculo giratorio (*spinner*) siempre se apague y se libere la interfaz de usuario.
+  - **Preservación Absoluta del Principio Zero-Cost:** La consulta mantiene su naturaleza hiper-específica por índice de cédula, consumiendo únicamente de 1 a 2 lecturas del cupo diario gratuito de 50.000 operaciones de Firestore (0,002%).
+  - **Control SemVer y Despliegue en Vivo:** Incremento a **v2.37.1** en `package.json`, `index.html` y despliegue inmediato en Firebase Hosting (`https://sgh-merida.web.app`) sin tiempo de caída (*Zero Downtime*).
+
+---
+
 ### v2.36.8 (11 de Noviembre de 2026)
 
 - **Enriquecimiento Integral de Expedientes Laborales (Fase 3) y Carga Masiva Inteligente de Excepciones:**

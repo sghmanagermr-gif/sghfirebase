@@ -8901,3 +8901,24 @@ Creo que solo 2 están en el RAC.xlsx"
 >    - El módulo de Auditor de Cédula realiza una búsqueda ultra-específica indexada (`where cedula in ...`), consumiendo exclusivamente **1 lectura por cargo encontrado** (1 lectura para cargo único, 2 para doble cargo).
 >    - Frente al cupo diario de 50.000 lecturas gratuitas que otorga Firebase Spark Plan, una auditoría representa apenas el 0,002% del margen disponible.
 >    - Por lo tanto, blindar el módulo con un temporizador y evitar el cerrojo de la caché local móvil preserva al 100% la filosofía Zero-Cost.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "ok procede  
+> Y haces la modificación ahorita, ¿afecta a los que están conectados en el estado merida?"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se aclaró de inmediato al Super Administrador que la modificación **NO afecta en lo absoluto a los usuarios actualmente conectados en el estado Mérida**:
+> 1. **Arquitectura sin Tiempo de Caída (Zero Downtime):** Firebase Hosting distribuye los archivos a través de una red CDN atómica; los directores con sesiones activas continúan operando con sus datos en pantalla sin cierres ni pérdidas de sesión.
+> 2. **Alcance Administrativo Especializado:** El cambio incide exclusivamente en la función de búsqueda del módulo Auditor de Cédula (en el panel administrativo), sin alterar los formularios de registro ni la navegación regular de los directores.
+>
+> **Ejecución Técnica Culminada:**
+> - Se implementó en `webapp/src/admin.js` la llamada directa al servidor (`getDocsFromServer` / `getDocFromServer`) para hacer bypass de los cerrojos de memoria local en IndexedDB en dispositivos móviles.
+> - Se integró un temporizador de ruptura de 6 segundos (`Promise.race`) para evitar que el indicador de carga (*spinner*) se congele indefinidamente.
+> - Se incrementó la versión a **v2.37.1** en `package.json` e `index.html`.
+> - Se compiló exitosamente con Vite y se desplegó en producción en Firebase Hosting (`https://sgh-merida.web.app`).
