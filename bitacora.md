@@ -4868,8 +4868,8 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
 ### Estructura Canónica y Ajustes de Presentación por Municipio:
 1. **Título:** `Informe preliminar de la jornada de actualización del SGH v2.37.1`
 2. **Saludo Institucional:** Párrafo de apertura (sin encabezado).
-3. **Reseña:** Síntesis descriptiva del estado general, histórico y avances del municipio.
-4. **Municipio auditado:** Nombre oficial de la entidad municipal.
+3. **Municipio auditado:** Nombre oficial de la entidad municipal (ubicado formalmente por encima de la Reseña).
+4. **Reseña:** Síntesis descriptiva del estado general, histórico y avances del municipio.
 5. **Cantidad de planteles:** Total de instituciones, desglosadas en Nacional, Estadal, Municipal y Subvencionado.
 6. **Cantidad de personal:** Total de trabajadores, desglosado por tipo de personal (Docente, Administrativo y Obrero) y por dependencia de nómina (Nacional y Estadal).
 7. **Porcentaje de los campos llenos:** Métrica oficial de completitud de datos (expedientes con >= 90% de campos llenos y margen residual).
