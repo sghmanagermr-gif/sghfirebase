@@ -4881,3 +4881,16 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
 - **Fuente de Datos Oficial Ratificada:** **Opción 1: En Vivo directamente desde Cloud Firestore (`sgh-merida`)**. Las auditorías consultan en tiempo real las colecciones vivas `cargos_personal` y `planteles` municipio a municipio para capturar los avances reales de los directores escolares en la jornada de actualización, manteniendo un consumo seguro y protegido de cuota diaria (apenas 1% a 2% por municipio).
 - **Almacenamiento Físico de Archivos:** Cada informe municipal generado se resguardará obligatoriamente en la carpeta `informes_nov_2026/` en formato de texto plano (`.txt`).
 - **Compromiso Institucional:** Esta estructura y fuente de datos se mantendrán de forma estricta, homogénea e inalterable a lo largo de cada una de las auditorías municipales solicitadas.
+
+
+### Auditoría Municipal: Andrés Bello (Completada)
+- **Planteles:** 32 instituciones educativas (10 Nacionales, 22 Estadales, 0 Municipales, 0 Subvencionados).
+- **Personal:** 551 funcionarios registrados.
+  - *Docentes:* 383 (229 Nacionales, 154 Estadales).
+  - *Administrativos:* 30 (30 Nacionales, 0 Estadales).
+  - *Obreros:* 138 (123 Nacionales, 15 Estadales).
+  - *Consolidado por Dependencia:* 382 Nacionales (69,33%) y 169 Estadales (30,67%).
+- **Porcentaje de los campos llenos:** 96,37% (531 de 551 funcionarios con >= 90% de completitud; margen residual de 20 casos [3,63%]).
+- **Coherencia en horas y turno:** 96,37% (531 coherentes, 20 observaciones de turno/horas aula).
+- **Coherencia en Situación Laboral vs Observaciones:** 100,00% (551 coherentes, 0 discrepancias).
+- **Archivo Físico Generado:** `informes_nov_2026/informe_andres_bello.txt`.

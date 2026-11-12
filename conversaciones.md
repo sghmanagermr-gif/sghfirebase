@@ -9184,3 +9184,23 @@ Creo que solo 2 están en el RAC.xlsx"
 >    - **Despedida:** Párrafo de cierre institucional (sin encabezado).
 >    - **Firma Oficial:** `Lic. Luis Alfonso Pérez - Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)`
 > 3. **Almacenamiento Físico:** Cada informe generado se resguarda en `informes_nov_2026/` en formato `.txt`. Se actualizó `informes_nov_2026/informe_alberto_adriani.txt` reflejando este nuevo orden jerárquico.
+
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "ANDRES BELLO"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Auditoría en vivo de **Andrés Bello** ejecutada y consolidada bajo la estructura jerárquica oficial:
+> - **Municipio auditado:** ANDRÉS BELLO (La Azulita)
+> - **Cantidad de planteles:** 32 planteles (10 Nacional, 22 Estadal, 0 Municipal, 0 Subvencionado).
+> - **Cantidad de personal:** 551 trabajadores (Docentes: 383 [229 Nac / 154 Est], Administrativos: 30 [30 Nac / 0 Est], Obreros: 138 [123 Nac / 15 Est]; Total Nac: 382 [69,33%], Est: 169 [30,67%]).
+> - **Porcentaje de los campos llenos:** 96,37% (531 con >= 90%; margen residual de 20 casos [3,63%]).
+> - **Coherencia en horas y turno:** 96,37% (531 coherentes, 20 observaciones).
+> - **Coherencia en Situación Laboral con respecto a las observaciones:** 100,00% (551 coherentes, 0 discrepancias).
+> - **Archivo guardado:** `informes_nov_2026/informe_andres_bello.txt`.
