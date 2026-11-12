@@ -8981,3 +8981,27 @@ Creo que solo 2 están en el RAC.xlsx"
 > 9. Coherencia en Situación Laboral con respecto a las observaciones.
 > 10. Despedida institucional.
 > 11. Firma oficial del Lic. Luis Alfonso Pérez.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "¿De donde vas a hacer la auditoria?"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se presentaron de forma transparente las dos fuentes de datos disponibles para ejecutar la auditoría municipal, ofreciendo la elección al Super Administrador según el objetivo de la supervisión:
+>
+> 1. **Fuente 1: Directamente en Vivo desde Cloud Firestore (`sgh-merida`):**
+>    - **Colecciones consultadas:** `cargos_personal` (expedientes del municipio) y `planteles` (catálogo de instituciones).
+>    - **Propósito:** Evalúa el estado vivo de la base de datos en tiempo real, reflejando las ediciones, cargas de matrícula y actualizaciones que los directores hayan guardado recientemente en la plataforma web.
+>    - **Consumo de Cuota:** Muy bajo y seguro (entre 300 y 1.200 lecturas por municipio, representando apenas un 0,6% a 2,4% de las 50.000 lecturas diarias gratuitas).
+>
+> 2. **Fuente 2: Desde los Archivos Maestros Consolidados Locales (Espejo de Inyección):**
+>    - **Archivos consultados:** `nomina_acualizada/Nomina.xlsx`, `RAC.xlsx` y los manifiestos de inyección de Fase 3 y Auditoría Estatal.
+>    - **Propósito:** Evalúa la consistencia algorítmica de la data base homologada e inyectada (coherencia de turnos, horas y observaciones de nómina).
+>    - **Consumo de Cuota:** Cero absoluto (0 lecturas a Firebase).
+>
+> Se solicitó al Super Administrador indicar cuál de las dos fuentes prefiere para comenzar (en vivo desde la nube para captar el avance de directores, o desde el espejo local para consumo cero).
