@@ -7944,3 +7944,47 @@ Creo que solo 2 están en el RAC.xlsx"
 >
 > 4. **Impacto en Cuota de Firebase:**
 >    - **0 operaciones de escritura**. Arzobispo Chacón no genera ningún consumo de cuota.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "CAMPO ELIAS"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se ejecutó la **Auditoría Integral** del Municipio Campo Elías (Ejido) cruzando el histórico RAC (Julio) vs Nómina Actual (V2) bajo el protocolo estricto de doble cargo y perfil integral:
+>
+> 1. **Cifras Globales:**
+>    - Registros en RAC (Julio): 3.091 personas (2.386 Nacionales, 695 Estadales, 10 clasificados internamente).
+>    - Registros en Nómina Actual (V2): 3.069 personas (2.364 Nacionales, 705 Estadales).
+>    - Total planteles analizados: 81 instituciones educativas.
+>
+> 2. **Auditoría de Doble Cargo y Plazas Omitidas (31 cargos a restaurar):**
+>    - Se identificaron 37 trabajadores con doble dependencia en el RAC histórico, de los cuales **31 sufrieron omisión de su plaza secundaria en V2** debido a colisión de cédula única en el sistema anterior.
+>    - Los 31 cargos omitidos están completamente reconstruidos con sus 35+ atributos institucionales en `scratch/31_cargos_campo_elias_restauracion.json`.
+>
+> 3. **Auditoría de Perfil Integral (Relleno de Campos en Blanco):**
+>    - De los 3.069 trabajadores en nómina activa, **únicamente 16 personas** tenían su bloque formativo y sociodemográfico vacío en V2 y fueron recuperadas desde el RAC de Julio:
+>      * **Javier Araque Alarcón (C.I. 18.796.552 - OD01261406):** 13 campos recuperados (nacimiento 07/03/1985, Mérida, Bachiller en Ciencia Agrícola, tallas M / 34 / 40, vivienda de familiar).
+>      * **Raymon Peña Fernández (C.I. 20.851.030 - OD01271406):** 13 campos recuperados (nacimiento 21/03/1990, Mérida, Bachiller, tallas M / 34 / 39, vivienda propia).
+>      * **José Gregorio Briceño García (C.I. 27.469.121 - OD01531406):** 13 campos recuperados (nacimiento 16/08/2000, Mérida, tallas M / 28 / 37, vivienda propia).
+>      * **María Auxiliadora García Bustamante (C.I. 12.549.847 - OD01531406):** 13 campos recuperados (nacimiento 05/11/1973, Mérida, Lcda. Educación Especial, tallas M / 32 / 37, vivienda propia).
+>      * **Nathaly Osorio (C.I. 16.444.348 - OD01531406):** 13 campos recuperados.
+>      * **Mary Delfina Pernía (C.I. 12.049.002 - OD01601406):** 13 campos recuperados.
+>      * **Yraima del Carmen Plaza Rojas (C.I. 9.479.363 - OD03691406):** 13 campos recuperados.
+>      * **Roxana Jacqueline Moreno (C.I. 10.717.740 - OD03831406):** 13 campos recuperados.
+>      * **Dayana Carolina Castro Rodríguez (C.I. 17.340.096 - OD04131406):** 12 campos recuperados.
+>      * **Lisett Coromoto Guerrero Soto (C.I. 16.020.352 - OD11741406):** 13 campos recuperados.
+>      * **Yennyfer Andreina Peña Rivas (C.I. 26.021.658 - OD11751406):** 13 campos recuperados.
+>      * **Leyda Josefina Quintero (C.I. 10.105.931 - OD16091406):** 13 campos recuperados.
+>      * **Luisa Coromoto Villalobos Uzcátegui (C.I. 10.684.294 - OD16251406):** 13 campos recuperados.
+>      * **Rosa Siomary Peña Barrios (C.I. 8.042.020 - OD17611406):** 13 campos recuperados.
+>      * **Luis Ernesto Gámez Pérez (C.I. 25.643.870 - S0288D1406):** 13 campos recuperados.
+>      * **Jenitze Lisbeth Sosa (C.I. 13.097.639 - S3979D1406):** 12 campos recuperados.
+>    - Todos estructurados y listos en `scratch/campo_elias_enriquecimiento_integral.json`.
+>
+> 4. **Impacto en Cuota de Firebase:**
+>    - En todo el municipio Campo Elías (con más de 3.000 trabajadores) se requieren **tan solo 47 operaciones de escritura en total** (31 cargos omitidos + 16 perfiles completados), manteniendo el consumo de cuota perfectamente seguro.
