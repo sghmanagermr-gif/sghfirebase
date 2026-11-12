@@ -4878,4 +4878,5 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
 10. **Despedida Institucional**
 11. **Firma:** `Lic. Luis Alfonso Pérez - Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)`
 
-- **Compromiso Institucional:** Esta estructura se mantendrá de forma estricta, homogénea e inalterable a lo largo de cada una de las auditorías municipales solicitadas.
+- **Fuente de Datos Oficial Ratificada:** **Opción 1: En Vivo directamente desde Cloud Firestore (`sgh-merida`)**. Las auditorías consultarán en tiempo real las colecciones vivas `cargos_personal` y `planteles` municipio a municipio para capturar los avances de directores escolares en la jornada de actualización, manteniendo un consumo seguro y protegido de cuota diaria (apenas 1% a 2% por municipio).
+- **Compromiso Institucional:** Esta estructura y fuente de datos se mantendrán de forma estricta, homogénea e inalterable a lo largo de cada una de las auditorías municipales solicitadas.

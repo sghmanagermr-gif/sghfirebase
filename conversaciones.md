@@ -9005,3 +9005,34 @@ Creo que solo 2 están en el RAC.xlsx"
 >    - **Consumo de Cuota:** Cero absoluto (0 lecturas a Firebase).
 >
 > Se solicitó al Super Administrador indicar cuál de las dos fuentes prefiere para comenzar (en vivo desde la nube para captar el avance de directores, o desde el espejo local para consumo cero).
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Opción 1: En Vivo directamente desde Firebase Firestore Que quede refrendado en la bitacora y conversaciones junto con la estructura"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se acogió y refrendó formalmente en **`bitacora.md`** y en **`conversaciones.md`** la decisión directiva del Super Administrador:
+>
+> 1. **Fuente de Datos Establecida:**  
+>    - **Opción 1: En Vivo directamente desde Cloud Firestore (`sgh-merida`).**
+>    - Cada informe municipal se generará consultando en tiempo real las colecciones `cargos_personal` y `planteles` de la base de datos de producción, garantizando que el análisis refleje con exactitud los datos vivos y las actualizaciones recientes que los directores de los planteles han venido guardando en la plataforma.
+>    - Se mantiene el monitoreo preventivo de cuota diaria para asegurar el principio Zero-Cost.
+>
+> 2. **Esquema Institucional Ratificado:**  
+>    Cada entrega municipal se presentará estrictamente bajo los 11 puntos acordados:
+>    - **Título:** Informe preliminar de la jornada de actualización del SGH v2.37.1
+>    - **Saludo**
+>    - **Resumen breve**
+>    - **Municipio auditado**
+>    - **Cantidad de planteles:** Total, Nacional, Estadal, Municipal y Subvencionado
+>    - **Cantidad de personal:** Total, Docente, Administrativo y Obrero, discriminado por dependencia: Nacional y Estadal
+>    - **Porcentaje del 90% de los campos llenos**
+>    - **Coherencia en horas y turno**
+>    - **Coherencia en Situación Laboral con respecto a las observaciones**
+>    - **Despedida**
+>    - **Lic. Luis Alfonso Pérez - Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)**
