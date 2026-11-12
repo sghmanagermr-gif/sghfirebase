@@ -4859,3 +4859,23 @@ Se diseñó, validó y ejecutó el motor maestro de migración y enriquecimiento
    - [`versiones.md`](file:///c:/Proyectos/sgh-mr%20-%20firebase/versiones.md): Registro cronológico de la versión 2.36.8.
 
 - **Resultado:** Aprobado con estado «SATISFACTORIO» por el administrador.
+
+## [v2.37.1] - 2026-11-12 (Protocolo Maestro de Auditoría Municipal del SGH v2.37.1)
+
+### Resumen Técnico
+A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y refrenda institucionalmente la estructura y plantilla estándar de reporte para la Auditoría Integral y Progresiva de los 23 Municipios del Estado Bolivariano de Mérida. Dicha auditoría evaluará la cobertura de datos, consistencia horaria, turnos y congruencia de la situación laboral frente a las observaciones institucionales.
+
+### Estructura Canónica de Reporte por Municipio:
+1. **Título:** `Informe preliminar de la jornada de actualización del SGH v2.37.1`
+2. **Saludo Institucional**
+3. **Resumen breve:** Síntesis del estado general y avances del municipio.
+4. **Municipio auditado:** Nombre oficial de la entidad municipal.
+5. **Cantidad de planteles:** Total de instituciones, desglosadas en Nacional, Estadal, Municipal y Subvencionado.
+6. **Cantidad de personal:** Total de trabajadores, desglosado por tipo de personal (Docente, Administrativo y Obrero) y por dependencia de nómina (Nacional y Estadal).
+7. **Porcentaje del 90% de los campos llenos:** Métrica de integridad de datos en los expedientes laborales.
+8. **Coherencia en horas y turno:** Verificación de correspondencia entre horas según recibo, horas académicas asignadas y compatibilidad de turnos (mañana, tarde, integral, nocturno).
+9. **Coherencia en Situación Laboral con respecto a las observaciones:** Cotejo entre la condición administrativa (Activo, Incapacitado, Reposo, Adecuación Laboral, Comisión de Servicio, etc.) y las notas u observaciones institucionales registradas.
+10. **Despedida Institucional**
+11. **Firma:** `Lic. Luis Alfonso Pérez - Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)`
+
+- **Compromiso Institucional:** Esta estructura se mantendrá de forma estricta, homogénea e inalterable a lo largo de cada una de las auditorías municipales solicitadas.

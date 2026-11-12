@@ -8944,3 +8944,40 @@ Creo que solo 2 están en el RAC.xlsx"
 >
 > 3. **La Estrategia Maestra Zero-Cost (Consumo CERO de Firebase):**  
 >    - Al disponer en local de los conjuntos de datos maestros homologados al 100% que reflejan con total simetría la base de datos tras la ejecución reciente, podemos realizar toda la auditoría algorítmica de campos vacíos, coherencia horaria y situación laboral directamente sobre los datos consolidados con **0 lecturas consumidas de Firebase (100% Zero-Cost)**.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Ok. Yo te hiré diciendo el municipio. y tu me responderas segun el siguiente esquema:  
+> - Titulo: Informe preliminar de la jornada de actualización del SGH v2.37.1  
+> - Saludo  
+> - Resumen breve  
+> - Municipio auditado  
+> - Cantidad de planteles: Total, Nacional, Estadal, Municipal y Subvencionado  
+> - Cantidad de personal: Total, Docente, Administrativo y Obrero, discriminado por dependencia: Nacional y Estadal  
+> - Porcentaje del 90% de los campos llenos  
+> - Coherencia en horas y turno  
+> - Coherencia en Situación Laboral con respecto a las observaciones  
+> - Despedida  
+> - Lic. Luis Alfonso Pérez - Desarrollador y Soporte Técnico del Sisyema de Gestión Humana (SGH)  
+> Que esta estructura quede refrendada en la vitacora y conversaciones para que a lo largo de las auditorias, mantengas la estructura"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se recibió formalmente la instrucción directiva y se **refrendó de forma inmediata y obligatoria tanto en `bitacora.md` como en `conversaciones.md`** la estructura canónica para todos los informes municipales de auditoría del SGH v2.37.1.
+>
+> A partir de este momento, cada municipio que el Super Administrador indique será auditado y respondido manteniendo con fidelidad absoluta los 11 puntos requeridos:
+> 1. Título oficial exacto.
+> 2. Saludo institucional.
+> 3. Resumen breve ejecutivo.
+> 4. Municipio auditado.
+> 5. Cantidad de planteles (Total, Nacional, Estadal, Municipal, Subvencionado).
+> 6. Cantidad de personal (Total, Docente, Administrativo, Obrero, desglosado por Nacional y Estadal).
+> 7. Porcentaje del 90% de los campos llenos.
+> 8. Coherencia en horas y turnos.
+> 9. Coherencia en Situación Laboral con respecto a las observaciones.
+> 10. Despedida institucional.
+> 11. Firma oficial del Lic. Luis Alfonso Pérez.
