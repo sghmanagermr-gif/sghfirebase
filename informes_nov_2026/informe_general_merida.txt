@@ -42,9 +42,8 @@ Coherencia en Situación Laboral con respecto a las observaciones
 • Índice de coherencia: 100,00% (27.298 de 27.298 funcionarios auditados).
 • Diagnóstico institucional: Concordancia absoluta y rigurosa en los 23 municipios entre el estatus de nómina (Activo, Adecuación Laboral, Comisión de Servicio y Trámite de Jubilación) y las observaciones oficiales registradas en el sistema, sin contradicciones administrativas ni inconsistencias normativas.
 
-Alegoría al SGH v2.37.1: El Telar Andino y la Brújula del Magisterio
-Cuentan los directores de las escuelas del páramo, de la selva nublada y del llano caliente que antes, la gestión humana era como caminar la cordillera a tientas en noche cerrada, cargando pesados fardos de papel mojado por la neblina andina, donde el nombre de un maestro rural se extraviaba con frecuencia en los vericuetos de un archivo distante.
-Hoy, con la llegada del SGH v2.37.1, los directivos sienten haber recibido una brújula de cristal y un telar dorado. En cada pantalla, la labor de sus maestros, obreros y administrativos ya no es una fría cifra olvidada, sino un hilo luminoso que se entrelaza con justicia y precisión en el gran tapiz del magisterio merideño. El director, desde su propia escuela y con la facilidad de un clic en su teléfono o computador, siente el alivio de ver reconocida y protegida la identidad de su gente, transformando lo que antes era agobio administrativo en un acto de orgullo, orden y transparencia compartida.
+Comentario sobre la recepción del sistema
+Es propicio resaltar que los directores de los planteles en todo el Estado Mérida han expresado una profunda satisfacción y agrado con la nueva versión del SGH v2.37.1. Los directivos coinciden en que la plataforma es sumamente ágil, clara y accesible desde cualquier dispositivo, manifestando que les ha simplificado sustancialmente la gestión del personal y optimizado los tiempos de respuesta administrativa en cada una de sus instituciones.
 
 Reiterando el compromiso institucional de garantizar la máxima transparencia, exactitud y confiabilidad en la gestión del talento humano del magisterio merideño, se hace entrega formal del consolidado del Estado Mérida.
 
@@ -52,3 +51,4 @@ Atentamente,
 
 Lic. Luis Alfonso Pérez
 Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)
+
