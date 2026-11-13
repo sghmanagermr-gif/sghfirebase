@@ -1,0 +1,50 @@
+Informe preliminar de la jornada de actualización del SGH v2.37.1
+
+Estimada Marina Sulbarán, Jefe de Gestión Humana:
+
+Reciba un cordial y fraterno saludo institucional. En cumplimiento de las directrices emanadas para el seguimiento, supervisión y control de calidad de la plataforma, presento a continuación el informe preliminar correspondiente al proceso de auditoría y supervisión de datos extraído en vivo directamente desde Cloud Firestore en el Municipio Caracciolo Parra Olmedo.
+
+Municipio auditado
+CARACCIOLO PARRA OLMEDO (Tucaní)
+
+Reseña
+El Municipio Caracciolo Parra Olmedo, con su capital Tucaní en plena Zona Panamericana del Estado Mérida, se distingue por su pujanza agropecuaria y su estratégica conectividad geográfica. Su red escolar abarca 50 instituciones educativas con una destacada presencia de planteles estadales (29 escuelas) articulada armónicamente con la estructura nacional (21 centros), extendiéndose a lo largo de las comunidades rurales del eje panamericano. En el SGH v2.37.1 y a través del registro en vivo de sus 644 trabajadores, el municipio alcanza un sólido 99,69% de completitud en los expedientes y una consistencia horaria y laboral absoluta del 100,00%, reflejando la alta dedicación y orden administrativo del personal directivo y docente en esta productiva zona.
+
+Cantidad de planteles
+• Total de planteles: 50 instituciones educativas
+• Nacional: 21 planteles
+• Estadal: 29 planteles
+• Municipal: 0 planteles
+• Subvencionado: 0 planteles
+
+Cantidad de personal
+• Total de funcionarios registrados en vivo: 644 trabajadores
+• Personal Docente: 485
+  - Nacional: 296 docentes
+  - Estadal: 189 docentes
+• Personal Administrativo: 22
+  - Nacional: 21 administrativos
+  - Estadal: 1 administrativo
+• Personal Obrero: 137
+  - Nacional: 131 obreros
+  - Estadal: 6 obreros
+• Consolidado por Dependencia: 448 Nacionales (69,57%) y 196 Estadales (30,43%).
+
+Porcentaje de los campos llenos
+• Nivel de completitud: 99,69% de los funcionarios cuentan con el 90% o más de sus campos requeridos totalmente diligenciados (642 de los 644 expedientes auditados).
+• Margen residual: Apenas 2 registros (0,31%) presentan datos secundarios complementarios en proceso de afinación en sede escolar.
+
+Coherencia en horas y turno
+• Índice de coherencia: 100,00% (644 funcionarios cuentan con correspondencia armónica entre sus horas según recibo de nómina y los turnos atendidos).
+• Observación técnica: No se detectan desajustes críticos en la asignación horaria ni inconsistencias de turno en los expedientes activos.
+
+Coherencia en Situación Laboral con respecto a las observaciones
+• Índice de coherencia: 100,00% (644 funcionarios).
+• Diagnóstico institucional: Existe concordancia absoluta y perfecta entre la condición de servicio declarada (Activo, Adecuación Laboral, Comisión de Servicio y Trámite de Jubilación) y las observaciones oficiales registradas en el sistema, sin contradicciones administrativas ni inconsistencias documentales.
+
+Reiterando el compromiso institucional de garantizar la máxima transparencia, exactitud y confiabilidad en la gestión del talento humano del magisterio merideño, quedo a su entera disposición para continuar con el siguiente municipio.
+
+Atentamente,
+
+Lic. Luis Alfonso Pérez
+Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)

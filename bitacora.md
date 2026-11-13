@@ -5073,3 +5073,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Coherencia Horas y Turno: 100,00% (3.080 funcionarios).
   - Coherencia Situación Laboral vs Observaciones: 100,00% (3.080 funcionarios).
 - **Archivo Físico Actualizado:** `informes_nov_2026/informe_campo_elias.txt`.
+
+
+### Auditoría En Vivo: Municipio Caracciolo Parra Olmedo (Tucaní) - Opción 1 (Firestore)
+- **Extracción En Vivo:** Consultas directas a Cloud Firestore (`sgh-merida`).
+- **Métricas Oficiales Obtenidas:**
+  - Planteles: 50 instituciones activas (21 Nacionales, 29 Estadales, 0 Municipales, 0 Subvencionados).
+  - Personal: 644 trabajadores en vivo (485 Docentes, 22 Administrativos, 137 Obreros).
+  - Desglose por Dependencia: 448 Nacionales (69,57%) y 196 Estadales (30,43%).
+  - Porcentaje de Campos Llenos: 99,69% (642 de 644 expedientes con >= 90%). Margen residual: 0,31% (2 expedientes).
+  - Coherencia Horas y Turno: 100,00% (644 funcionarios).
+  - Coherencia Situación Laboral vs Observaciones: 100,00% (644 funcionarios).
+- **Archivo Físico Generado:** `informes_nov_2026/informe_caracciolo_parra.txt`.
