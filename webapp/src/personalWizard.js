@@ -500,6 +500,60 @@ export function mostrarFormularioPersonal(autoScroll = true) {
     }
 }
 
+export function abrirFormularioNuevoPersonal() {
+    if (window._requierePaso1) {
+        if (window.showAlert) {
+            window.showAlert("Paso 1 Obligatorio", "Debe registrar y guardar la matrícula del plantel antes de gestionar personal.", "warning");
+        }
+        return;
+    }
+
+    let modoDespliegue = 'TOTAL';
+    try {
+        const sessionConfig = sessionStorage.getItem('sgh_despliegue_config');
+        if (sessionConfig) {
+            const parsed = JSON.parse(sessionConfig);
+            if (parsed && parsed.modo_operacion) modoDespliegue = parsed.modo_operacion;
+        }
+    } catch (e) {}
+
+    const rolUsuario = window.sgh_user_data?.rol;
+    const esDirector = rolUsuario === 'plaadmin';
+    const permiteNuevo = (modoDespliegue === 'TOTAL' || modoDespliegue === 'PERSONAL_COMPLETO' || modoDespliegue === 'SOLO_AGREGAR_PERSONAL');
+
+    if (esDirector && !permiteNuevo) {
+        if (window.showAlert) {
+            window.showAlert("Operación No Permitida", "El modo de despliegue actual no autoriza registrar nuevo personal libremente en este plantel.", "warning");
+        }
+        return;
+    }
+
+    poblarCatalogosGenerales();
+    initCascadaPersonal();
+    limpiarFormularioPersonal();
+
+    const contenedor = document.getElementById('seccion-registro-personal');
+    if (contenedor) {
+        contenedor.style.display = 'block';
+        const headerOffset = 95;
+        const elementPosition = contenedor.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+    }
+
+    const bannerEdit = document.getElementById('banner-modo-edicion');
+    if (bannerEdit) bannerEdit.style.display = 'none';
+
+    const btnSubmit = document.getElementById('btn-guardar-empleado-inline');
+    if (btnSubmit) btnSubmit.textContent = "REGISTRAR EMPLEADO";
+
+    const cedInp = document.getElementById('wp-cedula');
+    if (cedInp) {
+        cedInp.readOnly = false;
+        setTimeout(() => cedInp.focus(), 300);
+    }
+}
+
 export function cerrarFormularioPersonal() {
     const contenedor = document.getElementById('seccion-registro-personal');
     const contenedorTabla = document.getElementById('seccion-personal-existente');
@@ -507,7 +561,7 @@ export function cerrarFormularioPersonal() {
     if (contenedorTabla) contenedorTabla.style.display = 'none';
 }
 
-export function limpiarFormularioPersonal() {
+export function limpiarFormularioPersonal(scrollBackToTable = false) {
     window._docIdEnEdicion = null;
     window._cedulaOriginalEnEdicion = null;
     window._esTraslado = false;
@@ -517,6 +571,16 @@ export function limpiarFormularioPersonal() {
     const contenedor = document.getElementById('seccion-registro-personal');
     if (contenedor) {
         contenedor.style.display = 'none';
+    }
+
+    if (scrollBackToTable) {
+        const secTabla = document.getElementById('seccion-personal-existente');
+        if (secTabla && secTabla.style.display !== 'none') {
+            const headerOffset = 95;
+            const elementPosition = secTabla.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+        }
     }
 
     const bannerEdit = document.getElementById('banner-modo-edicion');
@@ -712,6 +776,27 @@ export function cargarEmpleadoEnFormulario(data, docId) {
         }
         return;
     }
+
+    let modoDespliegue = 'TOTAL';
+    try {
+        const sessionConfig = sessionStorage.getItem('sgh_despliegue_config');
+        if (sessionConfig) {
+            const parsed = JSON.parse(sessionConfig);
+            if (parsed && parsed.modo_operacion) modoDespliegue = parsed.modo_operacion;
+        }
+    } catch(e) {}
+
+    const rolUsuario = window.sgh_user_data?.rol;
+    const esDirector = rolUsuario === 'plaadmin';
+    const permiteEditar = (modoDespliegue === 'TOTAL' || modoDespliegue === 'PERSONAL_COMPLETO' || modoDespliegue === 'SOLO_EDITAR_PERSONAL' || modoDespliegue === 'SOLO_EDITAR_PERSONAL_Y_MATRICULA');
+
+    if (esDirector && !permiteEditar && !window._esTraslado) {
+        if (window.showAlert) {
+            window.showAlert("Operación No Permitida", "El modo de despliegue actual no permite modificar personal existente.", "warning");
+        }
+        return;
+    }
+
     window._docIdEnEdicion = docId;
 
     const nom = (data['nombre-apellido'] || data['apellidos-nombres'] || data.nombres || data.nombre || '').toUpperCase();
@@ -1015,6 +1100,26 @@ export function cargarEmpleadoEnFormulario(data, docId) {
  * Modal personalizado para confirmar la desincorporación del funcionario y registrar auditoría
  */
 export function mostrarModalEliminarPersonal(data, docId, codigoDEA) {
+    let modoDespliegue = 'TOTAL';
+    try {
+        const sessionConfig = sessionStorage.getItem('sgh_despliegue_config');
+        if (sessionConfig) {
+            const parsed = JSON.parse(sessionConfig);
+            if (parsed && parsed.modo_operacion) modoDespliegue = parsed.modo_operacion;
+        }
+    } catch(e) {}
+
+    const rolUsuario = window.sgh_user_data?.rol;
+    const esDirector = rolUsuario === 'plaadmin';
+    const permiteEliminar = (modoDespliegue === 'TOTAL' || modoDespliegue === 'PERSONAL_COMPLETO' || modoDespliegue === 'SOLO_EDITAR_PERSONAL' || modoDespliegue === 'SOLO_EDITAR_PERSONAL_Y_MATRICULA');
+
+    if (esDirector && !permiteEliminar) {
+        if (window.showAlert) {
+            window.showAlert("Operación No Permitida", "El modo de despliegue actual no permite desincorporar personal.", "warning");
+        }
+        return;
+    }
+
     const cedula = data['cedula-identidad'] || data.cedula || '';
     const nombre = (data['nombre-apellido'] || data['apellidos-nombres'] || data.nombre || data.nombres || '').toUpperCase();
     const cargo = data.cargo || 'N/A';
@@ -1544,14 +1649,39 @@ export async function guardarPersonalInline() {
     const newCedula = String(payload.cedula || '').trim();
     const cedulaCambio = isEditing && oldCedula && newCedula && (newCedula !== oldCedula);
 
-    // 🔒 REGLA DE ORO INSTITUCIONAL: CERO COLADOS NO AUTORIZADOS
-    // Los directores (plaadmin) NO pueden registrar personal nuevo libremente.
-    // Solo pueden actualizar personal existente o incorporar traslados oficiales.
+    // 🔒 REGLA DE ORO INSTITUCIONAL Y MODO COACCIÓN:
+    // Los directores (plaadmin) pueden registrar nuevo personal si el modo de despliegue lo autoriza
+    // (TOTAL, PERSONAL_COMPLETO, SOLO_AGREGAR_PERSONAL) o si es traslado oficial.
     const rolUsuario = window.sgh_user_data?.rol;
     const esDirector = rolUsuario === 'plaadmin';
-    if (esDirector && !isEditing && !isTraslado) {
+
+    let modoDespliegue = 'TOTAL';
+    try {
+        const sessionConfig = sessionStorage.getItem('sgh_despliegue_config');
+        if (sessionConfig) {
+            const parsed = JSON.parse(sessionConfig);
+            if (parsed && parsed.modo_operacion) {
+                modoDespliegue = parsed.modo_operacion;
+            }
+        }
+    } catch (e) {
+        console.warn("Aviso leyendo modo_operacion en guardarEmpleado:", e);
+    }
+
+    const permiteNuevo = (modoDespliegue === 'TOTAL' || modoDespliegue === 'PERSONAL_COMPLETO' || modoDespliegue === 'SOLO_AGREGAR_PERSONAL');
+    const permiteEditar = (modoDespliegue === 'TOTAL' || modoDespliegue === 'PERSONAL_COMPLETO' || modoDespliegue === 'SOLO_EDITAR_PERSONAL' || modoDespliegue === 'SOLO_EDITAR_PERSONAL_Y_MATRICULA');
+
+    if (esDirector && !isEditing && !isTraslado && !permiteNuevo) {
         if (window.showAlert) {
-            await window.showAlert("Operación No Permitida", "Los directores no tienen autorización para registrar nuevo personal libremente. Solo pueden actualizar personal existente o incorporar traslados oficiales.", "danger");
+            await window.showAlert("Operación No Permitida", "El modo de despliegue actual no autoriza el registro de nuevo personal libremente. Solo puede actualizar personal existente o incorporar traslados oficiales.", "danger");
+        }
+        limpiarFormularioPersonal();
+        return;
+    }
+
+    if (esDirector && isEditing && !permiteEditar) {
+        if (window.showAlert) {
+            await window.showAlert("Operación No Permitida", "El modo de despliegue actual no permite modificar personal existente.", "danger");
         }
         limpiarFormularioPersonal();
         return;
@@ -1657,7 +1787,7 @@ export async function guardarPersonalInline() {
             ? "¡Funcionario incorporado al plantel exitosamente por traslado!"
             : (cedulaCambio
                 ? `¡Empleado actualizado exitosamente! Cédula corregida a ${newCedula}.`
-                : "¡Empleado actualizado exitosamente!");
+                : (isEditing ? "¡Empleado actualizado exitosamente!" : "¡Empleado registrado exitosamente!"));
         showToast(mensajeExito, "success");
         limpiarFormularioPersonal();
         if (dea) cargarPersonalExistente(dea);
@@ -2439,6 +2569,22 @@ export function abrirModalTraslado() {
         if (window.showAlert) window.showAlert("Modo Supervisión", "Está en modo de supervisión (solo lectura). No se pueden realizar traslados ni incorporaciones.", "info");
         return;
     }
+    if (window._requierePaso1) {
+        if (window.showAlert) window.showAlert("Paso 1 Obligatorio", "Debe registrar y guardar la matrícula del plantel antes de incorporar personal por traslado.", "warning");
+        return;
+    }
+    let modoDespliegue = 'TOTAL';
+    try {
+        const sessionConfig = sessionStorage.getItem('sgh_despliegue_config');
+        if (sessionConfig) {
+            const parsed = JSON.parse(sessionConfig);
+            if (parsed && parsed.modo_operacion) modoDespliegue = parsed.modo_operacion;
+        }
+    } catch(e) {}
+    if (modoDespliegue === 'SOLO_MATRICULA') {
+        if (window.showAlert) window.showAlert("Operación No Permitida", "El modo de despliegue actual no permite incorporar personal.", "warning");
+        return;
+    }
     const modal = document.getElementById('modal-incorporar-traslado');
     if (!modal) return;
     const inpCed = document.getElementById('inp-cedula-traslado');
@@ -2654,6 +2800,7 @@ window.buscarFichaTrasladoUI = function () {
 };
 
 // Asignaciones globales a window
+window.abrirFormularioNuevoPersonal = abrirFormularioNuevoPersonal;
 window.mostrarFormularioPersonal = mostrarFormularioPersonal;
 window.cerrarFormularioPersonal = cerrarFormularioPersonal;
 window.limpiarFormularioPersonal = limpiarFormularioPersonal;

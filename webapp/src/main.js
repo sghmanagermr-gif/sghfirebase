@@ -2186,32 +2186,51 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                     cssRules = `
                         #seccion-personal-existente { display: none !important; }
                         #seccion-registro-personal { display: none !important; }
+                        #btn-nuevo-personal { display: none !important; }
+                        #btn-incorporar-traslado { display: none !important; }
+                        #banner-alerta-paso1-top, #banner-candado-paso1 { display: none !important; }
                     `;
                 } 
                 else if (modo === 'SOLO_AGREGAR_PERSONAL') {
                     cssRules = `
                         #btn-guardar-matricula { display: none !important; }
                         #plantel-form input:not([readonly]), #plantel-form select { pointer-events: none !important; opacity: 0.6 !important; }
+                        #contenedor-seleccion-planes { pointer-events: none !important; opacity: 0.6 !important; }
+                        #seccion-personal-existente { display: block !important; }
                         #seccion-personal-existente .btn-editar, #seccion-personal-existente .btn-eliminar { display: none !important; }
+                        #btn-nuevo-personal { display: inline-flex !important; }
+                        #banner-alerta-paso1-top, #banner-candado-paso1 { display: none !important; }
                     `;
                 } 
                 else if (modo === 'SOLO_EDITAR_PERSONAL') {
                     cssRules = `
                         #btn-guardar-matricula { display: none !important; }
                         #plantel-form input:not([readonly]), #plantel-form select { pointer-events: none !important; opacity: 0.6 !important; }
+                        #contenedor-seleccion-planes { pointer-events: none !important; opacity: 0.6 !important; }
                         #seccion-personal-existente { display: block !important; }
-                        #seccion-registro-personal:not(:has(#banner-modo-edicion[style*="flex"])) { display: none !important; }
+                        #btn-nuevo-personal { display: none !important; }
+                        #banner-alerta-paso1-top, #banner-candado-paso1 { display: none !important; }
                     `;
                 } 
                 else if (modo === 'SOLO_EDITAR_PERSONAL_Y_MATRICULA') {
                     cssRules = `
-                        #seccion-registro-personal:not(:has(#banner-modo-edicion[style*="flex"])) { display: none !important; }
+                        #btn-nuevo-personal { display: none !important; }
                     `;
                 }
                 else if (modo === 'PERSONAL_COMPLETO') {
                     cssRules = `
                         #btn-guardar-matricula { display: none !important; }
                         #plantel-form input:not([readonly]), #plantel-form select { pointer-events: none !important; opacity: 0.6 !important; }
+                        #contenedor-seleccion-planes { pointer-events: none !important; opacity: 0.6 !important; }
+                        #seccion-personal-existente { display: block !important; }
+                        #btn-nuevo-personal { display: inline-flex !important; }
+                        #banner-alerta-paso1-top, #banner-candado-paso1 { display: none !important; }
+                    `;
+                }
+                else if (modo === 'TOTAL') {
+                    cssRules = `
+                        #btn-nuevo-personal { display: inline-flex !important; }
+                        #banner-alerta-paso1-top, #banner-candado-paso1 { display: none !important; }
                     `;
                 }
                 
@@ -2219,16 +2238,20 @@ async function mostrarCandado(codigoDEA, dataParcial) {
 
                 // Also forcefully disable the inputs in the DOM to prevent 'Tab' key focusing
                 const secMatriculaForm = document.getElementById('plantel-form');
+                const disableMatricula = (modo !== 'TOTAL' && modo !== 'SOLO_MATRICULA' && modo !== 'SOLO_EDITAR_PERSONAL_Y_MATRICULA');
                 if (secMatriculaForm) {
                     const inputs = secMatriculaForm.querySelectorAll('input:not([readonly]), select');
-                    const disableMatricula = (modo !== 'TOTAL' && modo !== 'SOLO_MATRICULA' && modo !== 'SOLO_EDITAR_PERSONAL_Y_MATRICULA');
                     inputs.forEach(i => i.disabled = disableMatricula);
+                }
+                const contPlanes = document.getElementById('contenedor-seleccion-planes');
+                if (contPlanes) {
+                    contPlanes.querySelectorAll('input, select, button').forEach(i => i.disabled = disableMatricula);
                 }
                 
                 // To be extra safe with the existing logic, apply inline disabling once
                 const btnMatricula = document.getElementById('btn-guardar-matricula');
-                if (btnMatricula && modo !== 'TOTAL' && modo !== 'SOLO_MATRICULA' && modo !== 'SOLO_EDITAR_PERSONAL_Y_MATRICULA') {
-                    btnMatricula.disabled = true;
+                if (btnMatricula) {
+                    btnMatricula.disabled = disableMatricula;
                 }
 
             } catch(e) { console.error("Error aplicando coacción CSS:", e); }
@@ -2684,7 +2707,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
     }
 
     const tienePlanes = esEspecial || esAdulto || (window._planesSeleccionadosDirector && Object.keys(window._planesSeleccionadosDirector).length > 0);
-    const esModoSecuencial = (modoDespliegue === 'SOLO_EDITAR_PERSONAL_Y_MATRICULA' || modoDespliegue === 'TOTAL');
+    const esModoSecuencial = (modoDespliegue === 'SOLO_EDITAR_PERSONAL_Y_MATRICULA');
     const requierePaso1 = (!window._modoSupervision && esModoSecuencial && !hasData);
     window._requierePaso1 = requierePaso1;
 
@@ -2726,9 +2749,12 @@ async function mostrarCandado(codigoDEA, dataParcial) {
         if (secPersonal) secPersonal.style.display = 'none';
         const secReg = document.getElementById('seccion-registro-personal');
         if (secReg) secReg.style.display = 'none';
-    } else if (window._modoSupervision || modoDespliegue === 'SOLO_EDITAR_PERSONAL') {
+    } else if (window._modoSupervision || modoDespliegue === 'SOLO_EDITAR_PERSONAL' || modoDespliegue === 'PERSONAL_COMPLETO' || modoDespliegue === 'SOLO_AGREGAR_PERSONAL' || modoDespliegue === 'TOTAL') {
         const secPersonal = document.getElementById('seccion-personal-existente');
-        if (secPersonal) secPersonal.style.display = 'block';
+        if (secPersonal) {
+            secPersonal.style.removeProperty('display');
+            secPersonal.style.display = 'block';
+        }
         if (typeof window.cargarPersonalExistente === "function") {
             window.cargarPersonalExistente(codigoDEA);
         } else if (typeof window.mostrarFormularioPersonal === "function") {
@@ -3444,7 +3470,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                           secPersonal.scrollIntoView({ behavior: 'smooth', block: 'start' });
                       }, 350);
                   }
-                  if (previaSinMatricula) {
+                  if (previaSinMatricula && modoDespliegue === 'SOLO_EDITAR_PERSONAL_Y_MATRICULA') {
                       if (window.showAlert) {
                           window.showAlert("¡Paso 1 Completado!", "La matrícula estudiantil ha sido registrada con éxito. La nómina del personal ha sido habilitada para su revisión y actualización.", "success");
                       } else {

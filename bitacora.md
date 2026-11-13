@@ -5390,6 +5390,23 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   2. En `personalWizard.js` (línea 1552), existe una regla estricta que bloquea a los directores (`plaadmin`) si intentan guardar un registro que no provenga de edición o traslado.
   3. Falta conectar la presencia reactiva del botón `btn-nuevo-personal` y la excepción de guardado cuando el modo de coacción sea `PERSONAL_COMPLETO` o `SOLO_AGREGAR_PERSONAL`.
 
+---
+
+### Hito: Homologación Integral y Reactiva de los 6 Modos de Coacción en Despliegue (v2.37.2)
+- **Fecha:** 2026-11-13 ~18:50 (Hora Local Venezuela).
+- **Módulo:** Panel de Despliegue / Modo Coacción / personalWizard / main / Control de Acceso Directores (plaadmin).
+- **Objetivo:** Garantizar que todas las 6 opciones del selector "Nivel de Acceso Concedido en este Despliegue (Modo Coacción)" operen de forma estricta, integral y autónoma, reflejando reactivamente la visibilidad de herramientas, formularios y validaciones de seguridad:
+  1. `TOTAL`: Matrícula editable (botón guardar activo, banners paso 1 apagados). Nómina de personal visible, botones Editar y Eliminar habilitados. Botón reactivo "➕ Nuevo Personal" activo para registrar funcionarios libres, formulario en blanco funcional y guardado autorizado para plaadmin. Botón de traslados activo.
+  2. `SOLO_MATRICULA`: Matrícula editable y guardable. Todo el módulo de personal (tabla, formulario, botón nuevo personal y traslados) oculto y bloqueado por CSS e intercepciones JS en funciones de guardado/edición/eliminación.
+  3. `SOLO_AGREGAR_PERSONAL`: Matrícula bloqueada (inputs y planes disabled / pointer-events none, botón guardar oculto). Tabla de personal existente visible para consulta, pero botones Editar y Eliminar ocultos y bloqueados. Botón "➕ Nuevo Personal" visible y funcional para ingresar nuevos trabajadores autorizadamente.
+  4. `SOLO_EDITAR_PERSONAL`: Matrícula bloqueada. Tabla de personal visible con botones Editar y Eliminar activos. Botón "➕ Nuevo Personal" oculto; formulario de personal solo se abre en modo edición/traslado. Guardado de nuevo personal directo bloqueado con alerta institucional.
+  5. `SOLO_EDITAR_PERSONAL_Y_MATRICULA`: Modo secuencial. Si el plantel carece de matrícula (>0), exige Paso 1 obligatorio con banners de orientación y mantiene oculta la nómina. Al guardar matrícula o poseerla previamente, habilita la tabla de personal para editar y desincorporar, manteniendo oculto el botón de nuevo personal.
+  6. `PERSONAL_COMPLETO`: Matrícula bloqueada e inerte. Tabla de personal visible automáticamente (incluso en planteles sin matrícula previa o en excepciones como DEMO140000). Botones Editar y Eliminar activos. Botón reactivo "➕ Nuevo Personal" presente y visible; formulario en blanco accesible con guardado autorizado para plaadmin.
+- **Cambios Técnicos:**
+  * `webapp/index.html`: Inyección del botón `#btn-nuevo-personal` en la barra de herramientas `.personal-toolbar` de `#seccion-personal-existente` y botón "Cancelar" en `#form-personal-inline`.
+  * `webapp/src/personalWizard.js`: Implementación y exportación de `abrirFormularioNuevoPersonal()`, ajuste de `limpiarFormularioPersonal(scrollBackToTable)`, adición de validaciones por `modo_operacion` en `guardarEmpleado()`, `cargarEmpleadoEnFormulario()`, `mostrarModalEliminarPersonal()` y `abrirModalTraslado()`.
+  * `webapp/src/main.js`: Actualización exhaustiva de las reglas CSS de `#style-coaccion`, inhabilitación DOM coordinada para campos de matrícula y selectores de planes de estudio, y normalización de la lógica de bifurcación de vistas para que `PERSONAL_COMPLETO`, `SOLO_AGREGAR_PERSONAL` y `TOTAL` carguen la nómina de inmediato.
+
 
 
 

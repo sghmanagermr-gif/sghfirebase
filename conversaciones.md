@@ -10103,6 +10103,25 @@ Creo que solo 2 están en el RAC.xlsx"
 > - La ausencia del botón para nuevo personal se debe a que durante la versión v2.29.0 se implementó el "Blindaje Anti-Colados" para la auditoría del RAC, retirando el botón visible de "+ Nuevo Personal" de la barra de herramientas y dejando el formulario oculto por defecto para restringir a los directores solo a editar o trasladar.
 > - Se propone la habilitación reactiva del botón "➕ Nuevo Personal" en la barra de herramientas y el ajuste de la regla de guardado en `personalWizard.js` cuando el modo de coacción sea `PERSONAL_COMPLETO` o `SOLO_AGREGAR_PERSONAL`.
 
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Sedeo primero que verifiques cada uno de los Modo Coacción y que todos eten funcionado según su dinámica. Noes que me vas a decir cuando pruebe la opción Solo Modificar Matrícula: "es que en la version tal se hizo tal cosa...." o sea todas las6 opciones disponibles en el selector, deben hacer lo que deben hacer"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Verificación exhaustiva, homologación y despliegue técnico de las 6 modalidades del Modo Coacción:
+> 1. `TOTAL`: Apertura total de matrícula y personal (alta de nuevo personal, edición, eliminación y traslados activos).
+> 2. `SOLO_MATRICULA`: Matrícula editable; personal 100% oculto y bloqueado en DOM y funciones.
+> 3. `SOLO_AGREGAR_PERSONAL`: Matrícula bloqueada; nómina visible en modo consulta; editar y eliminar ocultos; botón ➕ Nuevo Personal activo con guardado permitido.
+> 4. `SOLO_EDITAR_PERSONAL`: Matrícula bloqueada; nómina visible; editar y eliminar activos; nuevo personal oculto y guardado libre bloqueado.
+> 5. `SOLO_EDITAR_PERSONAL_Y_MATRICULA`: Secuencial Paso 1 (matrícula) -> Paso 2 (editar nómina).
+> 6. `PERSONAL_COMPLETO`: Matrícula bloqueada; nómina visible de inmediato (incluyendo excepciones como DEMO140000); editar, eliminar y ➕ Nuevo Personal plenamente activos y autorizados.
+> - Se integró `#btn-nuevo-personal` en la barra de herramientas y botón Cancelar en el formulario, se implementó `abrirFormularioNuevoPersonal()`, se actualizaron las reglas de `styleTag` e inhabilitación DOM, se compiló el bundle de producción con Vite y se sincronizó con Git.
+
 
 
 
