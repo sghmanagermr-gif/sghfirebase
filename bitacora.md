@@ -4953,3 +4953,12 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
 - **Consumo de las Auditorías:** 0 lecturas adicionales a Firestore gracias al motor analítico basado en el espejo maestro unificado post-migración.
 - **Ventana de Reinicio:** Google Cloud restablece automáticamente la cuota diaria gratuita a la medianoche hora del Pacífico (aprox. 3:30 - 4:00 a.m. hora de Venezuela).
 - **Disponibilidad Operativa:** Auditorías municipales blindadas y sin interrupción.
+
+
+### Decisión Estratégica: Adopción de la Opción B (Zero Cost y Auditoría 100% en Vivo)
+- **Acuerdo Institucional:** A solicitud y bajo la directriz del Super Administrador (Lic. Luis Alfonso Pérez), se descarta el uso del espejo maestro estático para las cifras definitivas de auditoría, ya que los directores de planteles realizaron actualizaciones y modificaciones posteriores a la migración que deben reflejarse de forma fidedigna para la Jefa de Gestión Humana (Licda. Marina Sulbarán).
+- **Ruta Seleccionada (Opción B):** Mantener el plan gratuito Spark (Zero Cost) y pausar la jornada durante la noche, aguardando el reinicio automático del contador de cuota de Google Cloud (previsto para las 3:30 - 4:00 a.m. hora de Venezuela / 12:00 a.m. PST).
+- **Plan Operativo para la Mañana:**
+  1. Con las 50.000 lecturas gratuitas diarias restauradas, se re-auditarán en vivo directamente desde Firestore los primeros 5 municipios (Alberto Adriani, Andrés Bello, Antonio Pinto Salinas, Aricagua y Campo Elías), sobreescribiendo sus respectivos archivos `.txt` en `informes_nov_2026/` con las ediciones vivas de los directores.
+  2. Se auditarán secuencialmente los 18 municipios restantes en vivo desde Firestore, consumiendo en total ~23.000 lecturas (menos del 50% de la cuota diaria gratuita).
+  3. Todos los informes reflejarán el 100% de confiabilidad técnica y fidelidad a la base de datos viva.

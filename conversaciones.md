@@ -9331,3 +9331,33 @@ Creo que solo 2 están en el RAC.xlsx"
 > - **Consumo de la Auditoría Actual:** 0 lecturas adicionales a Firestore, preservando los límites y operando sobre el espejo maestro unificado 1:1 post-migración.
 > - **Reinicio Automático:** Google Cloud restablece los 50.000 llamados gratuitos diarios a las 12:00 a.m. PST (aprox. 3:30 a 4:00 a.m. hora de Venezuela).
 > - **Garantía Operativa:** El proceso de auditoría municipal continúa con total normalidad, velocidad y exactitud.
+
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Las auditorías no se deben hacer con el espejo maestro unificado post-migración, ya que después de esa migración directores estuvieron haciendo sus respectivas actualizaciones y modificaciones entonces los resultados de esos informes no son confiables. ¿Cómo hacemos? ¿Cuál es el plan?"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> El agente acogió con total acuerdo la observación del Administrador: para garantizar la confiabilidad institucional ante la Jefatura de Gestión Humana (Licda. Marina Sulbarán), los informes deben capturar obligatoriamente el pulso vivo de Cloud Firestore, incluyendo las modificaciones hechas por los directores tras la migración. Se plantearon dos vías:
+> - **Opción A:** Pasar inmediatamente al Plan Blaze (desbloqueo inmediato con costo de centavos).
+> - **Opción B:** Mantener el Plan Spark (Zero Cost) esperando la ventana de reinicio de cuota de Google a las 3:30 - 4:00 a.m. para auditar en vivo con 50.000 lecturas limpias.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "La opción b"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Formalización institucional de la **Opción B (Zero Cost y Auditoría 100% en Vivo desde Firestore)**:
+> 1. Se pausa la emisión de auditorías durante la noche para permitir el reinicio automático del contador gratuito diario de Google Cloud (3:30 a 4:00 a.m. hora de Venezuela / 12:00 a.m. PST).
+> 2. En la mañana, con las 50.000 lecturas gratuitas al 100%, se re-auditarán en vivo los 5 municipios previos (Alberto Adriani, Andrés Bello, Antonio Pinto Salinas, Aricagua y Campo Elías), sobreescribiendo sus archivos `.txt` en `informes_nov_2026/` con las actualizaciones reales de los directores.
+> 3. Se procederá con los 18 municipios restantes en vivo directamente desde Firestore, con un consumo estimado de ~23.000 lecturas, manteniéndose cómodamente dentro de la cuota diaria gratuita.
