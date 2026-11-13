@@ -1,0 +1,50 @@
+Informe preliminar de la jornada de actualización del SGH v2.37.1
+
+Estimada Marina Sulbarán, Jefe de Gestión Humana:
+
+Reciba un cordial y fraterno saludo institucional. En cumplimiento de las directrices emanadas para el seguimiento, supervisión y control de calidad de la plataforma, presento a continuación el informe preliminar correspondiente al proceso de auditoría y supervisión de datos extraído en vivo directamente desde Cloud Firestore en el Municipio Rivas Dávila.
+
+Municipio auditado
+RIVAS DÁVILA (Bailadores)
+
+Reseña
+El Municipio Rivas Dávila, cuya capital Bailadores se emplaza en la cabecera del fértil Valle del Mocotíes, es reconocido en toda Venezuela por su arraigada tradición campesina, su destacada producción agrícola de hortalizas y flores, y su valioso patrimonio cultural. Su sistema educativo está estructurado en 27 instituciones escolares distribuidas equilibradamente entre la administración nacional (14 planteles) y la dependencia estadal (13 centros), brindando cobertura escolar desde el casco urbano colonial hasta las aldeas de montaña como Las Playitas, La Cascada, Bodoque y Otrabanda. En el SGH v2.37.1 y a través del registro en vivo de sus 698 trabajadores, el municipio alcanza un sólido 94,27% de completitud documental y un 99,43% de coherencia horaria, evidenciando el compromiso docente y la disciplina administrativa de sus directivos escolares en este laborioso rincón del occidente merideño.
+
+Cantidad de planteles
+• Total de planteles: 27 instituciones educativas
+• Nacional: 14 planteles
+• Estadal: 13 planteles
+• Municipal: 0 planteles
+• Subvencionado: 0 planteles
+
+Cantidad de personal
+• Total de funcionarios registrados en vivo: 698 trabajadores
+• Personal Docente: 398
+  - Nacional: 291 docentes
+  - Estadal: 107 docentes
+• Personal Administrativo: 48
+  - Nacional: 46 administrativos
+  - Estadal: 2 administrativos
+• Personal Obrero: 224
+  - Nacional: 216 obreros
+  - Estadal: 8 obreros
+• Consolidado por Dependencia: 572 Nacionales (81,95%) y 126 Estadales (18,05%).
+
+Porcentaje de los campos llenos
+• Nivel de completitud: 94,27% de los funcionarios cuentan con el 90% o más de sus campos requeridos totalmente diligenciados (658 de los 698 expedientes auditados).
+• Margen residual: 40 registros (5,73%) presentan datos secundarios complementarios en proceso de afinación en sede escolar (principalmente variables sociodemográficas o de dotación).
+
+Coherencia en horas y turno
+• Índice de coherencia: 99,43% (694 funcionarios cuentan con correspondencia armónica entre sus horas según recibo de nómina y los turnos atendidos).
+• Observación técnica: Se detectaron 4 casos (0,57%) donde se requiere la definición del turno rotativo o la homologación fina de horas de aula frente a recibo por parte de las direcciones de los planteles.
+
+Coherencia en Situación Laboral con respecto a las observaciones
+• Índice de coherencia: 100,00% (698 funcionarios).
+• Diagnóstico institucional: Existe concordancia absoluta y perfecta entre la condición de servicio declarada (Activo, Adecuación Laboral, Comisión de Servicio y Trámite de Jubilación) y las observaciones oficiales registradas en el sistema, sin contradicciones administrativas ni inconsistencias documentales.
+
+Reiterando el compromiso institucional de garantizar la máxima transparencia, exactitud y confiabilidad en la gestión del talento humano del magisterio merideño, quedo a su entera disposición para continuar con el siguiente municipio.
+
+Atentamente,
+
+Lic. Luis Alfonso Pérez
+Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)

@@ -5212,3 +5212,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Coherencia Horas y Turno: 100,00% (1.085 funcionarios).
   - Coherencia Situación Laboral vs Observaciones: 100,00% (1.085 funcionarios).
 - **Archivo Físico Generado:** `informes_nov_2026/informe_rangel.txt`.
+
+
+### Auditoría En Vivo: Municipio Rivas Dávila (Bailadores) - Opción 1 (Firestore)
+- **Extracción En Vivo:** Consultas directas a Cloud Firestore (`sgh-merida`).
+- **Métricas Oficiales Obtenidas:**
+  - Planteles: 27 instituciones activas (14 Nacionales, 13 Estadales, 0 Municipales, 0 Subvencionados).
+  - Personal: 698 trabajadores en vivo (398 Docentes, 48 Administrativos, 224 Obreros).
+  - Desglose por Dependencia: 572 Nacionales (81,95%) y 126 Estadales (18,05%).
+  - Porcentaje de Campos Llenos: 94,27% (658 de 698 expedientes con >= 90%). Margen residual: 5,73% (40 expedientes).
+  - Coherencia Horas y Turno: 99,43% (694 funcionarios). Discrepancia menor: 4 casos (0,57%).
+  - Coherencia Situación Laboral vs Observaciones: 100,00% (698 funcionarios).
+- **Archivo Físico Generado:** `informes_nov_2026/informe_rivas_davila.txt`.
