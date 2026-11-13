@@ -5353,6 +5353,16 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
 - **Hito Estratégico:** La Profesora Marina Sulbarán, Jefe de Gestión Humana, revisó los informes de auditoría (los 23 municipales y el general estadal con sus tablas de planteles y nuevos epónimos en Word) manifestando plena satisfacción y gran entusiasmo con la calidad, presentación y rigor de los datos presentados.
 - **Próximo Paso Acordado:** Sesión de depuración y análisis pormenorizado de casos de doble cargo y duplicidades en las nóminas nacional y estadal bajo metodología Zero-Cost.
 
+### Redacción del Comunicado Oficial de Cierre del RAC y Apertura a la Jornada de Registros
+- **Fecha:** 2026-11-13 ~16:11 (Hora Local Venezuela).
+- **Objetivo:** Redactar un mensaje institucional breve, claro y motivador para los directivos y supervisores escolares del estado.
+- **Contenido Central:**
+  1. Anuncio formal del cierre victorioso de la Jornada de Actualización del RAC en el SGH v2.37.1 (1.184 planteles en los 23 municipios).
+  2. Reconocimiento y felicitación a directores y colectivos escolares por su dedicación y orden administrativo.
+  3. Expectativa y preparativos para la inminente apertura de la Jornada de Registros en el SGH.
+- **Archivo de Respaldo:** `scratch/mensaje_cierre_rac_apertura_registros.txt`.
+
+
 
 
 
