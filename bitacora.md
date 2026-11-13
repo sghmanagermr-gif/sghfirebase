@@ -5085,3 +5085,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Coherencia Horas y Turno: 100,00% (644 funcionarios).
   - Coherencia Situación Laboral vs Observaciones: 100,00% (644 funcionarios).
 - **Archivo Físico Generado:** `informes_nov_2026/informe_caracciolo_parra.txt`.
+
+
+### Auditoría En Vivo: Municipio Cardenal Quintero (Santo Domingo) - Opción 1 (Firestore)
+- **Extracción En Vivo:** Consultas directas a Cloud Firestore (`sgh-merida`).
+- **Métricas Oficiales Obtenidas:**
+  - Planteles: 19 instituciones activas (9 Nacionales, 10 Estadales, 0 Municipales, 0 Subvencionados).
+  - Personal: 514 trabajadores en vivo (352 Docentes, 16 Administrativos, 146 Obreros).
+  - Desglose por Dependencia: 435 Nacionales (84,63%) y 79 Estadales (15,37%).
+  - Porcentaje de Campos Llenos: 100,00% (514 de 514 expedientes con >= 90%). Margen residual: 0,00%.
+  - Coherencia Horas y Turno: 100,00% (514 funcionarios).
+  - Coherencia Situación Laboral vs Observaciones: 100,00% (514 funcionarios).
+- **Archivo Físico Generado:** `informes_nov_2026/informe_cardenal_quintero.txt`.

@@ -1,0 +1,50 @@
+Informe preliminar de la jornada de actualización del SGH v2.37.1
+
+Estimada Marina Sulbarán, Jefe de Gestión Humana:
+
+Reciba un cordial y fraterno saludo institucional. En cumplimiento de las directrices emanadas para el seguimiento, supervisión y control de calidad de la plataforma, presento a continuación el informe preliminar correspondiente al proceso de auditoría y supervisión de datos extraído en vivo directamente desde Cloud Firestore en el Municipio Cardenal Quintero.
+
+Municipio auditado
+CARDENAL QUINTERO (Santo Domingo)
+
+Reseña
+El Municipio Cardenal Quintero, enclavado en la alta cordillera andina con su capital Santo Domingo, se caracteriza por su privilegiada ubicación en la cuenca alta del río Santo Domingo, su clima de páramo y su profunda vocación agrícola y turística. Su entramado escolar está compuesto por 19 instituciones educativas (10 de administración estadal y 9 nacionales), que dan cobertura formativa desde los valles templados hasta las aldeas de mayor elevación. En el SGH v2.37.1 y a través del registro en vivo de sus 514 trabajadores, el municipio exhibe un impecable 100,00% de completitud documental y una sincronización horaria y laboral perfecta del 100,00%, demostrando un alto sentido de pertenencia y rigurosidad administrativa por parte de su personal.
+
+Cantidad de planteles
+• Total de planteles: 19 instituciones educativas
+• Nacional: 9 planteles
+• Estadal: 10 planteles
+• Municipal: 0 planteles
+• Subvencionado: 0 planteles
+
+Cantidad de personal
+• Total de funcionarios registrados en vivo: 514 trabajadores
+• Personal Docente: 352
+  - Nacional: 273 docentes
+  - Estadal: 79 docentes
+• Personal Administrativo: 16
+  - Nacional: 16 administrativos
+  - Estadal: 0 administrativos
+• Personal Obrero: 146
+  - Nacional: 146 obreros
+  - Estadal: 0 obreros
+• Consolidado por Dependencia: 435 Nacionales (84,63%) y 79 Estadales (15,37%).
+
+Porcentaje de los campos llenos
+• Nivel de completitud: 100,00% de los funcionarios cuentan con el 90% o más de sus campos requeridos totalmente diligenciados (514 de los 514 expedientes auditados).
+• Margen residual: 0 funcionarios (0,00%), reflejando la conclusión satisfactoria y completa de los registros en los planteles de la jurisdicción.
+
+Coherencia en horas y turno
+• Índice de coherencia: 100,00% (514 funcionarios cuentan con correspondencia armónica entre sus horas según recibo de nómina y los turnos atendidos).
+• Observación técnica: No se detectan desajustes críticos en la asignación horaria ni inconsistencias de turno en los expedientes activos.
+
+Coherencia en Situación Laboral con respecto a las observaciones
+• Índice de coherencia: 100,00% (514 funcionarios).
+• Diagnóstico institucional: Existe concordancia absoluta y perfecta entre la condición de servicio declarada (Activo, Adecuación Laboral, Comisión de Servicio y Trámite de Jubilación) y las observaciones oficiales registradas en el sistema, sin contradicciones administrativas ni inconsistencias documentales.
+
+Reiterando el compromiso institucional de garantizar la máxima transparencia, exactitud y confiabilidad en la gestión del talento humano del magisterio merideño, quedo a su entera disposición para continuar con el siguiente municipio.
+
+Atentamente,
+
+Lic. Luis Alfonso Pérez
+Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)
