@@ -5097,3 +5097,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Coherencia Horas y Turno: 100,00% (514 funcionarios).
   - Coherencia Situación Laboral vs Observaciones: 100,00% (514 funcionarios).
 - **Archivo Físico Generado:** `informes_nov_2026/informe_cardenal_quintero.txt`.
+
+
+### Auditoría En Vivo: Municipio Guaraque - Opción 1 (Firestore)
+- **Extracción En Vivo:** Consultas directas a Cloud Firestore (`sgh-merida`).
+- **Métricas Oficiales Obtenidas:**
+  - Planteles: 31 instituciones activas (17 Nacionales, 14 Estadales, 0 Municipales, 0 Subvencionados).
+  - Personal: 507 trabajadores en vivo (276 Docentes, 23 Administrativos, 208 Obreros).
+  - Desglose por Dependencia: 394 Nacionales (77,71%) y 113 Estadales (22,29%).
+  - Porcentaje de Campos Llenos: 99,01% (502 de 507 expedientes con >= 90%). Margen residual: 0,99% (5 expedientes).
+  - Coherencia Horas y Turno: 100,00% (507 funcionarios).
+  - Coherencia Situación Laboral vs Observaciones: 100,00% (507 funcionarios).
+- **Archivo Físico Generado:** `informes_nov_2026/informe_guaraque.txt`.

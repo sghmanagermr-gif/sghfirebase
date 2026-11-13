@@ -1,0 +1,50 @@
+Informe preliminar de la jornada de actualización del SGH v2.37.1
+
+Estimada Marina Sulbarán, Jefe de Gestión Humana:
+
+Reciba un cordial y fraterno saludo institucional. En cumplimiento de las directrices emanadas para el seguimiento, supervisión y control de calidad de la plataforma, presento a continuación el informe preliminar correspondiente al proceso de auditoría y supervisión de datos extraído en vivo directamente desde Cloud Firestore en el Municipio Guaraque.
+
+Municipio auditado
+GUARAQUE
+
+Reseña
+El Municipio Guaraque, situado en el extremo suroccidental del Estado Mérida y corazón del macizo montañoso de los Pueblos del Sur, se caracteriza por su agreste topografía, su profunda tradición agrícola y su red de comunidades campesinas dispersas. Su infraestructura educativa está constituida por 31 instituciones escolares (17 de dependencia nacional y 14 estadales), las cuales garantizan el derecho a la educación en valles y caseríos de geografía exigente como Río Negro y Mesa de Quintero. En el SGH v2.37.1 y a través del registro en vivo de sus 507 trabajadores, el municipio exhibe un sólido 99,01% de completitud documental y un 100,00% de coherencia en horas, turnos y situación laboral, evidenciando el compromiso inquebrantable y la mística vocacional de sus docentes y directores en zonas rurales de frontera interna.
+
+Cantidad de planteles
+• Total de planteles: 31 instituciones educativas
+• Nacional: 17 planteles
+• Estadal: 14 planteles
+• Municipal: 0 planteles
+• Subvencionado: 0 planteles
+
+Cantidad de personal
+• Total de funcionarios registrados en vivo: 507 trabajadores
+• Personal Docente: 276
+  - Nacional: 181 docentes
+  - Estadal: 95 docentes
+• Personal Administrativo: 23
+  - Nacional: 23 administrativos
+  - Estadal: 0 administrativos
+• Personal Obrero: 208
+  - Nacional: 190 obreros
+  - Estadal: 18 obreros
+• Consolidado por Dependencia: 394 Nacionales (77,71%) y 113 Estadales (22,29%).
+
+Porcentaje de los campos llenos
+• Nivel de completitud: 99,01% de los funcionarios cuentan con el 90% o más de sus campos requeridos totalmente diligenciados (502 de los 507 expedientes auditados).
+• Margen residual: Apenas 5 registros (0,99%) presentan datos secundarios complementarios en proceso de afinación en sede escolar.
+
+Coherencia en horas y turno
+• Índice de coherencia: 100,00% (507 funcionarios cuentan con correspondencia armónica entre sus horas según recibo de nómina y los turnos atendidos).
+• Observación técnica: No se detectan desajustes críticos en la asignación horaria ni inconsistencias de turno en los expedientes activos.
+
+Coherencia en Situación Laboral con respecto a las observaciones
+• Índice de coherencia: 100,00% (507 funcionarios).
+• Diagnóstico institucional: Existe concordancia absoluta y perfecta entre la condición de servicio declarada (Activo, Adecuación Laboral, Comisión de Servicio y Trámite de Jubilación) y las observaciones oficiales registradas en el sistema, sin contradicciones administrativas ni inconsistencias documentales.
+
+Reiterando el compromiso institucional de garantizar la máxima transparencia, exactitud y confiabilidad en la gestión del talento humano del magisterio merideño, quedo a su entera disposición para continuar con el siguiente municipio.
+
+Atentamente,
+
+Lic. Luis Alfonso Pérez
+Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)
