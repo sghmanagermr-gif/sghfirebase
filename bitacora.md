@@ -5121,3 +5121,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Coherencia Horas y Turno: 100,00% (491 funcionarios).
   - Coherencia Situación Laboral vs Observaciones: 100,00% (491 funcionarios).
 - **Archivo Físico Generado:** `informes_nov_2026/informe_julio_cesar_salas.txt`.
+
+
+### Auditoría En Vivo: Municipio Justo Briceño (Torondoy) - Opción 1 (Firestore)
+- **Extracción En Vivo:** Consultas directas a Cloud Firestore (`sgh-merida`).
+- **Métricas Oficiales Obtenidas:**
+  - Planteles: 20 instituciones activas (5 Nacionales, 15 Estadales, 0 Municipales, 0 Subvencionados).
+  - Personal: 406 trabajadores en vivo (278 Docentes, 14 Administrativos, 114 Obreros).
+  - Desglose por Dependencia: 266 Nacionales (65,52%) y 140 Estadales (34,48%).
+  - Porcentaje de Campos Llenos: 100,00% (406 de 406 expedientes con >= 90%). Margen residual: 0,00%.
+  - Coherencia Horas y Turno: 100,00% (406 funcionarios).
+  - Coherencia Situación Laboral vs Observaciones: 100,00% (406 funcionarios).
+- **Archivo Físico Generado:** `informes_nov_2026/informe_justo_briceno.txt`.
