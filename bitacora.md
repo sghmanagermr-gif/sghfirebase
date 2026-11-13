@@ -5371,6 +5371,18 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
 - **Fecha:** 2026-11-13 ~16:20 (Hora Local Venezuela).
 - **Acción:** A solicitud expresa del usuario para facilitar la operatividad y permitir el uso del botón nativo de copiado rápido con un solo clic en la interfaz del chat, se encasillaron ambos mensajes de WhatsApp en bloques de texto dedicados.
 
+### Análisis y Documentación de los Niveles de Acceso (Modo Coacción) en Despliegue
+- **Fecha:** 2026-11-13 ~18:18 (Hora Local Venezuela).
+- **Concepto Arquitectónico:** El "Modo Coacción" (`modo_operacion` en `configuracion/despliegue`) es el mecanismo de seguridad y gobierno de datos del SGH mediante el cual el superadministrador restringe y canaliza dinámicamente las acciones permitidas a los directores (`plaadmin`) a través de inyecciones CSS (`#style-coaccion`) e inhabilitación estricta de eventos en el DOM.
+- **Opciones Documentadas:**
+  1. `TOTAL`: Acceso pleno a matrícula y personal.
+  2. `SOLO_MATRICULA`: Oculta y bloquea toda la gestión de personal, limitando al director a secciones y estudiantes.
+  3. `SOLO_AGREGAR_PERSONAL`: Bloquea matrícula y anula editar/eliminar en personal existente; solo permite registrar nuevos ingresos.
+  4. `SOLO_EDITAR_PERSONAL`: Bloquea matrícula y la creación de personal nuevo desde cero; solo permite actualizar los 61 campos de funcionarios ya existentes (modo empleado en la auditoría RAC).
+  5. `SOLO_EDITAR_PERSONAL_Y_MATRICULA`: Coacción secuencial por etapas (Paso 1: Matrícula obligatoria -> Paso 2: Personal).
+  6. `PERSONAL_COMPLETO`: Bloquea matrícula y abre con libertad total el módulo de personal (alta y edición), ideal para la próxima Jornada de Registros.
+
+
 
 
 

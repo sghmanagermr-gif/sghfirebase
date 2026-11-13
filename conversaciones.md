@@ -10073,6 +10073,21 @@ Creo que solo 2 están en el RAC.xlsx"
 > **Respuesta del Agente:**  
 > Encasillado de ambos mensajes en bloques de texto independientes para habilitar el botón de copiado con un solo clic en la interfaz.
 
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "explícame de que se tratan las opciones de Nivel de Acceso Concedido en este Despliegue (Modo Coacción):"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Explicación detallada del mecanismo de "Modo Coacción" y sus 6 opciones de configuración en el Panel de Despliegue:
+> - Concepto: canalización y restricción dinámica de la interfaz para directores de planteles (`plaadmin`).
+> - Desglose de las 6 modalidades: Apertura Total, Solo Modificar Matrícula, Solo Cargar Nuevo Personal, Solo Editar Personal Existente, Actualización de Personal con Matrícula Obligatoria y Personal Completo.
+> - Casos de uso y recomendaciones estratégicas para cada tipo de jornada.
+
 
 
 
