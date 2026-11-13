@@ -5248,3 +5248,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Coherencia Horas y Turno: 100,00% (1.771 funcionarios).
   - Coherencia Situación Laboral vs Observaciones: 100,00% (1.771 funcionarios).
 - **Archivo Físico Generado:** `informes_nov_2026/informe_sucre.txt`.
+
+
+### Auditoría En Vivo: Municipio Tovar - Opción 1 (Firestore)
+- **Extracción En Vivo:** Consultas directas a Cloud Firestore (`sgh-merida`).
+- **Métricas Oficiales Obtenidas:**
+  - Planteles: 59 instituciones activas (35 Nacionales, 22 Estadales, 0 Municipales, 2 Subvencionados).
+  - Personal: 1.530 trabajadores en vivo (915 Docentes, 95 Administrativos, 520 Obreros).
+  - Desglose por Dependencia: 1.327 Nacionales (86,73%) y 203 Estadales (13,27%).
+  - Porcentaje de Campos Llenos: 99,74% (1.526 de 1.530 expedientes con >= 90%). Margen residual: 0,26% (4 expedientes).
+  - Coherencia Horas y Turno: 100,00% (1.530 funcionarios).
+  - Coherencia Situación Laboral vs Observaciones: 100,00% (1.530 funcionarios).
+- **Archivo Físico Generado:** `informes_nov_2026/informe_tovar.txt`.
