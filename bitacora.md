@@ -5382,6 +5382,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   5. `SOLO_EDITAR_PERSONAL_Y_MATRICULA`: Coacción secuencial por etapas (Paso 1: Matrícula obligatoria -> Paso 2: Personal).
   6. `PERSONAL_COMPLETO`: Bloquea matrícula y abre con libertad total el módulo de personal (alta y edición), ideal para la próxima Jornada de Registros.
 
+### Diagnóstico Técnico: Visibilidad de Nuevo Personal en Modo Personal Completo
+- **Fecha:** 2026-11-13 ~18:31 (Hora Local Venezuela).
+- **Problema Reportado:** Al probar el plantel `DEMO140000` bajo `PERSONAL_COMPLETO`, la matrícula se bloquea correctamente y los botones de editar/eliminar están activos, pero no se visualiza el botón para dar de alta nuevo personal.
+- **Causa Raíz Identificada:**
+  1. Durante la implementación del "Blindaje Anti-Colados" (v2.29.0) para la auditoría del RAC, se retiró el botón visible de "+ Nuevo Personal" de la barra de herramientas de la tabla de personal para evitar que los directores registraran personal fuera de nómina, dejando únicamente el botón de "📥 Incorporar Traslado" y la edición de filas existentes.
+  2. En `personalWizard.js` (línea 1552), existe una regla estricta que bloquea a los directores (`plaadmin`) si intentan guardar un registro que no provenga de edición o traslado.
+  3. Falta conectar la presencia reactiva del botón `btn-nuevo-personal` y la excepción de guardado cuando el modo de coacción sea `PERSONAL_COMPLETO` o `SOLO_AGREGAR_PERSONAL`.
+
+
 
 
 

@@ -10088,6 +10088,22 @@ Creo que solo 2 están en el RAC.xlsx"
 > - Desglose de las 6 modalidades: Apertura Total, Solo Modificar Matrícula, Solo Cargar Nuevo Personal, Solo Editar Personal Existente, Actualización de Personal con Matrícula Obligatoria y Personal Completo.
 > - Casos de uso y recomendaciones estratégicas para cada tipo de jornada.
 
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Con el plante DEMO140000 en excepciones, estoy usando Personal completo. ciertamente bloquea los modulos de la matricula; sin embargo, no aparece el boton para nuevo personal y están activos los botones editar y eliminar"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Diagnóstico y explicación de la causa raíz:
+> - Que los botones de editar y eliminar estén activos es el comportamiento esperado en "Personal Completo".
+> - La ausencia del botón para nuevo personal se debe a que durante la versión v2.29.0 se implementó el "Blindaje Anti-Colados" para la auditoría del RAC, retirando el botón visible de "+ Nuevo Personal" de la barra de herramientas y dejando el formulario oculto por defecto para restringir a los directores solo a editar o trasladar.
+> - Se propone la habilitación reactiva del botón "➕ Nuevo Personal" en la barra de herramientas y el ajuste de la regla de guardado en `personalWizard.js` cuando el modo de coacción sea `PERSONAL_COMPLETO` o `SOLO_AGREGAR_PERSONAL`.
+
+
 
 
 
