@@ -5293,4 +5293,6 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
 - **Cuota Remanente Disponible:** ~21.950 lecturas libres (43,9% de holgura restante).
 - **Operaciones de Escritura y Eliminación:** 0 escrituras, 0 eliminaciones (operación de auditoría 100% read-only).
 - **Estado de Salud de la Base de Datos:** Código HTTP 200 OK, latencia < 200 ms, cero errores de saturación (429 Resource Exhausted) y costo financiero $0,00 USD.
+- **Inventario de Epónimos y Nombres de Planteles:** Durante la corrida de auditoría de los 23 municipios, la consulta a `planteles` se procesó en memoria viva únicamente para el cómputo institucional y desglose por dependencia, preservando la cuota sin generar un archivo persistido con el listado nominal de instituciones. Se dispone de la cuota restante (21.950 lecturas disponibles) que permite extraer los 1.134 planteles completos (consumiendo solo 1.134 lecturas) si se requiere la nómina nominal de epónimos.
+
 
