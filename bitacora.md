@@ -5367,6 +5367,11 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
 - **Acción:** Se maquetaron las dos propuestas en sintaxis nativa de WhatsApp (`*negrita*`, `_cursiva_`, viñetas con emojis y saltos de línea optimizados para copiado directo) para su difusión inmediata en canales y grupos de directores y supervisores.
 - **Archivo de Respaldo:** `scratch/mensajes_whatsapp_cierre_rac.txt`.
 
+### Presentación de Comunicados en Bloques de Copiado Rápido
+- **Fecha:** 2026-11-13 ~16:20 (Hora Local Venezuela).
+- **Acción:** A solicitud expresa del usuario para facilitar la operatividad y permitir el uso del botón nativo de copiado rápido con un solo clic en la interfaz del chat, se encasillaron ambos mensajes de WhatsApp en bloques de texto dedicados.
+
+
 
 
 
