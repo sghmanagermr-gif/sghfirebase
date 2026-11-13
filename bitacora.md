@@ -4867,7 +4867,7 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
 
 ### Estructura Canónica y Ajustes de Presentación por Municipio:
 1. **Título:** `Informe preliminar de la jornada de actualización del SGH v2.37.1`
-2. **Saludo Institucional:** Párrafo de apertura (sin encabezado).
+2. **Saludo Institucional:** Apertura formal dirigida a `Estimada Marina Sulbarán, Jefe de Gestión Humana` (en prosa fluida, sin encabezado de sección).
 3. **Municipio auditado:** Nombre oficial de la entidad municipal (ubicado formalmente por encima de la Reseña).
 4. **Reseña:** Síntesis descriptiva del estado general, histórico y avances del municipio.
 5. **Cantidad de planteles:** Total de instituciones, desglosadas en Nacional, Estadal, Municipal y Subvencionado.

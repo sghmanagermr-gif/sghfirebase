@@ -1,8 +1,8 @@
 Informe preliminar de la jornada de actualización del SGH v2.37.1
 
-Estimado Administrador y Equipo Directivo del SGH:
+Estimada Marina Sulbarán, Jefe de Gestión Humana:
 
-Reciban un cordial y fraterno saludo institucional. En cumplimiento de las directrices emanadas para el seguimiento y control de calidad de la plataforma, presento a continuación el informe preliminar correspondiente al proceso de auditoría y supervisión de datos en el Municipio Andrés Bello.
+Reciba un cordial y fraterno saludo institucional. En cumplimiento de las directrices emanadas para el seguimiento, supervisión y control de calidad de la plataforma, presento a continuación el informe preliminar correspondiente al proceso de auditoría y supervisión de datos en el Municipio Andrés Bello.
 
 Municipio auditado
 ANDRÉS BELLO (La Azulita)
@@ -48,3 +48,4 @@ Atentamente,
 
 Lic. Luis Alfonso Pérez
 Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)
+

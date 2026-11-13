@@ -9204,3 +9204,33 @@ Creo que solo 2 están en el RAC.xlsx"
 > - **Coherencia en horas y turno:** 96,37% (531 coherentes, 20 observaciones).
 > - **Coherencia en Situación Laboral con respecto a las observaciones:** 100,00% (551 coherentes, 0 discrepancias).
 > - **Archivo guardado:** `informes_nov_2026/informe_andres_bello.txt`.
+
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Ok un ajuste más y que quede refrendado junto con: Opción 1: En Vivo directamente desde Firebase Firestore Que quede refrendado en la bitacora y conversaciones junto con la estructura.  
+> Estimado Administrador y Equipo Directivo del SGH: Cambiar por: Estimada Marina Sulbarán, Jefe de Gestión Humana"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se acogió e implementó el ajuste en el saludo institucional, quedando **formalmente refrendado en `bitacora.md` y `conversaciones.md`**:
+>
+> 1. **Fuente de Datos Oficial Ratificada:**  
+>    - **Opción 1: En Vivo directamente desde Firebase Firestore (`sgh-merida`)**, consultando en tiempo real las colecciones `cargos_personal` y `planteles`.
+> 2. **Esquema Jerárquico Oficial Actualizado:**  
+>    - **Título:** `Informe preliminar de la jornada de actualización del SGH v2.37.1`
+>    - **Saludo:** Apertura personalizada dirigida a: `Estimada Marina Sulbarán, Jefe de Gestión Humana` (en prosa fluida, sin encabezado).
+>    - **Municipio auditado:** Nombre oficial de la entidad (ubicado jerárquicamente sobre la Reseña).
+>    - **Reseña:** Contexto general y balance del avance en el municipio.
+>    - **Cantidad de planteles:** Total, Nacional, Estadal, Municipal y Subvencionado.
+>    - **Cantidad de personal:** Total, Docente, Administrativo y Obrero, discriminado por dependencia: Nacional y Estadal.
+>    - **Porcentaje de los campos llenos:** Nivel de completitud (>= 90% y margen residual).
+>    - **Coherencia en horas y turno:** Correspondencia entre recibo de nómina y turnos.
+>    - **Coherencia en Situación Laboral con respecto a las observaciones:** Concordancia administrativa.
+>    - **Despedida:** Cierre institucional (en prosa fluida, sin encabezado).
+>    - **Firma:** `Lic. Luis Alfonso Pérez - Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)`.
+> 3. **Actualización Retroactiva de Archivos Físicos:** Se actualizaron de inmediato los reportes generados en `informes_nov_2026/informe_alberto_adriani.txt` e `informes_nov_2026/informe_andres_bello.txt` incorporando el nuevo saludo protocolar.
