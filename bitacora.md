@@ -4980,3 +4980,12 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Arquitectura modular de `webapp` (Vite, JavaScript Vanilla, Tailwind, modales, wizard de personal, sanitizador global).
   - Limitaciones del Plan Spark de Firebase (50k lecturas/día, saturación HTTP 429, congelamiento del Auditor de Cédulas en móviles por bucles de reintentos).
   - Especificación de requerimientos para la nueva IA: Diseño de DDL relacional con claves foráneas, políticas de seguridad RLS (superadmin, munadmin, plaadmin), adaptación del cliente Vite/JS con `@supabase/supabase-js`, auditor de cédulas con timeout estricto e índice B-Tree, y estrategia de extracción y carga masiva de datos (ETL).
+
+
+### Reformulación Estratégica: Prompt de Evolución Arquitectónica hacia Supabase
+- **Ajuste de Enfoque:** Siguiendo las directrices del Administrador, se rediseñó por completo el archivo `PROMPT_MIGRACION_SUPABASE.md` para eliminar cualquier referencia a fallas o problemáticas coyunturales recientes, transformándolo en un informe de consultoría arquitectónica de alto nivel.
+- **Ejes Centrales Incorporados:**
+  - **Visión Holística del SGH:** Gobernanza educativa sobre 23 municipios, ~1.100 planteles, 23.000 - 25.000 cargos activos y 1.000 usuarios en 3 niveles de jerarquía.
+  - **Fortalezas del Sistema:** Frontend reactivo y ultraligero en Vanilla JS y Vite, solidez en las reglas de negocio institucionales (control de carga horaria, cruce de turnos, situaciones laborales) y validación previa en cliente.
+  - **Limitaciones de la Arquitectura NoSQL:** Carencia de claves foráneas nativas (desnormalización de datos de planteles en cargos), costo e ineficiencia al procesar agregaciones estadísticas globales, y restricciones en consultas relacionales complejas.
+  - **Aprovechamiento de Supabase (PostgreSQL):** Esquema relacional con integridad referencial (`ON UPDATE CASCADE`), vistas SQL para auditorías y resúmenes analíticos instantáneos, seguridad gobernada por el motor de base de datos con Row Level Security (RLS) y persistencia robusta.

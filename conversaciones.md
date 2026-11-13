@@ -9391,3 +9391,20 @@ Creo que solo 2 están en el RAC.xlsx"
 
 > **Respuesta del Agente:**  
 > Se generó y guardó físicamente en la raíz del repositorio el archivo maestro `PROMPT_MIGRACION_SUPABASE.md`. El documento cuenta con una estructura exhaustiva en Markdown que describe el contexto institucional, volumen de datos (23 municipios, 1.100+ escuelas, 23.031+ cargos, 1.000+ usuarios), arquitectura modular de la SPA en Vite/JS Vanilla, la problemática de saturación de cuota en Firestore (50k lecturas/día y bucles de reintento en móvil) y los 5 entregables esenciales requeridos para la consultoría con Supabase (Esquema DDL, Políticas RLS, Adaptación Frontend, Pipeline ETL y Análisis de Viabilidad en Free Tier).
+
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "No bases el promt en una problemática actual, tiene que ser mas generalizado sin puntualizar en fallas que hayamos comentado recientemente. Muy por el contrario que la otra IA tenga una idea amplia del sistema SGH; que sepa sus debilidades y fortalezas. para aprovechar las opciones de Supabase"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Rediseño integral del archivo `PROMPT_MIGRACION_SUPABASE.md` bajo un enfoque de consultoría y evolución arquitectónica general:
+> - Se eliminaron todas las referencias a incidentes puntuales o coyunturales recientes (como cuotas diarias temporales o bloqueos móviles específicos).
+> - Se amplió la perspectiva del sistema SGH: escala institucional (23 municipios, 1.100+ escuelas, ~25.000 cargos de personal, 1.000 usuarios jerárquicos).
+> - Se estructuró un análisis riguroso de **Fortalezas del SGH** (frontend ultraligero en Vite/JS Vanilla, lógica y validaciones de negocio maduras, experiencia consolidada del usuario) versus las **Limitaciones estructurales del modelo NoSQL** (carencia de integridad referencial, desnormalización forzada, ausencia de vistas analíticas agregadas en servidor y economía de lectura por documento).
+> - Se orientaron los entregables hacia las oportunidades de **Supabase (PostgreSQL)**: esquema relacional normalizado con claves foráneas, vistas SQL analíticas para auditorías municipales en servidor, políticas declarativas de seguridad por filas (RLS), adaptación desacoplada del frontend y metodología de migración ETL.

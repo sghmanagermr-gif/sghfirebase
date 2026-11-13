@@ -1,96 +1,85 @@
-# PROMPT MAESTRO DE CONSULTORÍA TÉCNICA: MIGRACIÓN DE SGH WEBAPP (FIREBASE FIRESTORE A SUPABASE POSTGRESQL)
+# PROMPT MAESTRO DE CONSULTORÍA ARQUITECTÓNICA: EVOLUCIÓN Y MIGRACIÓN DEL SISTEMA DE GESTIÓN HUMANA (SGH) A SUPABASE (POSTGRESQL)
 
 ## INSTRUCCIÓN PARA EL MODELO DE IA
-Actúa como un **Arquitecto Principal de Bases de Datos Cloud y Especialista en Migraciones de Alto Rendimiento (PostgreSQL, Supabase, Seguridad RLS y Frontend Vanilla JS / Vite)**. 
+Actúa como un **Arquitecto Principal de Software, Especialista en Bases de Datos Relacionales (PostgreSQL/Supabase) y Consultor Senior en Modernización de Sistemas Web**.
 
-Tu misión es recibir la descripción arquitectónica, volumen de datos y requerimientos operativos del **Sistema de Gestión Humana (SGH v2.37.1)** y generar una **propuesta técnica completa, detallada y ejecutable** para migrar su almacenamiento y autenticación desde **Google Firebase (Firestore NoSQL, Plan Spark)** hacia **Supabase (PostgreSQL relacional)**, maximizando el aprovechamiento de su plan gratuito sin restricciones artificiales de lectura.
-
----
-
-## 1. CONTEXTO INSTITUCIONAL Y ENVERGADURA DEL SISTEMA
-
-* **Nombre del Sistema:** Sistema de Gestión Humana (SGH v2.37.1).
-* **Organización:** Dirección de Educación / Jefatura de Gestión Humana del Estado Mérida, Venezuela.
-* **Propósito:** Registro, control de nómina y auditoría laboral continua de las instituciones educativas públicas y su personal dependiente en toda la entidad federal.
-* **Volumen de Datos Actual:**
-  * **División Político-Territorial:** 23 Municipios y 86 Parroquias plenamente estructurados.
-  * **Planteles Educativos:** ~1.100 instituciones clasificadas en cuatro dependencias: Nacional, Estadal, Municipal y Subvencionado.
-  * **Expedientes de Personal:** 23.031+ registros activos en la colección principal (`cargos_personal`), abarcando tres tipos de personal: Docente, Administrativo y Obrero.
-  * **Cuentas de Usuario:** ~1.000 usuarios jerárquicos (`superadmin`, `munadmin`, `plaadmin`).
-  * **Campos Críticos por Registro de Cargo:** Cédula de identidad, primer y segundo nombre, primer y segundo apellido, sexo, fecha de nacimiento, tipo de personal, dependencia institucional, código DEA del plantel de adscripción, nombre del plantel, municipio, parroquia, condición de nombramiento, situación laboral (Activo, Incapacitado, Comisión de Servicio, Reposo Médico, Adecuación Laboral, etc.), código de cargo, denominación del cargo, horas de recibo, horas de aula, turno de trabajo (Mañana, Tarde, Integral), observaciones institucionales y metadatos de auditoría.
+Tu misión es analizar la arquitectura global, volumen de información, fortalezas operativas y limitaciones estructurales del **Sistema de Gestión Humana (SGH v2.37.1)**, y diseñar una propuesta integral para evolucionar su capa de persistencia y seguridad desde una base de datos documental NoSQL (Google Firebase Firestore) hacia una plataforma relacional de alto rendimiento como **Supabase (PostgreSQL + PostgREST + Supabase Auth + Row Level Security)**.
 
 ---
 
-## 2. ARQUITECTURA TÉCNICA ACTUAL DEL CLIENTE (`webapp`)
+## 1. VISIÓN GENERAL Y ALCANCE DEL SISTEMA SGH
 
-* **Naturaleza del Frontend:** Single Page Application (SPA) modular y ligera, construida sobre **Vite** en JavaScript Vanilla moderno (ES Modules estándar, sin frameworks pesados como React o Angular), Tailwind CSS y SheetJS (`xlsx`) para exportación masiva.
-* **Estructura Modular Clave:**
-  * `src/main.js`: Orquestador principal, enrutamiento condicional de vistas, modales globales y cálculo de estadísticas visuales.
-  * `src/admin.js`: Panel de control administrativo, gestión de usuarios, reportería estadística y el módulo crítico **Auditor de Cédulas**.
-  * `src/auth.js`: Control de ciclo de vida de autenticación, manejo de persistencia por pestaña (`browserSessionPersistence`), verificación de roles y restricción de jornadas por municipio activo.
-  * `src/personalWizard.js`: Asistente por pasos para la creación y edición de expedientes de personal con validaciones en vivo de carga horaria, turnos y asignaturas.
-  * `src/dbUtils.js`: Capa de abstracción de datos y sanitizador global recursivo (conversión automática a mayúsculas, protección de correos y limpieza de cadenas).
-  * `src/geografia.js`: Catálogo y normalizador de municipios y parroquias del estado.
-  * `src/catalogosPlanes.js`: Mallas curriculares, códigos de planes de estudio y tablas de asignaturas oficiales.
-
----
-
-## 3. PROBLEMÁTICA CRÍTICA CON EL MODELO ACTUAL (FIREBASE FIRESTORE - PLAN SPARK)
-
-1. **Cuota Severa de Lecturas Diarias (50.000 lecturas/día):**
-   * Firestore factura cada documento obtenido como una lectura independiente.
-   * Ejecutar una auditoría analítica global o simultánea sobre los 23.031 registros consume más del 46% de la cuota total diaria en una sola pasada.
-   * La concurrencia de directores actualizando datos agota rápidamente el límite, arrojando errores HTTP 429 (`RESOURCE_EXHAUSTED / Quota exceeded`).
-2. **Congelamiento de Consultas en Dispositivos Móviles:**
-   * Ante el código de saturación 429 de Firestore, el SDK cliente de Firebase entra en un bucle continuo de reintentos exponenciales (*exponential backoff*).
-   * Como la promesa de red no se rechaza de inmediato, el navegador del celular mantiene el indicador de carga (*spinner*) girando indefinidamente, inutilizando el **Auditor de Cédulas** en teléfonos móviles.
-3. **Ausencia de Relaciones Nativas (NoSQL Denormalizado):**
-   * El código DEA y el municipio están duplicados en cada uno de los 23.031 registros. Si un plantel corrige su código DEA o su denominación, el sistema debe ejecutar actualizaciones masivas en lote documento por documento, consumiendo la cuota diaria de escrituras (límite de 20.000/día).
-4. **Búsquedas de Texto Rígidas:**
-   * Firestore no soporta búsquedas insensibles a mayúsculas/minúsculas ni coincidencias parciales nativas sin recurrir a índices externos de pago (Algolia/Typesense) o descargas excesivas a memoria.
+* **Propósito:** Plataforma integral para el registro, control de adscripción, auditoría de carga horaria y gestión de nómina educativa del Estado Mérida, Venezuela.
+* **Escala y Dimensión Institucional:**
+  * **División Geográfica:** 23 Municipios y 86 Parroquias.
+  * **Unidades Operativas (Planteles):** ~1.100 instituciones educativas distribuidas en dependencias Nacional, Estadal, Municipal y Subvencionado.
+  * **Población Laboral Registrada:** ~23.000 a 25.000 expedientes activos clasificados en tres sectores: Docente, Administrativo y Obrero.
+  * **Comunidad de Usuarios:** Alrededor de 1.000 usuarios concurrentes o periódicos estructurados en tres niveles jerárquicos:
+    * `superadmin`: Nivel directivo estadal (Jefatura de Gestión Humana / Desarrollador), con supervisión y control total del estado.
+    * `munadmin`: Coordinadores municipales, con visibilidad y control sobre las instituciones de su jurisdicción.
+    * `plaadmin`: Directores de planteles educativos, encargados de la actualización del personal adscrito a su sede.
 
 ---
 
-## 4. PLATAFORMA OBJETIVO: SUPABASE (POSTGRESQL RELACIONAL)
+## 2. ARQUITECTURA TECNOLÓGICA DEL CLIENTE (`webapp`)
 
-Se requiere canalizar el sistema hacia **Supabase** para capitalizar las bondades de su nivel gratuito:
-* **Base de datos PostgreSQL 15+ dedicada:** 500 MB de almacenamiento (suficiente para más de 300.000 registros relacionales de texto estructurado).
-* **Peticiones API Ilimitadas:** Sin cuota por lectura de filas vía PostgREST.
-* **Seguridad por Filas (Row Level Security - RLS):** Control de acceso granular gobernado a nivel de motor SQL.
-* **Supabase Auth:** Autenticación JWT integrada compatible con la persistencia en navegador existente.
-* **Consultas Relacionales Indexadas:** Tiempos de respuesta sub-10ms en búsquedas por cédula o código institucional gracias a índices B-Tree nativos.
+* **Frontend:** Single Page Application (SPA) modular desarrollada con **Vite** en **JavaScript Vanilla moderno (ES Modules)**, con estilos en CSS3 / Tailwind CSS y utilidades para procesamiento en cliente (SheetJS `xlsx`).
+* **Módulos Fundamentales:**
+  * `src/main.js`: Enrutamiento ligero, orquestación del dashboard, cálculo de métricas y gestión de modales.
+  * `src/admin.js`: Panel administrativo, gestión de credenciales y roles, reportes consolidados y herramientas de búsqueda y auditoría.
+  * `src/auth.js`: Control de sesiones de usuario, persistencia por pestaña y verificación de jerarquías.
+  * `src/personalWizard.js`: Flujo guiado para ingreso y edición de personal, con validación de coherencia en asignaturas, turnos y carga horaria semanal.
+  * `src/dbUtils.js`: Capa de abstracción para lectura/escritura y sanitización recursiva de datos (normalización a mayúsculas, protección de correos y limpieza de cadenas).
+  * `src/geografia.js` y `src/catalogosPlanes.js`: Módulos de referencia estática (municipios, parroquias, códigos de planes de estudio y denominaciones de cargos).
 
 ---
 
-## 5. ENTREGABLES REQUERIDOS DEL ESPECIALISTA
+## 3. ANÁLISIS DE FORTALEZAS Y DEBILIDADES DEL SISTEMA ACTUAL
 
-Por favor, estructura tu respuesta en los siguientes apartados técnicos exhaustivos:
+### Fortalezas del SGH:
+1. **Frontend Ligero y Veloz:** Al estar construido en JavaScript Vanilla sin sobrecarga de frameworks, la carga inicial es prácticamente instantánea y consume muy poca memoria en los navegadores.
+2. **Lógica de Negocio y Validaciones Maduras:** Reglas institucionales consolidadas para el cruce de turnos, coherencia de horas (recibo vs aula), control de situaciones laborales (Activo, Incapacitado, Comisión de Servicio, Reposo, Adecuación) y normalización de datos en cliente.
+3. **Flujos de Trabajo Adaptados al Usuario:** Asistentes paso a paso y paneles diferenciados por rol que ya son familiares para directores y supervisores municipales.
 
-### A. Diseño del Esquema Relacional de Base de Datos (DDL en PostgreSQL)
-* Genera el script SQL completo para crear las tablas necesarias:
-  * `municipios` y `parroquias`.
-  * `planteles` (con su código DEA como identificador único, dependencia, turnos y matrícula).
-  * `cargos_personal` (con claves foráneas hacia `planteles`, `municipios` y `parroquias`, tipos `ENUM` para situaciones laborales y dependencias, y restricciones `CHECK`).
-  * `perfiles_usuarios` (vinculada con `auth.users` de Supabase, almacenando el rol y el alcance geográfico o de plantel).
-* Implementa claves foráneas con reglas de integridad referencial (`ON UPDATE CASCADE`).
-* Diseña los índices B-Tree y GIN óptimos para acelerar la búsqueda de cédulas, nombres, códigos DEA y reportes de auditoría municipal.
+### Debilidades y Limitaciones del Modelo NoSQL Actual (Firestore):
+1. **Carencia de Integridad Referencial Nativa:** En el modelo NoSQL documental, la información del plantel (código DEA, nombre, municipio) y del personal están desnormalizadas. Si un plantel modifica su denominación o código institucional, se requiere actualizar miles de documentos individuales, arriesgando desincronización o inconsistencia de datos.
+2. **Incompatibilidad con Consultas Analíticas y Agregaciones:** Firestore cobra y procesa cada documento leído individualmente. Obtener estadísticas globales por municipio (como cantidad de escuelas por dependencia, horas docentes por turno o totales por tipo de personal) exige descargar colecciones completas al navegador en lugar de ejecutar una consulta agregada (`GROUP BY`, `SUM`, `COUNT`) en el motor de la base de datos.
+3. **Consultas Complejas y Búsquedas Limitadas:** Dificultad para realizar búsquedas insensibles a mayúsculas/minúsculas, cruces relacionales entre planteles y personal, o filtros multi-condicionales sin crear una multiplicidad de índices compuestos rígidos.
+4. **Economía de Operación en Capas Gratuitas:** Los límites de lectura por documento en bases de datos NoSQL penalizan las auditorías masivas periódicas, mientras que los motores relacionales evalúan consultas en memoria y servidor sin penalización por fila leída.
 
-### B. Políticas de Seguridad RLS (Row Level Security)
-* Define las directivas de seguridad en SQL (`CREATE POLICY`) para garantizar:
-  1. `superadmin`: Acceso total de lectura, inserción, actualización y eliminación sobre todas las tablas.
-  2. `munadmin`: Lectura y actualización restringida exclusivamente a los planteles y cargos de su municipio asignado.
-  3. `plaadmin`: Lectura y actualización restringida exclusivamente al plantel y los cargos vinculados a su código DEA.
+---
 
-### C. Estrategia de Adaptación del Código Frontend (`webapp`)
-* Explica cómo instalar e inicializar `@supabase/supabase-js` en el entorno Vite existente.
-* Proporciona la equivalencia de código para sustituir `firebase/auth` y `firebase/firestore` en `src/auth.js` y `src/dbUtils.js`.
-* Diseña la función optimizada para el **Auditor de Cédulas** en JavaScript, garantizando:
-  * Consulta directa con índice B-Tree.
-  * Límite de tiempo de espera estricto (timeout de 3 segundos con `AbortController`).
-  * Manejo seguro de errores en caso de intermitencia de datos móviles en el celular.
+## 4. OPORTUNIDADES AL MIGRAR A SUPABASE (POSTGRESQL)
 
-### D. Procedimiento de Migración de Datos (Pipeline ETL)
-* Describe el método más limpio y seguro para extraer los 23.031 registros actuales desde Firestore (en formato JSON) e inyectarlos masivamente en las nuevas tablas de Supabase respetando la integridad referencial y resolviendo inconsistencias históricas.
+* **Motor Relacional Maduro (PostgreSQL 15+):** Relaciones 1:N y N:M con claves foráneas, restricciones de integridad y cascadas automáticas (`ON UPDATE CASCADE`).
+* **Vistas SQL y Funciones Agregadas:** Capacidad de generar vistas (`VIEW` o `MATERIALIZED VIEW`) y funciones RPC que calculen resúmenes estadísticos municipales en milisegundos directamente en el servidor.
+* **Seguridad Declarativa con RLS (Row Level Security):** Delegación de la seguridad jerárquica (`superadmin`, `munadmin`, `plaadmin`) a nivel de base de datos, garantizando que un usuario jamás reciba datos ajenos a su jurisdicción.
+* **APIs Instantáneas (PostgREST):** Consumo directo desde JavaScript con una sintaxis limpia, fluida y con soporte para filtros relacionales profundos.
+* **Aprovechamiento del Nivel Gratuito de Supabase:** 500 MB de base de datos relacional (espacio de sobra para ~30.000 registros tabulares), solicitudes API sin límite de lecturas por fila y autenticación integrada (Supabase Auth).
 
-### E. Análisis de Viabilidad y Consumo en el Free Tier de Supabase
-* Evalúa detalladamente si el volumen de datos del SGH (23.031 cargos + 1.100 planteles + usuarios) y el tráfico estimado de auditorías opera con holgura dentro de los límites gratuitos de Supabase (500 MB de disco, transferencias de salida mensuales, conexiones activas de Postgres y límites de Edge API).
+---
+
+## 5. REQUERIMIENTOS DE LA CONSULTORÍA (ENTREGABLES DEL EXPERTO)
+
+Como especialista, por favor desarrolla una propuesta técnica exhaustiva organizada en los siguientes puntos:
+
+### A. Modelo Entidad-Relación y Esquema Relacional (DDL PostgreSQL)
+* Diseña la estructura de tablas normalizada: `municipios`, `parroquias`, `planteles`, `personal`, `cargos` y `usuarios_perfiles`.
+* Define tipos de datos precisos, claves primarias, claves foráneas con reglas de actualización, enumeraciones (`ENUM`) para situaciones laborales y tipos de personal, y restricciones `CHECK` para control de horas y turnos.
+* Propón los índices B-Tree estratégicos para acelerar búsquedas frecuentes (cédula, código DEA, nombres y filtros por dependencia).
+
+### B. Vistas de Auditoría y Reportería Analítica
+* Diseña vistas SQL optimizadas para generar resúmenes automáticos por municipio (conteo de planteles por dependencia, desglose de personal docente/administrativo/obrero y porcentaje de completitud de expedientes), evitando transferir miles de filas al cliente.
+
+### C. Estrategia de Seguridad Jerárquica con RLS
+* Elabora las políticas de Row Level Security (`CREATE POLICY`) que modelen exactamente los tres roles del SGH:
+  * Control total para el `superadmin`.
+  * Filtro geográfico automático para el `munadmin` (sólo accede a registros pertenecientes a su municipio).
+  * Filtro institucional para el `plaadmin` (sólo accede al plantel y cargos de su código DEA).
+
+### D. Plan de Adaptación del Frontend (`webapp`)
+* Explica cómo estructurar un nuevo módulo cliente `src/supabase.js` utilizando `@supabase/supabase-js`.
+* Muestra cómo refactorizar `src/auth.js` y `src/dbUtils.js` para desacoplar Firebase y conectarse a Supabase conservando la arquitectura modular en JavaScript Vanilla y las validaciones de negocio ya existentes.
+
+### E. Estrategia de Migración y Transición de Datos (ETL)
+* Diseña una metodología clara para exportar la base de datos documental actual (JSON de Firestore), normalizar y depurar los datos, e insertarlos en el nuevo esquema relacional sin pérdida de trazabilidad ni duplicación de registros.
