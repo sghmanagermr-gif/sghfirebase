@@ -9254,3 +9254,23 @@ Creo que solo 2 están en el RAC.xlsx"
 > - **Coherencia en horas y turno:** 97,66% (1.000 coherentes, 24 observaciones).
 > - **Coherencia en Situación Laboral con respecto a las observaciones:** 100,00% (1.024 coherentes, 0 discrepancias).
 > - **Archivo guardado:** `informes_nov_2026/informe_antonio_pinto_salinas.txt`.
+
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "ARICAGUA"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Auditoría en vivo de **Aricagua** ejecutada y consolidada bajo la estructura jerárquica oficial:
+> - **Municipio auditado:** ARICAGUA
+> - **Cantidad de planteles:** 23 planteles (10 Nacional, 13 Estadal, 0 Municipal, 0 Subvencionado).
+> - **Cantidad de personal:** 150 trabajadores (Docentes: 104 [66 Nac / 38 Est], Administrativos: 6 [6 Nac / 0 Est], Obreros: 40 [40 Nac / 0 Est]; Total Nac: 112 [74,67%], Est: 38 [25,33%]).
+> - **Porcentaje de los campos llenos:** 98,67% (148 con >= 90%; margen residual de 2 casos [1,33%]).
+> - **Coherencia en horas y turno:** 98,67% (148 coherentes, 2 observaciones).
+> - **Coherencia en Situación Laboral con respecto a las observaciones:** 100,00% (150 coherentes, 0 discrepancias).
+> - **Archivo guardado:** `informes_nov_2026/informe_aricagua.txt`.

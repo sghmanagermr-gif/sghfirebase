@@ -4907,3 +4907,16 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
 - **Coherencia en horas y turno:** 97,66% (1.000 coherentes, 24 observaciones técnicas de turno/horas aula).
 - **Coherencia en Situación Laboral vs Observaciones:** 100,00% (1.024 coherentes, 0 discrepancias tras confirmación de permiso por duelo de familiar en funcionaria activa).
 - **Archivo Físico Generado:** `informes_nov_2026/informe_antonio_pinto_salinas.txt`.
+
+
+### Auditoría Municipal: Aricagua (Completada)
+- **Planteles:** 23 instituciones educativas (10 Nacionales, 13 Estadales, 0 Municipales, 0 Subvencionados).
+- **Personal:** 150 funcionarios registrados.
+  - *Docentes:* 104 (66 Nacionales, 38 Estadales).
+  - *Administrativos:* 6 (6 Nacionales, 0 Estadales).
+  - *Obreros:* 40 (40 Nacionales, 0 Estadales).
+  - *Consolidado por Dependencia:* 112 Nacionales (74,67%) y 38 Estadales (25,33%).
+- **Porcentaje de los campos llenos:** 98,67% (148 de 150 funcionarios con >= 90% de completitud; margen residual de 2 casos [1,33%]).
+- **Coherencia en horas y turno:** 98,67% (148 coherentes, 2 observaciones técnicas de horas aula frente a recibo).
+- **Coherencia en Situación Laboral vs Observaciones:** 100,00% (150 coherentes, 0 discrepancias).
+- **Archivo Físico Generado:** `informes_nov_2026/informe_aricagua.txt`.
