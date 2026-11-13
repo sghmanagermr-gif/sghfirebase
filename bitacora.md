@@ -4920,3 +4920,16 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
 - **Coherencia en horas y turno:** 98,67% (148 coherentes, 2 observaciones técnicas de horas aula frente a recibo).
 - **Coherencia en Situación Laboral vs Observaciones:** 100,00% (150 coherentes, 0 discrepancias).
 - **Archivo Físico Generado:** `informes_nov_2026/informe_aricagua.txt`.
+
+
+### Auditoría Municipal: Arzobispo Chacón (Completada)
+- **Planteles:** 76 instituciones educativas (22 Nacionales, 54 Estadales, 0 Municipales, 0 Subvencionados).
+- **Personal:** 703 funcionarios registrados.
+  - *Docentes:* 527 (261 Nacionales, 266 Estadales).
+  - *Administrativos:* 20 (20 Nacionales, 0 Estadales).
+  - *Obreros:* 156 (142 Nacionales, 14 Estadales).
+  - *Consolidado por Dependencia:* 423 Nacionales (60,17%) y 280 Estadales (39,83%).
+- **Porcentaje de los campos llenos:** 98,86% (695 de 703 funcionarios con >= 90% de completitud; margen residual de 8 casos [1,14%]).
+- **Coherencia en horas y turno:** 96,16% (676 coherentes, 27 observaciones técnicas de turno/horas aula).
+- **Coherencia en Situación Laboral vs Observaciones:** 100,00% (703 coherentes, 0 discrepancias).
+- **Archivo Físico Generado:** `informes_nov_2026/informe_arzobispo_chacon.txt`.

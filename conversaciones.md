@@ -9274,3 +9274,23 @@ Creo que solo 2 están en el RAC.xlsx"
 > - **Coherencia en horas y turno:** 98,67% (148 coherentes, 2 observaciones).
 > - **Coherencia en Situación Laboral con respecto a las observaciones:** 100,00% (150 coherentes, 0 discrepancias).
 > - **Archivo guardado:** `informes_nov_2026/informe_aricagua.txt`.
+
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "ARZOBISPO CHACON"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Auditoría en vivo de **Arzobispo Chacón** ejecutada y consolidada bajo la estructura jerárquica oficial:
+> - **Municipio auditado:** ARZOBISPO CHACÓN (Canaguá)
+> - **Cantidad de planteles:** 76 planteles (22 Nacional, 54 Estadal, 0 Municipal, 0 Subvencionado).
+> - **Cantidad de personal:** 703 trabajadores (Docentes: 527 [261 Nac / 266 Est], Administrativos: 20 [20 Nac / 0 Est], Obreros: 156 [142 Nac / 14 Est]; Total Nac: 423 [60,17%], Est: 280 [39,83%]).
+> - **Porcentaje de los campos llenos:** 98,86% (695 con >= 90%; margen residual de 8 casos [1,14%]).
+> - **Coherencia en horas y turno:** 96,16% (676 coherentes, 27 observaciones).
+> - **Coherencia en Situación Laboral con respecto a las observaciones:** 100,00% (703 coherentes, 0 discrepancias).
+> - **Archivo guardado:** `informes_nov_2026/informe_arzobispo_chacon.txt`.
