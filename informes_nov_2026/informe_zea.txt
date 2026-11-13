@@ -1,0 +1,50 @@
+Informe preliminar de la jornada de actualización del SGH v2.37.1
+
+Estimada Marina Sulbarán, Jefe de Gestión Humana:
+
+Reciba un cordial y fraterno saludo institucional. En cumplimiento de las directrices emanadas para el seguimiento, supervisión y control de calidad de la plataforma, presento a continuación el informe preliminar correspondiente al proceso de auditoría y supervisión de datos extraído en vivo directamente desde Cloud Firestore en el Municipio Zea.
+
+Municipio auditado
+ZEA
+
+Reseña
+El Municipio Zea, distinguido históricamente como el rincón más pintoresco y cívico del occidente merideño en las estribaciones del Valle del Mocotíes y limítrofe con el Estado Táchira, destaca por su profunda tradición educadora, su arquitectura colonial preservada y su activa producción agropecuaria de café, cítricos y ganadería. Su estructura escolar está compuesta por 21 instituciones educativas (15 de administración nacional y 6 de carácter estadal), que brindan cobertura pedagógica tanto en el área urbana de Zea como en parroquias y aldeas campesinas como Caño El Tigre, San Roque y La Cuchilla. En el SGH v2.37.1 y a través del registro en vivo de sus 402 trabajadores, el municipio exhibe un impecable 100,00% de completitud documental y una sincronización perfecta en horas, turnos y situación laboral del 100,00%, coronando de manera ejemplar el ciclo de auditorías en vivo de los 23 municipios del Estado Mérida con un modelo de orden administrativo y vocación magisterial.
+
+Cantidad de planteles
+• Total de planteles: 21 instituciones educativas
+• Nacional: 15 planteles
+• Estadal: 6 planteles
+• Municipal: 0 planteles
+• Subvencionado: 0 planteles
+
+Cantidad de personal
+• Total de funcionarios registrados en vivo: 402 trabajadores
+• Personal Docente: 267
+  - Nacional: 224 docentes
+  - Estadal: 43 docentes
+• Personal Administrativo: 22
+  - Nacional: 22 administrativos
+  - Estadal: 0 administrativos
+• Personal Obrero: 113
+  - Nacional: 113 obreros
+  - Estadal: 0 obreros
+• Consolidado por Dependencia: 359 Nacionales (89,30%) y 43 Estadales (10,70%).
+
+Porcentaje de los campos llenos
+• Nivel de completitud: 100,00% de los funcionarios cuentan con el 90% o más de sus campos requeridos totalmente diligenciados (402 de los 402 expedientes auditados).
+• Margen residual: 0 funcionarios (0,00%), reflejando la conclusión satisfactoria y completa de los registros en los planteles de la jurisdicción.
+
+Coherencia en horas y turno
+• Índice de coherencia: 100,00% (402 funcionarios cuentan con correspondencia armónica entre sus horas según recibo de nómina y los turnos atendidos).
+• Observación técnica: No se detectan desajustes críticos en la asignación horaria ni inconsistencias de turno en los expedientes activos.
+
+Coherencia en Situación Laboral con respecto a las observaciones
+• Índice de coherencia: 100,00% (402 funcionarios).
+• Diagnóstico institucional: Existe concordancia absoluta y perfecta entre la condición de servicio declarada (Activo, Adecuación Laboral, Comisión de Servicio y Trámite de Jubilación) y las observaciones oficiales registradas en el sistema, sin contradicciones administrativas ni inconsistencias documentales.
+
+Reiterando el compromiso institucional de garantizar la máxima transparencia, exactitud y confiabilidad en la gestión del talento humano del magisterio merideño, culminamos con éxito la emisión individualizada de los 23 municipios del estado, quedando a su entera disposición para los pasos ejecutivos o consolidados que tenga a bien orientar.
+
+Atentamente,
+
+Lic. Luis Alfonso Pérez
+Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)
