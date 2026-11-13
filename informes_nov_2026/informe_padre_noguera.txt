@@ -17,6 +17,18 @@ Cantidad de planteles
 • Municipal: 0 planteles
 • Subvencionado: 0 planteles
 
+Planteles involucrados en la auditoría
+1. [OD00231415] EEB JOSE VICENTE NUCETE (Nuevo Epónimo: JOSE VICENTE NUCETE) - Dependencia: ESTADAL
+2. [OD13861415] ESCUELA ELIAS MOLINA (Nuevo Epónimo: ELIAS MOLINA) - Dependencia: NACIONAL
+3. [OD13871415] E.E PABLO RAMON DIAZ ARAQUE (Nuevo Epónimo: PABLO RAMON DIAZ ARAQUE) - Dependencia: ESTADAL
+4. [OD13881415] U.E.B.N JOSE ARCANGEL MOLINA VIAS (Nuevo Epónimo: JOSE ARCANGEL MOLINA VIAS) - Dependencia: NACIONAL
+5. [OD13901415] UEN PADRE NOGUERA (Nuevo Epónimo: PADRE NOGUERA) - Dependencia: NACIONAL
+6. [OD16541415] LN MAESTRO SIMON RODRIGUEZ (Nuevo Epónimo: MAESTRO SIMON RODRIGUEZ) - Dependencia: NACIONAL
+7. [OD16551415] IEE LENDER MOLINA (Nuevo Epónimo: INSTITUTO DE EDUCACION ESPECIAL) - Dependencia: NACIONAL
+8. [OD16561415] CEIS MARIA DE LA CRUZ VELAZCO (Nuevo Epónimo: MARIA DE LA CRUZ VELAZCO) - Dependencia: NACIONAL
+9. [OD16571415] CEIS MARIA DEL ROSARIO MOLINA MARUEZ (Nuevo Epónimo: MARIA DEL ROSARIO MOLINA MARUEZ) - Dependencia: NACIONAL
+10. [OD16581415] CEIS ARNOLDO CONTRERAS (Nuevo Epónimo: ARNOLDO CONTRERAS) - Dependencia: NACIONAL
+
 Cantidad de personal
 • Total de funcionarios registrados en vivo: 153 trabajadores
 • Personal Docente: 99

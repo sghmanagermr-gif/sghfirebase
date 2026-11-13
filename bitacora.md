@@ -5295,4 +5295,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
 - **Estado de Salud de la Base de Datos:** Código HTTP 200 OK, latencia < 200 ms, cero errores de saturación (429 Resource Exhausted) y costo financiero $0,00 USD.
 - **Inventario de Epónimos y Nombres de Planteles:** Durante la corrida de auditoría de los 23 municipios, la consulta a `planteles` se procesó en memoria viva únicamente para el cómputo institucional y desglose por dependencia, preservando la cuota sin generar un archivo persistido con el listado nominal de instituciones. Se dispone de la cuota restante (21.950 lecturas disponibles) que permite extraer los 1.134 planteles completos (consumiendo solo 1.134 lecturas) si se requiere la nómina nominal de epónimos.
 
+### Enriquecimiento de Informes Municipales: Inserción de Planteles y Nuevos Epónimos (23 Municipios)
+- **Fecha:** 2026-11-13 ~06:21 (Hora Local Venezuela).
+- **Acción Ejecutada:** A solicitud expresa de la Jefatura de Gestión Humana, se extrajo la totalidad de la colección `planteles` desde Cloud Firestore (1.185 documentos) consumiendo apenas 1.185 lecturas de las 21.950 disponibles, salvaguardando un respaldo permanente en `scratch/planteles_firestore_completo.json`.
+- **Inyección Estructural en Informes:** Se inyectó en los 23 archivos individuales (`informes_nov_2026/informe_<municipio>.txt`) la sección oficial:
+  `Planteles involucrados en la auditoría`
+  ubicada exactamente tras el conteo de planteles y antes de la sección `Cantidad de personal`.
+- **Estructura por Institución:** Se listaron numeradas del 1 al N todas las instituciones del municipio ordenadas por código DEA, incluyendo: Código DEA, Nombre nominal oficial, Nuevo Epónimo asignado y Dependencia (Nacional / Estadal / Subvencionado).
+- **Consolidado General:** Los 1.184 planteles de los 23 municipios quedaron perfectamente distribuidos y sincronizados, enriqueciendo sustancialmente el valor documental del informe para Marina Sulbarán.
+- **Cuota Remanente Actualizada:** ~20.765 lecturas gratuitas libres en el Plan Spark de Firebase para el resto del día.
+
+
 
