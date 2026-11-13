@@ -1,0 +1,50 @@
+Informe preliminar de la jornada de actualización del SGH v2.37.1
+
+Estimada Marina Sulbarán, Jefe de Gestión Humana:
+
+Reciba un cordial y fraterno saludo institucional. En cumplimiento de las directrices emanadas para el seguimiento, supervisión y control de calidad de la plataforma, presento a continuación el informe preliminar correspondiente al proceso de auditoría y supervisión de datos extraído en vivo directamente desde Cloud Firestore en el Municipio Rangel.
+
+Municipio auditado
+RANGEL (Mucuchíes)
+
+Reseña
+El Municipio Rangel, asentado sobre la majestuosa cuenca alta del río Chama con su capital Mucuchíes, constituye el corazón histórico, turístico y agrícola del Páramo de Mérida. Su estructura educativa está conformada por 36 instituciones escolares (21 nacionales y 15 estadales), que garantizan la atención escolar en valles fríos, laderas y aldeas parameras como San Rafael de Mucuchíes, Cacute, La Toma y Mucurubá. En el SGH v2.37.1 y a través del registro en vivo de sus 1.085 trabajadores, el municipio exhibe un extraordinario 99,63% de completitud documental y un 100,00% de coherencia en horas, turnos y situación laboral, demostrando el elevado sentido de vocación pedagógica, disciplina institucional y riguroso control administrativo de sus directores y educadores frente al rigor del clima andino.
+
+Cantidad de planteles
+• Total de planteles: 36 instituciones educativas
+• Nacional: 21 planteles
+• Estadal: 15 planteles
+• Municipal: 0 planteles
+• Subvencionado: 0 planteles
+
+Cantidad de personal
+• Total de funcionarios registrados en vivo: 1.085 trabajadores
+• Personal Docente: 680
+  - Nacional: 462 docentes
+  - Estadal: 218 docentes
+• Personal Administrativo: 81
+  - Nacional: 80 administrativos
+  - Estadal: 1 administrativo
+• Personal Obrero: 324
+  - Nacional: 323 obreros
+  - Estadal: 1 obrero
+• Consolidado por Dependencia: 865 Nacionales (79,72%) y 220 Estadales (20,28%).
+
+Porcentaje de los campos llenos
+• Nivel de completitud: 99,63% de los funcionarios cuentan con el 90% o más de sus campos requeridos totalmente diligenciados (1.081 de los 1.085 expedientes auditados).
+• Margen residual: Apenas 4 registros (0,37%) presentan datos secundarios complementarios en proceso de afinación en sede escolar.
+
+Coherencia en horas y turno
+• Índice de coherencia: 100,00% (1.085 funcionarios cuentan con correspondencia armónica entre sus horas según recibo de nómina y los turnos atendidos).
+• Observación técnica: No se detectan desajustes críticos en la asignación horaria ni inconsistencias de turno en los expedientes activos.
+
+Coherencia en Situación Laboral con respecto a las observaciones
+• Índice de coherencia: 100,00% (1.085 funcionarios).
+• Diagnóstico institucional: Existe concordancia absoluta y perfecta entre la condición de servicio declarada (Activo, Adecuación Laboral, Comisión de Servicio y Trámite de Jubilación) y las observaciones oficiales registradas en el sistema, sin contradicciones administrativas ni inconsistencias documentales.
+
+Reiterando el compromiso institucional de garantizar la máxima transparencia, exactitud y confiabilidad en la gestión del talento humano del magisterio merideño, quedo a su entera disposición para continuar con el siguiente municipio.
+
+Atentamente,
+
+Lic. Luis Alfonso Pérez
+Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)

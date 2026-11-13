@@ -5200,3 +5200,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Coherencia Horas y Turno: 100,00% (670 funcionarios).
   - Coherencia Situación Laboral vs Observaciones: 100,00% (670 funcionarios).
 - **Archivo Físico Generado:** `informes_nov_2026/informe_pueblo_llano.txt`.
+
+
+### Auditoría En Vivo: Municipio Rangel (Mucuchíes) - Opción 1 (Firestore)
+- **Extracción En Vivo:** Consultas directas a Cloud Firestore (`sgh-merida`).
+- **Métricas Oficiales Obtenidas:**
+  - Planteles: 36 instituciones activas (21 Nacionales, 15 Estadales, 0 Municipales, 0 Subvencionados).
+  - Personal: 1.085 trabajadores en vivo (680 Docentes, 81 Administrativos, 324 Obreros).
+  - Desglose por Dependencia: 865 Nacionales (79,72%) y 220 Estadales (20,28%).
+  - Porcentaje de Campos Llenos: 99,63% (1.081 de 1.085 expedientes con >= 90%). Margen residual: 0,37% (4 expedientes).
+  - Coherencia Horas y Turno: 100,00% (1.085 funcionarios).
+  - Coherencia Situación Laboral vs Observaciones: 100,00% (1.085 funcionarios).
+- **Archivo Físico Generado:** `informes_nov_2026/informe_rangel.txt`.
