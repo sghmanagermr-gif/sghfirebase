@@ -5025,3 +5025,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Coherencia Horas y Turno: 100,00% (546 funcionarios).
   - Coherencia Situación Laboral vs Observaciones: 100,00% (546 funcionarios).
 - **Archivo Físico Actualizado:** `informes_nov_2026/informe_andres_bello.txt`.
+
+
+### Auditoría En Vivo: Municipio Antonio Pinto Salinas (Santa Cruz de Mora) - Opción 1 (Firestore)
+- **Extracción En Vivo:** Consultas directas a Cloud Firestore (`sgh-merida`).
+- **Métricas Oficiales Obtenidas:**
+  - Planteles: 70 instituciones (31 Nacionales, 39 Estadales, 0 Municipales, 0 Subvencionados).
+  - Personal: 1.016 trabajadores en vivo (635 Docentes, 53 Administrativos, 328 Obreros).
+  - Desglose por Dependencia: 828 Nacionales (81,50%) y 188 Estadales (18,50%).
+  - Porcentaje de Campos Llenos: 99,80% (1.014 de 1.016 expedientes con >= 90%). Margen residual: 0,20% (2 expedientes).
+  - Coherencia Horas y Turno: 100,00% (1.016 funcionarios).
+  - Coherencia Situación Laboral vs Observaciones: 100,00% (1.016 funcionarios).
+- **Archivo Físico Actualizado:** `informes_nov_2026/informe_antonio_pinto_salinas.txt`.

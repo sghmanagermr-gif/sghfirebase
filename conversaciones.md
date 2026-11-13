@@ -9461,3 +9461,21 @@ Creo que solo 2 están en el RAC.xlsx"
 > - Se auditaron 546 cargos de personal activo en vivo (380 Docentes, 29 Administrativos, 137 Obreros; 392 Nacionales, 154 Estadales).
 > - Índices consolidados: 100,00% de completitud de campos (>= 90%), 100,00% de coherencia horaria y de turnos, y 100,00% de coherencia en situación laboral con respecto a observaciones oficiales.
 > - Se actualizó y respaldó el archivo físico en `informes_nov_2026/informe_andres_bello.txt`.
+
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "ANTONIO PINTO SALINA"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Emisión del informe preliminar de auditoría municipal en vivo (Opción 1: Cloud Firestore) para el Municipio Antonio Pinto Salinas (Santa Cruz de Mora):
+> - Extracción en vivo desde las colecciones activas `planteles` y `cargos_personal` en Firestore (`sgh-merida`).
+> - Se identificaron 70 planteles educativos (31 Nacionales, 39 Estadales).
+> - Se auditaron 1.016 cargos de personal activo en vivo (635 Docentes, 53 Administrativos, 328 Obreros; 828 Nacionales, 188 Estadales).
+> - Índices consolidados: 99,80% de completitud de campos (>= 90%), 100,00% de coherencia horaria y de turnos, y 100,00% de coherencia en situación laboral con respecto a observaciones oficiales.
+> - Se actualizó y respaldó el archivo físico en `informes_nov_2026/informe_antonio_pinto_salinas.txt`.

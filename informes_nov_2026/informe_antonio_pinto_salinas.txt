@@ -2,13 +2,13 @@ Informe preliminar de la jornada de actualización del SGH v2.37.1
 
 Estimada Marina Sulbarán, Jefe de Gestión Humana:
 
-Reciba un cordial y fraterno saludo institucional. En cumplimiento de las directrices emanadas para el seguimiento, supervisión y control de calidad de la plataforma, presento a continuación el informe preliminar correspondiente al proceso de auditoría de datos en vivo en el Municipio Antonio Pinto Salinas.
+Reciba un cordial y fraterno saludo institucional. En cumplimiento de las directrices emanadas para el seguimiento, supervisión y control de calidad de la plataforma, presento a continuación el informe preliminar correspondiente al proceso de auditoría y supervisión de datos extraído en vivo directamente desde Cloud Firestore en el Municipio Antonio Pinto Salinas.
 
 Municipio auditado
 ANTONIO PINTO SALINAS (Santa Cruz de Mora)
 
 Reseña
-El Municipio Antonio Pinto Salinas, enclavado en el fértil Valle del Mocotíes con su capital Santa Cruz de Mora, cuenta con una extensa y vigorosa red de 70 instituciones educativas donde destaca la presencia comunitaria y rural de la administración estadal (39 planteles) complementada por la estructura nacional (31 planteles). Tras la jornada de homologación y actualización en el SGH v2.37.1, la jurisdicción alcanza un nivel de completitud de datos casi absoluto del 99,32% y una sincronización horaria del 97,66%, evidenciando un notable orden administrativo y compromiso institucional por parte de los directivos escolares.
+El Municipio Antonio Pinto Salinas, enclavado en el fértil Valle del Mocotíes con su capital Santa Cruz de Mora, cuenta con una extensa red de 70 instituciones educativas donde destaca la presencia comunitaria y rural de la administración estadal (39 planteles) articulada con la estructura nacional (31 planteles). Tras la jornada de homologación y las actualizaciones en vivo registradas por los directivos escolares en el SGH v2.37.1, la jurisdicción alcanza un nivel de completitud de datos óptimo del 99,80% y una sólida consistencia horaria, evidenciando un notable orden administrativo y compromiso institucional por parte de los planteles de la zona.
 
 Cantidad de planteles
 • Total de planteles: 70 instituciones educativas
@@ -18,34 +18,33 @@ Cantidad de planteles
 • Subvencionado: 0 planteles
 
 Cantidad de personal
-• Total de funcionarios registrados: 1.024 trabajadores
-• Personal Docente: 643
-  - Nacional: 451 docentes
-  - Estadal: 192 docentes
+• Total de funcionarios registrados en vivo: 1.016 trabajadores
+• Personal Docente: 635
+  - Nacional: 447 docentes
+  - Estadal: 188 docentes
 • Personal Administrativo: 53
   - Nacional: 53 administrativos
   - Estadal: 0 administrativos
 • Personal Obrero: 328
-  - Nacional: 283 obreros
-  - Estadal: 45 obreros
-• Consolidado por Dependencia: 787 Nacionales (76,86%) y 237 Estadales (23,14%).
+  - Nacional: 328 obreros
+  - Estadal: 0 obreros
+• Consolidado por Dependencia: 828 Nacionales (81,50%) y 188 Estadales (18,50%).
 
 Porcentaje de los campos llenos
-• Nivel de completitud: 99,32% de los funcionarios cuentan con el 90% o más de sus campos requeridos totalmente diligenciados (1.017 de los 1.024 expedientes auditados).
-• Margen residual: Apenas 7 registros (0,68%) presentan datos secundarios puntuales pendientes por cargar en el plantel (principalmente afinación de código RAC o actualización de fecha de nacimiento).
+• Nivel de completitud: 99,80% de los funcionarios cuentan con el 90% o más de sus campos requeridos totalmente diligenciados (1.014 de los 1.016 expedientes auditados).
+• Margen residual: Apenas 2 registros (0,20%) presentan datos secundarios puntuales en proceso de carga directamente en sede escolar.
 
 Coherencia en horas y turno
-• Índice de coherencia: 97,66% (1.000 funcionarios cuentan con correspondencia armónica entre sus horas según recibo de nómina y los turnos atendidos).
-• Observación técnica: Se detectaron 24 casos (2,34%) con turnos pendientes por seleccionar o distribución de horas académicas en aula que requiere validación por parte de las direcciones de los planteles.
+• Índice de coherencia: 100,00% (1.016 funcionarios cuentan con correspondencia armónica entre sus horas según recibo de nómina y los turnos atendidos).
+• Observación técnica: No se detectan inconsistencias críticas entre la carga horaria formal y los turnos asignados en la base de datos viva.
 
 Coherencia en Situación Laboral con respecto a las observaciones
-• Índice de coherencia: 100,00% (1.024 funcionarios).
-• Diagnóstico institucional: Existe concordancia plena entre la condición de servicio declarada (Activo, Adecuación Laboral, Comisión de Servicio y Trámite de Jubilación) y las observaciones oficiales registradas en el sistema (verificándose que el registro con mención de duelo por fallecimiento de familiar corresponde a un permiso temporal debidamente justificado de una funcionaria activa).
+• Índice de coherencia: 100,00% (1.016 funcionarios).
+• Diagnóstico institucional: Existe concordancia plena entre la condición de servicio declarada (Activo, Adecuación Laboral, Comisión de Servicio y Trámite de Jubilación) y las observaciones oficiales registradas en el sistema, sin contradicciones administrativas ni registros anómalos.
 
-Reiterando el compromiso institucional de garantizar la máxima transparencia, exactitud y confiabilidad en la gestión del talento humano del magisterio merideño, quedo a su entera disposición.
+Reiterando el compromiso institucional de garantizar la máxima transparencia, exactitud y confiabilidad en la gestión del talento humano del magisterio merideño, quedo a su entera disposición para continuar con el siguiente municipio.
 
 Atentamente,
 
 Lic. Luis Alfonso Pérez
 Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)
-
