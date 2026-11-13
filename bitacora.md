@@ -4989,3 +4989,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - **Fortalezas del Sistema:** Frontend reactivo y ultraligero en Vanilla JS y Vite, solidez en las reglas de negocio institucionales (control de carga horaria, cruce de turnos, situaciones laborales) y validación previa en cliente.
   - **Limitaciones de la Arquitectura NoSQL:** Carencia de claves foráneas nativas (desnormalización de datos de planteles en cargos), costo e ineficiencia al procesar agregaciones estadísticas globales, y restricciones en consultas relacionales complejas.
   - **Aprovechamiento de Supabase (PostgreSQL):** Esquema relacional con integridad referencial (`ON UPDATE CASCADE`), vistas SQL para auditorías y resúmenes analíticos instantáneos, seguridad gobernada por el motor de base de datos con Row Level Security (RLS) y persistencia robusta.
+
+
+### Verificación Matutina de Restablecimiento de Cuotas (13 de Noviembre, 4:53 a.m.)
+- **Lectura de Directivas:** Se realizó la lectura exhaustiva y verificación del archivo de habilidades `.agents/skills/webapp-expert/SKILL_sgh_firebase.md` (Skills 1, 2, 3, 4, 5, 6 y Apéndice de UI).
+- **Evidencia Gráfica Oficial (Consola Firebase):**
+  - Desaparición del cartel rojo de saturación de Spark (*"Tu proyecto excedió los límites sin costo"*).
+  - La curva de operaciones cayó a cero en la medianoche y se mantiene plana en la base.
+  - La base de datos `(default)` exhibe el indicador de operatividad normal en verde.
+- **Diagnóstico Técnico en Vivo:**
+  - Se ejecutó un llamado de prueba directo a los endpoints de Cloud Firestore (`sgh-merida`).
+  - Resultado: **HTTP 200 (OK)**. El servidor ha salido formalmente del estado de estrangulamiento HTTP 429 (`RESOURCE_EXHAUSTED`).
+- **Paso Operativo Inmediato:** Realizar la prueba práctica en el celular sobre el Auditor de Cédulas para validar el comportamiento en móvil post-restablecimiento.

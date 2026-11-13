@@ -9408,3 +9408,22 @@ Creo que solo 2 están en el RAC.xlsx"
 > - Se amplió la perspectiva del sistema SGH: escala institucional (23 municipios, 1.100+ escuelas, ~25.000 cargos de personal, 1.000 usuarios jerárquicos).
 > - Se estructuró un análisis riguroso de **Fortalezas del SGH** (frontend ultraligero en Vite/JS Vanilla, lógica y validaciones de negocio maduras, experiencia consolidada del usuario) versus las **Limitaciones estructurales del modelo NoSQL** (carencia de integridad referencial, desnormalización forzada, ausencia de vistas analíticas agregadas en servidor y economía de lectura por documento).
 > - Se orientaron los entregables hacia las oportunidades de **Supabase (PostgreSQL)**: esquema relacional normalizado con claves foráneas, vistas SQL analíticas para auditorías municipales en servidor, políticas declarativas de seguridad por filas (RLS), adaptación desacoplada del frontend y metodología de migración ETL.
+
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+> *(Adjunta nueva captura de pantalla oficial de la consola de Firebase a las 4:53 a.m. del 13 de noviembre mostrando el levantamiento del cartel rojo de cuota y el estado de la base de datos)*.
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Confirmación de lectura íntegra del archivo `.agents/skills/webapp-expert/SKILL_sgh_firebase.md` (Skills 1 a 6 y Apéndice de UI).  
+> Análisis de la evidencia visual matutina:
+> - Desaparición total del banner rojo de advertencia de Google Cloud.
+> - Verificación en vivo de conectividad con Firestore: código de respuesta HTTP 200 (OK), confirmando el restablecimiento del servicio y la salida del estado de saturación 429.
+> - Explicación de la métrica visual: los 97k corresponden a la ventana acumulada móvil de 24 horas ("Últimas 24 horas nov 12 - nov 13"), mientras que la curva gráfica muestra consumo plano en cero desde la medianoche.
+> - Convocatoria a la prueba de fuego del Auditor de Cédulas en el dispositivo móvil del Administrador según lo pautado.
