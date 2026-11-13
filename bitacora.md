@@ -4962,3 +4962,11 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   1. Con las 50.000 lecturas gratuitas diarias restauradas, se re-auditarán en vivo directamente desde Firestore los primeros 5 municipios (Alberto Adriani, Andrés Bello, Antonio Pinto Salinas, Aricagua y Campo Elías), sobreescribiendo sus respectivos archivos `.txt` en `informes_nov_2026/` con las ediciones vivas de los directores.
   2. Se auditarán secuencialmente los 18 municipios restantes en vivo desde Firestore, consumiendo en total ~23.000 lecturas (menos del 50% de la cuota diaria gratuita).
   3. Todos los informes reflejarán el 100% de confiabilidad técnica y fidelidad a la base de datos viva.
+
+
+### Confirmación Visual de Cuota Firebase (Consola Oficial)
+- **Evidencia Aportada por el Administrador:** Capturas de pantalla oficiales de la consola de Firebase (`sgh-merida`, Plan Spark):
+  - Alerta roja explícita de Google: *"Tu proyecto excedió los límites sin costo. Actualiza a un plan pagado para asegurarte de que no se interrumpa el servicio"*.
+  - Métrica de Lecturas: 94.000 - 97.000 lecturas acumuladas (límite Spark: 50.000/día).
+  - Métrica de Escrituras: 20.000 escrituras acumuladas (límite Spark: 20.000/día).
+- **Decisión Ratificada:** Se confirma la pausa total de operaciones nocturnas para aguardar el restablecimiento automático de cuotas a costo cero en la madrugada.
