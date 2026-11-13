@@ -5037,3 +5037,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Coherencia Horas y Turno: 100,00% (1.016 funcionarios).
   - Coherencia Situación Laboral vs Observaciones: 100,00% (1.016 funcionarios).
 - **Archivo Físico Actualizado:** `informes_nov_2026/informe_antonio_pinto_salinas.txt`.
+
+
+### Auditoría En Vivo: Municipio Aricagua - Opción 1 (Firestore)
+- **Extracción En Vivo:** Consultas directas a Cloud Firestore (`sgh-merida`).
+- **Métricas Oficiales Obtenidas:**
+  - Planteles: 23 instituciones (10 Nacionales, 13 Estadales, 0 Municipales, 0 Subvencionados).
+  - Personal: 150 trabajadores en vivo (104 Docentes, 6 Administrativos, 40 Obreros).
+  - Desglose por Dependencia: 112 Nacionales (74,67%) y 38 Estadales (25,33%).
+  - Porcentaje de Campos Llenos: 100,00% (150 de 150 expedientes con >= 90%). Margen residual: 0,00%.
+  - Coherencia Horas y Turno: 100,00% (150 funcionarios).
+  - Coherencia Situación Laboral vs Observaciones: 100,00% (150 funcionarios).
+- **Archivo Físico Actualizado:** `informes_nov_2026/informe_aricagua.txt`.
