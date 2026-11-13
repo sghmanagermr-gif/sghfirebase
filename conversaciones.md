@@ -9294,3 +9294,23 @@ Creo que solo 2 están en el RAC.xlsx"
 > - **Coherencia en horas y turno:** 96,16% (676 coherentes, 27 observaciones).
 > - **Coherencia en Situación Laboral con respecto a las observaciones:** 100,00% (703 coherentes, 0 discrepancias).
 > - **Archivo guardado:** `informes_nov_2026/informe_arzobispo_chacon.txt`.
+
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "CAMPO ELIAS"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Auditoría en vivo de **Campo Elías** ejecutada y consolidada bajo la estructura jerárquica oficial:
+> - **Municipio auditado:** CAMPO ELÍAS (Ejido)
+> - **Cantidad de planteles:** 100 planteles (46 Nacional, 54 Estadal, 0 Municipal, 0 Subvencionado).
+> - **Cantidad de personal:** 3.069 trabajadores (Docentes: 1.918 [1.301 Nac / 617 Est], Administrativos: 264 [260 Nac / 4 Est], Obreros: 887 [803 Nac / 84 Est]; Total Nac: 2.364 [77,03%], Est: 705 [22,97%]).
+> - **Porcentaje de los campos llenos:** 98,50% (3.023 con >= 90%; margen residual de 46 casos [1,50%]).
+> - **Coherencia en horas y turno:** 97,43% (2.990 coherentes, 79 observaciones).
+> - **Coherencia en Situación Laboral con respecto a las observaciones:** 100,00% (3.069 coherentes, 0 discrepancias).
+> - **Archivo guardado:** `informes_nov_2026/informe_campo_elias.txt`.

@@ -4933,3 +4933,16 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
 - **Coherencia en horas y turno:** 96,16% (676 coherentes, 27 observaciones técnicas de turno/horas aula).
 - **Coherencia en Situación Laboral vs Observaciones:** 100,00% (703 coherentes, 0 discrepancias).
 - **Archivo Físico Generado:** `informes_nov_2026/informe_arzobispo_chacon.txt`.
+
+
+### Auditoría Municipal: Campo Elías (Completada)
+- **Planteles:** 100 instituciones educativas (46 Nacionales, 54 Estadales, 0 Municipales, 0 Subvencionados).
+- **Personal:** 3.069 funcionarios registrados.
+  - *Docentes:* 1.918 (1.301 Nacionales, 617 Estadales).
+  - *Administrativos:* 264 (260 Nacionales, 4 Estadales).
+  - *Obreros:* 887 (803 Nacionales, 84 Estadales).
+  - *Consolidado por Dependencia:* 2.364 Nacionales (77,03%) y 705 Estadales (22,97%).
+- **Porcentaje de los campos llenos:** 98,50% (3.023 de 3.069 funcionarios con >= 90% de completitud; margen residual de 46 casos [1,50%]).
+- **Coherencia en horas y turno:** 97,43% (2.990 coherentes, 79 observaciones técnicas de turno/horas aula).
+- **Coherencia en Situación Laboral vs Observaciones:** 100,00% (3.069 coherentes, 0 discrepancias).
+- **Archivo Físico Generado:** `informes_nov_2026/informe_campo_elias.txt`.
