@@ -5133,3 +5133,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Coherencia Horas y Turno: 100,00% (406 funcionarios).
   - Coherencia Situación Laboral vs Observaciones: 100,00% (406 funcionarios).
 - **Archivo Físico Generado:** `informes_nov_2026/informe_justo_briceno.txt`.
+
+
+### Auditoría En Vivo: Municipio Libertador (Mérida) - Opción 1 (Firestore)
+- **Extracción En Vivo:** Consultas directas a Cloud Firestore (`sgh-merida`).
+- **Métricas Oficiales Obtenidas:**
+  - Planteles: 186 instituciones activas (110 Nacionales, 76 Estadales, 0 Municipales, 0 Subvencionados).
+  - Personal: 6.087 trabajadores en vivo (3.722 Docentes, 671 Administrativos, 1.694 Obreros).
+  - Desglose por Dependencia: 4.993 Nacionales (82,03%) y 1.094 Estadales (17,97%).
+  - Porcentaje de Campos Llenos: 91,42% (5.565 de 6.087 expedientes con >= 90%). Margen residual: 8,58% (522 expedientes).
+  - Coherencia Horas y Turno: 99,98% (6.086 funcionarios). Discrepancia mínima: 1 caso (0,02%).
+  - Coherencia Situación Laboral vs Observaciones: 100,00% (6.087 funcionarios).
+- **Archivo Físico Generado:** `informes_nov_2026/informe_libertador.txt`.
