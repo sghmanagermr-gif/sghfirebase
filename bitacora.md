@@ -5224,3 +5224,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Coherencia Horas y Turno: 99,43% (694 funcionarios). Discrepancia menor: 4 casos (0,57%).
   - Coherencia Situación Laboral vs Observaciones: 100,00% (698 funcionarios).
 - **Archivo Físico Generado:** `informes_nov_2026/informe_rivas_davila.txt`.
+
+
+### Auditoría En Vivo: Municipio Santos Marquina (Tabay) - Opción 1 (Firestore)
+- **Extracción En Vivo:** Consultas directas a Cloud Firestore (`sgh-merida`).
+- **Métricas Oficiales Obtenidas:**
+  - Planteles: 18 instituciones activas (9 Nacionales, 9 Estadales en simetría exacta, 0 Municipales, 0 Subvencionados).
+  - Personal: 427 trabajadores en vivo (275 Docentes, 29 Administrativos, 121 Obreros).
+  - Desglose por Dependencia: 352 Nacionales (82,44%) y 75 Estadales (17,56%).
+  - Porcentaje de Campos Llenos: 99,30% (424 de 427 expedientes con >= 90%). Margen residual: 0,70% (3 expedientes).
+  - Coherencia Horas y Turno: 100,00% (427 funcionarios).
+  - Coherencia Situación Laboral vs Observaciones: 100,00% (427 funcionarios).
+- **Archivo Físico Generado:** `informes_nov_2026/informe_santos_marquina.txt`.

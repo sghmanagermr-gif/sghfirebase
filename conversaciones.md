@@ -9767,3 +9767,21 @@ Creo que solo 2 están en el RAC.xlsx"
 > - Se auditaron 698 cargos de personal activo en vivo (398 Docentes, 48 Administrativos, 224 Obreros; 572 Nacionales, 126 Estadales).
 > - Índices consolidados: 94,27% de completitud de campos (>= 90%), 99,43% de coherencia horaria y de turnos, y 100,00% de coherencia en situación laboral con respecto a observaciones oficiales.
 > - Se generó y respaldó el archivo físico en `informes_nov_2026/informe_rivas_davila.txt`.
+
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "SANTOS MARQUINA"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Emisión del informe preliminar de auditoría municipal en vivo (Opción 1: Cloud Firestore) para el Municipio Santos Marquina (Tabay):
+> - Extracción en vivo desde las colecciones activas `planteles` y `cargos_personal` en Firestore (`sgh-merida`).
+> - Se identificaron 18 planteles educativos (9 Nacionales, 9 Estadales en simetría perfecta).
+> - Se auditaron 427 cargos de personal activo en vivo (275 Docentes, 29 Administrativos, 121 Obreros; 352 Nacionales, 75 Estadales).
+> - Índices consolidados: 99,30% de completitud de campos (>= 90%), 100,00% de coherencia horaria y de turnos, y 100,00% de coherencia en situación laboral con respecto a observaciones oficiales.
+> - Se generó y respaldó el archivo físico en `informes_nov_2026/informe_santos_marquina.txt`.
