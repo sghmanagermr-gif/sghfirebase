@@ -5176,3 +5176,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Coherencia Horas y Turno: 100,00% (967 funcionarios).
   - Coherencia Situación Laboral vs Observaciones: 100,00% (967 funcionarios).
 - **Archivo Físico Generado:** `informes_nov_2026/informe_obispo_ramos_de_lora.txt`.
+
+
+### Auditoría En Vivo: Municipio Padre Noguera (Santa María de Caparo) - Opción 1 (Firestore)
+- **Extracción En Vivo:** Consultas directas a Cloud Firestore (`sgh-merida`).
+- **Métricas Oficiales Obtenidas:**
+  - Planteles: 10 instituciones activas (8 Nacionales, 2 Estadales, 0 Municipales, 0 Subvencionados).
+  - Personal: 153 trabajadores en vivo (99 Docentes, 5 Administrativos, 49 Obreros).
+  - Desglose por Dependencia: 149 Nacionales (97,39%) y 4 Estadales (2,61%).
+  - Porcentaje de Campos Llenos: 99,35% (152 de 153 expedientes con >= 90%). Margen residual: 0,65% (1 expediente).
+  - Coherencia Horas y Turno: 100,00% (153 funcionarios).
+  - Coherencia Situación Laboral vs Observaciones: 100,00% (153 funcionarios).
+- **Archivo Físico Generado:** `informes_nov_2026/informe_padre_noguera.txt`.
