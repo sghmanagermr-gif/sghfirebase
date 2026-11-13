@@ -4970,3 +4970,13 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Métrica de Lecturas: 94.000 - 97.000 lecturas acumuladas (límite Spark: 50.000/día).
   - Métrica de Escrituras: 20.000 escrituras acumuladas (límite Spark: 20.000/día).
 - **Decisión Ratificada:** Se confirma la pausa total de operaciones nocturnas para aguardar el restablecimiento automático de cuotas a costo cero en la madrugada.
+
+
+### Generación de Documento Maestro: Prompt de Migración a Supabase (.md)
+- **Documento Generado:** `PROMPT_MIGRACION_SUPABASE.md`.
+- **Objetivo:** Facilitar al Administrador una plantilla técnica completa y rigurosa en formato Markdown para consultar a otros agentes de inteligencia artificial especializados en bases de datos relacionales y Supabase (PostgreSQL).
+- **Contenido Incorporado:**
+  - Contexto institucional de Mérida (23 municipios, 1.100+ escuelas, 23.031+ cargos, 1.000+ usuarios).
+  - Arquitectura modular de `webapp` (Vite, JavaScript Vanilla, Tailwind, modales, wizard de personal, sanitizador global).
+  - Limitaciones del Plan Spark de Firebase (50k lecturas/día, saturación HTTP 429, congelamiento del Auditor de Cédulas en móviles por bucles de reintentos).
+  - Especificación de requerimientos para la nueva IA: Diseño de DDL relacional con claves foráneas, políticas de seguridad RLS (superadmin, munadmin, plaadmin), adaptación del cliente Vite/JS con `@supabase/supabase-js`, auditor de cédulas con timeout estricto e índice B-Tree, y estrategia de extracción y carga masiva de datos (ETL).

@@ -9378,3 +9378,16 @@ Creo que solo 2 están en el RAC.xlsx"
 > - Se valida totalmente su escepticismo: en desarrollo e infraestructura lo determinante son las pruebas reales y los resultados tangibles en los dispositivos.
 > - Se destaca que las capturas de pantalla de Google Cloud confirman objetivamente la saturación: el banner rojo advierte explícitamente *"Tu proyecto excedió los límites sin costo"* con 94k-97k lecturas (frente al tope Spark de 50k) y 20k escrituras (tope 20k).
 > - Se fija el compromiso operativo para la mañana: una vez restablecida la cuota gratuita (3:30 - 4:00 a.m. VET), se probará de inmediato en el celular. Si el restablecimiento devuelve la fluidez habitual, se confirma el diagnóstico de red/cuota; y si persistiera la menor falla en el móvil, se asumirá como prioridad técnica inmediata para auditar y reconstruir el código de la función hasta dejarla impecable y veloz.
+
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "neceito el promt en formato .md creo que es el formato que entiende mejor la IA"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se generó y guardó físicamente en la raíz del repositorio el archivo maestro `PROMPT_MIGRACION_SUPABASE.md`. El documento cuenta con una estructura exhaustiva en Markdown que describe el contexto institucional, volumen de datos (23 municipios, 1.100+ escuelas, 23.031+ cargos, 1.000+ usuarios), arquitectura modular de la SPA en Vite/JS Vanilla, la problemática de saturación de cuota en Firestore (50k lecturas/día y bucles de reintento en móvil) y los 5 entregables esenciales requeridos para la consultoría con Supabase (Esquema DDL, Políticas RLS, Adaptación Frontend, Pipeline ETL y Análisis de Viabilidad en Free Tier).
