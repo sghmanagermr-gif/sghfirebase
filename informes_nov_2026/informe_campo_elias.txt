@@ -2,50 +2,49 @@ Informe preliminar de la jornada de actualización del SGH v2.37.1
 
 Estimada Marina Sulbarán, Jefe de Gestión Humana:
 
-Reciba un cordial y fraterno saludo institucional. En cumplimiento de las directrices emanadas para el seguimiento, supervisión y control de calidad de la plataforma, presento a continuación el informe preliminar correspondiente al proceso de auditoría de datos en vivo en el Municipio Campo Elías.
+Reciba un cordial y fraterno saludo institucional. En cumplimiento de las directrices emanadas para el seguimiento, supervisión y control de calidad de la plataforma, presento a continuación el informe preliminar correspondiente al proceso de auditoría y supervisión de datos extraído en vivo directamente desde Cloud Firestore en el Municipio Campo Elías.
 
 Municipio auditado
 CAMPO ELÍAS (Ejido)
 
 Reseña
-El Municipio Campo Elías, con su capital Ejido, constituye la segunda entidad de mayor envergadura demográfica y educativa del Estado Mérida y pieza angular del Eje Metropolitano. Su estructura combina grandes complejos educativos urbanos y técnicos con una arraigada red de planteles rurales en parroquias como Jají, La Mesa y Acequias, totalizando exactamente 100 instituciones educativas (54 de administración estadal y 46 nacionales). En el SGH v2.37.1, sus 3.069 funcionarios exhiben un sólido 98,50% de completitud documental y una concordancia absoluta del 100,00% en su situación laboral, demostrando una notable capacidad organizativa y rigurosidad técnica en un municipio de alta densidad operacional.
+El Municipio Campo Elías, con su capital Ejido, constituye la segunda entidad de mayor envergadura demográfica y educativa del Estado Mérida y pieza angular del Eje Metropolitano. Su estructura combina grandes complejos educativos urbanos y técnicos con una arraigada red de planteles rurales en parroquias como Jají, La Mesa y Acequias, totalizando 98 instituciones educativas en la base activa (52 de administración estadal y 46 nacionales). En el SGH v2.37.1 y tras las modificaciones registradas en vivo en el sistema, sus 3.080 funcionarios exhiben un sólido 99,90% de completitud documental y una concordancia absoluta del 100,00% en su situación laboral y carga horaria, demostrando una notable capacidad organizativa y rigurosidad técnica en un municipio de alta densidad operacional.
 
 Cantidad de planteles
-• Total de planteles: 100 instituciones educativas
+• Total de planteles: 98 instituciones educativas
 • Nacional: 46 planteles
-• Estadal: 54 planteles
+• Estadal: 52 planteles
 • Municipal: 0 planteles
 • Subvencionado: 0 planteles
 
 Cantidad de personal
-• Total de funcionarios registrados: 3.069 trabajadores
-• Personal Docente: 1.918
-  - Nacional: 1.301 docentes
-  - Estadal: 617 docentes
-• Personal Administrativo: 264
+• Total de funcionarios registrados en vivo: 3.080 trabajadores
+• Personal Docente: 1.933
+  - Nacional: 1.321 docentes
+  - Estadal: 612 docentes
+• Personal Administrativo: 262
   - Nacional: 260 administrativos
-  - Estadal: 4 administrativos
-• Personal Obrero: 887
-  - Nacional: 803 obreros
-  - Estadal: 84 obreros
-• Consolidado por Dependencia: 2.364 Nacionales (77,03%) y 705 Estadales (22,97%).
+  - Estadal: 2 administrativos
+• Personal Obrero: 885
+  - Nacional: 880 obreros
+  - Estadal: 5 obreros
+• Consolidado por Dependencia: 2.461 Nacionales (79,90%) y 619 Estadales (20,10%).
 
 Porcentaje de los campos llenos
-• Nivel de completitud: 98,50% de los funcionarios cuentan con el 90% o más de sus campos requeridos totalmente diligenciados (3.023 de los 3.069 expedientes auditados).
-• Margen residual: Apenas 46 registros (1,50%) presentan datos secundarios pendientes de afinar directamente en los planteles (principalmente datos sociodemográficos de vivienda, profesión o actualización de código RAC).
+• Nivel de completitud: 99,90% de los funcionarios cuentan con el 90% o más de sus campos requeridos totalmente diligenciados (3.077 de los 3.080 expedientes auditados).
+• Margen residual: Apenas 3 registros (0,10%) presentan datos secundarios complementarios en proceso de afinación en sede escolar.
 
 Coherencia en horas y turno
-• Índice de coherencia: 97,43% (2.990 funcionarios cuentan con correspondencia armónica entre sus horas según recibo de nómina y los turnos atendidos).
-• Observación técnica: Se identificaron 79 casos (2,57%) donde se requiere la definición del turno de atención en el sistema o la sincronización fina de horas académicas en aula frente a la jornada nominal de recibo.
+• Índice de coherencia: 100,00% (3.080 funcionarios cuentan con correspondencia armónica entre sus horas según recibo de nómina y los turnos atendidos).
+• Observación técnica: No se detectan desajustes críticos en la asignación horaria ni inconsistencias de turno en los expedientes activos.
 
 Coherencia en Situación Laboral con respecto a las observaciones
-• Índice de coherencia: 100,00% (3.069 funcionarios).
+• Índice de coherencia: 100,00% (3.080 funcionarios).
 • Diagnóstico institucional: Existe concordancia absoluta y perfecta entre la condición de servicio declarada (Activo, Adecuación Laboral, Comisión de Servicio y Trámite de Jubilación) y las observaciones oficiales registradas en el sistema, sin contradicciones administrativas ni inconsistencias documentales.
 
-Reiterando el compromiso institucional de garantizar la máxima transparencia, exactitud y confiabilidad en la gestión del talento humano del magisterio merideño, quedo a su entera disposición.
+Reiterando el compromiso institucional de garantizar la máxima transparencia, exactitud y confiabilidad en la gestión del talento humano del magisterio merideño, quedo a su entera disposición para continuar con el siguiente municipio.
 
 Atentamente,
 
 Lic. Luis Alfonso Pérez
 Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)
-

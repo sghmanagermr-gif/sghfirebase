@@ -5061,3 +5061,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Coherencia Horas y Turno: 100,00% (700 funcionarios).
   - Coherencia Situación Laboral vs Observaciones: 100,00% (700 funcionarios).
 - **Archivo Físico Actualizado:** `informes_nov_2026/informe_arzobispo_chacon.txt`.
+
+
+### Auditoría En Vivo: Municipio Campo Elías (Ejido) - Opción 1 (Firestore)
+- **Extracción En Vivo:** Consultas directas a Cloud Firestore (`sgh-merida`).
+- **Métricas Oficiales Obtenidas:**
+  - Planteles: 98 instituciones activas (46 Nacionales, 52 Estadales, 0 Municipales, 0 Subvencionados).
+  - Personal: 3.080 trabajadores en vivo (1.933 Docentes, 262 Administrativos, 885 Obreros).
+  - Desglose por Dependencia: 2.461 Nacionales (79,90%) y 619 Estadales (20,10%).
+  - Porcentaje de Campos Llenos: 99,90% (3.077 de 3.080 expedientes con >= 90%). Margen residual: 0,10% (3 expedientes).
+  - Coherencia Horas y Turno: 100,00% (3.080 funcionarios).
+  - Coherencia Situación Laboral vs Observaciones: 100,00% (3.080 funcionarios).
+- **Archivo Físico Actualizado:** `informes_nov_2026/informe_campo_elias.txt`.
