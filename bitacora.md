@@ -4894,3 +4894,16 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
 - **Coherencia en horas y turno:** 96,37% (531 coherentes, 20 observaciones de turno/horas aula).
 - **Coherencia en Situación Laboral vs Observaciones:** 100,00% (551 coherentes, 0 discrepancias).
 - **Archivo Físico Generado:** `informes_nov_2026/informe_andres_bello.txt`.
+
+
+### Auditoría Municipal: Antonio Pinto Salinas (Completada)
+- **Planteles:** 70 instituciones educativas (31 Nacionales, 39 Estadales, 0 Municipales, 0 Subvencionados).
+- **Personal:** 1.024 funcionarios registrados.
+  - *Docentes:* 643 (451 Nacionales, 192 Estadales).
+  - *Administrativos:* 53 (53 Nacionales, 0 Estadales).
+  - *Obreros:* 328 (283 Nacionales, 45 Estadales).
+  - *Consolidado por Dependencia:* 787 Nacionales (76,86%) y 237 Estadales (23,14%).
+- **Porcentaje de los campos llenos:** 99,32% (1.017 de 1.024 funcionarios con >= 90% de completitud; margen residual de apenas 7 casos [0,68%]).
+- **Coherencia en horas y turno:** 97,66% (1.000 coherentes, 24 observaciones técnicas de turno/horas aula).
+- **Coherencia en Situación Laboral vs Observaciones:** 100,00% (1.024 coherentes, 0 discrepancias tras confirmación de permiso por duelo de familiar en funcionaria activa).
+- **Archivo Físico Generado:** `informes_nov_2026/informe_antonio_pinto_salinas.txt`.
