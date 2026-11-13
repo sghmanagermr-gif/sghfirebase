@@ -9587,3 +9587,21 @@ Creo que solo 2 están en el RAC.xlsx"
 > - Se auditaron 507 cargos de personal activo en vivo (276 Docentes, 23 Administrativos, 208 Obreros; 394 Nacionales, 113 Estadales).
 > - Índices consolidados: 99,01% de completitud de campos (>= 90%), 100,00% de coherencia horaria y de turnos, y 100,00% de coherencia en situación laboral con respecto a observaciones oficiales.
 > - Se generó y respaldó el archivo físico en `informes_nov_2026/informe_guaraque.txt`.
+
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "JULIO CESAR"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Emisión del informe preliminar de auditoría municipal en vivo (Opción 1: Cloud Firestore) para el Municipio Julio César Salas (Arapuey):
+> - Extracción en vivo desde las colecciones activas `planteles` y `cargos_personal` en Firestore (`sgh-merida`).
+> - Se identificaron 23 planteles educativos (8 Nacionales, 15 Estadales).
+> - Se auditaron 491 cargos de personal activo en vivo (355 Docentes, 15 Administrativos, 121 Obreros; 307 Nacionales, 184 Estadales).
+> - Índices consolidados: 98,98% de completitud de campos (>= 90%), 100,00% de coherencia horaria y de turnos, y 100,00% de coherencia en situación laboral con respecto a observaciones oficiales.
+> - Se generó y respaldó el archivo físico en `informes_nov_2026/informe_julio_cesar_salas.txt`.

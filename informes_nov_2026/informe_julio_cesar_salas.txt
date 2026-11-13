@@ -1,0 +1,50 @@
+Informe preliminar de la jornada de actualización del SGH v2.37.1
+
+Estimada Marina Sulbarán, Jefe de Gestión Humana:
+
+Reciba un cordial y fraterno saludo institucional. En cumplimiento de las directrices emanadas para el seguimiento, supervisión y control de calidad de la plataforma, presento a continuación el informe preliminar correspondiente al proceso de auditoría y supervisión de datos extraído en vivo directamente desde Cloud Firestore en el Municipio Julio César Salas.
+
+Municipio auditado
+JULIO CÉSAR SALAS (Arapuey)
+
+Reseña
+El Municipio Julio César Salas, con su capital Arapuey, se ubica en el extremo norte del Estado Mérida dentro de la productiva Zona Panamericana, limitando estrechamente con el Estado Zulia y la cuenca lacustre. Su economía predominantemente agrícola, ganadera y comercial se apoya en una red educativa de 23 instituciones escolares (15 planteles de administración estadal y 8 nacionales), articulando tanto la dinámica urbana de Arapuey como sus comunidades campesinas y caseríos rurales. En el SGH v2.37.1 y a través del registro en vivo de sus 491 trabajadores, el municipio exhibe un sólido 98,98% de completitud documental y un 100,00% de coherencia en horas, turnos y situación laboral, reflejando el orden administrativo y el compromiso del personal directivo y docente en esta estratégica franja limítrofe.
+
+Cantidad de planteles
+• Total de planteles: 23 instituciones educativas
+• Nacional: 8 planteles
+• Estadal: 15 planteles
+• Municipal: 0 planteles
+• Subvencionado: 0 planteles
+
+Cantidad de personal
+• Total de funcionarios registrados en vivo: 491 trabajadores
+• Personal Docente: 355
+  - Nacional: 181 docentes
+  - Estadal: 174 docentes
+• Personal Administrativo: 15
+  - Nacional: 14 administrativos
+  - Estadal: 1 administrativo
+• Personal Obrero: 121
+  - Nacional: 112 obreros
+  - Estadal: 9 obreros
+• Consolidado por Dependencia: 307 Nacionales (62,53%) y 184 Estadales (37,47%).
+
+Porcentaje de los campos llenos
+• Nivel de completitud: 98,98% de los funcionarios cuentan con el 90% o más de sus campos requeridos totalmente diligenciados (486 de los 491 expedientes auditados).
+• Margen residual: Apenas 5 registros (1,02%) presentan datos secundarios complementarios en proceso de afinación en sede escolar.
+
+Coherencia en horas y turno
+• Índice de coherencia: 100,00% (491 funcionarios cuentan con correspondencia armónica entre sus horas según recibo de nómina y los turnos atendidos).
+• Observación técnica: No se detectan desajustes críticos en la asignación horaria ni inconsistencias de turno en los expedientes activos.
+
+Coherencia en Situación Laboral con respecto a las observaciones
+• Índice de coherencia: 100,00% (491 funcionarios).
+• Diagnóstico institucional: Existe concordancia absoluta y perfecta entre la condición de servicio declarada (Activo, Adecuación Laboral, Comisión de Servicio y Trámite de Jubilación) y las observaciones oficiales registradas en el sistema, sin contradicciones administrativas ni inconsistencias documentales.
+
+Reiterando el compromiso institucional de garantizar la máxima transparencia, exactitud y confiabilidad en la gestión del talento humano del magisterio merideño, quedo a su entera disposición para continuar con el siguiente municipio.
+
+Atentamente,
+
+Lic. Luis Alfonso Pérez
+Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)

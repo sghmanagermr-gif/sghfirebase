@@ -5109,3 +5109,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Coherencia Horas y Turno: 100,00% (507 funcionarios).
   - Coherencia Situación Laboral vs Observaciones: 100,00% (507 funcionarios).
 - **Archivo Físico Generado:** `informes_nov_2026/informe_guaraque.txt`.
+
+
+### Auditoría En Vivo: Municipio Julio César Salas (Arapuey) - Opción 1 (Firestore)
+- **Extracción En Vivo:** Consultas directas a Cloud Firestore (`sgh-merida`).
+- **Métricas Oficiales Obtenidas:**
+  - Planteles: 23 instituciones activas (8 Nacionales, 15 Estadales, 0 Municipales, 0 Subvencionados).
+  - Personal: 491 trabajadores en vivo (355 Docentes, 15 Administrativos, 121 Obreros).
+  - Desglose por Dependencia: 307 Nacionales (62,53%) y 184 Estadales (37,47%).
+  - Porcentaje de Campos Llenos: 98,98% (486 de 491 expedientes con >= 90%). Margen residual: 1,02% (5 expedientes).
+  - Coherencia Horas y Turno: 100,00% (491 funcionarios).
+  - Coherencia Situación Laboral vs Observaciones: 100,00% (491 funcionarios).
+- **Archivo Físico Generado:** `informes_nov_2026/informe_julio_cesar_salas.txt`.
