@@ -5331,6 +5331,24 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Bloque formal de despedida institucional y firma del Desarrollador y Soporte Técnico (Lic. Luis Alfonso Pérez).
 - **Archivos Físicos Generados:** 24 documentos `.docx` en `informes_nov_2026/`.
 
+### Detección Zero-Cost de Funcionarios Duplicados y Multi-Cargo
+- **Fecha:** 2026-11-13 ~08:18 (Hora Local Venezuela).
+- **Consumo a Cloud Firestore:** 0 lecturas (100% Zero-Cost sobre el volcado estructurado local).
+- **Casos Emblemáticos Identificados:**
+  1. **Duplicidad Exacta en Mismo Plantel:**
+     - Funcionario: Liliana del Carmen Uzcategui Maldonado (C.I. 10.710.708).
+     - Plantel: Preescolar Don Andrés Bello (DEA: `OD12841412`), Municipio Libertador. Registrada dos veces con inconsistencia en asignación de cargo/obrero.
+  2. **Multi-Cargo / Conflicto Horario Estadal vs Nacional:**
+     - Funcionario: Carmen Teresa Salazar de Muñoz (C.I. 9.468.712).
+     - Registro Estadal: Docente V en Escuela Estadal Apolonio Araque Araque (`OD10231401`), 40 horas, turno mañana.
+     - Registro Nacional: Docente II en Don Rafael Ángel Rondón Márquez (`OD17781401`), 40 horas, doble turno.
+     - Conflicto: 80 horas semanales y colisión horaria entre el turno mañana estadal y el doble turno nacional.
+  3. **Doble Titularidad Estadal-Nacional:**
+     - Funcionario: Audry del Valle Carrero Bravo (C.I. 16.307.528).
+     - Registro Estadal: Docente IV en Escuela Estadal Rómulo Gallegos (`OD10211401`), 40 horas, turno mañana.
+     - Registro Nacional: Docente II en Liceo Luis Alfonzo Acevedo Quintero (`OD17691401`), 40 horas, turno tarde.
+
+
 
 
 

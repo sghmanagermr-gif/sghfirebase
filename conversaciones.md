@@ -9995,6 +9995,26 @@ Creo que solo 2 están en el RAC.xlsx"
 > - Diseño profesional: Membrete oficial de la Gobernación de Mérida y Gestión Humana, títulos y subtítulos con jerarquía tipográfica y paleta cromática institucional (#0F4C81, #1B365D, #C0392B), paneles sombreados para las reseñas, viñetas estructuradas con negritas para indicadores clave, y tablas ejecutivas con filas alternadas para el inventario de planteles y nuevos epónimos.
 > - Todos los archivos se encuentran listos para abrir, editar o imprimir directamente en Word en la carpeta `informes_nov_2026/`.
 
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Perfecto. Satisfecho.
+> 
+> Pregunta: Sin afectar Zero-Cost ¿Puedes detectar al menos un funcionario duplicado?"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Detección exitosa con costo cero de cuota (0 lecturas a Firestore):
+> - Se analizaron los volcados locales estructurados de personal.
+> - Se identificaron casos concretos de duplicidad:
+>   1. Liliana del Carmen Uzcategui Maldonado (C.I. 10.710.708) registrada dos veces en el mismo plantel (Preescolar Don Andrés Bello, DEA: `OD12841412`).
+>   2. Carmen Teresa Salazar de Muñoz (C.I. 9.468.712) con doble cargo activo en planteles distintos de Alberto Adriani (Docente V Estadal 40h mañana vs Docente II Nacional 40h doble turno, sumando 80h con colisión horaria).
+>   3. Audry del Valle Carrero Bravo (C.I. 16.307.528) con doble cargo activo simultáneo (Docente IV Estadal 40h mañana y Docente II Nacional 40h tarde).
+
+
 
 
 
