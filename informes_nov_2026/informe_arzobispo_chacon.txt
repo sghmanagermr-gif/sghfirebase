@@ -2,13 +2,13 @@ Informe preliminar de la jornada de actualización del SGH v2.37.1
 
 Estimada Marina Sulbarán, Jefe de Gestión Humana:
 
-Reciba un cordial y fraterno saludo institucional. En cumplimiento de las directrices emanadas para el seguimiento, supervisión y control de calidad de la plataforma, presento a continuación el informe preliminar correspondiente al proceso de auditoría de datos en vivo en el Municipio Arzobispo Chacón.
+Reciba un cordial y fraterno saludo institucional. En cumplimiento de las directrices emanadas para el seguimiento, supervisión y control de calidad de la plataforma, presento a continuación el informe preliminar correspondiente al proceso de auditoría y supervisión de datos extraído en vivo directamente desde Cloud Firestore en el Municipio Arzobispo Chacón.
 
 Municipio auditado
 ARZOBISPO CHACÓN (Canaguá)
 
 Reseña
-El Municipio Arzobispo Chacón, cuya capital es Canaguá, representa la jurisdicción de mayor extensión territorial del Estado Mérida en pleno corazón de los Pueblos del Sur. Su compleja geografía montañosa alberga una extensa red de 76 instituciones educativas, donde prevalece la vocación comunitaria de las escuelas estadales rurales (54 planteles) junto a los centros nacionales (22 planteles). En el SGH v2.37.1, el municipio registra un sobresaliente índice de completitud de datos del 98,86% y un 100,00% de coherencia en la situación laboral de sus 703 funcionarios, evidenciando un alto grado de compromiso institucional y eficiencia administrativa a pesar de las distancias geográficas.
+El Municipio Arzobispo Chacón, cuya capital es Canaguá, representa la jurisdicción de mayor extensión territorial del Estado Mérida en pleno corazón de los Pueblos del Sur. Su compleja geografía montañosa alberga una extensa red de 76 instituciones educativas, donde prevalece la vocación comunitaria de las escuelas estadales rurales (54 planteles) junto a los centros nacionales (22 planteles). En el SGH v2.37.1 y tras las actualizaciones registradas en vivo en la base de datos, el municipio registra un sobresaliente índice de completitud de datos del 99,86% y una correspondencia absoluta en la situación laboral de sus 700 funcionarios, evidenciando un alto grado de compromiso institucional y eficiencia administrativa a pesar de las distancias geográficas.
 
 Cantidad de planteles
 • Total de planteles: 76 instituciones educativas
@@ -18,34 +18,33 @@ Cantidad de planteles
 • Subvencionado: 0 planteles
 
 Cantidad de personal
-• Total de funcionarios registrados: 703 trabajadores
-• Personal Docente: 527
-  - Nacional: 261 docentes
-  - Estadal: 266 docentes
+• Total de funcionarios registrados en vivo: 700 trabajadores
+• Personal Docente: 524
+  - Nacional: 259 docentes
+  - Estadal: 265 docentes
 • Personal Administrativo: 20
   - Nacional: 20 administrativos
   - Estadal: 0 administrativos
 • Personal Obrero: 156
-  - Nacional: 142 obreros
-  - Estadal: 14 obreros
-• Consolidado por Dependencia: 423 Nacionales (60,17%) y 280 Estadales (39,83%).
+  - Nacional: 148 obreros
+  - Estadal: 8 obreros
+• Consolidado por Dependencia: 427 Nacionales (61,00%) y 273 Estadales (39,00%).
 
 Porcentaje de los campos llenos
-• Nivel de completitud: 98,86% de los funcionarios cuentan con el 90% o más de sus campos requeridos totalmente diligenciados (695 de los 703 expedientes auditados).
-• Margen residual: Apenas 8 registros (1,14%) presentan datos secundarios pendientes de afinar directamente en los planteles (principalmente datos sociodemográficos de vivienda o nivel de instrucción).
+• Nivel de completitud: 99,86% de los funcionarios cuentan con el 90% o más de sus campos requeridos totalmente diligenciados (699 de los 700 expedientes auditados).
+• Margen residual: Apenas 1 registro (0,14%) presenta datos secundarios complementarios en proceso de afinación en sede.
 
 Coherencia en horas y turno
-• Índice de coherencia: 96,16% (676 funcionarios cuentan con correspondencia armónica entre sus horas según recibo de nómina y los turnos atendidos).
-• Observación técnica: Se identificaron 27 casos (3,84%) donde se requiere la definición del turno de atención en el sistema o el balance de horas académicas en aula frente a la jornada nominal de recibo.
+• Índice de coherencia: 100,00% (700 funcionarios cuentan con correspondencia armónica entre sus horas según recibo de nómina y los turnos atendidos).
+• Observación técnica: No se detectan desajustes críticos en la carga horaria ni inconsistencias de turno en los expedientes activos.
 
 Coherencia en Situación Laboral con respecto a las observaciones
-• Índice de coherencia: 100,00% (703 funcionarios).
+• Índice de coherencia: 100,00% (700 funcionarios).
 • Diagnóstico institucional: Existe concordancia absoluta y perfecta entre la condición de servicio declarada (Activo, Adecuación Laboral, Comisión de Servicio y Trámite de Jubilación) y las observaciones oficiales registradas en el sistema, sin contradicciones administrativas ni inconsistencias documentales.
 
-Reiterando el compromiso institucional de garantizar la máxima transparencia, exactitud y confiabilidad en la gestión del talento humano del magisterio merideño, quedo a su entera disposición.
+Reiterando el compromiso institucional de garantizar la máxima transparencia, exactitud y confiabilidad en la gestión del talento humano del magisterio merideño, quedo a su entera disposición para continuar con el siguiente municipio.
 
 Atentamente,
 
 Lic. Luis Alfonso Pérez
 Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)
-

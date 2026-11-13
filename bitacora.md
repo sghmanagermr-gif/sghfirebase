@@ -5049,3 +5049,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Coherencia Horas y Turno: 100,00% (150 funcionarios).
   - Coherencia Situación Laboral vs Observaciones: 100,00% (150 funcionarios).
 - **Archivo Físico Actualizado:** `informes_nov_2026/informe_aricagua.txt`.
+
+
+### Auditoría En Vivo: Municipio Arzobispo Chacón (Canaguá) - Opción 1 (Firestore)
+- **Extracción En Vivo:** Consultas directas a Cloud Firestore (`sgh-merida`).
+- **Métricas Oficiales Obtenidas:**
+  - Planteles: 76 instituciones (22 Nacionales, 54 Estadales, 0 Municipales, 0 Subvencionados).
+  - Personal: 700 trabajadores en vivo (524 Docentes, 20 Administrativos, 156 Obreros).
+  - Desglose por Dependencia: 427 Nacionales (61,00%) y 273 Estadales (39,00%).
+  - Porcentaje de Campos Llenos: 99,86% (699 de 700 expedientes con >= 90%). Margen residual: 0,14% (1 expediente).
+  - Coherencia Horas y Turno: 100,00% (700 funcionarios).
+  - Coherencia Situación Laboral vs Observaciones: 100,00% (700 funcionarios).
+- **Archivo Físico Actualizado:** `informes_nov_2026/informe_arzobispo_chacon.txt`.
