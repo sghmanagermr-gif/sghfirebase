@@ -5152,3 +5152,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
 - **Lecturas Totales Consumidas Hoy:** 18.537 lecturas (incluyendo los dos municipios de mayor densidad: Alberto Adriani y Libertador).
 - **Cuota Gratuita Restante:** ~31.463 lecturas disponibles (62,9% del cupo diario de 50.000).
 - **Balance Proyectado:** Los 11 municipios restantes demandarán ~5.800 lecturas en total, por lo que la auditoría completa de los 23 municipios culminará consumiendo aproximadamente ~24.500 lecturas (menos del 50% de la cuota diaria).
+
+
+### Auditoría En Vivo: Municipio Miranda (Timotes) - Opción 1 (Firestore)
+- **Extracción En Vivo:** Consultas directas a Cloud Firestore (`sgh-merida`).
+- **Métricas Oficiales Obtenidas:**
+  - Planteles: 43 instituciones activas (18 Nacionales, 25 Estadales, 0 Municipales, 0 Subvencionados).
+  - Personal: 928 trabajadores en vivo (695 Docentes, 35 Administrativos, 198 Obreros).
+  - Desglose por Dependencia: 709 Nacionales (76,40%) y 219 Estadales (23,60%).
+  - Porcentaje de Campos Llenos: 99,78% (926 de 928 expedientes con >= 90%). Margen residual: 0,22% (2 expedientes).
+  - Coherencia Horas y Turno: 99,89% (927 funcionarios). Discrepancia: 1 caso (0,11%).
+  - Coherencia Situación Laboral vs Observaciones: 100,00% (928 funcionarios).
+- **Archivo Físico Generado:** `informes_nov_2026/informe_miranda.txt`.
