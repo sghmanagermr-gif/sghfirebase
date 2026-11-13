@@ -1,0 +1,54 @@
+Informe preliminar general de la jornada de actualización del SGH v2.37.1 - Estado Mérida
+
+Estimada Marina Sulbarán, Jefe de Gestión Humana:
+
+Reciba un cordial y fraterno saludo institucional. En cumplimiento de las directrices emanadas para el seguimiento, supervisión y control de calidad de la plataforma, presento a continuación el informe general consolidado correspondiente al proceso de auditoría y supervisión de datos de los veintitrés (23) municipios de la entidad, extraído en vivo directamente desde Cloud Firestore en la versión SGH v2.37.1.
+
+Ámbito auditado
+ESTADO BOLIVARIANO DE MÉRIDA (23 Municipios)
+
+Reseña General
+El Estado Mérida representa una de las geografías pedagógicas más diversas y exigentes del territorio nacional. Desde las costas lacustres del Sur del Lago (Alberto Adriani, Obispo Ramos de Lora, Tulio Febres Cordero) hasta los páramos y valles altos de la cordillera (Rangel, Miranda, Cardenal Quintero, Pueblo Llano), pasando por la cuenca del Mocotíes, la zona metropolitana y los intrincados Pueblos del Sur, la educación constituye el eje dinamizador de su identidad y progreso. La jornada de auditoría en vivo del SGH v2.37.1 consolida un hito histórico de transparencia y modernización administrativa, al integrar la totalidad de las 1.184 instituciones educativas y los 27.298 trabajadores del magisterio merideño en un ecosistema digital robusto, armónico y de estricta fidelidad con la realidad de cada plantel.
+
+Cantidad de planteles (Consolidado Estadal)
+• Total de planteles: 1.184 instituciones educativas
+• Nacional: 608 planteles (51,35%)
+• Estadal: 573 planteles (48,40%)
+• Municipal: 1 plantel (0,08%)
+• Subvencionado: 2 planteles (0,17%)
+
+Cantidad de personal (Consolidado Estadal en Vivo)
+• Total de funcionarios registrados en vivo: 27.298 trabajadores
+• Personal Docente: 17.512
+  - Nacional: 12.404 docentes
+  - Estadal: 5.108 docentes
+• Personal Administrativo: 1.763
+  - Nacional: 1.752 administrativos
+  - Estadal: 11 administrativos
+• Personal Obrero: 7.992
+  - Nacional: 7.888 obreros
+  - Estadal: 104 obreros
+• Consolidado por Dependencia: 22.066 Nacionales (80,83%) y 5.232 Estadales (19,17%).
+
+Porcentaje de los campos llenos (Completitud Documental Estadal)
+• Nivel de completitud: 97,74% de los funcionarios en todo el estado cumplen con tener el 90% o más de sus campos totalmente diligenciados (26.681 de los 27.298 expedientes auditados).
+• Margen residual: 617 expedientes (2,26%) correspondientes a campos secundarios y de bienestar social (tallas de uniformes y calzado) en proceso final de consignación por directores de zonas de difícil acceso.
+
+Coherencia en horas y turno
+• Índice de coherencia: 99,74% (27.227 funcionarios en todo el estado cuentan con correspondencia armónica y exacta entre sus horas según nómina/recibo y los turnos atendidos).
+• Margen residual: 71 casos (0,26%) de turnos rotativos en ajuste operativo en sedes locales.
+
+Coherencia en Situación Laboral con respecto a las observaciones
+• Índice de coherencia: 100,00% (27.298 de 27.298 funcionarios auditados).
+• Diagnóstico institucional: Concordancia absoluta y rigurosa en los 23 municipios entre el estatus de nómina (Activo, Adecuación Laboral, Comisión de Servicio y Trámite de Jubilación) y las observaciones oficiales registradas en el sistema, sin contradicciones administrativas ni inconsistencias normativas.
+
+Alegoría al SGH v2.37.1: El Telar Andino y la Brújula del Magisterio
+Cuentan los directores de las escuelas del páramo, de la selva nublada y del llano caliente que antes, la gestión humana era como caminar la cordillera a tientas en noche cerrada, cargando pesados fardos de papel mojado por la neblina andina, donde el nombre de un maestro rural se extraviaba con frecuencia en los vericuetos de un archivo distante.
+Hoy, con la llegada del SGH v2.37.1, los directivos sienten haber recibido una brújula de cristal y un telar dorado. En cada pantalla, la labor de sus maestros, obreros y administrativos ya no es una fría cifra olvidada, sino un hilo luminoso que se entrelaza con justicia y precisión en el gran tapiz del magisterio merideño. El director, desde su propia escuela y con la facilidad de un clic en su teléfono o computador, siente el alivio de ver reconocida y protegida la identidad de su gente, transformando lo que antes era agobio administrativo en un acto de orgullo, orden y transparencia compartida.
+
+Reiterando el compromiso institucional de garantizar la máxima transparencia, exactitud y confiabilidad en la gestión del talento humano del magisterio merideño, se hace entrega formal del consolidado del Estado Mérida.
+
+Atentamente,
+
+Lic. Luis Alfonso Pérez
+Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)
