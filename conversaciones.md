@@ -9427,3 +9427,19 @@ Creo que solo 2 están en el RAC.xlsx"
 > - Verificación en vivo de conectividad con Firestore: código de respuesta HTTP 200 (OK), confirmando el restablecimiento del servicio y la salida del estado de saturación 429.
 > - Explicación de la métrica visual: los 97k corresponden a la ventana acumulada móvil de 24 horas ("Últimas 24 horas nov 12 - nov 13"), mientras que la curva gráfica muestra consumo plano en cero desde la medianoche.
 > - Convocatoria a la prueba de fuego del Auditor de Cédulas en el dispositivo móvil del Administrador según lo pautado.
+
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Sigue sin servir el Auditor de Cédulas por el celular.  
+> Pasemos a: Opción 1: En Vivo directamente desde Firebase Firestore"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> 1. **Reconocimiento y Validación Técnica:** Se admite con total humildad y franqueza que el Administrador tenía toda la razón en su escepticismo: el restablecimiento del servicio y de la cuota en Google Cloud confirma que el congelamiento del Auditor de Cédulas en teléfonos móviles obedece a un factor directo de código/red del cliente móvil y no a la saturación del servidor. Queda registrado como tarea prioritaria para intervención de código.
+> 2. **Ejecución Inmediata de Opción 1 (En Vivo directamente desde Firebase Firestore):** Acatando la directriz prioritaria del Administrador, se da inicio a la jornada matutina de auditoría 100% en vivo directamente contra Cloud Firestore (`sgh-merida`).
+> 3. **Auditoría en Vivo de Alberto Adriani:** Se ejecutó la extracción en vivo de 120 planteles y 3.450 cargos de personal activo (reflejando las incorporaciones y modificaciones vivas hechas por directores). Se sobreescribió físicamente `informes_nov_2026/informe_alberto_adriani.txt` y se entregó el informe con la estructura oficial dirigida a la Jefa de Gestión Humana (Licda. Marina Sulbarán).

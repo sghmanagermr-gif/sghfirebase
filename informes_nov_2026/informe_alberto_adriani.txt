@@ -2,13 +2,13 @@ Informe preliminar de la jornada de actualización del SGH v2.37.1
 
 Estimada Marina Sulbarán, Jefe de Gestión Humana:
 
-Reciba un cordial y fraterno saludo institucional. En cumplimiento de las directrices emanadas para el seguimiento y control de calidad de la plataforma, presento a continuación el informe preliminar correspondiente al proceso de auditoría y supervisión de datos en el Municipio Alberto Adriani.
+Reciba un cordial y fraterno saludo institucional. En cumplimiento de las directrices emanadas para el seguimiento y control de calidad de la plataforma, presento a continuación el informe preliminar correspondiente al proceso de auditoría y supervisión de datos en vivo desde Cloud Firestore en el Municipio Alberto Adriani.
 
 Municipio auditado
 ALBERTO ADRIANI (El Vigía)
 
 Reseña
-El Municipio Alberto Adriani constituye el eje educativo y demográfico de mayor volumen de la Zona Panamericana de Mérida. Tras la jornada masiva de enriquecimiento integral y homologación simétrica, el municipio exhibe un extraordinario nivel de solidez estructural, con una completitud de expedientes superior al 98% y una consistencia horaria del 97,80%, reflejando un orden administrativo óptimo entre el personal adscrito a dependencias nacionales y estadales.
+El Municipio Alberto Adriani constituye el eje educativo y demográfico de mayor volumen de la Zona Panamericana de Mérida. Tras la jornada masiva de actualización y las modificaciones recientes introducidas directamente por los directores en la base de datos viva, el municipio exhibe un extraordinario nivel de solidez estructural, con una completitud de expedientes superior al 99% y una consistencia horaria del 98,12%, reflejando un orden administrativo óptimo entre el personal adscrito a dependencias nacionales y estadales.
 
 Cantidad de planteles
 • Total de planteles: 120 instituciones educativas
@@ -18,28 +18,28 @@ Cantidad de planteles
 • Subvencionado: 0 planteles
 
 Cantidad de personal
-• Total de funcionarios registrados: 3.449 trabajadores
-• Personal Docente: 2.147
-  - Nacional: 1.826 docentes
+• Total de funcionarios registrados: 3.450 trabajadores
+• Personal Docente: 2.149
+  - Nacional: 1.828 docentes
   - Estadal: 321 docentes
-• Personal Administrativo: 153
-  - Nacional: 153 administrativos
+• Personal Administrativo: 152
+  - Nacional: 152 administrativos
   - Estadal: 0 administrativos
 • Personal Obrero: 1.149
-  - Nacional: 1.105 obreros
-  - Estadal: 44 obreros
-• Consolidado por Dependencia: 3.084 Nacionales (89,42%) y 365 Estadales (10,58%).
+  - Nacional: 1.148 obreros
+  - Estadal: 1 obrero
+• Consolidado por Dependencia: 3.128 Nacionales (90,67%) y 322 Estadales (9,33%).
 
 Porcentaje de los campos llenos
-• Nivel de completitud: 98,32% de los funcionarios cumplen con tener el 90% o más de sus campos totalmente diligenciados (3.391 de los 3.449 expedientes).
-• Margen residual: Apenas 58 registros (1,68%) presentan datos secundarios pendientes por afinar directamente en los planteles (principalmente tallas de uniformes o detalles sociodemográficos de vivienda).
+• Nivel de completitud: 99,94% de los funcionarios cumplen con tener el 90% o más de sus campos totalmente diligenciados (3.448 de los 3.450 expedientes).
+• Margen residual: Apenas 2 registros (0,06%) presentan datos complementarios en proceso de actualización en sede.
 
 Coherencia en horas y turno
-• Índice de coherencia: 97,80% (3.373 funcionarios cuentan con sincronización exacta y armónica entre las horas de recibo de nómina y los turnos atendidos).
-• Observación técnica: Se detectaron 76 casos (2,20%) donde la carga de horas académicas en aula difiere ligeramente de la asignación formal de recibo o requiere ajuste en turnos rotativos por parte de los directores en el sistema.
+• Índice de coherencia: 98,12% (3.385 funcionarios cuentan con sincronización exacta y armónica entre las horas de recibo de nómina y los turnos atendidos).
+• Observación técnica: Se detectaron 65 casos (1,88%) donde la carga de horas académicas en aula difiere de la asignación formal de recibo o requiere ajuste en turnos rotativos por parte de los directores en el sistema.
 
 Coherencia en Situación Laboral con respecto a las observaciones
-• Índice de coherencia: 100,00% (3.449 funcionarios).
+• Índice de coherencia: 100,00% (3.450 funcionarios).
 • Diagnóstico institucional: Existe una concordancia perfecta entre el estatus laboral registrado (Activo, Adecuación Laboral, Comisión de Servicio y Trámite de Jubilación) y las observaciones oficiales asentadas en el expediente, sin contradicciones administrativas ni registros anómalos.
 
 Reiterando el compromiso institucional de garantizar la máxima transparencia, exactitud y confiabilidad en la gestión del talento humano del magisterio merideño, quedo atento para recibir las instrucciones y proceder con el siguiente municipio.

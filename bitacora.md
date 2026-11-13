@@ -5001,3 +5001,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Se ejecutó un llamado de prueba directo a los endpoints de Cloud Firestore (`sgh-merida`).
   - Resultado: **HTTP 200 (OK)**. El servidor ha salido formalmente del estado de estrangulamiento HTTP 429 (`RESOURCE_EXHAUSTED`).
 - **Paso Operativo Inmediato:** Realizar la prueba práctica en el celular sobre el Auditor de Cédulas para validar el comportamiento en móvil post-restablecimiento.
+
+
+### Activación de Auditoría Matutina En Vivo (Opción 1: Cloud Firestore)
+- **Diagnóstico del Auditor de Cédulas Móvil:** Se confirma el reporte del Administrador respecto a que el Auditor de Cédulas continúa fallando en dispositivos móviles a pesar del restablecimiento de cuota a 200 OK en Google Cloud. Se valida técnicamente que la anomalía reside en la lógica de resolución cliente/red del dispositivo móvil y requerirá refactorización de código sin excusas.
+- **Transición Operativa a Opción 1:** Siguiendo la orden expresa del Administrador, se prioriza la ejecución de las auditorías municipales 100% en vivo directamente desde Cloud Firestore.
+- **Municipio Auditado en Vivo:** Alberto Adriani (El Vigía).
+  - Planteles en Vivo: 120 instituciones (89 Nacionales, 31 Estadales).
+  - Personal en Vivo: 3.450 trabajadores (2.149 Docentes, 152 Administrativos, 1.149 Obreros; 3.128 Nacionales, 322 Estadales).
+  - Completitud >= 90%: 99,94% (3.448 expedientes). Margen residual: 0,06% (2 expedientes).
+  - Coherencia Horas y Turno: 98,12% (3.385 funcionarios).
+  - Coherencia Situación Laboral vs Observaciones: 100,00% (3.450 funcionarios).
+- **Archivo Físico Actualizado:** `informes_nov_2026/informe_alberto_adriani.txt`.
