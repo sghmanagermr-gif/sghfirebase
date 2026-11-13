@@ -5260,3 +5260,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Coherencia Horas y Turno: 100,00% (1.530 funcionarios).
   - Coherencia Situación Laboral vs Observaciones: 100,00% (1.530 funcionarios).
 - **Archivo Físico Generado:** `informes_nov_2026/informe_tovar.txt`.
+
+
+### Auditoría En Vivo: Municipio Tulio Febres Cordero (Nueva Bolivia) - Opción 1 (Firestore)
+- **Extracción En Vivo:** Consultas directas a Cloud Firestore (`sgh-merida`).
+- **Métricas Oficiales Obtenidas:**
+  - Planteles: 43 instituciones activas (28 Nacionales, 15 Estadales, 0 Municipales, 0 Subvencionados).
+  - Personal: 1.076 trabajadores en vivo (694 Docentes, 39 Administrativos, 343 Obreros).
+  - Desglose por Dependencia: 912 Nacionales (84,76%) y 164 Estadales (15,24%).
+  - Porcentaje de Campos Llenos: 99,26% (1.068 de 1.076 expedientes con >= 90%). Margen residual: 0,74% (8 expedientes).
+  - Coherencia Horas y Turno: 100,00% (1.076 funcionarios).
+  - Coherencia Situación Laboral vs Observaciones: 100,00% (1.076 funcionarios).
+- **Archivo Físico Generado:** `informes_nov_2026/informe_tulio_febres_cordero.txt`.

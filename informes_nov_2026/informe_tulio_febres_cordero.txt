@@ -1,0 +1,50 @@
+Informe preliminar de la jornada de actualización del SGH v2.37.1
+
+Estimada Marina Sulbarán, Jefe de Gestión Humana:
+
+Reciba un cordial y fraterno saludo institucional. En cumplimiento de las directrices emanadas para el seguimiento, supervisión y control de calidad de la plataforma, presento a continuación el informe preliminar correspondiente al proceso de auditoría y supervisión de datos extraído en vivo directamente desde Cloud Firestore en el Municipio Tulio Febres Cordero.
+
+Municipio auditado
+TULIO FEBRES CORDERO (Nueva Bolivia)
+
+Reseña
+El Municipio Tulio Febres Cordero, con su capital Nueva Bolivia en la estratégica encrucijada del Eje Panamericano y frontera inmediata con el Estado Zulia, constituye un dinámico centro agrocomercial, ganadero y de servicios para la cuenca sur del Lago de Maracaibo. Su infraestructura educativa está conformada por 43 instituciones escolares (28 de carácter nacional y 15 de administración estadal), integrando tanto la conurbación urbana de Nueva Bolivia y Palmarito a orillas del lago, como fértiles asentamientos rurales en parroquias como Independencia y María de la Concepción Palacios. En el SGH v2.37.1 y a través del registro en vivo de sus 1.076 trabajadores, el municipio exhibe un sólido 99,26% de completitud documental y una sincronización perfecta en horas, turnos y situación laboral del 100,00%, evidenciando la solidez organizativa, el orden administrativo y el compromiso institucional de sus docentes y directivos escolares.
+
+Cantidad de planteles
+• Total de planteles: 43 instituciones educativas
+• Nacional: 28 planteles
+• Estadal: 15 planteles
+• Municipal: 0 planteles
+• Subvencionado: 0 planteles
+
+Cantidad de personal
+• Total de funcionarios registrados en vivo: 1.076 trabajadores
+• Personal Docente: 694
+  - Nacional: 547 docentes
+  - Estadal: 147 docentes
+• Personal Administrativo: 39
+  - Nacional: 39 administrativos
+  - Estadal: 0 administrativos
+• Personal Obrero: 343
+  - Nacional: 326 obreros
+  - Estadal: 17 obreros
+• Consolidado por Dependencia: 912 Nacionales (84,76%) y 164 Estadales (15,24%).
+
+Porcentaje de los campos llenos
+• Nivel de completitud: 99,26% de los funcionarios cuentan con el 90% o más de sus campos requeridos totalmente diligenciados (1.068 de los 1.076 expedientes auditados).
+• Margen residual: Apenas 8 registros (0,74%) presentan datos secundarios complementarios en proceso de afinación en sede escolar.
+
+Coherencia en horas y turno
+• Índice de coherencia: 100,00% (1.076 funcionarios cuentan con correspondencia armónica entre sus horas según recibo de nómina y los turnos atendidos).
+• Observación técnica: No se detectan desajustes críticos en la asignación horaria ni inconsistencias de turno en los expedientes activos.
+
+Coherencia en Situación Laboral con respecto a las observaciones
+• Índice de coherencia: 100,00% (1.076 funcionarios).
+• Diagnóstico institucional: Existe concordancia absoluta y perfecta entre la condición de servicio declarada (Activo, Adecuación Laboral, Comisión de Servicio y Trámite de Jubilación) y las observaciones oficiales registradas en el sistema, sin contradicciones administrativas ni inconsistencias documentales.
+
+Reiterando el compromiso institucional de garantizar la máxima transparencia, exactitud y confiabilidad en la gestión del talento humano del magisterio merideño, quedo a su entera disposición para continuar con el siguiente municipio.
+
+Atentamente,
+
+Lic. Luis Alfonso Pérez
+Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)
