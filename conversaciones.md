@@ -9713,3 +9713,21 @@ Creo que solo 2 están en el RAC.xlsx"
 > - Se auditaron 153 cargos de personal activo en vivo (99 Docentes, 5 Administrativos, 49 Obreros; 149 Nacionales, 4 Estadales).
 > - Índices consolidados: 99,35% de completitud de campos (>= 90%), 100,00% de coherencia horaria y de turnos, y 100,00% de coherencia en situación laboral con respecto a observaciones oficiales.
 > - Se generó y respaldó el archivo físico en `informes_nov_2026/informe_padre_noguera.txt`.
+
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "PUEBLO LLANO"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Emisión del informe preliminar de auditoría municipal en vivo (Opción 1: Cloud Firestore) para el Municipio Pueblo Llano:
+> - Extracción en vivo desde las colecciones activas `planteles` y `cargos_personal` en Firestore (`sgh-merida`).
+> - Se identificaron 18 planteles educativos (13 Nacionales, 4 Estadales, 1 Municipal).
+> - Se auditaron 670 cargos de personal activo en vivo (445 Docentes, 31 Administrativos, 194 Obreros; 611 Nacionales, 59 Estadales).
+> - Índices consolidados: 100,00% de completitud de campos (>= 90%), 100,00% de coherencia horaria y de turnos, y 100,00% de coherencia en situación laboral con respecto a observaciones oficiales.
+> - Se generó y respaldó el archivo físico en `informes_nov_2026/informe_pueblo_llano.txt`.

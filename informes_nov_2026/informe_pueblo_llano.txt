@@ -1,0 +1,50 @@
+Informe preliminar de la jornada de actualización del SGH v2.37.1
+
+Estimada Marina Sulbarán, Jefe de Gestión Humana:
+
+Reciba un cordial y fraterno saludo institucional. En cumplimiento de las directrices emanadas para el seguimiento, supervisión y control de calidad de la plataforma, presento a continuación el informe preliminar correspondiente al proceso de auditoría y supervisión de datos extraído en vivo directamente desde Cloud Firestore en el Municipio Pueblo Llano.
+
+Municipio auditado
+PUEBLO LLANO
+
+Reseña
+El Municipio Pueblo Llano, encumbrado en las altas terrazas y valles fértiles del páramo merideño, es reconocido a nivel nacional como el epicentro agrícola por excelencia en la producción de hortalizas de piso alto. Su red educativa está conformada por 18 instituciones escolares (13 de administración nacional, 4 de dependencia estadal y 1 de carácter municipal), dando cobertura pedagógica integral tanto a la dinámica cabecera municipal como a sus laboriosas aldeas y caseríos como La Culata, Mutús y Las Agujas. En el SGH v2.37.1 y a través del registro en vivo de sus 670 trabajadores, el municipio alcanza un impecable 100,00% de completitud documental y una sincronización perfecta en horas, turnos y situación laboral del 100,00%, demostrando la disciplina, solidez organizativa y mística institucional de su magisterio en la cumbre productiva de Mérida.
+
+Cantidad de planteles
+• Total de planteles: 18 instituciones educativas
+• Nacional: 13 planteles
+• Estadal: 4 planteles
+• Municipal: 1 plantel
+• Subvencionado: 0 planteles
+
+Cantidad de personal
+• Total de funcionarios registrados en vivo: 670 trabajadores
+• Personal Docente: 445
+  - Nacional: 386 docentes
+  - Estadal: 59 docentes
+• Personal Administrativo: 31
+  - Nacional: 31 administrativos
+  - Estadal: 0 administrativos
+• Personal Obrero: 194
+  - Nacional: 194 obreros
+  - Estadal: 0 obreros
+• Consolidado por Dependencia: 611 Nacionales (91,19%) y 59 Estadales (8,81%).
+
+Porcentaje de los campos llenos
+• Nivel de completitud: 100,00% de los funcionarios cuentan con el 90% o más de sus campos requeridos totalmente diligenciados (670 de los 670 expedientes auditados).
+• Margen residual: 0 funcionarios (0,00%), reflejando la conclusión satisfactoria y completa de los registros en los planteles de la jurisdicción.
+
+Coherencia en horas y turno
+• Índice de coherencia: 100,00% (670 funcionarios cuentan con correspondencia armónica entre sus horas según recibo de nómina y los turnos atendidos).
+• Observación técnica: No se detectan desajustes críticos en la asignación horaria ni inconsistencias de turno en los expedientes activos.
+
+Coherencia en Situación Laboral con respecto a las observaciones
+• Índice de coherencia: 100,00% (670 funcionarios).
+• Diagnóstico institucional: Existe concordancia absoluta y perfecta entre la condición de servicio declarada (Activo, Adecuación Laboral, Comisión de Servicio y Trámite de Jubilación) y las observaciones oficiales registradas en el sistema, sin contradicciones administrativas ni inconsistencias documentales.
+
+Reiterando el compromiso institucional de garantizar la máxima transparencia, exactitud y confiabilidad en la gestión del talento humano del magisterio merideño, quedo a su entera disposición para continuar con el siguiente municipio.
+
+Atentamente,
+
+Lic. Luis Alfonso Pérez
+Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)

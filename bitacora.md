@@ -5188,3 +5188,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Coherencia Horas y Turno: 100,00% (153 funcionarios).
   - Coherencia Situación Laboral vs Observaciones: 100,00% (153 funcionarios).
 - **Archivo Físico Generado:** `informes_nov_2026/informe_padre_noguera.txt`.
+
+
+### Auditoría En Vivo: Municipio Pueblo Llano - Opción 1 (Firestore)
+- **Extracción En Vivo:** Consultas directas a Cloud Firestore (`sgh-merida`).
+- **Métricas Oficiales Obtenidas:**
+  - Planteles: 18 instituciones activas (13 Nacionales, 4 Estadales, 1 Municipal, 0 Subvencionados).
+  - Personal: 670 trabajadores en vivo (445 Docentes, 31 Administrativos, 194 Obreros).
+  - Desglose por Dependencia: 611 Nacionales (91,19%) y 59 Estadales (8,81%).
+  - Porcentaje de Campos Llenos: 100,00% (670 de 670 expedientes con >= 90%). Margen residual: 0,00%.
+  - Coherencia Horas y Turno: 100,00% (670 funcionarios).
+  - Coherencia Situación Laboral vs Observaciones: 100,00% (670 funcionarios).
+- **Archivo Físico Generado:** `informes_nov_2026/informe_pueblo_llano.txt`.
