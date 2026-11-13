@@ -5236,3 +5236,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Coherencia Horas y Turno: 100,00% (427 funcionarios).
   - Coherencia Situación Laboral vs Observaciones: 100,00% (427 funcionarios).
 - **Archivo Físico Generado:** `informes_nov_2026/informe_santos_marquina.txt`.
+
+
+### Auditoría En Vivo: Municipio Sucre (Lagunillas) - Opción 1 (Firestore)
+- **Extracción En Vivo:** Consultas directas a Cloud Firestore (`sgh-merida`).
+- **Métricas Oficiales Obtenidas:**
+  - Planteles: 109 instituciones activas (45 Nacionales, 64 Estadales, 0 Municipales, 0 Subvencionados).
+  - Personal: 1.771 trabajadores en vivo (1.229 Docentes, 69 Administrativos, 472 Obreros).
+  - Desglose por Dependencia: 1.249 Nacionales (70,53%) y 522 Estadales (29,47%).
+  - Porcentaje de Campos Llenos: 99,66% (1.765 de 1.771 expedientes con >= 90%). Margen residual: 0,34% (6 expedientes).
+  - Coherencia Horas y Turno: 100,00% (1.771 funcionarios).
+  - Coherencia Situación Laboral vs Observaciones: 100,00% (1.771 funcionarios).
+- **Archivo Físico Generado:** `informes_nov_2026/informe_sucre.txt`.
