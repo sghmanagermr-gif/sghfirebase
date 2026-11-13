@@ -5164,3 +5164,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Coherencia Horas y Turno: 99,89% (927 funcionarios). Discrepancia: 1 caso (0,11%).
   - Coherencia Situación Laboral vs Observaciones: 100,00% (928 funcionarios).
 - **Archivo Físico Generado:** `informes_nov_2026/informe_miranda.txt`.
+
+
+### Auditoría En Vivo: Municipio Obispo Ramos de Lora (Santa Elena de Arenales) - Opción 1 (Firestore)
+- **Extracción En Vivo:** Consultas directas a Cloud Firestore (`sgh-merida`).
+- **Métricas Oficiales Obtenidas:**
+  - Planteles: 52 instituciones activas (24 Nacionales, 28 Estadales, 0 Municipales, 0 Subvencionados).
+  - Personal: 967 trabajadores en vivo (622 Docentes, 26 Administrativos, 319 Obreros).
+  - Desglose por Dependencia: 770 Nacionales (79,63%) y 197 Estadales (20,37%).
+  - Porcentaje de Campos Llenos: 99,28% (960 de 967 expedientes con >= 90%). Margen residual: 0,72% (7 expedientes).
+  - Coherencia Horas y Turno: 100,00% (967 funcionarios).
+  - Coherencia Situación Laboral vs Observaciones: 100,00% (967 funcionarios).
+- **Archivo Físico Generado:** `informes_nov_2026/informe_obispo_ramos_de_lora.txt`.
