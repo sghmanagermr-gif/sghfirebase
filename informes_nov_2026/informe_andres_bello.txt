@@ -2,13 +2,13 @@ Informe preliminar de la jornada de actualización del SGH v2.37.1
 
 Estimada Marina Sulbarán, Jefe de Gestión Humana:
 
-Reciba un cordial y fraterno saludo institucional. En cumplimiento de las directrices emanadas para el seguimiento, supervisión y control de calidad de la plataforma, presento a continuación el informe preliminar correspondiente al proceso de auditoría y supervisión de datos en el Municipio Andrés Bello.
+Reciba un cordial y fraterno saludo institucional. En cumplimiento de las directrices emanadas para el seguimiento, supervisión y control de calidad de la plataforma, presento a continuación el informe preliminar correspondiente al proceso de auditoría y supervisión de datos extraído en vivo directamente desde Cloud Firestore en el Municipio Andrés Bello.
 
 Municipio auditado
 ANDRÉS BELLO (La Azulita)
 
 Reseña
-El Municipio Andrés Bello, conocido como "El Balcón de los Andes", presenta una configuración educativa con un marcado arraigo rural y una notable preponderancia de instituciones bajo administración estadal (22 de sus 32 planteles). Tras la jornada de homologación y actualización en el SGH v2.37.1, la jurisdicción alcanza un nivel de completitud documental sobresaliente del 96,37% y una concordancia absoluta del 100% en la situación laboral de su personal, consolidando la estabilidad y organización administrativa de su magisterio.
+El Municipio Andrés Bello, conocido como "El Balcón de los Andes", presenta una configuración educativa con un marcado arraigo rural y una notable preponderancia de instituciones bajo administración estadal (22 de sus 32 planteles). Tras la jornada de homologación y las actualizaciones en vivo registradas por los directores en el SGH v2.37.1, la jurisdicción alcanza un nivel de completitud documental óptimo del 100% y una concordancia absoluta en la situación laboral de su personal, consolidando la estabilidad y organización administrativa de su magisterio.
 
 Cantidad de planteles
 • Total de planteles: 32 instituciones educativas
@@ -18,34 +18,33 @@ Cantidad de planteles
 • Subvencionado: 0 planteles
 
 Cantidad de personal
-• Total de funcionarios registrados: 551 trabajadores
-• Personal Docente: 383
-  - Nacional: 229 docentes
-  - Estadal: 154 docentes
-• Personal Administrativo: 30
-  - Nacional: 30 administrativos
+• Total de funcionarios registrados en vivo: 546 trabajadores
+• Personal Docente: 380
+  - Nacional: 228 docentes
+  - Estadal: 152 docentes
+• Personal Administrativo: 29
+  - Nacional: 29 administrativos
   - Estadal: 0 administrativos
-• Personal Obrero: 138
-  - Nacional: 123 obreros
-  - Estadal: 15 obreros
-• Consolidado por Dependencia: 382 Nacionales (69,33%) y 169 Estadales (30,67%).
+• Personal Obrero: 137
+  - Nacional: 135 obreros
+  - Estadal: 2 obreros
+• Consolidado por Dependencia: 392 Nacionales (71,79%) y 154 Estadales (28,21%).
 
 Porcentaje de los campos llenos
-• Nivel de completitud: 96,37% de los funcionarios cumplen con tener el 90% o más de sus campos totalmente diligenciados (531 de los 551 expedientes auditados).
-• Margen residual: 20 funcionarios (3,63%) presentan campos sociodemográficos o secundarios pendientes de completar por parte de las direcciones de los planteles (principalmente datos de vivienda, lugar de nacimiento o nivel de instrucción).
+• Nivel de completitud: 100,00% de los funcionarios cumplen con tener el 90% o más de sus campos totalmente diligenciados (546 de los 546 expedientes auditados).
+• Margen residual: 0 funcionarios (0,00%), reflejando la culminación satisfactoria del llenado de datos por parte de los planteles de la zona.
 
 Coherencia en horas y turno
-• Índice de coherencia: 96,37% (531 funcionarios cuentan con sincronización armónica entre las horas según recibo de pago y los turnos atendidos).
-• Observación técnica: Se identificaron 20 casos (3,63%) donde se requiere la definición del turno de atención en el sistema o el ajuste de horas de aula frente a la carga nominal de recibo.
+• Índice de coherencia: 100,00% (546 funcionarios cuentan con sincronización armónica entre las horas según recibo de pago y los turnos atendidos).
+• Observación técnica: No se detectan desajustes en la carga de horas académicas frente a la asignación de recibo ni inconsistencias de turno en los expedientes activos.
 
 Coherencia en Situación Laboral con respecto a las observaciones
-• Índice de coherencia: 100,00% (551 funcionarios).
+• Índice de coherencia: 100,00% (546 funcionarios).
 • Diagnóstico institucional: Existe concordancia plena entre el estatus laboral reportado (Activo, Adecuación Laboral, Comisión de Servicio y Trámite de Jubilación) y las observaciones oficiales registradas en el sistema, sin contradicciones administrativas ni inconsistencias documentales.
 
-Reiterando el compromiso institucional de garantizar la máxima transparencia, exactitud y confiabilidad en la gestión del talento humano del magisterio merideño, quedo a su entera disposición.
+Reiterando el compromiso institucional de garantizar la máxima transparencia, exactitud y confiabilidad en la gestión del talento humano del magisterio merideño, quedo a su entera disposición para continuar con el siguiente municipio.
 
 Atentamente,
 
 Lic. Luis Alfonso Pérez
 Desarrollador y Soporte Técnico del Sistema de Gestión Humana (SGH)
-

@@ -5013,3 +5013,15 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   - Coherencia Horas y Turno: 98,12% (3.385 funcionarios).
   - Coherencia Situación Laboral vs Observaciones: 100,00% (3.450 funcionarios).
 - **Archivo Físico Actualizado:** `informes_nov_2026/informe_alberto_adriani.txt`.
+
+
+### Auditoría En Vivo: Municipio Andrés Bello (La Azulita) - Opción 1 (Firestore)
+- **Extracción En Vivo:** Consultas directas a Cloud Firestore (`sgh-merida`).
+- **Métricas Oficiales Obtenidas:**
+  - Planteles: 32 instituciones (10 Nacionales, 22 Estadales, 0 Municipales, 0 Subvencionados).
+  - Personal: 546 trabajadores en vivo (380 Docentes, 29 Administrativos, 137 Obreros).
+  - Desglose por Dependencia: 392 Nacionales (71,79%) y 154 Estadales (28,21%).
+  - Porcentaje de Campos Llenos: 100,00% (546 de 546 expedientes con >= 90%). Margen residual: 0,00%.
+  - Coherencia Horas y Turno: 100,00% (546 funcionarios).
+  - Coherencia Situación Laboral vs Observaciones: 100,00% (546 funcionarios).
+- **Archivo Físico Actualizado:** `informes_nov_2026/informe_andres_bello.txt`.
