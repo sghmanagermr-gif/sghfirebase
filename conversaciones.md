@@ -10122,6 +10122,23 @@ Creo que solo 2 están en el RAC.xlsx"
 > 6. `PERSONAL_COMPLETO`: Matrícula bloqueada; nómina visible de inmediato (incluyendo excepciones como DEMO140000); editar, eliminar y ➕ Nuevo Personal plenamente activos y autorizados.
 > - Se integró `#btn-nuevo-personal` en la barra de herramientas y botón Cancelar en el formulario, se implementó `abrirFormularioNuevoPersonal()`, se actualizaron las reglas de `styleTag` e inhabilitación DOM, se compiló el bundle de producción con Vite y se sincronizó con Git.
 
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "como puedes ver en la imagen a la izquierda, esta desplegado en modo Apertura Total; y a la derecha se puede ver que la matricula esta abierta. pero no hay El botón reactivo ➕ Nuevo Personal. En verdad no perdamos el tiempo hay mucho trabajo que hacer"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Diagnóstico y solución inmediata:
+> - Causa raíz identificada: En el paso previo se generó la compilación local (`dist/`) y se realizó el commit en Git, pero no se había ejecutado el comando de publicación a producción en Firebase Hosting (`firebase deploy --only hosting`), por lo que el navegador continuaba cargando los bundles antiguos de `sgh-merida.web.app` en la versión v2.37.1.
+> - Se elevó SemVer a `v2.37.2` para garantizar visibilidad del refresco en caché.
+> - Se recompiló la aplicación en Vite y se ejecutó exitosamente el despliegue directo a Firebase Hosting (`https://sgh-merida.web.app`).
+> - Se ubicó el botón "➕ Nuevo Personal" como la primera acción destacada en la barra de nómina.
+> - Se instruyó al usuario a realizar una recarga dura (Ctrl + F5 o vaciar caché) para visualizar la versión v2.37.2 con el botón activo.
+
 
 
 

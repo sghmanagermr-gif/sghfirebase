@@ -5406,6 +5406,8 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   * `webapp/index.html`: Inyección del botón `#btn-nuevo-personal` en la barra de herramientas `.personal-toolbar` de `#seccion-personal-existente` y botón "Cancelar" en `#form-personal-inline`.
   * `webapp/src/personalWizard.js`: Implementación y exportación de `abrirFormularioNuevoPersonal()`, ajuste de `limpiarFormularioPersonal(scrollBackToTable)`, adición de validaciones por `modo_operacion` en `guardarEmpleado()`, `cargarEmpleadoEnFormulario()`, `mostrarModalEliminarPersonal()` y `abrirModalTraslado()`.
   * `webapp/src/main.js`: Actualización exhaustiva de las reglas CSS de `#style-coaccion`, inhabilitación DOM coordinada para campos de matrícula y selectores de planes de estudio, y normalización de la lógica de bifurcación de vistas para que `PERSONAL_COMPLETO`, `SOLO_AGREGAR_PERSONAL` y `TOTAL` carguen la nómina de inmediato.
+  * `webapp/package.json`: Elevación de SemVer a `v2.37.2` y actualización de badges en `index.html`.
+  * **Despliegue a Producción:** Compilación exitosa con Vite y publicación a Firebase Hosting (`https://sgh-merida.web.app`) mediante Firebase Tools. Reubicación prioritaria del botón "➕ Nuevo Personal" como primera acción en la barra de nómina.
 
 
 
