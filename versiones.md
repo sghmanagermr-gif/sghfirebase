@@ -4,6 +4,18 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.38.5 (15 de Noviembre de 2026)
+
+- **Rediseño Visual del Panel Administrativo — Migración Completa del Menú Lateral a la Pizarra y Gestor de BD en Tarjetas (`index.html`, `admin.js`):**
+  - **Eliminación Integral de la Barra Lateral Izquierda (`#admin-sidebar`):** Traslado completo de las opciones de navegación desde el menú lateral hacia tarjetas interactivas en la Pizarra (`#admin-tab-estadisticas`) y el encabezado global, retirando definitivamente el botón hamburguesa (`#btn-hamburger`), el contenedor `<aside id="admin-sidebar">`, su navegación interna (`#btn-sidebar-logout`) y el fondo superpuesto (`#admin-sidebar-overlay`).
+  - **Navegación desde Encabezado y Dos Bloques en la Pizarra (`.stats-grid`):**
+    - El logo y título **SGH Panel** (`#btn-header-pizarra`) en el encabezado asumen la navegación directa de regreso a la Pizarra principal con desplazamiento suave al inicio.
+    - Separación de la Pizarra en dos bloques visuales independientes: bloque superior de métricas (**Usuarios del Sistema** `#card-pizarra-usuarios`, **Planteles del Estado / Municipio** `#card-pizarra-planteles`, **Personal Registrado**, **Total Matrícula**) y bloque inferior con las tarjetas de módulos (**Auditoría de Cédulas** `#card-pizarra-auditor-cedula`, **Despliegue** `#card-pizarra-despliegue`, **Base de datos** `#card-pizarra-bd` y **Mantenimiento de base de datos** `#card-pizarra-aspiradora`), conservando los controles estrictos de visibilidad y permisos por rol en `configurarInterfazPorRol()`.
+  - **Nueva Pantalla Gestor de BD en Tarjetas (`#admin-tab-bd`):** Conversión del antiguo acordeón de Base de datos en una pantalla dedicada distribuida en 12 tarjetas (`.bd-card-item`) para descargas (Planteles y Nómina Municipal), Planes de Estudio y los 9 catálogos maestros, incorporando botones `.btn-volver-gestor-bd` en `#admin-tab-listas` y `#admin-tab-planes` para regresar al Gestor de BD.
+  - **Apilamiento Vertical de Estadísticas Extendidas (`#extended-stats-container`):** Ajuste de ambos bloques de métricas extendidas (**Discriminación de Personal**, **Estatus de Matrícula**, **Situación Laboral** y **Personal por Jubilarse**) a una columna (`grid-template-columns: 1fr`) para mostrar cada panel uno debajo del otro en lugar de lado a lado.
+
+---
+
 ### v2.38.4 (15 de Noviembre de 2026)
 
 - **Selector Condicional de Estructura Municipal Exclusivo para Directores de Plantel (`index.html`, `main.js`, `personalWizard.js`, `admin.js`):**

@@ -521,15 +521,17 @@ export function initAdminDashboard(dbInstance, user) {
     };
 
     // 1. Botones de nivel superior: Estadísticas, Validación, Auditor de Cédula y Despliegue
-    const btnEstadisticas = document.getElementById('btn-sidebar-estadisticas') || document.querySelector('.sidebar-btn[data-target="admin-tab-estadisticas"]');
-    const btnValidacion = document.getElementById('btn-sidebar-validacion') || document.querySelector('.sidebar-btn[data-target="admin-tab-validacion"]');
-    const btnAuditorCedula = document.getElementById('btn-sidebar-auditor-cedula');
-    const btnDespliegue = document.getElementById('btn-sidebar-despliegue');
-    const btnAspiradora = document.getElementById('btn-sidebar-aspiradora');
+    const btnHeaderPizarra = document.getElementById('btn-header-pizarra');
+    const cardUsuarios = document.getElementById('card-pizarra-usuarios');
+    const cardPlanteles = document.getElementById('card-pizarra-planteles');
+    const cardAuditorCedula = document.getElementById('card-pizarra-auditor-cedula');
+    const cardDespliegue = document.getElementById('card-pizarra-despliegue');
+    const cardAspiradora = document.getElementById('card-pizarra-aspiradora');
 
-    if (btnEstadisticas) btnEstadisticas.style.display = tienePermiso('estadisticas') ? 'block' : 'none';
-    if (btnValidacion) btnValidacion.style.display = tienePermiso('validacion') ? 'block' : 'none';
-    if (btnAuditorCedula) btnAuditorCedula.style.display = (isSuperAdmin || isZonAdmin || userData?.rol === 'munadmin' || tienePermiso('planteles', true)) ? 'flex' : 'none';
+    if (btnHeaderPizarra) btnHeaderPizarra.style.cursor = tienePermiso('estadisticas') ? 'pointer' : 'default';
+    if (cardUsuarios) cardUsuarios.style.cursor = tienePermiso('validacion') ? 'pointer' : 'default';
+    if (cardPlanteles) cardPlanteles.style.cursor = tienePermiso('planteles') ? 'pointer' : 'default';
+    if (cardAuditorCedula) cardAuditorCedula.style.display = (isSuperAdmin || isZonAdmin || userData?.rol === 'munadmin' || tienePermiso('planteles', true)) ? 'flex' : 'none';
     const btnModoEscanerAlertas = document.getElementById('btn-modo-auditor-escaner');
     if (btnModoEscanerAlertas) {
       const puedeVerEscaner = isSuperAdmin || isZonAdmin;
@@ -543,16 +545,16 @@ export function initAdminDashboard(dbInstance, user) {
         if (btnInd) btnInd.click();
       }
     }
-    if (btnDespliegue) btnDespliegue.style.display = tienePermiso('despliegue', false) ? 'block' : 'none';
-    if (btnAspiradora) btnAspiradora.style.display = tienePermiso('despliegue', false) ? 'flex' : 'none';
+    if (cardDespliegue) cardDespliegue.style.display = tienePermiso('despliegue', false) ? 'flex' : 'none';
+    if (cardAspiradora) cardAspiradora.style.display = tienePermiso('despliegue', false) ? 'flex' : 'none';
 
-    // 2. Acordeón Gestor de BD y sus opciones
-    const btnAcordeonBd = document.getElementById('btn-sidebar-bd');
-    const accordionBd = document.querySelector('.accordion-content');
+    // 2. Gestor de BD / Base de datos (Pantalla de Tarjetas) y sus opciones
+    const cardPizarraBd = document.getElementById('card-pizarra-bd');
+    const tabBdGrid = document.getElementById('admin-tab-bd');
     let algunSubItemVisible = false;
 
-    if (accordionBd) {
-      accordionBd.querySelectorAll('.sidebar-btn').forEach(btn => {
+    if (tabBdGrid) {
+      tabBdGrid.querySelectorAll('.bd-card-item').forEach(btn => {
         const target = btn.getAttribute('data-target');
         let visible = false;
 
@@ -583,13 +585,13 @@ export function initAdminDashboard(dbInstance, user) {
           }
         }
 
-        btn.style.display = visible ? 'block' : 'none';
+        btn.style.display = visible ? 'flex' : 'none';
         if (visible) algunSubItemVisible = true;
       });
     }
 
-    if (btnAcordeonBd) {
-      btnAcordeonBd.style.display = algunSubItemVisible ? 'flex' : 'none';
+    if (cardPizarraBd) {
+      cardPizarraBd.style.display = algunSubItemVisible ? 'flex' : 'none';
     }
 
     // 2.1. Control de visibilidad del botón 'Nuevo Plantel' (exclusivo para superadmin y zonadmin)
@@ -682,53 +684,28 @@ export function initAdminDashboard(dbInstance, user) {
     });
     document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
 
-    if (tienePermiso('estadisticas') && btnEstadisticas && btnEstadisticas.style.display !== 'none') {
-      btnEstadisticas.classList.add('active');
+    if (tienePermiso('estadisticas')) {
       const tabEst = document.getElementById('admin-tab-estadisticas');
       if (tabEst) tabEst.classList.add('active');
-    } else if (tienePermiso('validacion') && btnValidacion && btnValidacion.style.display !== 'none') {
-      btnValidacion.classList.add('active');
+    } else if (tienePermiso('validacion')) {
       const tabVal = document.getElementById('admin-tab-validacion');
       if (tabVal) tabVal.classList.add('active');
     } else if (tienePermiso('planteles')) {
-      const btnPlanteles = document.getElementById('btn-sidebar-planteles');
-      if (btnPlanteles && btnPlanteles.style.display !== 'none') {
-        btnPlanteles.classList.add('active');
-        const tabPlanteles = document.getElementById('admin-tab-planteles');
-        if (tabPlanteles) tabPlanteles.classList.add('active');
-        loadPlanteles();
-      }
-    } else if (tienePermiso('planes')) {
-      const btnPlanes = document.querySelector('.sidebar-btn[data-target="admin-tab-planes"]');
-      if (btnPlanes && btnPlanes.style.display !== 'none') {
-        btnPlanes.classList.add('active');
-        const tabPlanes = document.getElementById('admin-tab-planes');
-        if (tabPlanes) tabPlanes.classList.add('active');
-      }
+      const tabPlanteles = document.getElementById('admin-tab-planteles');
+      if (tabPlanteles) tabPlanteles.classList.add('active');
+      loadPlanteles();
+    } else if (algunSubItemVisible) {
+      const tabBd = document.getElementById('admin-tab-bd');
+      if (tabBd) tabBd.classList.add('active');
     } else {
-      // Buscar el primer botón visible del sidebar que no sea descarga directa
+      // Buscar el primer botón visible del sidebar
       const primerBotonVisible = Array.from(document.querySelectorAll('#admin-sidebar .sidebar-btn:not(.accordion-btn)'))
-        .find(b => b.style.display !== 'none' && b.id !== 'btn-sidebar-descargar-nomina-mun' && b.id !== 'btn-sidebar-descargar-planteles');
+        .find(b => b.style.display !== 'none' && b.id !== 'btn-sidebar-logout');
       if (primerBotonVisible) {
         primerBotonVisible.classList.add('active');
         const tgt = primerBotonVisible.getAttribute('data-target');
         const tabEl = tgt ? document.getElementById(tgt) : null;
         if (tabEl) tabEl.classList.add('active');
-        if (tgt === 'admin-tab-listas') {
-          const l = primerBotonVisible.getAttribute('data-lista');
-          const t = primerBotonVisible.getAttribute('data-tipo');
-          if (typeof window.loadListasMaestras === 'function') window.loadListasMaestras(l, t);
-        }
-        if (primerBotonVisible.closest('.accordion-content')) {
-          const accContent = primerBotonVisible.closest('.accordion-content');
-          accContent.style.display = 'flex';
-          const accBtn = document.getElementById('btn-sidebar-bd');
-          if (accBtn) {
-            accBtn.classList.add('open');
-            const arrow = accBtn.querySelector('.arrow');
-            if (arrow) arrow.style.transform = 'rotate(-180deg)';
-          }
-        }
       }
     }
   }
@@ -787,7 +764,8 @@ export function initAdminDashboard(dbInstance, user) {
          if (targetId !== 'admin-tab-estadisticas' && 
              targetId !== 'admin-tab-validacion' && 
              targetId !== 'admin-tab-planteles' &&
-             targetId !== 'admin-tab-auditor-cedula') {
+             targetId !== 'admin-tab-auditor-cedula' &&
+             targetId !== 'admin-tab-bd') {
             return;
          }
       }
@@ -858,6 +836,250 @@ export function initAdminDashboard(dbInstance, user) {
       }
       
       if(typeof window.closeSidebar === 'function') window.closeSidebar();
+    });
+  });
+
+  // Tarjeta "Usuarios del Sistema" en la Pizarra -> Navegación directa a Validación de Usuarios
+  const cardPizarraUsuarios = document.getElementById('card-pizarra-usuarios');
+  if (cardPizarraUsuarios && !cardPizarraUsuarios._hasNavListener) {
+    cardPizarraUsuarios._hasNavListener = true;
+    cardPizarraUsuarios.addEventListener('click', () => {
+      const activeUser = window.sgh_user_data || userData;
+      if (activeUser?.rol === 'zonadmin' && activeUser?.permisos && !activeUser.permisos.validacion) {
+        showToast("No tiene permisos para acceder a Validación de Usuarios.", "warning");
+        return;
+      }
+      document.querySelectorAll('.sidebar-btn').forEach(b => {
+        if (!b.classList.contains('accordion-btn')) b.classList.remove('active');
+      });
+      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+      const tabVal = document.getElementById('admin-tab-validacion');
+      if (tabVal) tabVal.classList.add('active');
+      const adminMain = document.getElementById('admin-main');
+      if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // Tarjeta "Planteles" en la Pizarra -> Navegación directa a Planteles
+  const cardPizarraPlanteles = document.getElementById('card-pizarra-planteles');
+  if (cardPizarraPlanteles && !cardPizarraPlanteles._hasNavListener) {
+    cardPizarraPlanteles._hasNavListener = true;
+    cardPizarraPlanteles.addEventListener('click', () => {
+      const activeUser = window.sgh_user_data || userData;
+      if (activeUser?.rol === 'zonadmin' && activeUser?.permisos && !activeUser.permisos.planteles) {
+        showToast("No tiene permisos para acceder a Planteles.", "warning");
+        return;
+      }
+      document.querySelectorAll('.sidebar-btn').forEach(b => {
+        if (!b.classList.contains('accordion-btn')) b.classList.remove('active');
+      });
+      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+      const tabPlanteles = document.getElementById('admin-tab-planteles');
+      if (tabPlanteles) tabPlanteles.classList.add('active');
+      loadPlanteles();
+      const adminMain = document.getElementById('admin-main');
+      if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // Tarjeta "Auditoría de Cédulas" en la Pizarra -> Navegación directa a Auditoría de Cédulas
+  const cardPizarraAuditorCedula = document.getElementById('card-pizarra-auditor-cedula');
+  if (cardPizarraAuditorCedula && !cardPizarraAuditorCedula._hasNavListener) {
+    cardPizarraAuditorCedula._hasNavListener = true;
+    cardPizarraAuditorCedula.addEventListener('click', () => {
+      document.querySelectorAll('.sidebar-btn').forEach(b => {
+        if (!b.classList.contains('accordion-btn')) b.classList.remove('active');
+      });
+      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+      const tabAuditor = document.getElementById('admin-tab-auditor-cedula');
+      if (tabAuditor) tabAuditor.classList.add('active');
+      const adminMain = document.getElementById('admin-main');
+      if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        document.getElementById('inp-auditor-cedula')?.focus();
+      }, 100);
+    });
+  }
+
+  // Logo y título "SGH Panel" en encabezado -> Navegación directa a la Pizarra
+  const btnHeaderPizarra = document.getElementById('btn-header-pizarra');
+  if (btnHeaderPizarra && !btnHeaderPizarra._hasNavListener) {
+    btnHeaderPizarra._hasNavListener = true;
+    btnHeaderPizarra.addEventListener('click', () => {
+      const activeUser = window.sgh_user_data || userData;
+      if (activeUser?.rol === 'zonadmin' && activeUser?.permisos && !activeUser.permisos.estadisticas) {
+        showToast("No tiene permisos para acceder a Métricas.", "warning");
+        return;
+      }
+      document.querySelectorAll('.sidebar-btn').forEach(b => {
+        if (!b.classList.contains('accordion-btn')) b.classList.remove('active');
+      });
+      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+      const tabEst = document.getElementById('admin-tab-estadisticas');
+      if (tabEst) tabEst.classList.add('active');
+      if (typeof window.closeSidebar === 'function') window.closeSidebar();
+      const adminMain = document.getElementById('admin-main');
+      if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // Tarjeta "Despliegue" en la Pizarra -> Navegación directa a Modos de Despliegue
+  const cardPizarraDespliegue = document.getElementById('card-pizarra-despliegue');
+  if (cardPizarraDespliegue && !cardPizarraDespliegue._hasNavListener) {
+    cardPizarraDespliegue._hasNavListener = true;
+    cardPizarraDespliegue.addEventListener('click', () => {
+      const activeUser = window.sgh_user_data || userData;
+      const esSuper = activeUser?.rol === 'superadmin' || activeUser?.rol === 'admin';
+      const puedeDespliegue = esSuper || (activeUser?.rol === 'zonadmin' && activeUser?.permisos?.despliegue === true);
+      if (!puedeDespliegue) {
+        showToast("No tiene permisos para acceder a Despliegue.", "warning");
+        return;
+      }
+      document.querySelectorAll('.sidebar-btn').forEach(b => {
+        if (!b.classList.contains('accordion-btn')) b.classList.remove('active');
+      });
+      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+      const tabDesp = document.getElementById('admin-tab-despliegue');
+      if (tabDesp) tabDesp.classList.add('active');
+      loadConfig();
+      const adminMain = document.getElementById('admin-main');
+      if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // Tarjeta "Base de datos" en la Pizarra -> Navegación directa a pantalla Base de datos / Gestor de BD
+  const cardPizarraBd = document.getElementById('card-pizarra-bd');
+  if (cardPizarraBd && !cardPizarraBd._hasNavListener) {
+    cardPizarraBd._hasNavListener = true;
+    cardPizarraBd.addEventListener('click', () => {
+      document.querySelectorAll('.sidebar-btn').forEach(b => {
+        if (!b.classList.contains('accordion-btn')) b.classList.remove('active');
+      });
+      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+      const tabBd = document.getElementById('admin-tab-bd');
+      if (tabBd) tabBd.classList.add('active');
+      const adminMain = document.getElementById('admin-main');
+      if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // Tarjeta "Mantenimiento de base de datos" en la Pizarra -> Navegación directa a Mantenimiento BD
+  const cardPizarraAspiradora = document.getElementById('card-pizarra-aspiradora');
+  if (cardPizarraAspiradora && !cardPizarraAspiradora._hasNavListener) {
+    cardPizarraAspiradora._hasNavListener = true;
+    cardPizarraAspiradora.addEventListener('click', () => {
+      const activeUser = window.sgh_user_data || userData;
+      const esSuper = activeUser?.rol === 'superadmin' || activeUser?.rol === 'admin';
+      const puedeDespliegue = esSuper || (activeUser?.rol === 'zonadmin' && activeUser?.permisos?.despliegue === true);
+      if (!puedeDespliegue) return;
+      document.querySelectorAll('.sidebar-btn').forEach(b => {
+        if (!b.classList.contains('accordion-btn')) b.classList.remove('active');
+      });
+      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+      const tabAspiradora = document.getElementById('admin-tab-aspiradora');
+      if (tabAspiradora) tabAspiradora.classList.add('active');
+      const adminMain = document.getElementById('admin-main');
+      if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // Tarjetas dentro de "Gestor de BD" (#admin-tab-bd)
+  document.querySelectorAll('#admin-tab-bd .bd-card-item').forEach(card => {
+    if (card._hasBdListener) return;
+    card._hasBdListener = true;
+    card.addEventListener('click', () => {
+      const activeUser = window.sgh_user_data || userData;
+      const isMun = activeUser?.rol === 'munadmin';
+      const isZon = activeUser?.rol === 'zonadmin';
+      const p = isZon ? activeUser?.permisos : null;
+
+      if (card.id === 'btn-sidebar-descargar-planteles') {
+        if (isZon && p && !p.planteles) {
+          showToast("No tiene permisos para acceder a Planteles.", "warning");
+          return;
+        }
+        abrirModalSeleccionarPlanteles();
+        return;
+      }
+
+      if (card.id === 'btn-sidebar-descargar-nomina-mun') {
+        if (isZon && p && !p.nomina) {
+          showToast("No tiene permisos para descargar Nómina Municipal.", "warning");
+          return;
+        }
+        abrirModalSeleccionarNomina();
+        return;
+      }
+
+      const targetId = card.getAttribute('data-target');
+      if (isMun) {
+        showToast("No tiene permisos para acceder a este módulo.", "warning");
+        return;
+      }
+      if (isZon && p) {
+        if (targetId === 'admin-tab-planes' && !p.planes) {
+          showToast("No tiene permisos para acceder a Planes de Estudio.", "warning");
+          return;
+        }
+        if (targetId === 'admin-tab-listas') {
+          const lista = card.getAttribute('data-lista');
+          let permKey = null;
+          if (lista === 'dependencia') permKey = 'cat_dependencia';
+          else if (lista === 'modalidades') permKey = 'cat_modalidades';
+          else if (lista === 'niveles_educativos') permKey = 'cat_niveles_educativos';
+          else if (lista === 'municipios') permKey = 'cat_municipios';
+          else if (lista === 'situacion_laboral') permKey = 'cat_situacion_laboral';
+          else if (lista === 'instruccion') permKey = 'cat_instruccion';
+          else if (lista === 'tipo_vivienda' || lista === 'condicion_vivienda') permKey = 'cat_vivienda';
+          else if (lista === 'estado_civil') permKey = 'cat_estado_civil';
+
+          const permitido = (permKey && typeof p[permKey] !== 'undefined') ? p[permKey] : p.listas;
+          if (!permitido) {
+            showToast("No tiene permisos para acceder a este catálogo.", "warning");
+            return;
+          }
+        }
+      }
+
+      document.querySelectorAll('.sidebar-btn').forEach(b => {
+        if (!b.classList.contains('accordion-btn')) b.classList.remove('active');
+      });
+      const btnBd = document.getElementById('btn-sidebar-bd');
+      if (btnBd) btnBd.classList.add('active');
+
+      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+      if (targetId) {
+        const targetElem = document.getElementById(targetId);
+        if (targetElem) targetElem.classList.add('active');
+        if (targetId === 'admin-tab-planes' && typeof catalogosGlobal !== 'undefined' && (!catalogosGlobal['planes-estudio'] || Object.keys(catalogosGlobal['planes-estudio']).length === 0)) {
+          loadCatalogos();
+        }
+        if (targetId === 'admin-tab-listas') {
+          const lista = card.getAttribute('data-lista');
+          const tipo = card.getAttribute('data-tipo');
+          if (typeof window.loadListasMaestras === 'function') window.loadListasMaestras(lista, tipo);
+        }
+      }
+      const adminMain = document.getElementById('admin-main');
+      if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  // Botón "⬅️ Volver a Gestor de BD" desde Planes de Estudio y Catálogos
+  document.querySelectorAll('.btn-volver-gestor-bd').forEach(btn => {
+    if (btn._hasBackBdListener) return;
+    btn._hasBackBdListener = true;
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.sidebar-btn').forEach(b => {
+        if (!b.classList.contains('accordion-btn')) b.classList.remove('active');
+      });
+      const btnBd = document.getElementById('btn-sidebar-bd');
+      if (btnBd) btnBd.classList.add('active');
+      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+      const tabBd = document.getElementById('admin-tab-bd');
+      if (tabBd) tabBd.classList.add('active');
+      const adminMain = document.getElementById('admin-main');
+      if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
     });
   });
 

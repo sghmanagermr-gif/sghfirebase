@@ -5483,6 +5483,29 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
     - Lectura de `cargoEstructuraMunicipal` en `evaluarAlertasRojasFuncionario()`, visualización en Auditor Individual (`renderResultadosAuditoria`) y tabla del Escáner (`renderTablaEscaner`), y adición de columnas en descargas `.xlsx` (`ejecutarExportacionNominaExcel` y `exportarAlertasExcel`).
   * **Verificación:** Compilación limpia con Vite, verificación funcional progresiva en Firebase Hosting (`https://sgh-merida.web.app`), sincronización de versión a `v2.38.4` en `package.json` e `index.html`, actualización de documentación institucional y respaldo en GitHub (`main`).
 
+---
+
+### Hito: Rediseño Visual del Panel Administrativo — Migración del Menú Lateral a la Pizarra y Gestor de BD en Tarjetas (v2.38.5)
+- **Fecha:** 2026-11-15 ~16:30 (Hora Local Venezuela).
+- **Módulos:** Panel Administrativo (`webapp/index.html`, `webapp/src/admin.js`).
+- **Objetivo:** Simplificar la experiencia de navegación administrativa eliminando el menú lateral oculto (hamburguesa/sidebar) y centralizando todos los módulos en tarjetas interactivas dentro de la Pizarra principal, con retorno directo desde el logotipo superior y distribución modular del Gestor de Base de Datos.
+- **Cambios Técnicos (v2.38.5):**
+  * **Migración del Encabezado y Pizarra en Dos Bloques (`webapp/index.html`, `webapp/src/admin.js`):**
+    - Conversión del bloque izquierdo del encabezado (`#btn-header-pizarra`, con logotipo y título **SGH Panel**) en disparador hacia `#admin-tab-estadisticas`.
+    - Asignación de navegación directa a tarjetas existentes en `.stats-grid`: `#card-pizarra-usuarios` (`admin-tab-validacion`) y `#card-pizarra-planteles` (`admin-tab-planteles` con invocación a `loadPlanteles()`).
+    - Creación de nuevas tarjetas interactivas en `.stats-grid`: `#card-pizarra-auditor-cedula` (`admin-tab-auditor-cedula` con foco automático en `#inp-auditor-cedula`), `#card-pizarra-despliegue` (`admin-tab-despliegue` con `loadConfig()` y validación de permiso `despliegue`), `#card-pizarra-bd` (`admin-tab-bd`) y `#card-pizarra-aspiradora` (`admin-tab-aspiradora` con control de permiso `despliegue`).
+    - Separación estructural de las tarjetas de la Pizarra en dos contenedores `.stats-grid`: grupo superior de 4 métricas principales (**Usuarios del Sistema**, **Planteles del Municipio/Estado**, **Personal Registrado**, **Total Matrícula**) y grupo inferior separado por margen de `20px` con los 4 módulos administrativos (**Auditoría de Cédulas**, **Despliegue**, **Base de datos**, **Mantenimiento de base de datos**).
+  * **Pantalla Dedicada Gestor de BD (`#admin-tab-bd`):**
+    - Sustitución del antiguo acordeón lateral por la pestaña `#admin-tab-bd`, distribuida en 12 tarjetas `.bd-card-item` (descarga de Planteles, descarga de Nómina Municipal, Planes de Estudio y 9 catálogos de `dependencia`, `modalidades`, `niveles_educativos`, `municipios`, `situacion_laboral`, `instruccion`, `tipo_vivienda`, `condicion_vivienda`, `estado_civil`).
+    - Actualización de `configurarInterfazPorRol()` en `admin.js` para evaluar la visibilidad individual de cada `.bd-card-item` dentro de `#admin-tab-bd` y controlar la visibilidad de `#card-pizarra-bd` mediante `algunSubItemVisible`.
+    - Adición de botones de retorno `.btn-volver-gestor-bd` en `#admin-tab-listas` y `#admin-tab-planes`.
+  * **Apilamiento Vertical de Estadísticas Extendidas (`#extended-stats-container`):**
+    - Cambio de `grid-template-columns` de `repeat(auto-fit, minmax(300px, 1fr))` a `1fr` en ambas filas de `#extended-stats-container` para apilar verticalmente **Discriminación de Personal**, **Estatus de Matrícula**, **Situación Laboral** y **Personal por Jubilarse**.
+  * **Retiro Definitivo del Menú Lateral (`webapp/index.html`):**
+    - Tras vaciar todos los botones de navegación, eliminación de `#btn-hamburger` en `#admin-header-left`, `<aside id="admin-sidebar">` (junto con su `<nav>` y `#btn-sidebar-logout`), y `#admin-sidebar-overlay`, manteniendo el botón **Salir** (`#btn-logout-admin`) fijo en el encabezado global.
+  * **Verificación:** Compilación limpia de producción con Vite (`v2.38.5`), publicación en Firebase Hosting (`https://sgh-merida.web.app`), actualización documental en `versiones.md`, `bitacora.md` y `conversaciones.md`, y respaldo en GitHub (`main`).
+
+
 
 
 

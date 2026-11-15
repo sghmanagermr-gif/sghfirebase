@@ -10332,6 +10332,202 @@ Creo que solo 2 están en el RAC.xlsx"
 > **Respuesta del Agente:**  
 > Confirmación recibida y cierre oficial de la versión **v2.38.4**. Sincronización de versión en `webapp/package.json` y `webapp/index.html`, actualización formal de `versiones.md`, `bitacora.md` y `conversaciones.md`, compilación final de producción, despliegue en Firebase Hosting (`https://sgh-merida.web.app`) y respaldo en GitHub (`main`).
 
+---
+
+## Sesión: 15 de Noviembre de 2026 (Tarde - Rediseño Visual del Panel Administrativo v2.38.5)
+
+* **Emisor:** Usuario (Super Administrador) — `[2026-11-15 15:07]`
+
+> **Mensaje del Usuario:**  
+> "Lee el archivo SKILL_sgh_firebase.md de webapp-expert usando tu herramienta view_file antes de hacer cualquier otra cosa."  
+> vamos hacer unos ajustes visuales. En un momento te comento cuales son
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Acabo de leer por completo el archivo de lineamientos `SKILL_sgh_firebase.md` y tengo presentes todas las reglas del proyecto. Quedo atento para que me indiques cuáles son los ajustes visuales que vamos a realizar.
+
+---
+
+* **Emisor:** Usuario (Super Administrador) — `[2026-11-15 15:11]`
+
+> **Mensaje del Usuario:**  
+> ok, poco a poco vamos a ir eliminando botones de la barra lateral izquierda e irlas aplicando a lo que está en la pizarra. por ejemplo `id="btn-sidebar-validacion"` le vamos a dar esa función a la tarjeta `class="stat-card glass-panel"` Usuarios del Sistema
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Listo, el ajuste visual ya quedó compilado sin errores y publicado en línea en https://sgh-merida.web.app para que puedas probarlo directamente.  
+> Qué se modificó en este paso:  
+> 1. Retiro del botón en la barra lateral izquierda: En `webapp/index.html` se eliminó la opción Usuarios del Sistema del menú desplegable izquierdo.  
+> 2. Tarjeta interactiva en la Pizarra: En `webapp/index.html` la tarjeta Usuarios del Sistema de la Pizarra ahora tiene cursor interactivo y apunta directamente a la vista de gestión de usuarios. En `webapp/src/admin.js` al hacer clic sobre esa tarjeta se valida que la cuenta tenga permiso de validación de usuarios, se abre inmediatamente la pestaña Usuarios del Sistema y se desplaza la vista al inicio.  
+> Verificación y publicación realizadas: Compilación de producción sin errores (33 módulos transformados en 708ms) y publicación en Firebase Hosting (10 archivos subidos en https://sgh-merida.web.app), conservando v2.38.4 hasta finalizar los ajustes visuales.  
+> ¿Los resultados fueron satisfactorios o deseas que pasemos al siguiente botón de la barra lateral?
+
+---
+
+* **Emisor:** Usuario (Super Administrador) — `[2026-11-15 15:17]`
+
+> **Mensaje del Usuario:**  
+> `id="btn-sidebar-planteles"` le vamos a dar esa función a la tarjeta `class="stat-card glass-panel"` Planteles del Estado  
+>   
+> `id="btn-sidebar-auditor-cedula"` le vamos a dar esa función a una nueva tarjeta `class="stat-card glass-panel"` con el nombre Ausitoria de cédulas
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Listo, ambos cambios visuales ya están compilados sin errores y publicados en línea en https://sgh-merida.web.app para que puedas probarlos directamente en la Pizarra.  
+> Qué se modificó en este paso:  
+> 1. Retiro de los botones en la barra lateral izquierda (`webapp/index.html`): se retiraron el botón Auditor de Cédula y el botón Planteles dentro de Gestor de BD.  
+> 2. Tarjeta Planteles en la Pizarra (`webapp/index.html`, `webapp/src/admin.js`): la tarjeta de Planteles ahora tiene comportamiento interactivo; al hacer clic verifica permiso, abre la vista de Planteles, carga la lista y desplaza al inicio.  
+> 3. Nueva tarjeta Auditoría de Cédulas en la Pizarra (`webapp/index.html`, `webapp/src/admin.js`): se agregó la tarjeta en la cuadrícula principal de la Pizarra; al hacer clic abre Auditor de Cédulas y enfoca el campo de búsqueda respetando permisos.  
+> Verificación y publicación realizadas: Compilación de producción sin errores (33 módulos transformados en 721ms) y publicación en Firebase Hosting (10 archivos subidos en https://sgh-merida.web.app), conservando v2.38.4 hasta completar los ajustes visuales.  
+> ¿Los resultados fueron satisfactorios o pasamos al siguiente botón de la barra lateral?
+
+---
+
+* **Emisor:** Usuario (Super Administrador) — `[2026-11-15 15:26]`
+
+> **Mensaje del Usuario:**  
+> `id="btn-sidebar-estadisticas"` le vamos a dar esa función a `<div style="display: flex; align-items: center; gap: 8px; min-width: 0;"> <img src="/sgh-logo.png" ...> SGH Panel v2.38.4 </div>`
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Listo, el ajuste del encabezado superior ya quedó compilado sin errores y publicado en línea en https://sgh-merida.web.app para que puedas probarlo directamente.  
+> Qué se modificó en este paso:  
+> 1. Encabezado SGH Panel interactivo (`webapp/index.html`): se convirtió el bloque del logotipo junto al título SGH Panel v2.38.4 en un acceso directo interactivo con puntero de mano y aviso al pasar el ratón para regresar a la Pizarra desde cualquier pantalla administrativa, y se eliminó el botón Pizarra de la barra lateral izquierda.  
+> 2. Lógica de navegación y permisos (`webapp/src/admin.js`): al hacer clic sobre el logotipo o título SGH Panel en la barra superior, se verifica el permiso de métricas, se activa la Pizarra principal, se cierra el menú lateral si estaba abierto y se desplaza la vista al inicio.  
+> Verificación y publicación realizadas: Compilación sin errores (33 módulos transformados en 659ms) y publicación en Firebase Hosting (10 archivos subidos en https://sgh-merida.web.app).  
+> ¿Los resultados fueron satisfactorios o deseas continuar con el siguiente botón de la barra lateral?
+
+---
+
+* **Emisor:** Usuario (Super Administrador) — `[2026-11-15 15:30 / 15:35]`
+
+> **Mensaje del Usuario:**  
+> `id="btn-sidebar-despliegue"` le vamos a dar esa función a una nueva tarjeta `class="stat-card glass-panel"` con el nombre Despliegue  
+> *(Seguimiento del usuario:)* `id="btn-sidebar-despliegue"` a una nueva tarjeta `class="stat-card glass-panel"` con el nombre Despliegue
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Listo, la tarjeta Despliegue ya quedó integrada en la Pizarra, compilada sin errores y publicada en línea en https://sgh-merida.web.app para que puedas probarla directamente.  
+> Qué se modificó en este paso:  
+> 1. Retiro en la barra lateral y nueva tarjeta en la Pizarra (`webapp/index.html`): se retiró el botón Despliegue del menú lateral izquierdo y se creó la nueva tarjeta Despliegue inmediatamente después de Auditoría de Cédulas dentro de la cuadrícula principal de la Pizarra.  
+> 2. Navegación y control de permisos (`webapp/src/admin.js`): conserva la regla de visibilidad por perfil ocultándose cuando la cuenta no tiene permiso; al hacer clic verifica permiso, abre la pantalla de configuración de modos de operación, carga la configuración actual y desplaza la vista al inicio.  
+> Verificación y publicación realizadas: Compilación sin errores (33 módulos transformados en 648ms) y publicación en Firebase Hosting (10 archivos subidos en https://sgh-merida.web.app).  
+> ¿Los resultados fueron satisfactorios o pasamos al siguiente botón de la barra lateral?
+
+---
+
+* **Emisor:** Usuario (Super Administrador) — `[2026-11-15 15:38]`
+
+> **Mensaje del Usuario:**  
+> `id="btn-sidebar-bd"` a una nueva pantalla, distribuida con tarjetas
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Listo, la nueva pantalla Gestor de BD organizada con tarjetas ya quedó compilada sin errores y publicada en línea en https://sgh-merida.web.app para que puedas probarla directamente.  
+> Qué se modificó en este paso:  
+> 1. Botón directo en la barra lateral izquierda (`webapp/index.html`): se eliminó el antiguo acordeón desplegable de Gestor de BD y el botón pasó a abrir directamente su propia pantalla principal.  
+> 2. Nueva pantalla Gestor de BD distribuida en 12 tarjetas (`webapp/index.html`): Descargar Planteles (Excel), Nómina Municipal (Excel), Planes de Estudio, Dependencias, Modalidades, Niveles Educativos, Municipios, Situación Laboral, Nivel de Instrucción, Tipo de Vivienda, Condición de Vivienda y Estado Civil, agregando el botón Volver a Gestor de BD en catálogos maestros y Planes de Estudio.  
+> 3. Permisos por perfil y navegación (`webapp/src/admin.js`): cada una de las 12 tarjetas respeta los permisos asignados a cada rol y quedaron enlazados sus clics y botones de retorno.  
+> Verificación y publicación realizadas: Compilación sin errores (33 módulos transformados en 627ms) y publicación en Firebase Hosting (10 archivos subidos en https://sgh-merida.web.app).  
+> ¿Los resultados fueron satisfactorios o deseas que traslademos también este acceso o el botón Mantenimiento BD a la Pizarra?
+
+---
+
+* **Emisor:** Usuario (Super Administrador) — `[2026-11-15 15:47]`
+
+> **Mensaje del Usuario:**  
+> `id="btn-sidebar-bd"` le vamos a dar esa función a una nueva tarjeta `class="stat-card glass-panel"` con el nombre Base de datos
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Listo, la nueva tarjeta Base de datos ya está integrada en la Pizarra, compilada sin errores y publicada en línea en https://sgh-merida.web.app para que puedas probarla directamente.  
+> Qué se modificó en este paso:  
+> 1. Retiro del botón en la barra lateral izquierda (`webapp/index.html`): se eliminó el botón Gestor de BD del menú lateral izquierdo.  
+> 2. Nueva tarjeta Base de datos en la Pizarra (`webapp/index.html`, `webapp/src/admin.js`): se incorporó la tarjeta inmediatamente después de Despliegue; al hacer clic abre directamente la pantalla con las 12 tarjetas de descargas, planes de estudio y catálogos, conservando el control de visibilidad por permisos.  
+> Verificación y publicación realizadas: Compilación sin errores (33 módulos transformados en 599ms) y publicación en Firebase Hosting (10 archivos subidos en https://sgh-merida.web.app).  
+> ¿Los resultados fueron satisfactorios o pasamos ahora con el botón Mantenimiento BD?
+
+---
+
+* **Emisor:** Usuario (Super Administrador) — `[2026-11-15 15:50]`
+
+> **Mensaje del Usuario:**  
+> `id="btn-sidebar-aspiradora"` le vamos a dar esa función a una nueva tarjeta `class="stat-card glass-panel"` con el nombre mantenimiento de base de datos
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Ya quedó lista y publicada la migración del botón de Mantenimiento BD desde la barra lateral izquierda hacia la Pizarra principal.  
+> En `webapp/index.html` se retiró el botón Mantenimiento BD del menú de la barra lateral izquierda y se agregó en la Pizarra la nueva tarjeta Mantenimiento de base de datos después de Base de datos.  
+> En `webapp/src/admin.js` se actualizó el control de visibilidad por rol según el permiso de despliegue y se conectó el clic para abrir la pantalla de mantenimiento de base de datos y desplazar la vista al inicio.  
+> Compilación sin errores (33 módulos procesados) y publicación en Firebase Hosting (10 archivos actualizados en https://sgh-merida.web.app), manteniendo v2.38.4 hasta finalizar ajustes.  
+> ¿Los resultados fueron satisfactorios?
+
+---
+
+* **Emisor:** Usuario (Super Administrador) — `[2026-11-15 16:02]`
+
+> **Mensaje del Usuario:**  
+> lo elementos que estan dento de `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 20px;">` y `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">` que no esten uno al lado del otro sino uno debajo del otro
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Ya quedó aplicado y publicado el ajuste de diseño para apilar las tarjetas de estadísticas extendidas una debajo de la otra.  
+> En `webapp/index.html`, en los dos bloques de estadísticas extendidas (Discriminación de Personal junto a Estatus de Matrícula, y Situación Laboral junto a Personal por Jubilarse) se ajustó la distribución de la cuadrícula a una sola columna para que todos los paneles aparezcan uno debajo del otro en lugar de quedar lado a lado.  
+> Compilación sin errores (33 módulos procesados) y publicación en Firebase Hosting (10 archivos en https://sgh-merida.web.app).  
+> ¿Los resultados fueron satisfactorios?
+
+---
+
+* **Emisor:** Usuario (Super Administrador) — `[2026-11-15 16:19]`
+
+> **Mensaje del Usuario:**  
+> Al ya no haber nada en `<nav style="padding: 20px 10px; display: flex; flex-direction: column; gap: 5px; flex-grow: 1;"> ... <button id="btn-sidebar-logout" ...>Salir del Sistema</button> ... </nav>` Ya no hace falta que aparezca. y no hace falta tampoco `<button id="btn-hamburger" ...>☰</button>`
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Ya quedó retirado el menú lateral y su botón de apertura, y los cambios ya están publicados en el sistema.  
+> En `webapp/index.html` se eliminó el botón de menú hamburguesa de la parte izquierda del encabezado superior y se eliminó por completo la barra lateral deslizable junto con su fondo superpuesto y el bloque de navegación que contenía el botón adicional de Salir del Sistema (manteniendo intacto el botón Salir en la esquina superior derecha del encabezado).  
+> Compilación sin errores (33 módulos procesados) y publicación en Firebase Hosting (10 archivos en https://sgh-merida.web.app).  
+> ¿Los resultados fueron satisfactorios?
+
+---
+
+* **Emisor:** Usuario (Super Administrador) — `[2026-11-15 16:25]`
+
+> **Mensaje del Usuario:**  
+> vamos a separar las tarjetas que estan dentro de: `<div class="stats-grid" style="margin: 0 auto;">` USUARIOS DEL SISTEMA, PLANTELES DEL ESTADO, PERSONAL REGISTRADO, MATRICULA ESTADAL. A parte en otro div abajo
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Ya quedaron separadas las tarjetas en dos grupos distintos dentro de la Pizarra y los cambios ya fueron publicados.  
+> En `webapp/index.html` se dividió la cuadrícula principal de la Pizarra en dos bloques independientes: bloque superior con Usuarios del Sistema, Planteles del Municipio o del Estado, Personal Registrado y Total Matrícula; y bloque inferior (con separación superior) con Auditoría de Cédulas, Despliegue, Base de datos y Mantenimiento de base de datos.  
+> Compilación sin errores (33 módulos procesados) y publicación en Firebase Hosting (10 archivos en https://sgh-merida.web.app).  
+> ¿Los resultados fueron satisfactorios?
+
+---
+
+* **Emisor:** Usuario (Super Administrador) — `[2026-11-15 16:28]`
+
+> **Mensaje del Usuario:**  
+> Estoy satisfecho con todos los cambios visuales que se han hecho
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Confirmación recibida y cierre oficial de la versión **v2.38.5**. Sincronización de versión a `v2.38.5` en `webapp/package.json` y `webapp/index.html`, actualización formal de `versiones.md`, `bitacora.md` y `conversaciones.md`, compilación final de producción, publicación en Firebase Hosting (`https://sgh-merida.web.app`) y respaldo en GitHub (`main`).
+
+
 
 
 
