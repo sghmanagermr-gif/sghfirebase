@@ -10272,6 +10272,66 @@ Creo que solo 2 están en el RAC.xlsx"
 > **Respuesta del Agente:**  
 > Confirmación recibida y cierre oficial de la versión **v2.38.3**. Actualización de `webapp/package.json`, `webapp/index.html`, `versiones.md`, `bitacora.md` y `conversaciones.md`, compilación final, despliegue en Firebase Hosting (`https://sgh-merida.web.app`) y respaldo en GitHub (`main`).
 
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Ahora debemos hacer un ajuste en la pantalla del usuario plaadmin. Después del campo Código RAC y antes de Titular / Interino un selector ¿PERTENECE A LA ESTRUCTURA MUNICIPAL? con los item SI, NO. Si se selecciona NO no pasa nada se continua con el formulario; si es SI aparece un selector con los siguientes item: COORDINADOR DE AREA MUNICIPAL, RESPONSABLE MUNICIPAL DEL PROCESO DE LA DIRECCIÓN DE SUPERVISIÓN Y ACOMPAÑAMIENTO DE LAS POLITICAS EDUCATIVAS, RESPONSABLE MUNICIPAL DE INVESTIGACIÓN Y FORMACIÓN DOCENTE Y CALIDAD EDUCATIVA, RESPONSABLE MUNICIPAL DE DESARROLLO Y PROTECCIÓN ESTUDIANTIL Y COMUNIDADES EDUCATIVAS, RESPONSABLE MUNICIPAL DE GESTIÓN HUMANA, SUPERVISOR DE CIRCUITO. Esto con el proposito de identificar los funcionarios que pertenencen a la estructura municipal"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Implementación inicial del selector condicional municipal (`#container-estructura-municipal` con opciones `NO`/`SI` y `#container-cargo-estructura-municipal`) en `webapp/index.html`, `webapp/src/main.js`, `webapp/src/personalWizard.js` y `webapp/src/admin.js`, con guardado estructurado, visualización en tabla del plantel y exportaciones Excel, compilado y publicado en vivo en `https://sgh-merida.web.app`.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Después de SUPERVISOR DE CIRCUITO, agrega a la lista DIRECTOR(A) DE PLANTEL"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Incorporación de `DIRECTOR(A) DE PLANTEL` inmediatamente después de `SUPERVISOR DE CIRCUITO` dentro de `#wp-cargo-estructura-municipal` en `webapp/index.html`, compilación y actualización en `https://sgh-merida.web.app`.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Se me olvidó aclararte que ese selector con al lista: solo lo ve el usuario pladmins ... solo lo ve el usuario plaadmin"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Ajuste estricto de visibilidad y validación en `onEstructuraMunicipalChangeUI()`, `actualizarVisibilidadCamposPlanta()` y `validarFormularioPersonal()` de `webapp/src/personalWizard.js` para garantizar que únicamente el perfil director de plantel (`plaadmin`) visualice y valide ambos selectores municipales, compilado y publicado en `https://sgh-merida.web.app`.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "La idea de este este selector es que en un futuro, al momento de hacer una consulta de la estructura municipal, completa o de cada unos de los items, se filtren por esa información"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Confirmación de la estructura de almacenamiento en Firestore (`'pertenece-estructura-municipal'` con valores `'SI'`/`'NO'` y `'cargo-estructura-municipal'` con el texto exacto de los 7 ítems cerrados), preparada para consultas futuras totales o filtradas por cargo individual y disponible de inmediato en las descargas `.xlsx`.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Si estoy satisfecho"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Confirmación recibida y cierre oficial de la versión **v2.38.4**. Sincronización de versión en `webapp/package.json` y `webapp/index.html`, actualización formal de `versiones.md`, `bitacora.md` y `conversaciones.md`, compilación final de producción, despliegue en Firebase Hosting (`https://sgh-merida.web.app`) y respaldo en GitHub (`main`).
+
 
 
 

@@ -4,6 +4,16 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.38.4 (15 de Noviembre de 2026)
+
+- **Selector Condicional de Estructura Municipal Exclusivo para Directores de Plantel (`index.html`, `main.js`, `personalWizard.js`, `admin.js`):**
+  - Incorporación del selector **¿Pertenece a la Estructura Municipal?** (`#container-estructura-municipal` / `#wp-pertenece-estructura-municipal`, con valores `NO` predeterminado y `SI`) ubicado después de **Código RAC** y antes de **Titular / Interino**.
+  - Al seleccionar `SI`, despliega el selector obligatorio **Cargo en Estructura Municipal** (`#container-cargo-estructura-municipal` / `#wp-cargo-estructura-municipal`) con las 7 categorías oficiales: `COORDINADOR DE AREA MUNICIPAL`, `RESPONSABLE MUNICIPAL DEL PROCESO DE LA DIRECCIÓN DE SUPERVISIÓN Y ACOMPAÑAMIENTO DE LAS POLITICAS EDUCATIVAS`, `RESPONSABLE MUNICIPAL DE INVESTIGACIÓN Y FORMACIÓN DOCENTE Y CALIDAD EDUCATIVA`, `RESPONSABLE MUNICIPAL DE DESARROLLO Y PROTECCIÓN ESTUDIANTIL Y COMUNIDADES EDUCATIVAS`, `RESPONSABLE MUNICIPAL DE GESTIÓN HUMANA`, `SUPERVISOR DE CIRCUITO` y `DIRECTOR(A) DE PLANTEL`.
+  - Visibilidad estricta restringida exclusivamente al rol de director de plantel (`plaadmin`), permaneciendo oculto para usuarios de Planta (`plantadmin`) y cualquier otro perfil.
+  - Validación condicional obligatoria al seleccionar `SI`, limpieza completa al guardar, recarga en edición, persistencia estructurada en los campos `'pertenece-estructura-municipal'` y `'cargo-estructura-municipal'` (lista para futuras consultas integrales o filtradas por cargo), etiqueta visual en la nómina del plantel y columnas en Auditoría, Escáner de Alertas Rojas y exportaciones Excel (`.xlsx`).
+
+---
+
 ### v2.38.3 (15 de Noviembre de 2026)
 
 - **Selector Obligatorio de Cargo / Nivel en Planta (`#wp-cargo-planta`) y Conexión con Alerta Roja N.º 5 (`index.html`, `main.js`, `personalWizard.js`, `admin.js`):**

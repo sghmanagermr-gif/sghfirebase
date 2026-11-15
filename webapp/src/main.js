@@ -2136,6 +2136,8 @@ async function mostrarCandado(codigoDEA, dataParcial) {
             #container-carga-horaria-academica { display: none !important; }
             #container-oficina { display: block !important; }
             #container-cargo-planta { display: block !important; }
+            #container-estructura-municipal { display: none !important; }
+            #container-cargo-estructura-municipal { display: none !important; }
             #seccion-personal-existente { display: block !important; }
         `;
         const cardPF = document.getElementById('card-plantel-form');
@@ -2301,6 +2303,8 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                     #container-carga-horaria-academica { display: none !important; }
                     #container-oficina { display: block !important; }
                     #container-cargo-planta { display: block !important; }
+                    #container-estructura-municipal { display: none !important; }
+                    #container-cargo-estructura-municipal { display: none !important; }
                     #seccion-personal-existente { display: block !important; }
                 `;
             }

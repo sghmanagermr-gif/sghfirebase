@@ -66,6 +66,7 @@ export function evaluarAlertasRojasFuncionario(cedula, docs = [], resolverDatosP
     const depRaw = normTextoAlerta(d.dependencia || d['DEPENDENCIA'] || infoP.dependenciaPlantel || '');
     const cargoNombre = normTextoAlerta(d.cargo || d['nombre-cargo'] || d['denominacion-cargo'] || d['CARGO'] || '');
     const cargoPlantaNorm = normTextoAlerta(d['cargo-planta'] || d.cargo_planta || '');
+    const cargoEstMunNorm = normTextoAlerta(d['cargo-estructura-municipal'] || d.cargo_estructura_municipal || '');
     const codRac = normTextoAlerta(d['codigo-rac'] || d['codigo-cargo'] || d['CODIGO RAC'] || '');
     const ubicAdmin = normTextoAlerta(d['ubicacion-administrativa'] || d['UBICACIÓN ADMINISTRATIVA'] || '');
     const oficinaNorm = normTextoAlerta(d.oficina || '');
@@ -92,6 +93,7 @@ export function evaluarAlertasRojasFuncionario(cedula, docs = [], resolverDatosP
       depRaw,
       cargoNombre,
       cargoPlanta: cargoPlantaNorm,
+      cargoEstructuraMunicipal: cargoEstMunNorm,
       codRac,
       ubicAdmin,
       oficinaNorm,
@@ -5371,6 +5373,8 @@ export function initAdminDashboard(dbInstance, user) {
           'Cargo': emp['cargo'] || emp['CARGO'] || '',
           'Código RAC': emp['codigo-rac'] || emp['codigo-cargo'] || emp['CODIGO RAC'] || '',
           'Cargo / Nivel en Planta': emp['cargo-planta'] || emp.cargo_planta || '',
+          'Pertenece Estructura Municipal': emp['pertenece-estructura-municipal'] || emp.pertenece_estructura_municipal || (emp['cargo-estructura-municipal'] ? 'SI' : 'NO'),
+          'Cargo Estructura Municipal': emp['cargo-estructura-municipal'] || emp.cargo_estructura_municipal || '',
           'Condición': emp['titular'] || emp['TITULAR'] || '',
           'Fecha de Ingreso': emp['fecha-ingreso'] || emp['FECHA DE INGRESO'] || '',
           'Años de Antigüedad': emp['antiguedad'] || emp['ANTIGUEDAD'] || '',
@@ -6606,6 +6610,7 @@ export function initAdminDashboard(dbInstance, user) {
                   <div><span style="color: #64748b;">CARGO:</span> <strong style="color: #1e293b; display: block;">${cargo}</strong></div>
                   <div><span style="color: #64748b;">CÓDIGO RAC:</span> <strong style="color: #0284c7; display: block; font-family: monospace;">${codRac}</strong></div>
                   ${(d['cargo-planta'] || d.cargo_planta) ? `<div><span style="color: #64748b;">CARGO / NIVEL EN PLANTA:</span> <strong style="color: #6b21a8; display: block;">${escaparHtmlAuditor(String(d['cargo-planta'] || d.cargo_planta).toUpperCase())}</strong></div>` : ''}
+                  ${(d['cargo-estructura-municipal'] || d.cargo_estructura_municipal) ? `<div><span style="color: #64748b;">CARGO ESTRUCTURA MUNICIPAL:</span> <strong style="color: #0f766e; display: block;">${escaparHtmlAuditor(String(d['cargo-estructura-municipal'] || d.cargo_estructura_municipal).toUpperCase())}</strong></div>` : ''}
                   <div><span style="color: #64748b;">TITULAR / INTERINO:</span> <strong style="color: #1e293b; display: block;">${dispTit}</strong></div>
                   <div><span style="color: #64748b;">FECHA DE INGRESO:</span> <strong style="color: #1e293b; display: block;">${fIngreso}</strong></div>
                   <div><span style="color: #64748b;">ANTIGÜEDAD (AÑOS):</span> <strong style="color: #1e293b; display: block;">${ant} años</strong></div>
@@ -7012,7 +7017,7 @@ export function initAdminDashboard(dbInstance, user) {
                 ${escaparHtmlAuditor(r.escuela)}
               </div>
               <div style="font-size: 0.76rem; color: #475569; margin-top: 2px;">
-                ${escaparHtmlAuditor(r.municipio)} · <strong>${escaparHtmlAuditor(r.tipo)}</strong> · ${escaparHtmlAuditor(r.cargoNombre || 'S/C')}${r.cargoPlanta ? ` · Nivel Planta: <strong>${escaparHtmlAuditor(r.cargoPlanta)}</strong>` : ''} · Turno: <strong>${escaparHtmlAuditor(r.turnosDisplay)}</strong> · ${r.horasEfectivas}h
+                ${escaparHtmlAuditor(r.municipio)} · <strong>${escaparHtmlAuditor(r.tipo)}</strong> · ${escaparHtmlAuditor(r.cargoNombre || 'S/C')}${r.cargoPlanta ? ` · Nivel Planta: <strong>${escaparHtmlAuditor(r.cargoPlanta)}</strong>` : ''}${r.cargoEstructuraMunicipal ? ` · Est. Municipal: <strong>${escaparHtmlAuditor(r.cargoEstructuraMunicipal)}</strong>` : ''} · Turno: <strong>${escaparHtmlAuditor(r.turnosDisplay)}</strong> · ${r.horasEfectivas}h
               </div>
             </div>
           `).join('');
@@ -7134,6 +7139,7 @@ export function initAdminDashboard(dbInstance, user) {
               'Cargo Nominal': r.cargoNombre || 'S/E',
               'Código RAC': r.codRac || 'S/E',
               'Cargo / Nivel en Planta': r.cargoPlanta || 'S/E',
+              'Cargo Estructura Municipal': r.cargoEstructuraMunicipal || 'S/E',
               'Turnos Atiende': r.turnosDisplay,
               'Horas Recibo': r.horasRecibo,
               'Horas Académicas': r.horasAcad,

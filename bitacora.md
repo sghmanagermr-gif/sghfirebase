@@ -5465,6 +5465,24 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
     - Incorporación de insignia visual en tabla de Planta (`cargarPersonalExistente`), Auditor Individual, Escáner de Cierre de Jornada y columna `Cargo / Nivel en Planta` en las exportaciones Excel (`.xlsx`).
   * **Verificación:** Prueba de 6 escenarios normativos sobre `evaluarAlertasRojasFuncionario` (Coordinador, Jefe de División, Jefe de Zona, Otros, legado sin clasificar y Asistente Ejecutivo legado) con resultado 100% conforme. Sincronización de versión a `v2.38.3` en `package.json` e `index.html`, compilación limpia con Vite y despliegue completo en Firebase Hosting (`https://sgh-merida.web.app`).
 
+---
+
+### Hito: Selector Condicional de Estructura Municipal Exclusivo para `plaadmin` (v2.38.4)
+- **Fecha:** 2026-11-15 ~14:50 (Hora Local Venezuela).
+- **Módulos:** Formulario de Personal en Plantel (`webapp/index.html`, `webapp/src/main.js`, `webapp/src/personalWizard.js`) y Reportes / Auditoría (`webapp/src/admin.js`).
+- **Objetivo:** Permitir a los directores de plantel (`plaadmin`) identificar de forma estandarizada al personal adscrito que forma parte de la Estructura Municipal (CDCE Municipal, Supervisión Circuital o Dirección de Plantel) para habilitar futuras consultas globales o filtradas por cargo específico.
+- **Cambios Técnicos (v2.38.4):**
+  * **Interfaz Condicional en Plantel (`webapp/index.html`):**
+    - Inserción de `#container-estructura-municipal` (`#wp-pertenece-estructura-municipal`: `NO` / `SI`) y `#container-cargo-estructura-municipal` (`#wp-cargo-estructura-municipal`) inmediatamente después de `#container-cargo-planta` / **Código RAC** y antes de `#wp-titular`.
+    - Lista cerrada de 7 opciones oficiales en `#wp-cargo-estructura-municipal`: `COORDINADOR DE AREA MUNICIPAL`, `RESPONSABLE MUNICIPAL DEL PROCESO DE LA DIRECCIÓN DE SUPERVISIÓN Y ACOMPAÑAMIENTO DE LAS POLITICAS EDUCATIVAS`, `RESPONSABLE MUNICIPAL DE INVESTIGACIÓN Y FORMACIÓN DOCENTE Y CALIDAD EDUCATIVA`, `RESPONSABLE MUNICIPAL DE DESARROLLO Y PROTECCIÓN ESTUDIANTIL Y COMUNIDADES EDUCATIVAS`, `RESPONSABLE MUNICIPAL DE GESTIÓN HUMANA`, `SUPERVISOR DE CIRCUITO` y `DIRECTOR(A) DE PLANTEL`.
+  * **Control Estricto de Visibilidad y Flujo (`webapp/src/main.js`, `webapp/src/personalWizard.js`):**
+    - Regla estricta en `onEstructuraMunicipalChangeUI()`, `actualizarVisibilidadCamposPlanta(data)` y `validarFormularioPersonal()`: ambos selectores se muestran y validan exclusivamente cuando el usuario autenticado posee rol `plaadmin` y el formulario no corresponde a Planta (`plantadmin` / `0012...` / `SEDE ADMINISTRATIVA`), manteniéndose ocultos en `mostrarCandado()` (`main.js`) y para cualquier otro rol.
+    - Cuando se selecciona `NO`, el formulario continúa normalmente sin desplegar campos extra ni exigir selección adicional; al seleccionar `SI`, el selector `#wp-cargo-estructura-municipal` pasa a ser obligatorio.
+    - Reseteo limpio en `limpiarFormularioPersonal()`, recarga fiel al editar en `cargarEmpleadoEnFormulario()`, guardado en los campos `'pertenece-estructura-municipal'` y `'cargo-estructura-municipal'` de `cargos_personal`, etiqueta visual `🏛️` en la tabla del plantel (`cargarPersonalExistente`) y exportación en Excel (`exportarNominaExcel`).
+  * **Integración en Consultas y Reportes (`webapp/src/admin.js`):**
+    - Lectura de `cargoEstructuraMunicipal` en `evaluarAlertasRojasFuncionario()`, visualización en Auditor Individual (`renderResultadosAuditoria`) y tabla del Escáner (`renderTablaEscaner`), y adición de columnas en descargas `.xlsx` (`ejecutarExportacionNominaExcel` y `exportarAlertasExcel`).
+  * **Verificación:** Compilación limpia con Vite, verificación funcional progresiva en Firebase Hosting (`https://sgh-merida.web.app`), sincronización de versión a `v2.38.4` en `package.json` e `index.html`, actualización de documentación institucional y respaldo en GitHub (`main`).
+
 
 
 

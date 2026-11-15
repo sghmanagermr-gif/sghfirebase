@@ -491,7 +491,29 @@ export async function initCascadaPersonal() {
 }
 
 /**
- * Muestra u oculta los campos exclusivos de Planta / Zona Educativa en el formulario.
+ * Controla la visibilidad y limpieza del selector de cargo municipal según SI/NO.
+ */
+export function onEstructuraMunicipalChangeUI() {
+    const esPlaAdmin = window.sgh_user_data?.rol === 'plaadmin';
+    const selPert = document.getElementById('wp-pertenece-estructura-municipal');
+    const contCargoMun = document.getElementById('container-cargo-estructura-municipal');
+    const selCargoMun = document.getElementById('wp-cargo-estructura-municipal');
+    const val = (selPert?.value || 'NO').toUpperCase();
+
+    if (esPlaAdmin && val === 'SI') {
+        if (contCargoMun) contCargoMun.style.display = 'block';
+    } else {
+        if (contCargoMun) contCargoMun.style.display = 'none';
+        if (selCargoMun) {
+            selCargoMun.value = '';
+            selCargoMun.selectedIndex = 0;
+            selCargoMun.style.borderColor = '';
+        }
+    }
+}
+
+/**
+ * Muestra u oculta los campos exclusivos de Planta / Zona Educativa vs Plantel en el formulario.
  */
 function actualizarVisibilidadCamposPlanta(data = null) {
     const esPlantaForm = window.sgh_user_data?.rol === 'plantadmin'
@@ -504,6 +526,17 @@ function actualizarVisibilidadCamposPlanta(data = null) {
     if (contOfi) contOfi.style.display = displayVal;
     const contCargoPlanta = document.getElementById('container-cargo-planta');
     if (contCargoPlanta) contCargoPlanta.style.display = displayVal;
+
+    const esPlaAdminForm = window.sgh_user_data?.rol === 'plaadmin' && !esPlantaForm;
+    const contEstMun = document.getElementById('container-estructura-municipal');
+    const contCargoEstMun = document.getElementById('container-cargo-estructura-municipal');
+    if (esPlaAdminForm) {
+        if (contEstMun) contEstMun.style.display = 'block';
+        onEstructuraMunicipalChangeUI();
+    } else {
+        if (contEstMun) contEstMun.style.display = 'none';
+        if (contCargoEstMun) contCargoEstMun.style.display = 'none';
+    }
 }
 
 export function mostrarFormularioPersonal(autoScroll = true) {
@@ -822,7 +855,7 @@ export function limpiarFormularioPersonal(scrollBackToTable = false) {
     const ids = [
         'wp-cedula', 'wp-nombres', 'wp-lugar-nacimiento', 'wp-nacimiento', 'wp-edad', 'wp-genero', 'wp-nacionalidad',
         'wp-estado-civil', 'wp-ubicacion-administrativa', 'wp-tipo-personal', 'wp-dependencia', 'wp-subcategoria',
-        'wp-cargo', 'wp-codigo-rac', 'wp-cargo-planta', 'wp-titular', 'wp-situacion-laboral', 'wp-descripcion-situacion', 'wp-especialidad-imparte',
+        'wp-cargo', 'wp-codigo-rac', 'wp-cargo-planta', 'wp-pertenece-estructura-municipal', 'wp-cargo-estructura-municipal', 'wp-titular', 'wp-situacion-laboral', 'wp-descripcion-situacion', 'wp-especialidad-imparte',
         'wp-horas-recibo', 'wp-horas-academicas', 'wp-horas-por-programar', 'wp-horas-administrativas',
         'wp-fecha-ingreso', 'wp-antiguedad', 'wp-instruccion', 'wp-titulo', 'wp-turnos-atiende',
         'wp-talla-camisa', 'wp-talla-pantalon', 'wp-talla-zapato', 'wp-actividad-deportiva', 'wp-actividad-cultural',
@@ -893,6 +926,14 @@ export function limpiarFormularioPersonal(scrollBackToTable = false) {
 
     const containerCuad = document.getElementById('container-btn-cuadratura');
     if (containerCuad) containerCuad.style.display = 'none';
+
+    const selPertEstMun = document.getElementById('wp-pertenece-estructura-municipal');
+    if (selPertEstMun) {
+        selPertEstMun.value = 'NO';
+        selPertEstMun.selectedIndex = 0;
+    }
+    const containerCargoEstMun = document.getElementById('container-cargo-estructura-municipal');
+    if (containerCargoEstMun) containerCargoEstMun.style.display = 'none';
 
     const depSel = document.getElementById('wp-dependencia');
     if (depSel) depSel.disabled = true;
@@ -1112,6 +1153,14 @@ export function cargarEmpleadoEnFormulario(data, docId) {
     actualizarVisibilidadCamposPlanta(data);
     setVal('wp-cargo-planta', '');
     setSelectSmart('wp-cargo-planta', data['cargo-planta'] || data.cargo_planta || '');
+    const cargoEstMun = data['cargo-estructura-municipal'] || data.cargo_estructura_municipal || '';
+    const perteneceEstMun = String(data['pertenece-estructura-municipal'] || data.pertenece_estructura_municipal || (cargoEstMun ? 'SI' : 'NO')).trim().toUpperCase() === 'SI' ? 'SI' : 'NO';
+    setVal('wp-pertenece-estructura-municipal', perteneceEstMun);
+    onEstructuraMunicipalChangeUI();
+    setVal('wp-cargo-estructura-municipal', '');
+    if (perteneceEstMun === 'SI' && cargoEstMun) {
+        setSelectSmart('wp-cargo-estructura-municipal', cargoEstMun);
+    }
 
     const tipo = (data['tipo-personal'] || '').toUpperCase();
     const dep = (data.dependencia || '').toUpperCase();
@@ -1569,6 +1618,9 @@ export function validarFormularioPersonal() {
         || String(obtenerDEAActualWizard()).startsWith('0012')
         || (contCargoPlantaEl && window.getComputedStyle(contCargoPlantaEl).display !== 'none');
 
+    const pertEstMunVal = (document.getElementById('wp-pertenece-estructura-municipal')?.value || 'NO').toUpperCase();
+    const requiereCargoEstMun = (window.sgh_user_data?.rol === 'plaadmin' && !esPlantaVal) && pertEstMunVal === 'SI';
+
     const campos = [
         // 1. Datos Personales
         { id: 'wp-nacionalidad', nombre: 'Nacionalidad' },
@@ -1591,6 +1643,7 @@ export function validarFormularioPersonal() {
         { id: 'wp-dependencia', nombre: 'Dependencia' },
         { id: 'wp-cargo', nombre: 'Cargo' },
         ...(esPlantaVal ? [{ id: 'wp-cargo-planta', nombre: 'Cargo / Nivel en Planta' }] : []),
+        ...(requiereCargoEstMun ? [{ id: 'wp-cargo-estructura-municipal', nombre: 'Cargo en Estructura Municipal' }] : []),
         { id: 'wp-titular', nombre: 'Condición de Titular' },
         // Horas se validan condicionalmente según tipo de personal
         { id: 'wp-fecha-ingreso', nombre: 'Fecha de Ingreso' },
@@ -1795,6 +1848,8 @@ export async function guardarPersonalInline() {
         'codigo-cargo': document.getElementById('wp-codigo-rac')?.value || '',
         'codigo-rac': document.getElementById('wp-codigo-rac')?.value || '',
         'cargo-planta': document.getElementById('wp-cargo-planta')?.value || '',
+        'pertenece-estructura-municipal': (document.getElementById('wp-pertenece-estructura-municipal')?.value || 'NO').toUpperCase() === 'SI' ? 'SI' : 'NO',
+        'cargo-estructura-municipal': (document.getElementById('wp-pertenece-estructura-municipal')?.value || 'NO').toUpperCase() === 'SI' ? (document.getElementById('wp-cargo-estructura-municipal')?.value || '') : '',
         titular: document.getElementById('wp-titular')?.value || '',
         'horas-recibo': parseFloat(document.getElementById('wp-horas-recibo')?.value) || 0,
         'horas-academicas': parseFloat(document.getElementById('wp-horas-academicas')?.value) || 0,
@@ -2103,7 +2158,8 @@ async function cargarPersonalExistente(codigoDEA) {
             tdNom.style.padding = '12px';
             const nomClean = (data['nombre-apellido'] || data['apellidos-nombres'] || data.nombre || data.nombres || 'N/A').toUpperCase();
             const cargoPlantaVal = (data['cargo-planta'] || data.cargo_planta || '').toString().trim().toUpperCase();
-            if (data.oficina || cargoPlantaVal) {
+            const cargoEstMunVal = (data['cargo-estructura-municipal'] || data.cargo_estructura_municipal || '').toString().trim().toUpperCase();
+            if (data.oficina || cargoPlantaVal || cargoEstMunVal) {
                 const nomDiv = document.createElement('div');
                 nomDiv.textContent = nomClean;
                 tdNom.appendChild(nomDiv);
@@ -2115,6 +2171,12 @@ async function cargarPersonalExistente(codigoDEA) {
                     bPlanta.style.cssText = `font-size: 0.72rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 4px; border: 1px solid ${esAltoNivel ? '#c4b5fd' : '#cbd5e1'}; background: ${esAltoNivel ? '#f3e8ff' : '#f1f5f9'}; color: ${esAltoNivel ? '#6b21a8' : '#475569'};`;
                     bPlanta.textContent = `🏛️ ${cargoPlantaVal}`;
                     badgesWrap.appendChild(bPlanta);
+                }
+                if (cargoEstMunVal) {
+                    const bEstMun = document.createElement('span');
+                    bEstMun.style.cssText = 'font-size: 0.72rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 4px; border: 1px solid #99f6e4; background: #f0fdfa; color: #0f766e;';
+                    bEstMun.textContent = `🏛️ ${cargoEstMunVal}`;
+                    badgesWrap.appendChild(bEstMun);
                 }
                 if (data.oficina) {
                     const bOfi = document.createElement('span');
@@ -2684,6 +2746,7 @@ window.calcularHorasUI = calcularHorasUI;
 window.onNivelModalidadChangeUI = onNivelModalidadChangeUI;
 window.onAtiendeMatriculaChangeUI = onAtiendeMatriculaChangeUI;
 window.toggleMatriculaUI = toggleMatriculaUI;
+window.onEstructuraMunicipalChangeUI = onEstructuraMunicipalChangeUI;
 window.validarHorasDocenteUI = function (forzar = false) {
     verificarTopeHorasDocente(forzar);
     if (forzar) {
@@ -3154,6 +3217,8 @@ export async function exportarNominaExcel() {
                 'Oficina / Coordinación': emp['oficina'] || '',
                 'Código RAC': emp['codigo-rac'] || emp['codigo-cargo'] || emp['CODIGO RAC'] || '',
                 'Cargo / Nivel en Planta': emp['cargo-planta'] || emp.cargo_planta || '',
+                'Pertenece Estructura Municipal': emp['pertenece-estructura-municipal'] || emp.pertenece_estructura_municipal || (emp['cargo-estructura-municipal'] ? 'SI' : 'NO'),
+                'Cargo Estructura Municipal': emp['cargo-estructura-municipal'] || emp.cargo_estructura_municipal || '',
                 'Condición': emp['titular'] || emp['TITULAR'] || '',
                 'Fecha de Ingreso': emp['fecha-ingreso'] || emp['FECHA DE INGRESO'] || '',
                 'Años de Antigüedad': emp['antiguedad'] || emp['ANTIGUEDAD'] || '',
