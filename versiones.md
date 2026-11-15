@@ -4,6 +4,13 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.38.2 (15 de Noviembre de 2026)
+
+- **Limpieza Completa de Todos los Campos al Guardar Personal (`personalWizard.js`):**
+  - Reinicio íntegro de los 53 controles del formulario **Registro de Personal** tras pulsar Guardar Empleado (`#btn-guardar-empleado-inline`), incorporando **Lugar de Nacimiento**, **Estado Civil**, **Titular / Interino**, **Actividad Deportiva** y **Actividad Cultural**, eliminando valores residuales de carga horaria posterior a `toggleMatriculaUI()` y borrando bordes o avisos de validación previos.
+
+---
+
 ### v2.38.1 (15 de Noviembre de 2026)
 
 - **Aviso Discreto Amarillo de Cédula en Otro Plantel (Complemento de Captura Silenciosa):**

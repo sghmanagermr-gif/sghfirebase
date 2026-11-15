@@ -10181,6 +10181,32 @@ Creo que solo 2 están en el RAC.xlsx"
 > **Respuesta del Agente:**  
 > Confirmación recibida de las versiones v2.38.0 y v2.38.1. Actualización formal de `bitacora.md`, `conversaciones.md`, `versiones.md` y sincronización completa de los cambios en el repositorio remoto de Git.
 
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "al dar clic en id="btn-guardar-empleado-inline" se requiere que borre todos los campos del formulario Registro de Personal"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Implementación y despliegue de la versión **v2.38.2**:
+> - Actualización de `limpiarFormularioPersonal()` en `webapp/src/personalWizard.js` añadiendo los campos faltantes (`wp-lugar-nacimiento`, `wp-estado-civil`, `wp-titular`, `wp-actividad-deportiva` y `wp-actividad-cultural`), ejecutando `form.reset()`, limpiando los 53 controles del formulario Registro de Personal y vaciando los campos e indicadores de horas tras `toggleMatriculaUI()`.
+> - Verificación automatizada sobre los 53 controles, compilación limpia con Vite y publicación en Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Si satisfactorios"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Registro cerrado de la versión v2.38.2 en `bitacora.md`, `conversaciones.md` y `versiones.md`, con respaldo y sincronización en GitHub.
+
 
 
 

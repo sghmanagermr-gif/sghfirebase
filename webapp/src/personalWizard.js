@@ -796,14 +796,19 @@ export function limpiarFormularioPersonal(scrollBackToTable = false) {
         searchInput.dispatchEvent(new Event('input'));
     }
 
+    const formEl = document.getElementById('form-personal-inline');
+    if (formEl && typeof formEl.reset === 'function') {
+        formEl.reset();
+    }
+
     const ids = [
-        'wp-cedula', 'wp-nombres', 'wp-nacimiento', 'wp-edad', 'wp-genero', 'wp-nacionalidad',
-        'wp-ubicacion-administrativa', 'wp-tipo-personal', 'wp-dependencia', 'wp-subcategoria',
-        'wp-cargo', 'wp-codigo-rac', 'wp-situacion-laboral', 'wp-descripcion-situacion', 'wp-especialidad-imparte',
+        'wp-cedula', 'wp-nombres', 'wp-lugar-nacimiento', 'wp-nacimiento', 'wp-edad', 'wp-genero', 'wp-nacionalidad',
+        'wp-estado-civil', 'wp-ubicacion-administrativa', 'wp-tipo-personal', 'wp-dependencia', 'wp-subcategoria',
+        'wp-cargo', 'wp-codigo-rac', 'wp-titular', 'wp-situacion-laboral', 'wp-descripcion-situacion', 'wp-especialidad-imparte',
         'wp-horas-recibo', 'wp-horas-academicas', 'wp-horas-por-programar', 'wp-horas-administrativas',
         'wp-fecha-ingreso', 'wp-antiguedad', 'wp-instruccion', 'wp-titulo', 'wp-turnos-atiende',
-        'wp-talla-camisa', 'wp-talla-pantalon', 'wp-talla-zapato', 'wp-atiende-matricula',
-        'wp-nivel-modalidad', 'wp-tipo-vivienda', 'wp-condicion-vivienda', 'wp-tipo-material',
+        'wp-talla-camisa', 'wp-talla-pantalon', 'wp-talla-zapato', 'wp-actividad-deportiva', 'wp-actividad-cultural',
+        'wp-atiende-matricula', 'wp-nivel-modalidad', 'wp-tipo-vivienda', 'wp-condicion-vivienda', 'wp-tipo-material',
         'wp-tipo-enfermedad', 'wp-medicamento', 'wp-discapacidad', 'wp-ubch', 'wp-circuito-comunal',
         'wp-centro-votacion', 'wp-observaciones', 'wp-tel-habitacion', 'wp-tel-celular', 'wp-tel-oficina',
         'wp-prefijo-hab', 'wp-prefijo-cel', 'wp-prefijo-ofi', 'wp-correo', 'wp-direccion', 'wp-profesion', 'wp-oficina'
@@ -813,8 +818,23 @@ export function limpiarFormularioPersonal(scrollBackToTable = false) {
         if (el) {
             if (el.tagName === 'SELECT') el.selectedIndex = 0;
             else el.value = '';
+            el.style.borderColor = '';
+            if (typeof el.setCustomValidity === 'function') el.setCustomValidity('');
         }
     });
+
+    const scopeLimpieza = formEl || document.getElementById('seccion-registro-personal');
+    if (scopeLimpieza && typeof scopeLimpieza.querySelectorAll === 'function') {
+        scopeLimpieza.querySelectorAll('input, select, textarea').forEach(el => {
+            if (el.tagName === 'SELECT') {
+                el.selectedIndex = 0;
+            } else {
+                el.value = '';
+            }
+            el.style.borderColor = '';
+            if (typeof el.setCustomValidity === 'function') el.setCustomValidity('');
+        });
+    }
 
     const helpHoras = document.getElementById('wp-horas-academicas-help');
     if (helpHoras) {
@@ -826,7 +846,7 @@ export function limpiarFormularioPersonal(scrollBackToTable = false) {
     const inpHRecibo = document.getElementById('wp-horas-recibo');
     if (inpHRecibo) inpHRecibo.style.borderColor = '';
     const inpProg = document.getElementById('wp-horas-por-programar');
-    if (inpProg) inpProg.value = '0';
+    if (inpProg) inpProg.value = '';
     const atiendeMatSel = document.getElementById('wp-atiende-matricula');
     if (atiendeMatSel) delete atiendeMatSel.dataset.manualChanged;
     window._cacheCargosPorCedula = {};
@@ -834,10 +854,21 @@ export function limpiarFormularioPersonal(scrollBackToTable = false) {
     const containerRango = document.getElementById('container-rango-obrero');
     if (containerRango) containerRango.style.display = 'none';
 
-    const containerCarga = document.getElementById('container-carga-horaria');
     const containerNivel = document.getElementById('container-nivel-modalidad');
     if (containerNivel) containerNivel.style.display = 'none';
     if (window.toggleMatriculaUI) window.toggleMatriculaUI();
+
+    ['wp-horas-recibo', 'wp-horas-academicas', 'wp-horas-administrativas', 'wp-horas-por-programar'].forEach(id => {
+        const elH = document.getElementById(id);
+        if (elH) {
+            elH.value = '';
+            elH.style.borderColor = '';
+        }
+    });
+    if (helpHoras) {
+        helpHoras.style.display = 'none';
+        helpHoras.innerHTML = '';
+    }
 
     const containerEsp = document.getElementById('container-especialidad');
     if (containerEsp) containerEsp.style.display = 'none';

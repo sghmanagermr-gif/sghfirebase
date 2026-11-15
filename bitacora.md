@@ -5437,6 +5437,18 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
     - Si una cédula nueva figura en otra institución distinta al plantel actual, muestra un modal de alerta en color amarillo con el texto exacto *"La cédula está registrada en otro plantel. ¿Desea continuar?"* sin exponer ningún dato de plantel, municipio, cargo ni horas, acompañado de un botón verde **Aceptar** y un botón amarillo **Cancelar**.
   * **SemVer y Despliegue:** Incremento secuencial a `v2.38.0` y `v2.38.1` en `webapp/package.json` y `webapp/index.html`, compilación limpia con Vite y publicación en Firebase Hosting (`https://sgh-merida.web.app`).
 
+---
+
+### Hito: Limpieza Exhaustiva del Formulario Registro de Personal al Guardar (v2.38.2)
+- **Fecha:** 2026-11-15 ~09:53 (Hora Local Venezuela).
+- **Módulo:** personalWizard / Formulario Registro de Personal (`#form-personal-inline`).
+- **Objetivo:** Garantizar que al guardar un registro desde `#btn-guardar-empleado-inline` se limpien absolutamente todos los 53 controles del formulario, evitando valores residuales de funcionarios anteriores.
+- **Cambios Técnicos (`webapp/src/personalWizard.js`):**
+  * Incorporación en `limpiarFormularioPersonal()` de los 5 campos faltantes (`wp-lugar-nacimiento`, `wp-estado-civil`, `wp-titular`, `wp-actividad-deportiva` y `wp-actividad-cultural`).
+  * Ejecución de `form.reset()` y recorrido directo de todos los `input, select, textarea` dentro de `#form-personal-inline` para vaciar valores, restablecer `selectedIndex = 0`, borrar bordes rojos y reiniciar mensajes de validez.
+  * Limpieza posterior a `toggleMatriculaUI()` de `wp-horas-recibo`, `wp-horas-academicas`, `wp-horas-administrativas`, `wp-horas-por-programar` y ocultamiento de `#wp-horas-academicas-help`.
+  * **Verificación:** Prueba automatizada verificando el vaciado completo de los 53 controles de `#form-personal-inline`, compilación exitosa (`v2.38.2`) y publicación en Firebase Hosting (`https://sgh-merida.web.app`).
+
 
 
 
