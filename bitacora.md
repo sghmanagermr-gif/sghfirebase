@@ -5505,6 +5505,30 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
     - Tras vaciar todos los botones de navegación, eliminación de `#btn-hamburger` en `#admin-header-left`, `<aside id="admin-sidebar">` (junto con su `<nav>` y `#btn-sidebar-logout`), y `#admin-sidebar-overlay`, manteniendo el botón **Salir** (`#btn-logout-admin`) fijo en el encabezado global.
   * **Verificación:** Compilación limpia de producción con Vite (`v2.38.5`), publicación en Firebase Hosting (`https://sgh-merida.web.app`), actualización documental en `versiones.md`, `bitacora.md` y `conversaciones.md`, y respaldo en GitHub (`main`).
 
+---
+
+### Hito: Desacople Modular de la Pizarra y Nuevas Pantallas de Discriminación de Personal y Estatus de Matrícula (v2.38.6)
+- **Fecha:** 2026-11-15 ~17:15 (Hora Local Venezuela).
+- **Módulos:** Panel Administrativo (`webapp/index.html`, `webapp/src/admin.js`, `webapp/public/resumen_estadisticas.json`, `scripts/actualizar_resumen_local.mjs`).
+- **Objetivo:** Desacoplar las secciones densas de información de la Pizarra administrativa para optimizar el rendimiento visual y la experiencia de usuario, trasladando Discriminación de Personal y Estatus de Matrícula a pantallas independientes invocadas mediante sus tarjetas interactivas respectivas.
+- **Cambios Técnicos (v2.38.6):**
+  * **Discriminación de Personal por 6 Dependencias Oficiales (`webapp/public/resumen_estadisticas.json`, `scripts/actualizar_resumen_local.mjs`, `webapp/src/admin.js`):**
+    - Se incorporó la estructura `porDependencia` para las 6 dependencias del estado: `NACIONAL`, `ESTADAL`, `MUNICIPAL`, `AUTONOMA`, `SUBVENCIONADA` y `PRIVADA`.
+    - Cada categoría desglosa el total global y los subtotales de `docentes`, `administrativos` y `obreros`.
+    - En `loadEstadisticas()` se implementó un escudo Zero-Cost: si el documento en Firestore carece del campo, se fusiona transparentemente en el cliente desde el archivo estático local sin consumir cuotas de lectura de la base de datos.
+  * **Pantalla Dedicada para Discriminación de Personal (`#admin-tab-discriminacion-personal`):**
+    - Se extrajo el panel de Discriminación de Personal fuera de `#extended-stats-container` en `#admin-tab-estadisticas`.
+    - Se creó la pestaña `#admin-tab-discriminacion-personal` con encabezado, subtítulo dinámico `#admin-disc-personal-desc` y panel espacioso con los contadores de Docentes, Administrativos, Obreros y las tarjetas de las 6 dependencias.
+    - Se vinculó la tarjeta `#card-pizarra-personal` (Personal Registrado) en la Pizarra con un listener de navegación directa que activa la pestaña y realiza scroll superior suave.
+  * **Pantalla Dedicada para Estatus de Matrícula (`#admin-tab-estatus-matricula`):**
+    - Se extrajo el panel de Estatus de Matrícula fuera de `#extended-stats-container`.
+    - Se creó la pestaña `#admin-tab-estatus-matricula` con encabezado, botón de sincronización `#btn-sync-matricula-mun`, subtítulo dinámico `#admin-estatus-matricula-desc`, tarjetas de Planteles Cargados y Pendientes, y el listado de seguimiento con mayor altura (`max-height: 480px`).
+    - Se vinculó la tarjeta `#card-pizarra-matricula` (Total Matrícula) en la Pizarra con un listener de navegación directa hacia `#admin-tab-estatus-matricula`.
+  * **Subtítulos Dinámicos y Navegación Circular:**
+    - Los subtítulos de ambas pantallas (`#admin-disc-personal-desc` y `#admin-estatus-matricula-desc`) se actualizan automáticamente en tiempo real según el filtro activo (Consolidado Estadal vs Municipio seleccionado).
+    - El retorno a la Pizarra se realiza instantáneamente desde cualquier pantalla pulsando el logotipo **SGH Panel** en el encabezado.
+  * **Verificación:** Compilación limpia de producción con Vite (`v2.38.6`), publicación en Firebase Hosting (`https://sgh-merida.web.app`), actualización documental en `versiones.md`, `bitacora.md` y `conversaciones.md`, y respaldo en GitHub (`main`).
+
 
 
 

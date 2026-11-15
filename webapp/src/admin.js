@@ -882,6 +882,38 @@ export function initAdminDashboard(dbInstance, user) {
     });
   }
 
+  // Tarjeta "Personal Registrado" en la Pizarra -> Navegación directa a Discriminación de Personal
+  const cardPizarraPersonal = document.getElementById('card-pizarra-personal');
+  if (cardPizarraPersonal && !cardPizarraPersonal._hasNavListener) {
+    cardPizarraPersonal._hasNavListener = true;
+    cardPizarraPersonal.addEventListener('click', () => {
+      document.querySelectorAll('.sidebar-btn').forEach(b => {
+        if (!b.classList.contains('accordion-btn')) b.classList.remove('active');
+      });
+      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+      const tabDiscPersonal = document.getElementById('admin-tab-discriminacion-personal');
+      if (tabDiscPersonal) tabDiscPersonal.classList.add('active');
+      const adminMain = document.getElementById('admin-main');
+      if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // Tarjeta "Matrícula" en la Pizarra -> Navegación directa a Estatus de Matrícula
+  const cardPizarraMatricula = document.getElementById('card-pizarra-matricula');
+  if (cardPizarraMatricula && !cardPizarraMatricula._hasNavListener) {
+    cardPizarraMatricula._hasNavListener = true;
+    cardPizarraMatricula.addEventListener('click', () => {
+      document.querySelectorAll('.sidebar-btn').forEach(b => {
+        if (!b.classList.contains('accordion-btn')) b.classList.remove('active');
+      });
+      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+      const tabEstatusMatricula = document.getElementById('admin-tab-estatus-matricula');
+      if (tabEstatusMatricula) tabEstatusMatricula.classList.add('active');
+      const adminMain = document.getElementById('admin-main');
+      if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
   // Tarjeta "Auditoría de Cédulas" en la Pizarra -> Navegación directa a Auditoría de Cédulas
   const cardPizarraAuditorCedula = document.getElementById('card-pizarra-auditor-cedula');
   if (cardPizarraAuditorCedula && !cardPizarraAuditorCedula._hasNavListener) {
@@ -1153,6 +1185,8 @@ export function initAdminDashboard(dbInstance, user) {
       const elMatricula = document.getElementById('stat-matricula');
       const elMatriculaTitle = document.getElementById('stat-matricula-title');
       const elMatriculaDesc = document.getElementById('stat-matricula-desc');
+      const elDiscPersonalDesc = document.getElementById('admin-disc-personal-desc');
+      const elEstatusMatriculaDesc = document.getElementById('admin-estatus-matricula-desc');
 
       if (esVistaMunicipal) {
         if (elPlantelesTitle) elPlantelesTitle.textContent = isMunAdmin ? 'Planteles del Municipio' : `Planteles de ${mun}`;
@@ -1161,6 +1195,8 @@ export function initAdminDashboard(dbInstance, user) {
         if (elUsuariosDesc) elUsuariosDesc.textContent = isMunAdmin ? 'Directores con cuenta de acceso' : `Directores en ${mun}`;
         if (elMatriculaTitle) elMatriculaTitle.textContent = 'Matrícula Municipal';
         if (elMatriculaDesc) elMatriculaDesc.textContent = `Estudiantes en ${mun}`;
+        if (elDiscPersonalDesc) elDiscPersonalDesc.textContent = mun ? `Distribución de personal activo en ${mun}.` : 'Distribución municipal de personal activo.';
+        if (elEstatusMatriculaDesc) elEstatusMatriculaDesc.textContent = mun ? `Seguimiento de carga de matrícula en ${mun}.` : 'Seguimiento municipal de carga de matrícula.';
       } else if (isZonAdmin) {
         if (elPlantelesTitle) elPlantelesTitle.textContent = 'Planteles del Estado';
         if (elPlantelesDesc) elPlantelesDesc.textContent = 'Total escuelas del estado';
@@ -1168,6 +1204,8 @@ export function initAdminDashboard(dbInstance, user) {
         if (elUsuariosDesc) elUsuariosDesc.textContent = 'Coordinadores municipales';
         if (elMatriculaTitle) elMatriculaTitle.textContent = 'Matrícula Estadal';
         if (elMatriculaDesc) elMatriculaDesc.textContent = 'Estudiantes en el estado';
+        if (elDiscPersonalDesc) elDiscPersonalDesc.textContent = 'Distribución consolidada del personal en el estado Mérida.';
+        if (elEstatusMatriculaDesc) elEstatusMatriculaDesc.textContent = 'Seguimiento consolidado de carga de matrícula en el estado Mérida.';
       } else {
         if (elPlantelesTitle) elPlantelesTitle.textContent = 'Planteles del Estado';
         if (elPlantelesDesc) elPlantelesDesc.textContent = 'Total escuelas del estado';
@@ -1175,6 +1213,8 @@ export function initAdminDashboard(dbInstance, user) {
         if (elUsuariosDesc) elUsuariosDesc.textContent = 'Cuentas de acceso activas';
         if (elMatriculaTitle) elMatriculaTitle.textContent = 'Matrícula Estadal';
         if (elMatriculaDesc) elMatriculaDesc.textContent = 'Estudiantes en el estado';
+        if (elDiscPersonalDesc) elDiscPersonalDesc.textContent = 'Distribución consolidada del personal en el estado Mérida.';
+        if (elEstatusMatriculaDesc) elEstatusMatriculaDesc.textContent = 'Seguimiento consolidado de carga de matrícula en el estado Mérida.';
       }
 
       // 1. Contador ligero de usuarios con soporte para variantes de municipio
@@ -1216,12 +1256,33 @@ export function initAdminDashboard(dbInstance, user) {
         console.warn("[Zero-Cost Shield] Lectura Firestore inaccesible o cuota alcanzada, usando respaldo local.");
       }
 
-      // Intento B: Respaldo local de alta velocidad (0 lecturas)
-      if (!resumenData) {
+      // Intento B: Respaldo local de alta velocidad (0 lecturas) o complemento si Firestore aún no incluye porDependencia
+      const faltaPorDependencia = resumenData && !(resumenData.global?.porDependencia || resumenData.porDependencia);
+      if (!resumenData || faltaPorDependencia) {
         try {
           const resp = await fetch('/resumen_estadisticas.json');
           if (resp.ok) {
-            resumenData = await resp.json();
+            const localResumen = await resp.json();
+            if (!resumenData) {
+              resumenData = localResumen;
+            } else {
+              const targetGlobal = resumenData.global || resumenData;
+              if (localResumen.global?.porDependencia) {
+                targetGlobal.porDependencia = localResumen.global.porDependencia;
+              }
+              if (localResumen.porMunicipio) {
+                resumenData.porMunicipio = resumenData.porMunicipio || {};
+                for (const [mKey, mVal] of Object.entries(resumenData.porMunicipio)) {
+                  if (mVal && !mVal.porDependencia) {
+                    const localMun = localResumen.porMunicipio[mKey] || getDatosMunicipio(localResumen, mKey);
+                    if (localMun?.porDependencia) mVal.porDependencia = localMun.porDependencia;
+                  }
+                }
+                for (const [mKey, mVal] of Object.entries(localResumen.porMunicipio)) {
+                  if (!resumenData.porMunicipio[mKey]) resumenData.porMunicipio[mKey] = mVal;
+                }
+              }
+            }
           }
         } catch (errFetch) {
           console.error("[Zero-Cost Shield] Error al cargar resumen local:", errFetch);
@@ -1257,6 +1318,7 @@ export function initAdminDashboard(dbInstance, user) {
             docentes: 0,
             administrativos: 0,
             obreros: 0,
+            porDependencia: {},
             situacion_laboral: {},
             jubilables: [],
             matricula: { cargados: 0, pendientes: 0, arrCargados: [], arrPendientes: [] }
@@ -1293,6 +1355,28 @@ export function initAdminDashboard(dbInstance, user) {
         if (elDocentes) elDocentes.textContent = Number(datosActivos.docentes || 0).toLocaleString();
         if (elAdministrativos) elAdministrativos.textContent = Number(datosActivos.administrativos || 0).toLocaleString();
         if (elObreros) elObreros.textContent = Number(datosActivos.obreros || 0).toLocaleString();
+
+        const porDep = datosActivos.porDependencia || {};
+        const mapaDeps = [
+          { key: 'NACIONAL', numId: 'stat-dep-nacional', detId: 'stat-dep-nacional-detalle' },
+          { key: 'ESTADAL', numId: 'stat-dep-estadal', detId: 'stat-dep-estadal-detalle' },
+          { key: 'MUNICIPAL', numId: 'stat-dep-municipal', detId: 'stat-dep-municipal-detalle' },
+          { key: 'AUTONOMA', numId: 'stat-dep-autonoma', detId: 'stat-dep-autonoma-detalle' },
+          { key: 'SUBVENCIONADA', numId: 'stat-dep-subvencionada', detId: 'stat-dep-subvencionada-detalle' },
+          { key: 'PRIVADA', numId: 'stat-dep-privada', detId: 'stat-dep-privada-detalle' }
+        ];
+        mapaDeps.forEach(({ key, numId, detId }) => {
+          const dVal = porDep[key] || { total: 0, docentes: 0, administrativos: 0, obreros: 0 };
+          const dDoc = Number(dVal.docentes || 0);
+          const dAdm = Number(dVal.administrativos || 0);
+          const dObr = Number(dVal.obreros || 0);
+          const dTotal = Number(dVal.total !== undefined ? dVal.total : (dDoc + dAdm + dObr));
+          const elNum = document.getElementById(numId);
+          const elDet = document.getElementById(detId);
+          if (elNum) elNum.textContent = dTotal.toLocaleString();
+          if (elDet) elDet.textContent = `Doc: ${dDoc.toLocaleString()} · Adm: ${dAdm.toLocaleString()} · Obr: ${dObr.toLocaleString()}`;
+        });
+
         if (discLoading) discLoading.style.display = 'none';
         if (discContent) discContent.style.display = 'flex';
 

@@ -10527,6 +10527,60 @@ Creo que solo 2 están en el RAC.xlsx"
 > **Respuesta del Agente:**  
 > Confirmación recibida y cierre oficial de la versión **v2.38.5**. Sincronización de versión a `v2.38.5` en `webapp/package.json` y `webapp/index.html`, actualización formal de `versiones.md`, `bitacora.md` y `conversaciones.md`, compilación final de producción, publicación en Firebase Hosting (`https://sgh-merida.web.app`) y respaldo en GitHub (`main`).
 
+---
+
+* **Emisor:** Usuario (Super Administrador) — `[2026-11-15 16:32]`
+
+> **Mensaje del Usuario:**  
+> en el elemento Discriminación de Personal aparece correctamente Docente, Administrativo y Obrero. Pero se necesita tanbién discriminarlos por dependencia: NACIONAL, ESTADAL, MUNICIPAL. AUTONOMA, SUBVENCIONADA y PRIVADA
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se incorporó la discriminación de personal por las 6 dependencias oficiales (NACIONAL, ESTADAL, MUNICIPAL, AUTONOMA, SUBVENCIONADA y PRIVADA) dentro del panel de Discriminación de Personal. Cada una cuenta con su tarjeta estilizada, total general y desglose detallado de Docentes, Administrativos y Obreros, respaldada por la arquitectura Zero-Cost sin consumo de cuotas Firestore.  
+> Compilación limpia de producción y publicación en Firebase Hosting (https://sgh-merida.web.app).  
+> ¿Los resultados fueron satisfactorios?
+
+---
+
+* **Emisor:** Usuario (Super Administrador) — `[2026-11-15 16:40]`
+
+> **Mensaje del Usuario:**  
+> Perfecto, ahora el elemento Dsicriminación de Personal, lo pondremos en una pantalla aparte y con la tarjeta PERSONAL REGISTRADO se invoca
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se desacopló la sección de Discriminación de Personal de la Pizarra principal y se creó su propia pantalla independiente (`#admin-tab-discriminacion-personal`). La tarjeta interactiva Personal Registrado (`#card-pizarra-personal`) en la Pizarra ahora funciona como acceso directo a esta pantalla, con subtítulo dinámico según el alcance estadal o municipal y retorno mediante el logotipo superior.  
+> Compilación limpia de producción y publicación en Firebase Hosting (https://sgh-merida.web.app).  
+> ¿Los resultados fueron satisfactorios?
+
+---
+
+* **Emisor:** Usuario (Super Administrador) — `[2026-11-15 16:59]`
+
+> **Mensaje del Usuario:**  
+> Hagamos lo mismo con el elemento Estatus de Matrícula y la tarjeta MATRÍCULA ESTADAL
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se desacopló la sección de Estatus de Matrícula de la Pizarra principal hacia su propia pantalla independiente (`#admin-tab-estatus-matricula`), vinculada directamente a la tarjeta interactiva de Matrícula (`#card-pizarra-matricula`). Se conservaron los contadores de Cargados y Pendientes, el botón Sincronizar en la cabecera y el listado de planteles con mayor altura visual.  
+> Compilación limpia de producción y publicación en Firebase Hosting (https://sgh-merida.web.app).  
+> ¿Los resultados fueron satisfactorios?
+
+---
+
+* **Emisor:** Usuario (Super Administrador) — `[2026-11-15 17:14]`
+
+> **Mensaje del Usuario:**  
+> Sí, son satisfactorios
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Confirmación de satisfacción recibida y cierre formal de la versión **v2.38.6**. Actualización física de versión en `webapp/package.json` e `index.html` (5 referencias), registro exhaustivo en `versiones.md`, `bitacora.md` y `conversaciones.md`, compilación final de producción con Vite, publicación en Firebase Hosting (`https://sgh-merida.web.app`) y sincronización automática en el repositorio GitHub (`main`).
+
 
 
 

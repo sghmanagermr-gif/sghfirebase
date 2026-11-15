@@ -230,6 +230,44 @@
           "pendientes": 26
         }
       }
+    },
+    "porDependencia": {
+      "NACIONAL": {
+        "total": 20799,
+        "docentes": 12126,
+        "administrativos": 1618,
+        "obreros": 7055
+      },
+      "ESTADAL": {
+        "total": 5800,
+        "docentes": 5018,
+        "administrativos": 12,
+        "obreros": 770
+      },
+      "MUNICIPAL": {
+        "total": 2,
+        "docentes": 0,
+        "administrativos": 0,
+        "obreros": 2
+      },
+      "AUTONOMA": {
+        "total": 0,
+        "docentes": 0,
+        "administrativos": 0,
+        "obreros": 0
+      },
+      "SUBVENCIONADA": {
+        "total": 9,
+        "docentes": 0,
+        "administrativos": 0,
+        "obreros": 9
+      },
+      "PRIVADA": {
+        "total": 0,
+        "docentes": 0,
+        "administrativos": 0,
+        "obreros": 0
+      }
     }
   },
   "porMunicipio": {
@@ -757,6 +795,44 @@
           "VICENTE LECUNA",
           "VICENTE SALIAS"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 3092,
+          "docentes": 1834,
+          "administrativos": 153,
+          "obreros": 1105
+        },
+        "ESTADAL": {
+          "total": 366,
+          "docentes": 322,
+          "administrativos": 0,
+          "obreros": 44
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "ANDRES BELLO": {
@@ -910,6 +986,44 @@
           "SIMON BOLIVAR",
           "VIANEY LISBETH VIELMA ALBARRAN"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 407,
+          "docentes": 243,
+          "administrativos": 34,
+          "obreros": 130
+        },
+        "ESTADAL": {
+          "total": 180,
+          "docentes": 164,
+          "administrativos": 0,
+          "obreros": 16
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "ANTONIO PINTO SALINA": {
@@ -1102,6 +1216,44 @@
           "VICTOR FERNANDEZ",
           "VICTORIANO MOLINA ZERPA"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 791,
+          "docentes": 452,
+          "administrativos": 53,
+          "obreros": 286
+        },
+        "ESTADAL": {
+          "total": 239,
+          "docentes": 193,
+          "administrativos": 0,
+          "obreros": 46
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "ARICAGUA": {
@@ -1180,6 +1332,44 @@
           "TERESA DE LA PARRA",
           "UNIDAD EDUCATIVA BOLIVARIANA FRANCISCO UZCÁTEGUI DÁVILA"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 112,
+          "docentes": 66,
+          "administrativos": 6,
+          "obreros": 40
+        },
+        "ESTADAL": {
+          "total": 38,
+          "docentes": 38,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "ARZOBISPO CHACON": {
@@ -1403,6 +1593,44 @@
           "VICENTE ROJAS",
           "VICENTE SALIAS"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 424,
+          "docentes": 262,
+          "administrativos": 20,
+          "obreros": 142
+        },
+        "ESTADAL": {
+          "total": 282,
+          "docentes": 268,
+          "administrativos": 0,
+          "obreros": 14
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "CAMPO ELIAS": {
@@ -1822,6 +2050,44 @@
           "VIRGEN DEL ROSARIO",
           "YUBAN ORTEGA"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 2385,
+          "docentes": 1314,
+          "administrativos": 263,
+          "obreros": 808
+        },
+        "ESTADAL": {
+          "total": 712,
+          "docentes": 623,
+          "administrativos": 4,
+          "obreros": 85
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "CARACCIOLO PARRA": {
@@ -2027,6 +2293,44 @@
           "WILLIAN DELGADO ALVIAREZ",
           "YSAURO MORENO TORRES"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 456,
+          "docentes": 320,
+          "administrativos": 20,
+          "obreros": 116
+        },
+        "ESTADAL": {
+          "total": 239,
+          "docentes": 208,
+          "administrativos": 1,
+          "obreros": 30
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "CARDENAL QUINTERO": {
@@ -2126,6 +2430,44 @@
           "SIMON RODRIGUEZ",
           "YOLANDA ALBARRÁN MORENO"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 306,
+          "docentes": 195,
+          "administrativos": 13,
+          "obreros": 98
+        },
+        "ESTADAL": {
+          "total": 63,
+          "docentes": 58,
+          "administrativos": 0,
+          "obreros": 5
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "GUARAQUE": {
@@ -2235,6 +2577,44 @@
           "VIRGINIA GARCÍA DE DAVILA",
           "VIRGINIA MARTINEZ DE MORENO"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 395,
+          "docentes": 191,
+          "administrativos": 26,
+          "obreros": 178
+        },
+        "ESTADAL": {
+          "total": 140,
+          "docentes": 100,
+          "administrativos": 0,
+          "obreros": 40
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "JULIO CESAR": {
@@ -2295,6 +2675,44 @@
           "SANTA CRUZ",
           "SIMON RODRIGUEZ"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 62,
+          "docentes": 43,
+          "administrativos": 3,
+          "obreros": 16
+        },
+        "ESTADAL": {
+          "total": 49,
+          "docentes": 42,
+          "administrativos": 0,
+          "obreros": 7
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "JUSTO BRICEÑO": {
@@ -2363,6 +2781,44 @@
           "SANTA ROSA",
           "SIMON RODRIGUEZ"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 131,
+          "docentes": 75,
+          "administrativos": 8,
+          "obreros": 48
+        },
+        "ESTADAL": {
+          "total": 94,
+          "docentes": 75,
+          "administrativos": 0,
+          "obreros": 19
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "LIBERTADOR": {
@@ -3228,6 +3684,44 @@
           "YOLANDA TERESA SARCOS (ANTES MONTERREY)",
           "ZAYDI LACRUZ (ANTES LOS ANDES)"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 4927,
+          "docentes": 2747,
+          "administrativos": 576,
+          "obreros": 1604
+        },
+        "ESTADAL": {
+          "total": 1233,
+          "docentes": 1100,
+          "administrativos": 2,
+          "obreros": 131
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "MIRANDA": {
@@ -3379,6 +3873,44 @@
           "TIMOTE",
           "TORIBIO ANDRADE"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 454,
+          "docentes": 326,
+          "administrativos": 22,
+          "obreros": 106
+        },
+        "ESTADAL": {
+          "total": 198,
+          "docentes": 173,
+          "administrativos": 0,
+          "obreros": 25
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "OBISPO RAMOS DE LORA": {
@@ -3605,6 +4137,44 @@
           "SANTA ELENA",
           "SIMON RODRIGUEZ"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 750,
+          "docentes": 432,
+          "administrativos": 27,
+          "obreros": 291
+        },
+        "ESTADAL": {
+          "total": 243,
+          "docentes": 205,
+          "administrativos": 0,
+          "obreros": 38
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "PADRE NOGUERA": {
@@ -3646,6 +4216,44 @@
           "PABLO RAMON DIAZ ARAQUE",
           "PADRE NOGUERA"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 149,
+          "docentes": 95,
+          "administrativos": 5,
+          "obreros": 49
+        },
+        "ESTADAL": {
+          "total": 4,
+          "docentes": 4,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "PUEBLO LLANO": {
@@ -3731,6 +4339,44 @@
           "PEDRO CAMEJO",
           "PEDRO JOSÉ GONZÁLEZ"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 397,
+          "docentes": 266,
+          "administrativos": 18,
+          "obreros": 113
+        },
+        "ESTADAL": {
+          "total": 38,
+          "docentes": 35,
+          "administrativos": 0,
+          "obreros": 3
+        },
+        "MUNICIPAL": {
+          "total": 2,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 2
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "RANGEL": {
@@ -3878,6 +4524,44 @@
           "UNIDAD EDUCATIVA COLEGIO CARDENAL QUINTERO",
           "VICTORIANO LOBO"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 498,
+          "docentes": 277,
+          "administrativos": 46,
+          "obreros": 175
+        },
+        "ESTADAL": {
+          "total": 166,
+          "docentes": 146,
+          "administrativos": 1,
+          "obreros": 19
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "RIVAS DAVILA": {
@@ -4022,6 +4706,44 @@
           "TULIO FEBRES CORDERO",
           "ZAISA ISABEL MORA"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 576,
+          "docentes": 316,
+          "administrativos": 50,
+          "obreros": 210
+        },
+        "ESTADAL": {
+          "total": 114,
+          "docentes": 88,
+          "administrativos": 2,
+          "obreros": 24
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "SANTOS MARQUINA": {
@@ -4129,6 +4851,44 @@
           "MARIANA MONSALVE",
           "TABAY"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 363,
+          "docentes": 214,
+          "administrativos": 32,
+          "obreros": 117
+        },
+        "ESTADAL": {
+          "total": 92,
+          "docentes": 79,
+          "administrativos": 0,
+          "obreros": 13
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "SUCRE": {
@@ -4473,6 +5233,44 @@
           "ZENON DIAZ CAMACHO",
           "ÁNGEL ANTONIO ALTUVE"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 1191,
+          "docentes": 725,
+          "administrativos": 67,
+          "obreros": 399
+        },
+        "ESTADAL": {
+          "total": 607,
+          "docentes": 523,
+          "administrativos": 2,
+          "obreros": 82
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "TOVAR": {
@@ -4745,6 +5543,44 @@
           "SIMON RODRIGUEZ",
           "TEL ELVIS DE JESUS APONCIO"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 1436,
+          "docentes": 795,
+          "administrativos": 102,
+          "obreros": 539
+        },
+        "ESTADAL": {
+          "total": 251,
+          "docentes": 214,
+          "administrativos": 0,
+          "obreros": 37
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 9,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 9
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "TULIO FEBRES": {
@@ -4913,6 +5749,44 @@
           "UBALDO ENRIQUE MORILLO",
           "VICENTE SALIAS"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 901,
+          "docentes": 560,
+          "administrativos": 40,
+          "obreros": 301
+        },
+        "ESTADAL": {
+          "total": 217,
+          "docentes": 164,
+          "administrativos": 0,
+          "obreros": 53
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "ZEA": {
@@ -5036,6 +5910,44 @@
           "TEL RAMON RAMIREZ",
           "TOMAS RAMON CONTRERAS RODRIGUEZ"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 363,
+          "docentes": 232,
+          "administrativos": 22,
+          "obreros": 109
+        },
+        "ESTADAL": {
+          "total": 52,
+          "docentes": 44,
+          "administrativos": 0,
+          "obreros": 8
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "SIN MUNICIPIO": {
@@ -5056,6 +5968,44 @@
         "pendientes": 0,
         "arrCargados": [],
         "arrPendientes": []
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 8,
+          "docentes": 6,
+          "administrativos": 0,
+          "obreros": 2
+        },
+        "ESTADAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "JULIO CESAR SALAS": {
@@ -5116,6 +6066,44 @@
           "SANTA CRUZ",
           "SIMON RODRIGUEZ"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 62,
+          "docentes": 43,
+          "administrativos": 3,
+          "obreros": 16
+        },
+        "ESTADAL": {
+          "total": 49,
+          "docentes": 42,
+          "administrativos": 0,
+          "obreros": 7
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "JULIO CÉSAR SALAS": {
@@ -5176,6 +6164,44 @@
           "SANTA CRUZ",
           "SIMON RODRIGUEZ"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 62,
+          "docentes": 43,
+          "administrativos": 3,
+          "obreros": 16
+        },
+        "ESTADAL": {
+          "total": 49,
+          "docentes": 42,
+          "administrativos": 0,
+          "obreros": 7
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "CARACCIOLO PARRA OLMEDO": {
@@ -5381,6 +6407,44 @@
           "WILLIAN DELGADO ALVIAREZ",
           "YSAURO MORENO TORRES"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 456,
+          "docentes": 320,
+          "administrativos": 20,
+          "obreros": 116
+        },
+        "ESTADAL": {
+          "total": 239,
+          "docentes": 208,
+          "administrativos": 1,
+          "obreros": 30
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "ANTONIO PINTO SALINAS": {
@@ -5573,6 +6637,44 @@
           "VICTOR FERNANDEZ",
           "VICTORIANO MOLINA ZERPA"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 791,
+          "docentes": 452,
+          "administrativos": 53,
+          "obreros": 286
+        },
+        "ESTADAL": {
+          "total": 239,
+          "docentes": 193,
+          "administrativos": 0,
+          "obreros": 46
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "TULIO FEBRES CORDERO": {
@@ -5741,6 +6843,44 @@
           "UBALDO ENRIQUE MORILLO",
           "VICENTE SALIAS"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 901,
+          "docentes": 560,
+          "administrativos": 40,
+          "obreros": 301
+        },
+        "ESTADAL": {
+          "total": 217,
+          "docentes": 164,
+          "administrativos": 0,
+          "obreros": 53
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "ANDRÉS BELLO": {
@@ -5894,6 +7034,44 @@
           "SIMON BOLIVAR",
           "VIANEY LISBETH VIELMA ALBARRAN"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 407,
+          "docentes": 243,
+          "administrativos": 34,
+          "obreros": 130
+        },
+        "ESTADAL": {
+          "total": 180,
+          "docentes": 164,
+          "administrativos": 0,
+          "obreros": 16
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "CAMPO ELÍAS": {
@@ -6313,6 +7491,44 @@
           "VIRGEN DEL ROSARIO",
           "YUBAN ORTEGA"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 2385,
+          "docentes": 1314,
+          "administrativos": 263,
+          "obreros": 808
+        },
+        "ESTADAL": {
+          "total": 712,
+          "docentes": 623,
+          "administrativos": 4,
+          "obreros": 85
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "ARZOBISPO CHACÓN": {
@@ -6536,6 +7752,44 @@
           "VICENTE ROJAS",
           "VICENTE SALIAS"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 424,
+          "docentes": 262,
+          "administrativos": 20,
+          "obreros": 142
+        },
+        "ESTADAL": {
+          "total": 282,
+          "docentes": 268,
+          "administrativos": 0,
+          "obreros": 14
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "RIVAS DÁVILA": {
@@ -6680,6 +7934,44 @@
           "TULIO FEBRES CORDERO",
           "ZAISA ISABEL MORA"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 576,
+          "docentes": 316,
+          "administrativos": 50,
+          "obreros": 210
+        },
+        "ESTADAL": {
+          "total": 114,
+          "docentes": 88,
+          "administrativos": 2,
+          "obreros": 24
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     },
     "JUSTO BRICENO": {
@@ -6748,6 +8040,44 @@
           "SANTA ROSA",
           "SIMON RODRIGUEZ"
         ]
+      },
+      "porDependencia": {
+        "NACIONAL": {
+          "total": 131,
+          "docentes": 75,
+          "administrativos": 8,
+          "obreros": 48
+        },
+        "ESTADAL": {
+          "total": 94,
+          "docentes": 75,
+          "administrativos": 0,
+          "obreros": 19
+        },
+        "MUNICIPAL": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "AUTONOMA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "SUBVENCIONADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        },
+        "PRIVADA": {
+          "total": 0,
+          "docentes": 0,
+          "administrativos": 0,
+          "obreros": 0
+        }
       }
     }
   }

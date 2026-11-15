@@ -4,6 +4,18 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.38.6 (15 de Noviembre de 2026)
+
+- **Desacople Modular de la Pizarra y Nuevas Pantallas para Discriminación de Personal y Estatus de Matrícula (`index.html`, `admin.js`, `resumen_estadisticas.json`):**
+  - **Desglose de Personal por 6 Dependencias (`resumen_estadisticas.json`, `scripts/actualizar_resumen_local.mjs`, `admin.js`, `index.html`):** Incorporación de la discriminación detallada de personal por dependencia oficial (NACIONAL, ESTADAL, MUNICIPAL, AUTONOMA, SUBVENCIONADA y PRIVADA) con sus respectivos subtotales de Docentes, Administrativos y Obreros, respaldada por la arquitectura Zero-Cost sin consumo de cuotas Firestore.
+  - **Nueva Pantalla Independiente de Discriminación de Personal (`#admin-tab-discriminacion-personal`):** Extracción del panel de distribución de personal fuera de la Pizarra principal hacia su propia pantalla administrativa con encabezado, subtítulo dinámico de alcance estadal/municipal (`#admin-disc-personal-desc`) y diseño espacioso.
+  - **Acceso Directo desde la Tarjeta Personal Registrado (`#card-pizarra-personal`):** La tarjeta de Personal Registrado en la Pizarra asume la función interactiva de navegación directa hacia `#admin-tab-discriminacion-personal`, con desplazamiento suave al inicio y retorno mediante el logotipo superior.
+  - **Nueva Pantalla Independiente de Estatus de Matrícula (`#admin-tab-estatus-matricula`):** Desacople de la monitorización de carga de matrícula fuera de la Pizarra hacia una pantalla dedicada con mayor amplitud visual, listado de planteles cargados y pendientes con scroll extendido, botón de sincronización en cabecera y subtítulo dinámico institucional (`#admin-estatus-matricula-desc`).
+  - **Acceso Directo desde la Tarjeta Total Matrícula (`#card-pizarra-matricula`):** La tarjeta de Total Matrícula en la Pizarra asume la función interactiva de navegación directa hacia `#admin-tab-estatus-matricula`.
+  - **Limpieza y Enfoque de la Pizarra:** Al retirar ambos módulos extensos hacia pantallas independientes, la Pizarra consolida su diseño minimalista y rápido, centrado exclusivamente en indicadores clave y accesos directos a los módulos especializados.
+
+---
+
 ### v2.38.5 (15 de Noviembre de 2026)
 
 - **Rediseño Visual del Panel Administrativo — Migración Completa del Menú Lateral a la Pizarra y Gestor de BD en Tarjetas (`index.html`, `admin.js`):**

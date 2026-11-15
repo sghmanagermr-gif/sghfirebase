@@ -69,12 +69,38 @@ const pivoteJubilacion = new Date(anioJubilacion, 2, 31);
 const fechaLimite = new Date(pivoteJubilacion);
 fechaLimite.setFullYear(fechaLimite.getFullYear() - 25);
 
+const DEPS_OFICIALES = ['NACIONAL', 'ESTADAL', 'MUNICIPAL', 'AUTONOMA', 'SUBVENCIONADA', 'PRIVADA'];
+
+function crearMapaDependencias() {
+  const obj = {};
+  for (const d of DEPS_OFICIALES) obj[d] = { total: 0, docentes: 0, administrativos: 0, obreros: 0 };
+  return obj;
+}
+
+function normalizarDependenciaEstadistica(rawDep, dea) {
+  let d = String(rawDep || '').trim().toUpperCase();
+  if (!d || d === 'ESTADAL/ NACIONAL') {
+    const p = plantelesMap.get(String(dea || '').trim().toUpperCase());
+    if (p && p.dependencia && p.dependencia !== 'ESTADAL/ NACIONAL') {
+      d = String(p.dependencia).trim().toUpperCase();
+    }
+  }
+  if (d.includes('AUTONOM')) return 'AUTONOMA';
+  if (d.includes('SUBVENCION')) return 'SUBVENCIONADA';
+  if (d.includes('PRIVAD')) return 'PRIVADA';
+  if (d.includes('MUNICIPAL')) return 'MUNICIPAL';
+  if (d.includes('ESTADAL') && !d.includes('NACIONAL')) return 'ESTADAL';
+  if (d.includes('NACIONAL')) return 'NACIONAL';
+  return 'NACIONAL';
+}
+
 const global = {
   totalPersonal: rows.length,
   totalPlanteles: totalPlantelesEstado,
   docentes: 0,
   administrativos: 0,
   obreros: 0,
+  porDependencia: crearMapaDependencias(),
   situacion_laboral: {},
   jubilables: {
     total: 0,
@@ -97,6 +123,7 @@ for (const [munNorm, arrPlanteles] of Object.entries(plantelesPorMunicipio)) {
     docentes: 0,
     administrativos: 0,
     obreros: 0,
+    porDependencia: crearMapaDependencias(),
     situacion_laboral: {},
     jubilables: {},
     matricula: {
@@ -114,9 +141,21 @@ for (const [munNorm, arrPlanteles] of Object.entries(plantelesPorMunicipio)) {
 
 rows.forEach(r => {
   const tipo = (r['Tipo de Personal'] || '').toUpperCase();
-  if (tipo.includes('DOCENTE')) global.docentes++;
-  else if (tipo.includes('ADMINISTRATIVO')) global.administrativos++;
-  else if (tipo.includes('OBRERO')) global.obreros++;
+  const deaRawDep = (r['Código Plantel (DEA)'] || '').toUpperCase().trim();
+  const dep = normalizarDependenciaEstadistica(r['Dependencia'] || r['DEPENDENCIA'], deaRawDep);
+  if (tipo.includes('DOCENTE')) {
+    global.docentes++;
+    global.porDependencia[dep].docentes++;
+    global.porDependencia[dep].total++;
+  } else if (tipo.includes('ADMINISTRATIVO')) {
+    global.administrativos++;
+    global.porDependencia[dep].administrativos++;
+    global.porDependencia[dep].total++;
+  } else if (tipo.includes('OBRERO')) {
+    global.obreros++;
+    global.porDependencia[dep].obreros++;
+    global.porDependencia[dep].total++;
+  }
 
   const sit = (r['Situación Laboral'] || 'NO DEFINIDA').toUpperCase().trim();
   global.situacion_laboral[sit] = (global.situacion_laboral[sit] || 0) + 1;
@@ -136,6 +175,7 @@ rows.forEach(r => {
       docentes: 0,
       administrativos: 0,
       obreros: 0,
+      porDependencia: crearMapaDependencias(),
       situacion_laboral: {},
       jubilables: {},
       matricula: { cargados: 0, pendientes: 0, arrCargados: [], arrPendientes: [] }
@@ -143,9 +183,19 @@ rows.forEach(r => {
   }
 
   porMunicipio[mun].totalPersonal++;
-  if (tipo.includes('DOCENTE')) porMunicipio[mun].docentes++;
-  else if (tipo.includes('ADMINISTRATIVO')) porMunicipio[mun].administrativos++;
-  else if (tipo.includes('OBRERO')) porMunicipio[mun].obreros++;
+  if (tipo.includes('DOCENTE')) {
+    porMunicipio[mun].docentes++;
+    porMunicipio[mun].porDependencia[dep].docentes++;
+    porMunicipio[mun].porDependencia[dep].total++;
+  } else if (tipo.includes('ADMINISTRATIVO')) {
+    porMunicipio[mun].administrativos++;
+    porMunicipio[mun].porDependencia[dep].administrativos++;
+    porMunicipio[mun].porDependencia[dep].total++;
+  } else if (tipo.includes('OBRERO')) {
+    porMunicipio[mun].obreros++;
+    porMunicipio[mun].porDependencia[dep].obreros++;
+    porMunicipio[mun].porDependencia[dep].total++;
+  }
 
   porMunicipio[mun].situacion_laboral[sit] = (porMunicipio[mun].situacion_laboral[sit] || 0) + 1;
 
