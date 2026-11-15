@@ -4,6 +4,35 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.38.1 (15 de Noviembre de 2026)
+
+- **Aviso Discreto Amarillo de Cédula en Otro Plantel (Complemento de Captura Silenciosa):**
+  - Al registrar personal nuevo en un plantel (`personalWizard.js`), si la cédula figura activa en otra institución, se presenta un modal de alerta amarilla con el texto directo: *"La cédula está registrada en otro plantel. ¿Desea continuar?"*, sin revelar ningún indicio sobre el plantel, municipio, cargo, turno ni horas del registro previo.
+  - Incluye un botón verde **Aceptar** (permite continuar y guardar el registro sin trabas) y un botón amarillo **Cancelar** (limpia el campo cédula al salir de la casilla o detiene el guardado).
+
+---
+
+### v2.38.0 (15 de Noviembre de 2026)
+
+- **Captura Silenciosa en Planteles y Escáner Centralizado de las 5 Alertas Rojas (Gestión Humana y Nómina):**
+  - **Captura Silenciosa y Homologación de Carga Horaria (`personalWizard.js`):** Se eliminaron las advertencias cruzadas y los bloqueos por tope en otros planteles. Tope local docente unificado en 54 horas semanales y conservación funcional de las horas de recibo (`37.5h` Administrativo, `40h` Obrero) como horas académicas cuando atienden matrícula.
+  - **Motor Centralizado de las 5 Alertas Rojas (`admin.js`):** Evaluación normativa por cédula en el Auditor Individual y en el nuevo **Escáner de Cierre de Jornada** (exclusivo para niveles estadales `superadmin`, `admin` y `zonadmin`):
+    1. Doble Destino Ilegal (Administrativo/Obrero multi-plantel o más de 2 cargos fuera del fraccionado legal Media/Adultos ≤ 54h).
+    2. Exceso de Carga Horaria Docente (> 54 horas semanales consolidadas).
+    3. Cabalgamiento de Turno / Choque Horario entre planteles.
+    4. Incompatibilidad de Dependencia Nacional entre Básica (Inicial/Primaria) y Media/Adultos o doble Básica Nacional.
+    5. Docentes en Planta Central / Zona Educativa / Sede Administrativa / CDCE sin cargo de Alto Nivel, Jefatura, Coordinación nominal, Dirección, Supervisión, Encargaduría o código RAC `210LNR`.
+  - **Escáner Zero-Cost y Exportación Excel:** Agrupación estatal por cédula previa al filtro municipal, 6 tarjetas interactivas de filtro rápido, búsqueda en memoria, salto directo **Auditar Frente a Frente**, re-sincronización manual y descarga en `.xlsx`.
+
+---
+
+### v2.37.2 (13 de Noviembre de 2026)
+
+- **Homologación Integral de los 6 Modos de Coacción y Botón Reactivo ➕ Nuevo Personal:**
+  - Garantía operativa total en todas las 6 modalidades del selector de despliegue (`TOTAL`, `SOLO_MATRICULA`, `SOLO_AGREGAR_PERSONAL`, `SOLO_EDITAR_PERSONAL`, `SOLO_EDITAR_PERSONAL_Y_MATRICULA` y `PERSONAL_COMPLETO`), con botón reactivo **➕ Nuevo Personal** como acción prioritaria en la barra de nómina.
+
+---
+
 ### v2.37.1 (12 de Noviembre de 2026)
 
 - **Optimización Anti-Bloqueo del Auditor Quirúrgico de Cédulas en Dispositivos Móviles:**

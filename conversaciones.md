@@ -10139,6 +10139,48 @@ Creo que solo 2 están en el RAC.xlsx"
 > - Se ubicó el botón "➕ Nuevo Personal" como la primera acción destacada en la barra de nómina.
 > - Se instruyó al usuario a realizar una recarga dura (Ctrl + F5 o vaciar caché) para visualizar la versión v2.37.2 con el botón activo.
 
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Ya apareció el boton Nuevo personal, pero creo hay problemas en la logica para agregar nuevo personal: Acabo de registrar un funcionario con cedula 12617597. Rastrea esta cedula en la unicamente en la base de datos en vivo de Firestore. ¿Dime si la condigues? ¿En cual plantel la consigues? ¿Y la condicion en horas y turno?" / Explicación de los registros en `S1539D1419` (doble turno), `DEMO140000` y `OD17631419` + mensajes y audios de acuerdos con Gestión Humana (Marina Sulbarán) y Nómina (Darío Angulo) para reajustar pluricargos e incorporar el Escáner Centralizado de las 5 Alertas Rojas.
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Rastreo en vivo de la cédula `12617597`, análisis normativo de los criterios acordados con Gestión Humana y Nómina, presentación del plan de implementación e implementación y despliegue de la versión **v2.38.0**:
+> - Captura Silenciosa en planteles con tope unificado docente de 54 horas, coherencia local por recibo de pago y conservación funcional de horas nominales (`37.5h` Administrativo, `40h` Obrero) cuando atienden matrícula.
+> - Motor centralizado de las **5 Alertas Rojas** en Auditoría de Cédula y nuevo **Escáner de Cierre de Jornada** exclusivo para administración estadal (Doble Destino Ilegal, Exceso > 54h, Cabalgamiento de Turno, Incompatibilidad en Dependencia Nacional y Docentes en Planta sin Cargo de Alto Nivel / Encargaduría), con 6 tarjetas interactivas, búsqueda en memoria Zero-Cost y exportación `.xlsx`.
+> - Verificación automatizada exitosa contra los 3 registros reales de la cédula `12617597` (`ALERTA_1`, `ALERTA_2` y `ALERTA_3`) y casos de control.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "ok fijate. con respecto a Captura Silenciosa en los Planteles solo se necesita avisarle al director con un alerta de color amarillo que diga, la cedula está registrada en otro plantel (no se le dará ningún indicio de cual es ese plantel) desea continuar. y un boton verde para aceptar y uno amarillo para cancelar"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Implementación y despliegue en vivo de la versión **v2.38.1**:
+> - Incorporación en `webapp/src/personalWizard.js` de un modal de alerta de color amarillo al detectar que una cédula ingresada existe en otro plantel, mostrando exclusivamente *"La cédula está registrada en otro plantel. ¿Desea continuar?"* sin revelar ningún dato de institución, municipio, cargo, turno ni horas.
+> - Botón verde **Aceptar** para continuar con el registro y botón amarillo **Cancelar** para detener la operación y limpiar/enfocar el campo cédula.
+> - Verificación automatizada y despliegue completo en Firebase Hosting (`https://sgh-merida.web.app`).
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Si satisfactorios la version 2.38.0 y 2.38.1"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Confirmación recibida de las versiones v2.38.0 y v2.38.1. Actualización formal de `bitacora.md`, `conversaciones.md`, `versiones.md` y sincronización completa de los cambios en el repositorio remoto de Git.
+
 
 
 

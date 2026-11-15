@@ -5409,6 +5409,34 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   * `webapp/package.json`: Elevación de SemVer a `v2.37.2` y actualización de badges en `index.html`.
   * **Despliegue a Producción:** Compilación exitosa con Vite y publicación a Firebase Hosting (`https://sgh-merida.web.app`) mediante Firebase Tools. Reubicación prioritaria del botón "➕ Nuevo Personal" como primera acción en la barra de nómina.
 
+---
+
+### Hito: Captura Silenciosa en Planteles y Panel Centralizado de las 5 Alertas Rojas (v2.38.0 - v2.38.1)
+- **Fecha:** 2026-11-15 ~09:41 (Hora Local Venezuela).
+- **Módulo:** personalWizard / Auditor de Cédula / Escáner de Cierre de Jornada / Nómina y Gestión Humana.
+- **Objetivo:** Reemplazar los bloqueos y advertencias visibles en los planteles por una arquitectura de Captura Silenciosa con validación de coherencia local y aviso discreto sin indicios del otro plantel, consolidando toda la auditoría normativa en un Escáner Centralizado exclusivo de Administración Estadal basado en las 5 Alertas Rojas acordadas con Gestión Humana (Marina Sulbarán) y Nómina (Darío Angulo).
+- **Cambios Técnicos (v2.38.0):**
+  * **Captura Silenciosa y Unificación de Carga Horaria (`webapp/src/personalWizard.js`):**
+    - Eliminación de consultas cruzadas entre planteles, avisos visibles de pluriempleo y bloqueos de guardado por tope en otros planteles (`verificarTopeHorasDocente` y `guardarPersonalInline`).
+    - Unificación del tope legal docente en `54 horas` semanales para todos los niveles y modalidades, validando únicamente la coherencia local (`horasAsignadas <= horasRecibo <= 54` Docente o `40` Administrativo/Obrero).
+    - Homologación de horas nominales por defecto (`37.5` Administrativo, `40` Obrero); cuando atienden matrícula, sus horas de recibo se asignan funcionalmente como horas académicas con `horas-administrativas = 0` sin sobrescribirlas con `53.33`.
+    - Exportación y normalización con acentos en `sonTurnosCoincidentes` (`MAÑANA`/`MANANA`, `TARDE`, `DOBLE TURNO`, `NOCTURN`, `SABATIN`).
+  * **Motor Centralizado de las 5 Alertas Rojas y Escáner Estadal (`webapp/index.html`, `webapp/src/admin.js`):**
+    - Selector de modo en `#admin-tab-auditor-cedula`: `Búsqueda Individual` (habilitada también para `munadmin`) vs `Escáner de Cierre de Jornada (5 Alertas Rojas)` (exclusivo para `superadmin`, `admin` y `zonadmin`).
+    - Implementación y exportación de `evaluarAlertasRojasFuncionario(cedula, docs, resolverDatosPlantel)` evaluando por cédula:
+      1. `ALERTA_1` (**Doble Destino Ilegal**): `>= 2` cargos con Administrativo u Obrero (Art. 148 CRBV) o `> 2` cargos fuera del fraccionado legal de Media/Adultos `<= 54h`.
+      2. `ALERTA_2` (**Exceso Tope Docente > 54 hrs**): suma consolidada por cédula superior a `54h`.
+      3. `ALERTA_3` (**Cabalgamiento de Turno**): colisión física de turnos entre planteles de una misma cédula mediante `sonTurnosCoincidentes`.
+      4. `ALERTA_4` (**Incompatibilidad Dependencia Nacional**): docente en nómina Nacional combinando Básica (`INICIAL`/`PRIMARIA`) con Media/Adultos/Nocturno o doble Básica Nacional.
+      5. `ALERTA_5` (**Docentes en Planta sin Cargo de Alto Nivel / Encargaduría**): registro único o múltiple docente adscrito a Planta/Zona Educativa/Sede Administrativa/CDCE (`es_planta`, `oficina`, `0012...`) sin cargo de Jefatura de División, Coordinador nominal, Director, Supervisor, Responsable, Encargaduría/Alto Nivel o código RAC `210LNR`.
+    - Principio Zero-Cost Spark en el Escáner: reutilización de `window._cacheExportPersonal['TODOS']` y caché de planteles, agrupación estatal previa por cédula antes de filtrar por municipio, 6 tarjetas interactivas de filtro rápido, buscador instantáneo en memoria, botón **Auditar Frente a Frente**, botón de re-sincronización manual y exportación integral a Excel (`.xlsx`).
+  * **Verificación:** Confirmación con los 3 registros en vivo de la cédula `12617597` (`ALERTA_1`, `ALERTA_2`, `ALERTA_3`, total `133.33h`) y pruebas de control para `ALERTA_4`, `ALERTA_5` y supuestos legales fraccionados.
+- **Cambios Técnicos (v2.38.1):**
+  * **Aviso Discreto Amarillo en Planteles (`webapp/src/personalWizard.js`):**
+    - Implementación de `mostrarAlertaCedulaEnOtroPlantel()` y `verificarCedulaEnOtroPlantel(cedulaRaw, origen)` conectadas al campo `#wp-cedula` y a `guardarPersonalInline()`.
+    - Si una cédula nueva figura en otra institución distinta al plantel actual, muestra un modal de alerta en color amarillo con el texto exacto *"La cédula está registrada en otro plantel. ¿Desea continuar?"* sin exponer ningún dato de plantel, municipio, cargo ni horas, acompañado de un botón verde **Aceptar** y un botón amarillo **Cancelar**.
+  * **SemVer y Despliegue:** Incremento secuencial a `v2.38.0` y `v2.38.1` en `webapp/package.json` y `webapp/index.html`, compilación limpia con Vite y publicación en Firebase Hosting (`https://sgh-merida.web.app`).
+
 
 
 

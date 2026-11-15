@@ -3,6 +3,218 @@ import { doc, getDoc, getDocFromServer, setDoc, updateDoc, collection, query, wh
 import * as XLSX from 'xlsx';
 import { showToast, showAlert } from './uiUtils.js';
 import { getMunicipios, getParroquias, normalizarMunicipio, getVariantesMunicipio } from './geografia.js';
+import { sonTurnosCoincidentes } from './personalWizard.js';
+
+function normTextoAlerta(valor) {
+  return String(valor || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toUpperCase()
+    .trim();
+}
+
+function clasificarTipoPersonalAlerta(rawTipo) {
+  const t = normTextoAlerta(rawTipo);
+  if (t.includes('DOCENTE')) return 'DOCENTE';
+  if (t.includes('OBRERO')) return 'OBRERO';
+  if (t.includes('ADMINISTRATIVO')) return 'ADMINISTRATIVO';
+  return 'OTRO';
+}
+
+function esCargoAutorizadoPlanta(cargoNorm, codRacNorm) {
+  if (codRacNorm === '210LNR') return true;
+  return /(JEFE DE DIVISION|JEFA DE DIVISION|JEFE DIVISION|JEFA DIVISION|COORDINADOR|COORDINADORA|DIRECTOR|DIRECTORA|SUPERVISOR|SUPERVISORA|RESPONSABLE|ENCARGADURIA|ENCARGADO|ENCARGADA|ALTO NIVEL)/.test(cargoNorm);
+}
+
+/**
+ * Motor centralizado de las 5 Alertas Rojas normativas por cédula (SGH Mérida).
+ * Evalúa pluricargos, tope legal docente (54h), cabalgamiento de turnos,
+ * incompatibilidad de dependencia Nacional y docentes en Planta sin encargaduría.
+ */
+export function evaluarAlertasRojasFuncionario(cedula, docs = [], resolverDatosPlantel = null) {
+  const registros = (docs || []).map((d) => {
+    const infoP = typeof resolverDatosPlantel === 'function'
+      ? resolverDatosPlantel(d)
+      : {
+          dea: d['codigo-plantel'] || d['codigoDEA'] || d['codigoPlantel'] || d['CODIGO DEL PLANTEL'] || 'S/D',
+          escuela: d['ubicacion-fisica'] || d.plantel || d['UBICACIÓN FÍSICA'] || 'Plantel Registrado',
+          municipio: d.municipio || 'N/R',
+          parroquia: d.parroquia || 'N/R',
+          esPlantaPlantel: false,
+          nivelPlantel: '',
+          dependenciaPlantel: '',
+          denominacionPlantel: ''
+        };
+
+    const tipoRaw = d['tipo-personal'] || d['TIPO PERSONAL'] || 'N/E';
+    const tipo = clasificarTipoPersonalAlerta(tipoRaw);
+    const horasAcad = Number(d['horas-academicas'] ?? d['HORAS ACADEMICAS'] ?? 0) || 0;
+    const horasAdmin = Number(d['horas-administrativas'] ?? d['HORAS ADMINISTRATIVAS'] ?? 0) || 0;
+    const horasRecibo = Number(d['horas-recibo'] ?? d['HORAS RECIBO DE PAGO'] ?? 0) || 0;
+    const horasEfectivas = Number(Math.max(horasRecibo, horasAcad + horasAdmin).toFixed(2));
+    const turnosRaw = d['turnos-atiende'] || d['TURNOS QUE ATIENDE'] || '';
+    const turnosDisplay = Array.isArray(turnosRaw) ? turnosRaw.join(', ') : String(turnosRaw || '').trim();
+    const nivelProp = normTextoAlerta(d['nivel-modalidad'] || d['NIVEL O MODALIDAD'] || '');
+    const nivelPlantelNorm = normTextoAlerta(infoP.nivelPlantel || '');
+    const nivelDoc = nivelProp || nivelPlantelNorm;
+    const depRaw = normTextoAlerta(d.dependencia || d['DEPENDENCIA'] || infoP.dependenciaPlantel || '');
+    const cargoNombre = normTextoAlerta(d.cargo || d['nombre-cargo'] || d['denominacion-cargo'] || d['CARGO'] || '');
+    const codRac = normTextoAlerta(d['codigo-rac'] || d['codigo-cargo'] || d['CODIGO RAC'] || '');
+    const ubicAdmin = normTextoAlerta(d['ubicacion-administrativa'] || d['UBICACIÓN ADMINISTRATIVA'] || '');
+    const oficinaNorm = normTextoAlerta(d.oficina || '');
+    const deaNorm = normTextoAlerta(infoP.dea || '');
+    const escuelaNorm = normTextoAlerta(infoP.escuela || '');
+    const denomNorm = normTextoAlerta(infoP.denominacionPlantel || d.denominacion || '');
+
+    return {
+      doc: d,
+      infoP,
+      dea: infoP.dea || 'S/D',
+      escuela: infoP.escuela || 'Plantel Registrado',
+      municipio: infoP.municipio || 'N/R',
+      parroquia: infoP.parroquia || 'N/R',
+      tipoRaw,
+      tipo,
+      horasAcad,
+      horasAdmin,
+      horasRecibo,
+      horasEfectivas,
+      turnosRaw,
+      turnosDisplay: turnosDisplay || 'N/R',
+      nivelDoc,
+      depRaw,
+      cargoNombre,
+      codRac,
+      ubicAdmin,
+      oficinaNorm,
+      deaNorm,
+      escuelaNorm,
+      denomNorm
+    };
+  });
+
+  const alertas = [];
+  const totalHoras = Number(registros.reduce((acc, r) => acc + r.horasEfectivas, 0).toFixed(2));
+  const tieneDocente = registros.some(r => r.tipo === 'DOCENTE');
+
+  // ALERTA 1: Doble Destino Ilegal (Obrero/Adm con >= 2 cargos o > 2 cargos fuera de Media/Adultos legal)
+  if (registros.length >= 2) {
+    const tieneAdmObrero = registros.some(r => r.tipo === 'OBRERO' || r.tipo === 'ADMINISTRATIVO');
+    const esFraccionadoMediaAdultosLegal = registros.every(r =>
+      r.tipo === 'DOCENTE' && /(MEDIA|ADULTO|TECNICA|NOCTURN)/.test(`${r.nivelDoc} ${normTextoAlerta(r.turnosDisplay)}`)
+    ) && totalHoras <= 54.01;
+
+    if (tieneAdmObrero || (registros.length > 2 && !esFraccionadoMediaAdultosLegal)) {
+      const detalleTipos = registros.map(r => `${r.dea} (${r.tipo})`).join(' + ');
+      const motivoA1 = tieneAdmObrero
+        ? 'Presencia de cargo Administrativo u Obrero en duplicidad multi-plantel (infracción Art. 148 CRBV incluso en turnos o dependencias distintas).'
+        : `Más de 2 destinos activos (${registros.length} planteles) fuera del supuesto fraccionado legal de Media/Adultos ≤ 54 hrs.`;
+      alertas.push({
+        codigo: 'ALERTA_1',
+        titulo: '1. Doble Destino Ilegal',
+        severidad: 'CRITICA',
+        detalle: `${motivoA1} Registros: ${detalleTipos}.`
+      });
+    }
+  }
+
+  // ALERTA 2: Exceso de Tope Legal Docente (> 54 hrs/semana)
+  if ((registros.length >= 2 || tieneDocente) && totalHoras > 54.01) {
+    const desgloseHoras = registros.map(r => `${r.dea}: ${r.horasEfectivas}h`).join(' + ');
+    alertas.push({
+      codigo: 'ALERTA_2',
+      titulo: '2. Exceso de Carga Horaria (> 54 hrs)',
+      severidad: 'CRITICA',
+      detalle: `Suma consolidada de ${totalHoras} hrs/semana, excediendo el tope máximo permitido de 54 hrs (${desgloseHoras}).`
+    });
+  }
+
+  // ALERTA 3: Cabalgamiento de Horario / Choque de Turno
+  if (registros.length >= 2) {
+    const choques = [];
+    for (let i = 0; i < registros.length; i++) {
+      for (let j = i + 1; j < registros.length; j++) {
+        const a = registros[i];
+        const b = registros[j];
+        if (sonTurnosCoincidentes(a.turnosRaw, b.turnosRaw)) {
+          choques.push(`${a.dea} [${a.turnosDisplay}] ↔ ${b.dea} [${b.turnosDisplay}]`);
+        }
+      }
+    }
+    if (choques.length > 0) {
+      alertas.push({
+        codigo: 'ALERTA_3',
+        titulo: '3. Cabalgamiento de Turno',
+        severidad: 'CRITICA',
+        detalle: `Coincidencia horaria física imposible detectada entre planteles: ${choques.join('; ')}.`
+      });
+    }
+  }
+
+  // ALERTA 4: Incompatibilidad de Dependencia Nacional (Básica + Media/Adultos o Doble Básica Nacional)
+  const docentesNacionales = registros.filter(r => r.tipo === 'DOCENTE' && r.depRaw.includes('NACIONAL'));
+  if (docentesNacionales.length >= 2) {
+    let basicaNacSolo = 0;
+    let mediaAdultosNac = 0;
+    let mixtoBasicaYMedia = 0;
+    docentesNacionales.forEach((r) => {
+      const esMediaOAdultos = /(MEDIA|ADULTO|NOCTURN|TECNICA)/.test(`${r.nivelDoc} ${normTextoAlerta(r.turnosDisplay)}`);
+      const esBasica = /(INICIAL|PREESCOLAR|PRIMARIA|BASICA)/.test(r.nivelDoc);
+      if (esBasica && esMediaOAdultos) mixtoBasicaYMedia++;
+      else if (esMediaOAdultos) mediaAdultosNac++;
+      else if (esBasica) basicaNacSolo++;
+    });
+
+    const combinaBasicaYMedia = (basicaNacSolo > 0 && (mediaAdultosNac > 0 || mixtoBasicaYMedia > 0)) || (mixtoBasicaYMedia >= 2);
+    const dobleBasicaNacional = (basicaNacSolo + mixtoBasicaYMedia) >= 2 && mediaAdultosNac === 0;
+    if (combinaBasicaYMedia || dobleBasicaNacional) {
+      const detalleNac = docentesNacionales.map(r => `${r.dea} (${r.nivelDoc || 'SIN NIVEL'})`).join(' + ');
+      alertas.push({
+        codigo: 'ALERTA_4',
+        titulo: '4. Incompatibilidad Dependencia Nacional',
+        severidad: 'CRITICA',
+        detalle: `Código docente en dependencia Nacional incompatible entre niveles Básica/Inicial/Primaria y Media/Adultos o doble Básica Nacional: ${detalleNac}.`
+      });
+    }
+  }
+
+  // ALERTA 5: Docentes en Planta Central / Sedes Administrativas sin Cargo de Alto Nivel / Encargaduría (evalúa incluso registro único)
+  const docentesPlantaIrregulares = registros.filter((r) => {
+    if (r.tipo !== 'DOCENTE') return false;
+    const esUbicacionPlanta = Boolean(r.doc?.es_planta === true)
+      || Boolean(r.oficinaNorm)
+      || Boolean(r.infoP?.esPlantaPlantel)
+      || r.deaNorm.startsWith('0012')
+      || r.denomNorm === 'SEDE ADMINISTRATIVA'
+      || /(PLANTA|ZONA EDUCATIVA|SEDE ADMINISTRATIVA|\bCDCE\b)/.test(`${r.deaNorm} ${r.escuelaNorm} ${r.ubicAdmin}`);
+
+    if (!esUbicacionPlanta) return false;
+    const cargoEval = `${r.cargoNombre} ${r.codRac}`;
+    return !esCargoAutorizadoPlanta(cargoEval, r.codRac);
+  });
+
+  if (docentesPlantaIrregulares.length > 0) {
+    const detallePlanta = docentesPlantaIrregulares
+      .map(r => `${r.dea} - Cargo: ${r.cargoNombre || 'S/E'}${r.codRac ? ` (RAC: ${r.codRac})` : ''}`)
+      .join('; ');
+    alertas.push({
+      codigo: 'ALERTA_5',
+      titulo: '5. Docente en Planta sin Cargo de Alto Nivel / Encargaduría',
+      severidad: 'CRITICA',
+      detalle: `Personal docente adscrito a Planta/Zona Educativa/Sede Administrativa sin rango de Jefatura, Coordinación nominal, Dirección, Supervisión o código 210LNR: ${detallePlanta}.`
+    });
+  }
+
+  return {
+    cedula,
+    alertas,
+    codigos: alertas.map(a => a.codigo),
+    tieneAlertas: alertas.length > 0,
+    totalHoras,
+    totalCargos: registros.length,
+    registros
+  };
+}
 
 // Helper de extracción de datos municipales con soporte multi-alias
 function getDatosMunicipio(resumenData, munInput) {
@@ -308,6 +520,19 @@ export function initAdminDashboard(dbInstance, user) {
     if (btnEstadisticas) btnEstadisticas.style.display = tienePermiso('estadisticas') ? 'block' : 'none';
     if (btnValidacion) btnValidacion.style.display = tienePermiso('validacion') ? 'block' : 'none';
     if (btnAuditorCedula) btnAuditorCedula.style.display = (isSuperAdmin || isZonAdmin || userData?.rol === 'munadmin' || tienePermiso('planteles', true)) ? 'flex' : 'none';
+    const btnModoEscanerAlertas = document.getElementById('btn-modo-auditor-escaner');
+    if (btnModoEscanerAlertas) {
+      const puedeVerEscaner = isSuperAdmin || isZonAdmin;
+      btnModoEscanerAlertas.style.display = puedeVerEscaner ? 'inline-flex' : 'none';
+      if (!puedeVerEscaner) {
+        const secInd = document.getElementById('seccion-auditor-individual');
+        const secEsc = document.getElementById('seccion-auditor-escaner');
+        const btnInd = document.getElementById('btn-modo-auditor-individual');
+        if (secInd) secInd.style.display = 'block';
+        if (secEsc) secEsc.style.display = 'none';
+        if (btnInd) btnInd.click();
+      }
+    }
     if (btnDespliegue) btnDespliegue.style.display = tienePermiso('despliegue', false) ? 'block' : 'none';
     if (btnAspiradora) btnAspiradora.style.display = tienePermiso('despliegue', false) ? 'flex' : 'none';
 
@@ -5677,6 +5902,63 @@ export function initAdminDashboard(dbInstance, user) {
 
     if (!formAuditor) return;
 
+    function resolverDatosPlantel(d, plantelesMap = null) {
+      if ((!Array.isArray(currentPlanteles) || currentPlanteles.length === 0) && typeof obtenerPlantelesEstadalCache === 'function') {
+        const cacheP = obtenerPlantelesEstadalCache();
+        if (Array.isArray(cacheP) && cacheP.length > 0) currentPlanteles = cacheP;
+      }
+
+      let dea = d['codigo-plantel'] || d['codigoDEA'] || d['codigoPlantel'] || d['CODIGO DEL PLANTEL'] || d['CODIGO'] || '';
+      const deaUpper = String(dea || '').trim().toUpperCase();
+      let escuela = d['ubicacion-fisica'] || d.plantel || d['UBICACIÓN FÍSICA'] || '';
+      let mun = d.municipio || '';
+      let par = d.parroquia || '';
+      let depPlantel = d.dependencia || d['DEPENDENCIA'] || '';
+      let denomPlantel = d.denominacion || '';
+      let nivelPlantel = '';
+      let esPlantaPlantel = Boolean(d.es_planta || d.oficina || deaUpper.startsWith('0012'));
+
+      let match = null;
+      if (deaUpper) {
+        if (plantelesMap instanceof Map) {
+          match = plantelesMap.get(deaUpper) || null;
+        } else if (Array.isArray(currentPlanteles)) {
+          match = currentPlanteles.find(p => String(p.codigos?.plantel || p.codigoDEA || p.id || '').trim().toUpperCase() === deaUpper) || null;
+        }
+      }
+
+      if (match) {
+        if (!escuela || escuela.includes('no especificado') || escuela.includes('no registrado')) {
+          escuela = match['nombre-plantel']?.nominal || match.denominacion || match['nombre-plantel'] || dea;
+        }
+        if (!mun || mun === 'N/R') mun = match.municipio || '';
+        if (!par || par === 'N/R') par = match.parroquia || '';
+        if (!depPlantel) depPlantel = match.dependencia || '';
+        if (!denomPlantel) denomPlantel = match.denominacion || '';
+        nivelPlantel = match.nivel || '';
+        if (match.es_planta || String(match.denominacion || '').toUpperCase() === 'SEDE ADMINISTRATIVA') {
+          esPlantaPlantel = true;
+        }
+      }
+
+      return {
+        dea: dea || 'S/D',
+        escuela: escuela || 'Plantel Registrado',
+        municipio: mun || 'N/R',
+        parroquia: par || 'N/R',
+        esPlantaPlantel,
+        nivelPlantel,
+        dependenciaPlantel: depPlantel,
+        denominacionPlantel: denomPlantel
+      };
+    }
+
+    const escaparHtmlAuditor = (str) => String(str ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+
     btnLimpiar?.addEventListener('click', () => {
       if (inpAuditor) inpAuditor.value = '';
       if (estadoInicial) estadoInicial.style.display = 'block';
@@ -5843,67 +6125,101 @@ export function initAdminDashboard(dbInstance, user) {
       }
 
       // CASO 2: FUNCIONARIO ÚNICO O DUPLICADO
+      window._ultimoAuditorDocsActual = { cedula: cedulaBuscada, docs: [...docs] };
       const esDuplicado = docs.length > 1;
+      const evaluacion = evaluarAlertasRojasFuncionario(cedulaBuscada, docs, resolverDatosPlantel);
       let html = '';
 
-      // Helpers de Simetría SGH: resolución inteligente de datos de plantel y ubicación
-      const resolverDatosPlantel = (d) => {
-        let dea = d['codigo-plantel'] || d['codigoDEA'] || d['codigoPlantel'] || d['CODIGO DEL PLANTEL'] || d['CODIGO'] || '';
-        let escuela = d['ubicacion-fisica'] || d.plantel || d['UBICACIÓN FÍSICA'] || '';
-        let mun = d.municipio || '';
-        let par = d.parroquia || '';
-
-        if ((!escuela || escuela.includes('no especificado') || escuela.includes('no registrado') || !mun || mun === 'N/R' || !par || par === 'N/R') && dea && Array.isArray(currentPlanteles)) {
-          const match = currentPlanteles.find(p => (p.codigos?.plantel || p.codigoDEA || p.id) === dea);
-          if (match) {
-            if (!escuela || escuela.includes('no especificado') || escuela.includes('no registrado')) {
-              escuela = match['nombre-plantel']?.nominal || match.denominacion || match['nombre-plantel'] || dea;
-            }
-            if (!mun || mun === 'N/R') mun = match.municipio || '';
-            if (!par || par === 'N/R') par = match.parroquia || '';
-          }
-        }
-        return {
-          dea: dea || 'S/D',
-          escuela: escuela || 'Plantel Registrado',
-          municipio: mun || 'N/R',
-          parroquia: par || 'N/R'
-        };
-      };
-
-      // Banner Superior de Estado
-      if (!esDuplicado) {
+      // Banner Superior de Estado (Silencioso en planteles -> Dictamen Centralizado en Auditoría)
+      if (!esDuplicado && !evaluacion.tieneAlertas) {
         const d = docs[0];
         const infoP = resolverDatosPlantel(d);
-        const dea = infoP.dea;
-        const escuela = infoP.escuela;
         html += `
-          <div style="background: linear-gradient(135deg, #065f46 0%, #047857 100%); color: white; padding: 16px 20px; border-radius: 10px; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-shadow: 0 4px 12px rgba(4,120,87,0.15);">
+          <div style="background: linear-gradient(135deg, #065f46 0%, #047857 100%); color: white; padding: 16px 20px; border-radius: 10px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-shadow: 0 4px 12px rgba(4,120,87,0.15);">
             <div style="display: flex; align-items: center; gap: 12px;">
               <div style="background: rgba(255,255,255,0.2); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">🟢</div>
               <div>
                 <h4 style="margin: 0; font-size: 1.1rem; color: #ffffff;">REGISTRO ÚNICO Y VÁLIDO</h4>
-                <p style="margin: 3px 0 0; font-size: 0.85rem; color: #a7f3d0;">Esta cédula figura registrada formalmente en <strong>1 sola institución</strong> (${dea} - ${escuela} — ${infoP.municipio} / ${infoP.parroquia}).</p>
+                <p style="margin: 3px 0 0; font-size: 0.85rem; color: #a7f3d0;">Esta cédula figura registrada formalmente en <strong>1 sola institución</strong> (${escaparHtmlAuditor(infoP.dea)} - ${escaparHtmlAuditor(infoP.escuela)} — ${escaparHtmlAuditor(infoP.municipio)} / ${escaparHtmlAuditor(infoP.parroquia)}) sin Alertas Rojas.</p>
               </div>
             </div>
-            <span style="background: rgba(255,255,255,0.25); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;">Sin Duplicidad</span>
+            <span style="background: rgba(255,255,255,0.25); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;">Sin Alertas Rojas</span>
+          </div>
+        `;
+      } else if (!esDuplicado && evaluacion.tieneAlertas) {
+        const d = docs[0];
+        const infoP = resolverDatosPlantel(d);
+        html += `
+          <div style="background: linear-gradient(135deg, #991b1b 0%, #b91c1c 100%); color: white; padding: 18px 22px; border-radius: 10px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-shadow: 0 4px 15px rgba(185,28,28,0.22);">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="background: rgba(255,255,255,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">🚨</div>
+              <div>
+                <h4 style="margin: 0; font-size: 1.12rem; color: #ffffff;">REGISTRO ÚNICO CON IRREGULARIDAD NORMATIVA</h4>
+                <p style="margin: 3px 0 0; font-size: 0.86rem; color: #fecaca;">
+                  Aunque la cédula <strong>V-${escaparHtmlAuditor(cedulaBuscada)}</strong> tiene 1 registro (${escaparHtmlAuditor(infoP.dea)} - ${escaparHtmlAuditor(infoP.escuela)}), activa <strong>${evaluacion.alertas.length} Alerta(s) Roja(s)</strong>.
+                </p>
+              </div>
+            </div>
+            <span style="background: #ffffff; color: #b91c1c; padding: 6px 14px; border-radius: 20px; font-size: 0.84rem; font-weight: 800;">
+              ${evaluacion.alertas.length} ALERTA(S) ROJA(S)
+            </span>
+          </div>
+        `;
+      } else if (esDuplicado && !evaluacion.tieneAlertas) {
+        html += `
+          <div style="background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%); color: white; padding: 16px 20px; border-radius: 10px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-shadow: 0 4px 12px rgba(13,148,136,0.18);">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="background: rgba(255,255,255,0.2); width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">⚖️</div>
+              <div>
+                <h4 style="margin: 0; font-size: 1.1rem; color: #ffffff;">PLURICARGO DOCENTE COMPATIBLE (SIN ALERTAS ROJAS)</h4>
+                <p style="margin: 3px 0 0; font-size: 0.86rem; color: #ccfbf1;">
+                  La cédula <strong>V-${escaparHtmlAuditor(cedulaBuscada)}</strong> posee <strong>${docs.length} registros</strong> (${evaluacion.totalHoras} hrs/sem totales ≤ 54h), sin cabalgamiento horario ni incompatibilidad Nacional.
+                </p>
+              </div>
+            </div>
+            <span style="background: rgba(255,255,255,0.25); padding: 5px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 800;">
+              ${docs.length} CARGOS COMPATIBLES
+            </span>
           </div>
         `;
       } else {
         html += `
-          <div style="background: linear-gradient(135deg, #991b1b 0%, #b91c1c 100%); color: white; padding: 18px 22px; border-radius: 10px; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-shadow: 0 4px 15px rgba(185,28,28,0.2);">
+          <div style="background: linear-gradient(135deg, #991b1b 0%, #b91c1c 100%); color: white; padding: 18px 22px; border-radius: 10px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-shadow: 0 4px 15px rgba(185,28,28,0.2);">
             <div style="display: flex; align-items: center; gap: 12px;">
-              <div style="background: rgba(255,255,255,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">⚠️</div>
+              <div style="background: rgba(255,255,255,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">🚨</div>
               <div>
-                <h4 style="margin: 0; font-size: 1.15rem; color: #ffffff; letter-spacing: 0.5px;">ALERTA DE DUPLICIDAD / MULTI-PLANTEL</h4>
+                <h4 style="margin: 0; font-size: 1.15rem; color: #ffffff; letter-spacing: 0.5px;">ALERTA DE DUPLICIDAD / IRREGULARIDAD NORMATIVA</h4>
                 <p style="margin: 3px 0 0; font-size: 0.88rem; color: #fecaca;">
-                  La cédula <strong>V-${cedulaBuscada}</strong> aparece registrada <strong>${docs.length} VECES</strong> en la base de datos en diferentes instituciones.
+                  La cédula <strong>V-${escaparHtmlAuditor(cedulaBuscada)}</strong> aparece en <strong>${docs.length} REGISTROS</strong> (${evaluacion.totalHoras} hrs/sem consolidadas) y dispara <strong>${evaluacion.alertas.length} Alerta(s) Roja(s)</strong>.
                 </p>
               </div>
             </div>
             <span style="background: #ffffff; color: #b91c1c; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 800; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
-              ${docs.length} REGISTROS ACTIVOS
+              ${docs.length} REGISTROS · ${evaluacion.alertas.length} ALERTA(S)
             </span>
+          </div>
+        `;
+      }
+
+      if (evaluacion.tieneAlertas) {
+        html += `
+          <div style="background: #fff1f2; border: 2px solid #f43f5e; border-radius: 12px; padding: 16px 18px; margin-bottom: 22px; box-shadow: 0 4px 12px rgba(244,63,94,0.1);">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+              <h4 style="margin: 0; color: #9f1239; font-size: 0.98rem; display: flex; align-items: center; gap: 8px;">
+                🚨 DICTAMEN DE AUDITORÍA — ALERTAS ROJAS DETECTADAS (${evaluacion.alertas.length})
+              </h4>
+              <span style="font-size: 0.78rem; font-weight: 700; color: #be123c; background: #ffe4e6; padding: 3px 10px; border-radius: 12px;">
+                Carga consolidada: ${evaluacion.totalHoras} hrs/semana
+              </span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              ${evaluacion.alertas.map(a => `
+                <div style="background: #ffffff; border-left: 4px solid #e11d48; border-radius: 6px; padding: 10px 12px; font-size: 0.84rem; color: #334155;">
+                  <div style="font-weight: 800; color: #be123c; margin-bottom: 3px;">🔴 ${escaparHtmlAuditor(a.titulo)}</div>
+                  <div style="line-height: 1.4;">${escaparHtmlAuditor(a.detalle)}</div>
+                </div>
+              `).join('')}
+            </div>
           </div>
         `;
       }
@@ -6407,10 +6723,30 @@ export function initAdminDashboard(dbInstance, user) {
             btn.disabled = true;
             btn.innerHTML = '⏳ Eliminando...';
             await deleteDoc(doc(db, 'cargos_personal', docId));
-            if (window._cacheExportPersonal) window._cacheExportPersonal = {};
+            if (window._cacheExportPersonal) {
+              const todosCache = Array.isArray(window._cacheExportPersonal.TODOS)
+                ? window._cacheExportPersonal.TODOS.filter(item => item.id !== docId)
+                : null;
+              window._cacheExportPersonal = todosCache ? { TODOS: todosCache } : {};
+            }
             showToast(`Expediente ${docId} eliminado exitosamente de la base de datos.`, "success", 5000);
-            const cardEl = btn.closest('div[style*="border-radius: 14px"]');
-            if (cardEl) cardEl.remove();
+
+            if (window._ultimoAuditorDocsActual && window._ultimoAuditorDocsActual.cedula === ced) {
+              const restantes = window._ultimoAuditorDocsActual.docs.filter(item => item.id !== docId);
+              if (restantes.length > 0) {
+                renderResultadosAuditoria(ced, restantes);
+              } else {
+                window._ultimoAuditorDocsActual = null;
+                renderResultadosAuditoria(ced, []);
+              }
+            } else {
+              const cardEl = btn.closest('div[style*="border-radius: 14px"]');
+              if (cardEl) cardEl.remove();
+            }
+
+            if (typeof window._refrescarEscanerDesdeMemoria === 'function') {
+              window._refrescarEscanerDesdeMemoria();
+            }
           } catch(err) {
             console.error("Error al eliminar expediente:", err);
             showAlert("Error", "No se pudo eliminar el expediente: " + err.message, "danger");
@@ -6420,6 +6756,431 @@ export function initAdminDashboard(dbInstance, user) {
         });
       });
     }
+
+    // =========================================================================
+    // SUB-MÓDULO: ESCÁNER CENTRALIZADO DE CIERRE DE JORNADA (5 ALERTAS ROJAS)
+    // Exclusivo SuperAdmin / Admin Estadal / ZonAdmin (Zero-Cost Spark)
+    // =========================================================================
+    function setupEscanerAlertasRojas() {
+      const btnModoInd = document.getElementById('btn-modo-auditor-individual');
+      const btnModoEsc = document.getElementById('btn-modo-auditor-escaner');
+      const secInd = document.getElementById('seccion-auditor-individual');
+      const secEsc = document.getElementById('seccion-auditor-escaner');
+      const selAmbito = document.getElementById('sel-ambito-escaner-alertas');
+      const chkDemo = document.getElementById('chk-incluir-demo-escaner');
+      const btnEjecutar = document.getElementById('btn-ejecutar-escaner-alertas');
+      const btnSync = document.getElementById('btn-sync-escaner-alertas');
+      const btnExportar = document.getElementById('btn-exportar-alertas-excel');
+      const cardsFiltro = document.querySelectorAll('.card-filtro-alerta-roja');
+      const inpFiltroTabla = document.getElementById('inp-filtrar-tabla-escaner');
+      const lblResumenFiltro = document.getElementById('lbl-resumen-filtro-escaner');
+      const boxInicial = document.getElementById('escaner-alertas-inicial');
+      const boxSpinner = document.getElementById('escaner-alertas-spinner');
+      const boxResultados = document.getElementById('escaner-alertas-resultados');
+      const tbody = document.getElementById('tbody-escaner-alertas');
+
+      if (!btnModoInd || !btnModoEsc || !secInd || !secEsc) return;
+
+      let resultadosConAlertas = [];
+      let resultadosFiltradosActuales = [];
+      let filtroAlertaActivo = 'ALL';
+      let barridoEjecutado = false;
+
+      const rolActual = String(userData?.rol || window.sgh_user_data?.rol || '').toLowerCase();
+      const puedeEscanear = rolActual === 'superadmin' || rolActual === 'zonadmin' || rolActual === 'admin';
+      btnModoEsc.style.display = puedeEscanear ? 'inline-flex' : 'none';
+
+      function activarModoAuditor(modo) {
+        const esEscaner = modo === 'escaner' && puedeEscanear;
+        secInd.style.display = esEscaner ? 'none' : 'block';
+        secEsc.style.display = esEscaner ? 'block' : 'none';
+
+        btnModoInd.style.background = esEscaner ? 'transparent' : 'white';
+        btnModoInd.style.color = esEscaner ? '#475569' : '#0f172a';
+        btnModoInd.style.boxShadow = esEscaner ? 'none' : '0 1px 4px rgba(0,0,0,0.08)';
+
+        btnModoEsc.style.background = esEscaner ? '#991b1b' : 'transparent';
+        btnModoEsc.style.color = esEscaner ? '#ffffff' : '#991b1b';
+        btnModoEsc.style.boxShadow = esEscaner ? '0 2px 6px rgba(153,27,27,0.22)' : 'none';
+      }
+
+      btnModoInd.addEventListener('click', () => activarModoAuditor('individual'));
+      btnModoEsc.addEventListener('click', () => {
+        if (!puedeEscanear) {
+          showToast('El Escáner Centralizado de Alertas Rojas está reservado para Administración Estadal.', 'warning');
+          return;
+        }
+        activarModoAuditor('escaner');
+      });
+
+      if (selAmbito) {
+        const municipiosOrdenados = [...getMunicipios()].sort((a, b) => a.localeCompare(b));
+        selAmbito.innerHTML = `
+          <option value="TODOS" style="font-weight: bold;">⭐ CONSOLIDADO ESTADAL (TODOS LOS MUNICIPIOS)</option>
+          ${municipiosOrdenados.map(m => `<option value="${escaparHtmlAuditor(m)}">${escaparHtmlAuditor(m)}</option>`).join('')}
+        `;
+      }
+
+      function extraerNombreFuncionario(docs) {
+        for (const d of docs) {
+          const directo = d['nombre-apellido'] || d['apellidos-nombres'] || d.nombre || d.nombres || d['APELLIDOS Y NOMBRES'] || d['NOMBRE Y APELLIDO'];
+          if (directo && String(directo).trim()) return String(directo).trim().toUpperCase();
+          const partes = [d['primer-apellido'] || d.primer_apellido, d['segundo-apellido'] || d.segundo_apellido, d['primer-nombre'] || d.primer_nombre, d['segundo-nombre'] || d.segundo_nombre]
+            .filter(Boolean)
+            .map(s => String(s).trim());
+          if (partes.length > 0) return partes.join(' ').replace(/\s+/g, ' ').toUpperCase();
+        }
+        return 'FUNCIONARIO SIN NOMBRE';
+      }
+
+      async function asegurarDatosNominaEscaner(forzarSync = false) {
+        window._cacheExportPersonal = window._cacheExportPersonal || {};
+
+        if (!Array.isArray(currentPlanteles) || currentPlanteles.length === 0) {
+          const cacheP = typeof obtenerPlantelesEstadalCache === 'function' ? obtenerPlantelesEstadalCache() : null;
+          if (!forzarSync && Array.isArray(cacheP) && cacheP.length > 0) {
+            currentPlanteles = cacheP;
+          }
+        }
+
+        if (forzarSync || !Array.isArray(currentPlanteles) || currentPlanteles.length === 0) {
+          const snapPlanteles = forzarSync
+            ? await getDocsFromServer(collection(db, 'planteles'))
+            : await getDocs(collection(db, 'planteles'));
+          const listaP = [];
+          snapPlanteles.forEach(pDoc => listaP.push({ id: pDoc.id, ...pDoc.data() }));
+          currentPlanteles = listaP;
+          if (typeof guardarPlantelesEstadalCache === 'function') guardarPlantelesEstadalCache(listaP);
+        }
+
+        if (forzarSync || !Array.isArray(window._cacheExportPersonal.TODOS) || window._cacheExportPersonal.TODOS.length === 0) {
+          const snapPersonal = forzarSync
+            ? await getDocsFromServer(collection(db, 'cargos_personal'))
+            : await getDocs(collection(db, 'cargos_personal'));
+          const listaDocs = [];
+          snapPersonal.forEach(pDoc => listaDocs.push({ id: pDoc.id, ...pDoc.data() }));
+          window._cacheExportPersonal.TODOS = listaDocs;
+        }
+
+        if (btnSync) btnSync.style.display = 'inline-flex';
+      }
+
+      function construirMapaPlanteles() {
+        const mapa = new Map();
+        (currentPlanteles || []).forEach(p => {
+          const dea = String(p.codigos?.plantel || p.codigoDEA || p.id || '').trim().toUpperCase();
+          if (dea) mapa.set(dea, p);
+        });
+        return mapa;
+      }
+
+      function procesarNominasEnMemoria() {
+        const todosDocs = Array.isArray(window._cacheExportPersonal?.TODOS) ? window._cacheExportPersonal.TODOS : [];
+        const plantelesMap = construirMapaPlanteles();
+        const incluirDemo = chkDemo ? chkDemo.checked : true;
+        const ambitoSel = (selAmbito?.value || 'TODOS').trim().toUpperCase();
+        const ambitoNorm = ambitoSel === 'TODOS' ? 'TODOS' : normalizarMunicipio(ambitoSel);
+
+        const porCedula = new Map();
+        todosDocs.forEach((d) => {
+          const deaRaw = String(d['codigo-plantel'] || d['codigoDEA'] || d['codigoPlantel'] || d['CODIGO DEL PLANTEL'] || '').trim().toUpperCase();
+          if (!incluirDemo && deaRaw.startsWith('DEMO')) return;
+
+          const cedRaw = d['cedula-identidad'] || d.cedula || d['CEDULA'] || d['CÉDULA'] || '';
+          const ced = String(cedRaw).trim().toUpperCase().replace(/[^0-9VE]/g, '').replace(/^[VE]/, '');
+          if (!ced) return;
+
+          if (!porCedula.has(ced)) porCedula.set(ced, []);
+          porCedula.get(ced).push(d);
+        });
+
+        const detectados = [];
+        porCedula.forEach((docsCed, ced) => {
+          const evaluacion = evaluarAlertasRojasFuncionario(ced, docsCed, (docItem) => resolverDatosPlantel(docItem, plantelesMap));
+          if (!evaluacion.tieneAlertas) return;
+
+          if (ambitoNorm !== 'TODOS') {
+            const perteneceAlAmbito = evaluacion.registros.some(r => normalizarMunicipio(r.municipio) === ambitoNorm);
+            if (!perteneceAlAmbito) return;
+          }
+
+          const nombre = extraerNombreFuncionario(docsCed);
+          const textoBusqueda = [
+            ced,
+            nombre,
+            ...evaluacion.registros.map(r => `${r.dea} ${r.escuela} ${r.municipio} ${r.tipoRaw} ${r.cargoNombre} ${r.turnosDisplay}`),
+            ...evaluacion.alertas.map(a => `${a.codigo} ${a.titulo} ${a.detalle}`)
+          ].join(' ').toUpperCase();
+
+          detectados.push({
+            cedula: ced,
+            nombre,
+            evaluacion,
+            textoBusqueda
+          });
+        });
+
+        detectados.sort((a, b) => {
+          if (b.evaluacion.alertas.length !== a.evaluacion.alertas.length) {
+            return b.evaluacion.alertas.length - a.evaluacion.alertas.length;
+          }
+          if (b.evaluacion.totalHoras !== a.evaluacion.totalHoras) {
+            return b.evaluacion.totalHoras - a.evaluacion.totalHoras;
+          }
+          return a.cedula.localeCompare(b.cedula);
+        });
+
+        resultadosConAlertas = detectados;
+        actualizarContadoresTarjetas();
+        renderTablaEscaner();
+      }
+
+      function actualizarContadoresTarjetas() {
+        const counts = { ALL: resultadosConAlertas.length, ALERTA_1: 0, ALERTA_2: 0, ALERTA_3: 0, ALERTA_4: 0, ALERTA_5: 0 };
+        resultadosConAlertas.forEach(({ evaluacion }) => {
+          evaluacion.codigos.forEach(c => {
+            if (counts[c] !== undefined) counts[c]++;
+          });
+        });
+
+        const idsMap = {
+          ALL: 'cnt-alerta-all',
+          ALERTA_1: 'cnt-alerta-1',
+          ALERTA_2: 'cnt-alerta-2',
+          ALERTA_3: 'cnt-alerta-3',
+          ALERTA_4: 'cnt-alerta-4',
+          ALERTA_5: 'cnt-alerta-5'
+        };
+        Object.entries(idsMap).forEach(([key, elId]) => {
+          const el = document.getElementById(elId);
+          if (el) el.textContent = String(counts[key] ?? 0);
+        });
+      }
+
+      function renderTablaEscaner() {
+        if (!tbody || !boxResultados || !boxInicial) return;
+
+        const qTexto = String(inpFiltroTabla?.value || '').trim().toUpperCase();
+        resultadosFiltradosActuales = resultadosConAlertas.filter((item) => {
+          const pasaCard = filtroAlertaActivo === 'ALL' || item.evaluacion.codigos.includes(filtroAlertaActivo);
+          if (!pasaCard) return false;
+          if (!qTexto) return true;
+          return item.textoBusqueda.includes(qTexto);
+        });
+
+        if (btnExportar) {
+          btnExportar.disabled = resultadosFiltradosActuales.length === 0;
+          btnExportar.style.opacity = resultadosFiltradosActuales.length === 0 ? '0.5' : '1';
+        }
+
+        const limiteRender = 500;
+        const visibles = resultadosFiltradosActuales.slice(0, limiteRender);
+        if (lblResumenFiltro) {
+          const sufijoTrunc = resultadosFiltradosActuales.length > limiteRender
+            ? ` (mostrando primeros ${limiteRender}; use Excel o el buscador para ver todos)`
+            : '';
+          lblResumenFiltro.textContent = `${resultadosFiltradosActuales.length} cédula(s) con alertas${sufijoTrunc}`;
+        }
+
+        if (visibles.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="5" style="text-align: center; padding: 34px 16px; color: #047857; background: #ecfdf5; font-weight: 700;">
+                ✅ No se detectaron funcionarios con infracciones bajo el filtro seleccionado.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = visibles.map((item) => {
+          const ev = item.evaluacion;
+          const cargosHtml = ev.registros.map((r) => `
+            <div style="margin-bottom: 6px; padding-bottom: 5px; border-bottom: 1px dashed #e2e8f0;">
+              <div style="font-weight: 700; color: #0f172a;">
+                <span style="background: #e2e8f0; color: #1e293b; padding: 1px 6px; border-radius: 4px; font-size: 0.74rem; margin-right: 4px;">${escaparHtmlAuditor(r.dea)}</span>
+                ${escaparHtmlAuditor(r.escuela)}
+              </div>
+              <div style="font-size: 0.76rem; color: #475569; margin-top: 2px;">
+                ${escaparHtmlAuditor(r.municipio)} · <strong>${escaparHtmlAuditor(r.tipo)}</strong> · ${escaparHtmlAuditor(r.cargoNombre || 'S/C')} · Turno: <strong>${escaparHtmlAuditor(r.turnosDisplay)}</strong> · ${r.horasEfectivas}h
+              </div>
+            </div>
+          `).join('');
+
+          const alertasHtml = ev.alertas.map((a) => `
+            <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 5px 8px; margin-bottom: 5px;">
+              <div style="font-weight: 800; color: #b91c1c; font-size: 0.76rem;">🔴 ${escaparHtmlAuditor(a.titulo)}</div>
+              <div style="font-size: 0.73rem; color: #7f1d1d; line-height: 1.3; margin-top: 2px;">${escaparHtmlAuditor(a.detalle)}</div>
+            </div>
+          `).join('');
+
+          return `
+            <tr style="border-bottom: 1px solid #e2e8f0; vertical-align: top;">
+              <td style="padding: 10px 12px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 0.9rem;">V-${escaparHtmlAuditor(item.cedula)}</div>
+                <div style="font-size: 0.79rem; color: #334155; font-weight: 600; margin-top: 2px;">${escaparHtmlAuditor(item.nombre)}</div>
+              </td>
+              <td style="padding: 10px 12px; text-align: center; white-space: nowrap;">
+                <span style="display: inline-block; background: #fee2e2; color: #991b1b; padding: 2px 9px; border-radius: 12px; font-weight: 800; font-size: 0.78rem;">
+                  ${ev.totalCargos} cargo(s)
+                </span>
+                <div style="margin-top: 5px; font-weight: 800; color: ${ev.totalHoras > 54.01 ? '#dc2626' : '#0f172a'};">
+                  ${ev.totalHoras} hrs/sem
+                </div>
+              </td>
+              <td style="padding: 10px 12px; min-width: 260px;">${cargosHtml}</td>
+              <td style="padding: 10px 12px; min-width: 280px;">${alertasHtml}</td>
+              <td style="padding: 10px 12px; text-align: right; white-space: nowrap;">
+                <button type="button" class="btn-escaner-auditar-cedula" data-cedula="${escaparHtmlAuditor(item.cedula)}"
+                  style="width: auto; margin: 0; background: #1e293b; color: white; border: none; padding: 7px 12px; border-radius: 7px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">
+                  🔍 Auditar Frente a Frente
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        tbody.querySelectorAll('.btn-escaner-auditar-cedula').forEach((btnAud) => {
+          btnAud.addEventListener('click', () => {
+            const ced = btnAud.getAttribute('data-cedula') || '';
+            if (!ced) return;
+            activarModoAuditor('individual');
+            inpAuditor.value = ced;
+            const btnSub = formAuditor.querySelector('button[type="submit"]');
+            if (btnSub) btnSub.click();
+            else formAuditor.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+          });
+        });
+      }
+
+      async function ejecutarEscanerAlertasRojas(forzarSync = false) {
+        if (!puedeEscanear) return;
+        try {
+          if (boxInicial) boxInicial.style.display = 'none';
+          if (boxResultados) boxResultados.style.display = 'none';
+          if (boxSpinner) boxSpinner.style.display = 'block';
+          if (btnEjecutar) btnEjecutar.disabled = true;
+
+          await asegurarDatosNominaEscaner(forzarSync);
+          procesarNominasEnMemoria();
+          barridoEjecutado = true;
+
+          if (boxSpinner) boxSpinner.style.display = 'none';
+          if (boxResultados) boxResultados.style.display = 'block';
+
+          showToast(
+            `Barrido completado: ${resultadosConAlertas.length} funcionario(s) con Alertas Rojas detectadas.`,
+            resultadosConAlertas.length > 0 ? 'warning' : 'success',
+            4500
+          );
+        } catch (err) {
+          console.error('Error ejecutando escáner de alertas rojas:', err);
+          if (boxSpinner) boxSpinner.style.display = 'none';
+          if (boxInicial) boxInicial.style.display = 'block';
+          showAlert('Error de Escaneo', 'No se pudo completar el barrido: ' + err.message, 'danger');
+        } finally {
+          if (btnEjecutar) btnEjecutar.disabled = false;
+        }
+      }
+
+      function exportarAlertasExcel() {
+        if (!resultadosFiltradosActuales || resultadosFiltradosActuales.length === 0) {
+          showToast('No hay registros con Alertas Rojas para exportar.', 'warning');
+          return;
+        }
+
+        const filasExcel = [];
+        let nro = 1;
+        resultadosFiltradosActuales.forEach((item) => {
+          const ev = item.evaluacion;
+          const resumenAlertas = ev.alertas.map(a => `${a.titulo}: ${a.detalle}`).join(' | ');
+          const tieneA1 = ev.codigos.includes('ALERTA_1') ? 'SÍ' : 'NO';
+          const tieneA2 = ev.codigos.includes('ALERTA_2') ? 'SÍ' : 'NO';
+          const tieneA3 = ev.codigos.includes('ALERTA_3') ? 'SÍ' : 'NO';
+          const tieneA4 = ev.codigos.includes('ALERTA_4') ? 'SÍ' : 'NO';
+          const tieneA5 = ev.codigos.includes('ALERTA_5') ? 'SÍ' : 'NO';
+
+          ev.registros.forEach((r) => {
+            const d = r.doc || {};
+            filasExcel.push({
+              'N°': nro++,
+              'Cédula': item.cedula,
+              'Apellidos y Nombres': item.nombre,
+              'N° de Cargos Cédula': ev.totalCargos,
+              'Suma Horas Cédula': ev.totalHoras,
+              'Alertas Detectadas': ev.alertas.length,
+              'Alerta 1 (Doble Destino Ilegal)': tieneA1,
+              'Alerta 2 (Exceso > 54 Hrs)': tieneA2,
+              'Alerta 3 (Cabalgamiento Turno)': tieneA3,
+              'Alerta 4 (Incomp. Básica+Media Nac.)': tieneA4,
+              'Alerta 5 (Docente Planta s/Encargaduría)': tieneA5,
+              'Código Plantel (DEA)': r.dea,
+              'Plantel / Sede': r.escuela,
+              'Municipio': r.municipio,
+              'Parroquia': r.parroquia,
+              'Dependencia': r.depRaw || 'N/R',
+              'Tipo de Personal': r.tipo,
+              'Nivel / Modalidad': r.nivelDoc || 'N/R',
+              'Cargo Nominal': r.cargoNombre || 'S/E',
+              'Código RAC': r.codRac || 'S/E',
+              'Turnos Atiende': r.turnosDisplay,
+              'Horas Recibo': r.horasRecibo,
+              'Horas Académicas': r.horasAcad,
+              'Horas Administrativas': r.horasAdmin,
+              'Horas Efectivas Cargo': r.horasEfectivas,
+              'Situación Laboral': d['situacion-laboral'] || d['SITUACIÓN DEL TRABAJADOR'] || 'N/R',
+              'Dictamen Detallado': resumenAlertas
+            });
+          });
+        });
+
+        const ws = XLSX.utils.json_to_sheet(filasExcel);
+        ws['!cols'] = Object.keys(filasExcel[0] || {}).map((k) => ({
+          wch: Math.min(Math.max(k.length + 2, 14), 52)
+        }));
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Alertas_Rojas_SGH');
+        const fecha = new Date().toISOString().slice(0, 10);
+        const sufAmbito = (selAmbito?.value || 'TODOS').replace(/[^A-Z0-9_-]/gi, '_');
+        XLSX.writeFile(wb, `Auditoria_5_Alertas_Rojas_${sufAmbito}_${fecha}.xlsx`);
+        showToast(`Reporte descargado con ${resultadosFiltradosActuales.length} cédula(s) y ${filasExcel.length} cargo(s).`, 'success', 4500);
+      }
+
+      if (btnEjecutar) btnEjecutar.addEventListener('click', () => ejecutarEscanerAlertasRojas(false));
+      if (btnSync) btnSync.addEventListener('click', () => ejecutarEscanerAlertasRojas(true));
+      if (btnExportar) btnExportar.addEventListener('click', exportarAlertasExcel);
+
+      cardsFiltro.forEach((card) => {
+        card.addEventListener('click', () => {
+          filtroAlertaActivo = card.getAttribute('data-filtro-alerta') || 'ALL';
+          cardsFiltro.forEach((c) => {
+            const esActiva = c === card;
+            c.style.border = esActiva ? '2px solid #991b1b' : '1.5px solid #e2e8f0';
+            c.style.background = esActiva ? '#fef2f2' : '#ffffff';
+            c.style.boxShadow = esActiva ? '0 2px 8px rgba(153,27,27,0.12)' : 'none';
+          });
+          if (barridoEjecutado) renderTablaEscaner();
+        });
+      });
+
+      if (inpFiltroTabla) {
+        inpFiltroTabla.addEventListener('input', () => {
+          if (barridoEjecutado) renderTablaEscaner();
+        });
+      }
+
+      const refrescarDesdeMemoriaSiActivo = () => {
+        if (barridoEjecutado && Array.isArray(window._cacheExportPersonal?.TODOS)) {
+          procesarNominasEnMemoria();
+        }
+      };
+
+      if (selAmbito) selAmbito.addEventListener('change', refrescarDesdeMemoriaSiActivo);
+      if (chkDemo) chkDemo.addEventListener('change', refrescarDesdeMemoriaSiActivo);
+      window._refrescarEscanerDesdeMemoria = refrescarDesdeMemoriaSiActivo;
+    }
+
+    setupEscanerAlertasRojas();
   }
   setupAuditorCedula();
 

@@ -434,21 +434,47 @@ export async function initCascadaPersonal() {
 
         if (tipoVal === 'DOCENTE') {
             if (lblRecibo) lblRecibo.innerHTML = 'Horas según Recibo (H.DOC) <span style="color: #dc2626;">*</span>';
-            if (inpHRecibo) inpHRecibo.placeholder = 'Ej. 53.33 o 40';
+            if (inpHRecibo) inpHRecibo.placeholder = 'Ej. 53.33, 40 o 54';
             if (lblAdmin) lblAdmin.innerHTML = (atiendeMatSel?.value === 'SI') ? 'Horas Administrativas' : 'Horas Administrativas (en este Plantel)';
             if (inpAdmin) inpAdmin.placeholder = 'Ej. 0 o 20 (Coordinación)';
             if (atiendeMatSel && !atiendeMatSel.dataset.manualChanged) {
                 atiendeMatSel.value = 'SI';
             }
-        } else if (tipoVal === 'ADMINISTRATIVO' || tipoVal === 'OBRERO') {
+        } else if (tipoVal === 'ADMINISTRATIVO') {
             if (lblRecibo) lblRecibo.innerHTML = 'Horas según Recibo (H.ADM) <span style="color: #dc2626;">*</span>';
-            if (inpHRecibo) inpHRecibo.placeholder = '40';
-            if (lblAdmin) lblAdmin.innerHTML = 'Horas Administrativas (en este Plantel)';
-            if (inpAdmin) inpAdmin.placeholder = '40';
-            if (inpHRecibo && !inpHRecibo.value) inpHRecibo.value = '40';
-            if (inpAdmin && !inpAdmin.value) inpAdmin.value = '40';
+            if (inpHRecibo) {
+                inpHRecibo.placeholder = '37.5';
+                if (!inpHRecibo.value || inpHRecibo.value === '40' || inpHRecibo.value === '53.33') {
+                    inpHRecibo.value = '37.5';
+                }
+            }
             if (atiendeMatSel && !atiendeMatSel.dataset.manualChanged) {
                 atiendeMatSel.value = 'NO';
+            }
+            if (lblAdmin) lblAdmin.innerHTML = 'Horas Administrativas (en este Plantel)';
+            if (inpAdmin && atiendeMatSel?.value !== 'SI') {
+                inpAdmin.placeholder = '37.5';
+                if (!inpAdmin.value || inpAdmin.value === '40' || inpAdmin.value === '53.33') {
+                    inpAdmin.value = '37.5';
+                }
+            }
+        } else if (tipoVal === 'OBRERO') {
+            if (lblRecibo) lblRecibo.innerHTML = 'Horas según Recibo (H.ADM) <span style="color: #dc2626;">*</span>';
+            if (inpHRecibo) {
+                inpHRecibo.placeholder = '40';
+                if (!inpHRecibo.value || inpHRecibo.value === '37.5' || inpHRecibo.value === '53.33') {
+                    inpHRecibo.value = '40';
+                }
+            }
+            if (atiendeMatSel && !atiendeMatSel.dataset.manualChanged) {
+                atiendeMatSel.value = 'NO';
+            }
+            if (lblAdmin) lblAdmin.innerHTML = 'Horas Administrativas (en este Plantel)';
+            if (inpAdmin && atiendeMatSel?.value !== 'SI') {
+                inpAdmin.placeholder = '40';
+                if (!inpAdmin.value || inpAdmin.value === '37.5' || inpAdmin.value === '53.33') {
+                    inpAdmin.value = '40';
+                }
             }
         }
         if (window.toggleMatriculaUI) window.toggleMatriculaUI();
@@ -561,9 +587,164 @@ export function cerrarFormularioPersonal() {
     if (contenedorTabla) contenedorTabla.style.display = 'none';
 }
 
+function obtenerDEAActualWizard() {
+    let dea = window.currentPlantelDEA || '';
+    if (!dea && window.sgh_user_data?.jerarquia?.plantel_codigo) {
+        dea = window.sgh_user_data.jerarquia.plantel_codigo;
+    }
+    if (!dea) {
+        const stPlantel = localStorage.getItem('plantelSeleccionado');
+        if (stPlantel) {
+            try { dea = JSON.parse(stPlantel).codigoDEA || ''; } catch (e) { }
+        }
+    }
+    return String(dea || '').trim().toUpperCase();
+}
+
+export function mostrarAlertaCedulaEnOtroPlantel() {
+    return new Promise((resolve) => {
+        const prev = document.getElementById('modal-alerta-cedula-otro-plantel');
+        if (prev) prev.remove();
+
+        const overlay = document.createElement('div');
+        overlay.id = 'modal-alerta-cedula-otro-plantel';
+        overlay.style.cssText = 'position: fixed; inset: 0; background: rgba(15, 23, 42, 0.58); backdrop-filter: blur(2px); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 16px;';
+
+        overlay.innerHTML = `
+            <div style="background: #fffbeb; border: 2px solid #f59e0b; border-radius: 14px; max-width: 440px; width: 100%; padding: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.28); font-family: inherit;">
+                <div style="display: flex; align-items: flex-start; gap: 14px;">
+                    <div style="flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%; background: #fef3c7; border: 1.5px solid #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+                        ⚠️
+                    </div>
+                    <div style="flex: 1;">
+                        <h4 style="margin: 0 0 8px; font-size: 1.05rem; font-weight: 800; color: #92400e;">
+                            Aviso de Validación
+                        </h4>
+                        <p style="margin: 0; font-size: 0.94rem; line-height: 1.5; color: #78350f; font-weight: 600;">
+                            La cédula está registrada en otro plantel. ¿Desea continuar?
+                        </p>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-top: 22px; flex-wrap: wrap;">
+                    <button type="button" id="btn-cancelar-cedula-otro-plantel"
+                        style="width: auto !important; margin: 0 !important; padding: 10px 20px; border-radius: 8px; border: 1.5px solid #ca8a04; background: #facc15; color: #422006; font-weight: 800; font-size: 0.9rem; cursor: pointer;">
+                        Cancelar
+                    </button>
+                    <button type="button" id="btn-aceptar-cedula-otro-plantel"
+                        style="width: auto !important; margin: 0 !important; padding: 10px 22px; border-radius: 8px; border: 1.5px solid #15803d; background: #16a34a; color: #ffffff; font-weight: 800; font-size: 0.9rem; cursor: pointer; box-shadow: 0 2px 8px rgba(22,163,74,0.28);">
+                        Aceptar
+                    </button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        const cerrar = (aceptado) => {
+            overlay.remove();
+            resolve(aceptado);
+        };
+
+        const btnCancelar = document.getElementById('btn-cancelar-cedula-otro-plantel');
+        const btnAceptar = document.getElementById('btn-aceptar-cedula-otro-plantel');
+        if (btnCancelar) btnCancelar.onclick = () => cerrar(false);
+        if (btnAceptar) {
+            btnAceptar.onclick = () => cerrar(true);
+            setTimeout(() => btnAceptar.focus(), 30);
+        }
+    });
+}
+
+export async function verificarCedulaEnOtroPlantel(cedulaRaw, origen = 'blur') {
+    const cedula = String(cedulaRaw || '').trim().replace(/[^0-9]/g, '');
+    if (cedula.length < 6) return true;
+
+    const origEdit = String(window._cedulaOriginalEnEdicion || '').trim().replace(/[^0-9]/g, '');
+    if (window._docIdEnEdicion && origEdit && cedula === origEdit) {
+        return true;
+    }
+
+    if (window._cedulaConfirmadaOtroPlantel === cedula) {
+        return true;
+    }
+
+    if (window._promesaVerificacionCedula && window._promesaVerificacionCedula.cedula === cedula) {
+        return window._promesaVerificacionCedula.promise;
+    }
+
+    const ejecutar = async () => {
+        try {
+            window._verificandoCedulaOtroPlantel = true;
+            window._cacheCargosPorCedula = window._cacheCargosPorCedula || {};
+
+            let docsCedula = window._cacheCargosPorCedula[cedula];
+            if (!Array.isArray(docsCedula)) {
+                const nac = (document.getElementById('wp-nacionalidad')?.value || 'V').toUpperCase();
+                const variantesSet = new Set([cedula, `${nac}-${cedula}`, `V-${cedula}`, `E-${cedula}`]);
+                const numCed = Number(cedula);
+                if (!Number.isNaN(numCed)) variantesSet.add(numCed);
+                const variantes = Array.from(variantesSet);
+
+                const snap = await getDocs(query(collection(db, 'cargos_personal'), where('cedula', 'in', variantes)));
+                docsCedula = snap.docs.map((dSnap) => ({ id: dSnap.id, ...dSnap.data() }));
+                window._cacheCargosPorCedula[cedula] = docsCedula;
+            }
+
+            const deaActual = obtenerDEAActualWizard();
+            const docIdEdit = window._docIdEnEdicion || '';
+            const existeEnOtroPlantel = docsCedula.some((d) => {
+                if (docIdEdit && d.id === docIdEdit) return false;
+                const deaDoc = String(d['codigo-plantel'] || d.codigoDEA || d.codigoPlantel || d['CODIGO DEL PLANTEL'] || '').trim().toUpperCase();
+                if (deaDoc && deaActual) return deaDoc !== deaActual;
+                if (!deaDoc && deaActual && d.id) return !String(d.id).toUpperCase().startsWith(`${deaActual}_`);
+                return Boolean(deaDoc || d.id);
+            });
+
+            if (!existeEnOtroPlantel) return true;
+
+            const aceptado = await mostrarAlertaCedulaEnOtroPlantel();
+            if (aceptado) {
+                window._cedulaConfirmadaOtroPlantel = cedula;
+                return true;
+            }
+
+            window._cedulaConfirmadaOtroPlantel = null;
+            const cedInp = document.getElementById('wp-cedula');
+            if (origen === 'blur') {
+                if (cedInp) {
+                    cedInp.value = '';
+                    cedInp.setCustomValidity('');
+                    setTimeout(() => cedInp.focus(), 50);
+                }
+            } else {
+                const btnGuardar = document.getElementById('btn-guardar-empleado-inline');
+                if (btnGuardar) {
+                    btnGuardar.disabled = false;
+                    btnGuardar.textContent = window._esTraslado ? 'INCORPORAR AL PLANTEL' : (window._docIdEnEdicion ? 'ACTUALIZAR EMPLEADO' : 'Guardar Empleado');
+                }
+                if (cedInp) setTimeout(() => cedInp.focus(), 50);
+            }
+            return false;
+        } catch (err) {
+            console.warn('Aviso verificando cédula en otro plantel:', err);
+            return true;
+        } finally {
+            window._verificandoCedulaOtroPlantel = false;
+            window._promesaVerificacionCedula = null;
+        }
+    };
+
+    const promise = ejecutar();
+    window._promesaVerificacionCedula = { cedula, promise };
+    return promise;
+}
+
 export function limpiarFormularioPersonal(scrollBackToTable = false) {
     window._docIdEnEdicion = null;
     window._cedulaOriginalEnEdicion = null;
+    window._cedulaConfirmadaOtroPlantel = null;
+    window._verificandoCedulaOtroPlantel = false;
+    window._promesaVerificacionCedula = null;
     window._esTraslado = false;
     window._datosTraslado = null;
 
@@ -1478,51 +1659,39 @@ export async function guardarPersonalInline() {
     const nombres = document.getElementById('wp-nombres')?.value || '';
     const tipoPersonal = (document.getElementById('wp-tipo-personal')?.value || '').toUpperCase();
 
-    // --- Candado de Carga Horaria Acumulada y Validación de Recibo ---
-    const atiendeMat = (document.getElementById('wp-atiende-matricula')?.value || 'NO').toUpperCase();
-    if (atiendeMat === 'SI') {
-        const resHoras = await verificarTopeHorasDocente(true);
-        if (resHoras && resHoras.excede) {
-            const desgloseHtml = (resHoras.desglose && resHoras.desglose.length > 0)
-                ? `<div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 12px; margin: 12px 0;">
-                    <strong style="color: #334155; display: block; margin-bottom: 6px; font-size: 0.88rem;">Horas comprometidas en otros planteles:</strong>
-                    <ul style="margin: 0; padding-left: 18px; color: #475569; font-size: 0.85rem; line-height: 1.5;">
-                        ${resHoras.desglose.map(d => `<li><strong>${d.plantel}</strong>: ${d.horas} hrs (${d.cargo} - ${d.nivel || 'N/A'} - Turno: ${d.turno || 'N/A'})</li>`).join('')}
-                    </ul>
-                    <div style="margin-top: 8px; font-weight: 700; color: #1e293b; font-size: 0.85rem;">Total en otros planteles: ${resHoras.horasOtros} hrs</div>
-                   </div>`
-                : '';
+    // --- Validación Local de Coherencia de Recibo (Captura Silenciosa sin Bloqueos Cruzados) ---
+    const resHoras = await verificarTopeHorasDocente(true);
+    if (resHoras && resHoras.excede) {
+        await showAlert(
+            "⛔ Validación de Carga Horaria Local",
+            `<div style="text-align: left; font-size: 0.92rem; line-height: 1.5;">
+                <p style="margin: 0 0 10px; color: #1e293b;">
+                    Verifique la coherencia de las horas declaradas para <strong>${nombres || 'FUNCIONARIO'}</strong> (C.I. ${cedula}) en este plantel:
+                </p>
+                <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 12px; margin: 10px 0; color: #991b1b; font-size: 0.88rem; border-radius: 4px;">
+                    ${resHoras.mensajeError}
+                </div>
+                <div style="margin-top: 12px; padding: 10px 12px; background: #fff7ed; border: 1px solid #ffedd5; color: #9a3412; font-size: 0.84rem; border-radius: 6px;">
+                    📌 <strong>Instrucción:</strong> Ajuste las Horas según Recibo de Pago y las Horas asignadas en este plantel para guardar el registro.
+                </div>
+            </div>`,
+            "danger"
+        );
 
-            await showAlert(
-                "⛔ Validación de Carga Horaria",
-                `<div style="text-align: left; font-size: 0.92rem; line-height: 1.5;">
-                    <p style="margin: 0 0 10px; color: #1e293b;">
-                        No es posible guardar el registro de <strong>${nombres || 'FUNCIONARIO'}</strong> (C.I. ${cedula}) debido a la siguiente observación institucional:
-                    </p>
-                    <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 12px; margin: 10px 0; color: #991b1b; font-size: 0.88rem; border-radius: 4px;">
-                        ${resHoras.mensajeError}
-                    </div>
-                    ${desgloseHtml}
-                    <div style="margin-top: 12px; padding: 10px 12px; background: #fff7ed; border: 1px solid #ffedd5; color: #9a3412; font-size: 0.84rem; border-radius: 6px;">
-                        📌 <strong>Instrucción:</strong> Revise las Horas según Recibo de Pago y las Horas Académicas asignadas en este plantel para dar cumplimiento a la normativa de nómina.
-                    </div>
-                </div>`,
-                "danger"
-            );
-
-            const btn = document.getElementById('btn-guardar-empleado-inline');
-            if (btn) {
-                btn.disabled = false;
-                btn.textContent = window._esTraslado ? "INCORPORAR AL PLANTEL" : (window._docIdEnEdicion ? "Actualizar Empleado" : "Guardar Empleado");
-            }
-            const inpHoras = document.getElementById('wp-horas-academicas');
-            if (inpHoras) {
-                inpHoras.focus();
-                inpHoras.style.borderColor = '#dc2626';
-                inpHoras.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-            return;
+        const btn = document.getElementById('btn-guardar-empleado-inline');
+        if (btn) {
+            btn.disabled = false;
+            btn.textContent = window._esTraslado ? "INCORPORAR AL PLANTEL" : (window._docIdEnEdicion ? "ACTUALIZAR EMPLEADO" : "Guardar Empleado");
         }
+        const inpTarget = (resHoras.motivoBloqueo === 'RECIBO_SUPERA_TOPE')
+            ? document.getElementById('wp-horas-recibo')
+            : document.getElementById('wp-horas-academicas');
+        if (inpTarget) {
+            inpTarget.focus();
+            inpTarget.style.borderColor = '#dc2626';
+            inpTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return;
     }
 
     const telHabNum = document.getElementById('wp-tel-habitacion')?.value || '';
@@ -1706,6 +1875,11 @@ export async function guardarPersonalInline() {
         } catch (eCheck) {
             console.warn("Aviso verificando existencia de cédula:", eCheck);
         }
+    }
+
+    const puedeContinuarCedula = await verificarCedulaEnOtroPlantel(newCedula || payload.cedula, 'submit');
+    if (!puedeContinuarCedula) {
+        return;
     }
 
     // Si se está actualizando o incorporando por traslado, limpiar el campo de búsqueda de inmediato
@@ -1993,8 +2167,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- Función de Normalización y Comparación de Turnos Institucionales ---
 export function sonTurnosCoincidentes(t1, t2) {
-    const s1 = (t1 || '').toUpperCase().trim();
-    const s2 = (t2 || '').toUpperCase().trim();
+    const norm = (t) => (t || '').toUpperCase().trim().replace(/MANANA/g, 'MAÑANA');
+    const s1 = norm(t1);
+    const s2 = norm(t2);
     if (!s1 || !s2) return false;
 
     // Si ambos son exactamente iguales (ej. MAÑANA vs MAÑANA, TARDE vs TARDE, NOCTURNO vs NOCTURNO)
@@ -2010,18 +2185,17 @@ export function sonTurnosCoincidentes(t1, t2) {
     // Mismo turno detectado por subcadena clave
     if (s1.includes('MAÑANA') && s2.includes('MAÑANA')) return true;
     if (s1.includes('TARDE') && s2.includes('TARDE')) return true;
-    if (s1.includes('NOCTURNO') && s2.includes('NOCTURNO')) return true;
-    if (s1.includes('SABATINO') && s2.includes('SABATINO')) return true;
+    if (s1.includes('NOCTURN') && s2.includes('NOCTURN')) return true;
+    if (s1.includes('SABATIN') && s2.includes('SABATIN')) return true;
 
     return false;
 }
 
-// --- Escudo de Carga Horaria Acumulada, Validación de Recibo y Topes Institucionales ---
+// --- Validación Local de Carga Horaria según Recibo (Captura Silenciosa - Tope Unificado 54h Docente) ---
 export async function verificarTopeHorasDocente(forzarConsulta = false) {
     const atiendeMat = (document.getElementById('wp-atiende-matricula')?.value || 'NO').toUpperCase();
     const tipoPersonal = (document.getElementById('wp-tipo-personal')?.value || '').toUpperCase();
     const nivelSel = (document.getElementById('wp-nivel-modalidad')?.value || '').toUpperCase();
-    const turnoInp = (document.getElementById('wp-turnos-atiende')?.value || '').toUpperCase().trim();
     const inpHoras = document.getElementById('wp-horas-academicas');
     const inpHRecibo = document.getElementById('wp-horas-recibo');
     const inpAdmin = document.getElementById('wp-horas-administrativas');
@@ -2035,16 +2209,26 @@ export async function verificarTopeHorasDocente(forzarConsulta = false) {
 
     const esBasica = (nivelSel.includes('INICIAL') || nivelSel.includes('PRIMARIA')) && !nivelSel.includes('MEDIA');
     const esMedia = nivelSel.includes('MEDIA');
+    const esAdmObrero = (tipoPersonal === 'ADMINISTRATIVO' || tipoPersonal === 'OBRERO');
+    const tope = (tipoPersonal === 'DOCENTE' || !tipoPersonal) ? 54 : 40;
+    const etiqueta = (tipoPersonal === 'DOCENTE' || !tipoPersonal)
+        ? 'Personal Docente (Tope: 54 Horas)'
+        : `${tipoPersonal} (Tope Recibo: ${tipoPersonal === 'ADMINISTRATIVO' ? '37.5' : '40'} Horas)`;
 
-    // Si no atiende matrícula, validación sencilla administrativa
     if (atiendeMat === 'NO') {
         const totalAdmin = horasAdmin || horasRecibo || 0;
         let excedeAdmin = false;
+        let motivoAdm = '';
         let msgAdmin = '';
 
         if (horasRecibo > 0 && horasAdmin > (horasRecibo + 0.01)) {
             excedeAdmin = true;
+            motivoAdm = 'EXCEDE_RECIBO';
             msgAdmin = `⚠️ <strong>Incoherencia horaria:</strong> Las Horas Administrativas asignadas (<strong>${horasAdmin} hrs</strong>) no pueden superar las Horas según Recibo de Pago (<strong>${horasRecibo} hrs</strong>).`;
+        } else if (horasRecibo > (tope + 0.01)) {
+            excedeAdmin = true;
+            motivoAdm = 'RECIBO_SUPERA_TOPE';
+            msgAdmin = `⚠️ <strong>Tope legal excedido:</strong> El recibo de pago (<strong>${horasRecibo} hrs</strong>) excede el tope máximo permitido de <strong>${tope} hrs</strong> para ${etiqueta}.`;
         }
 
         if (helpEl) {
@@ -2054,7 +2238,8 @@ export async function verificarTopeHorasDocente(forzarConsulta = false) {
                 helpEl.style.background = '#fef2f2';
                 helpEl.style.borderColor = '#fca5a5';
                 helpEl.innerHTML = msgAdmin;
-                if (inpAdmin) inpAdmin.style.borderColor = '#dc2626';
+                if (motivoAdm === 'RECIBO_SUPERA_TOPE' && inpHRecibo) inpHRecibo.style.borderColor = '#dc2626';
+                else if (inpAdmin) inpAdmin.style.borderColor = '#dc2626';
             } else {
                 if (inpAdmin) inpAdmin.style.borderColor = '';
                 if (inpHRecibo) inpHRecibo.style.borderColor = '';
@@ -2066,10 +2251,10 @@ export async function verificarTopeHorasDocente(forzarConsulta = false) {
         }
 
         return {
-            tope: 40,
+            tope,
             esMedia: false,
             esBasica: false,
-            etiqueta: 'Personal Administrativo / Servicio',
+            etiqueta,
             horasOtros: 0,
             horasInp: 0,
             horasRecibo,
@@ -2078,143 +2263,24 @@ export async function verificarTopeHorasDocente(forzarConsulta = false) {
             disp: 0,
             desglose: [],
             excede: excedeAdmin,
-            motivoBloqueo: excedeAdmin ? 'EXCEDE_RECIBO' : '',
+            motivoBloqueo: motivoAdm,
             mensajeError: msgAdmin
         };
     }
 
-    // --- Si atiende matrícula: auditoría pedagógica estricta ---
-    const cedulaInp = document.getElementById('wp-cedula')?.value || '';
-    const cleanCed = cedulaInp.replace(/[^0-9]/g, '');
-
-    let deaActual = window.currentPlantelDEA || '';
-    if (!deaActual && window.sgh_user_data && window.sgh_user_data.jerarquia) {
-        deaActual = window.sgh_user_data.jerarquia.plantel_codigo;
-    }
-    if (!deaActual) {
-        const stPlantel = localStorage.getItem('plantelSeleccionado');
-        if (stPlantel) {
-            try { deaActual = JSON.parse(stPlantel).codigoDEA; } catch (e) { }
-        }
-    }
-
-    window._cacheCargosPorCedula = window._cacheCargosPorCedula || {};
-
-    if (cleanCed && cleanCed.length >= 5) {
-        if (forzarConsulta || !window._cacheCargosPorCedula[cleanCed]) {
-            const posibles = [cleanCed, `V-${cleanCed}`, `E-${cleanCed}`, `V${cleanCed}`, `E${cleanCed}`];
-            try {
-                let snap = await getDocs(query(collection(db, "cargos_personal"), where("cedula", "in", posibles)));
-                let docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                if (docs.length === 0) {
-                    try {
-                        const snapDoc = await getDoc(doc(db, "cargos_personal", cleanCed));
-                        if (snapDoc.exists()) docs = [{ id: snapDoc.id, ...snapDoc.data() }];
-                    } catch(eDoc) {}
-                }
-                window._cacheCargosPorCedula[cleanCed] = docs;
-            } catch (err) {
-                console.warn("[SGH-Horas] Error al consultar cargos cruzados de cédula:", err);
-            }
-        }
-    }
-
-    let horasOtros = 0;
-    let horasOtrosCoincidentes = 0;
-    let tieneBasicaOtro = false;
-    let tieneMediaOtro = false;
-    let hayConflictoTurno = false;
-    let conflictoTurnoInfo = null;
-    const desglose = [];
-    const cargosList = (cleanCed && window._cacheCargosPorCedula[cleanCed]) ? window._cacheCargosPorCedula[cleanCed] : [];
-
-    cargosList.forEach(c => {
-        if (window._docIdEnEdicion && c.id === window._docIdEnEdicion) return;
-
-        const cDea = c['codigo-plantel'] || c.codigoDEA || '';
-        if (!window._docIdEnEdicion && cDea === deaActual && c.id === `${deaActual}_${cleanCed}`) return;
-
-        const h = parseFloat(c['horas-academicas'] || c['HORAS ACADEMICAS']) || 0;
-        const cTurno = (c['turnos-atiende'] || c['TURNOS QUE ATIENDE'] || c.turno || '').toUpperCase().trim();
-
-        if (h > 0) {
-            const nMod = (c['nivel-modalidad'] || '').toUpperCase();
-            if (nMod.includes('MEDIA')) {
-                tieneMediaOtro = true;
-            } else if (nMod.includes('INICIAL') || nMod.includes('PRIMARIA')) {
-                tieneBasicaOtro = true;
-            }
-            horasOtros += h;
-
-            const coinciden = sonTurnosCoincidentes(turnoInp, cTurno);
-            if (coinciden) {
-                hayConflictoTurno = true;
-                horasOtrosCoincidentes += h;
-                if (!conflictoTurnoInfo) {
-                    conflictoTurnoInfo = {
-                        plantel: cDea || 'OTRO PLANTEL',
-                        horas: h,
-                        cargo: c.cargo || c['codigo-cargo'] || 'DOCENTE',
-                        nivel: nMod,
-                        turno: cTurno || 'MISMO TURNO'
-                    };
-                }
-            }
-
-            desglose.push({
-                plantel: cDea || 'OTRO PLANTEL',
-                horas: h,
-                cargo: c.cargo || c['codigo-cargo'] || 'DOCENTE',
-                nivel: nMod,
-                turno: cTurno || 'NO ESPECIFICADO',
-                coincideTurno: coinciden
-            });
-        }
-    });
-
-    const tope = esMedia ? 56 : 53.33;
-    const etiqueta = esMedia ? 'Educación Media (Tope: 56 Horas)' : 'Educación Básica (Inicial/Primaria: 53.33 Horas)';
-    const totalMismoTurno = horasOtrosCoincidentes + horasInp;
-    const total = horasOtros + horasInp;
-    const disp = Math.max(0, tope - horasOtrosCoincidentes);
-
-    const esSoloMedia = esMedia && !tieneBasicaOtro;
-    const involucraBasica = esBasica || tieneBasicaOtro;
-
+    // --- Si atiende matrícula: coherencia estrictamente local en este plantel ---
     let excede = false;
     let mensajeError = '';
     let motivoBloqueo = '';
 
-    // 1. En Educación Básica (aula concentrada) o Régimen Mixto Básica-Media: Bloqueo estricto por turno coincidente
-    if (involucraBasica && hayConflictoTurno) {
-        excede = true;
-        motivoBloqueo = 'TURNO_COINCIDENTE';
-        mensajeError = `⚠️ <strong>Conflicto de Horario / Turno coincidente en Educación Básica:</strong> El docente ya tiene asignadas <strong>${conflictoTurnoInfo.horas} hrs</strong> en el turno <strong>${conflictoTurnoInfo.turno}</strong> en el plantel <strong>${conflictoTurnoInfo.plantel}</strong> (${conflictoTurnoInfo.cargo}). La docencia de aula en Básica no permite atender dos planteles simultáneamente en el mismo turno.`;
-    } 
-    // 2. En Educación Media: Los turnos NO bloquean (docente por horas puede impartir en la mañana en 2 liceos). Se valida el tope legal acumulado de 56 horas
-    else if (esSoloMedia && total > (tope + 0.01)) {
-        excede = true;
-        motivoBloqueo = 'MEDIA_TOTAL_SUPERA_TOPE';
-        const exceso = (total - tope).toFixed(2);
-        mensajeError = `⚠️ <strong>Tope legal en Educación Media excedido:</strong> Total acumulado: <strong>${total} hrs</strong> (${horasOtros} hrs en otros liceos + ${horasInp} hrs aquí). La normativa del MPPE establece un tope máximo de <strong>56 horas académicas</strong> para docentes por horas. Exceso: ${exceso} hrs.`;
-    } 
-    // 3. Horas asignadas en este plantel vs Recibo de este plantel
-    else if (horasRecibo > 0 && totalAsignadasPlantel > (horasRecibo + 0.01)) {
+    if (horasRecibo > 0 && totalAsignadasPlantel > (horasRecibo + 0.01)) {
         excede = true;
         motivoBloqueo = 'EXCEDE_RECIBO';
         mensajeError = `⚠️ <strong>Incoherencia horaria:</strong> La suma de Horas Académicas (<strong>${horasInp} hrs</strong>) y Horas Administrativas (<strong>${horasAdmin} hrs</strong>) en este plantel (<strong>${totalAsignadasPlantel} hrs</strong>) supera las Horas según Recibo de Pago (<strong>${horasRecibo} hrs</strong>).`;
-    } 
-    // 4. Recibo supera el tope legal del cargo
-    else if (horasRecibo > (tope + 0.01)) {
+    } else if (horasRecibo > (tope + 0.01)) {
         excede = true;
         motivoBloqueo = 'RECIBO_SUPERA_TOPE';
-        mensajeError = `⚠️ <strong>Tope legal excedido:</strong> El recibo de pago (<strong>${horasRecibo} hrs</strong>) excede el tope máximo legal de <strong>${tope} hrs</strong> para ${etiqueta}.`;
-    } 
-    // 5. Límite de seguridad institucional para pluriempleo en turnos alternos (máximo 2 cargos completos de 53.33)
-    else if (!hayConflictoTurno && horasOtros > 0 && total > 106.66) {
-        excede = true;
-        motivoBloqueo = 'PLURIEMPLEO_EXCESIVO';
-        mensajeError = `⚠️ <strong>Tope de pluriempleo excedido:</strong> La carga total acumulada (${total} hrs) supera el límite máximo institucional permitido para doble turno (106.66 hrs).`;
+        mensajeError = `⚠️ <strong>Tope legal excedido:</strong> El recibo de pago (<strong>${horasRecibo} hrs</strong>) excede el tope máximo legal individual de <strong>${tope} hrs</strong> para ${etiqueta}.`;
     }
 
     if (helpEl) {
@@ -2224,50 +2290,42 @@ export async function verificarTopeHorasDocente(forzarConsulta = false) {
             helpEl.style.background = '#fef2f2';
             helpEl.style.borderColor = '#fca5a5';
             helpEl.innerHTML = mensajeError;
-            if (inpHoras) inpHoras.style.borderColor = '#dc2626';
-            if (motivoBloqueo === 'RECIBO_SUPERA_TOPE' && inpHRecibo) inpHRecibo.style.borderColor = '#dc2626';
+            if (motivoBloqueo === 'RECIBO_SUPERA_TOPE' && inpHRecibo) {
+                inpHRecibo.style.borderColor = '#dc2626';
+                if (inpHoras) inpHoras.style.borderColor = '';
+            } else {
+                if (inpHoras) inpHoras.style.borderColor = '#dc2626';
+                if (inpHRecibo) inpHRecibo.style.borderColor = '';
+            }
         } else {
             if (inpHoras) inpHoras.style.borderColor = '';
             if (inpHRecibo) inpHRecibo.style.borderColor = '';
             if (inpAdmin) inpAdmin.style.borderColor = '';
 
-            if (esSoloMedia) {
+            if (esAdmObrero) {
                 helpEl.style.color = '#0369a1';
                 helpEl.style.background = '#f0f9ff';
                 helpEl.style.borderColor = '#bae6fd';
-                const textoOtros = horasOtros > 0 ? ` (+ ${horasOtros} hrs en otros liceos)` : '';
-                const tagRecibo = (tipoPersonal === 'DOCENTE') ? 'H.DOC' : 'H.ADM';
-                if (horasAdmin > 0) {
-                    helpEl.innerHTML = `✅ <strong>Educación Media (Horas Compartidas):</strong> Recibo: <strong>${horasRecibo || 0} hrs</strong> (${tagRecibo}) | Asignadas aquí: <strong>${totalAsignadasPlantel} hrs</strong> (${horasInp} acad + ${horasAdmin} adm)${textoOtros} | <strong>Carga Total Media: ${total} hrs</strong> (Tope legal: 56 hrs).`;
-                } else {
-                    helpEl.innerHTML = `✅ <strong>Educación Media (Docente por Horas):</strong> Recibo: <strong>${horasRecibo || 0} hrs</strong> (${tagRecibo}) | En este Liceo: <strong>${horasInp} hrs</strong>${textoOtros} | <strong>Carga Total Media: ${total} hrs</strong> (Tope: 56 hrs). Horas por Programar: <strong>${horasPorProg} hrs</strong>.`;
-                }
-            } else if (horasOtros > 0 && !hayConflictoTurno) {
-                helpEl.style.color = '#15803d';
-                helpEl.style.background = '#f0fdf4';
-                helpEl.style.borderColor = '#bbf7d0';
-                helpEl.innerHTML = `✅ <strong>Pluriempleo / Turnos Compatibles:</strong> Docente activo en turno <strong>${turnoInp || 'ACTUAL'}</strong> en este plantel (<strong>${horasInp} hrs</strong>) y turno no coincidente en otro plantel (<strong>${horasOtros} hrs</strong>). Validación exitosa sin solapamiento de horario.`;
-            } else if (esBasica) {
-                helpEl.style.color = '#15803d';
-                helpEl.style.background = '#f0fdf4';
-                helpEl.style.borderColor = '#bbf7d0';
-                helpEl.innerHTML = `✅ <strong>Educación Básica (Inicial / Primaria):</strong> Carga horaria única de <strong>${totalAsignadasPlantel} hrs</strong> según nómina ministerial (un solo plantel). Horas por programar: <strong>0</strong>.`;
+                helpEl.innerHTML = `✅ <strong>Carga Nominal Funcional frente a Matrícula (${tipoPersonal}):</strong> Recibo: <strong>${horasRecibo || (tipoPersonal === 'ADMINISTRATIVO' ? 37.5 : 40)} hrs</strong> (H.ADM) | En aula: <strong>${horasInp} hrs</strong>. Su carga nominal según recibo cubre funcionalmente la atención de matrícula sin sumar horas adicionales hasta la regularización del cargo.`;
             } else if (esMedia) {
                 helpEl.style.color = '#0369a1';
                 helpEl.style.background = '#f0f9ff';
                 helpEl.style.borderColor = '#bae6fd';
-                const textoOtros = horasOtros > 0 ? ` (+ ${horasOtros} hrs en otro plantel)` : '';
-                const tagRecibo = (tipoPersonal === 'DOCENTE') ? 'H.DOC' : 'H.ADM';
                 if (horasAdmin > 0) {
-                    helpEl.innerHTML = `✅ <strong>Educación Media (Dedicación Mixta):</strong> Recibo: <strong>${horasRecibo || 0} hrs</strong> (${tagRecibo}) | Académicas: <strong>${horasInp} hrs</strong> + Administrativas: <strong>${horasAdmin} hrs</strong> = <strong>${totalAsignadasPlantel} hrs</strong> asignadas | <strong>Por Programar: ${horasPorProg} hrs</strong>${textoOtros}. Tope legal: ${tope} hrs.`;
+                    helpEl.innerHTML = `✅ <strong>Educación Media (Dedicación Mixta):</strong> Recibo: <strong>${horasRecibo || 0} hrs</strong> (H.DOC) | Académicas: <strong>${horasInp} hrs</strong> + Administrativas: <strong>${horasAdmin} hrs</strong> = <strong>${totalAsignadasPlantel} hrs</strong> asignadas | <strong>Por Programar: ${horasPorProg} hrs</strong>. Tope docente: 54 hrs.`;
                 } else {
-                    helpEl.innerHTML = `ℹ️ <strong>Educación Media:</strong> Recibo: <strong>${horasRecibo || 0} hrs</strong> (${tagRecibo}) | En este Plantel: <strong>${horasInp} hrs</strong> | <strong>Por Programar: ${horasPorProg} hrs</strong>${textoOtros}. Tope legal: ${tope} hrs.`;
+                    helpEl.innerHTML = `✅ <strong>Educación Media:</strong> Recibo: <strong>${horasRecibo || 0} hrs</strong> (H.DOC) | En este Plantel: <strong>${horasInp} hrs</strong> | <strong>Por Programar: ${horasPorProg} hrs</strong>. Tope máximo docente: 54 hrs.`;
                 }
+            } else if (esBasica) {
+                helpEl.style.color = '#15803d';
+                helpEl.style.background = '#f0fdf4';
+                helpEl.style.borderColor = '#bbf7d0';
+                helpEl.innerHTML = `✅ <strong>Educación Básica (Inicial / Primaria):</strong> Carga horaria declarada en este plantel: <strong>${totalAsignadasPlantel} hrs</strong> según recibo (H.DOC). Horas por programar: <strong>${horasPorProg} hrs</strong>. Tope docente: 54 hrs.`;
             } else {
                 helpEl.style.color = '#475569';
                 helpEl.style.background = '#f8fafc';
                 helpEl.style.borderColor = '#e2e8f0';
-                helpEl.innerHTML = `ℹ️ Asignación pedagógica activa. Tope de carga: <strong>${tope} hrs</strong>.`;
+                helpEl.innerHTML = `ℹ️ Asignación pedagógica activa en este plantel. Tope máximo docente: <strong>${tope} hrs</strong>.`;
             }
         }
     }
@@ -2277,13 +2335,13 @@ export async function verificarTopeHorasDocente(forzarConsulta = false) {
         esMedia,
         esBasica,
         etiqueta,
-        horasOtros,
+        horasOtros: 0,
         horasInp,
         horasRecibo,
         horasPorProg,
-        total,
-        disp,
-        desglose,
+        total: totalAsignadasPlantel,
+        disp: Math.max(0, tope - horasInp),
+        desglose: [],
         excede,
         motivoBloqueo,
         mensajeError
@@ -2339,6 +2397,7 @@ export function calcularHorasUI(forzarConsulta = false) {
 
 export function onNivelModalidadChangeUI() {
     const nivelSel = (document.getElementById('wp-nivel-modalidad')?.value || '').toUpperCase();
+    const tipoVal = (document.getElementById('wp-tipo-personal')?.value || '').toUpperCase();
     const hReciboInput = document.getElementById('wp-horas-recibo');
     const hAcadInput = document.getElementById('wp-horas-academicas');
     const hAdminInput = document.getElementById('wp-horas-administrativas');
@@ -2347,7 +2406,23 @@ export function onNivelModalidadChangeUI() {
     const esBasica = (nivelSel.includes('INICIAL') || nivelSel.includes('PRIMARIA')) && !nivelSel.includes('MEDIA');
     const esMedia = nivelSel.includes('MEDIA');
 
-    if (esBasica) {
+    if (tipoVal === 'ADMINISTRATIVO' || tipoVal === 'OBRERO') {
+        const hNominal = (tipoVal === 'ADMINISTRATIVO') ? '37.5' : '40';
+        if (hReciboInput && (!hReciboInput.value || hReciboInput.value === '53.33')) {
+            hReciboInput.value = hNominal;
+        }
+        if (hAcadInput) {
+            hAcadInput.value = hReciboInput?.value || hNominal;
+        }
+        if (hAdminInput) {
+            hAdminInput.value = '0';
+        }
+        if (esBasica && espInput && !espInput.value) {
+            espInput.value = 'AULA INTEGRAL';
+        } else if (esMedia && espInput && espInput.value === 'AULA INTEGRAL') {
+            espInput.value = '';
+        }
+    } else if (esBasica) {
         if (hReciboInput) hReciboInput.value = '53.33';
         if (hAcadInput) hAcadInput.value = '53.33';
         if (hAdminInput) hAdminInput.value = '0';
@@ -2421,6 +2496,22 @@ export function toggleMatriculaUI() {
         if (cacad) cacad.style.display = 'block';
         if (cprog) cprog.style.display = 'block';
         if (ccuad) ccuad.style.display = 'none';
+
+        if (tipoVal === 'ADMINISTRATIVO' || tipoVal === 'OBRERO') {
+            const hNominal = (tipoVal === 'ADMINISTRATIVO') ? '37.5' : '40';
+            const hRecibo = document.getElementById('wp-horas-recibo');
+            const hAcad = document.getElementById('wp-horas-academicas');
+            const hAdmin = document.getElementById('wp-horas-administrativas');
+            if (hRecibo && (!hRecibo.value || hRecibo.value === '53.33')) {
+                hRecibo.value = hNominal;
+            }
+            if (hAcad && (!hAcad.value || hAcad.value === '0' || hAcad.value === '53.33')) {
+                hAcad.value = hRecibo?.value || hNominal;
+            }
+            if (hAdmin) {
+                hAdmin.value = '0';
+            }
+        }
 
         const selNivel = document.getElementById('wp-nivel-modalidad');
         if (selNivel && !selNivel.value) {
@@ -2498,13 +2589,14 @@ export function toggleMatriculaUI() {
         const hProg = document.getElementById('wp-horas-por-programar');
         if (hProg) hProg.value = '';
 
+        const hDefault = (tipoVal === 'ADMINISTRATIVO') ? '37.5' : '40';
         const hRecibo = document.getElementById('wp-horas-recibo');
         const hAdmin = document.getElementById('wp-horas-administrativas');
         if (hAdmin && !hAdmin.value) {
-            hAdmin.value = hRecibo?.value || '40';
+            hAdmin.value = hRecibo?.value || hDefault;
         }
         if (hRecibo && !hRecibo.value) {
-            hRecibo.value = hAdmin?.value || '40';
+            hRecibo.value = hAdmin?.value || hDefault;
         }
 
         calcularHorasUI(false);
@@ -2517,6 +2609,10 @@ window.onAtiendeMatriculaChangeUI = onAtiendeMatriculaChangeUI;
 window.toggleMatriculaUI = toggleMatriculaUI;
 window.validarHorasDocenteUI = function (forzar = false) {
     verificarTopeHorasDocente(forzar);
+    if (forzar) {
+        const cedVal = document.getElementById('wp-cedula')?.value;
+        if (cedVal) verificarCedulaEnOtroPlantel(cedVal, 'blur');
+    }
 };
 
 // Helpers de validación y cálculo en UI
@@ -2524,6 +2620,10 @@ window.validarCedulaUI = function () {
     const nac = document.getElementById('wp-nacionalidad')?.value;
     const cedInp = document.getElementById('wp-cedula');
     if (!cedInp) return;
+    const cedNorm = String(cedInp.value || '').trim().replace(/[^0-9]/g, '');
+    if (window._cedulaConfirmadaOtroPlantel && cedNorm !== window._cedulaConfirmadaOtroPlantel) {
+        window._cedulaConfirmadaOtroPlantel = null;
+    }
     let val = parseInt(cedInp.value);
     if (isNaN(val)) return;
 
