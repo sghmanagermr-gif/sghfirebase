@@ -490,6 +490,22 @@ export async function initCascadaPersonal() {
     actualizarCascada();
 }
 
+/**
+ * Muestra u oculta los campos exclusivos de Planta / Zona Educativa en el formulario.
+ */
+function actualizarVisibilidadCamposPlanta(data = null) {
+    const esPlantaForm = window.sgh_user_data?.rol === 'plantadmin'
+        || window.currentPlantelInfo?.es_planta
+        || window.currentPlantelInfo?.denominacion === 'SEDE ADMINISTRATIVA'
+        || String(obtenerDEAActualWizard()).startsWith('0012')
+        || Boolean(data && (data.oficina || data['cargo-planta'] || data.cargo_planta));
+    const displayVal = esPlantaForm ? 'block' : 'none';
+    const contOfi = document.getElementById('container-oficina');
+    if (contOfi) contOfi.style.display = displayVal;
+    const contCargoPlanta = document.getElementById('container-cargo-planta');
+    if (contCargoPlanta) contCargoPlanta.style.display = displayVal;
+}
+
 export function mostrarFormularioPersonal(autoScroll = true) {
     if (window._requierePaso1) {
         console.warn("🔒 [SGH] Paso 1 obligatorio pendiente: La gestión de personal está bloqueada hasta declarar matrícula.");
@@ -498,6 +514,7 @@ export function mostrarFormularioPersonal(autoScroll = true) {
     poblarCatalogosGenerales();
     initCascadaPersonal();
     limpiarFormularioPersonal();
+    actualizarVisibilidadCamposPlanta();
 
     const contenedor = document.getElementById('seccion-registro-personal');
     const contenedorTabla = document.getElementById('seccion-personal-existente');
@@ -557,6 +574,7 @@ export function abrirFormularioNuevoPersonal() {
     poblarCatalogosGenerales();
     initCascadaPersonal();
     limpiarFormularioPersonal();
+    actualizarVisibilidadCamposPlanta();
 
     const contenedor = document.getElementById('seccion-registro-personal');
     if (contenedor) {
@@ -804,7 +822,7 @@ export function limpiarFormularioPersonal(scrollBackToTable = false) {
     const ids = [
         'wp-cedula', 'wp-nombres', 'wp-lugar-nacimiento', 'wp-nacimiento', 'wp-edad', 'wp-genero', 'wp-nacionalidad',
         'wp-estado-civil', 'wp-ubicacion-administrativa', 'wp-tipo-personal', 'wp-dependencia', 'wp-subcategoria',
-        'wp-cargo', 'wp-codigo-rac', 'wp-titular', 'wp-situacion-laboral', 'wp-descripcion-situacion', 'wp-especialidad-imparte',
+        'wp-cargo', 'wp-codigo-rac', 'wp-cargo-planta', 'wp-titular', 'wp-situacion-laboral', 'wp-descripcion-situacion', 'wp-especialidad-imparte',
         'wp-horas-recibo', 'wp-horas-academicas', 'wp-horas-por-programar', 'wp-horas-administrativas',
         'wp-fecha-ingreso', 'wp-antiguedad', 'wp-instruccion', 'wp-titulo', 'wp-turnos-atiende',
         'wp-talla-camisa', 'wp-talla-pantalon', 'wp-talla-zapato', 'wp-actividad-deportiva', 'wp-actividad-cultural',
@@ -1091,9 +1109,9 @@ export function cargarEmpleadoEnFormulario(data, docId) {
     // 2. Datos Laborales
     setVal('wp-ubicacion-administrativa', data['ubicacion-administrativa'] || '');
     setVal('wp-oficina', data.oficina || '');
-    const esPlantaForm = window.sgh_user_data?.rol === 'plantadmin' || window.currentPlantelInfo?.es_planta || window.currentPlantelInfo?.denominacion === 'SEDE ADMINISTRATIVA' || !!data.oficina;
-    const contOfi = document.getElementById('container-oficina');
-    if (contOfi) contOfi.style.display = esPlantaForm ? 'block' : 'none';
+    actualizarVisibilidadCamposPlanta(data);
+    setVal('wp-cargo-planta', '');
+    setSelectSmart('wp-cargo-planta', data['cargo-planta'] || data.cargo_planta || '');
 
     const tipo = (data['tipo-personal'] || '').toUpperCase();
     const dep = (data.dependencia || '').toUpperCase();
@@ -1544,6 +1562,13 @@ export function validarFormularioPersonal() {
         el.style.borderColor = '';
     });
 
+    const contCargoPlantaEl = document.getElementById('container-cargo-planta');
+    const esPlantaVal = window.sgh_user_data?.rol === 'plantadmin'
+        || window.currentPlantelInfo?.es_planta
+        || window.currentPlantelInfo?.denominacion === 'SEDE ADMINISTRATIVA'
+        || String(obtenerDEAActualWizard()).startsWith('0012')
+        || (contCargoPlantaEl && window.getComputedStyle(contCargoPlantaEl).display !== 'none');
+
     const campos = [
         // 1. Datos Personales
         { id: 'wp-nacionalidad', nombre: 'Nacionalidad' },
@@ -1565,6 +1590,7 @@ export function validarFormularioPersonal() {
         { id: 'wp-tipo-personal', nombre: 'Tipo de Personal' },
         { id: 'wp-dependencia', nombre: 'Dependencia' },
         { id: 'wp-cargo', nombre: 'Cargo' },
+        ...(esPlantaVal ? [{ id: 'wp-cargo-planta', nombre: 'Cargo / Nivel en Planta' }] : []),
         { id: 'wp-titular', nombre: 'Condición de Titular' },
         // Horas se validan condicionalmente según tipo de personal
         { id: 'wp-fecha-ingreso', nombre: 'Fecha de Ingreso' },
@@ -1768,6 +1794,7 @@ export async function guardarPersonalInline() {
         cargo: document.getElementById('wp-cargo')?.value || '',
         'codigo-cargo': document.getElementById('wp-codigo-rac')?.value || '',
         'codigo-rac': document.getElementById('wp-codigo-rac')?.value || '',
+        'cargo-planta': document.getElementById('wp-cargo-planta')?.value || '',
         titular: document.getElementById('wp-titular')?.value || '',
         'horas-recibo': parseFloat(document.getElementById('wp-horas-recibo')?.value) || 0,
         'horas-academicas': parseFloat(document.getElementById('wp-horas-academicas')?.value) || 0,
@@ -2075,8 +2102,27 @@ async function cargarPersonalExistente(codigoDEA) {
             const tdNom = document.createElement('td');
             tdNom.style.padding = '12px';
             const nomClean = (data['nombre-apellido'] || data['apellidos-nombres'] || data.nombre || data.nombres || 'N/A').toUpperCase();
-            if (data.oficina) {
-                tdNom.innerHTML = `<div>${nomClean}</div><div style="font-size: 0.74rem; color: #1e40af; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; background: #eff6ff; padding: 2px 7px; border-radius: 4px; margin-top: 4px; border: 1px solid #bfdbfe;">🏢 ${data.oficina}</div>`;
+            const cargoPlantaVal = (data['cargo-planta'] || data.cargo_planta || '').toString().trim().toUpperCase();
+            if (data.oficina || cargoPlantaVal) {
+                const nomDiv = document.createElement('div');
+                nomDiv.textContent = nomClean;
+                tdNom.appendChild(nomDiv);
+                const badgesWrap = document.createElement('div');
+                badgesWrap.style.cssText = 'display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px;';
+                if (cargoPlantaVal) {
+                    const bPlanta = document.createElement('span');
+                    const esAltoNivel = cargoPlantaVal !== 'OTROS';
+                    bPlanta.style.cssText = `font-size: 0.72rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 4px; border: 1px solid ${esAltoNivel ? '#c4b5fd' : '#cbd5e1'}; background: ${esAltoNivel ? '#f3e8ff' : '#f1f5f9'}; color: ${esAltoNivel ? '#6b21a8' : '#475569'};`;
+                    bPlanta.textContent = `🏛️ ${cargoPlantaVal}`;
+                    badgesWrap.appendChild(bPlanta);
+                }
+                if (data.oficina) {
+                    const bOfi = document.createElement('span');
+                    bOfi.style.cssText = 'font-size: 0.74rem; color: #1e40af; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; background: #eff6ff; padding: 2px 7px; border-radius: 4px; border: 1px solid #bfdbfe;';
+                    bOfi.textContent = `🏢 ${data.oficina}`;
+                    badgesWrap.appendChild(bOfi);
+                }
+                tdNom.appendChild(badgesWrap);
             } else {
                 tdNom.textContent = nomClean;
             }
@@ -3107,6 +3153,7 @@ export async function exportarNominaExcel() {
                 'Cargo': emp['cargo'] || emp['CARGO'] || '',
                 'Oficina / Coordinación': emp['oficina'] || '',
                 'Código RAC': emp['codigo-rac'] || emp['codigo-cargo'] || emp['CODIGO RAC'] || '',
+                'Cargo / Nivel en Planta': emp['cargo-planta'] || emp.cargo_planta || '',
                 'Condición': emp['titular'] || emp['TITULAR'] || '',
                 'Fecha de Ingreso': emp['fecha-ingreso'] || emp['FECHA DE INGRESO'] || '',
                 'Años de Antigüedad': emp['antiguedad'] || emp['ANTIGUEDAD'] || '',

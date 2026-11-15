@@ -5449,6 +5449,22 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   * Limpieza posterior a `toggleMatriculaUI()` de `wp-horas-recibo`, `wp-horas-academicas`, `wp-horas-administrativas`, `wp-horas-por-programar` y ocultamiento de `#wp-horas-academicas-help`.
   * **Verificación:** Prueba automatizada verificando el vaciado completo de los 53 controles de `#form-personal-inline`, compilación exitosa (`v2.38.2`) y publicación en Firebase Hosting (`https://sgh-merida.web.app`).
 
+---
+
+### Hito: Selector Obligatorio de Cargo / Nivel en Planta y Afinación de Alerta Roja N.º 5 (v2.38.3)
+- **Fecha:** 2026-11-15 ~13:55 (Hora Local Venezuela).
+- **Módulos:** Formulario de Personal Planta (`webapp/index.html`, `webapp/src/main.js`, `webapp/src/personalWizard.js`) y Motor de Auditoría / Escáner de Alertas (`webapp/src/admin.js`).
+- **Contexto Analítico:** Cruzando `nomina_acualizada/RAC_zona.xlsx` (198 registros, 54 docentes en Planta) contra `nomina_acualizada/estructura/DATA_ESTRUCTURA_PLANTA_MERIDA.xlsx`, `estructura_cdce_zona.xlsx`, `DATA_ESTRUCTURA_MUNICIPAL.xlsx`, `estructura_cdce_municipal.xlsx`, `ESTRUCTURA_SUPERVISORES_CIRCUITOS.xlsx` y `DIRECTORES_PLANTELES.xlsx`, se confirmó que los directivos estadales (Directora, Asistente Ejecutivo, Jefes de División 210LNR y Coordinadores de Área 240LNR) conservan en su recibo de pago códigos RAC nominales de Docente de Aula.
+- **Cambios Técnicos (v2.38.3):**
+  * **Selector Obligatorio para Planta (`#container-cargo-planta` / `#wp-cargo-planta`):**
+    - Ubicado en `webapp/index.html` inmediatamente después de `#wp-codigo-rac` y antes de `#wp-titular`, con los ítems `JEFE DE ZONA`, `JEFE DE DIVISION`, `COORDINADOR` (donde se clasifica también el cargo de Asistente Ejecutivo) y `OTROS`.
+    - Visibilidad exclusiva para usuarios `plantadmin` y divisiones de Planta (`0012...` / `SEDE ADMINISTRATIVA`) controlada en `mostrarCandado` (`main.js`) y `actualizarVisibilidadCamposPlanta` (`personalWizard.js`).
+    - Validación obligatoria en `validarFormularioPersonal()` exclusivamente cuando el formulario opera en contexto de Planta; reseteo limpio en `limpiarFormularioPersonal()` y persistencia en el campo `'cargo-planta'` de `cargos_personal`. Sin pre-carga masiva sobre expedientes previos de Firestore.
+  * **Conexión con Alerta Roja N.º 5 y Reportes (`webapp/src/admin.js`, `webapp/src/personalWizard.js`):**
+    - Actualización de `esCargoAutorizadoPlanta(cargoNorm, codRacNorm, cargoPlantaNorm)` y `evaluarAlertasRojasFuncionario`: autoriza `JEFE DE ZONA`, `JEFE DE DIVISION` y `COORDINADOR`; marca alerta con `OTROS`; y conserva evaluación de respaldo por código (`140LNR`, `210LNR`, `240LNR`) y denominación (`ASISTENTE EJECUTIVO`, Jefaturas, Coordinaciones, etc.) para expedientes aún sin clasificar.
+    - Incorporación de insignia visual en tabla de Planta (`cargarPersonalExistente`), Auditor Individual, Escáner de Cierre de Jornada y columna `Cargo / Nivel en Planta` en las exportaciones Excel (`.xlsx`).
+  * **Verificación:** Prueba de 6 escenarios normativos sobre `evaluarAlertasRojasFuncionario` (Coordinador, Jefe de División, Jefe de Zona, Otros, legado sin clasificar y Asistente Ejecutivo legado) con resultado 100% conforme. Sincronización de versión a `v2.38.3` en `package.json` e `index.html`, compilación limpia con Vite y despliegue completo en Firebase Hosting (`https://sgh-merida.web.app`).
+
 
 
 

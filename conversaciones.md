@@ -10207,6 +10207,71 @@ Creo que solo 2 están en el RAC.xlsx"
 > **Respuesta del Agente:**  
 > Registro cerrado de la versión v2.38.2 en `bitacora.md`, `conversaciones.md` y `versiones.md`, con respaldo y sincronización en GitHub.
 
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Ok antes de continuar debemos entender la estructura de Zona Educativa RAC_zona y la estructura de los municipios. Para eso debes analizar los archivos que estan en la carpeta nomina_acualizada\estructura. Reportame tu análisis y de allí partiremos a realizar las posibles propuestas para implementar dentro del siste SGH"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Entrega de diagnóstico completo sobre `RAC_zona.xlsx` (198 registros, 54 docentes en divisiones `0012...`) cruzado con `DATA_ESTRUCTURA_PLANTA_MERIDA.xlsx` / `estructura_cdce_zona.xlsx` (33 cargos de Alto Nivel en Hoja 1 y 143 plazas de sede en Hoja 2), `DATA_ESTRUCTURA_MUNICIPAL.xlsx` / `estructura_cdce_municipal.xlsx` (115 cargos directivos en los 23 CDCE municipales), `ESTRUCTURA_SUPERVISORES_CIRCUITOS.xlsx` (91 supervisores circuitales) y `DIRECTORES_PLANTELES.xlsx` (631 planteles / 611 directores), demostrando por qué 14 docentes de Alto Nivel figuraban en Alerta 5 y formulando propuestas de solución Zero-Cost.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "vamos hacer esto. en la pantalla de una usuario plantadmin despues del selector CÓDIGO RAC y antes de TITULAR / INTERINO coloca un selector con los siguientes items: JEFE DE ZONA, JEFE DE DIVISION, COORDINADOR, OTROS. Después te digo que haremos con eso"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Incorporación del selector **Cargo / Nivel en Planta** (`#wp-cargo-planta`) exclusivo para cuentas y dependencias de Planta / Zona Educativa en `webapp/index.html`, `webapp/src/main.js` y `webapp/src/personalWizard.js` (con las 4 opciones indicadas), compilado y publicado en vivo en `https://sgh-merida.web.app`.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "¿Crees que los items de ese nuevo selector, contribuyan con el aviso de Docente en Planta sin Cargo de Alto Nivel / Encargaduría?"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Confirmación afirmativa explicando el impacto directo en la Alerta Roja N.º 5 y consultando 3 puntos operativos: obligatoriedad del selector en Planta, posible pre-carga sobre registros existentes y clasificación del cargo de Asistente Ejecutivo.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "- Me parece bien Hacer el selector obligatorio para usuarios de Planta
+> - No hagamos la Pre-cargar el valor en los registros que ya están hoy en el sistema
+> - La Asistente Ejecutivo entra en la clasificación de COORDINADOR"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Implementación y despliegue de la versión **v2.38.3**:
+> - Selector **Cargo / Nivel en Planta** configurado como obligatorio exclusivamente para usuarios de Planta (`plantadmin` / `0012...`).
+> - Conexión directa con la **Alerta Roja N.º 5** en `webapp/src/admin.js` (exime `JEFE DE ZONA`, `JEFE DE DIVISION` y `COORDINADOR`, marca alerta con `OTROS`, e incluye respaldo legado sin tocar registros previos en Firestore).
+> - Etiqueta visible en tabla de Planta, ficha del Auditor Individual, Escáner de Alertas Rojas y columna en los reportes Excel (`.xlsx`). Verificación unitaria sobre los 6 escenarios normativos.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> "Estoy satisfecho"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Confirmación recibida y cierre oficial de la versión **v2.38.3**. Actualización de `webapp/package.json`, `webapp/index.html`, `versiones.md`, `bitacora.md` y `conversaciones.md`, compilación final, despliegue en Firebase Hosting (`https://sgh-merida.web.app`) y respaldo en GitHub (`main`).
+
 
 
 

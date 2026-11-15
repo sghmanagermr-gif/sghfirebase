@@ -2135,6 +2135,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
             #seccion-cuadratura { display: none !important; }
             #container-carga-horaria-academica { display: none !important; }
             #container-oficina { display: block !important; }
+            #container-cargo-planta { display: block !important; }
             #seccion-personal-existente { display: block !important; }
         `;
         const cardPF = document.getElementById('card-plantel-form');
@@ -2299,6 +2300,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                     #seccion-cuadratura { display: none !important; }
                     #container-carga-horaria-academica { display: none !important; }
                     #container-oficina { display: block !important; }
+                    #container-cargo-planta { display: block !important; }
                     #seccion-personal-existente { display: block !important; }
                 `;
             }

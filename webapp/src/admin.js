@@ -21,9 +21,15 @@ function clasificarTipoPersonalAlerta(rawTipo) {
   return 'OTRO';
 }
 
-function esCargoAutorizadoPlanta(cargoNorm, codRacNorm) {
-  if (codRacNorm === '210LNR') return true;
-  return /(JEFE DE DIVISION|JEFA DE DIVISION|JEFE DIVISION|JEFA DIVISION|COORDINADOR|COORDINADORA|DIRECTOR|DIRECTORA|SUPERVISOR|SUPERVISORA|RESPONSABLE|ENCARGADURIA|ENCARGADO|ENCARGADA|ALTO NIVEL)/.test(cargoNorm);
+function esCargoAutorizadoPlanta(cargoNorm, codRacNorm, cargoPlantaNorm = '') {
+  if (cargoPlantaNorm === 'JEFE DE ZONA' || cargoPlantaNorm === 'JEFE DE DIVISION' || cargoPlantaNorm === 'COORDINADOR') {
+    return true;
+  }
+  if (cargoPlantaNorm === 'OTROS') {
+    return false;
+  }
+  if (codRacNorm === '210LNR' || codRacNorm === '240LNR' || codRacNorm === '140LNR') return true;
+  return /(JEFE DE ZONA|JEFE DE DIVISION|JEFA DE DIVISION|JEFE DIVISION|JEFA DIVISION|COORDINADOR|COORDINADORA|ASISTENTE EJECUTIVO|DIRECTOR|DIRECTORA|SUPERVISOR|SUPERVISORA|RESPONSABLE|ENCARGADURIA|ENCARGADO|ENCARGADA|ALTO NIVEL)/.test(cargoNorm);
 }
 
 /**
@@ -59,6 +65,7 @@ export function evaluarAlertasRojasFuncionario(cedula, docs = [], resolverDatosP
     const nivelDoc = nivelProp || nivelPlantelNorm;
     const depRaw = normTextoAlerta(d.dependencia || d['DEPENDENCIA'] || infoP.dependenciaPlantel || '');
     const cargoNombre = normTextoAlerta(d.cargo || d['nombre-cargo'] || d['denominacion-cargo'] || d['CARGO'] || '');
+    const cargoPlantaNorm = normTextoAlerta(d['cargo-planta'] || d.cargo_planta || '');
     const codRac = normTextoAlerta(d['codigo-rac'] || d['codigo-cargo'] || d['CODIGO RAC'] || '');
     const ubicAdmin = normTextoAlerta(d['ubicacion-administrativa'] || d['UBICACIÓN ADMINISTRATIVA'] || '');
     const oficinaNorm = normTextoAlerta(d.oficina || '');
@@ -84,6 +91,7 @@ export function evaluarAlertasRojasFuncionario(cedula, docs = [], resolverDatosP
       nivelDoc,
       depRaw,
       cargoNombre,
+      cargoPlanta: cargoPlantaNorm,
       codRac,
       ubicAdmin,
       oficinaNorm,
@@ -190,12 +198,12 @@ export function evaluarAlertasRojasFuncionario(cedula, docs = [], resolverDatosP
 
     if (!esUbicacionPlanta) return false;
     const cargoEval = `${r.cargoNombre} ${r.codRac}`;
-    return !esCargoAutorizadoPlanta(cargoEval, r.codRac);
+    return !esCargoAutorizadoPlanta(cargoEval, r.codRac, r.cargoPlanta);
   });
 
   if (docentesPlantaIrregulares.length > 0) {
     const detallePlanta = docentesPlantaIrregulares
-      .map(r => `${r.dea} - Cargo: ${r.cargoNombre || 'S/E'}${r.codRac ? ` (RAC: ${r.codRac})` : ''}`)
+      .map(r => `${r.dea} - Cargo: ${r.cargoNombre || 'S/E'}${r.codRac ? ` (RAC: ${r.codRac})` : ''}${r.cargoPlanta ? ` [Nivel Planta: ${r.cargoPlanta}]` : ''}`)
       .join('; ');
     alertas.push({
       codigo: 'ALERTA_5',
@@ -5362,6 +5370,7 @@ export function initAdminDashboard(dbInstance, user) {
           'Subcategoría': emp['subcategoria'] || emp['SUB CATEGORIA 1 TP'] || '',
           'Cargo': emp['cargo'] || emp['CARGO'] || '',
           'Código RAC': emp['codigo-rac'] || emp['codigo-cargo'] || emp['CODIGO RAC'] || '',
+          'Cargo / Nivel en Planta': emp['cargo-planta'] || emp.cargo_planta || '',
           'Condición': emp['titular'] || emp['TITULAR'] || '',
           'Fecha de Ingreso': emp['fecha-ingreso'] || emp['FECHA DE INGRESO'] || '',
           'Años de Antigüedad': emp['antiguedad'] || emp['ANTIGUEDAD'] || '',
@@ -6596,6 +6605,7 @@ export function initAdminDashboard(dbInstance, user) {
                   <div><span style="color: #64748b;">DEPENDENCIA:</span> <strong style="color: ${dep.includes('EST') ? '#059669' : '#2563eb'}; display: block;">${dep}</strong></div>
                   <div><span style="color: #64748b;">CARGO:</span> <strong style="color: #1e293b; display: block;">${cargo}</strong></div>
                   <div><span style="color: #64748b;">CÓDIGO RAC:</span> <strong style="color: #0284c7; display: block; font-family: monospace;">${codRac}</strong></div>
+                  ${(d['cargo-planta'] || d.cargo_planta) ? `<div><span style="color: #64748b;">CARGO / NIVEL EN PLANTA:</span> <strong style="color: #6b21a8; display: block;">${escaparHtmlAuditor(String(d['cargo-planta'] || d.cargo_planta).toUpperCase())}</strong></div>` : ''}
                   <div><span style="color: #64748b;">TITULAR / INTERINO:</span> <strong style="color: #1e293b; display: block;">${dispTit}</strong></div>
                   <div><span style="color: #64748b;">FECHA DE INGRESO:</span> <strong style="color: #1e293b; display: block;">${fIngreso}</strong></div>
                   <div><span style="color: #64748b;">ANTIGÜEDAD (AÑOS):</span> <strong style="color: #1e293b; display: block;">${ant} años</strong></div>
@@ -7002,7 +7012,7 @@ export function initAdminDashboard(dbInstance, user) {
                 ${escaparHtmlAuditor(r.escuela)}
               </div>
               <div style="font-size: 0.76rem; color: #475569; margin-top: 2px;">
-                ${escaparHtmlAuditor(r.municipio)} · <strong>${escaparHtmlAuditor(r.tipo)}</strong> · ${escaparHtmlAuditor(r.cargoNombre || 'S/C')} · Turno: <strong>${escaparHtmlAuditor(r.turnosDisplay)}</strong> · ${r.horasEfectivas}h
+                ${escaparHtmlAuditor(r.municipio)} · <strong>${escaparHtmlAuditor(r.tipo)}</strong> · ${escaparHtmlAuditor(r.cargoNombre || 'S/C')}${r.cargoPlanta ? ` · Nivel Planta: <strong>${escaparHtmlAuditor(r.cargoPlanta)}</strong>` : ''} · Turno: <strong>${escaparHtmlAuditor(r.turnosDisplay)}</strong> · ${r.horasEfectivas}h
               </div>
             </div>
           `).join('');
@@ -7123,6 +7133,7 @@ export function initAdminDashboard(dbInstance, user) {
               'Nivel / Modalidad': r.nivelDoc || 'N/R',
               'Cargo Nominal': r.cargoNombre || 'S/E',
               'Código RAC': r.codRac || 'S/E',
+              'Cargo / Nivel en Planta': r.cargoPlanta || 'S/E',
               'Turnos Atiende': r.turnosDisplay,
               'Horas Recibo': r.horasRecibo,
               'Horas Académicas': r.horasAcad,

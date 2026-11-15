@@ -4,6 +4,15 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.38.3 (15 de Noviembre de 2026)
+
+- **Selector Obligatorio de Cargo / Nivel en Planta (`#wp-cargo-planta`) y Conexión con Alerta Roja N.º 5 (`index.html`, `main.js`, `personalWizard.js`, `admin.js`):**
+  - Incorporación del selector obligatorio **Cargo / Nivel en Planta** exclusivo para usuarios de Planta Central / Zona Educativa (`plantadmin` y divisiones `0012...`), ubicado después de **Código RAC** y antes de **Titular / Interino**, con las opciones: `JEFE DE ZONA`, `JEFE DE DIVISION`, `COORDINADOR` (incluye Asistente Ejecutivo) y `OTROS`.
+  - Conexión directa con la **Alerta Roja N.º 5 (Docentes en Planta sin Cargo de Alto Nivel / Encargaduría)**: los docentes clasificados como `JEFE DE ZONA`, `JEFE DE DIVISION` o `COORDINADOR` quedan reconocidos como cargo autorizado de Planta y exentos de Alerta 5; los marcados como `OTROS` disparan la alerta para control de Gestión Humana, manteniendo compatibilidad con expedientes previos sin pre-carga en base de datos.
+  - Visualización de insignia de nivel en la nómina de Planta, fichas del Auditor Individual, Escáner de Alertas Rojas y exportaciones Excel (`.xlsx`).
+
+---
+
 ### v2.38.2 (15 de Noviembre de 2026)
 
 - **Limpieza Completa de Todos los Campos al Guardar Personal (`personalWizard.js`):**
