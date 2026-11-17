@@ -4,6 +4,16 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.38.7 (17 de Noviembre de 2026)
+
+- **Corte Oficial Cloud Firestore, Sincronización a Google Sheets y Blindaje Zero-Cost en la Pizarra (`admin.js`, `resumen_estadisticas.json`, `index.html`, `package.json`):**
+  - **Prioridad Reactiva al Corte Estático en la Pizarra (`admin.js`):** Corrección del flujo de carga en la Pizarra (`loadEstadisticas()`) para otorgar prioridad absoluta al archivo estático compilado `resumen_estadisticas.json` de alta velocidad y 0 lecturas, incorporando comparador cronológico de fechas de corte (`fechaLocal > fechaCloud`) para evitar que documentos obsoletos en la nube o en caché sobreescriban el corte oficial.
+  - **Sincronización Integral a Google Sheets (`rac_actualizado`, ID: `1xRXGCx-oZiiFQqZB0K6VQZTYoU2bZVH-Y5yuTAPKKgU`):** Carga masiva y limpia de 27,501 filas en la pestaña `PERSONAL` (59 columnas canónicas auditadas) y 1,185 filas en la pestaña `PLANTELES` (35 columnas), preservando íntegramente la estructura jerárquica de matrícula escolar por grados, secciones y género (`matricula_desglosada_json`).
+  - **Generación de Archivos Maestros en Excel (`nomina_acualizada/`):** Creación del libro en bruto `corte_noviembre_17.xlsx` (203.39 MB, 197 columnas físicas de Firestore) y del libro institucional consolidado `corte_noviembre_17_consolidado.xlsx` (77.47 MB, 59 columnas canónicas) con normalización de cargos, dependencias y rangos obreros.
+  - **Auditoría Forense del 100% de la Base de Datos (`scratch/auditoria_100_firestore.json`):** Mapeo de 27,501 cargos pertenecientes a 25,798 personas únicas (1,694 pluricargos identificados), 1,185 planteles del estado, y conciliación estricta de 133,639 estudiantes y 26,450 funcionarios en nómina activa.
+
+---
+
 ### v2.38.6 (15 de Noviembre de 2026)
 
 - **Desacople Modular de la Pizarra y Nuevas Pantallas para Discriminación de Personal y Estatus de Matrícula (`index.html`, `admin.js`, `resumen_estadisticas.json`):**

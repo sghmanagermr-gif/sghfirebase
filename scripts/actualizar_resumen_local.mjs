@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import XLSX from 'xlsx';
+import { normalizarMunicipio } from '../webapp/src/geografia.js';
 
 const EXCEL_PATH = path.resolve('nomina_acualizada', 'Nomina_Personal_Consolidado_Estadal_MERIDA_2026-11-09.xlsx');
 const BD_SGH_PATH = path.resolve('bd_sgh.json');
@@ -228,6 +229,103 @@ for (const [mun, data] of Object.entries(porMunicipio)) {
     })
     .sort((a, b) => b.count - a.count);
   data.jubilables = listaJub;
+}
+
+// 5. Inyectar Matrícula (Total Estadal, Masculino, Femenino, y por Municipio/Plantel)
+const SCRATCH_PLANTOLES_PATH = path.resolve('scratch', 'planteles_firestore_completo.json');
+if (fs.existsSync(SCRATCH_PLANTOLES_PATH)) {
+  console.log('Procesando datos de matrícula escolar desde:', SCRATCH_PLANTOLES_PATH);
+  const rawPlanteles = JSON.parse(fs.readFileSync(SCRATCH_PLANTOLES_PATH, 'utf8'));
+  const listPlanteles = Array.isArray(rawPlanteles) ? rawPlanteles : Object.values(rawPlanteles);
+
+  const globalMat = {
+    totalEstudiantes: 0,
+    masculino: 0,
+    femenino: 0,
+    plantelesTotal: 0,
+    cargados: 0,
+    pendientes: 0,
+    porMunicipio: {}
+  };
+
+  for (const m of Object.keys(porMunicipio)) {
+    porMunicipio[m].matricula = {
+      total: 0,
+      masculino: 0,
+      femenino: 0,
+      plantelesTotal: 0,
+      cargados: 0,
+      pendientes: 0,
+      planteles: []
+    };
+  }
+
+  listPlanteles.forEach(p => {
+    const rawMun = p.municipio || '';
+    const munNorm = normalizarMunicipio(rawMun);
+    if (!munNorm || !porMunicipio[munNorm]) return;
+
+    const mMun = porMunicipio[munNorm].matricula;
+    const mat = p.matricula || {};
+    const t = parseInt(mat['total-gen'] || p['matricula-total'] || 0, 10);
+    const m = parseInt(mat['total-gen-mas'] || 0, 10);
+    const f = parseInt(mat['total-gen-fem'] || 0, 10);
+    const eponimo = (p['nombre-plantel']?.['nuevo-eponimo'] || p['nombre-plantel']?.nuevo_eponimo || p.denominacion || p.nombre || p.codigos?.plantel || p.id || 'Plantel').trim().toUpperCase();
+    const dea = (p.codigos?.plantel || p.codigoDEA || p.id || '').trim().toUpperCase();
+
+    mMun.plantelesTotal++;
+    globalMat.plantelesTotal++;
+
+    const cargado = (t > 0 || m > 0 || f > 0);
+    if (cargado) {
+      mMun.cargados++;
+      mMun.total += t;
+      mMun.masculino += m;
+      mMun.femenino += f;
+
+      globalMat.cargados++;
+      globalMat.totalEstudiantes += t;
+      globalMat.masculino += m;
+      globalMat.femenino += f;
+    } else {
+      mMun.pendientes++;
+      globalMat.pendientes++;
+    }
+
+    mMun.planteles.push({
+      id: p.id,
+      dea,
+      nombre: eponimo,
+      total: t,
+      masculino: m,
+      femenino: f,
+      cargado
+    });
+  });
+
+  for (const [m, mData] of Object.entries(porMunicipio)) {
+    const mMun = mData.matricula;
+    if (mMun && Array.isArray(mMun.planteles)) {
+      mMun.planteles.sort((a, b) => a.nombre.localeCompare(b.nombre));
+      globalMat.porMunicipio[m] = {
+        total: mMun.total,
+        masculino: mMun.masculino,
+        femenino: mMun.femenino,
+        plantelesTotal: mMun.plantelesTotal,
+        cargados: mMun.cargados,
+        pendientes: mMun.pendientes
+      };
+    }
+  }
+
+  global.matricula = globalMat;
+  console.log('✅ Matrícula integrada exitosamente:', {
+    total: globalMat.totalEstudiantes,
+    mas: globalMat.masculino,
+    fem: globalMat.femenino,
+    cargados: globalMat.cargados,
+    pendientes: globalMat.pendientes
+  });
 }
 
 // Inyectar Aliases obligatorios (Intervención 180)

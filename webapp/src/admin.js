@@ -527,10 +527,12 @@ export function initAdminDashboard(dbInstance, user) {
     const cardAuditorCedula = document.getElementById('card-pizarra-auditor-cedula');
     const cardDespliegue = document.getElementById('card-pizarra-despliegue');
     const cardAspiradora = document.getElementById('card-pizarra-aspiradora');
+    const cardCorteSheets = document.getElementById('card-pizarra-corte-sheets');
 
     if (btnHeaderPizarra) btnHeaderPizarra.style.cursor = tienePermiso('estadisticas') ? 'pointer' : 'default';
     if (cardUsuarios) cardUsuarios.style.cursor = tienePermiso('validacion') ? 'pointer' : 'default';
     if (cardPlanteles) cardPlanteles.style.cursor = tienePermiso('planteles') ? 'pointer' : 'default';
+    if (cardCorteSheets) cardCorteSheets.style.display = (isSuperAdmin || isZonAdmin) ? 'flex' : 'none';
     if (cardAuditorCedula) cardAuditorCedula.style.display = (isSuperAdmin || isZonAdmin || userData?.rol === 'munadmin' || tienePermiso('planteles', true)) ? 'flex' : 'none';
     const btnModoEscanerAlertas = document.getElementById('btn-modo-auditor-escaner');
     if (btnModoEscanerAlertas) {
@@ -893,6 +895,25 @@ export function initAdminDashboard(dbInstance, user) {
       document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
       const tabDiscPersonal = document.getElementById('admin-tab-discriminacion-personal');
       if (tabDiscPersonal) tabDiscPersonal.classList.add('active');
+      if (window._cacheResumenData) {
+        renderDiscriminacionPersonalCompleta(window._cacheResumenData);
+      }
+      const adminMain = document.getElementById('admin-main');
+      if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // Botón "Volver a Municipios" desde la pantalla de detalle de personal por municipio
+  const btnVolverMunicipiosPersonal = document.getElementById('btn-volver-a-municipios-personal');
+  if (btnVolverMunicipiosPersonal && !btnVolverMunicipiosPersonal._hasListener) {
+    btnVolverMunicipiosPersonal._hasListener = true;
+    btnVolverMunicipiosPersonal.addEventListener('click', () => {
+      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+      const tabDiscPersonal = document.getElementById('admin-tab-discriminacion-personal');
+      if (tabDiscPersonal) tabDiscPersonal.classList.add('active');
+      if (window._cacheResumenData) {
+        renderDiscriminacionPersonalCompleta(window._cacheResumenData);
+      }
       const adminMain = document.getElementById('admin-main');
       if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
     });
@@ -909,6 +930,25 @@ export function initAdminDashboard(dbInstance, user) {
       document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
       const tabEstatusMatricula = document.getElementById('admin-tab-estatus-matricula');
       if (tabEstatusMatricula) tabEstatusMatricula.classList.add('active');
+      if (window._cacheResumenData) {
+        renderEstatusMatriculaCompleto(window._cacheResumenData);
+      }
+      const adminMain = document.getElementById('admin-main');
+      if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // Botón "Volver a Municipios" desde la pantalla de detalle de municipio
+  const btnVolverMunicipios = document.getElementById('btn-volver-a-municipios');
+  if (btnVolverMunicipios && !btnVolverMunicipios._hasListener) {
+    btnVolverMunicipios._hasListener = true;
+    btnVolverMunicipios.addEventListener('click', () => {
+      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+      const tabEstatusMatricula = document.getElementById('admin-tab-estatus-matricula');
+      if (tabEstatusMatricula) tabEstatusMatricula.classList.add('active');
+      if (window._cacheResumenData) {
+        renderEstatusMatriculaCompleto(window._cacheResumenData);
+      }
       const adminMain = document.getElementById('admin-main');
       if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
     });
@@ -1012,6 +1052,77 @@ export function initAdminDashboard(dbInstance, user) {
       if (tabAspiradora) tabAspiradora.classList.add('active');
       const adminMain = document.getElementById('admin-main');
       if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // Tarjeta "Corte Oficial Google Sheets" en la Pizarra -> Abre el modal de Corte Oficial
+  const cardPizarraCorteSheets = document.getElementById('card-pizarra-corte-sheets');
+  const modalCorteSheets = document.getElementById('modal-corte-google-sheets');
+  const btnCerrarModalCorte = document.getElementById('btn-cerrar-modal-corte');
+  const btnEjecutarSyncSheets = document.getElementById('btn-ejecutar-sincronizacion-sheets');
+  const statusSyncMsg = document.getElementById('status-sync-corte-msg');
+
+  if (cardPizarraCorteSheets && !cardPizarraCorteSheets._hasNavListener) {
+    cardPizarraCorteSheets._hasNavListener = true;
+    cardPizarraCorteSheets.addEventListener('click', () => {
+      const activeUser = window.sgh_user_data || userData;
+      const esSuper = activeUser?.rol === 'superadmin' || activeUser?.rol === 'admin';
+      const esZon = activeUser?.rol === 'zonadmin';
+      if (!esSuper && !esZon) {
+        showToast('Esta función está reservada para el Administrador del Sistema.', 'warning');
+        return;
+      }
+      if (modalCorteSheets) modalCorteSheets.style.display = 'flex';
+      if (statusSyncMsg) statusSyncMsg.style.display = 'none';
+    });
+  }
+
+  if (btnCerrarModalCorte && !btnCerrarModalCorte._hasListener) {
+    btnCerrarModalCorte._hasListener = true;
+    btnCerrarModalCorte.addEventListener('click', () => {
+      if (modalCorteSheets) modalCorteSheets.style.display = 'none';
+    });
+  }
+
+  if (btnEjecutarSyncSheets && !btnEjecutarSyncSheets._hasListener) {
+    btnEjecutarSyncSheets._hasListener = true;
+    btnEjecutarSyncSheets.addEventListener('click', async () => {
+      if (!confirm('¿Deseas verificar y preparar la sincronización del Corte Oficial hacia Google Sheets?\n\nEl documento vinculado es: rac_actualizado.')) return;
+
+      btnEjecutarSyncSheets.disabled = true;
+      btnEjecutarSyncSheets.textContent = '⏳ Verificando estado de cuota en Google Cloud...';
+      if (statusSyncMsg) {
+        statusSyncMsg.style.display = 'block';
+        statusSyncMsg.style.background = '#fef3c7';
+        statusSyncMsg.style.color = '#92400e';
+        statusSyncMsg.style.border = '1px solid #fde68a';
+        statusSyncMsg.innerHTML = 'Verificando contador de lecturas en Firestore...';
+      }
+
+      try {
+        const snapTest = await getDocs(query(collection(db, 'planteles'), limit(1)));
+        if (statusSyncMsg) {
+          statusSyncMsg.style.background = '#eff6ff';
+          statusSyncMsg.style.color = '#1e40af';
+          statusSyncMsg.style.border = '1px solid #bfdbfe';
+          statusSyncMsg.innerHTML = '✓ Conexión con Firestore activa y disponible. El motor de sincronización ejecutará la extracción completa hacia Google Sheets.';
+        }
+        showToast('Conexión con Firebase establecida exitosamente.', 'success');
+      } catch (err) {
+        const is429 = err?.message?.includes('quota') || err?.code === 'resource-exhausted';
+        if (statusSyncMsg) {
+          statusSyncMsg.style.background = '#fef2f2';
+          statusSyncMsg.style.color = '#991b1b';
+          statusSyncMsg.style.border = '1px solid #fecaca';
+          statusSyncMsg.innerHTML = is429
+            ? '⚠️ Cuota diaria de Firestore temporalmente completada. El contador de Google Cloud se restablece automáticamente a las ~3:30 - 4:00 a.m. para el volcado oficial.'
+            : 'Estado de conexión: ' + (err.message || 'Error de verificación.');
+        }
+        showToast(is429 ? 'Cuota diaria de Firestore temporalmente alcanzada.' : 'Estado de conexión verificado.', 'warning');
+      } finally {
+        btnEjecutarSyncSheets.disabled = false;
+        btnEjecutarSyncSheets.innerHTML = '<span>🔄</span> Sincronizar Corte Oficial desde Firebase';
+      }
     });
   }
 
@@ -1138,6 +1249,1129 @@ export function initAdminDashboard(dbInstance, user) {
     }
   }
 
+  // --- MOTOR VISUAL DE ESTATUS DE MATRÍCULA Y TARJETAS MUNICIPALES (Zero-Cost) ---
+  function renderEstatusMatriculaCompleto(resumenData, filtroMun = null) {
+    if (!resumenData) return;
+    window._cacheResumenData = resumenData;
+
+    const activeUser = window.sgh_user_data || userData;
+    const esMunAdminStrict = (activeUser?.rol === 'munadmin');
+    const munAsignado = normalizarMunicipio(activeUser?.jerarquia?.municipio || activeUser?.municipio || '');
+    if (esMunAdminStrict && munAsignado) {
+      filtroMun = munAsignado;
+    }
+
+    const matLoading = document.getElementById('stat-mat-loading');
+    const seccionMun = document.getElementById('seccion-matricula-municipios');
+    if (matLoading) matLoading.style.display = 'none';
+    if (seccionMun) seccionMun.style.display = 'block';
+
+    const lblAmbito = document.getElementById('lbl-mat-total-ambito');
+    const elTotal = document.getElementById('stat-mat-total-estatal');
+    const elAvance = document.getElementById('stat-mat-avance-estatal');
+    const elMas = document.getElementById('stat-mat-mas-estatal');
+    const elMasPorc = document.getElementById('stat-mat-mas-porc');
+    const elFem = document.getElementById('stat-mat-fem-estatal');
+    const elFemPorc = document.getElementById('stat-mat-fem-porc');
+
+    const esMun = Boolean(filtroMun);
+    const munData = esMun ? (getDatosMunicipio(resumenData, filtroMun)?.matricula || resumenData.porMunicipio?.[filtroMun]?.matricula) : null;
+    const matFuente = munData || resumenData.global?.matricula || { totalEstudiantes: 0, total: 0, masculino: 0, femenino: 0, cargados: 0, pendientes: 0, plantelesTotal: 0 };
+
+    const totVal = Number(matFuente.totalEstudiantes !== undefined ? matFuente.totalEstudiantes : (matFuente.total || 0));
+    const masVal = Number(matFuente.masculino || 0);
+    const femVal = Number(matFuente.femenino || 0);
+    const cargadosVal = Number(matFuente.cargados || 0);
+    const pendientesVal = Number(matFuente.pendientes || 0);
+    const plantelesTotalVal = Number(matFuente.plantelesTotal || (cargadosVal + pendientesVal));
+
+    if (lblAmbito) lblAmbito.textContent = esMun ? `Matrícula Total - Municipio ${filtroMun}` : 'Matrícula Total del Estado';
+    if (elTotal) elTotal.textContent = totVal.toLocaleString();
+    if (elAvance) elAvance.textContent = `${cargadosVal.toLocaleString()} planteles cargados · ${pendientesVal.toLocaleString()} pendientes (${plantelesTotalVal.toLocaleString()} planteles en total)`;
+
+    const porcMas = totVal > 0 ? ((masVal / totVal) * 100).toFixed(1) : 0;
+    const porcFem = totVal > 0 ? ((femVal / totVal) * 100).toFixed(1) : 0;
+
+    if (elMas) elMas.textContent = masVal.toLocaleString();
+    if (elMasPorc) elMasPorc.textContent = `${porcMas}%`;
+    if (elFem) elFem.textContent = femVal.toLocaleString();
+    if (elFemPorc) elFemPorc.textContent = `${porcFem}%`;
+
+    const secMatHeader = document.querySelector('#seccion-matricula-municipios h3');
+    const secMatDesc = document.querySelector('#seccion-matricula-municipios p');
+    const inpBuscarMatMun = document.getElementById('inp-buscar-mun-matricula');
+    if (secMatHeader) {
+      secMatHeader.textContent = esMunAdminStrict ? `Matrícula del Municipio ${filtroMun}` : 'Matrícula por Municipio';
+    }
+    if (secMatDesc) {
+      secMatDesc.textContent = esMunAdminStrict ? `Detalle escolar y planteles del municipio ${filtroMun}.` : 'Selecciona un municipio para consultar el detalle de sus planteles.';
+    }
+    if (inpBuscarMatMun && inpBuscarMatMun.parentElement) {
+      inpBuscarMatMun.parentElement.style.display = esMunAdminStrict ? 'none' : 'block';
+    }
+
+    // Renderizar Cuadrícula de Tarjetas de Municipios (Estadal: 23 municipios, Munadmin: su municipio)
+    const gridMun = document.getElementById('grid-mat-municipios');
+    if (gridMun) {
+      gridMun.innerHTML = '';
+      const municipiosLista = (esMunAdminStrict && filtroMun)
+        ? [filtroMun]
+        : (filtroMun ? [filtroMun] : getMunicipios());
+
+      municipiosLista.forEach(m => {
+        const dMun = getDatosMunicipio(resumenData, m)?.matricula || resumenData.porMunicipio?.[m]?.matricula || { total: 0, masculino: 0, femenino: 0, cargados: 0, pendientes: 0, plantelesTotal: 0, planteles: [] };
+        const mTot = Number(dMun.total || 0);
+        const mMas = Number(dMun.masculino || 0);
+        const mFem = Number(dMun.femenino || 0);
+        const mCarg = Number(dMun.cargados || 0);
+        const mTotalPlanteles = Number(dMun.plantelesTotal || (dMun.planteles ? dMun.planteles.length : (mCarg + Number(dMun.pendientes || 0))));
+
+        const card = document.createElement('div');
+        card.className = 'glass-panel card-mun-mat';
+        card.dataset.municipio = m;
+        card.style.cssText = 'padding: 18px 20px; border-radius: 12px; cursor: pointer; transition: all 0.2s ease; border-top: 4px solid #ea580c; display: flex; flex-direction: column; justify-content: space-between; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.04);';
+
+        card.innerHTML = `
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <h4 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: #1e293b;">${m}</h4>
+              <span style="font-size: 0.72rem; font-weight: 700; padding: 3px 8px; border-radius: 12px; background: ${dMun.pendientes === 0 ? '#f0fdf4' : '#fff7ed'}; color: ${dMun.pendientes === 0 ? '#16a34a' : '#c2410c'}; border: 1px solid ${dMun.pendientes === 0 ? '#bbf7d0' : '#fed7aa'}; white-space: nowrap;">
+                ${mCarg}/${mTotalPlanteles} planteles
+              </span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin: 10px 0 8px;">
+              <span style="font-size: 0.82rem; color: #64748b; font-weight: 600;">Matrícula:</span>
+              <span style="font-size: 1.35rem; font-weight: 800; color: #ea580c;">${mTot.toLocaleString()}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #f1f5f9; font-size: 0.8rem;">
+              <span style="color: #2563eb; font-weight: 600;">👦 Mas: <strong>${mMas.toLocaleString()}</strong></span>
+              <span style="color: #db2777; font-weight: 600;">👧 Fem: <strong>${mFem.toLocaleString()}</strong></span>
+            </div>
+          </div>
+          <div style="margin-top: 14px; padding-top: 10px; border-top: 1px dashed #e2e8f0; display: flex; justify-content: flex-end; align-items: center;">
+            <span style="font-size: 0.78rem; font-weight: 700; color: #2563eb; display: flex; align-items: center; gap: 4px;">
+              Ver planteles <span>➔</span>
+            </span>
+          </div>
+        `;
+
+        card.addEventListener('mouseenter', () => {
+          card.style.transform = 'translateY(-3px)';
+          card.style.boxShadow = '0 8px 20px rgba(0,0,0,0.08)';
+          card.style.borderColor = '#ea580c';
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'translateY(0)';
+          card.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)';
+        });
+
+        card.addEventListener('click', () => {
+          abrirDetalleMatriculaMunicipio(m, resumenData);
+        });
+
+        gridMun.appendChild(card);
+      });
+
+      // Filtro en vivo de municipios
+      const inpBuscarMun = document.getElementById('inp-buscar-mun-matricula');
+      if (inpBuscarMun && !inpBuscarMun._hasFilterListener) {
+        inpBuscarMun._hasFilterListener = true;
+        inpBuscarMun.addEventListener('input', (e) => {
+          const query = (e.target.value || '').trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+          const cards = gridMun.querySelectorAll('.card-mun-mat');
+          cards.forEach(c => {
+            const mName = (c.dataset.municipio || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+            c.style.display = mName.includes(query) ? 'flex' : 'none';
+          });
+        });
+      }
+    }
+  }
+
+  function abrirDetalleMatriculaMunicipio(munNombre, resumenData) {
+    if (!resumenData) resumenData = window._cacheResumenData;
+    if (!resumenData) return;
+    const activeUser = window.sgh_user_data || userData;
+    const esMunAdminStrict = (activeUser?.rol === 'munadmin');
+    const munAsignado = normalizarMunicipio(activeUser?.jerarquia?.municipio || activeUser?.municipio || '');
+    if (esMunAdminStrict && munAsignado) {
+      munNombre = munAsignado;
+    }
+    const munNorm = normalizarMunicipio(munNombre);
+    const munData = getDatosMunicipio(resumenData, munNombre)?.matricula || resumenData.porMunicipio?.[munNombre]?.matricula || resumenData.porMunicipio?.[munNorm]?.matricula || { total: 0, masculino: 0, femenino: 0, cargados: 0, pendientes: 0, plantelesTotal: 0, planteles: [] };
+
+    document.querySelectorAll('.sidebar-btn').forEach(b => {
+      if (!b.classList.contains('accordion-btn')) b.classList.remove('active');
+    });
+    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+    const tabMun = document.getElementById('admin-tab-matricula-municipio');
+    if (tabMun) tabMun.classList.add('active');
+    const adminMain = document.getElementById('admin-main');
+    if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
+
+    const elTitulo = document.getElementById('titulo-matricula-municipio-detalle');
+    const elSubtitulo = document.getElementById('subtitulo-matricula-municipio-detalle');
+    const elTotal = document.getElementById('stat-mun-sel-total');
+    const elAvance = document.getElementById('stat-mun-sel-avance');
+    const elMas = document.getElementById('stat-mun-sel-mas');
+    const elFem = document.getElementById('stat-mun-sel-fem');
+
+    const mTot = Number(munData.total || 0);
+    const mMas = Number(munData.masculino || 0);
+    const mFem = Number(munData.femenino || 0);
+    const mCarg = Number(munData.cargados || 0);
+    const mPend = Number(munData.pendientes || 0);
+    const mTotPlanteles = Number(munData.plantelesTotal || (munData.planteles ? munData.planteles.length : (mCarg + mPend)));
+
+    if (elTitulo) elTitulo.textContent = `Municipio ${munNorm}`;
+    if (elSubtitulo) elSubtitulo.textContent = `${mCarg} planteles han registrado matrícula escolar de ${mTotPlanteles} planteles en total.`;
+    if (elTotal) elTotal.textContent = mTot.toLocaleString();
+    if (elAvance) elAvance.textContent = `${mCarg} planteles cargados · ${mPend} pendientes`;
+    if (elMas) elMas.textContent = mMas.toLocaleString();
+    if (elFem) elFem.textContent = mFem.toLocaleString();
+
+    const gridPlanteles = document.getElementById('grid-planteles-matricula-mun');
+    const inpBuscar = document.getElementById('inp-buscar-plantel-matricula');
+    const selFiltro = document.getElementById('sel-filtro-estado-plantel-matricula');
+    if (inpBuscar) inpBuscar.value = '';
+    if (selFiltro) selFiltro.value = 'TODOS';
+
+    const planteles = Array.isArray(munData.planteles) ? munData.planteles : [];
+
+    function renderTarjetasPlanteles(arr) {
+      if (!gridPlanteles) return;
+      gridPlanteles.innerHTML = '';
+
+      if (arr.length === 0) {
+        gridPlanteles.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: #64748b; background: white; border-radius: 12px; border: 1px dashed #cbd5e1;">
+            <div style="font-size: 2rem; margin-bottom: 8px;">🏫</div>
+            <div style="font-weight: 700; color: #475569; font-size: 1rem;">No se encontraron planteles</div>
+            <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Intenta con otro término de búsqueda o cambia el filtro de estatus.</div>
+          </div>
+        `;
+        return;
+      }
+
+      arr.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'glass-panel card-plantel-item';
+        card.dataset.dea = p.dea || '';
+        card.dataset.nombre = p.nombre || '';
+        card.dataset.cargado = p.cargado ? 'true' : 'false';
+        card.style.cssText = `padding: 16px; border-radius: 12px; display: flex; flex-direction: column; justify-content: space-between; border-top: 3px solid ${p.cargado ? '#16a34a' : '#ef4444'}; background: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,0.03);`;
+
+        const pMas = Number(p.masculino !== undefined ? p.masculino : (p.mas !== undefined ? p.mas : (p['total-gen-mas'] || 0)));
+        const pFem = Number(p.femenino !== undefined ? p.femenino : (p.fem !== undefined ? p.fem : (p['total-gen-fem'] || 0)));
+
+        card.innerHTML = `
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 8px;">
+              <span style="font-family: monospace; font-size: 0.72rem; font-weight: 700; color: #475569; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; border: 1px solid #e2e8f0;">${p.dea || 'SIN DEA'}</span>
+              <span style="font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; background: ${p.cargado ? '#f0fdf4' : '#fef2f2'}; color: ${p.cargado ? '#16a34a' : '#ef4444'}; border: 1px solid ${p.cargado ? '#bbf7d0' : '#fecaca'}; white-space: nowrap;">
+                ${p.cargado ? '✅ Cargado' : '🔴 Pendiente'}
+              </span>
+            </div>
+            <h4 style="margin: 0 0 10px 0; font-size: 0.95rem; font-weight: 700; color: #1e293b; line-height: 1.35;" title="${p.nombre}">
+              ${p.nombre}
+            </h4>
+          </div>
+
+          <div style="background: #f8fafc; border-radius: 8px; padding: 10px 12px; border: 1px solid #e2e8f0; margin-top: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;">
+              <span style="font-size: 0.78rem; font-weight: 600; color: #64748b;">Matrícula Total:</span>
+              <span style="font-size: 1.25rem; font-weight: 800; color: ${p.cargado ? '#1e293b' : '#94a3b8'};">
+                ${p.cargado ? Number(p.total || 0).toLocaleString() : '0'}
+              </span>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-top: 1px solid #e2e8f0; padding-top: 6px; font-size: 0.78rem;">
+              <span style="color: #2563eb; font-weight: 600;">👦 Mas: <strong>${pMas.toLocaleString()}</strong></span>
+              <span style="color: #db2777; font-weight: 600;">👧 Fem: <strong>${pFem.toLocaleString()}</strong></span>
+            </div>
+          </div>
+        `;
+        gridPlanteles.appendChild(card);
+      });
+    }
+
+    renderTarjetasPlanteles(planteles);
+
+    function aplicarFiltrosPlanteles() {
+      const q = (inpBuscar?.value || '').trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+      const st = selFiltro?.value || 'TODOS';
+
+      const filtrados = planteles.filter(p => {
+        const matchQ = !q || (p.nombre && p.nombre.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().includes(q))
+                          || (p.dea && p.dea.toLowerCase().includes(q));
+        let matchSt = true;
+        if (st === 'CARGADOS') matchSt = Boolean(p.cargado);
+        if (st === 'PENDIENTES') matchSt = !p.cargado;
+        return matchQ && matchSt;
+      });
+      renderTarjetasPlanteles(filtrados);
+    }
+
+    if (inpBuscar && !inpBuscar._hasListener) {
+      inpBuscar._hasListener = true;
+      inpBuscar.addEventListener('input', aplicarFiltrosPlanteles);
+    }
+    if (selFiltro && !selFiltro._hasListener) {
+      selFiltro._hasListener = true;
+      selFiltro.addEventListener('change', aplicarFiltrosPlanteles);
+    }
+  }
+
+  // --- MOTOR VISUAL DE DISCRIMINACIÓN DE PERSONAL Y TARJETAS MUNICIPALES (Zero-Cost) ---
+  function renderDiscriminacionPersonalCompleta(resumenData, filtroMun = null) {
+    if (!resumenData) return;
+    window._cacheResumenData = resumenData;
+
+    const activeUser = window.sgh_user_data || userData;
+    const esMunAdminStrict = (activeUser?.rol === 'munadmin');
+    const munAsignado = normalizarMunicipio(activeUser?.jerarquia?.municipio || activeUser?.municipio || '');
+    if (esMunAdminStrict && munAsignado) {
+      filtroMun = munAsignado;
+    }
+
+    const discLoading = document.getElementById('stat-disc-loading');
+    const seccionMun = document.getElementById('seccion-personal-municipios');
+    if (discLoading) discLoading.style.display = 'none';
+    if (seccionMun) seccionMun.style.display = 'block';
+
+    const lblAmbito = document.getElementById('lbl-personal-total-ambito');
+    const elTotal = document.getElementById('stat-personal-total-estatal');
+    const elAvance = document.getElementById('stat-personal-avance-estatal');
+
+    const elDocTot = document.getElementById('stat-disc-doc-total');
+    const elDocMas = document.getElementById('stat-disc-doc-mas');
+    const elDocFem = document.getElementById('stat-disc-doc-fem');
+
+    const elAdmTot = document.getElementById('stat-disc-adm-total');
+    const elAdmMas = document.getElementById('stat-disc-adm-mas');
+    const elAdmFem = document.getElementById('stat-disc-adm-fem');
+
+    const elObrTot = document.getElementById('stat-disc-obr-total');
+    const elObrMas = document.getElementById('stat-disc-obr-mas');
+    const elObrFem = document.getElementById('stat-disc-obr-fem');
+
+    const esMun = Boolean(filtroMun);
+    const munData = esMun ? (getDatosMunicipio(resumenData, filtroMun)?.personal_detallado || resumenData.porMunicipio?.[filtroMun]?.personal_detallado) : null;
+    const pFuente = munData || resumenData.global?.personal_detallado || {
+      total: resumenData.global?.totalPersonal || 0,
+      docentes: { total: resumenData.global?.docentes || 0, mas: 0, fem: 0 },
+      administrativos: { total: resumenData.global?.administrativos || 0, mas: 0, fem: 0 },
+      obreros: { total: resumenData.global?.obreros || 0, mas: 0, fem: 0 },
+      porDependencia: resumenData.global?.porDependencia || {}
+    };
+
+    const totVal = Number(pFuente.total || 0);
+    const docTot = Number(pFuente.docentes?.total || 0);
+    const docMas = Number(pFuente.docentes?.mas ?? pFuente.docentes?.masculino ?? 0);
+    const docFem = Number(pFuente.docentes?.fem ?? pFuente.docentes?.femenino ?? 0);
+
+    const admTot = Number(pFuente.administrativos?.total || 0);
+    const admMas = Number(pFuente.administrativos?.mas ?? pFuente.administrativos?.masculino ?? 0);
+    const admFem = Number(pFuente.administrativos?.fem ?? pFuente.administrativos?.femenino ?? 0);
+
+    const obrTot = Number(pFuente.obreros?.total || 0);
+    const obrMas = Number(pFuente.obreros?.mas ?? pFuente.obreros?.masculino ?? 0);
+    const obrFem = Number(pFuente.obreros?.fem ?? pFuente.obreros?.femenino ?? 0);
+
+    if (lblAmbito) lblAmbito.textContent = esMun ? `Personal Total - Municipio ${filtroMun}` : 'Personal Total del Estado';
+    if (elTotal) elTotal.textContent = totVal.toLocaleString();
+    if (elAvance) elAvance.textContent = esMun ? `Nómina activa consolidada de ${filtroMun}` : 'Nómina activa consolidada en los 23 municipios';
+
+    if (elDocTot) elDocTot.textContent = docTot.toLocaleString();
+    if (elDocMas) elDocMas.textContent = docMas.toLocaleString();
+    if (elDocFem) elDocFem.textContent = docFem.toLocaleString();
+
+    if (elAdmTot) elAdmTot.textContent = admTot.toLocaleString();
+    if (elAdmMas) elAdmMas.textContent = admMas.toLocaleString();
+    if (elAdmFem) elAdmFem.textContent = admFem.toLocaleString();
+
+    if (elObrTot) elObrTot.textContent = obrTot.toLocaleString();
+    if (elObrMas) elObrMas.textContent = obrMas.toLocaleString();
+    if (elObrFem) elObrFem.textContent = obrFem.toLocaleString();
+
+    // Renderizar Desglose por las 6 Dependencias Oficiales en la Tarjeta Superior
+    const gridDepsEstado = document.getElementById('grid-personal-dependencias-estado');
+    const dependenciasLista = ['NACIONAL', 'ESTADAL', 'MUNICIPAL', 'AUTONOMA', 'SUBVENCIONADA', 'PRIVADA'];
+    const depMeta = {
+      NACIONAL: { color: '#2563eb', bg: 'rgba(37,99,235,0.06)', border: 'rgba(37,99,235,0.2)', icon: '🏛️' },
+      ESTADAL: { color: '#059669', bg: 'rgba(16,185,129,0.06)', border: 'rgba(16,185,129,0.2)', icon: '🏢' },
+      MUNICIPAL: { color: '#7c3aed', bg: 'rgba(124,58,237,0.06)', border: 'rgba(124,58,237,0.2)', icon: '🏛️' },
+      AUTONOMA: { color: '#d97706', bg: 'rgba(217,119,6,0.06)', border: 'rgba(217,119,6,0.2)', icon: '⚡' },
+      SUBVENCIONADA: { color: '#0891b2', bg: 'rgba(8,145,178,0.06)', border: 'rgba(8,145,178,0.2)', icon: '🤝' },
+      PRIVADA: { color: '#e11d48', bg: 'rgba(225,29,72,0.06)', border: 'rgba(225,29,72,0.2)', icon: '🏫' }
+    };
+
+    if (gridDepsEstado) {
+      gridDepsEstado.innerHTML = '';
+      const depsFuente = pFuente.porDependencia || {};
+
+      dependenciasLista.forEach(depKey => {
+        const dVal = depsFuente[depKey] || { total: 0, docentes: { total: 0, mas: 0, fem: 0 }, administrativos: { total: 0, mas: 0, fem: 0 }, obreros: { total: 0, mas: 0, fem: 0 } };
+        const cfg = depMeta[depKey] || { color: '#64748b', bg: '#f8fafc', border: '#e2e8f0', icon: '📁' };
+
+        const dTot = Number(dVal.total || 0);
+        const dDoc = Number(dVal.docentes?.total || 0);
+        const dDocM = Number(dVal.docentes?.mas ?? dVal.docentes?.masculino ?? 0);
+        const dDocF = Number(dVal.docentes?.fem ?? dVal.docentes?.femenino ?? 0);
+
+        const dAdm = Number(dVal.administrativos?.total || 0);
+        const dAdmM = Number(dVal.administrativos?.mas ?? dVal.administrativos?.masculino ?? 0);
+        const dAdmF = Number(dVal.administrativos?.fem ?? dVal.administrativos?.femenino ?? 0);
+
+        const dObr = Number(dVal.obreros?.total || 0);
+        const dObrM = Number(dVal.obreros?.mas ?? dVal.obreros?.masculino ?? 0);
+        const dObrF = Number(dVal.obreros?.fem ?? dVal.obreros?.femenino ?? 0);
+
+        const cardDep = document.createElement('div');
+        cardDep.style.cssText = `background: ${cfg.bg}; border: 1px solid ${cfg.border}; border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between;`;
+        cardDep.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid ${cfg.border}; padding-bottom: 8px;">
+            <span style="font-size: 0.85rem; font-weight: 800; color: ${cfg.color}; letter-spacing: 0.5px;">${cfg.icon} ${depKey}</span>
+            <span style="font-size: 1.25rem; font-weight: 800; color: #1e293b;">${dTot.toLocaleString()}</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.78rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.7); padding: 4px 8px; border-radius: 6px;">
+              <span style="color: #334155; font-weight: 700;">📚 Docentes: <strong>${dDoc.toLocaleString()}</strong></span>
+              <span style="color: #64748b; font-size: 0.74rem;">👦 ${dDocM.toLocaleString()} · 👧 ${dDocF.toLocaleString()}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.7); padding: 4px 8px; border-radius: 6px;">
+              <span style="color: #334155; font-weight: 700;">💼 Admin: <strong>${dAdm.toLocaleString()}</strong></span>
+              <span style="color: #64748b; font-size: 0.74rem;">👦 ${dAdmM.toLocaleString()} · 👧 ${dAdmF.toLocaleString()}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.7); padding: 4px 8px; border-radius: 6px;">
+              <span style="color: #334155; font-weight: 700;">🛠️ Obreros: <strong>${dObr.toLocaleString()}</strong></span>
+              <span style="color: #64748b; font-size: 0.74rem;">👦 ${dObrM.toLocaleString()} · 👧 ${dObrF.toLocaleString()}</span>
+            </div>
+          </div>
+        `;
+        gridDepsEstado.appendChild(cardDep);
+      });
+    }
+
+    const secMunHeader = document.querySelector('#seccion-personal-municipios h3');
+    const secMunDesc = document.querySelector('#seccion-personal-municipios p');
+    const inpBuscarMun = document.getElementById('inp-buscar-mun-personal');
+    if (secMunHeader) {
+      secMunHeader.textContent = esMunAdminStrict ? `Personal del Municipio ${filtroMun}` : 'Personal por Municipio';
+    }
+    if (secMunDesc) {
+      secMunDesc.textContent = esMunAdminStrict ? `Detalle consolidado y planteles del municipio ${filtroMun}.` : 'Selecciona un municipio para consultar el detalle de su personal por plantel.';
+    }
+    if (inpBuscarMun && inpBuscarMun.parentElement) {
+      inpBuscarMun.parentElement.style.display = esMunAdminStrict ? 'none' : 'block';
+    }
+
+    // Renderizar Cuadrícula de Tarjetas de Municipios (Estadal: 23 municipios, Munadmin: su municipio)
+    const gridMun = document.getElementById('grid-personal-municipios');
+    if (gridMun) {
+      gridMun.innerHTML = '';
+      const municipiosLista = (esMunAdminStrict && filtroMun)
+        ? [filtroMun]
+        : (filtroMun ? [filtroMun] : getMunicipios());
+
+      municipiosLista.forEach(m => {
+        const dMun = getDatosMunicipio(resumenData, m)?.personal_detallado || resumenData.porMunicipio?.[m]?.personal_detallado || {
+          total: 0,
+          docentes: { total: 0, mas: 0, fem: 0 },
+          administrativos: { total: 0, mas: 0, fem: 0 },
+          obreros: { total: 0, mas: 0, fem: 0 },
+          porDependencia: {},
+          planteles: []
+        };
+
+        const mTot = Number(dMun.total || 0);
+        const mDocTot = Number(dMun.docentes?.total || 0);
+        const mDocMas = Number(dMun.docentes?.mas ?? dMun.docentes?.masculino ?? 0);
+        const mDocFem = Number(dMun.docentes?.fem ?? dMun.docentes?.femenino ?? 0);
+
+        const mAdmTot = Number(dMun.administrativos?.total || 0);
+        const mAdmMas = Number(dMun.administrativos?.mas ?? dMun.administrativos?.masculino ?? 0);
+        const mAdmFem = Number(dMun.administrativos?.fem ?? dMun.administrativos?.femenino ?? 0);
+
+        const mObrTot = Number(dMun.obreros?.total || 0);
+        const mObrMas = Number(dMun.obreros?.mas ?? dMun.obreros?.masculino ?? 0);
+        const mObrFem = Number(dMun.obreros?.fem ?? dMun.obreros?.femenino ?? 0);
+
+        const plantelesCount = Array.isArray(dMun.planteles) ? dMun.planteles.length : 0;
+        const depsMun = dMun.porDependencia || {};
+
+        // Construir desglose de dependencias del municipio
+        let htmlDepsMun = '';
+        const depsConPersonal = [];
+        const depsCero = [];
+
+        dependenciasLista.forEach(depKey => {
+          const dVal = depsMun[depKey] || { total: 0, docentes: { total: 0, mas: 0, fem: 0 }, administrativos: { total: 0, mas: 0, fem: 0 }, obreros: { total: 0, mas: 0, fem: 0 } };
+          const dt = Number(dVal.total || 0);
+          const cfg = depMeta[depKey] || { color: '#64748b' };
+          const dDoc = Number(dVal.docentes?.total || 0);
+          const dDocM = Number(dVal.docentes?.mas ?? dVal.docentes?.masculino ?? 0);
+          const dDocF = Number(dVal.docentes?.fem ?? dVal.docentes?.femenino ?? 0);
+          const dAdm = Number(dVal.administrativos?.total || 0);
+          const dAdmM = Number(dVal.administrativos?.mas ?? dVal.administrativos?.masculino ?? 0);
+          const dAdmF = Number(dVal.administrativos?.fem ?? dVal.administrativos?.femenino ?? 0);
+          const dObr = Number(dVal.obreros?.total || 0);
+          const dObrM = Number(dVal.obreros?.mas ?? dVal.obreros?.masculino ?? 0);
+          const dObrF = Number(dVal.obreros?.fem ?? dVal.obreros?.femenino ?? 0);
+
+          if (dt > 0) {
+            depsConPersonal.push(`
+              <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 7px 10px; margin-bottom: 5px;">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px;">
+                  <span style="font-size: 0.76rem; font-weight: 800; color: ${cfg.color};">${depKey}</span>
+                  <span style="font-size: 0.85rem; font-weight: 800; color: #1e293b;">${dt.toLocaleString()} pers.</span>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 2px; font-size: 0.72rem; color: #475569;">
+                  <div>📚 Doc: <strong>${dDoc.toLocaleString()}</strong> (👦 ${dDocM} · 👧 ${dDocF})</div>
+                  <div>💼 Adm: <strong>${dAdm.toLocaleString()}</strong> (👦 ${dAdmM} · 👧 ${dAdmF})</div>
+                  <div>🛠️ Obr: <strong>${dObr.toLocaleString()}</strong> (👦 ${dObrM} · 👧 ${dObrF})</div>
+                </div>
+              </div>
+            `);
+          } else {
+            depsCero.push(depKey);
+          }
+        });
+
+        htmlDepsMun = depsConPersonal.join('');
+        if (depsCero.length > 0) {
+          htmlDepsMun += `
+            <div style="padding: 4px 8px; background: #f8fafc; border-radius: 6px; border: 1px dashed #e2e8f0; font-size: 0.68rem; color: #94a3b8; margin-top: 4px;">
+              ⚪ Otras dep. (0 pers.): ${depsCero.join(', ')}
+            </div>
+          `;
+        }
+
+        const card = document.createElement('div');
+        card.className = 'glass-panel card-mun-personal';
+        card.dataset.municipio = m;
+        card.style.cssText = 'padding: 18px 20px; border-radius: 12px; cursor: pointer; transition: all 0.2s ease; border-top: 4px solid var(--primary-color); display: flex; flex-direction: column; justify-content: space-between; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.04);';
+
+        card.innerHTML = `
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <h4 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: #1e293b;">${m}</h4>
+              <span style="font-size: 0.72rem; font-weight: 700; padding: 3px 8px; border-radius: 12px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; white-space: nowrap;">
+                ${plantelesCount} planteles
+              </span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin: 8px 0 10px;">
+              <span style="font-size: 0.82rem; color: #64748b; font-weight: 600;">Personal Total:</span>
+              <span style="font-size: 1.35rem; font-weight: 800; color: var(--primary-color);">${mTot.toLocaleString()}</span>
+            </div>
+
+            <!-- Discriminación por Tipo de Personal (Mas y Fem) -->
+            <div style="display: flex; flex-direction: column; gap: 4px; padding: 8px 10px; background: #f8fafc; border-radius: 8px; border: 1px solid #f1f5f9; font-size: 0.75rem; margin-bottom: 10px;">
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: #2563eb; font-weight: 700;">📚 Docentes: <strong>${mDocTot.toLocaleString()}</strong></span>
+                <span style="color: #64748b;">👦 ${mDocMas.toLocaleString()} · 👧 ${mDocFem.toLocaleString()}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: #d97706; font-weight: 700;">💼 Admin: <strong>${mAdmTot.toLocaleString()}</strong></span>
+                <span style="color: #64748b;">👦 ${mAdmMas.toLocaleString()} · 👧 ${mAdmFem.toLocaleString()}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: #059669; font-weight: 700;">🛠️ Obreros: <strong>${mObrTot.toLocaleString()}</strong></span>
+                <span style="color: #64748b;">👦 ${mObrMas.toLocaleString()} · 👧 ${mObrFem.toLocaleString()}</span>
+              </div>
+            </div>
+
+            <!-- Discriminación por Dependencias Oficiales -->
+            <div style="margin-top: 6px;">
+              <div style="font-size: 0.72rem; font-weight: 700; color: #64748b; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px;">
+                Discriminado por Dependencia:
+              </div>
+              ${htmlDepsMun}
+            </div>
+          </div>
+
+          <div style="margin-top: 14px; padding-top: 10px; border-top: 1px dashed #e2e8f0; display: flex; justify-content: flex-end; align-items: center;">
+            <span style="font-size: 0.78rem; font-weight: 700; color: var(--primary-color); display: flex; align-items: center; gap: 4px;">
+              Ver planteles <span>➔</span>
+            </span>
+          </div>
+        `;
+
+        card.addEventListener('mouseenter', () => {
+          card.style.transform = 'translateY(-3px)';
+          card.style.boxShadow = '0 8px 20px rgba(0,0,0,0.08)';
+          card.style.borderColor = 'var(--primary-color)';
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'translateY(0)';
+          card.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)';
+        });
+
+        card.addEventListener('click', () => {
+          abrirDetallePersonalMunicipio(m, resumenData);
+        });
+
+        gridMun.appendChild(card);
+      });
+
+      // Filtro en vivo de municipios para discriminación de personal
+      const inpBuscarMun = document.getElementById('inp-buscar-mun-personal');
+      if (inpBuscarMun && !inpBuscarMun._hasFilterListener) {
+        inpBuscarMun._hasFilterListener = true;
+        inpBuscarMun.addEventListener('input', (e) => {
+          const query = (e.target.value || '').trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+          const cards = gridMun.querySelectorAll('.card-mun-personal');
+          cards.forEach(c => {
+            const mName = (c.dataset.municipio || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+            c.style.display = mName.includes(query) ? 'flex' : 'none';
+          });
+        });
+      }
+    }
+
+    // Renderizar Situación Laboral (Debajo de id="seccion-personal-municipios")
+    const containerSit = document.getElementById('stat-situacion-laboral');
+    const lblSitAmbito = document.getElementById('lbl-situacion-laboral-ambito');
+    if (containerSit) {
+      containerSit.innerHTML = '';
+      const sitFuente = (esMun ? (getDatosMunicipio(resumenData, filtroMun)?.situacion_laboral || resumenData.porMunicipio?.[filtroMun]?.situacion_laboral) : resumenData.global?.situacion_laboral) || {};
+      const sitArr = Object.entries(sitFuente).sort((a, b) => b[1] - a[1]);
+
+      if (lblSitAmbito) {
+        lblSitAmbito.textContent = esMun 
+          ? `Distribución del personal del municipio ${filtroMun} según condición administrativa activa.`
+          : 'Distribución consolidada de los 26.215 funcionarios del estado Mérida según condición administrativa activa.';
+      }
+
+      if (sitArr.length === 0) {
+        containerSit.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: #94a3b8; font-size: 0.9rem; padding: 25px;">Sin registros de situación laboral.</div>';
+      } else {
+        sitArr.forEach(([s, count]) => {
+          const item = document.createElement('div');
+          item.style.cssText = 'background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s ease;';
+          item.innerHTML = `
+            <span style="color: #334155; font-size: 0.82rem; font-weight: 600; line-height: 1.25;">${s}</span>
+            <span style="font-weight: 800; color: #1e293b; font-size: 0.95rem; background: #ffffff; padding: 3px 8px; border-radius: 6px; border: 1px solid #cbd5e1; margin-left: 8px; white-space: nowrap;">
+              ${Number(count).toLocaleString()}
+            </span>
+          `;
+          containerSit.appendChild(item);
+        });
+      }
+    }
+
+    // Renderizar Personal por Jubilarse (Debajo de Situación Laboral)
+    const tbodyJub = document.getElementById('tbody-jubilables');
+    const badgeTotJub = document.getElementById('badge-total-jubilables');
+    const lblJubAmbito = document.getElementById('lbl-jubilables-ambito');
+    const thPlantel = document.getElementById('th-jubilables-col1') || document.querySelector('#panel-jubilables-personal table th');
+
+    if (tbodyJub) {
+      tbodyJub.innerHTML = '';
+      let jubList = [];
+      let totJubCount = 0;
+
+      if (esMun) {
+        if (thPlantel) thPlantel.textContent = 'Plantel (DEA)';
+        const dMun = getDatosMunicipio(resumenData, filtroMun) || resumenData.porMunicipio?.[filtroMun] || {};
+        jubList = Array.isArray(dMun.jubilables) ? dMun.jubilables : (dMun.jubilables ? Object.values(dMun.jubilables) : []);
+        totJubCount = jubList.reduce((acc, item) => acc + (Number(item.count) || 0), 0);
+        if (lblJubAmbito) lblJubAmbito.textContent = `Personal del municipio ${filtroMun} con 25 años o más de servicio acumulados a Marzo.`;
+      } else {
+        if (thPlantel) thPlantel.textContent = 'Municipio';
+        jubList = (resumenData.global?.jubilables?.porMunicipio) || [];
+        totJubCount = Number(resumenData.global?.jubilables?.total || jubList.reduce((acc, item) => acc + (Number(item.count) || 0), 0));
+        if (lblJubAmbito) lblJubAmbito.textContent = 'Consolidado estadal de personal con 25 años o más de servicio acumulados a Marzo.';
+      }
+
+      if (badgeTotJub) {
+        badgeTotJub.textContent = `Total: ${totJubCount.toLocaleString()} por jubilarse`;
+      }
+
+      if (!jubList || jubList.length === 0) {
+        tbodyJub.innerHTML = '<tr><td colspan="2" style="text-align: center; padding: 25px; color: #94a3b8;">No hay personal por jubilarse proyectado en este ámbito.</td></tr>';
+      } else {
+        jubList.forEach(item => {
+          const nombre = item.nombre || item.clave;
+          const subtitle = (esMun && item.clave && item.clave !== item.nombre) ? '<br><span style="color:#64748b; font-size: 0.75rem; font-family: monospace;">DEA: ' + item.clave + '</span>' : '';
+          tbodyJub.innerHTML += '<tr>' +
+            '<td style="padding: 10px 14px; border-bottom: 1px solid #e2e8f0; color: #334155; font-size: 0.85rem;"><strong>' + nombre + '</strong>' + subtitle + '</td>' +
+            '<td style="padding: 10px 14px; border-bottom: 1px solid #e2e8f0; color: #0f172a; text-align: center; font-weight: 700; font-size: 0.95rem;">' + Number(item.count || 0).toLocaleString() + '</td>' +
+          '</tr>';
+        });
+      }
+    }
+  }
+
+  function abrirDetallePersonalMunicipio(munNombre, resumenData) {
+    if (!resumenData) resumenData = window._cacheResumenData;
+    if (!resumenData) return;
+    const activeUser = window.sgh_user_data || userData;
+    const esMunAdminStrict = (activeUser?.rol === 'munadmin');
+    const munAsignado = normalizarMunicipio(activeUser?.jerarquia?.municipio || activeUser?.municipio || '');
+    if (esMunAdminStrict && munAsignado) {
+      munNombre = munAsignado;
+    }
+    const munNorm = normalizarMunicipio(munNombre);
+    const munData = getDatosMunicipio(resumenData, munNombre)?.personal_detallado
+                 || resumenData.porMunicipio?.[munNombre]?.personal_detallado
+                 || resumenData.porMunicipio?.[munNorm]?.personal_detallado
+                 || { total: 0, docentes: { total: 0, mas: 0, fem: 0 }, administrativos: { total: 0, mas: 0, fem: 0 }, obreros: { total: 0, mas: 0, fem: 0 }, porDependencia: {}, planteles: [] };
+
+    document.querySelectorAll('.sidebar-btn').forEach(b => {
+      if (!b.classList.contains('accordion-btn')) b.classList.remove('active');
+    });
+    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+    const tabMun = document.getElementById('admin-tab-personal-municipio');
+    if (tabMun) tabMun.classList.add('active');
+    const adminMain = document.getElementById('admin-main');
+    if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
+
+    const elTitulo = document.getElementById('titulo-personal-municipio-detalle');
+    const elSubtitulo = document.getElementById('subtitulo-personal-municipio-detalle');
+    const elTotal = document.getElementById('stat-mun-sel-personal-total');
+    const elAvance = document.getElementById('stat-mun-sel-personal-avance');
+
+    const elDocTot = document.getElementById('stat-mun-sel-doc-total');
+    const elDocMas = document.getElementById('stat-mun-sel-doc-mas');
+    const elDocFem = document.getElementById('stat-mun-sel-doc-fem');
+
+    const elAdmTot = document.getElementById('stat-mun-sel-adm-total');
+    const elAdmMas = document.getElementById('stat-mun-sel-adm-mas');
+    const elAdmFem = document.getElementById('stat-mun-sel-adm-fem');
+
+    const elObrTot = document.getElementById('stat-mun-sel-obr-total');
+    const elObrMas = document.getElementById('stat-mun-sel-obr-mas');
+    const elObrFem = document.getElementById('stat-mun-sel-obr-fem');
+
+    const mTot = Number(munData.total || 0);
+    const mDocTot = Number(munData.docentes?.total || 0);
+    const mDocMas = Number(munData.docentes?.mas ?? munData.docentes?.masculino ?? 0);
+    const mDocFem = Number(munData.docentes?.fem ?? munData.docentes?.femenino ?? 0);
+
+    const mAdmTot = Number(munData.administrativos?.total || 0);
+    const mAdmMas = Number(munData.administrativos?.mas ?? munData.administrativos?.masculino ?? 0);
+    const mAdmFem = Number(munData.administrativos?.fem ?? munData.administrativos?.femenino ?? 0);
+
+    const mObrTot = Number(munData.obreros?.total || 0);
+    const mObrMas = Number(munData.obreros?.mas ?? munData.obreros?.masculino ?? 0);
+    const mObrFem = Number(munData.obreros?.fem ?? munData.obreros?.femenino ?? 0);
+
+    const planteles = Array.isArray(munData.planteles) ? munData.planteles : [];
+
+    if (elTitulo) elTitulo.textContent = `Municipio ${munNorm}`;
+    if (elSubtitulo) elSubtitulo.textContent = `${planteles.length} planteles con personal registrado en nómina activa.`;
+    if (elTotal) elTotal.textContent = mTot.toLocaleString();
+    if (elAvance) elAvance.textContent = `Nómina activa consolidada (${planteles.length} planteles)`;
+
+    if (elDocTot) elDocTot.textContent = mDocTot.toLocaleString();
+    if (elDocMas) elDocMas.textContent = mDocMas.toLocaleString();
+    if (elDocFem) elDocFem.textContent = mDocFem.toLocaleString();
+
+    if (elAdmTot) elAdmTot.textContent = mAdmTot.toLocaleString();
+    if (elAdmMas) elAdmMas.textContent = mAdmMas.toLocaleString();
+    if (elAdmFem) elAdmFem.textContent = mAdmFem.toLocaleString();
+
+    if (elObrTot) elObrTot.textContent = mObrTot.toLocaleString();
+    if (elObrMas) elObrMas.textContent = mObrMas.toLocaleString();
+    if (elObrFem) elObrFem.textContent = mObrFem.toLocaleString();
+
+    // Renderizar Desglose por las 6 Dependencias en la Tarjeta Resumen del Municipio
+    const gridDepsMun = document.getElementById('grid-personal-dependencias-mun');
+    const dependenciasLista = ['NACIONAL', 'ESTADAL', 'MUNICIPAL', 'AUTONOMA', 'SUBVENCIONADA', 'PRIVADA'];
+    const depMeta = {
+      NACIONAL: { color: '#2563eb', bg: 'rgba(37,99,235,0.06)', border: 'rgba(37,99,235,0.2)', icon: '🏛️' },
+      ESTADAL: { color: '#059669', bg: 'rgba(16,185,129,0.06)', border: 'rgba(16,185,129,0.2)', icon: '🏢' },
+      MUNICIPAL: { color: '#7c3aed', bg: 'rgba(124,58,237,0.06)', border: 'rgba(124,58,237,0.2)', icon: '🏛️' },
+      AUTONOMA: { color: '#d97706', bg: 'rgba(217,119,6,0.06)', border: 'rgba(217,119,6,0.2)', icon: '⚡' },
+      SUBVENCIONADA: { color: '#0891b2', bg: 'rgba(8,145,178,0.06)', border: 'rgba(8,145,178,0.2)', icon: '🤝' },
+      PRIVADA: { color: '#e11d48', bg: 'rgba(225,29,72,0.06)', border: 'rgba(225,29,72,0.2)', icon: '🏫' }
+    };
+
+    if (gridDepsMun) {
+      gridDepsMun.innerHTML = '';
+      const depsFuente = munData.porDependencia || {};
+
+      dependenciasLista.forEach(depKey => {
+        const dVal = depsFuente[depKey] || { total: 0, docentes: { total: 0, mas: 0, fem: 0 }, administrativos: { total: 0, mas: 0, fem: 0 }, obreros: { total: 0, mas: 0, fem: 0 } };
+        const cfg = depMeta[depKey] || { color: '#64748b', bg: '#f8fafc', border: '#e2e8f0', icon: '📁' };
+
+        const dTot = Number(dVal.total || 0);
+        const dDoc = Number(dVal.docentes?.total || 0);
+        const dDocM = Number(dVal.docentes?.mas ?? dVal.docentes?.masculino ?? 0);
+        const dDocF = Number(dVal.docentes?.fem ?? dVal.docentes?.femenino ?? 0);
+
+        const dAdm = Number(dVal.administrativos?.total || 0);
+        const dAdmM = Number(dVal.administrativos?.mas ?? dVal.administrativos?.masculino ?? 0);
+        const dAdmF = Number(dVal.administrativos?.fem ?? dVal.administrativos?.femenino ?? 0);
+
+        const dObr = Number(dVal.obreros?.total || 0);
+        const dObrM = Number(dVal.obreros?.mas ?? dVal.obreros?.masculino ?? 0);
+        const dObrF = Number(dVal.obreros?.fem ?? dVal.obreros?.femenino ?? 0);
+
+        const cardDep = document.createElement('div');
+        cardDep.style.cssText = `background: ${cfg.bg}; border: 1px solid ${cfg.border}; border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; justify-content: space-between;`;
+        cardDep.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; border-bottom: 1px solid ${cfg.border}; padding-bottom: 4px;">
+            <span style="font-size: 0.78rem; font-weight: 800; color: ${cfg.color};">${cfg.icon} ${depKey}</span>
+            <span style="font-size: 1rem; font-weight: 800; color: #1e293b;">${dTot.toLocaleString()}</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 3px; font-size: 0.72rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="color: #334155; font-weight: 600;">📚 Doc: <strong>${dDoc.toLocaleString()}</strong></span>
+              <span style="color: #64748b; font-size: 0.7rem;">👦 ${dDocM} · 👧 ${dDocF}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="color: #334155; font-weight: 600;">💼 Adm: <strong>${dAdm.toLocaleString()}</strong></span>
+              <span style="color: #64748b; font-size: 0.7rem;">👦 ${dAdmM} · 👧 ${dAdmF}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="color: #334155; font-weight: 600;">🛠️ Obr: <strong>${dObr.toLocaleString()}</strong></span>
+              <span style="color: #64748b; font-size: 0.7rem;">👦 ${dObrM} · 👧 ${dObrF}</span>
+            </div>
+          </div>
+        `;
+        gridDepsMun.appendChild(cardDep);
+      });
+    }
+
+    // Renderizar Cuadrícula de Tarjetas de Planteles
+    const gridPlanteles = document.getElementById('grid-planteles-personal-mun');
+    const inpBuscar = document.getElementById('inp-buscar-plantel-personal');
+    const selFiltro = document.getElementById('sel-filtro-dep-plantel-personal');
+    if (inpBuscar) inpBuscar.value = '';
+    if (selFiltro) selFiltro.value = 'TODAS';
+
+    let selectedPlantelDea = null;
+
+    function renderTarjetasPlantelesPersonal(arr) {
+      if (!gridPlanteles) return;
+      gridPlanteles.innerHTML = '';
+
+      if (arr.length === 0) {
+        gridPlanteles.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: #64748b; background: white; border-radius: 12px; border: 1px dashed #cbd5e1;">
+            <div style="font-size: 2rem; margin-bottom: 8px;">🏫</div>
+            <div style="font-weight: 700; color: #475569; font-size: 1rem;">No se encontraron planteles con ese criterio</div>
+            <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Intenta con otro término de búsqueda o cambia el filtro de dependencia.</div>
+          </div>
+        `;
+        return;
+      }
+
+      arr.forEach(p => {
+        const depPlantel = (p.dependencia || 'NACIONAL').toUpperCase();
+        const cfg = depMeta[depPlantel] || { color: '#2563eb', bg: '#eff6ff', border: '#bfdbfe' };
+
+        const pTot = Number(p.total || 0);
+        const pDocTot = Number(p.docentes?.total || 0);
+        const pDocMas = Number(p.docentes?.mas ?? p.docentes?.masculino ?? 0);
+        const pDocFem = Number(p.docentes?.fem ?? p.docentes?.femenino ?? 0);
+
+        const pAdmTot = Number(p.administrativos?.total || 0);
+        const pAdmMas = Number(p.administrativos?.mas ?? p.administrativos?.masculino ?? 0);
+        const pAdmFem = Number(p.administrativos?.fem ?? p.administrativos?.femenino ?? 0);
+
+        const pObrTot = Number(p.obreros?.total || 0);
+        const pObrMas = Number(p.obreros?.mas ?? p.obreros?.masculino ?? 0);
+        const pObrFem = Number(p.obreros?.fem ?? p.obreros?.femenino ?? 0);
+
+        const isSelected = (selectedPlantelDea && p.dea === selectedPlantelDea);
+
+        const card = document.createElement('div');
+        card.className = 'glass-panel card-plantel-personal-item';
+        card.dataset.dea = p.dea || '';
+        card.dataset.nombre = p.nombre || '';
+        card.dataset.dependencia = depPlantel;
+        card.style.cssText = `padding: 16px; border-radius: 12px; display: flex; flex-direction: column; justify-content: space-between; border-top: 4px solid ${cfg.color}; background: ${isSelected ? '#f0f7ff' : '#ffffff'}; box-shadow: ${isSelected ? '0 0 0 2px #2563eb, 0 4px 12px rgba(37,99,235,0.15)' : '0 2px 6px rgba(0,0,0,0.03)'}; cursor: pointer; transition: all 0.2s ease;`;
+
+        card.innerHTML = `
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 8px;">
+              <span style="font-family: monospace; font-size: 0.72rem; font-weight: 700; color: #475569; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; border: 1px solid #e2e8f0;">${p.dea || 'SIN DEA'}</span>
+              <span style="font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; background: ${cfg.bg}; color: ${cfg.color}; border: 1px solid ${cfg.border}; white-space: nowrap;">
+                ${depPlantel}
+              </span>
+            </div>
+            <h4 style="margin: 0 0 10px 0; font-size: 0.95rem; font-weight: 700; color: #1e293b; line-height: 1.35;" title="${p.nombre}">
+              ${p.nombre}
+            </h4>
+          </div>
+
+          <div>
+            <div style="background: #f8fafc; border-radius: 8px; padding: 10px 12px; border: 1px solid #e2e8f0; margin-top: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;">
+                <span style="font-size: 0.78rem; font-weight: 700; color: #64748b;">Personal Total:</span>
+                <span style="font-size: 1.25rem; font-weight: 800; color: #1e293b;">
+                  ${pTot.toLocaleString()}
+                </span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.75rem;">
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="color: #2563eb; font-weight: 700;">📚 Docentes: <strong>${pDocTot.toLocaleString()}</strong></span>
+                  <span style="color: #64748b;">👦 ${pDocMas} · 👧 ${pDocFem}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="color: #d97706; font-weight: 700;">💼 Admin: <strong>${pAdmTot.toLocaleString()}</strong></span>
+                  <span style="color: #64748b;">👦 ${pAdmMas} · 👧 ${pAdmFem}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="color: #059669; font-weight: 700;">🛠️ Obreros: <strong>${pObrTot.toLocaleString()}</strong></span>
+                  <span style="color: #64748b;">👦 ${pObrMas} · 👧 ${pObrFem}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Detalle por Dependencia del Plantel -->
+            <div style="margin-top: 8px; padding-top: 6px; border-top: 1px dashed #e2e8f0; font-size: 0.72rem; color: #64748b; display: flex; justify-content: space-between; align-items: center;">
+              <span>Dependencia: <strong style="color: ${cfg.color}; font-weight: 800;">${depPlantel}</strong></span>
+              <span style="font-weight: 600;">Doc: ${pDocTot} · Adm: ${pAdmTot} · Obr: ${pObrTot}</span>
+            </div>
+
+            <!-- Indicador visual interactivo -->
+            <div style="margin-top: 8px; text-align: center; font-size: 0.72rem; font-weight: 700; color: ${isSelected ? '#2563eb' : '#64748b'}; background: ${isSelected ? '#dbeafe' : '#f1f5f9'}; padding: 4px 8px; border-radius: 6px; border: 1px dashed ${isSelected ? '#93c5fd' : '#cbd5e1'};">
+              ${isSelected ? '✓ Plantel seleccionado (viendo detalle abajo)' : '👆 Clic para consultar situación y jubilaciones'}
+            </div>
+          </div>
+        `;
+
+        card.addEventListener('mouseenter', () => {
+          if (selectedPlantelDea !== p.dea) {
+            card.style.transform = 'translateY(-2px)';
+            card.style.boxShadow = '0 6px 16px rgba(0,0,0,0.06)';
+          }
+        });
+        card.addEventListener('mouseleave', () => {
+          if (selectedPlantelDea !== p.dea) {
+            card.style.transform = 'translateY(0)';
+            card.style.boxShadow = '0 2px 6px rgba(0,0,0,0.03)';
+          }
+        });
+
+        card.addEventListener('click', () => {
+          if (selectedPlantelDea === p.dea) {
+            limpiarSeleccionPlantel();
+          } else {
+            seleccionarPlantel(p);
+          }
+        });
+
+        gridPlanteles.appendChild(card);
+      });
+    }
+
+    function actualizarEstilosTarjetas() {
+      const cards = gridPlanteles?.querySelectorAll('.card-plantel-personal-item') || [];
+      cards.forEach(card => {
+        const isSel = (selectedPlantelDea && card.dataset.dea === selectedPlantelDea);
+        const depPlantel = card.dataset.dependencia || 'NACIONAL';
+        const cfg = depMeta[depPlantel] || { color: '#64748b', bg: '#f8fafc', border: '#e2e8f0' };
+        card.style.background = isSel ? '#f0f7ff' : '#ffffff';
+        card.style.boxShadow = isSel ? '0 0 0 2px #2563eb, 0 4px 12px rgba(37,99,235,0.15)' : '0 2px 6px rgba(0,0,0,0.03)';
+        const hint = card.lastElementChild?.lastElementChild;
+        if (hint) {
+          hint.style.color = isSel ? '#2563eb' : '#64748b';
+          hint.style.background = isSel ? '#dbeafe' : '#f1f5f9';
+          hint.style.borderColor = isSel ? '#93c5fd' : '#cbd5e1';
+          hint.textContent = isSel ? '✓ Plantel seleccionado (viendo detalle abajo)' : '👆 Clic para consultar situación y jubilaciones';
+        }
+      });
+    }
+
+    function renderSituacionLaboralMun(sitMap, tituloNombre, deaOpcional, total) {
+      const container = document.getElementById('stat-situacion-laboral-mun');
+      const titulo = document.getElementById('titulo-situacion-laboral-mun');
+      const subtitulo = document.getElementById('subtitulo-situacion-laboral-mun');
+      const badge = document.getElementById('badge-total-sit-mun');
+      if (!container) return;
+
+      container.innerHTML = '';
+      const sitArr = Object.entries(sitMap || {}).sort((a, b) => b[1] - a[1]);
+      const totFunc = sitArr.reduce((acc, [, val]) => acc + (Number(val) || 0), 0) || Number(total || 0);
+
+      if (deaOpcional) {
+        if (titulo) titulo.innerHTML = `<span>💼</span> Situación Laboral — ${tituloNombre}`;
+        if (subtitulo) subtitulo.textContent = `Distribución del personal del plantel (${deaOpcional}) según condición administrativa activa.`;
+      } else {
+        if (titulo) titulo.innerHTML = `<span>💼</span> Situación Laboral — Municipio ${tituloNombre}`;
+        if (subtitulo) subtitulo.textContent = `Distribución consolidada del personal del municipio ${tituloNombre} según condición administrativa activa.`;
+      }
+
+      if (badge) badge.textContent = `${totFunc.toLocaleString()} funcionarios`;
+
+      if (sitArr.length === 0) {
+        container.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: #94a3b8; font-size: 0.9rem; padding: 25px;">Sin registros de situación laboral para este ámbito.</div>';
+        return;
+      }
+
+      sitArr.forEach(([s, count]) => {
+        const item = document.createElement('div');
+        item.style.cssText = 'background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02); transition: all 0.2s ease;';
+        item.innerHTML = `
+          <span style="color: #334155; font-size: 0.82rem; font-weight: 600; line-height: 1.25;">${s}</span>
+          <span style="font-weight: 800; color: #1e293b; font-size: 0.95rem; background: #f8fafc; padding: 3px 8px; border-radius: 6px; border: 1px solid #cbd5e1; margin-left: 8px; white-space: nowrap;">
+            ${Number(count).toLocaleString()}
+          </span>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function renderJubilablesMun(jubData, esPlantel, nombreContexto) {
+      const tbody = document.getElementById('tbody-jubilables-mun');
+      const titulo = document.getElementById('titulo-jubilables-mun');
+      const subtitulo = document.getElementById('subtitulo-jubilables-mun');
+      const badge = document.getElementById('badge-total-jubilables-mun');
+      const thCol1 = document.getElementById('th-jubilables-mun-col1');
+      const thCol2 = document.getElementById('th-jubilables-mun-col2');
+      if (!tbody) return;
+
+      tbody.innerHTML = '';
+
+      if (esPlantel) {
+        if (titulo) titulo.innerHTML = `<span>⏳</span> Personal por Jubilarse (Próximo Año) — ${nombreContexto}`;
+        if (subtitulo) subtitulo.textContent = `Personal proyectado con 25 años o más de servicio acumulados en este plantel.`;
+        if (thCol1) thCol1.textContent = 'Funcionario (Cédula y Nombre)';
+        if (thCol2) thCol2.textContent = 'Cargo / Años de Servicio';
+
+        const lista = Array.isArray(jubData?.lista) ? jubData.lista : [];
+        const tot = Number(jubData?.total ?? lista.length);
+        if (badge) badge.textContent = `${tot.toLocaleString()} por jubilarse`;
+
+        if (lista.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="2" style="text-align: center; padding: 25px; color: #94a3b8; font-size: 0.9rem;">Este plantel no cuenta con personal proyectado para jubilación el próximo año.</td></tr>';
+          return;
+        }
+
+        lista.forEach(func => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td style="padding: 10px 14px; border-bottom: 1px solid #f1f5f9;">
+              <div style="font-weight: 700; color: #1e293b; font-size: 0.9rem;">${func.nombre || 'SIN NOMBRE'}</div>
+              <div style="font-size: 0.75rem; color: #64748b; font-family: monospace; margin-top: 2px;">C.I. V-${func.cedula || 'S/C'}</div>
+            </td>
+            <td style="padding: 10px 14px; border-bottom: 1px solid #f1f5f9; text-align: center;">
+              <span style="font-weight: 700; color: #b45309; background: #fef3c7; padding: 2px 8px; border-radius: 6px; font-size: 0.78rem; border: 1px solid #fde68a; display: inline-block;">
+                ${func.antiguedad || 25} años de servicio
+              </span>
+              <div style="font-size: 0.72rem; color: #475569; margin-top: 3px; font-weight: 600;">${func.cargo || 'DOCENTE'}</div>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } else {
+        if (titulo) titulo.innerHTML = `<span>⏳</span> Personal por Jubilarse (Próximo Año) — Municipio ${nombreContexto}`;
+        if (subtitulo) subtitulo.textContent = `Planteles del municipio ${nombreContexto} con personal proyectado con 25 años o más de servicio.`;
+        if (thCol1) thCol1.textContent = 'Plantel (Nombre y DEA)';
+        if (thCol2) thCol2.textContent = 'Cantidad';
+
+        const arr = Array.isArray(jubData) ? jubData : [];
+        const tot = arr.reduce((acc, item) => acc + (Number(item.count) || 0), 0);
+        if (badge) badge.textContent = `${tot.toLocaleString()} por jubilarse`;
+
+        if (arr.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="2" style="text-align: center; padding: 25px; color: #94a3b8; font-size: 0.9rem;">No hay personal por jubilarse proyectado en este municipio.</td></tr>';
+          return;
+        }
+
+        arr.forEach(item => {
+          const tr = document.createElement('tr');
+          tr.style.cursor = 'pointer';
+          tr.title = 'Clic para ver los funcionarios de este plantel';
+          tr.innerHTML = `
+            <td style="padding: 10px 14px; border-bottom: 1px solid #f1f5f9;">
+              <div style="font-weight: 700; color: #1e293b; font-size: 0.9rem;">${item.nombre || item.clave}</div>
+              ${item.clave ? `<span style="font-size: 0.72rem; color: #64748b; font-family: monospace; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; border: 1px solid #e2e8f0; display: inline-block; margin-top: 3px;">${item.clave}</span>` : ''}
+            </td>
+            <td style="padding: 10px 14px; border-bottom: 1px solid #f1f5f9; text-align: center;">
+              <span style="font-weight: 800; color: #b45309; background: #fef3c7; padding: 3px 10px; border-radius: 12px; font-size: 0.85rem; border: 1px solid #fde68a;">
+                ${Number(item.count).toLocaleString()}
+              </span>
+            </td>
+          `;
+          tr.addEventListener('mouseenter', () => { tr.style.background = '#f8fafc'; });
+          tr.addEventListener('mouseleave', () => { tr.style.background = 'transparent'; });
+          tr.addEventListener('click', () => {
+            const plantelObj = planteles.find(p => (p.dea && p.dea === item.clave) || (p.nombre && p.nombre.toUpperCase() === (item.nombre || '').toUpperCase()));
+            if (plantelObj) {
+              seleccionarPlantel(plantelObj);
+            }
+          });
+          tbody.appendChild(tr);
+        });
+      }
+    }
+
+    function seleccionarPlantel(p) {
+      selectedPlantelDea = p.dea;
+      actualizarEstilosTarjetas();
+
+      const banner = document.getElementById('banner-contexto-seleccion-plantel');
+      const lblNombre = document.getElementById('lbl-nombre-plantel-seleccionado');
+      const lblDea = document.getElementById('lbl-dea-plantel-seleccionado');
+      if (banner) banner.style.display = 'flex';
+      if (lblNombre) lblNombre.textContent = p.nombre || 'Plantel seleccionado';
+      if (lblDea) lblDea.textContent = p.dea || 'SIN DEA';
+
+      renderSituacionLaboralMun(p.situacion_laboral || {}, p.nombre, p.dea, p.total);
+      renderJubilablesMun(p.jubilables, true, p.nombre);
+
+      if (banner) {
+        banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    function limpiarSeleccionPlantel() {
+      selectedPlantelDea = null;
+      actualizarEstilosTarjetas();
+
+      const banner = document.getElementById('banner-contexto-seleccion-plantel');
+      if (banner) banner.style.display = 'none';
+
+      const dMunFull = getDatosMunicipio(resumenData, munNombre) || resumenData.porMunicipio?.[munNombre] || resumenData.porMunicipio?.[munNorm] || {};
+      const sitMun = dMunFull.situacion_laboral || {};
+      const jubMun = dMunFull.jubilables || [];
+
+      renderSituacionLaboralMun(sitMun, munNorm, null, mTot);
+      renderJubilablesMun(jubMun, false, munNorm);
+    }
+
+    const btnLimpiar = document.getElementById('btn-limpiar-seleccion-plantel');
+    if (btnLimpiar && !btnLimpiar._hasListener) {
+      btnLimpiar._hasListener = true;
+      btnLimpiar.addEventListener('click', limpiarSeleccionPlantel);
+    }
+
+    // Inicializar paneles de situación laboral y jubilables con los datos municipales
+    limpiarSeleccionPlantel();
+
+    renderTarjetasPlantelesPersonal(planteles);
+
+    function aplicarFiltrosPlantelesPersonal() {
+      const q = (inpBuscar?.value || '').trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+      const depSel = selFiltro?.value || 'TODAS';
+
+      const filtrados = planteles.filter(p => {
+        const matchQ = !q || (p.nombre && p.nombre.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().includes(q))
+                          || (p.dea && p.dea.toLowerCase().includes(q));
+        let matchDep = true;
+        if (depSel !== 'TODAS') {
+          matchDep = ((p.dependencia || 'NACIONAL').toUpperCase() === depSel);
+        }
+        return matchQ && matchDep;
+      });
+      renderTarjetasPlantelesPersonal(filtrados);
+    }
+
+    if (inpBuscar && !inpBuscar._hasListener) {
+      inpBuscar._hasListener = true;
+      inpBuscar.addEventListener('input', aplicarFiltrosPlantelesPersonal);
+    }
+    if (selFiltro && !selFiltro._hasListener) {
+      selFiltro._hasListener = true;
+      selFiltro.addEventListener('change', aplicarFiltrosPlantelesPersonal);
+    }
+  }
+
   // Cargar Estadísticas (Tab por Defecto - Arquitectura Zero-Cost con Ficha Resumen)
   async function loadEstadisticas(forzarSync = false, munOverride = null) {
     try {
@@ -1243,50 +2477,32 @@ export function initAdminDashboard(dbInstance, user) {
         renderStatValue(elUsuarios, usuariosLocales.length > 0 ? usuariosLocales.length : '-');
       }
 
-      // 2. Cargar Ficha Resumen (Zero-Cost: 1 sola lectura a Firestore o 0 con respaldo local)
+      // 2. Cargar Ficha Resumen (Zero-Cost: Prioridad a corte estático local precompilado de 0 lecturas)
       let resumenData = null;
 
-      // Intento A: Documento único en Firestore (1 lectura)
+      // Intento A: Carga de alta velocidad del corte estático compilado (0 lecturas, 0 costo)
+      try {
+        const resp = await fetch('/resumen_estadisticas.json?v=' + Date.now());
+        if (resp.ok) {
+          resumenData = await resp.json();
+        }
+      } catch (errFetch) {
+        console.warn("[Zero-Cost Shield] Error al cargar resumen estático local:", errFetch);
+      }
+
+      // Intento B: Comprobar si Firestore tiene un corte más reciente o actuar de respaldo
       try {
         const snapRes = await getDoc(doc(db, 'estadisticas', 'resumen_global'));
         if (snapRes.exists()) {
-          resumenData = snapRes.data();
+          const cloudResumen = snapRes.data();
+          const fechaCloud = new Date(cloudResumen.fecha_corte || cloudResumen.fecha_generacion || 0).getTime();
+          const fechaLocal = new Date(resumenData?.fecha_corte || resumenData?.fecha_generacion || 0).getTime();
+          if (!resumenData || (fechaCloud > fechaLocal)) {
+            resumenData = cloudResumen;
+          }
         }
       } catch (errDb) {
         console.warn("[Zero-Cost Shield] Lectura Firestore inaccesible o cuota alcanzada, usando respaldo local.");
-      }
-
-      // Intento B: Respaldo local de alta velocidad (0 lecturas) o complemento si Firestore aún no incluye porDependencia
-      const faltaPorDependencia = resumenData && !(resumenData.global?.porDependencia || resumenData.porDependencia);
-      if (!resumenData || faltaPorDependencia) {
-        try {
-          const resp = await fetch('/resumen_estadisticas.json');
-          if (resp.ok) {
-            const localResumen = await resp.json();
-            if (!resumenData) {
-              resumenData = localResumen;
-            } else {
-              const targetGlobal = resumenData.global || resumenData;
-              if (localResumen.global?.porDependencia) {
-                targetGlobal.porDependencia = localResumen.global.porDependencia;
-              }
-              if (localResumen.porMunicipio) {
-                resumenData.porMunicipio = resumenData.porMunicipio || {};
-                for (const [mKey, mVal] of Object.entries(resumenData.porMunicipio)) {
-                  if (mVal && !mVal.porDependencia) {
-                    const localMun = localResumen.porMunicipio[mKey] || getDatosMunicipio(localResumen, mKey);
-                    if (localMun?.porDependencia) mVal.porDependencia = localMun.porDependencia;
-                  }
-                }
-                for (const [mKey, mVal] of Object.entries(localResumen.porMunicipio)) {
-                  if (!resumenData.porMunicipio[mKey]) resumenData.porMunicipio[mKey] = mVal;
-                }
-              }
-            }
-          }
-        } catch (errFetch) {
-          console.error("[Zero-Cost Shield] Error al cargar resumen local:", errFetch);
-        }
       }
 
       if (!resumenData) {
@@ -1379,6 +2595,7 @@ export function initAdminDashboard(dbInstance, user) {
 
         if (discLoading) discLoading.style.display = 'none';
         if (discContent) discContent.style.display = 'flex';
+        renderDiscriminacionPersonalCompleta(resumenData, (esVistaMunicipal && mun) ? mun : null);
 
         // Renderizar Estatus de Matrícula
         let matInfo = datosActivos.matricula || { cargados: 0, pendientes: datosActivos.totalPlanteles || 0 };
@@ -1745,26 +2962,38 @@ export function initAdminDashboard(dbInstance, user) {
         }
         if (matLoading) matLoading.style.display = 'none';
         if (matContent) matContent.style.display = 'flex';
+        renderEstatusMatriculaCompleto(resumenData, (esVistaMunicipal && mun) ? mun : null);
 
         // Renderizar Situación Laboral
         if (containerSit) {
           containerSit.innerHTML = '';
           const sitMap = datosActivos.situacion_laboral || {};
           const sitArr = Object.entries(sitMap).sort((a,b) => b[1] - a[1]);
+          const lblSitAmbito = document.getElementById('lbl-situacion-laboral-ambito');
+          if (lblSitAmbito) {
+            lblSitAmbito.textContent = (esVistaMunicipal && mun)
+              ? `Distribución del personal del municipio ${mun} según condición administrativa activa.`
+              : 'Distribución consolidada de los 26.215 funcionarios del estado Mérida según condición administrativa activa.';
+          }
           if (sitArr.length === 0) {
-            containerSit.innerHTML = '<div style="text-align: center; color: #94a3b8; font-size: 0.9rem;">Sin datos registrados.</div>';
+            containerSit.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: #94a3b8; font-size: 0.9rem; padding: 25px;">Sin registros de situación laboral.</div>';
           } else {
             for (const [s, count] of sitArr) {
-              containerSit.innerHTML += '<div style="display: flex; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding: 8px 0; font-size: 0.95rem;">' +
-                '<span style="color: #334155;">' + s + '</span>' +
-                '<span style="font-weight: bold; color: #0f172a;">' + Number(count).toLocaleString() + '</span>' +
-              '</div>';
+              const item = document.createElement('div');
+              item.style.cssText = 'background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s ease;';
+              item.innerHTML = `
+                <span style="color: #334155; font-size: 0.82rem; font-weight: 600; line-height: 1.25;">${s}</span>
+                <span style="font-weight: 800; color: #1e293b; font-size: 0.95rem; background: #ffffff; padding: 3px 8px; border-radius: 6px; border: 1px solid #cbd5e1; margin-left: 8px; white-space: nowrap;">
+                  ${Number(count).toLocaleString()}
+                </span>
+              `;
+              containerSit.appendChild(item);
             }
           }
         }
 
         // Modificar Encabezado dinámicamente
-        const thPlantel = document.querySelector('#extended-stats-container table th');
+        const thPlantel = document.getElementById('th-jubilables-col1') || document.querySelector('#panel-jubilables-personal table th');
         if (thPlantel) {
           thPlantel.textContent = esVistaMunicipal ? 'Plantel (DEA)' : 'Municipio';
         }
@@ -1779,15 +3008,30 @@ export function initAdminDashboard(dbInstance, user) {
             jubList = (datosActivos.jubilables?.porMunicipio) || [];
           }
 
+          const badgeTotJub = document.getElementById('badge-total-jubilables');
+          const lblJubAmbito = document.getElementById('lbl-jubilables-ambito');
+          const totJubCount = esVistaMunicipal
+            ? (Array.isArray(jubList) ? jubList.reduce((acc, item) => acc + (Number(item.count) || 0), 0) : 0)
+            : Number(datosActivos.jubilables?.total || (Array.isArray(jubList) ? jubList.reduce((acc, item) => acc + (Number(item.count) || 0), 0) : 0));
+
+          if (badgeTotJub) {
+            badgeTotJub.textContent = `Total: ${totJubCount.toLocaleString()} por jubilarse`;
+          }
+          if (lblJubAmbito) {
+            lblJubAmbito.textContent = esVistaMunicipal
+              ? `Personal del municipio ${mun} con 25 años o más de servicio acumulados a Marzo.`
+              : 'Consolidado estadal de personal con 25 años o más de servicio acumulados a Marzo.';
+          }
+
           if (!jubList || jubList.length === 0) {
-            tbodyJub.innerHTML = '<tr><td colspan="2" style="text-align: center; padding: 10px; color: #94a3b8;">No hay personal por jubilarse proyectado.</td></tr>';
+            tbodyJub.innerHTML = '<tr><td colspan="2" style="text-align: center; padding: 20px; color: #94a3b8;">No hay personal por jubilarse proyectado.</td></tr>';
           } else {
             jubList.forEach(item => {
               const nombre = item.nombre || item.clave;
-              const subtitle = (esVistaMunicipal && item.clave) ? '<br><span style="color:#64748b; font-size: 0.75rem;">DEA: ' + item.clave + '</span>' : '';
+              const subtitle = (esVistaMunicipal && item.clave && item.clave !== item.nombre) ? '<br><span style="color:#64748b; font-size: 0.75rem; font-family: monospace;">DEA: ' + item.clave + '</span>' : '';
               tbodyJub.innerHTML += '<tr>' +
-                '<td style="padding: 8px; border-bottom: 1px solid #e2e8f0; color: #334155; font-size: 0.85rem;"><strong>' + nombre + '</strong>' + subtitle + '</td>' +
-                '<td style="padding: 8px; border-bottom: 1px solid #e2e8f0; color: #0f172a; text-align: center; font-weight: bold;">' + item.count + '</td>' +
+                '<td style="padding: 10px 14px; border-bottom: 1px solid #e2e8f0; color: #334155; font-size: 0.85rem;"><strong>' + nombre + '</strong>' + subtitle + '</td>' +
+                '<td style="padding: 10px 14px; border-bottom: 1px solid #e2e8f0; color: #0f172a; text-align: center; font-weight: 700; font-size: 0.95rem;">' + Number(item.count || 0).toLocaleString() + '</td>' +
               '</tr>';
             });
           }

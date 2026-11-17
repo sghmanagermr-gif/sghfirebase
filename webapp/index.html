@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SGH - v2.38.6</title>
+  <title>SGH - v2.38.7</title>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
@@ -147,7 +147,7 @@
           style="width: 110px; height: 110px; border-radius: 20px; object-fit: cover; box-shadow: 0 10px 25px rgba(0,0,0,0.2); margin-bottom: 18px;" />
         <h1
           style="color: var(--primary-color); margin-bottom: 5px; display: flex; align-items: baseline; justify-content: center; gap: 8px;">
-          SGH <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">v2.38.6</span></h1>
+          SGH <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">v2.38.7</span></h1>
         <p>Sistema de Gestión Humana - Estado Mérida</p>
         <form id="login-form">
           <input type="email" id="login-email" placeholder="Correo Electrónico" required autocomplete="email" />
@@ -274,7 +274,7 @@
     <section id="dashboard-view" class="view">
       <nav class="navbar">
         <div class="nav-brand">
-          <span style="color: var(--primary-color);">SGH</span> v2.38.6
+          <span style="color: var(--primary-color);">SGH</span> v2.38.7
         </div>
         <div class="nav-user">
           <span id="user-display-name" style="font-weight: 500;">Cargando...</span>
@@ -337,7 +337,7 @@
         <img src="/sgh-logo.png" alt="SGH Logo"
           style="width: 32px; height: 32px; border-radius: 6px; object-fit: cover; box-shadow: 0 2px 6px rgba(0,0,0,0.15);" />
         <span style="color: var(--primary-color); font-weight: 700;">SGH</span> <span
-          style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">v2.38.6</span>
+          style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">v2.38.7</span>
       </div>
       <div class="nav-user" style="display: flex; gap: 10px; align-items: center;">
         <button id="btn-logout-lock" class="btn-icon"
@@ -1934,6 +1934,46 @@
     </div>
   </div>
 
+  <!-- MODAL: CORTE OFICIAL GOOGLE SHEETS (SUPERADMIN) -->
+  <div id="modal-corte-google-sheets" class="lock-screen" aria-hidden="true" style="display: none; z-index: 10005;">
+    <div class="glass-panel" style="background: white; max-width: 540px; width: 92%; padding: 24px; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+        <h3 style="margin: 0; color: #16a34a; font-size: 1.3rem; display: flex; align-items: center; gap: 8px;">
+          <span>📊</span> Corte Oficial Google Sheets
+        </h3>
+        <button type="button" id="btn-cerrar-modal-corte" style="background: transparent; border: none; font-size: 1.3rem; color: #64748b; cursor: pointer; padding: 0 4px; line-height: 1;">✕</button>
+      </div>
+
+      <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0 0 18px; line-height: 1.45;">
+        Este documento en Google Sheets almacena el corte oficial de datos (PERSONAL y PLANTELES) que alimenta las tarjetas de la pizarra y las descargas de nóminas a costo cero.
+      </p>
+
+      <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 14px 16px; margin-bottom: 18px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <span style="font-size: 0.78rem; font-weight: 700; color: #16a34a; text-transform: uppercase;">Estado del Corte</span>
+          <span id="badge-fecha-corte-sheets" style="font-size: 0.75rem; font-weight: 700; background: #ffffff; color: #16a34a; padding: 2px 8px; border-radius: 12px; border: 1px solid #bbf7d0;">
+            Viernes 13 de Noviembre, 8:00 p.m.
+          </span>
+        </div>
+        <div style="font-size: 0.82rem; color: #374151;">
+          Documento vinculado: <strong>rac_actualizado</strong> (Hojas: PERSONAL y PLANTELES)
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
+        <a id="btn-abrir-google-sheet-link" href="https://docs.google.com/spreadsheets/d/1xRXGCx-oZiiFQqZB0K6VQZTYoU2bZVH-Y5yuTAPKKgU/edit" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 16px; background: #ffffff; color: #15803d; border: 1.5px solid #86efac; border-radius: 8px; font-weight: 700; text-decoration: none; font-size: 0.9rem; transition: all 0.2s;">
+          <span>📄</span> Abrir Documento en Google Drive <span>➔</span>
+        </a>
+
+        <button type="button" id="btn-ejecutar-sincronizacion-sheets" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 16px; background: #16a34a; color: #ffffff; border: none; border-radius: 8px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;">
+          <span>🔄</span> Sincronizar Corte Oficial desde Firebase
+        </button>
+      </div>
+
+      <div id="status-sync-corte-msg" style="display: none; padding: 10px 14px; border-radius: 8px; font-size: 0.82rem; margin-top: 10px;"></div>
+    </div>
+  </div>
+
 
   <!-- VISTA DEL SÚPER ADMIN -->
   <section id="admin-view" class="view" style="flex-direction: column; min-height: 100vh;">
@@ -1950,7 +1990,7 @@
             <h1
               style="color: var(--primary-color); font-size: 1.05rem; margin: 0; display: flex; align-items: center; gap: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
               SGH Panel <span id="admin-header-version-badge"
-                style="font-size: 0.72rem; font-weight: 600; color: var(--primary-color); background: rgba(37,99,235,0.1); padding: 2px 6px; border-radius: 10px;">v2.38.6</span>
+                style="font-size: 0.72rem; font-weight: 600; color: var(--primary-color); background: rgba(37,99,235,0.1); padding: 2px 6px; border-radius: 10px;">v2.38.7</span>
             </h1>
           </div>
         </div>
@@ -2074,56 +2114,13 @@
               <p id="stat-aspiradora-desc" class="stat-card-desc">Depuración y respaldo</p>
             </div>
 
-          </div>
-
-          <!-- EXTENDED STATS PARA MUNADMIN -->
-          <div id="extended-stats-container" style="display: none; margin-top: 30px;">
-
-            <!-- Fila 2: Situación Laboral y Jubilaciones -->
-            <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
-
-              <!-- Situación Laboral -->
-              <div class="glass-panel" style="padding: 20px;">
-                <h3
-                  style="margin-top: 0; color: #1e293b; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; font-size: 1.1rem;">
-                  Situación Laboral</h3>
-                <div id="stat-situacion-laboral" style="margin-top: 15px; max-height: 250px; overflow-y: auto;">
-                  <div class="panel-card-loading" style="min-height: 140px;">
-                    <div class="panel-card-spinner"></div>
-                    <span>Cargando situación laboral...</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Personal por Jubilarse -->
-              <div class="glass-panel" style="padding: 20px;">
-                <h3
-                  style="margin-top: 0; color: #1e293b; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; font-size: 1.1rem;">
-                  Personal por Jubilarse (Próximo Año)</h3>
-                <p style="font-size: 0.8rem; color: #64748b; margin-top: 0;">Con 25 años de servicio acumulados a Marzo.
-                </p>
-                <div style="margin-top: 10px; max-height: 215px; overflow-y: auto;">
-                  <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
-                    <thead style="background: #f1f5f9; position: sticky; top: 0;">
-                      <tr>
-                        <th style="padding: 8px; text-align: left; border-bottom: 1px solid #cbd5e1;">Plantel (DEA)</th>
-                        <th style="padding: 8px; text-align: center; border-bottom: 1px solid #cbd5e1;">Cantidad</th>
-                      </tr>
-                    </thead>
-                    <tbody id="tbody-jubilables">
-                      <tr>
-                        <td colspan="2" style="text-align: center; padding: 25px;">
-                          <div class="panel-card-loading" style="min-height: 80px;">
-                            <div class="panel-card-spinner"></div>
-                            <span>Calculando personal por jubilarse...</span>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
+            <!-- Tarjeta 📊 Corte Oficial Google Sheets (Exclusivo Superadmin) -->
+            <div id="card-pizarra-corte-sheets" class="stat-card glass-panel"
+              title="Corte Oficial de Base de Datos y Sincronización a Google Sheets" style="cursor: pointer; border-left: 4px solid #16a34a;">
+              <div class="stat-card-icon">📊</div>
+              <h3 class="stat-card-title">Corte Oficial Google Sheets</h3>
+              <span id="stat-corte-sheets" class="stat-card-number" style="color: #16a34a; font-size: 1.15rem; font-weight: 700;">Sincronizar</span>
+              <p id="stat-corte-sheets-desc" class="stat-card-desc">Firebase ➔ Sheets</p>
             </div>
 
           </div>
@@ -2138,63 +2135,291 @@
             </div>
           </div>
 
-          <div class="glass-panel" style="padding: 24px;">
-            <div id="stat-disc-loading" class="panel-card-loading" style="min-height: 80px;">
-              <div class="panel-card-spinner"></div>
-              <span>Cargando distribución de personal...</span>
+          <!-- Tarjeta con Personal total del estado: discriminado por Docentes, Administrativos, Obreros (Mas y Fem) y por Dependencias -->
+          <div id="card-personal-total-estado" class="glass-panel" style="padding: 22px 24px; margin-bottom: 25px; border-left: 5px solid var(--primary-color);">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; border-bottom: 1px solid #e2e8f0; padding-bottom: 18px; margin-bottom: 18px;">
+              <div>
+                <span id="lbl-personal-total-ambito" style="font-size: 0.82rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase; letter-spacing: 0.5px;">Personal Total del Estado</span>
+                <div id="stat-personal-total-estatal" style="font-size: 2.3rem; font-weight: 800; color: #1e293b; line-height: 1.1; margin: 4px 0;"><span style="font-size: 1.2rem; font-weight: 600; color: #64748b;">En cálculo...</span></div>
+                <div id="stat-personal-avance-estatal" style="font-size: 0.85rem; color: #64748b;">Nómina activa consolidada</div>
+              </div>
+
+              <!-- 3 Bloques principales: Docente, Administrativo, Obrero con Mas y Fem -->
+              <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <!-- Docentes -->
+                <div style="padding: 12px 18px; background: rgba(37,99,235,0.06); border-radius: 12px; border: 1px solid rgba(37,99,235,0.2); min-width: 140px; text-align: center;">
+                  <div style="font-size: 0.78rem; font-weight: 700; color: #2563eb;">📚 DOCENTES</div>
+                  <div id="stat-disc-doc-total" style="font-size: 1.5rem; font-weight: 800; color: #1e293b; margin: 2px 0;">0</div>
+                  <div style="font-size: 0.72rem; color: #64748b; font-weight: 600;">
+                    👦 <span id="stat-disc-doc-mas" style="color: #2563eb;">0</span> · 👧 <span id="stat-disc-doc-fem" style="color: #db2777;">0</span>
+                  </div>
+                </div>
+                <!-- Administrativos -->
+                <div style="padding: 12px 18px; background: rgba(245,158,11,0.06); border-radius: 12px; border: 1px solid rgba(245,158,11,0.2); min-width: 140px; text-align: center;">
+                  <div style="font-size: 0.78rem; font-weight: 700; color: #d97706;">💼 ADMINISTRATIVOS</div>
+                  <div id="stat-disc-adm-total" style="font-size: 1.5rem; font-weight: 800; color: #1e293b; margin: 2px 0;">0</div>
+                  <div style="font-size: 0.72rem; color: #64748b; font-weight: 600;">
+                    👦 <span id="stat-disc-adm-mas" style="color: #2563eb;">0</span> · 👧 <span id="stat-disc-adm-fem" style="color: #db2777;">0</span>
+                  </div>
+                </div>
+                <!-- Obreros -->
+                <div style="padding: 12px 18px; background: rgba(16,185,129,0.06); border-radius: 12px; border: 1px solid rgba(16,185,129,0.2); min-width: 140px; text-align: center;">
+                  <div style="font-size: 0.78rem; font-weight: 700; color: #059669;">🛠️ OBREROS</div>
+                  <div id="stat-disc-obr-total" style="font-size: 1.5rem; font-weight: 800; color: #1e293b; margin: 2px 0;">0</div>
+                  <div style="font-size: 0.72rem; color: #64748b; font-weight: 600;">
+                    👦 <span id="stat-disc-obr-mas" style="color: #2563eb;">0</span> · 👧 <span id="stat-disc-obr-fem" style="color: #db2777;">0</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div id="stat-disc-content" style="display: none; flex-direction: column; gap: 20px;">
-              <div style="display: flex; justify-content: space-around; align-items: center; gap: 15px; flex-wrap: wrap; padding: 10px 0;">
-                <div style="text-align: center;">
-                  <div style="font-size: 1.8rem; font-weight: bold; color: #3b82f6;" id="stat-docentes">0</div>
-                  <div style="font-size: 0.9rem; color: #64748b; font-weight: 600;">Docente</div>
-                </div>
-                <div style="text-align: center;">
-                  <div style="font-size: 1.8rem; font-weight: bold; color: #f59e0b;" id="stat-administrativos">0</div>
-                  <div style="font-size: 0.9rem; color: #64748b; font-weight: 600;">Admin.</div>
-                </div>
-                <div style="text-align: center;">
-                  <div style="font-size: 1.8rem; font-weight: bold; color: #10b981;" id="stat-obreros">0</div>
-                  <div style="font-size: 0.9rem; color: #64748b; font-weight: 600;">Obrero</div>
-                </div>
+            <!-- Desglose por las 6 Dependencias Oficiales -->
+            <div>
+              <div style="font-size: 0.85rem; font-weight: 700; color: #475569; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.4px;">
+                Personal por Dependencia (Docentes, Administrativos y Obreros discriminados por Sexo)
               </div>
+              <div id="grid-personal-dependencias-estado" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 14px;">
+                <!-- JavaScript inyectará las 6 dependencias con sus Docentes M/F, Admin M/F, Obreros M/F -->
+              </div>
+            </div>
+          </div>
 
-              <div style="border-top: 1px solid #e2e8f0; padding-top: 16px;">
-                <div style="font-size: 0.85rem; font-weight: 700; color: #475569; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.4px;">Por Dependencia</div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px;">
-                  <div style="padding: 12px; background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0; text-align: center;">
-                    <div style="font-size: 0.75rem; font-weight: 700; color: #2563eb;">NACIONAL</div>
-                    <div id="stat-dep-nacional" style="font-size: 1.35rem; font-weight: 800; color: #1e293b; margin: 4px 0;">0</div>
-                    <div id="stat-dep-nacional-detalle" style="font-size: 0.72rem; color: #64748b;">Doc: 0 · Adm: 0 · Obr: 0</div>
-                  </div>
-                  <div style="padding: 12px; background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0; text-align: center;">
-                    <div style="font-size: 0.75rem; font-weight: 700; color: #059669;">ESTADAL</div>
-                    <div id="stat-dep-estadal" style="font-size: 1.35rem; font-weight: 800; color: #1e293b; margin: 4px 0;">0</div>
-                    <div id="stat-dep-estadal-detalle" style="font-size: 0.72rem; color: #64748b;">Doc: 0 · Adm: 0 · Obr: 0</div>
-                  </div>
-                  <div style="padding: 12px; background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0; text-align: center;">
-                    <div style="font-size: 0.75rem; font-weight: 700; color: #7c3aed;">MUNICIPAL</div>
-                    <div id="stat-dep-municipal" style="font-size: 1.35rem; font-weight: 800; color: #1e293b; margin: 4px 0;">0</div>
-                    <div id="stat-dep-municipal-detalle" style="font-size: 0.72rem; color: #64748b;">Doc: 0 · Adm: 0 · Obr: 0</div>
-                  </div>
-                  <div style="padding: 12px; background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0; text-align: center;">
-                    <div style="font-size: 0.75rem; font-weight: 700; color: #0284c7;">AUTONOMA</div>
-                    <div id="stat-dep-autonoma" style="font-size: 1.35rem; font-weight: 800; color: #1e293b; margin: 4px 0;">0</div>
-                    <div id="stat-dep-autonoma-detalle" style="font-size: 0.72rem; color: #64748b;">Doc: 0 · Adm: 0 · Obr: 0</div>
-                  </div>
-                  <div style="padding: 12px; background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0; text-align: center;">
-                    <div style="font-size: 0.75rem; font-weight: 700; color: #d97706;">SUBVENCIONADA</div>
-                    <div id="stat-dep-subvencionada" style="font-size: 1.35rem; font-weight: 800; color: #1e293b; margin: 4px 0;">0</div>
-                    <div id="stat-dep-subvencionada-detalle" style="font-size: 0.72rem; color: #64748b;">Doc: 0 · Adm: 0 · Obr: 0</div>
-                  </div>
-                  <div style="padding: 12px; background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0; text-align: center;">
-                    <div style="font-size: 0.75rem; font-weight: 700; color: #dc2626;">PRIVADA</div>
-                    <div id="stat-dep-privada" style="font-size: 1.35rem; font-weight: 800; color: #1e293b; margin: 4px 0;">0</div>
-                    <div id="stat-dep-privada-detalle" style="font-size: 0.72rem; color: #64748b;">Doc: 0 · Adm: 0 · Obr: 0</div>
-                  </div>
+          <!-- Spinner de carga -->
+          <div id="stat-disc-loading" class="panel-card-loading" style="min-height: 80px;">
+            <div class="panel-card-spinner"></div>
+            <span>Cargando distribución de personal...</span>
+          </div>
+
+          <!-- Contenedores de compatibilidad oculta -->
+          <div id="stat-disc-compatibilidad" style="display: none;">
+            <div id="stat-docentes">0</div>
+            <div id="stat-administrativos">0</div>
+            <div id="stat-obreros">0</div>
+            <div id="stat-disc-content"></div>
+            <div id="stat-dep-nacional">0</div>
+            <div id="stat-dep-nacional-detalle"></div>
+            <div id="stat-dep-estadal">0</div>
+            <div id="stat-dep-estadal-detalle"></div>
+            <div id="stat-dep-municipal">0</div>
+            <div id="stat-dep-municipal-detalle"></div>
+            <div id="stat-dep-autonoma">0</div>
+            <div id="stat-dep-autonoma-detalle"></div>
+            <div id="stat-dep-subvencionada">0</div>
+            <div id="stat-dep-subvencionada-detalle"></div>
+            <div id="stat-dep-privada">0</div>
+            <div id="stat-dep-privada-detalle"></div>
+          </div>
+
+          <!-- Sección: Tarjetas de Personal por Municipio -->
+          <div id="seccion-personal-municipios" style="display: none;">
+            <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+              <div>
+                <h3 style="font-size: 1.3rem; color: var(--primary-color); margin: 0 0 4px;">Personal por Municipio</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Selecciona un municipio para consultar el detalle de su personal por plantel.</p>
+              </div>
+              <div style="position: relative; min-width: 250px;">
+                <input type="text" id="inp-buscar-mun-personal" placeholder="🔍 Filtrar municipio..." style="width: 100%; height: 38px; padding: 0 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.85rem; background: white; outline: none; box-sizing: border-box;">
+              </div>
+            </div>
+
+            <div id="grid-personal-municipios" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px;">
+              <!-- Se inyectan las 23 tarjetas de municipios vía JS -->
+            </div>
+          </div>
+
+          <!-- Panel: Situación Laboral -->
+          <div id="panel-situacion-laboral-personal" class="glass-panel" style="padding: 22px 24px; margin-top: 25px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
+              <div>
+                <h3 style="margin: 0; color: #1e293b; font-size: 1.3rem; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                  <span>💼</span> Situación Laboral
+                </h3>
+                <p id="lbl-situacion-laboral-ambito" style="font-size: 0.85rem; color: #64748b; margin: 3px 0 0;">
+                  Distribución del personal según su estatus y condición administrativa activa.
+                </p>
+              </div>
+            </div>
+            <div id="stat-situacion-laboral" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; max-height: 420px; overflow-y: auto; padding-right: 4px;">
+              <div class="panel-card-loading" style="min-height: 100px; grid-column: 1 / -1;">
+                <div class="panel-card-spinner"></div>
+                <span>Cargando situación laboral...</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel: Personal por Jubilarse -->
+          <div id="panel-jubilables-personal" class="glass-panel" style="padding: 22px 24px; margin-top: 25px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+              <div>
+                <h3 style="margin: 0; color: #1e293b; font-size: 1.3rem; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                  <span>⏳</span> Personal por Jubilarse (Próximo Año)
+                </h3>
+                <p id="lbl-jubilables-ambito" style="font-size: 0.85rem; color: #64748b; margin: 3px 0 0;">
+                  Personal con 25 años de servicio acumulados a Marzo.
+                </p>
+              </div>
+              <span id="badge-total-jubilables" style="font-size: 0.82rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; background: #fef3c7; color: #b45309; border: 1px solid #fde68a;">
+                Total: en cálculo...
+              </span>
+            </div>
+            <div style="max-height: 380px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 10px;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                <thead style="background: #f8fafc; position: sticky; top: 0; z-index: 1;">
+                  <tr>
+                    <th id="th-jubilables-col1" style="padding: 10px 14px; text-align: left; border-bottom: 1px solid #cbd5e1; font-weight: 700; color: #475569;">Plantel (DEA)</th>
+                    <th style="padding: 10px 14px; text-align: center; border-bottom: 1px solid #cbd5e1; font-weight: 700; color: #475569; width: 140px;">Cantidad</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-jubilables">
+                  <tr>
+                    <td colspan="2" style="text-align: center; padding: 25px;">
+                      <div class="panel-card-loading" style="min-height: 80px;">
+                        <div class="panel-card-spinner"></div>
+                        <span>Calculando personal por jubilarse...</span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: DETALLE DE PERSONAL POR MUNICIPIO (PANTALLA LIGADA AL MUNICIPIO) -->
+        <div id="admin-tab-personal-municipio" class="admin-tab">
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; gap: 15px;">
+            <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+              <button id="btn-volver-a-municipios-personal" type="button" style="padding: 8px 14px; border-radius: 8px; border: 1px solid #cbd5e1; background: #ffffff; color: var(--text-main); font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); transition: all 0.2s ease;">
+                <span>⬅️</span> Volver a Municipios
+              </button>
+              <div>
+                <h2 id="titulo-personal-municipio-detalle" style="font-size: 1.7rem; color: var(--primary-color); margin: 0 0 3px;">Municipio</h2>
+                <p id="subtitulo-personal-municipio-detalle" style="color: var(--text-muted); margin: 0; font-size: 0.88rem;">Cargando nómina escolar...</p>
+              </div>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+              <input type="text" id="inp-buscar-plantel-personal" placeholder="🔍 Buscar por nombre o DEA..." style="height: 38px; padding: 0 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.85rem; background: white; min-width: 230px; outline: none; box-sizing: border-box;">
+              <select id="sel-filtro-dep-plantel-personal" style="height: 38px; padding: 0 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.85rem; background: white; cursor: pointer; box-sizing: border-box;">
+                <option value="TODAS">Todas las dependencias</option>
+                <option value="NACIONAL">Nacional</option>
+                <option value="ESTADAL">Estadal</option>
+                <option value="MUNICIPAL">Municipal</option>
+                <option value="AUTONOMA">Autónoma</option>
+                <option value="SUBVENCIONADA">Subvencionada</option>
+                <option value="PRIVADA">Privada</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Tarjeta resumen del municipio seleccionado -->
+          <div id="card-resumen-personal-mun-seleccionado" class="glass-panel" style="padding: 20px 24px; margin-bottom: 22px; border-left: 5px solid #2563eb;">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 14px; margin-bottom: 14px;">
+              <div>
+                <span style="font-size: 0.78rem; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px;">Resumen de Personal Municipal</span>
+                <div id="stat-mun-sel-personal-total" style="font-size: 2rem; font-weight: 800; color: #1e293b; line-height: 1.1; margin: 3px 0;">0</div>
+                <div id="stat-mun-sel-personal-avance" style="font-size: 0.82rem; color: #64748b;">Nómina activa del municipio</div>
+              </div>
+              <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <div style="padding: 10px 14px; background: rgba(37,99,235,0.06); border-radius: 10px; border: 1px solid rgba(37,99,235,0.2); text-align: center; min-width: 120px;">
+                  <div style="font-size: 0.72rem; font-weight: 700; color: #2563eb;">DOCENTES</div>
+                  <div id="stat-mun-sel-doc-total" style="font-size: 1.3rem; font-weight: 800; color: #1e293b;">0</div>
+                  <div style="font-size: 0.68rem; color: #64748b;">👦 <span id="stat-mun-sel-doc-mas">0</span> · 👧 <span id="stat-mun-sel-doc-fem">0</span></div>
+                </div>
+                <div style="padding: 10px 14px; background: rgba(245,158,11,0.06); border-radius: 10px; border: 1px solid rgba(245,158,11,0.2); text-align: center; min-width: 120px;">
+                  <div style="font-size: 0.72rem; font-weight: 700; color: #d97706;">ADMINISTRATIVOS</div>
+                  <div id="stat-mun-sel-adm-total" style="font-size: 1.3rem; font-weight: 800; color: #1e293b;">0</div>
+                  <div style="font-size: 0.68rem; color: #64748b;">👦 <span id="stat-mun-sel-adm-mas">0</span> · 👧 <span id="stat-mun-sel-adm-fem">0</span></div>
+                </div>
+                <div style="padding: 10px 14px; background: rgba(16,185,129,0.06); border-radius: 10px; border: 1px solid rgba(16,185,129,0.2); text-align: center; min-width: 120px;">
+                  <div style="font-size: 0.72rem; font-weight: 700; color: #059669;">OBREROS</div>
+                  <div id="stat-mun-sel-obr-total" style="font-size: 1.3rem; font-weight: 800; color: #1e293b;">0</div>
+                  <div style="font-size: 0.68rem; color: #64748b;">👦 <span id="stat-mun-sel-obr-mas">0</span> · 👧 <span id="stat-mun-sel-obr-fem">0</span></div>
                 </div>
               </div>
+            </div>
+
+            <!-- Desglose por dependencias en el municipio -->
+            <div id="grid-personal-dependencias-mun" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px;">
+              <!-- Se inyectan las dependencias del municipio vía JS -->
+            </div>
+          </div>
+
+          <!-- Cuadrícula de tarjetas de planteles del municipio con desglose de personal -->
+          <div id="grid-planteles-personal-mun" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px;">
+            <!-- Se inyectan las tarjetas de planteles vía JS -->
+          </div>
+
+          <!-- Barra de Contexto de Selección de Plantel (si hay uno seleccionado) -->
+          <div id="banner-contexto-seleccion-plantel" style="display: none; margin-top: 25px; padding: 12px 18px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 1.2rem;">🏫</span>
+              <div>
+                <strong id="lbl-nombre-plantel-seleccionado" style="color: #1e293b; font-size: 0.95rem;">Plantel Seleccionado</strong>
+                <span id="lbl-dea-plantel-seleccionado" style="font-size: 0.75rem; color: #64748b; font-family: monospace; background: #ffffff; padding: 2px 6px; border-radius: 4px; border: 1px solid #cbd5e1; margin-left: 6px;">DEA</span>
+              </div>
+            </div>
+            <button id="btn-limpiar-seleccion-plantel" type="button" style="padding: 6px 12px; font-size: 0.78rem; font-weight: 700; color: #2563eb; background: #ffffff; border: 1px solid #bfdbfe; border-radius: 6px; cursor: pointer; transition: all 0.2s;">
+              ✖️ Ver todo el municipio
+            </button>
+          </div>
+
+          <!-- Panel: Situación Laboral (Municipal o del Plantel Seleccionado) -->
+          <div id="panel-situacion-laboral-mun" class="glass-panel" style="padding: 22px 24px; margin-top: 25px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+              <div>
+                <h3 id="titulo-situacion-laboral-mun" style="margin: 0; color: #1e293b; font-size: 1.25rem; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                  <span>💼</span> Situación Laboral
+                </h3>
+                <p id="subtitulo-situacion-laboral-mun" style="font-size: 0.85rem; color: #64748b; margin: 3px 0 0;">
+                  Distribución según estatus y condición administrativa activa.
+                </p>
+              </div>
+              <span id="badge-total-sit-mun" style="font-size: 0.82rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe;">
+                0 funcionarios
+              </span>
+            </div>
+            <div id="stat-situacion-laboral-mun" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; max-height: 400px; overflow-y: auto; padding-right: 4px;">
+              <div class="panel-card-loading" style="min-height: 80px; grid-column: 1 / -1;">
+                <div class="panel-card-spinner"></div>
+                <span>Cargando situación laboral...</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel: Personal por Jubilarse (Municipal o del Plantel Seleccionado) -->
+          <div id="panel-jubilables-mun" class="glass-panel" style="padding: 22px 24px; margin-top: 25px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+              <div>
+                <h3 id="titulo-jubilables-mun" style="margin: 0; color: #1e293b; font-size: 1.25rem; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                  <span>⏳</span> Personal por Jubilarse (Próximo Año)
+                </h3>
+                <p id="subtitulo-jubilables-mun" style="font-size: 0.85rem; color: #64748b; margin: 3px 0 0;">
+                  Personal con 25 años o más de servicio acumulados a Marzo.
+                </p>
+              </div>
+              <span id="badge-total-jubilables-mun" style="font-size: 0.82rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; background: #fef3c7; color: #b45309; border: 1px solid #fde68a;">
+                0 por jubilarse
+              </span>
+            </div>
+            <div style="max-height: 380px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 10px;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                <thead style="background: #f8fafc; position: sticky; top: 0; z-index: 1;">
+                  <tr>
+                    <th id="th-jubilables-mun-col1" style="padding: 10px 14px; text-align: left; border-bottom: 1px solid #cbd5e1; font-weight: 700; color: #475569;">Plantel / Funcionario</th>
+                    <th id="th-jubilables-mun-col2" style="padding: 10px 14px; text-align: center; border-bottom: 1px solid #cbd5e1; font-weight: 700; color: #475569; width: 140px;">Cantidad</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-jubilables-mun">
+                  <tr>
+                    <td colspan="2" style="text-align: center; padding: 25px;">
+                      <div class="panel-card-loading" style="min-height: 80px;">
+                        <div class="panel-card-spinner"></div>
+                        <span>Calculando personal por jubilarse...</span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -2204,7 +2429,7 @@
           <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; margin-bottom: 25px; gap: 15px;">
             <div>
               <h2 style="font-size: 1.8rem; color: var(--primary-color); margin: 0 0 5px;">Estatus de Matrícula</h2>
-              <p id="admin-estatus-matricula-desc" style="color: var(--text-muted); margin: 0;">Seguimiento consolidado de carga de matrícula en el estado Mérida.</p>
+              <p id="admin-estatus-matricula-desc" style="color: var(--text-muted); margin: 0;">Seguimiento consolidado de carga escolar en el estado Mérida.</p>
             </div>
             <button id="btn-sync-matricula-mun" title="Consultar cambios recientes en el servidor"
               style="display: none; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 8px 14px; font-size: 0.85rem; color: #475569; cursor: pointer; font-weight: 600; transition: all 0.2s;">
@@ -2212,35 +2437,111 @@
             </button>
           </div>
 
-          <div class="glass-panel" style="padding: 24px;">
-            <div class="stat-group" style="display: flex; flex-direction: column;">
-
-              <div id="stat-mat-loading" class="panel-card-loading" style="min-height: 180px;">
-                <div class="panel-card-spinner"></div>
-                <span>Cargando estatus de matrícula...</span>
+          <!-- Tarjeta con Matrícula total del estado: discriminado por Masculino y Femenino -->
+          <div id="card-mat-total-estado" class="glass-panel" style="padding: 22px 24px; margin-bottom: 25px; border-left: 5px solid #ea580c;">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px;">
+              <div>
+                <span id="lbl-mat-total-ambito" style="font-size: 0.82rem; font-weight: 700; color: #ea580c; text-transform: uppercase; letter-spacing: 0.5px;">Matrícula Total del Estado</span>
+                <div id="stat-mat-total-estatal" style="font-size: 2.3rem; font-weight: 800; color: #1e293b; line-height: 1.1; margin: 4px 0;"><span style="font-size: 1.2rem; font-weight: 600; color: #64748b;">En cálculo...</span></div>
+                <div id="stat-mat-avance-estatal" style="font-size: 0.85rem; color: #64748b;">Calculando consolidado escolar...</div>
               </div>
-
-              <div id="stat-mat-content" style="display: none; flex-direction: column;">
-                <div style="display: flex; gap: 12px; text-align: center; margin-bottom: 16px;">
-                  <div
-                    style="flex: 1; padding: 14px; background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0;">
-                    <div id="stat-mat-cargada" style="font-size: 1.5rem; font-weight: 800; color: #16a34a;"><span
-                        style="font-size: 0.95rem; font-weight: 600; color: #64748b;">En cálculo...</span></div>
-                    <div style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Cargados</div>
+              <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+                <div style="padding: 14px 22px; background: rgba(37,99,235,0.06); border-radius: 12px; border: 1px solid rgba(37,99,235,0.2); text-align: center; min-width: 140px;">
+                  <div style="font-size: 0.78rem; font-weight: 700; color: #2563eb; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                    <span>👦</span> MASCULINO
                   </div>
-                  <div
-                    style="flex: 1; padding: 14px; background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0;">
-                    <div id="stat-mat-pendiente" style="font-size: 1.5rem; font-weight: 800; color: #ef4444;"><span
-                        style="font-size: 0.95rem; font-weight: 600; color: #64748b;">En cálculo...</span></div>
-                    <div style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Pendientes</div>
-                  </div>
+                  <div id="stat-mat-mas-estatal" style="font-size: 1.6rem; font-weight: 800; color: #1e293b; margin: 2px 0;">0</div>
+                  <div id="stat-mat-mas-porc" style="font-size: 0.72rem; color: #64748b; font-weight: 600;">0%</div>
                 </div>
-                <div id="stat-mat-lista"
-                  style="flex: 1; min-height: 180px; max-height: 480px; overflow-y: auto; padding-right: 5px; font-size: 0.85rem;">
-                  <!-- JavaScript inyectará la lista aquí -->
+                <div style="padding: 14px 22px; background: rgba(219,39,119,0.06); border-radius: 12px; border: 1px solid rgba(219,39,119,0.2); text-align: center; min-width: 140px;">
+                  <div style="font-size: 0.78rem; font-weight: 700; color: #db2777; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                    <span>👧</span> FEMENINO
+                  </div>
+                  <div id="stat-mat-fem-estatal" style="font-size: 1.6rem; font-weight: 800; color: #1e293b; margin: 2px 0;">0</div>
+                  <div id="stat-mat-fem-porc" style="font-size: 0.72rem; color: #64748b; font-weight: 600;">0%</div>
                 </div>
               </div>
             </div>
+          </div>
+
+          <!-- Spinner de carga -->
+          <div id="stat-mat-loading" class="panel-card-loading" style="min-height: 120px;">
+            <div class="panel-card-spinner"></div>
+            <span>Cargando estatus de matrícula...</span>
+          </div>
+
+          <!-- Contenedores de compatibilidad oculta -->
+          <div id="stat-mat-compatibilidad" style="display: none;">
+            <div id="stat-mat-cargada">0</div>
+            <div id="stat-mat-pendiente">0</div>
+            <div id="stat-mat-content"></div>
+            <div id="stat-mat-lista"></div>
+          </div>
+
+          <!-- Sección: Tarjetas de Matrícula por Municipio -->
+          <div id="seccion-matricula-municipios" style="display: none;">
+            <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+              <div>
+                <h3 style="font-size: 1.3rem; color: var(--primary-color); margin: 0 0 4px;">Matrícula por Municipio</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Selecciona un municipio para consultar el detalle de sus planteles.</p>
+              </div>
+              <div style="position: relative; min-width: 250px;">
+                <input type="text" id="inp-buscar-mun-matricula" placeholder="🔍 Filtrar municipio..." style="width: 100%; height: 38px; padding: 0 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.85rem; background: white; outline: none; box-sizing: border-box;">
+              </div>
+            </div>
+
+            <div id="grid-mat-municipios" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px;">
+              <!-- Se inyectan las 23 tarjetas de municipios vía JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: DETALLE DE MATRÍCULA POR MUNICIPIO (PANTALLA LIGADA AL MUNICIPIO) -->
+        <div id="admin-tab-matricula-municipio" class="admin-tab">
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; gap: 15px;">
+            <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+              <button id="btn-volver-a-municipios" type="button" style="padding: 8px 14px; border-radius: 8px; border: 1px solid #cbd5e1; background: #ffffff; color: var(--text-main); font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); transition: all 0.2s ease;">
+                <span>⬅️</span> Volver a Municipios
+              </button>
+              <div>
+                <h2 id="titulo-matricula-municipio-detalle" style="font-size: 1.7rem; color: var(--primary-color); margin: 0 0 3px;">Municipio</h2>
+                <p id="subtitulo-matricula-municipio-detalle" style="color: var(--text-muted); margin: 0; font-size: 0.88rem;">Cargando resumen escolar...</p>
+              </div>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+              <input type="text" id="inp-buscar-plantel-matricula" placeholder="🔍 Buscar por nombre o DEA..." style="height: 38px; padding: 0 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.85rem; background: white; min-width: 230px; outline: none; box-sizing: border-box;">
+              <select id="sel-filtro-estado-plantel-matricula" style="height: 38px; padding: 0 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.85rem; background: white; cursor: pointer; box-sizing: border-box;">
+                <option value="TODOS">Todos los planteles</option>
+                <option value="CARGADOS">Solo con matrícula</option>
+                <option value="PENDIENTES">Solo pendientes</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Tarjeta resumen del municipio seleccionado -->
+          <div id="card-resumen-mun-seleccionado" class="glass-panel" style="padding: 18px 22px; margin-bottom: 22px; border-left: 5px solid #2563eb;">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px;">
+              <div>
+                <span style="font-size: 0.78rem; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px;">Resumen Escolar Municipal</span>
+                <div id="stat-mun-sel-total" style="font-size: 2rem; font-weight: 800; color: #1e293b; line-height: 1.1; margin: 3px 0;">0</div>
+                <div id="stat-mun-sel-avance" style="font-size: 0.82rem; color: #64748b;">Planteles cargados</div>
+              </div>
+              <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <div style="padding: 10px 18px; background: rgba(37,99,235,0.06); border-radius: 10px; border: 1px solid rgba(37,99,235,0.2); text-align: center; min-width: 120px;">
+                  <div style="font-size: 0.75rem; font-weight: 700; color: #2563eb;">👦 MASCULINO</div>
+                  <div id="stat-mun-sel-mas" style="font-size: 1.4rem; font-weight: 800; color: #1e293b; margin: 2px 0;">0</div>
+                </div>
+                <div style="padding: 10px 18px; background: rgba(219,39,119,0.06); border-radius: 10px; border: 1px solid rgba(219,39,119,0.2); text-align: center; min-width: 120px;">
+                  <div style="font-size: 0.75rem; font-weight: 700; color: #db2777;">👧 FEMENINO</div>
+                  <div id="stat-mun-sel-fem" style="font-size: 1.4rem; font-weight: 800; color: #1e293b; margin: 2px 0;">0</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cuadrícula de tarjetas de planteles del municipio -->
+          <div id="grid-planteles-matricula-mun" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px;">
+            <!-- Se inyectan las tarjetas de planteles vía JS -->
           </div>
         </div>
 

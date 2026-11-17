@@ -5529,6 +5529,31 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
     - El retorno a la Pizarra se realiza instantáneamente desde cualquier pantalla pulsando el logotipo **SGH Panel** en el encabezado.
   * **Verificación:** Compilación limpia de producción con Vite (`v2.38.6`), publicación en Firebase Hosting (`https://sgh-merida.web.app`), actualización documental en `versiones.md`, `bitacora.md` y `conversaciones.md`, y respaldo en GitHub (`main`).
 
+---
+
+### Hito: Corte Oficial Cloud Firestore (17 de Noviembre), Transmisión a Google Sheets y Blindaje Zero-Cost en Producción (v2.38.7)
+- **Fecha:** 2026-11-17 ~18:10 (Hora Local Venezuela).
+- **Módulos:** Base de Datos Cloud Firestore, Google Sheets (`rac_actualizado`), Pizarra Administrativa (`webapp/src/admin.js`), Compilación Estadística (`webapp/public/resumen_estadisticas.json`, `scripts/compilar_resumen.mjs`, `scripts/sincronizar_corte_google_sheets.mjs`).
+- **Objetivo:** Ejecutar la descarga integral del 100% de la base de datos Firestore sin omisiones, realizar auditoría exhaustiva de claves físicas y canónicas, exportar los libros maestros Excel (`corte_noviembre_17.xlsx` y `corte_noviembre_17_consolidado.xlsx`), poblar las pestañas `PERSONAL` y `PLANTELES` en Google Sheets respetando el desglose de matrícula escolar, corregir la prioridad de lectura en la Pizarra y desplegar a producción bajo costo $0.00 USD.
+- **Cambios Técnicos (v2.38.7):**
+  * **Descarga y Auditoría del 100% de Firestore (`scratch/corte_oficial_firestore_*.json`, `scratch/auditoria_100_firestore.json`):**
+    - Extracción íntegra de 27,501 registros de cargos y 1,185 planteles del estado Mérida.
+    - Detección de 25,798 personas únicas (cédulas) y 1,694 trabajadores con pluricargos (2 o 3 cargos simultáneos).
+    - Mapeo de 197 claves físicas en personal y 50 en planteles, consolidando las matrices de planes de estudio y normalizando discrepancias diacríticas.
+  * **Generación de Libros Excel Institucionales (`nomina_acualizada/`):**
+    - `corte_noviembre_17.xlsx` (203.39 MB, 27,501 filas x 197 columnas en PERSONAL y 1,185 filas x 50 columnas en PLANTELES).
+    - `corte_noviembre_17_consolidado.xlsx` (77.47 MB, 27,501 filas x 59 columnas canónicas en PERSONAL_CONSOLIDADO y 1,185 filas x 26 columnas en PLANTELES_CONSOLIDADO).
+    - Preservación explícita de `matricula_total`, `matricula_masculino`, `matricula_femenino` y `matricula_desglosada_json` (árbol completo de secciones A, B, U, grados y planes 20000, 21000).
+  * **Transmisión Masiva a Google Sheets (`rac_actualizado`, ID: `1xRXGCx-oZiiFQqZB0K6VQZTYoU2bZVH-Y5yuTAPKKgU`):**
+    - Redimensionamiento preventivo de la cuadrícula mediante `batchUpdate` a 45,000 filas en `PERSONAL` y 7,000 en `PLANTELES`.
+    - Carga por lotes de 27,501 filas en `PERSONAL` (columnas A a BG) y 1,185 filas en `PLANTELES` (columnas A a AI).
+  * **Corrección de Prioridad Zero-Cost en la Pizarra (`webapp/src/admin.js`):**
+    - Se refactorizó el bloque de carga de estadísticas para consultar de forma inmediata el archivo compilado `resumen_estadisticas.json?v=` (0 lecturas a Firestore).
+    - Se incorporó comparación cronológica (`fechaLocal > fechaCloud`) para evitar que documentos obsoletos de Firestore o de la caché IndexedDB sobrescriban las cifras oficiales de la entrega.
+  * **Despliegue a Producción:**
+    - Compilación exitosa con Vite y publicación a Firebase Hosting (`https://sgh-merida.web.app`) con las cifras oficiales activas: 27,501 de personal registrado, 133,639 de matrícula escolar y 1,185 planteles validados.
+  * **Verificación:** Aprobación explícita de satisfacción del usuario, actualización de SemVer a `v2.38.7` en `package.json` e `index.html`, registro en `versiones.md`, `bitacora.md` y `conversaciones.md`, y sincronización con GitHub (`main`).
+
 
 
 

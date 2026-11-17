@@ -10581,6 +10581,29 @@ Creo que solo 2 están en el RAC.xlsx"
 > **Respuesta del Agente:**  
 > Confirmación de satisfacción recibida y cierre formal de la versión **v2.38.6**. Actualización física de versión en `webapp/package.json` e `index.html` (5 referencias), registro exhaustivo en `versiones.md`, `bitacora.md` y `conversaciones.md`, compilación final de producción con Vite, publicación en Firebase Hosting (`https://sgh-merida.web.app`) y sincronización automática en el repositorio GitHub (`main`).
 
+---
+
+## Sesión: 17 de Noviembre de 2026
+
+### Intervención: Corte Oficial Cloud Firestore, Sincronización a Google Sheets y Despliegue Zero-Cost (v2.38.7)
+
+* **Fecha / Hora:** 2026-11-17 ~18:10 (Hora Local Venezuela)
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> Sí, satisfecho
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Confirmación de satisfacción recibida y cierre formal de la versión **v2.38.7**.  
+> Se completó la extracción integral de 27,501 registros de cargos y 1,185 planteles desde Cloud Firestore con costo $0.00 USD.  
+> Se realizó la auditoría forense del 100% de los datos y se generaron los archivos maestros en `nomina_acualizada/` (`corte_noviembre_17.xlsx` de 203.39 MB y `corte_noviembre_17_consolidado.xlsx` de 77.47 MB).  
+> Se sincronizó la totalidad del conjunto de datos consolidado a Google Sheets (`rac_actualizado`, ID: `1xRXGCx-oZiiFQqZB0K6VQZTYoU2bZVH-Y5yuTAPKKgU`) en las pestañas `PERSONAL` (27,501 filas x 59 columnas) y `PLANTELES` (1,185 filas x 35 columnas), preservando íntegramente la estructura jerárquica de matrícula escolar por grados, secciones y género.  
+> Se compiló el resumen estadístico con estructura 100% compatible y se corrigió en `admin.js` el flujo de lectura de la Pizarra para dar prioridad reactiva al corte estático frente a datos obsoletos de la nube.  
+> Se ejecutó la compilación de producción y el despliegue exitoso hacia Firebase Hosting (`https://sgh-merida.web.app`), activando las cifras oficiales para todos los usuarios: 27,501 personal registrado, 133,639 de matrícula estadal y 1,185 planteles validados.  
+> Registro documental culminado en `versiones.md`, `bitacora.md` y `conversaciones.md`, con respaldo final en GitHub (`main`).
+
 
 
 
