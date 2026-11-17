@@ -240,11 +240,74 @@ let isInitialized = false;
 let db = null;
 let userData = null;
 
+// --- SANEAMIENTO HISTÓRICO: CORRECCIÓN DE EPÓNIMOS Y DATOS INSTITUCIONALES ---
+export const CORRECCIONES_EPONIMOS_EXCEL = {
+  'OD14841420': { eponimo: '24 DE JUNIO DE 1821', nominal: 'ESCUELA BOLIVARIANA 24 DE JUNIO' },
+  'S2183D1401': { eponimo: '12 DE FEBRERO DE 1814', nominal: 'U.E. 12 DE FEBRERO' },
+  'OD17241401': { eponimo: '19 DE ABRIL DE 1810', nominal: 'LICEO BOLIVARIANO 19 DE ABRIL' },
+  'OD01331406': { eponimo: '19 DE ABRIL DE 1810', nominal: 'ESCUELA 19 DE ABRIL' },
+  'OD11311405': { eponimo: '22 DE OCTUBRE DE 1818', nominal: 'E.E. LA QUEBRADA' },
+  'OD03171401': { eponimo: '1 DE MAYO', nominal: 'U.E.B. 1ERO DE MAYO' },
+  'OD02671401': { eponimo: '23 DE ENERO', nominal: 'ESCUELA BASICA 23 DE ENERO' },
+  'OD12311410': { eponimo: '23 DE ENERO DE 1958', nominal: 'C.E. 23 DE ENERO DE 1958' },
+  'OD04011401': { eponimo: '12 DE OCTUBRE', nominal: 'E.B. 12 DE OCTUBRE' },
+  'ON10031401': { eponimo: '12 DE OCTUBRE', nominal: 'E.P.E. 12 DE OCTUBRE' },
+  'OD11461406': { eponimo: '12 DE OCTUBRE', nominal: 'P.E. RURAL ESCOLAR 530' },
+  'OD17171412': { eponimo: '5 DE JULIO', nominal: 'J.I. 5 DE JULIO' },
+  'OD11451405': { eponimo: '23 DE MAYO', nominal: 'E.E. SORTIFRAN ARRIBA' },
+  'OD03621407': {
+    eponimo: 'RICARDO RAMIREZ MORENO',
+    nominal: 'ESCUELA ESTADAL EL RINCON',
+    municipio: 'CARACCIOLO PARRA',
+    parroquia: 'TUCANI',
+    dependencia: 'ESTADAL',
+    nivel: 'INICIAL - PRIMARIA'
+  }
+};
+
+export function normalizarPlantelConCorrecciones(p) {
+  if (!p) return p;
+  const dea = (p.codigos?.plantel || p.codigoDEA || p.codigo_plantel || p.id || '').trim().toUpperCase();
+  const correc = CORRECCIONES_EPONIMOS_EXCEL[dea];
+  if (correc) {
+    if (!p.municipio || p.municipio === 'N/A') p.municipio = correc.municipio;
+    if (!p.parroquia || p.parroquia === 'N/A') p.parroquia = correc.parroquia;
+    if (!p.nivel || p.nivel === 'N/A') p.nivel = correc.nivel;
+    if (!p.dependencia || p.dependencia === 'N/A') p.dependencia = correc.dependencia;
+    if (!p['nombre-plantel']) p['nombre-plantel'] = {};
+    if (!p['nombre-plantel'].nominal && correc.nominal) p['nombre-plantel'].nominal = correc.nominal;
+    if ((!p['nombre-plantel']['nuevo-eponimo'] || p['nombre-plantel']['nuevo-eponimo'] === 'SIN NOMBRE') && correc.eponimo) {
+      p['nombre-plantel']['nuevo-eponimo'] = correc.eponimo;
+      p['nombre-plantel'].nuevo_eponimo = correc.eponimo;
+    }
+    if (p.nuevo_eponimo === 'SIN NOMBRE' || !p.nuevo_eponimo) {
+      p.nuevo_eponimo = correc.eponimo;
+    }
+    if (!p.codigos) p.codigos = {};
+    if (!p.codigos.plantel) p.codigos.plantel = dea;
+  }
+  return p;
+}
+
+export function obtenerEponimoLimpioPlantel(p) {
+  if (!p) return '';
+  const dea = (p.codigos?.plantel || p.codigoDEA || p.codigo_plantel || p.id || '').trim().toUpperCase();
+  if (CORRECCIONES_EPONIMOS_EXCEL[dea]) {
+    return CORRECCIONES_EPONIMOS_EXCEL[dea].eponimo;
+  }
+  const ep = (p['nombre-plantel']?.['nuevo-eponimo'] || p['nombre-plantel']?.nuevo_eponimo || p.nuevo_eponimo || '').trim();
+  if (ep && (!isNaN(Number(ep)) || ep.startsWith('-') || /^-?\d+$/.test(ep))) {
+    return (p['nombre-plantel']?.nominal || p.denominacion || p.nombre_plantel || ep).trim();
+  }
+  return ep || (p['nombre-plantel']?.nominal || p.nombre_plantel || p.denominacion || '').trim();
+}
+
 // --- ESCUDO ZERO-COST: GESTOR DE CACHÉ DE PLANTELES MUNICIPALES ---
 export function obtenerPlantelesMunCache(mun) {
   if (!mun) return null;
   const key = mun.trim().toUpperCase();
   if (window._cachePlantelesMun && Array.isArray(window._cachePlantelesMun[key]) && window._cachePlantelesMun[key].length > 0) {
+    window._cachePlantelesMun[key].forEach(normalizarPlantelConCorrecciones);
     return window._cachePlantelesMun[key];
   }
   try {
@@ -252,6 +315,7 @@ export function obtenerPlantelesMunCache(mun) {
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) {
+        parsed.forEach(normalizarPlantelConCorrecciones);
         window._cachePlantelesMun = window._cachePlantelesMun || {};
         window._cachePlantelesMun[key] = parsed;
         return parsed;
@@ -282,6 +346,7 @@ export function limpiarPlantelesMunCache(mun) {
 
 export function obtenerPlantelesEstadalCache() {
   if (window._cachePlantelesEstadal && Array.isArray(window._cachePlantelesEstadal) && window._cachePlantelesEstadal.length > 0) {
+    window._cachePlantelesEstadal.forEach(normalizarPlantelConCorrecciones);
     return window._cachePlantelesEstadal;
   }
   try {
@@ -289,6 +354,7 @@ export function obtenerPlantelesEstadalCache() {
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) {
+        parsed.forEach(normalizarPlantelConCorrecciones);
         window._cachePlantelesEstadal = parsed;
         return parsed;
       }
@@ -310,36 +376,6 @@ export function limpiarPlantelesEstadalCache() {
   try {
     sessionStorage.removeItem('sgh_cache_planteles_ESTADAL');
   } catch (e) {}
-}
-
-// --- SANEAMIENTO HISTÓRICO: CORRECCIÓN DE EPÓNIMOS CON FECHAS SERIALES DE EXCEL ---
-export const CORRECCIONES_EPONIMOS_EXCEL = {
-  'OD14841420': { eponimo: '24 DE JUNIO DE 1821', nominal: 'ESCUELA BOLIVARIANA 24 DE JUNIO' },
-  'S2183D1401': { eponimo: '12 DE FEBRERO DE 1814', nominal: 'U.E. 12 DE FEBRERO' },
-  'OD17241401': { eponimo: '19 DE ABRIL DE 1810', nominal: 'LICEO BOLIVARIANO 19 DE ABRIL' },
-  'OD01331406': { eponimo: '19 DE ABRIL DE 1810', nominal: 'ESCUELA 19 DE ABRIL' },
-  'OD11311405': { eponimo: '22 DE OCTUBRE DE 1818', nominal: 'E.E. LA QUEBRADA' },
-  'OD03171401': { eponimo: '1 DE MAYO', nominal: 'U.E.B. 1ERO DE MAYO' },
-  'OD02671401': { eponimo: '23 DE ENERO', nominal: 'ESCUELA BASICA 23 DE ENERO' },
-  'OD12311410': { eponimo: '23 DE ENERO DE 1958', nominal: 'C.E. 23 DE ENERO DE 1958' },
-  'OD04011401': { eponimo: '12 DE OCTUBRE', nominal: 'E.B. 12 DE OCTUBRE' },
-  'ON10031401': { eponimo: '12 DE OCTUBRE', nominal: 'E.P.E. 12 DE OCTUBRE' },
-  'OD11461406': { eponimo: '12 DE OCTUBRE', nominal: 'P.E. RURAL ESCOLAR 530' },
-  'OD17171412': { eponimo: '5 DE JULIO', nominal: 'J.I. 5 DE JULIO' },
-  'OD11451405': { eponimo: '23 DE MAYO', nominal: 'E.E. SORTIFRAN ARRIBA' }
-};
-
-export function obtenerEponimoLimpioPlantel(p) {
-  if (!p) return '';
-  const dea = (p.codigos?.plantel || p.codigoDEA || p.id || '').trim().toUpperCase();
-  if (CORRECCIONES_EPONIMOS_EXCEL[dea]) {
-    return CORRECCIONES_EPONIMOS_EXCEL[dea].eponimo;
-  }
-  const ep = (p['nombre-plantel']?.['nuevo-eponimo'] || p['nombre-plantel']?.nuevo_eponimo || p.nuevo_eponimo || '').trim();
-  if (ep && (!isNaN(Number(ep)) || ep.startsWith('-') || /^-?\d+$/.test(ep))) {
-    return (p['nombre-plantel']?.nominal || p.denominacion || p.nombre_plantel || ep).trim();
-  }
-  return ep || (p['nombre-plantel']?.nominal || p.nombre_plantel || p.denominacion || '').trim();
 }
 
 // --- ESCUDO ZERO-COST: GESTOR DE CACHÉ DE MATRÍCULA ESTADAL ---
@@ -5021,6 +5057,10 @@ export function initAdminDashboard(dbInstance, user) {
   function renderPlantelesList() {
     if(!tbodyPlanteles) return;
     tbodyPlanteles.innerHTML = '';
+
+    if (Array.isArray(currentPlanteles)) {
+      currentPlanteles.forEach(normalizarPlantelConCorrecciones);
+    }
     
     const isMunAdmin = (userData?.rol === 'munadmin');
     const userMun = isMunAdmin 
@@ -7292,6 +7332,7 @@ export function initAdminDashboard(dbInstance, user) {
     if (!p && typeof currentPlanteles !== 'undefined' && Array.isArray(currentPlanteles)) {
       p = currentPlanteles.find(x => x.id === dea || x.codigos?.plantel === dea);
     }
+    if (p) normalizarPlantelConCorrecciones(p);
     
     if (!p) {
       try {
