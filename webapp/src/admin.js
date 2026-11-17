@@ -335,11 +335,11 @@ export function obtenerEponimoLimpioPlantel(p) {
   if (CORRECCIONES_EPONIMOS_EXCEL[dea]) {
     return CORRECCIONES_EPONIMOS_EXCEL[dea].eponimo;
   }
-  const ep = (p['nombre-plantel']?.['nuevo-eponimo'] || p['nombre-plantel']?.nuevo_eponimo || '').trim();
+  const ep = (p['nombre-plantel']?.['nuevo-eponimo'] || p['nombre-plantel']?.nuevo_eponimo || p.nuevo_eponimo || '').trim();
   if (ep && (!isNaN(Number(ep)) || ep.startsWith('-') || /^-?\d+$/.test(ep))) {
-    return (p['nombre-plantel']?.nominal || p.denominacion || ep).trim();
+    return (p['nombre-plantel']?.nominal || p.denominacion || p.nombre_plantel || ep).trim();
   }
-  return ep || (p['nombre-plantel']?.nominal || p.denominacion || '').trim();
+  return ep || (p['nombre-plantel']?.nominal || p.nombre_plantel || p.denominacion || '').trim();
 }
 
 // --- ESCUDO ZERO-COST: GESTOR DE CACHÉ DE MATRÍCULA ESTADAL ---
@@ -5105,7 +5105,7 @@ export function initAdminDashboard(dbInstance, user) {
 
        tr.innerHTML = `
          <td style="padding: 15px 20px;">
-           <span style="background: rgba(37,99,235,0.1); color: var(--primary-color); padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">${p.codigos?.plantel || 'N/A'}</span>
+           <span style="background: rgba(37,99,235,0.1); color: var(--primary-color); padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">${p.codigos?.plantel || p.codigoDEA || p.codigo_plantel || p.id || 'N/A'}</span>
          </td>
          <td style="padding: 15px 20px; font-weight: 600; color: var(--text-main);">
            ${textoPrincipal}${badgeDemo}
