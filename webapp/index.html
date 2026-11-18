@@ -2802,33 +2802,19 @@
                 Nuevo Plantel</button>
             </div>
           </div>
-          <div class="glass-panel" style="padding: 0; overflow-x: auto; max-height: 400px; overflow-y: auto;">
-            <table style="width: 100%; border-collapse: collapse; text-align: left;">
-              <thead>
-                <tr style="background: rgba(37, 99, 235, 0.05); border-bottom: 1px solid var(--glass-border);">
-                  <th style="padding: 15px 20px; font-weight: 600; color: var(--text-muted); font-size: 0.85rem;">CÓDIGO
-                    DEA</th>
-                  <th style="padding: 15px 20px; font-weight: 600; color: var(--text-muted); font-size: 0.85rem;">NUEVO
-                    EPÓNIMO
-                  </th>
-                  <th style="padding: 15px 20px; font-weight: 600; color: var(--text-muted); font-size: 0.85rem;">
-                    MUNICIPIO</th>
-                  <th style="padding: 15px 20px; font-weight: 600; color: var(--text-muted); font-size: 0.85rem;">
-                    PARROQUIA</th>
-                  <th style="padding: 15px 20px; font-weight: 600; color: var(--text-muted); font-size: 0.85rem;">NIVEL
-                  </th>
-                  <th
-                    style="padding: 15px 20px; font-weight: 600; color: var(--text-muted); font-size: 0.85rem; text-align: right;">
-                    ACCIONES</th>
-                </tr>
-              </thead>
-              <tbody id="tbody-planteles">
-                <tr>
-                  <td colspan="6" style="padding: 30px; text-align: center; color: var(--text-muted);">Cargando
-                    planteles...</td>
-                </tr>
-              </tbody>
-            </table>
+          <!-- Barra informativa y contador dinámico de planteles -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding: 0 4px; flex-wrap: wrap; gap: 10px;">
+            <span id="contador-planteles-badge" style="font-size: 0.85rem; font-weight: 600; color: #1e293b; background: rgba(37,99,235,0.06); padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(37,99,235,0.15); display: inline-flex; align-items: center; gap: 6px;">
+              🏫 Cargando planteles...
+            </span>
+          </div>
+
+          <!-- Contenedor Cuadrícula de Tarjetas de Planteles -->
+          <div id="grid-planteles" class="planteles-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; max-height: calc(100vh - 230px); overflow-y: auto; padding: 4px; box-sizing: border-box;">
+            <div style="grid-column: 1 / -1; padding: 40px 20px; text-align: center; color: var(--text-muted);" class="glass-panel">
+              <span style="font-size: 2rem; display: block; margin-bottom: 8px;">⏳</span>
+              <p style="margin: 0; font-weight: 500;">Cargando planteles del estado...</p>
+            </div>
           </div>
         </div>
 

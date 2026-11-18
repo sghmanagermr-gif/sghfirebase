@@ -493,7 +493,8 @@ export function initAdminDashboard(dbInstance, user) {
 
   // Declaraciones principales de estado y elementos DOM de Planteles (Evita TDZ)
   let currentPlanteles = [];
-  const tbodyPlanteles = document.getElementById('tbody-planteles');
+  const gridPlanteles = document.getElementById('grid-planteles') || document.getElementById('tbody-planteles');
+  const tbodyPlanteles = gridPlanteles;
   const inpBuscarPlantel = document.getElementById('inp-buscar-plantel');
   const selFiltroMunicipio = document.getElementById('filtro-municipio-plantel');
   const selFiltroParroquia = document.getElementById('filtro-parroquia-plantel');
@@ -4931,10 +4932,15 @@ export function initAdminDashboard(dbInstance, user) {
   }
 
   async function loadPlanteles(forzarSync = false) {
-    if(!tbodyPlanteles) return;
+    if(!gridPlanteles) return;
     try {
       if (!forzarSync && (!Array.isArray(currentPlanteles) || currentPlanteles.length === 0)) {
-        tbodyPlanteles.innerHTML = '<tr><td colspan="6" style="padding: 20px; text-align: center; color: var(--text-muted);">Cargando planteles...</td></tr>';
+        gridPlanteles.innerHTML = `
+          <div style="grid-column: 1 / -1; padding: 40px 20px; text-align: center; color: var(--text-muted);" class="glass-panel">
+            <span style="font-size: 2rem; display: block; margin-bottom: 8px;">⏳</span>
+            <p style="margin: 0; font-weight: 500;">Cargando planteles del estado...</p>
+          </div>
+        `;
       }
 
       const isMun = (userData?.rol === 'munadmin');
@@ -5048,15 +5054,20 @@ export function initAdminDashboard(dbInstance, user) {
       renderPlantelesList();
     } catch(err) {
       console.error("Error loading planteles:", err);
-      if(tbodyPlanteles) {
-        tbodyPlanteles.innerHTML = '<tr><td colspan="6" style="padding: 20px; text-align: center; color: var(--danger);">Error cargando planteles.</td></tr>';
+      if(gridPlanteles) {
+        gridPlanteles.innerHTML = `
+          <div style="grid-column: 1 / -1; padding: 40px 20px; text-align: center; color: var(--danger);" class="glass-panel">
+            <span style="font-size: 2rem; display: block; margin-bottom: 8px;">⚠️</span>
+            <p style="margin: 0; font-weight: 500;">Error cargando planteles.</p>
+          </div>
+        `;
       }
     }
   }
 
   function renderPlantelesList() {
-    if(!tbodyPlanteles) return;
-    tbodyPlanteles.innerHTML = '';
+    if(!gridPlanteles) return;
+    gridPlanteles.innerHTML = '';
 
     if (Array.isArray(currentPlanteles)) {
       currentPlanteles.forEach(normalizarPlantelConCorrecciones);
@@ -5114,55 +5125,108 @@ export function initAdminDashboard(dbInstance, user) {
       return epA.localeCompare(epB, 'es', { sensitivity: 'base' });
     });
 
+    // Actualizar indicador dinámico de conteo
+    const elContador = document.getElementById('contador-planteles-badge');
+    if (elContador) {
+      const ambitoTexto = userMun || filtroMun;
+      let labelAmbito = ambitoTexto ? `Municipio ${ambitoTexto}` : 'Todo el Estado Mérida';
+      if (filtroPar) labelAmbito += ` (Parroquia ${filtroPar})`;
+      elContador.innerHTML = `🏫 <strong>${filtered.length.toLocaleString()}</strong> planteles encontrados en <em>${labelAmbito}</em>`;
+    }
+
     if(filtered.length === 0) {
       const munTexto = userMun || filtroMun;
       const msgVacio = munTexto 
         ? `No se encontraron planteles en el municipio ${munTexto}${filtroPar ? ' (Parroquia ' + filtroPar + ')' : ''}.` 
         : 'No se encontraron planteles con los criterios seleccionados.';
-      tbodyPlanteles.innerHTML = `<tr><td colspan="6" style="padding: 20px; text-align: center; color: var(--text-muted);">${msgVacio}</td></tr>`;
+      gridPlanteles.innerHTML = `
+        <div style="grid-column: 1 / -1; padding: 40px 20px; text-align: center; color: var(--text-muted);" class="glass-panel">
+          <span style="font-size: 2rem; display: block; margin-bottom: 8px;">🔍</span>
+          <p style="margin: 0; font-size: 0.95rem; font-weight: 500;">${msgVacio}</p>
+          <span style="font-size: 0.8rem; color: #94a3b8; display: block; margin-top: 6px;">Intenta ajustar los filtros de municipio, parroquia o búsqueda.</span>
+        </div>
+      `;
       return;
     }
 
     filtered.forEach(p => {
-       const tr = document.createElement('tr');
-       tr.style.borderBottom = '1px solid var(--glass-border)';
+       const card = document.createElement('div');
+       card.className = 'plantel-card-item glass-panel';
        const eponimoVal = obtenerEponimoLimpioPlantel(p);
        const nominalVal = (p['nombre-plantel']?.nominal || '').trim();
        const textoPrincipal = eponimoVal || nominalVal || 'SIN NOMBRE';
        const isDemo = p.es_demo || p.id?.startsWith('DEMO');
-       const badgeDemo = isDemo ? `<span style="display: inline-block; margin-left: 6px; background: #fdf4ff; color: #a21caf; border: 1px solid #f0abfc; padding: 2px 6px; border-radius: 4px; font-size: 0.72rem; font-weight: bold;">🧪 Laboratorio DEMO</span>` : '';
-       const subtextoNominal = (eponimoVal && nominalVal && eponimoVal.toUpperCase() !== nominalVal.toUpperCase())
-         ? `<div style="font-size: 0.75rem; color: #64748b; font-weight: normal; margin-top: 2px;">(Nominal: ${nominalVal})</div>`
-         : '';
+       const badgeDemo = isDemo ? `<span style="background: #fdf4ff; color: #a21caf; border: 1px solid #f0abfc; padding: 2px 6px; border-radius: 4px; font-size: 0.72rem; font-weight: bold;">🧪 Demo</span>` : '';
+       
+       const subtextoNominal = (nominalVal && (!eponimoVal || eponimoVal.toUpperCase() !== nominalVal.toUpperCase()))
+         ? `<div style="font-size: 0.78rem; color: #64748b; font-weight: 500; margin-top: 2px; line-height: 1.3;">Nominal: ${nominalVal}</div>`
+         : (nominalVal ? `<div style="font-size: 0.78rem; color: #94a3b8; margin-top: 2px; line-height: 1.3;">${nominalVal}</div>` : '');
+
+       const deaVal = (p.codigos?.plantel || p.codigoDEA || p.codigo_plantel || p.id || 'N/A').trim().toUpperCase();
 
        const botonesAccionHtml = isMunAdmin
-         ? `<button class="btn-plantel-action btn-ficha-plantel" data-id="${p.id}" data-dea="${p.codigos?.plantel || p.id}" title="Ver Ficha y Expediente de Auditoría">📋 Ficha</button>`
+         ? `
+           <button class="btn-plantel-action btn-ficha-plantel" data-id="${p.id}" data-dea="${deaVal}" title="Ver Ficha y Expediente de Auditoría" style="flex: 1; padding: 8px 14px; font-size: 0.84rem; font-weight: 600; border-radius: 8px; border: 1px solid #bfdbfe; background: #eff6ff; color: #1d4ed8; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+             📋 Ficha
+           </button>
+         `
          : `
-           <button class="btn-plantel-action btn-ficha-plantel" data-id="${p.id}" data-dea="${p.codigos?.plantel || p.id}" title="Ver Ficha y Expediente de Auditoría">📋 Ficha</button>
-           <button class="btn-plantel-action btn-edit-plantel" data-id="${p.id}">✏️ Editar</button>
-           <button class="btn-plantel-action btn-del-plantel" data-id="${p.id}">🗑️ Eliminar</button>
+           <button class="btn-plantel-action btn-ficha-plantel" data-id="${p.id}" data-dea="${deaVal}" title="Ver Ficha y Expediente de Auditoría" style="flex: 1; padding: 8px 12px; font-size: 0.84rem; font-weight: 600; border-radius: 8px; border: 1px solid #bfdbfe; background: #eff6ff; color: #1d4ed8; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+             📋 Ficha
+           </button>
+           <button class="btn-plantel-action btn-edit-plantel" data-id="${p.id}" title="Editar Plantel" style="flex: 1; padding: 8px 12px; font-size: 0.84rem; font-weight: 600; border-radius: 8px; border: 1px solid #fed7aa; background: #fff7ed; color: #c2410c; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+             ✏️ Editar
+           </button>
+           <button class="btn-plantel-action btn-del-plantel" data-id="${p.id}" title="Eliminar Plantel" style="padding: 8px 12px; font-size: 0.84rem; font-weight: 600; border-radius: 8px; border: 1px solid #fecaca; background: #fef2f2; color: #b91c1c; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+             🗑️
+           </button>
          `;
 
-       tr.innerHTML = `
-         <td style="padding: 15px 20px;">
-           <span style="background: rgba(37,99,235,0.1); color: var(--primary-color); padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">${p.codigos?.plantel || p.codigoDEA || p.codigo_plantel || p.id || 'N/A'}</span>
-         </td>
-         <td style="padding: 15px 20px; font-weight: 600; color: var(--text-main);">
-           ${textoPrincipal}${badgeDemo}
+       card.innerHTML = `
+         <div>
+           <!-- Cabecera de Ficha: DEA y Dependencia / Demo -->
+           <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 8px;">
+             <span style="background: rgba(37,99,235,0.1); color: var(--primary-color); padding: 4px 10px; border-radius: 6px; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.5px;">
+               ${deaVal}
+             </span>
+             <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+               ${p.dependencia ? `<span style="background: #f1f5f9; color: #475569; padding: 3px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 600;">${p.dependencia}</span>` : ''}
+               ${badgeDemo}
+             </div>
+           </div>
+
+           <!-- Epónimo y Nominal -->
+           <h3 style="margin: 0 0 4px 0; font-size: 1rem; font-weight: 700; color: var(--text-main); line-height: 1.35;">
+             ${textoPrincipal}
+           </h3>
            ${subtextoNominal}
-         </td>
-         <td style="padding: 15px 20px; color: var(--text-muted); font-size: 0.9rem;">${p.municipio || 'N/A'}</td>
-         <td style="padding: 15px 20px; color: var(--text-muted); font-size: 0.9rem;">${p.parroquia || 'N/A'}</td>
-         <td style="padding: 15px 20px; color: var(--text-muted); font-size: 0.9rem;">${p.nivel || 'N/A'}</td>
-         <td class="plantel-actions-cell" style="display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end;">
+
+           <!-- Ubicación Geográfica y Nivel -->
+           <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(226, 232, 240, 0.8); font-size: 0.82rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 4px;">
+             <div style="display: flex; align-items: center; gap: 6px;">
+               <span style="font-size: 0.9rem;">📍</span>
+               <span style="font-weight: 500; color: #334155;">${p.municipio || 'N/A'}</span>
+               <span style="color: #cbd5e1;">•</span>
+               <span>Parroquia ${p.parroquia || 'N/A'}</span>
+             </div>
+             ${p.nivel && p.nivel !== 'N/A' ? `
+             <div style="display: flex; align-items: center; gap: 6px; color: #64748b;">
+               <span style="font-size: 0.9rem;">📚</span>
+               <span>${p.nivel}</span>
+             </div>` : ''}
+           </div>
+         </div>
+
+         <!-- Botones de Acción (los 3 botones requeridos) -->
+         <div class="plantel-actions-cell" style="display: flex; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(226, 232, 240, 0.8); align-items: center;">
            ${botonesAccionHtml}
-         </td>
+         </div>
        `;
-       tbodyPlanteles.appendChild(tr);
+       gridPlanteles.appendChild(card);
     });
 
     // Attach events
-    document.querySelectorAll('.btn-ficha-plantel').forEach(b => {
+    gridPlanteles.querySelectorAll('.btn-ficha-plantel').forEach(b => {
        b.onclick = () => {
          const id = b.getAttribute('data-id');
          const dea = b.getAttribute('data-dea') || id;
@@ -5171,7 +5235,7 @@ export function initAdminDashboard(dbInstance, user) {
        };
     });
 
-    document.querySelectorAll('.btn-edit-plantel').forEach(b => {
+    gridPlanteles.querySelectorAll('.btn-edit-plantel').forEach(b => {
        b.onclick = () => {
          const id = b.getAttribute('data-id');
          const plantel = currentPlanteles.find(x => x.id === id);
@@ -5179,7 +5243,7 @@ export function initAdminDashboard(dbInstance, user) {
        };
     });
 
-    document.querySelectorAll('.btn-del-plantel').forEach(b => {
+    gridPlanteles.querySelectorAll('.btn-del-plantel').forEach(b => {
        b.onclick = async () => {
          const id = b.getAttribute('data-id');
          const plantel = currentPlanteles.find(x => x.id === id);
@@ -5188,7 +5252,7 @@ export function initAdminDashboard(dbInstance, user) {
          if(ok) {
             try {
               b.disabled = true;
-              b.innerText = 'Borrando...';
+              b.innerText = '...';
               await deleteDoc(doc(db, "planteles", id));
               
               // Actualizar en memoria y limpiar cachés de sesión inmediatamente
@@ -5205,9 +5269,11 @@ export function initAdminDashboard(dbInstance, user) {
               poblarFiltrosGeograficosTabla();
               renderPlantelesList();
               showToast("Plantel eliminado con éxito", "success");
-            } catch(e) {
-              console.error(e);
+            } catch(delErr) {
+              console.error(delErr);
               showConfirm("Error", "Ocurrió un problema eliminando el plantel.", "danger");
+              b.disabled = false;
+              b.innerText = '🗑️';
             }
          }
        };
