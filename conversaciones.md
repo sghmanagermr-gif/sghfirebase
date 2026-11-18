@@ -10604,6 +10604,45 @@ Creo que solo 2 están en el RAC.xlsx"
 > Se ejecutó la compilación de producción y el despliegue exitoso hacia Firebase Hosting (`https://sgh-merida.web.app`), activando las cifras oficiales para todos los usuarios: 27,501 personal registrado, 133,639 de matrícula estadal y 1,185 planteles validados.  
 > Registro documental culminado en `versiones.md`, `bitacora.md` y `conversaciones.md`, con respaldo final en GitHub (`main`).
 
+---
+
+### Intervención: Saneamiento Institucional del Plantel OD03621407, Normalización en Caché y Despliegue (v2.38.8)
+
+* **Fecha / Hora:** 2026-11-17 ~20:55 (Hora Local Venezuela)
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> Perfecto dándole al botón azul de sincronizar ya no muestra el plantel S/N
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Excelente noticia. Al presionar el botón de sincronización, el navegador purgó la memoria temporal de sesión y consultó directamente el documento saneado en Cloud Firestore, desplegando de forma impecable:  
+> - Código DEA: OD03621407  
+> - Nuevo Epónimo: RICARDO RAMIREZ MORENO  
+> - Nombre Nominal: ESCUELA ESTADAL EL RINCON  
+> - Municipio: CARACCIOLO PARRA  
+> - Parroquia: TUCANI  
+> - Nivel: INICIAL - PRIMARIA  
+> Con este paso completamos con éxito el saneamiento estructural en Cloud Firestore, la actualización en el Corte Oficial de Google Sheets, el blindaje en el código fuente de la aplicación web y el despliegue en producción.  
+> ¿Los resultados fueron satisfactorios?
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> Sí satisfactorio
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Confirmación de satisfacción recibida y cierre formal de la versión **v2.38.8**.  
+> Se ejecutó la actualización física de versión a v2.38.8 en `webapp/package.json` e `webapp/index.html` (5 referencias).  
+> Se completó el registro exhaustivo en `versiones.md`, `bitacora.md` y `conversaciones.md`.  
+> Se compiló limpiamente la versión de producción con Vite y se desplegó a Firebase Hosting (`https://sgh-merida.web.app`).  
+> Se realizó la confirmación y respaldo automático de la rama `main` en el repositorio remoto GitHub mediante `git push origin main`.
+
 
 
 

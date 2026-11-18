@@ -5554,6 +5554,30 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
     - Compilación exitosa con Vite y publicación a Firebase Hosting (`https://sgh-merida.web.app`) con las cifras oficiales activas: 27,501 de personal registrado, 133,639 de matrícula escolar y 1,185 planteles validados.
   * **Verificación:** Aprobación explícita de satisfacción del usuario, actualización de SemVer a `v2.38.7` en `package.json` e `index.html`, registro en `versiones.md`, `bitacora.md` y `conversaciones.md`, y sincronización con GitHub (`main`).
 
+---
+
+### Hito: Saneamiento Institucional del Plantel OD03621407, Normalización Inmediata en Caché y Visualización de Epónimos (v2.38.8)
+- **Fecha:** 2026-11-17 ~20:55 (Hora Local Venezuela).
+- **Módulos:** Base de Datos Cloud Firestore, Google Sheets (`rac_actualizado`), Módulo de Planteles (`webapp/src/admin.js`), Interfaz Global (`webapp/index.html`, `webapp/package.json`).
+- **Objetivo:** Resolver de forma definitiva la visualización del plantel `OD03621407` (Escuela Estadal El Rincón / Ricardo Ramírez Moreno, Municipio Caracciolo Parra Olmedo, Parroquia Tucaní) reportado con epónimo "SIN NOMBRE" y valores "N/A" en municipio, parroquia y nivel, ejecutando el saneamiento integral en Firestore, Google Sheets y blindando el motor de renderizado y caché de sesión en el cliente bajo arquitectura Zero-Cost ($0.00 USD).
+- **Cambios Técnicos (v2.38.8):**
+  * **Saneamiento Transaccional en Cloud Firestore (`scripts/sanear_plantel_od03621407.mjs`):**
+    - Se constató que el documento `planteles/OD03621407` existía históricamente como un cascarón incompleto.
+    - Se ejecutó actualización vía REST API inyectando el perfil institucional completo: `nombre-plantel: { nominal: "ESCUELA ESTADAL EL RINCON", nuevo-eponimo: "RICARDO RAMIREZ MORENO" }`, `nuevo_eponimo: "RICARDO RAMIREZ MORENO"`, `denominacion: "ESCUELA"`, `dependencia: "ESTADAL"`, `codigos: { plantel: "OD03621407", dependencia: ["E"] }`, `municipio: "CARACCIOLO PARRA"`, `parroquia: "TUCANI"`, `planes-estudio: ["20000", "21000"]`, y `datos_completados: true`, obteniendo respuesta exitosa HTTP 200.
+  * **Saneamiento en Google Sheets (`rac_actualizado`, ID: `1xRXGCx-oZiiFQqZB0K6VQZTYoU2bZVH-Y5yuTAPKKgU`):**
+    - Se actualizó la fila 285 de la pestaña `PLANTELES` mediante la API de Google Sheets v4, alineando exactamente los campos institucionales canónicos para asegurar total coherencia entre la nube y la hoja maestra.
+    - Se actualizó el archivo de respaldo local `scratch/corte_oficial_firestore_planteles.json`.
+  * **Blindaje de Normalización Inmediata y Resiliencia de Caché (`webapp/src/admin.js`):**
+    - Se amplió el catálogo `CORRECCIONES_EPONIMOS_EXCEL` incorporando la entrada de `OD03621407` con sus atributos institucionales completos.
+    - Se implementó la función exportada `normalizarPlantelConCorrecciones(p)` que enriquece de inmediato cualquier plantel cuyo identificador coincida con el catálogo, evitando que fallas históricas de carga o registros incompletos degraden la interfaz.
+    - Se conectó la normalización en los puntos neurálgicos: `obtenerPlantelesEstadalCache()`, `obtenerPlantelesMunCache()`, el inicio de `renderPlantelesList()`, y `abrirFichaAuditoria()`.
+    - Se ajustó la celda CÓDIGO DEA en la tabla de planteles para evaluar en cascada `${p.codigos?.plantel || p.codigoDEA || p.codigo_plantel || p.id || 'N/A'}`.
+  * **Manejo de Caché de Sesión Zero-Cost:**
+    - Se documentó e instruyó el uso del botón `[🔄 Sincronizar]` (`#btn-refrescar-planteles`), el cual purga selectivamente la memoria temporal de sesión (`sessionStorage.removeItem('sgh_cache_planteles_ESTADAL')`) y realiza una recarga fresca desde Firestore cuando el usuario lo requiere.
+  * **Despliegue a Producción:**
+    - Compilación limpia con Vite (`v2.38.8`) y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+  * **Verificación:** Aprobación explícita de satisfacción del usuario ("Sí satisfactorio"), actualización de versión a `v2.38.8` en `package.json` e `index.html`, registro en `versiones.md`, `bitacora.md` y `conversaciones.md`, y sincronización con GitHub (`main`).
+
 
 
 

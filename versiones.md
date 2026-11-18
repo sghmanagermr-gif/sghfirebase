@@ -4,6 +4,16 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.38.8 (17 de Noviembre de 2026)
+
+- **Saneamiento Estructural de Planteles, Blindaje de Epónimos y Normalización Inmediata en Caché (`admin.js`, `index.html`, `package.json`):**
+  - **Saneamiento Integral del Plantel OD03621407 en Firestore y Google Sheets:** Identificación y corrección del caso aislado donde el plantel Escuela Estadal El Rincón / Ricardo Ramírez Moreno (Municipio Caracciolo Parra Olmedo, Parroquia Tucaní) figuraba como documento incompleto. Se actualizaron vía REST API en Cloud Firestore todos los campos institucionales (`nombre-plantel`, `nuevo_eponimo`, `denominacion`, `dependencia`, `codigos`, `municipio`, `parroquia`, `planes-estudio` y `datos_completados`) y la fila 285 en la hoja oficial `PLANTELES` de Google Sheets (`rac_actualizado`).
+  - **Blindaje Automático de Normalización en Memoria de Sesión (`admin.js`):** Implementación de la rutina de auto-enriquecimiento `normalizarPlantelConCorrecciones()` asociada al catálogo `CORRECCIONES_EPONIMOS_EXCEL`. Permite que, incluso si la memoria temporal de sesión del navegador (`sessionStorage`) contiene una versión histórica incompleta antes de sincronizar, el sistema autocomplete y presente de inmediato el nuevo epónimo, nombre nominal, municipio, parroquia, nivel y dependencia.
+  - **Corrección Defensiva de Renderizado de Código DEA en la Tabla de Planteles (`admin.js`):** Ajuste en `renderPlantelesList()` para garantizar que la columna CÓDIGO DEA evalúe en cascada `${p.codigos?.plantel || p.codigoDEA || p.codigo_plantel || p.id || 'N/A'}`, eliminando cualquier falso positivo de "N/A" en el identificador del plantel.
+  - **Sincronización Purgada Zero-Cost:** Validación del botón `[🔄 Sincronizar]` en la interfaz de planteles para purgar selectivamente la clave `sgh_cache_planteles_ESTADAL` y recuperar el documento actualizado directamente desde Firestore bajo la capa gratuita de Spark.
+
+---
+
 ### v2.38.7 (17 de Noviembre de 2026)
 
 - **Corte Oficial Cloud Firestore, Sincronización a Google Sheets y Blindaje Zero-Cost en la Pizarra (`admin.js`, `resumen_estadisticas.json`, `index.html`, `package.json`):**
