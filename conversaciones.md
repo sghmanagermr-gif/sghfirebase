@@ -10643,6 +10643,39 @@ Creo que solo 2 están en el RAC.xlsx"
 > Se compiló limpiamente la versión de producción con Vite y se desplegó a Firebase Hosting (`https://sgh-merida.web.app`).  
 > Se realizó la confirmación y respaldo automático de la rama `main` en el repositorio remoto GitHub mediante `git push origin main`.
 
+---
+
+### Intervención: Rediseño a Tarjetas de Planteles y Restricción Exclusiva a Superadmin (v2.38.9)
+
+* **Fecha / Hora:** 2026-11-17 ~21:30 (Hora Local Venezuela)
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> Sí. Observando la pantalla de planteles me gustaría Un diseño también con tarjetas. O sea, quitar la tabla que está en este momento y hacer tarjetas con los planteles. Y al momento de filtrar por municipio y por parroquia, se filtran las tarjetas correspondientes. Me parece bien que estas fichas contengan: el código DEA, el nombre de nuevo epónimo, el nombre nominal, y los tres botones de acción
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Implementación del rediseño completo de la sección de planteles: sustitución del contenedor tabular por una cuadrícula moderna de tarjetas (`.planteles-grid` y `.plantel-card-item`), fichas estilizadas con Código DEA, Nuevo Epónimo, Nombre Nominal, ubicación geográfica, nivel y los tres botones de acción (📋 Ficha, ✏️ Editar y 🗑️ Eliminar), con filtrado dinámico en tiempo real y contador de resultados. Despliegue en Firebase Hosting.  
+> ¿Los resultados fueron satisfactorios?
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> Sí satisfactorios. El botón de mantenimiento de base de datos y el botón corte oficial Google sheets solo deben ser visibles para el usuario superadmin
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Confirmación de satisfacción recibida y cierre formal de la versión **v2.38.9**.  
+> Se configuró el blindaje estricto de seguridad en `admin.js` para que las tarjetas y botones de "Mantenimiento de Base de Datos" (Aspiradora) y "Corte Oficial Google Sheets" sean visibles y ejecutables de forma exclusiva por el usuario con rol `superadmin`.  
+> Se actualizó la versión física a v2.38.9 en `webapp/package.json` e `webapp/index.html` (5 referencias).  
+> Se completó el registro en `versiones.md`, `bitacora.md` y `conversaciones.md`.  
+> Se compiló limpiamente la versión de producción con Vite y se desplegó a Firebase Hosting (`https://sgh-merida.web.app`).  
+> Se realizó la confirmación y respaldo automático de la rama `main` en GitHub (`git push origin main`).
+
 
 
 

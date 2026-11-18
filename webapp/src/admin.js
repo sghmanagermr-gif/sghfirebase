@@ -569,7 +569,7 @@ export function initAdminDashboard(dbInstance, user) {
     if (btnHeaderPizarra) btnHeaderPizarra.style.cursor = tienePermiso('estadisticas') ? 'pointer' : 'default';
     if (cardUsuarios) cardUsuarios.style.cursor = tienePermiso('validacion') ? 'pointer' : 'default';
     if (cardPlanteles) cardPlanteles.style.cursor = tienePermiso('planteles') ? 'pointer' : 'default';
-    if (cardCorteSheets) cardCorteSheets.style.display = (isSuperAdmin || isZonAdmin) ? 'flex' : 'none';
+    if (cardCorteSheets) cardCorteSheets.style.display = isSuperAdmin ? 'flex' : 'none';
     if (cardAuditorCedula) cardAuditorCedula.style.display = (isSuperAdmin || isZonAdmin || userData?.rol === 'munadmin' || tienePermiso('planteles', true)) ? 'flex' : 'none';
     const btnModoEscanerAlertas = document.getElementById('btn-modo-auditor-escaner');
     if (btnModoEscanerAlertas) {
@@ -585,7 +585,7 @@ export function initAdminDashboard(dbInstance, user) {
       }
     }
     if (cardDespliegue) cardDespliegue.style.display = tienePermiso('despliegue', false) ? 'flex' : 'none';
-    if (cardAspiradora) cardAspiradora.style.display = tienePermiso('despliegue', false) ? 'flex' : 'none';
+    if (cardAspiradora) cardAspiradora.style.display = isSuperAdmin ? 'flex' : 'none';
 
     // 2. Gestor de BD / Base de datos (Pantalla de Tarjetas) y sus opciones
     const cardPizarraBd = document.getElementById('card-pizarra-bd');
@@ -844,10 +844,14 @@ export function initAdminDashboard(dbInstance, user) {
                 return;
              }
           }
-         if ((targetId === 'admin-tab-despliegue' || targetId === 'admin-tab-aspiradora') && !p.despliegue) {
+          if (targetId === 'admin-tab-aspiradora' && !isSuperAdmin) {
+            showToast("El mantenimiento de base de datos está reservado exclusivamente para el usuario Superadmin.", "warning");
+            return;
+          }
+          if (targetId === 'admin-tab-despliegue' && !p.despliegue) {
             showToast("No tiene permisos para acceder a Despliegue.", "warning");
             return;
-         }
+          }
       }
 
       document.querySelectorAll('.sidebar-btn').forEach(b => {
@@ -1079,8 +1083,10 @@ export function initAdminDashboard(dbInstance, user) {
     cardPizarraAspiradora.addEventListener('click', () => {
       const activeUser = window.sgh_user_data || userData;
       const esSuper = activeUser?.rol === 'superadmin' || activeUser?.rol === 'admin';
-      const puedeDespliegue = esSuper || (activeUser?.rol === 'zonadmin' && activeUser?.permisos?.despliegue === true);
-      if (!puedeDespliegue) return;
+      if (!esSuper) {
+        showToast('El mantenimiento de base de datos está reservado exclusivamente para el usuario Superadmin.', 'warning');
+        return;
+      }
       document.querySelectorAll('.sidebar-btn').forEach(b => {
         if (!b.classList.contains('accordion-btn')) b.classList.remove('active');
       });
@@ -1104,9 +1110,8 @@ export function initAdminDashboard(dbInstance, user) {
     cardPizarraCorteSheets.addEventListener('click', () => {
       const activeUser = window.sgh_user_data || userData;
       const esSuper = activeUser?.rol === 'superadmin' || activeUser?.rol === 'admin';
-      const esZon = activeUser?.rol === 'zonadmin';
-      if (!esSuper && !esZon) {
-        showToast('Esta función está reservada para el Administrador del Sistema.', 'warning');
+      if (!esSuper) {
+        showToast('La sincronización del Corte Oficial está reservada exclusivamente para el usuario Superadmin.', 'warning');
         return;
       }
       if (modalCorteSheets) modalCorteSheets.style.display = 'flex';

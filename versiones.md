@@ -4,6 +4,15 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.38.9 (17 de Noviembre de 2026)
+
+- **Rediseño a Tarjetas Interactivas de Planteles y Restricción de Seguridad Exclusiva Superadmin (`index.html`, `admin.js`, `styles.css`, `package.json`):**
+  - **Cuadrícula Moderna de Tarjetas de Planteles (`index.html`, `styles.css`, `admin.js`):** Sustitución integral de la tabla plana de planteles por una cuadrícula fluida y responsiva (`.planteles-grid` y `.plantel-card-item`). Cada ficha presenta el Código DEA en cápsula distintiva, Nuevo Epónimo en título principal, Nombre Nominal histórico en subtítulo, ubicación geográfica con icono de mapa (Municipio y Parroquia), Nivel educativo y los tres botones de acción rápida: 📋 Ficha, ✏️ Editar y 🗑️ Eliminar.
+  - **Filtrado Dinámico en Tiempo Real con Contador de Fichas:** Actualización instantánea en memoria al filtrar por Municipio, Parroquia o término de búsqueda (DEA, epónimo o nominal), acompañada de un distintivo superior que refleja el número exacto de planteles encontrados en el ámbito seleccionado.
+  - **Restricción Estricta de Módulos Críticos a Rol Superadmin (`admin.js`):** Blindaje de permisos para que las tarjetas y botones de acción de **Mantenimiento de Base de Datos** (Aspiradora Inteligente) y **Corte Oficial Google Sheets** sean visibles y ejecutables de forma exclusiva por el usuario con rol `superadmin`, ocultándolos y bloqueándolos completamente para coordinadores zonales (`zonadmin`) y demás roles institucionales.
+
+---
+
 ### v2.38.8 (17 de Noviembre de 2026)
 
 - **Saneamiento Estructural de Planteles, Blindaje de Epónimos y Normalización Inmediata en Caché (`admin.js`, `index.html`, `package.json`):**

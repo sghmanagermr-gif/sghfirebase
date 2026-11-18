@@ -5578,6 +5578,27 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
     - Compilación limpia con Vite (`v2.38.8`) y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
   * **Verificación:** Aprobación explícita de satisfacción del usuario ("Sí satisfactorio"), actualización de versión a `v2.38.8` en `package.json` e `index.html`, registro en `versiones.md`, `bitacora.md` y `conversaciones.md`, y sincronización con GitHub (`main`).
 
+---
+
+### Hito: Rediseño a Tarjetas de Planteles y Restricción Exclusiva a Superadmin en Mantenimiento y Corte Oficial (v2.38.9)
+- **Fecha:** 2026-11-17 ~21:30 (Hora Local Venezuela).
+- **Módulos:** Panel Administrativo (`webapp/index.html`, `webapp/styles.css`, `webapp/src/admin.js`, `webapp/package.json`).
+- **Objetivo:** Transformar la experiencia visual del inventario de planteles migrando de la tabla rígida a una cuadrícula fluida de tarjetas interactivas (`.planteles-grid`, `.plantel-card-item`), con filtrado dinámico en cascada (Municipio, Parroquia, Buscador en memoria), y restringir el acceso y visibilidad de las tarjetas críticas "Mantenimiento de Base de Datos" y "Corte Oficial Google Sheets" exclusivamente al rol `superadmin`.
+- **Cambios Técnicos (v2.38.9):**
+  * **Cuadrícula y Tarjetas Modernas de Planteles (`webapp/index.html`, `webapp/styles.css`, `webapp/src/admin.js`):**
+    - Se reemplazó el contenedor `<table>` por `<div id="grid-planteles" class="planteles-grid">`.
+    - Cada ficha escolar renderiza de forma limpia y destacada: Código DEA en cápsula superior izquierda, dependencia y distintivo Demo, Nuevo Epónimo como encabezado principal en negrita, Nombre Nominal en subtítulo, ubicación geográfica estructurada (`📍 Municipio • Parroquia`) y Nivel educativo.
+    - Se incorporaron en la base de la tarjeta los tres botones de acción requeridos con estilos ergonómicos: `📋 Ficha` (azul suave), `✏️ Editar` (ámbar suave) y `🗑️ Eliminar` (rojo suave con confirmación y depuración inmediata en memoria y caché de sesión).
+  * **Filtrado Dinámico en Tiempo Real con Contador Superior:**
+    - Se conectó el renderizado reactivo a los selectores de Municipio y Parroquia, así como al campo de búsqueda en vivo.
+    - Se añadió el elemento `#contador-planteles-badge` que informa dinámicamente la cantidad de escuelas encontradas según la jurisdicción activa (ej. "🏫 48 planteles encontrados en Municipio CARACCIOLO PARRA (Parroquia TUCANI)").
+  * **Blindaje de Seguridad y Control RBAC Exclusivo Superadmin (`webapp/src/admin.js`):**
+    - En `configurarInterfazPorRol()`, se restringió la visibilidad de `#card-pizarra-corte-sheets` y `#card-pizarra-aspiradora` estrictamente a `isSuperAdmin` (`userData?.rol === 'superadmin' || userData?.rol === 'admin'`), ocultándolas por completo para `zonadmin` y coordinadores municipales.
+    - En los controladores de navegación directa por clic y activación de pestañas (`#admin-tab-aspiradora` y `#modal-corte-google-sheets`), se incorporó la validación estricta de rol para rechazar cualquier intento de acceso no autorizado con notificación toast institucional.
+  * **Despliegue a Producción:**
+    - Compilación limpia con Vite (`v2.38.9`) y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
+  * **Verificación:** Aprobación explícita de satisfacción del usuario, actualización de versión a `v2.38.9` en `package.json` e `index.html`, registro en `versiones.md`, `bitacora.md` y `conversaciones.md`, y sincronización con GitHub (`main`).
+
 
 
 
