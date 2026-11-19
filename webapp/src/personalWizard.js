@@ -2137,6 +2137,9 @@ async function cargarPersonalExistente(codigoDEA) {
         if (querySnapshot.empty) {
             window._personalPlantelData = [];
             tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px; color: #64748b;">No hay personal registrado en este plantel.</td></tr>';
+            if (typeof window.actualizarMetricasPizarraUsuario === 'function') {
+                window.actualizarMetricasPizarraUsuario();
+            }
             return;
         }
 
@@ -2145,49 +2148,85 @@ async function cargarPersonalExistente(codigoDEA) {
             const data = docSnap.data();
             const docId = docSnap.id;
             window._personalPlantelData.push({ ...data, _docId: docId });
+
+            const cargoRaw = (data.cargo || data['nombre-cargo'] || data['denominacion-cargo'] || data['CARGO'] || '').toString().trim().toUpperCase();
+            const cargoPlantaVal = (data['cargo-planta'] || data.cargo_planta || '').toString().trim().toUpperCase();
+            const cargoEstMunVal = (data['cargo-estructura-municipal'] || data.cargo_estructura_municipal || '').toString().trim().toUpperCase();
+            const codRacVal = (data['codigo-rac'] || data['codigo-cargo'] || '').toString().trim().toUpperCase();
+            const sitVal = (data['situacion-laboral'] || data['SITUACION LABORAL'] || 'ACTIVO').toString().trim().toUpperCase();
+
+            // Evaluación de Alto Nivel
+            const esAltoNivel = (cargoPlantaVal && cargoPlantaVal !== 'OTROS')
+                || ['210LNR', '240LNR', '140LNR', '150LNR'].includes(codRacVal)
+                || codRacVal.includes('LNR')
+                || /(JEFE|COORDINADOR|DIRECTOR|DIRECTORA|SUPERVISOR|RESPONSABLE|ENCARGADUR|ALTO NIVEL)/.test(cargoRaw);
+
             const tr = document.createElement('tr');
             tr.style.borderBottom = '1px solid #e2e8f0';
             const emailFunc = (data['correo'] || data['correo-electronico'] || data.email || data['CORREO ELECTRONICO'] || '').toString().trim().toLowerCase();
             tr.dataset.correo = emailFunc;
+            tr.dataset.docId = docId;
+            tr.dataset.cedula = data['cedula-identidad'] || data.cedula || '';
+            const nomClean = (data['nombre-apellido'] || data['apellidos-nombres'] || data.nombre || data.nombres || 'N/A').toUpperCase();
+            tr.dataset.nombre = nomClean;
+            tr.dataset.cargo = cargoRaw;
+            tr.dataset.cargoPlanta = cargoPlantaVal;
+            tr.dataset.codRac = codRacVal;
+            tr.dataset.situacion = sitVal;
+            tr.dataset.esAltoNivel = esAltoNivel ? 'true' : 'false';
 
             const tdCed = document.createElement('td');
             tdCed.style.padding = '12px';
+            tdCed.style.fontWeight = '600';
+            tdCed.style.color = '#334155';
             tdCed.textContent = data['cedula-identidad'] || data.cedula || 'N/A';
 
             const tdNom = document.createElement('td');
             tdNom.style.padding = '12px';
-            const nomClean = (data['nombre-apellido'] || data['apellidos-nombres'] || data.nombre || data.nombres || 'N/A').toUpperCase();
-            const cargoPlantaVal = (data['cargo-planta'] || data.cargo_planta || '').toString().trim().toUpperCase();
-            const cargoEstMunVal = (data['cargo-estructura-municipal'] || data.cargo_estructura_municipal || '').toString().trim().toUpperCase();
-            if (data.oficina || cargoPlantaVal || cargoEstMunVal) {
-                const nomDiv = document.createElement('div');
-                nomDiv.textContent = nomClean;
-                tdNom.appendChild(nomDiv);
-                const badgesWrap = document.createElement('div');
-                badgesWrap.style.cssText = 'display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px;';
-                if (cargoPlantaVal) {
-                    const bPlanta = document.createElement('span');
-                    const esAltoNivel = cargoPlantaVal !== 'OTROS';
-                    bPlanta.style.cssText = `font-size: 0.72rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 4px; border: 1px solid ${esAltoNivel ? '#c4b5fd' : '#cbd5e1'}; background: ${esAltoNivel ? '#f3e8ff' : '#f1f5f9'}; color: ${esAltoNivel ? '#6b21a8' : '#475569'};`;
-                    bPlanta.textContent = `🏛️ ${cargoPlantaVal}`;
-                    badgesWrap.appendChild(bPlanta);
-                }
-                if (cargoEstMunVal) {
-                    const bEstMun = document.createElement('span');
-                    bEstMun.style.cssText = 'font-size: 0.72rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 4px; border: 1px solid #99f6e4; background: #f0fdfa; color: #0f766e;';
-                    bEstMun.textContent = `🏛️ ${cargoEstMunVal}`;
-                    badgesWrap.appendChild(bEstMun);
-                }
-                if (data.oficina) {
-                    const bOfi = document.createElement('span');
-                    bOfi.style.cssText = 'font-size: 0.74rem; color: #1e40af; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; background: #eff6ff; padding: 2px 7px; border-radius: 4px; border: 1px solid #bfdbfe;';
-                    bOfi.textContent = `🏢 ${data.oficina}`;
-                    badgesWrap.appendChild(bOfi);
-                }
-                tdNom.appendChild(badgesWrap);
-            } else {
-                tdNom.textContent = nomClean;
+
+            const nomDiv = document.createElement('div');
+            nomDiv.style.fontWeight = '600';
+            nomDiv.style.color = '#0f172a';
+            nomDiv.textContent = nomClean;
+            tdNom.appendChild(nomDiv);
+
+            const badgesWrap = document.createElement('div');
+            badgesWrap.style.cssText = 'display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin-top: 4px;';
+
+            if (cargoRaw) {
+                const spCargo = document.createElement('span');
+                spCargo.style.cssText = 'font-size: 0.8rem; color: #475569; font-weight: 500;';
+                spCargo.textContent = cargoRaw;
+                badgesWrap.appendChild(spCargo);
             }
+
+            if (esAltoNivel) {
+                const bAlto = document.createElement('span');
+                bAlto.style.cssText = 'font-size: 0.72rem; font-weight: 700; display: inline-flex; align-items: center; gap: 3px; padding: 1px 7px; border-radius: 4px; border: 1px solid #c4b5fd; background: #f3e8ff; color: #6b21a8;';
+                bAlto.textContent = cargoPlantaVal ? `🏛️ ${cargoPlantaVal}` : '🏛️ ALTO NIVEL';
+                badgesWrap.appendChild(bAlto);
+            } else if (cargoPlantaVal) {
+                const bPlanta = document.createElement('span');
+                bPlanta.style.cssText = 'font-size: 0.72rem; font-weight: 600; display: inline-flex; align-items: center; gap: 3px; padding: 1px 7px; border-radius: 4px; border: 1px solid #cbd5e1; background: #f1f5f9; color: #475569;';
+                bPlanta.textContent = `🏛️ ${cargoPlantaVal}`;
+                badgesWrap.appendChild(bPlanta);
+            }
+
+            if (cargoEstMunVal) {
+                const bEstMun = document.createElement('span');
+                bEstMun.style.cssText = 'font-size: 0.72rem; font-weight: 700; display: inline-flex; align-items: center; gap: 3px; padding: 1px 7px; border-radius: 4px; border: 1px solid #99f6e4; background: #f0fdfa; color: #0f766e;';
+                bEstMun.textContent = `🏛️ ${cargoEstMunVal}`;
+                badgesWrap.appendChild(bEstMun);
+            }
+
+            if (data.oficina) {
+                const bOfi = document.createElement('span');
+                bOfi.style.cssText = 'font-size: 0.74rem; color: #1e40af; font-weight: 600; display: inline-flex; align-items: center; gap: 3px; background: #eff6ff; padding: 1px 7px; border-radius: 4px; border: 1px solid #bfdbfe;';
+                bOfi.textContent = `🏢 ${data.oficina}`;
+                badgesWrap.appendChild(bOfi);
+            }
+
+            tdNom.appendChild(badgesWrap);
 
             const tdTipo = document.createElement('td');
             tdTipo.style.padding = '12px';
@@ -2195,7 +2234,8 @@ async function cargarPersonalExistente(codigoDEA) {
 
             const tdSit = document.createElement('td');
             tdSit.style.padding = '12px';
-            tdSit.textContent = data['situacion-laboral'] || 'N/A';
+            const esActivo = sitVal.includes('ACTIVO');
+            tdSit.innerHTML = `<span style="font-size: 0.78rem; font-weight: 700; padding: 3px 8px; border-radius: 6px; display: inline-block; background: ${esActivo ? '#ecfdf5' : '#fffbeb'}; color: ${esActivo ? '#047857' : '#b45309'}; border: 1px solid ${esActivo ? '#a7f3d0' : '#fde68a'};">${sitVal}</span>`;
 
             const tdAcc = document.createElement('td');
             tdAcc.style.padding = '12px';
@@ -2251,6 +2291,13 @@ async function cargarPersonalExistente(codigoDEA) {
         window._cacheStaffSupervision = window._cacheStaffSupervision || {};
         window._cacheStaffSupervision[codigoDEA] = [...window._personalPlantelData];
 
+        if (typeof window.actualizarMetricasPizarraUsuario === 'function') {
+            window.actualizarMetricasPizarraUsuario();
+        }
+        if (typeof window.renderizarSituacionLaboralPersonal === 'function') {
+            window.renderizarSituacionLaboralPersonal();
+        }
+
     } catch (error) {
         console.error("Error cargando personal:", error);
         tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px; color: #ef4444;">Error cargando registros.</td></tr>';
@@ -2274,8 +2321,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const cedula = row.cells[0]?.textContent.toLowerCase() || '';
                 const nombre = row.cells[1]?.textContent.toLowerCase() || '';
                 const correo = (row.dataset.correo || '').toLowerCase();
+                const cargo = (row.dataset.cargo || '').toLowerCase();
+                const sit = (row.dataset.situacion || '').toLowerCase();
 
-                if (cedula.includes(searchTerm) || nombre.includes(searchTerm) || correo.includes(searchTerm)) {
+                if (cedula.includes(searchTerm) || nombre.includes(searchTerm) || correo.includes(searchTerm) || cargo.includes(searchTerm) || sit.includes(searchTerm)) {
                     row.style.display = '';
                     matchCount++;
                 } else {

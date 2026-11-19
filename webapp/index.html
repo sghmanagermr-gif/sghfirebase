@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SGH - v2.38.9</title>
+  <title>SGH - v2.38.10</title>
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
@@ -147,7 +147,7 @@
           style="width: 110px; height: 110px; border-radius: 20px; object-fit: cover; box-shadow: 0 10px 25px rgba(0,0,0,0.2); margin-bottom: 18px;" />
         <h1
           style="color: var(--primary-color); margin-bottom: 5px; display: flex; align-items: baseline; justify-content: center; gap: 8px;">
-          SGH <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">v2.38.9</span></h1>
+          SGH <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">v2.38.10</span></h1>
         <p>Sistema de Gestión Humana - Estado Mérida</p>
         <form id="login-form">
           <input type="email" id="login-email" placeholder="Correo Electrónico" required autocomplete="email" />
@@ -274,7 +274,7 @@
     <section id="dashboard-view" class="view">
       <nav class="navbar">
         <div class="nav-brand">
-          <span style="color: var(--primary-color);">SGH</span> v2.38.9
+          <span style="color: var(--primary-color);">SGH</span> v2.38.10
         </div>
         <div class="nav-user">
           <span id="user-display-name" style="font-weight: 500;">Cargando...</span>
@@ -337,7 +337,7 @@
         <img src="/sgh-logo.png" alt="SGH Logo"
           style="width: 32px; height: 32px; border-radius: 6px; object-fit: cover; box-shadow: 0 2px 6px rgba(0,0,0,0.15);" />
         <span style="color: var(--primary-color); font-weight: 700;">SGH</span> <span
-          style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">v2.38.9</span>
+          style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">v2.38.10</span>
       </div>
       <div class="nav-user" style="display: flex; gap: 10px; align-items: center;">
         <button id="btn-logout-lock" class="btn-icon"
@@ -347,7 +347,283 @@
       </div>
     </nav>
 
-    <div id="card-plantel-form" class="lock-card glass-panel" style="max-width: 1200px; width: 95%; padding: 0; margin-bottom: 40px;">
+    <!-- SUBNAV TABS PARA USUARIOS DE PLANTEL Y DESPACHO -->
+    <div id="subnav-usuario-container" style="max-width: 1200px; width: 95%; margin: 0 auto 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+      <div class="user-subnav-tabs" style="display: flex; gap: 8px; background: rgba(255,255,255,0.7); backdrop-filter: blur(8px); padding: 5px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+        <button type="button" id="tab-btn-pizarra" class="user-subnav-btn active" onclick="window.cambiarTabUsuario('pizarra')">
+          <span>📊</span> <span id="label-tab-pizarra">Mi Pizarra</span>
+        </button>
+        <button type="button" id="tab-btn-personal" class="user-subnav-btn" onclick="window.cambiarTabUsuario('personal')">
+          <span>👥</span> <span id="label-tab-personal">Nómina de Personal</span>
+        </button>
+        <button type="button" id="tab-btn-matricula" class="user-subnav-btn" onclick="window.cambiarTabUsuario('matricula')">
+          <span>🏫</span> <span>Datos y Matrícula</span>
+        </button>
+      </div>
+      <div id="subnav-badge-container" style="display: flex; align-items: center; gap: 10px;">
+        <span id="subnav-badge-rol" style="font-size: 0.78rem; font-weight: 700; background: #e0f2fe; color: #0284c7; padding: 4px 10px; border-radius: 8px; border: 1px solid #bae6fd;">
+          Acceso Institucional
+        </span>
+      </div>
+    </div>
+
+    <!-- 1. VISTA TAB: PIZARRA (ESCOLAR / DESPACHO) -->
+    <div id="view-tab-pizarra" style="width: 100%;">
+
+      <!-- PIZARRA ESCOLAR (DIRECTORES DE PLANTEL - plaadmin) -->
+      <div id="pizarra-escolar-content" style="display: none; max-width: 1200px; width: 95%; margin: 0 auto 30px;">
+        
+        <!-- Header Hero Institucional -->
+        <div class="pizarra-hero-card">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(56, 189, 248, 0.15); border: 1.5px solid rgba(56, 189, 248, 0.3); display: flex; align-items: center; justify-content: center; font-size: 1.8rem;">
+              🏫
+            </div>
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                <span id="pizarra-pla-badge-dea" style="background: #0284c7; color: white; padding: 2px 10px; border-radius: 6px; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.5px;">CÓDIGO DEA</span>
+                <span id="pizarra-pla-badge-dependencia" style="background: rgba(255,255,255,0.15); color: #e2e8f0; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600;">ESTADAL</span>
+                <span id="pizarra-pla-badge-turno" style="background: rgba(255,255,255,0.15); color: #e2e8f0; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600;">MAÑANA</span>
+              </div>
+              <h2 id="pizarra-pla-nombre" style="margin: 0; font-size: 1.35rem; font-weight: 700; color: #ffffff; letter-spacing: -0.3px;">Nombre del Plantel</h2>
+              <div id="pizarra-pla-ubicacion" style="font-size: 0.82rem; color: #94a3b8; margin-top: 2px;">📍 Municipio &mdash; Parroquia</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); color: #6ee7b7; font-size: 0.8rem; padding: 6px 12px; border-radius: 8px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+              <span style="width: 8px; height: 8px; border-radius: 50%; background: #34d399; display: inline-block;"></span> Pizarra Escolar
+            </span>
+          </div>
+        </div>
+
+        <!-- 4 Tarjetas Superiores Indicadoras (KPIs) -->
+        <div class="stats-grid" style="margin-bottom: 24px;">
+          <!-- 1. Personal Registrado -->
+          <div id="card-pizarra-pla-personal" class="stat-card glass-panel" style="cursor: pointer;" onclick="window.verNominaCompleta()" title="Ver nómina de personal del plantel">
+            <div class="stat-card-icon">👥</div>
+            <h3 class="stat-card-title">Personal Registrado</h3>
+            <span id="stat-pla-personal-num" class="stat-card-number" style="color: var(--primary-color);">0</span>
+            <p id="stat-pla-personal-desc" class="stat-card-desc">Cargando personal...</p>
+          </div>
+
+          <!-- 2. Matrícula Estadal -->
+          <div id="card-pizarra-pla-matricula" class="stat-card glass-panel" style="cursor: pointer;" onclick="window.cambiarTabUsuario('matricula')" title="Gestionar matrícula estudiantil">
+            <div class="stat-card-icon">🎓</div>
+            <h3 class="stat-card-title">Matrícula Estadal</h3>
+            <span id="stat-pla-matricula-num" class="stat-card-number" style="color: #ea580c;">0</span>
+            <p id="stat-pla-matricula-desc" class="stat-card-desc">Estudiantes atendidos</p>
+          </div>
+
+          <!-- 3. Estatus de Matrícula -->
+          <div id="card-pizarra-pla-estatus" class="stat-card glass-panel" style="cursor: pointer;" onclick="window.cambiarTabUsuario('matricula')" title="Consultar estatus de matrícula">
+            <div class="stat-card-icon">📋</div>
+            <h3 class="stat-card-title">Estatus Matrícula</h3>
+            <span id="stat-pla-estatus-num" class="stat-card-number" style="font-size: 1.35rem; color: #16a34a;">Al Día</span>
+            <p id="stat-pla-estatus-desc" class="stat-card-desc">Verificada</p>
+          </div>
+
+          <!-- 4. Secciones / Aulas -->
+          <div id="card-pizarra-pla-secciones" class="stat-card glass-panel" style="cursor: pointer;" onclick="window.cambiarTabUsuario('matricula')" title="Ver secciones y aulas configuradas">
+            <div class="stat-card-icon">🏫</div>
+            <h3 class="stat-card-title">Secciones / Aulas</h3>
+            <span id="stat-pla-secciones-num" class="stat-card-number" style="color: #0284c7;">0</span>
+            <p id="stat-pla-secciones-desc" class="stat-card-desc">Grupos activos</p>
+          </div>
+        </div>
+
+        <!-- Tarjetas de Acciones Rápidas -->
+        <div style="margin-bottom: 12px;">
+          <h3 style="font-size: 1.1rem; color: #1e293b; font-weight: 700; margin: 0 0 4px; display: flex; align-items: center; gap: 8px;">
+            <span>⚡</span> Acciones Rápidas
+          </h3>
+          <p style="font-size: 0.85rem; color: #64748b; margin: 0 0 16px;">Módulos principales del plantel educativo.</p>
+        </div>
+
+        <div class="action-cards-grid">
+          <!-- Acción 1: Gestión de Personal -->
+          <div class="action-card-pizarra" onclick="window.verNominaCompleta()">
+            <div>
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <span style="font-size: 1.5rem;">👥</span>
+                <h4 style="margin: 0; font-size: 1.05rem; color: #1e293b; font-weight: 700;">Gestión de Personal</h4>
+              </div>
+              <p style="margin: 0 0 16px; font-size: 0.85rem; color: #64748b; line-height: 1.4;">
+                Consulte la nómina completa, registre nuevos funcionarios y gestione cargos y asistencias.
+              </p>
+            </div>
+            <button type="button" class="btn-pizarra-action primary">Ver Nómina ➔</button>
+          </div>
+
+          <!-- Acción 2: Matrícula -->
+          <div class="action-card-pizarra" onclick="window.cambiarTabUsuario('matricula')">
+            <div>
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <span style="font-size: 1.5rem;">📝</span>
+                <h4 style="margin: 0; font-size: 1.05rem; color: #1e293b; font-weight: 700;">Carga de Matrícula</h4>
+              </div>
+              <p style="margin: 0 0 16px; font-size: 0.85rem; color: #64748b; line-height: 1.4;">
+                Actualice la matrícula estudiantil por grados, secciones y género, así como planes de estudio.
+              </p>
+            </div>
+            <button type="button" class="btn-pizarra-action primary">Gestionar Matrícula ➔</button>
+          </div>
+
+          <!-- Acción 3: Descargar Excel -->
+          <div class="action-card-pizarra" onclick="if(window.exportarNominaExcel) window.exportarNominaExcel();">
+            <div>
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <span style="font-size: 1.5rem;">📊</span>
+                <h4 style="margin: 0; font-size: 1.05rem; color: #1e293b; font-weight: 700;">Descargar Nómina Excel</h4>
+              </div>
+              <p style="margin: 0 0 16px; font-size: 0.85rem; color: #64748b; line-height: 1.4;">
+                Exporte la nómina oficial del plantel en formato Microsoft Excel (.xlsx) con todos sus campos.
+              </p>
+            </div>
+            <button type="button" class="btn-pizarra-action success">Descargar .xlsx 📥</button>
+          </div>
+
+          <!-- Acción 4: Ficha Institucional -->
+          <div class="action-card-pizarra" onclick="window.abrirFichaDesdePizarra();">
+            <div>
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <span style="font-size: 1.5rem;">🏫</span>
+                <h4 style="margin: 0; font-size: 1.05rem; color: #1e293b; font-weight: 700;">Ficha Institucional</h4>
+              </div>
+              <p style="margin: 0 0 16px; font-size: 0.85rem; color: #64748b; line-height: 1.4;">
+                Vea la ficha oficial con datos de DEA, código estadístico, ubicación y resumen institucional.
+              </p>
+            </div>
+            <button type="button" class="btn-pizarra-action info">Ver Ficha 📋</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- PIZARRA DE DESPACHO (SEDES ADMINISTRATIVAS / PLANTA CENTRAL - plantadmin) -->
+      <div id="pizarra-despacho-content" style="display: none; max-width: 1200px; width: 95%; margin: 0 auto 30px;">
+        
+        <!-- Header Hero Institucional -->
+        <div class="pizarra-hero-card">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(139, 92, 246, 0.2); border: 1.5px solid rgba(139, 92, 246, 0.4); display: flex; align-items: center; justify-content: center; font-size: 1.8rem;">
+              🏛️
+            </div>
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                <span id="pizarra-plant-badge-cod" style="background: #7c3aed; color: white; padding: 2px 10px; border-radius: 6px; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.5px;">SEDE CENTRAL</span>
+                <span id="pizarra-plant-badge-tipo" style="background: rgba(255,255,255,0.15); color: #e2e8f0; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600;">ADMINISTRATIVO</span>
+              </div>
+              <h2 id="pizarra-plant-nombre" style="margin: 0; font-size: 1.35rem; font-weight: 700; color: #ffffff; letter-spacing: -0.3px;">Nombre de la Sede / Despacho</h2>
+              <div id="pizarra-plant-ubicacion" style="font-size: 0.82rem; color: #94a3b8; margin-top: 2px;">📍 Sede Central &mdash; Planta Administrativa</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span style="background: rgba(139, 92, 246, 0.2); border: 1px solid rgba(139, 92, 246, 0.4); color: #d8b4fe; font-size: 0.8rem; padding: 6px 12px; border-radius: 8px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+              <span style="width: 8px; height: 8px; border-radius: 50%; background: #a855f7; display: inline-block;"></span> Pizarra de Despacho
+            </span>
+          </div>
+        </div>
+
+        <!-- 4 Tarjetas Superiores Indicadoras (KPIs) con ALTO NIVEL -->
+        <div class="stats-grid" style="margin-bottom: 24px;">
+          <!-- 1. Personal Total -->
+          <div id="card-pizarra-plant-personal" class="stat-card glass-panel" style="cursor: pointer;" onclick="window.verNominaCompleta()" title="Ver nómina completa de funcionarios del despacho">
+            <div class="stat-card-icon">👥</div>
+            <h3 class="stat-card-title">Personal del Despacho</h3>
+            <span id="stat-plant-personal-num" class="stat-card-number" style="color: var(--primary-color);">0</span>
+            <p id="stat-plant-personal-desc" class="stat-card-desc">Nómina total adscrita</p>
+          </div>
+
+          <!-- 2. CARGOS DE ALTO NIVEL (SOLICITUD EXPRESA DEL USUARIO) -->
+          <div id="card-pizarra-plant-altonivel" class="stat-card glass-panel" style="cursor: pointer; border-left: 4px solid #8b5cf6; background: linear-gradient(180deg, #ffffff 0%, #faf5ff 100%);" onclick="window.filtrarPersonalAltoNivel()" title="Ver cargos directivos y jefaturas de alto nivel">
+            <div class="stat-card-icon">🏛️</div>
+            <h3 class="stat-card-title" style="color: #6b21a8; font-weight: 700;">Cargos de Alto Nivel</h3>
+            <span id="stat-plant-altonivel-num" class="stat-card-number" style="color: #7c3aed;">0</span>
+            <p id="stat-plant-altonivel-desc" class="stat-card-desc">Directores, Jefes y Coordinadores</p>
+          </div>
+
+          <!-- 3. Personal de Apoyo -->
+          <div id="card-pizarra-plant-apoyo" class="stat-card glass-panel" style="cursor: pointer;" onclick="window.filtrarPersonalApoyo()" title="Ver personal administrativo y obrero">
+            <div class="stat-card-icon">🏢</div>
+            <h3 class="stat-card-title">Personal de Apoyo</h3>
+            <span id="stat-plant-apoyo-num" class="stat-card-number" style="color: #0d9488;">0</span>
+            <p id="stat-plant-apoyo-desc" class="stat-card-desc">Administrativos y Obreros</p>
+          </div>
+
+          <!-- 4. Situación Laboral -->
+          <div id="card-pizarra-plant-condicion" class="stat-card glass-panel" style="cursor: pointer;" onclick="window.verSituacionLaboral()" title="Consultar desglose de condición laboral">
+            <div class="stat-card-icon">💼</div>
+            <h3 class="stat-card-title">Situación Laboral</h3>
+            <span id="stat-plant-condicion-num" class="stat-card-number" style="color: #16a34a;">100%</span>
+            <p id="stat-plant-condicion-desc" class="stat-card-desc">Activos en sede</p>
+          </div>
+        </div>
+
+        <!-- Tarjetas de Acciones Rápidas para Despacho -->
+        <div style="margin-bottom: 12px;">
+          <h3 style="font-size: 1.1rem; color: #1e293b; font-weight: 700; margin: 0 0 4px; display: flex; align-items: center; gap: 8px;">
+            <span>⚡</span> Acciones Rápidas
+          </h3>
+          <p style="font-size: 0.85rem; color: #64748b; margin: 0 0 16px;">Operaciones principales de la sede administrativa.</p>
+        </div>
+
+        <div class="action-cards-grid">
+          <!-- Acción 1: Nómina del Despacho -->
+          <div class="action-card-pizarra" onclick="window.verNominaCompleta()">
+            <div>
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <span style="font-size: 1.5rem;">👥</span>
+                <h4 style="margin: 0; font-size: 1.05rem; color: #1e293b; font-weight: 700;">Nómina del Despacho</h4>
+              </div>
+              <p style="margin: 0 0 16px; font-size: 0.85rem; color: #64748b; line-height: 1.4;">
+                Consulte la lista completa de funcionarios, oficinas asignadas, cargos de planta y datos de contacto.
+              </p>
+            </div>
+            <button type="button" class="btn-pizarra-action primary">Ver Nómina ➔</button>
+          </div>
+
+          <!-- Acción 2: Nuevo Personal -->
+          <div class="action-card-pizarra" onclick="window.cambiarTabUsuario('personal'); if(window.abrirFormularioNuevoPersonal) window.abrirFormularioNuevoPersonal();">
+            <div>
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <span style="font-size: 1.5rem;">➕</span>
+                <h4 style="margin: 0; font-size: 1.05rem; color: #1e293b; font-weight: 700;">Registrar Funcionario</h4>
+              </div>
+              <p style="margin: 0 0 16px; font-size: 0.85rem; color: #64748b; line-height: 1.4;">
+                Incorpore un nuevo funcionario o directivo a la plantilla institucional de este despacho.
+              </p>
+            </div>
+            <button type="button" class="btn-pizarra-action purple">Nuevo Personal ➕</button>
+          </div>
+
+          <!-- Acción 3: Descargar Excel -->
+          <div class="action-card-pizarra" onclick="if(window.exportarNominaExcel) window.exportarNominaExcel();">
+            <div>
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <span style="font-size: 1.5rem;">📊</span>
+                <h4 style="margin: 0; font-size: 1.05rem; color: #1e293b; font-weight: 700;">Descargar Nómina Excel</h4>
+              </div>
+              <p style="margin: 0 0 16px; font-size: 0.85rem; color: #64748b; line-height: 1.4;">
+                Exporte la nómina oficial de la sede en formato Excel (.xlsx) con cargos de planta y oficinas.
+              </p>
+            </div>
+            <button type="button" class="btn-pizarra-action success">Descargar .xlsx 📥</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- 2. VISTA TAB: MATRÍCULA Y DATOS INSTITUCIONALES -->
+    <div id="view-tab-matricula" style="display: none; width: 100%;">
+      <div style="max-width: 1200px; width: 95%; margin: 0 auto 15px; display: flex; justify-content: flex-start;">
+        <button type="button" class="btn-volver-pizarra" onclick="window.cambiarTabUsuario('pizarra')">
+          <span>⬅️</span> <span>Volver a mi Pizarra</span>
+        </button>
+      </div>
+
+      <div id="card-plantel-form" class="lock-card glass-panel" style="max-width: 1200px; width: 95%; margin: 0 auto 40px; padding: 0;">
 
 
       <form id="plantel-form" style="padding: 30px; background: rgba(255,255,255,0.3);">
@@ -817,6 +1093,16 @@
         <input type="hidden" id="inp-vacantes" value="0" />
       </form>
     </div>
+    </div><!-- fin view-tab-matricula -->
+
+    <!-- 3. VISTA TAB: NÓMINA DE PERSONAL -->
+    <div id="view-tab-personal" style="display: none; width: 100%;">
+      <div style="max-width: 1200px; width: 95%; margin: 0 auto 15px; display: flex; justify-content: flex-start;">
+        <button type="button" class="btn-volver-pizarra" onclick="window.cambiarTabUsuario('pizarra')">
+          <span>⬅️</span> <span>Volver a mi Pizarra</span>
+        </button>
+      </div>
+
     <!-- SECCIÓN REGISTRO DE PERSONAL (EN LÍNEA) -->
 
     <!-- TABLA DE PERSONAL EXISTENTE -->
@@ -867,6 +1153,38 @@
           </button>
         </div>
       </div>
+
+      <!-- BANNER DE FILTRO ACTIVO -->
+      <div id="container-filtro-activo" style="display: none; align-items: center; justify-content: space-between; background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; flex-wrap: wrap; gap: 8px;">
+        <span id="texto-filtro-activo" style="font-size: 0.88rem; font-weight: 700; color: #7c3aed;">
+          🏛️ Filtrado: Cargos de Alto Nivel
+        </span>
+        <button type="button" onclick="window.limpiarFiltrosPersonal()" style="background: white; border: 1px solid #c4b5fd; color: #7c3aed; font-size: 0.82rem; font-weight: 700; padding: 5px 12px; border-radius: 6px; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+          ✕ Ver Todos los Funcionarios
+        </button>
+      </div>
+
+      <!-- PANEL SITUACIÓN LABORAL -->
+      <div id="panel-situacion-laboral-personal" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 18px; margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 1.15rem;">💼</span>
+            <span style="font-size: 0.92rem; color: #1e293b; font-weight: 700;">Distribución por Situación Laboral</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span id="badge-total-sit-personal" style="font-size: 0.78rem; font-weight: 700; background: #ffffff; color: #16a34a; padding: 3px 8px; border-radius: 6px; border: 1px solid #bbf7d0;">
+              100% Activos
+            </span>
+            <button type="button" id="btn-reset-filtro-sit" onclick="window.limpiarFiltrosPersonal()" style="display: none; background: #ffffff; color: #2563eb; border: 1px solid #bfdbfe; font-size: 0.78rem; font-weight: 600; padding: 3px 8px; border-radius: 6px; cursor: pointer;">
+              ✕ Ver Todos
+            </button>
+          </div>
+        </div>
+        <div id="grid-situacion-laboral-personal" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px;">
+          <!-- Generado dinámicamente -->
+        </div>
+      </div>
+
       <div class="table-responsive-wrapper" style="max-height: 350px; overflow-y: auto; overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid #e2e8f0; border-radius: 8px; width: 100%; max-width: 100%;">
         <table style="width: 100%; min-width: 650px; border-collapse: collapse; text-align: left;">
           <thead style="background-color: #f8fafc; position: sticky; top: 0; z-index: 1;">
@@ -1298,6 +1616,7 @@
         </div>
       </form>
     </div>
+    </div><!-- fin view-tab-personal -->
 
     <!-- BOTÓN FINAL SALIR DEL SISTEMA (ACCESO RÁPIDO TRAS COMPLETAR REGISTROS EN CELULARES Y ESCRITORIO) -->
     <div style="text-align: center; margin: 30px auto 20px; padding: 0 15px; width: 100%; max-width: 350px;">
@@ -1990,7 +2309,7 @@
             <h1
               style="color: var(--primary-color); font-size: 1.05rem; margin: 0; display: flex; align-items: center; gap: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
               SGH Panel <span id="admin-header-version-badge"
-                style="font-size: 0.72rem; font-weight: 600; color: var(--primary-color); background: rgba(37,99,235,0.1); padding: 2px 6px; border-radius: 10px;">v2.38.9</span>
+                style="font-size: 0.72rem; font-weight: 600; color: var(--primary-color); background: rgba(37,99,235,0.1); padding: 2px 6px; border-radius: 10px;">v2.38.10</span>
             </h1>
           </div>
         </div>
@@ -2016,6 +2335,38 @@
       <!-- MAIN CONTENT -->
       <main id="admin-main"
         style="flex-grow: 1; overflow-y: auto; padding: 20px; width: 100%; transition: opacity 0.3s ease;">
+
+        <!-- SUBNAV TABS PARA USUARIOS ADMINISTRATIVOS (superadmin, zonadmin, munadmin) -->
+        <div id="subnav-admin-container" style="max-width: 1400px; width: 100%; margin: 0 auto 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+          <div class="user-subnav-tabs">
+            <button type="button" id="admin-subnav-pizarra" class="user-subnav-btn active" onclick="window.cambiarAdminTab('admin-tab-estadisticas')">
+              <span>📊</span> <span>Pizarra</span>
+            </button>
+            <button type="button" id="admin-subnav-planteles" class="user-subnav-btn" onclick="window.cambiarAdminTab('admin-tab-planteles')">
+              <span>🏫</span> <span>Planteles</span>
+            </button>
+            <button type="button" id="admin-subnav-personal" class="user-subnav-btn" onclick="window.cambiarAdminTab('admin-tab-discriminacion-personal')">
+              <span>👥</span> <span>Personal</span>
+            </button>
+            <button type="button" id="admin-subnav-matricula" class="user-subnav-btn" onclick="window.cambiarAdminTab('admin-tab-estatus-matricula')">
+              <span>🎓</span> <span>Matrícula</span>
+            </button>
+            <button type="button" id="admin-subnav-usuarios" class="user-subnav-btn" onclick="window.cambiarAdminTab('admin-tab-validacion')">
+              <span>👤</span> <span>Usuarios</span>
+            </button>
+            <button type="button" id="admin-subnav-auditor" class="user-subnav-btn" onclick="window.cambiarAdminTab('admin-tab-auditor-cedula')">
+              <span>🔍</span> <span>Auditor Cédula</span>
+            </button>
+            <button type="button" id="admin-subnav-bd" class="user-subnav-btn" onclick="window.cambiarAdminTab('admin-tab-bd')">
+              <span>🗄️</span> <span>Base de Datos</span>
+            </button>
+          </div>
+          <div id="subnav-admin-badge-container" style="display: flex; align-items: center; gap: 10px;">
+            <span id="subnav-admin-badge-rol" style="font-size: 0.78rem; font-weight: 700; background: #e0f2fe; color: #0284c7; padding: 4px 10px; border-radius: 8px; border: 1px solid #bae6fd;">
+              Panel de Control
+            </span>
+          </div>
+        </div>
 
         <!-- TAB: ESTADÍSTICAS -->
         <div id="admin-tab-estadisticas" class="admin-tab active">

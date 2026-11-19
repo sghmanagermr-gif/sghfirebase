@@ -4,6 +4,24 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.38.10 (19 de Noviembre de 2026)
+
+- **Pizarras Institucionales para Usuarios de Plantel y Despacho (`plaadmin` / `plantadmin`), Barra de Pestañas Interactivas Global (`user-subnav-tabs`) y Corrección de Centrado (`index.html`, `main.js`, `admin.js`, `personalWizard.js`, `styles.css`, `package.json`):**
+  - **Pizarras Especializadas para Directores y Sedes Administrativas (`index.html`, `main.js`):**
+    - Para `plaadmin` (Planteles Educativos): Pizarra Escolar (`#pizarra-escolar-content`) con Hero Card institucional, 4 tarjetas de indicadores clave KPIs (Personal Registrado, Matrícula Estadal, Estatus de Matrícula y Secciones/Aulas activas) y 4 tarjetas de acciones rápidas (Nómina de Personal, Carga de Matrícula, Descargar Excel y Ficha Institucional).
+    - Para `plantadmin` (Sedes Administrativas / Despachos): Pizarra de Despacho (`#pizarra-despacho-content`) con Hero Card institucional, 4 tarjetas de indicadores clave KPIs (Personal del Despacho, Cargos de Alto Nivel con distintivo en morado, Personal de Apoyo y Situación Laboral %) y 3 tarjetas de acciones rápidas (Nómina del Despacho, Registrar Funcionario y Descargar Excel).
+  - **Barra de Navegación por Pestañas Interactivas (`.user-subnav-tabs`, `.user-subnav-btn`):**
+    - Implementación de la barra superior con estilo pastilla moderno y fondo translúcido (`backdrop-filter: blur(8px)`), desplazamiento suave al hacer clic y distintivo de rol contextual a la derecha.
+    - Integración transversal en el Panel Administrativo para todos los roles de gestión (`superadmin`, `zonadmin` y `munadmin`) con pestañas directas: Pizarra, Planteles, Personal, Matrícula, Usuarios, Auditor Cédula y Base de Datos, con sincronización bidireccional entre clics en tarjetas de métricas y la barra de navegación.
+  - **Módulo de Distribución por Situación Laboral y Filtros de Personal (`personalWizard.js`, `main.js`):**
+    - Creación del panel interactivo `#panel-situacion-laboral-personal` con porcentaje global de activos y fichas interactivas por cada condición laboral (Activo, Reposo, Permiso, Jubilado) que filtran la nómina con un solo clic.
+    - Detección precisa de cargos de Alto Nivel mediante evaluación integral de código RAC (150LNR, etc.), cargo de planta y cargos directivos institucionales.
+    - Restauración inmediata de todos los funcionarios al cambiar de pestaña o pulsar "Ver Todos".
+  - **Corrección de Centrado Horizontal en Datos y Matrícula (`index.html`):**
+    - Asignación de márgenes horizontales automáticos (`margin: 0 auto 40px;`) al contenedor principal `#card-plantel-form`, garantizando un alineamiento simétrico y centrado en pantallas de alta resolución.
+
+---
+
 ### v2.38.9 (17 de Noviembre de 2026)
 
 - **Rediseño a Tarjetas Interactivas de Planteles y Restricción de Seguridad Exclusiva Superadmin (`index.html`, `admin.js`, `styles.css`, `package.json`):**

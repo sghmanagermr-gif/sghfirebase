@@ -10688,6 +10688,114 @@ Creo que solo 2 están en el RAC.xlsx"
 > **Respuesta del Agente:**  
 > Confirmación de satisfacción total recibida. La versión **v2.38.9** queda plenamente ratificada y operativa en producción con el rediseño a tarjetas de planteles y las restricciones de seguridad exclusivas para Superadmin, debidamente respaldada en el repositorio remoto GitHub.
 
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> Me gustaría que los usuarios: plantaadmin y plaadmin tengan tengan una pizarra. ¿Qué me recomiendas?
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se propuso el diseño arquitectónico de dos pizarras analíticas especializadas adaptadas a la naturaleza de cada rol:
+> 1. Para directores de planteles educativos (plaadmin): Una Pizarra Escolar con Hero Card institucional, 4 tarjetas de indicadores clave (Personal Registrado con desglose de docentes/administrativos/obreros, Matrícula Estadal con discriminación por género, Estatus de Matrícula y Secciones/Aulas activas) y 4 tarjetas de acciones rápidas (Nómina de Personal, Carga de Matrícula, Descargar Excel y Ficha Institucional).
+> 2. Para sedes administrativas y despachos centrales (plantadmin): Una Pizarra de Despacho enfocada en la gestión de planta central, con Hero Card institucional, 4 tarjetas de indicadores (Personal del Despacho, Cargos de Alto Nivel, Personal de Apoyo y Situación Laboral %) y 3 tarjetas de acciones rápidas (Nómina del Despacho, Registrar Funcionario y Descargar Excel).
+> Adicionalmente, se recomendó implementar una barra de navegación superior con pestañas interactivas tipo pastilla (Mi Pizarra, Nómina de Personal / Nómina del Despacho, Datos y Matrícula) y botón de retorno a la pizarra.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> Para la pizarra de Despacho, En las tarjetas superior, agrega una tarjeta para los cargos de Alto Nivel
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se aprobó e integró la tarjeta destacada de Cargos de Alto Nivel con acento visual en morado institucional, icono de edificio gubernamental (🏛️) y conteo dinámico para directores, jefes y coordinadores, estructurando la cuadrícula de 4 KPIs para el Despacho: Personal del Despacho, Cargos de Alto Nivel, Personal de Apoyo y Situación Laboral.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> Me parece bien. Procede. Pero primero solo para ver en local
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se implementaron las dos Pizarras institucionales en local (sin desplegar a producción):
+> - Pizarra Escolar para plaadmin y Pizarra de Despacho para plantadmin en index.html.
+> - Barra de pestañas interactivas (user-subnav-tabs) y botones de navegación.
+> - Estilos en styles.css (.user-subnav-btn, .btn-volver-pizarra, .pizarra-hero-card, .action-cards-grid, etc.).
+> - Lógica reactiva de cálculo en memoria en main.js y personalWizard.js.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> Muy bonita la presentación, pero hay que ajustar unos detalles importantes
+> - La pizarra principal está muy bien 0001.png
+> - Al dar clic en la tarjeta Personal de despacho, aparece sin personal Captura.png
+> - Al dar clic en la tarjeta Cargo de Alto Nivel, Aparece sin personal Captura0001.png
+> - Al dar clic en la tarjeta Situación Laboral, aparece sin datos. Ya tienes la experiencia de Situación Laboral en otras pantallas.
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se diagnosticó y corrigió la causa raíz de las tres incidencias:
+> 1. Detección de Alto Nivel: El cargo de la autoridad de la Dirección de Zona figuraba con código RAC 150LNR y denominación DIRECTOR DE ZONA EDUC. El filtro anterior evaluaba el nombre de la persona en lugar del cargo y código RAC, ocultando todas las filas con display: none. Se enriqueció la evaluación para considerar RAC (150LNR, etc.), cargo de planta y cargos directivos, asignando el distintivo ALTO NIVEL.
+> 2. Restauración de filas: Se conectó limpiarFiltrosPersonal() y verNominaCompleta() para que al pulsar Personal de despacho o cambiar de pestaña se muestren de inmediato todos los funcionarios.
+> 3. Situación Laboral interactiva: Se incorporó el panel superior de Situación Laboral con porcentaje de activos y tarjetas interactivas por cada condición laboral (Activo, Reposo, Permiso, Jubilado) con filtrado instantáneo.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> Un último detalle para confirmate la pregunta.
+> - En la pantalla de plaadmin al dar clic en la tarjeta Matrícula Estadal o Cargar Matrícula o en el boton de la tardeta Cargar Matricula Gestionar Matrícula el módulo aparece recargado a la izquierda, como lo ves en la imagen
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se identificó que el contenedor principal del formulario institucional y matrícula (card-plantel-form) tenía asignado un ancho máximo de 1200px pero carecía de márgenes laterales automáticos (margin: 0 auto). Al verse en monitores anchos (1920x1080), se alineaba a la izquierda. Se le asignó el centrado institucional uniforme (margin: 0 auto 40px), quedando perfectamente simétrico y centrado.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> Ese elemento class="user-subnav-tabs" con los botones que diseñaste para los usuarios plantaadmin y plaadmin me gustó, ¿puedes integrarlo tambien para los demas usuarios?
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Se integró de forma transversal la barra de navegación con pestañas interactivas (user-subnav-tabs) para todos los roles administrativos (superadmin, zonadmin y munadmin) en el Panel Administrativo:
+> - Pestañas directas: Pizarra, Planteles, Personal, Matrícula, Usuarios, Auditor Cédula y Base de Datos (protegida por permisos).
+> - Distintivo contextual de rol: 👑 Súper Administrador (morado), 🏛️ Zona Educativa Mérida (azul) y 📍 Coordinación Municipal con nombre del municipio (verde).
+> - Navegación directa con un solo clic entre cualquier módulo sin tener que regresar a la Pizarra previa, con sincronización bidireccional automática.
+> - Desplazamiento horizontal táctil suave para dispositivos móviles y tabletas.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> Sí satisfactorios. despliega en firebase por favor
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Confirmación de satisfacción recibida y cierre formal de la versión **v2.38.10**.  
+> Se incrementó la versión física a v2.38.10 en package.json e index.html.  
+> Se actualizó la bitácora técnica institucional (bitacora.md), el historial cronológico de versiones (versiones.md) y el registro íntegro de conversaciones (conversaciones.md).  
+> Se compiló la versión de producción con Vite y se desplegó exitosamente a Firebase Hosting (https://sgh-merida.web.app).  
+> Se realizó el commit y respaldo automático de la rama main en el repositorio remoto GitHub.
+
+
 
 
 

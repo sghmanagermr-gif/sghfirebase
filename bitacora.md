@@ -5599,6 +5599,32 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
     - Compilación limpia con Vite (`v2.38.9`) y despliegue a Firebase Hosting (`https://sgh-merida.web.app`).
   * **Verificación:** Aprobación explícita de satisfacción del usuario, actualización de versión a `v2.38.9` en `package.json` e `index.html`, registro en `versiones.md`, `bitacora.md` y `conversaciones.md`, y sincronización con GitHub (`main`).
 
+---
+
+### Hito: Pizarras Especializadas para Planteles y Despacho (`plaadmin`/`plantadmin`), Subnav de Pestañas Global (`user-subnav-tabs`) y Blindaje Visual (v2.38.10)
+- **Fecha:** 2026-11-19 ~06:45 (Hora Local Venezuela).
+- **Módulos:** Arquitectura de Interfaz y Vistas (`webapp/index.html`, `webapp/styles.css`, `webapp/src/main.js`, `webapp/src/admin.js`, `webapp/src/personalWizard.js`, `webapp/package.json`).
+- **Objetivo:** Dotar a los directores de planteles educativos (`plaadmin`) y directivos de sedes administrativas / despacho central (`plantadmin`) de tableros analíticos especializados (Pizarra Escolar y Pizarra de Despacho) con tarjetas KPI y acciones rápidas, incorporar la barra superior de pestañas interactivas tipo pastilla (`.user-subnav-tabs`) tanto en las pantallas de usuario como transversalmente en el Panel Administrativo (`superadmin`, `zonadmin`, `munadmin`), implementar el desglose interactivo de Situación Laboral y corregir el centrado horizontal en el formulario de matrícula institucional.
+- **Cambios Técnicos (v2.38.10):**
+  * **Pizarra Escolar y Pizarra de Despacho (`webapp/index.html`, `webapp/src/main.js`):**
+    - Se diseñó `#pizarra-escolar-content` para planteles con Hero Card institucional, 4 tarjetas de indicadores clave (Personal Registrado con desglose de Docentes/Administrativos/Obreros, Matrícula Estadal con discriminación por sexo, Estatus de Matrícula y Secciones/Aulas activas) y 4 tarjetas de acceso rápido (Nómina de Personal, Carga de Matrícula, Descargar Excel y Ficha Institucional).
+    - Se diseñó `#pizarra-despacho-content` para despachos centrales con Hero Card institucional, 4 tarjetas KPI (Personal del Despacho, Cargos de Alto Nivel con acento en morado, Personal de Apoyo y Situación Laboral con porcentaje de servicio) y 3 tarjetas de acceso rápido (Nómina del Despacho, Registrar Funcionario y Descargar Excel).
+    - Función reactiva `window.actualizarMetricasPizarraUsuario()` que computa en memoria las estadísticas en tiempo real sin lecturas adicionales a Firestore (Zero-Cost).
+  * **Subnav de Pestañas Interactivas (`.user-subnav-tabs`, `.user-subnav-btn`, `styles.css`):**
+    - Componente de pestañas con fondo translúcido (`backdrop-filter: blur(8px)`), bordes redondeados y estilo pastilla moderno activo en azul institucional.
+    - Barra `#subnav-usuario-container` para directores y despachos con botón ergonómico de retorno `[⬅️ Volver a mi Pizarra]`.
+    - Barra `#subnav-admin-container` integrada en la parte superior del Panel Administrativo para `superadmin`, `zonadmin` y `munadmin`, permitiendo el salto directo con un solo clic entre Pizarra, Planteles, Personal, Matrícula, Usuarios, Auditor Cédula y Base de Datos, con sincronización bidireccional entre las tarjetas de la Pizarra y la barra superior mediante `actualizarAdminSubnavActivo()`.
+  * **Distribución Interactiva de Situación Laboral y Detección de Alto Nivel (`webapp/src/personalWizard.js`, `webapp/src/main.js`):**
+    - Inclusión del contenedor `#panel-situacion-laboral-personal` sobre la tabla de personal, renderizando el porcentaje global de activos y tarjetas interactivas por cada situación (Activo, Reposo, Permiso, Jubilado) que filtran la nómina al hacer clic.
+    - Algoritmo de detección de Alto Nivel en `personalWizard.js` y `main.js` combinando código RAC (150LNR, 210LNR, 240LNR, 140LNR o series LNR), cargo de planta y cargos directivos (Director, Jefe, Coordinador, Supervisor, Responsable), mostrando el distintivo morado `ALTO NIVEL`.
+    - Función `limpiarFiltrosPersonal()` y `verNominaCompleta()` que aseguran la restauración inmediata de todas las filas en la tabla al cambiar de pestaña.
+  * **Corrección de Centrado Horizontal en Datos y Matrícula (`webapp/index.html`):**
+    - Se asignaron márgenes laterales automáticos (`margin: 0 auto 40px;`) al contenedor principal `#card-plantel-form`, garantizando un centrado simétrico en monitores de alta resolución (1920x1080).
+  * **Despliegue a Producción:**
+    - Compilación limpia con Vite (`v2.38.10`) y despliegue exitoso a Firebase Hosting (`https://sgh-merida.web.app`).
+  * **Verificación:** Aprobación explícita de satisfacción del usuario ("Sí satisfactorios"), incremento a versión `v2.38.10` en `package.json` e `index.html`, documentación en `versiones.md`, `bitacora.md` y `conversaciones.md`, y sincronización con GitHub (`main`).
+
+
 
 
 

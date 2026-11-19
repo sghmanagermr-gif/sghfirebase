@@ -717,6 +717,43 @@ export function initAdminDashboard(dbInstance, user) {
       }
     }
 
+    // 3.1 Subnav Superior Institucional para Usuarios Administrativos (superadmin, zonadmin, munadmin)
+    const badgeSubnav = document.getElementById('subnav-admin-badge-rol');
+    const btnSubnavPizarra = document.getElementById('admin-subnav-pizarra');
+    const btnSubnavPlanteles = document.getElementById('admin-subnav-planteles');
+    const btnSubnavPersonal = document.getElementById('admin-subnav-personal');
+    const btnSubnavMatricula = document.getElementById('admin-subnav-matricula');
+    const btnSubnavUsuarios = document.getElementById('admin-subnav-usuarios');
+    const btnSubnavAuditor = document.getElementById('admin-subnav-auditor');
+    const btnSubnavBd = document.getElementById('admin-subnav-bd');
+
+    if (badgeSubnav) {
+      if (isSuperAdmin) {
+        badgeSubnav.textContent = '👑 Súper Administrador';
+        badgeSubnav.style.background = '#fdf4ff';
+        badgeSubnav.style.color = '#9333ea';
+        badgeSubnav.style.borderColor = '#f0abfc';
+      } else if (isZonAdmin) {
+        badgeSubnav.textContent = '🏛️ Zona Educativa Mérida';
+        badgeSubnav.style.background = '#eff6ff';
+        badgeSubnav.style.color = '#1d4ed8';
+        badgeSubnav.style.borderColor = '#bfdbfe';
+      } else if (isMunAdmin) {
+        badgeSubnav.textContent = `📍 Coordinación: ${mun || 'Municipal'}`;
+        badgeSubnav.style.background = '#f0fdf4';
+        badgeSubnav.style.color = '#166534';
+        badgeSubnav.style.borderColor = '#bbf7d0';
+      }
+    }
+
+    if (btnSubnavPizarra) btnSubnavPizarra.style.display = tienePermiso('estadisticas') ? 'inline-flex' : 'none';
+    if (btnSubnavPlanteles) btnSubnavPlanteles.style.display = tienePermiso('planteles') ? 'inline-flex' : 'none';
+    if (btnSubnavPersonal) btnSubnavPersonal.style.display = tienePermiso('estadisticas') ? 'inline-flex' : 'none';
+    if (btnSubnavMatricula) btnSubnavMatricula.style.display = tienePermiso('estadisticas') ? 'inline-flex' : 'none';
+    if (btnSubnavUsuarios) btnSubnavUsuarios.style.display = tienePermiso('validacion') ? 'inline-flex' : 'none';
+    if (btnSubnavAuditor) btnSubnavAuditor.style.display = (isSuperAdmin || isZonAdmin || isMunAdmin || tienePermiso('planteles', true)) ? 'inline-flex' : 'none';
+    if (btnSubnavBd) btnSubnavBd.style.display = (isSuperAdmin || (isZonAdmin && algunSubItemVisible)) ? 'inline-flex' : 'none';
+
     // 4. Determinar la primera pestaña activa permitida
     document.querySelectorAll('.sidebar-btn').forEach(b => {
       if (!b.classList.contains('accordion-btn')) b.classList.remove('active');
@@ -747,7 +784,91 @@ export function initAdminDashboard(dbInstance, user) {
         if (tabEl) tabEl.classList.add('active');
       }
     }
+
+    const activeTabInicial = document.querySelector('.admin-tab.active');
+    if (activeTabInicial) {
+      actualizarAdminSubnavActivo(activeTabInicial.id);
+    }
   }
+
+  function actualizarAdminSubnavActivo(targetTabId) {
+    const container = document.getElementById('subnav-admin-container');
+    if (!container) return;
+
+    const btns = container.querySelectorAll('.user-subnav-btn');
+    btns.forEach(b => b.classList.remove('active'));
+
+    let activeBtnId = null;
+    if (targetTabId === 'admin-tab-estadisticas') {
+      activeBtnId = 'admin-subnav-pizarra';
+    } else if (targetTabId === 'admin-tab-planteles') {
+      activeBtnId = 'admin-subnav-planteles';
+    } else if (targetTabId === 'admin-tab-discriminacion-personal' || targetTabId === 'admin-tab-personal-municipio') {
+      activeBtnId = 'admin-subnav-personal';
+    } else if (targetTabId === 'admin-tab-estatus-matricula' || targetTabId === 'admin-tab-matricula-municipio') {
+      activeBtnId = 'admin-subnav-matricula';
+    } else if (targetTabId === 'admin-tab-validacion') {
+      activeBtnId = 'admin-subnav-usuarios';
+    } else if (targetTabId === 'admin-tab-auditor-cedula') {
+      activeBtnId = 'admin-subnav-auditor';
+    } else if (['admin-tab-bd', 'admin-tab-planes', 'admin-tab-listas', 'admin-tab-aspiradora', 'admin-tab-despliegue'].includes(targetTabId)) {
+      activeBtnId = 'admin-subnav-bd';
+    }
+
+    if (activeBtnId) {
+      const btn = document.getElementById(activeBtnId);
+      if (btn) btn.classList.add('active');
+    }
+  }
+  window.actualizarAdminSubnavActivo = actualizarAdminSubnavActivo;
+
+  window.cambiarAdminTab = function(targetTabId) {
+    const activeUser = window.sgh_user_data || userData;
+    const isSuper = activeUser?.rol === 'superadmin' || activeUser?.rol === 'admin';
+    const isMun = activeUser?.rol === 'munadmin';
+    const isZon = activeUser?.rol === 'zonadmin';
+    const p = isZon && activeUser?.permisos ? activeUser.permisos : null;
+
+    if (isMun && targetTabId === 'admin-tab-bd') {
+      showToast("No tiene permisos para acceder a Base de Datos.", "warning");
+      return;
+    }
+    if (isZon && p) {
+      if (targetTabId === 'admin-tab-estadisticas' && !p.estadisticas) {
+        showToast("No tiene permisos para acceder a Métricas.", "warning");
+        return;
+      }
+      if (targetTabId === 'admin-tab-validacion' && !p.validacion) {
+        showToast("No tiene permisos para acceder a Validación de Usuarios.", "warning");
+        return;
+      }
+      if (targetTabId === 'admin-tab-planteles' && !p.planteles) {
+        showToast("No tiene permisos para acceder a Planteles.", "warning");
+        return;
+      }
+    }
+
+    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+    const targetElem = document.getElementById(targetTabId);
+    if (targetElem) targetElem.classList.add('active');
+
+    actualizarAdminSubnavActivo(targetTabId);
+
+    if (targetTabId === 'admin-tab-planteles' && typeof loadPlanteles === 'function') {
+      loadPlanteles();
+    } else if (targetTabId === 'admin-tab-discriminacion-personal' && window._cacheResumenData && typeof renderDiscriminacionPersonalCompleta === 'function') {
+      renderDiscriminacionPersonalCompleta(window._cacheResumenData);
+    } else if (targetTabId === 'admin-tab-estatus-matricula' && window._cacheResumenData && typeof renderEstatusMatriculaCompleto === 'function') {
+      renderEstatusMatriculaCompleto(window._cacheResumenData);
+    } else if (targetTabId === 'admin-tab-auditor-cedula') {
+      setTimeout(() => document.getElementById('inp-auditor-cedula')?.focus(), 100);
+    } else if (targetTabId === 'admin-tab-despliegue' && typeof loadConfig === 'function') {
+      loadConfig();
+    }
+
+    const adminMain = document.getElementById('admin-main');
+    if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   if (isInitialized) {
      // Si ya se inicializó el DOM, solo recargamos los datos para el nuevo usuario
@@ -898,6 +1019,7 @@ export function initAdminDashboard(dbInstance, user) {
       document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
       const tabVal = document.getElementById('admin-tab-validacion');
       if (tabVal) tabVal.classList.add('active');
+      actualizarAdminSubnavActivo('admin-tab-validacion');
       const adminMain = document.getElementById('admin-main');
       if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
     });
@@ -919,6 +1041,7 @@ export function initAdminDashboard(dbInstance, user) {
       document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
       const tabPlanteles = document.getElementById('admin-tab-planteles');
       if (tabPlanteles) tabPlanteles.classList.add('active');
+      actualizarAdminSubnavActivo('admin-tab-planteles');
       loadPlanteles();
       const adminMain = document.getElementById('admin-main');
       if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
@@ -936,6 +1059,7 @@ export function initAdminDashboard(dbInstance, user) {
       document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
       const tabDiscPersonal = document.getElementById('admin-tab-discriminacion-personal');
       if (tabDiscPersonal) tabDiscPersonal.classList.add('active');
+      actualizarAdminSubnavActivo('admin-tab-discriminacion-personal');
       if (window._cacheResumenData) {
         renderDiscriminacionPersonalCompleta(window._cacheResumenData);
       }
@@ -952,6 +1076,7 @@ export function initAdminDashboard(dbInstance, user) {
       document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
       const tabDiscPersonal = document.getElementById('admin-tab-discriminacion-personal');
       if (tabDiscPersonal) tabDiscPersonal.classList.add('active');
+      actualizarAdminSubnavActivo('admin-tab-discriminacion-personal');
       if (window._cacheResumenData) {
         renderDiscriminacionPersonalCompleta(window._cacheResumenData);
       }
@@ -971,6 +1096,7 @@ export function initAdminDashboard(dbInstance, user) {
       document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
       const tabEstatusMatricula = document.getElementById('admin-tab-estatus-matricula');
       if (tabEstatusMatricula) tabEstatusMatricula.classList.add('active');
+      actualizarAdminSubnavActivo('admin-tab-estatus-matricula');
       if (window._cacheResumenData) {
         renderEstatusMatriculaCompleto(window._cacheResumenData);
       }
@@ -987,6 +1113,7 @@ export function initAdminDashboard(dbInstance, user) {
       document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
       const tabEstatusMatricula = document.getElementById('admin-tab-estatus-matricula');
       if (tabEstatusMatricula) tabEstatusMatricula.classList.add('active');
+      actualizarAdminSubnavActivo('admin-tab-estatus-matricula');
       if (window._cacheResumenData) {
         renderEstatusMatriculaCompleto(window._cacheResumenData);
       }
@@ -1006,6 +1133,7 @@ export function initAdminDashboard(dbInstance, user) {
       document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
       const tabAuditor = document.getElementById('admin-tab-auditor-cedula');
       if (tabAuditor) tabAuditor.classList.add('active');
+      actualizarAdminSubnavActivo('admin-tab-auditor-cedula');
       const adminMain = document.getElementById('admin-main');
       if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
       setTimeout(() => {
@@ -1030,6 +1158,7 @@ export function initAdminDashboard(dbInstance, user) {
       document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
       const tabEst = document.getElementById('admin-tab-estadisticas');
       if (tabEst) tabEst.classList.add('active');
+      actualizarAdminSubnavActivo('admin-tab-estadisticas');
       if (typeof window.closeSidebar === 'function') window.closeSidebar();
       const adminMain = document.getElementById('admin-main');
       if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1054,6 +1183,7 @@ export function initAdminDashboard(dbInstance, user) {
       document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
       const tabDesp = document.getElementById('admin-tab-despliegue');
       if (tabDesp) tabDesp.classList.add('active');
+      actualizarAdminSubnavActivo('admin-tab-despliegue');
       loadConfig();
       const adminMain = document.getElementById('admin-main');
       if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1071,6 +1201,7 @@ export function initAdminDashboard(dbInstance, user) {
       document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
       const tabBd = document.getElementById('admin-tab-bd');
       if (tabBd) tabBd.classList.add('active');
+      actualizarAdminSubnavActivo('admin-tab-bd');
       const adminMain = document.getElementById('admin-main');
       if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
     });
@@ -1093,6 +1224,7 @@ export function initAdminDashboard(dbInstance, user) {
       document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
       const tabAspiradora = document.getElementById('admin-tab-aspiradora');
       if (tabAspiradora) tabAspiradora.classList.add('active');
+      actualizarAdminSubnavActivo('admin-tab-aspiradora');
       const adminMain = document.getElementById('admin-main');
       if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
     });
@@ -1448,6 +1580,7 @@ export function initAdminDashboard(dbInstance, user) {
     document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
     const tabMun = document.getElementById('admin-tab-matricula-municipio');
     if (tabMun) tabMun.classList.add('active');
+    actualizarAdminSubnavActivo('admin-tab-matricula-municipio');
     const adminMain = document.getElementById('admin-main');
     if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -1965,6 +2098,7 @@ export function initAdminDashboard(dbInstance, user) {
     document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
     const tabMun = document.getElementById('admin-tab-personal-municipio');
     if (tabMun) tabMun.classList.add('active');
+    actualizarAdminSubnavActivo('admin-tab-personal-municipio');
     const adminMain = document.getElementById('admin-main');
     if (adminMain) adminMain.scrollTo({ top: 0, behavior: 'smooth' });
 

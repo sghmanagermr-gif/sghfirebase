@@ -2045,6 +2045,561 @@ document.getElementById('toggle-vacantes')?.addEventListener('click', (e) => {
     }
 });
 
+// =============================================================================
+// PIZARRA DE USUARIOS (ESCOLAR / DESPACHO) - V2.38.9
+// =============================================================================
+
+function configurarPizarraUsuario(codigoDEA, data, esPlanta) {
+  const subnav = document.getElementById('subnav-usuario-container');
+  if (subnav) subnav.style.display = 'flex';
+
+  const tabMatricula = document.getElementById('tab-btn-matricula');
+  const labelPersonal = document.getElementById('label-tab-personal');
+  const badgeRol = document.getElementById('subnav-badge-rol');
+
+  const contentEscolar = document.getElementById('pizarra-escolar-content');
+  const contentDespacho = document.getElementById('pizarra-despacho-content');
+
+  if (esPlanta) {
+    if (tabMatricula) tabMatricula.style.display = 'none';
+    if (labelPersonal) labelPersonal.textContent = 'Nómina del Despacho';
+    if (badgeRol) {
+      badgeRol.textContent = '🏢 Despacho Administrativo';
+      badgeRol.style.background = '#faf5ff';
+      badgeRol.style.color = '#7c3aed';
+      badgeRol.style.borderColor = '#e9d5ff';
+    }
+
+    if (contentEscolar) contentEscolar.style.display = 'none';
+    if (contentDespacho) contentDespacho.style.display = 'block';
+
+    // Poblar Header Despacho
+    const bCod = document.getElementById('pizarra-plant-badge-cod');
+    const bTipo = document.getElementById('pizarra-plant-badge-tipo');
+    const hNombre = document.getElementById('pizarra-plant-nombre');
+    const pUbic = document.getElementById('pizarra-plant-ubicacion');
+
+    if (bCod) bCod.textContent = codigoDEA || 'SEDE CENTRAL';
+    if (bTipo) bTipo.textContent = data?.denominacion || 'ADMINISTRATIVO';
+    const nomSede = (typeof data?.['nombre-plantel'] === 'object' && data?.['nombre-plantel'] !== null)
+      ? (data['nombre-plantel'].nominal || '')
+      : (data?.nombre_plantel || data?.nombre || data?.denominacion || 'Sede Administrativa');
+    if (hNombre) hNombre.textContent = nomSede;
+    if (pUbic) pUbic.textContent = `📍 Municipio ${data?.municipio || 'Libertador'} — Planta Central`;
+
+  } else {
+    if (tabMatricula) tabMatricula.style.display = 'inline-flex';
+    if (labelPersonal) labelPersonal.textContent = 'Nómina de Personal';
+    if (badgeRol) {
+      badgeRol.textContent = '🏫 Plantel Educativo';
+      badgeRol.style.background = '#e0f2fe';
+      badgeRol.style.color = '#0284c7';
+      badgeRol.style.borderColor = '#bae6fd';
+    }
+
+    if (contentEscolar) contentEscolar.style.display = 'block';
+    if (contentDespacho) contentDespacho.style.display = 'none';
+
+    // Poblar Header Escolar
+    const bDea = document.getElementById('pizarra-pla-badge-dea');
+    const bDep = document.getElementById('pizarra-pla-badge-dependencia');
+    const bTur = document.getElementById('pizarra-pla-badge-turno');
+    const hNombre = document.getElementById('pizarra-pla-nombre');
+    const pUbic = document.getElementById('pizarra-pla-ubicacion');
+
+    if (bDea) bDea.textContent = `DEA: ${codigoDEA || 'S/D'}`;
+    if (bDep) bDep.textContent = (data?.dependencia || 'ESTADAL').toUpperCase();
+    const turnoVal = (data?.['turno-plantel'] || data?.turno || 'MAÑANA').toUpperCase();
+    if (bTur) bTur.textContent = turnoVal;
+    
+    const eponimoVal = (typeof data?.['nombre-plantel'] === 'object' && data?.['nombre-plantel'] !== null)
+      ? (data['nombre-plantel']['nuevo-eponimo'] || data['nombre-plantel'].nominal || '')
+      : (data?.nuevo_eponimo || data?.nombre_plantel || data?.nombre || 'Plantel Educativo');
+    if (hNombre) hNombre.textContent = eponimoVal;
+    if (pUbic) pUbic.textContent = `📍 Municipio ${data?.municipio || 'N/A'} — Parroquia ${data?.parroquia || 'N/A'}`;
+  }
+
+  if (typeof window.actualizarMetricasPizarraUsuario === 'function') {
+    window.actualizarMetricasPizarraUsuario();
+  }
+  if (typeof window.renderizarSituacionLaboralPersonal === 'function') {
+    window.renderizarSituacionLaboralPersonal();
+  }
+}
+
+window.limpiarFiltrosPersonal = function() {
+  const tbody = document.getElementById('tbody-personal-existente');
+  const buscador = document.getElementById('buscador-personal');
+  const bannerFiltro = document.getElementById('container-filtro-activo');
+  const btnResetSit = document.getElementById('btn-reset-filtro-sit');
+
+  if (buscador) buscador.value = '';
+  if (bannerFiltro) bannerFiltro.style.display = 'none';
+  if (btnResetSit) btnResetSit.style.display = 'none';
+
+  if (!tbody) return;
+  const noMatch = tbody.querySelector('#row-no-matches');
+  if (noMatch) noMatch.remove();
+
+  const rows = tbody.querySelectorAll('tr');
+  rows.forEach(r => {
+    if (r.cells.length > 1) {
+      r.style.display = '';
+    }
+  });
+};
+
+window.verNominaCompleta = function() {
+  window.cambiarTabUsuario('personal');
+  window.limpiarFiltrosPersonal();
+  const secPers = document.getElementById('seccion-personal-existente');
+  if (secPers) {
+    setTimeout(() => {
+      secPers.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }
+};
+
+window.cambiarTabUsuario = function(tabName) {
+  const viewPizarra = document.getElementById('view-tab-pizarra');
+  const viewPersonal = document.getElementById('view-tab-personal');
+  const viewMatricula = document.getElementById('view-tab-matricula');
+
+  const btnPizarra = document.getElementById('tab-btn-pizarra');
+  const btnPersonal = document.getElementById('tab-btn-personal');
+  const btnMatricula = document.getElementById('tab-btn-matricula');
+
+  [btnPizarra, btnPersonal, btnMatricula].forEach(b => {
+    if (b) b.classList.remove('active');
+  });
+
+  if (tabName === 'pizarra') {
+    if (viewPizarra) viewPizarra.style.display = 'block';
+    if (viewPersonal) viewPersonal.style.display = 'none';
+    if (viewMatricula) viewMatricula.style.display = 'none';
+    if (btnPizarra) btnPizarra.classList.add('active');
+    if (typeof window.actualizarMetricasPizarraUsuario === 'function') {
+      window.actualizarMetricasPizarraUsuario();
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else if (tabName === 'personal') {
+    if (viewPizarra) viewPizarra.style.display = 'none';
+    if (viewPersonal) viewPersonal.style.display = 'block';
+    if (viewMatricula) viewMatricula.style.display = 'none';
+    if (btnPersonal) btnPersonal.classList.add('active');
+    const secPers = document.getElementById('seccion-personal-existente');
+    if (secPers) secPers.style.display = 'block';
+    window.limpiarFiltrosPersonal();
+    if (typeof window.renderizarSituacionLaboralPersonal === 'function') {
+      window.renderizarSituacionLaboralPersonal();
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else if (tabName === 'matricula') {
+    if (viewPizarra) viewPizarra.style.display = 'none';
+    if (viewPersonal) viewPersonal.style.display = 'none';
+    if (viewMatricula) viewMatricula.style.display = 'block';
+    if (btnMatricula) btnMatricula.classList.add('active');
+    const cardPF = document.getElementById('card-plantel-form');
+    if (cardPF) cardPF.style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+};
+
+window.renderizarSituacionLaboralPersonal = function() {
+  const container = document.getElementById('grid-situacion-laboral-personal');
+  const badgeTot = document.getElementById('badge-total-sit-personal');
+  if (!container) return;
+
+  const personal = window._personalPlantelData || [];
+  if (personal.length === 0) {
+    container.innerHTML = '<div style="grid-column: 1 / -1; color: #94a3b8; font-size: 0.85rem; text-align: center; padding: 12px;">Sin registros de personal cargados.</div>';
+    if (badgeTot) badgeTot.textContent = '0 funcionarios';
+    return;
+  }
+
+  const sitMap = {};
+  let totalActivos = 0;
+  personal.forEach(p => {
+    let sit = (p['situacion-laboral'] || p['SITUACION LABORAL'] || 'ACTIVO').trim().toUpperCase();
+    if (!sit) sit = 'ACTIVO';
+    sitMap[sit] = (sitMap[sit] || 0) + 1;
+    if (sit.includes('ACTIVO')) totalActivos++;
+  });
+
+  const pct = Math.round((totalActivos / personal.length) * 100);
+  if (badgeTot) {
+    badgeTot.textContent = `${pct}% Activos (${totalActivos}/${personal.length})`;
+    badgeTot.style.color = pct >= 90 ? '#16a34a' : (pct >= 70 ? '#ea580c' : '#dc2626');
+    badgeTot.style.borderColor = pct >= 90 ? '#bbf7d0' : (pct >= 70 ? '#fed7aa' : '#fecaca');
+  }
+
+  container.innerHTML = '';
+  const entries = Object.entries(sitMap).sort((a, b) => b[1] - a[1]);
+  entries.forEach(([sit, count]) => {
+    const item = document.createElement('div');
+    item.className = 'pill-situacion-laboral';
+    item.style.cssText = 'background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.2s ease;';
+    item.innerHTML = `
+      <span style="color: #334155; font-size: 0.82rem; font-weight: 600;">${sit}</span>
+      <span style="font-weight: 800; color: #0f172a; font-size: 0.9rem; background: #f1f5f9; padding: 2px 8px; border-radius: 6px; border: 1px solid #cbd5e1; margin-left: 6px;">${count}</span>
+    `;
+    item.onmouseover = () => {
+      item.style.borderColor = '#0284c7';
+      item.style.background = '#f0f9ff';
+      item.style.transform = 'translateY(-1px)';
+    };
+    item.onmouseout = () => {
+      item.style.borderColor = '#cbd5e1';
+      item.style.background = '#ffffff';
+      item.style.transform = 'none';
+    };
+    item.onclick = () => window.filtrarPersonalPorSituacion(sit);
+    container.appendChild(item);
+  });
+};
+
+window.verSituacionLaboral = function() {
+  window.cambiarTabUsuario('personal');
+  window.limpiarFiltrosPersonal();
+  if (typeof window.renderizarSituacionLaboralPersonal === 'function') {
+    window.renderizarSituacionLaboralPersonal();
+  }
+  const panel = document.getElementById('panel-situacion-laboral-personal');
+  if (panel) {
+    setTimeout(() => {
+      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 120);
+  }
+};
+
+window.filtrarPersonalPorSituacion = function(sitBuscada) {
+  const tbody = document.getElementById('tbody-personal-existente');
+  const bannerFiltro = document.getElementById('container-filtro-activo');
+  const txtFiltro = document.getElementById('texto-filtro-activo');
+  const btnResetSit = document.getElementById('btn-reset-filtro-sit');
+
+  if (!tbody) return;
+
+  const noMatch = tbody.querySelector('#row-no-matches');
+  if (noMatch) noMatch.remove();
+
+  const norm = sitBuscada.trim().toUpperCase();
+  const rows = tbody.querySelectorAll('tr');
+  let matchCount = 0;
+  rows.forEach(r => {
+    if (r.cells.length <= 1) return;
+    const sitRow = (r.dataset.situacion || '').toUpperCase();
+    if (sitRow.includes(norm) || (norm === 'ACTIVO' && (!sitRow || sitRow.includes('ACTIVO')))) {
+      r.style.display = '';
+      matchCount++;
+    } else {
+      r.style.display = 'none';
+    }
+  });
+
+  if (matchCount === 0) {
+    const trEmpty = document.createElement('tr');
+    trEmpty.id = 'row-no-matches';
+    trEmpty.innerHTML = `<td colspan="5" style="text-align: center; padding: 25px; color: #64748b; font-weight: 500;">No se encontraron funcionarios en condición: ${sitBuscada}.</td>`;
+    tbody.appendChild(trEmpty);
+  }
+
+  if (bannerFiltro && txtFiltro) {
+    bannerFiltro.style.display = 'flex';
+    txtFiltro.textContent = `💼 Filtrado por Condición: ${sitBuscada} (${matchCount})`;
+  }
+  if (btnResetSit) btnResetSit.style.display = 'inline-block';
+
+  if (window.showToast) {
+    window.showToast(`Mostrando ${matchCount} funcionario(s) en condición ${sitBuscada}`, 'info');
+  }
+};
+
+window.filtrarPersonalAltoNivel = function() {
+  window.cambiarTabUsuario('personal');
+  const tbody = document.getElementById('tbody-personal-existente');
+  const bannerFiltro = document.getElementById('container-filtro-activo');
+  const txtFiltro = document.getElementById('texto-filtro-activo');
+  const buscador = document.getElementById('buscador-personal');
+  if (buscador) buscador.value = '';
+
+  if (!tbody) return;
+
+  const noMatch = tbody.querySelector('#row-no-matches');
+  if (noMatch) noMatch.remove();
+
+  const rows = tbody.querySelectorAll('tr');
+  let matchCount = 0;
+  rows.forEach(r => {
+    if (r.cells.length <= 1) return;
+    const isAlto = r.dataset.esAltoNivel === 'true'
+      || (r.dataset.cargoPlanta && r.dataset.cargoPlanta !== 'OTROS')
+      || ['210LNR', '240LNR', '140LNR', '150LNR'].includes(r.dataset.codRac || '')
+      || (r.dataset.codRac || '').includes('LNR')
+      || /(JEFE|COORDINADOR|DIRECTOR|DIRECTORA|SUPERVISOR|RESPONSABLE|ENCARGADUR|ALTO NIVEL)/.test((r.dataset.cargo || '') + ' ' + (r.textContent || ''));
+    if (isAlto) {
+      r.style.display = '';
+      matchCount++;
+    } else {
+      r.style.display = 'none';
+    }
+  });
+
+  if (matchCount === 0) {
+    const trEmpty = document.createElement('tr');
+    trEmpty.id = 'row-no-matches';
+    trEmpty.innerHTML = '<td colspan="5" style="text-align: center; padding: 25px; color: #64748b; font-weight: 500;">No se encontraron funcionarios de Alto Nivel adscritos a esta sede.</td>';
+    tbody.appendChild(trEmpty);
+  }
+
+  if (bannerFiltro && txtFiltro) {
+    bannerFiltro.style.display = 'flex';
+    txtFiltro.textContent = `🏛️ Filtrado: Cargos de Alto Nivel (${matchCount})`;
+  }
+
+  if (window.showToast) {
+    window.showToast(`Mostrando ${matchCount} funcionario(s) de Alto Nivel`, 'info');
+  }
+
+  const secPers = document.getElementById('seccion-personal-existente');
+  if (secPers) {
+    setTimeout(() => {
+      secPers.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }
+};
+
+window.filtrarPersonalApoyo = function() {
+  window.cambiarTabUsuario('personal');
+  const tbody = document.getElementById('tbody-personal-existente');
+  const bannerFiltro = document.getElementById('container-filtro-activo');
+  const txtFiltro = document.getElementById('texto-filtro-activo');
+  const buscador = document.getElementById('buscador-personal');
+  if (buscador) buscador.value = '';
+
+  if (!tbody) return;
+
+  const noMatch = tbody.querySelector('#row-no-matches');
+  if (noMatch) noMatch.remove();
+
+  const rows = tbody.querySelectorAll('tr');
+  let matchCount = 0;
+  rows.forEach(r => {
+    if (r.cells.length <= 1) return;
+    const isAlto = r.dataset.esAltoNivel === 'true'
+      || (r.dataset.cargoPlanta && r.dataset.cargoPlanta !== 'OTROS')
+      || ['210LNR', '240LNR', '140LNR', '150LNR'].includes(r.dataset.codRac || '')
+      || (r.dataset.codRac || '').includes('LNR')
+      || /(JEFE|COORDINADOR|DIRECTOR|DIRECTORA|SUPERVISOR|RESPONSABLE|ENCARGADUR|ALTO NIVEL)/.test((r.dataset.cargo || '') + ' ' + (r.textContent || ''));
+    if (!isAlto) {
+      r.style.display = '';
+      matchCount++;
+    } else {
+      r.style.display = 'none';
+    }
+  });
+
+  if (matchCount === 0) {
+    const trEmpty = document.createElement('tr');
+    trEmpty.id = 'row-no-matches';
+    trEmpty.innerHTML = '<td colspan="5" style="text-align: center; padding: 25px; color: #64748b; font-weight: 500;">No se encontraron funcionarios de apoyo adscritos a esta sede.</td>';
+    tbody.appendChild(trEmpty);
+  }
+
+  if (bannerFiltro && txtFiltro) {
+    bannerFiltro.style.display = 'flex';
+    txtFiltro.textContent = `🏢 Filtrado: Personal de Apoyo (${matchCount})`;
+  }
+
+  if (window.showToast) {
+    window.showToast(`Mostrando ${matchCount} funcionario(s) de Apoyo`, 'info');
+  }
+
+  const secPers = document.getElementById('seccion-personal-existente');
+  if (secPers) {
+    setTimeout(() => {
+      secPers.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }
+};
+
+window.actualizarMetricasPizarraUsuario = function() {
+  const dp = window.currentPlantelInfo || window.currentPlantel || {};
+  const esPlanta = window.sgh_user_data?.rol === 'plantadmin' 
+    || dp.es_planta 
+    || dp.denominacion === 'SEDE ADMINISTRATIVA'
+    || window.currentPlantel?.es_planta
+    || window.currentPlantel?.denominacion === 'SEDE ADMINISTRATIVA';
+
+  const personal = window._personalPlantelData || [];
+
+  if (esPlanta) {
+    // === METRICAS PIZARRA DE DESPACHO ===
+    const elPersonalNum = document.getElementById('stat-plant-personal-num');
+    const elPersonalDesc = document.getElementById('stat-plant-personal-desc');
+    const elAltoNivelNum = document.getElementById('stat-plant-altonivel-num');
+    const elAltoNivelDesc = document.getElementById('stat-plant-altonivel-desc');
+    const elApoyoNum = document.getElementById('stat-plant-apoyo-num');
+    const elApoyoDesc = document.getElementById('stat-plant-apoyo-desc');
+    const elCondicionNum = document.getElementById('stat-plant-condicion-num');
+    const elCondicionDesc = document.getElementById('stat-plant-condicion-desc');
+
+    let altoNivelCount = 0;
+    let apoyoCount = 0;
+    let activosCount = 0;
+
+    personal.forEach(p => {
+      const cargoPlanta = (p['cargo-planta'] || p.cargo_planta || '').toString().trim().toUpperCase();
+      const codRac = (p['codigo-rac'] || p['codigo-cargo'] || '').toString().trim().toUpperCase();
+      const cargo = (p.cargo || p['nombre-cargo'] || p['denominacion-cargo'] || '').toString().trim().toUpperCase();
+
+      const esAlto = (cargoPlanta && cargoPlanta !== 'OTROS')
+        || ['210LNR', '240LNR', '140LNR', '150LNR'].includes(codRac)
+        || codRac.includes('LNR')
+        || /(JEFE|COORDINADOR|DIRECTOR|DIRECTORA|SUPERVISOR|RESPONSABLE|ENCARGADUR|ALTO NIVEL)/.test(cargo);
+
+      if (esAlto) {
+        altoNivelCount++;
+      } else {
+        apoyoCount++;
+      }
+
+      const sit = (p['situacion-laboral'] || p['SITUACION LABORAL'] || '').toString().trim().toUpperCase();
+      if (!sit || sit.includes('ACTIVO')) {
+        activosCount++;
+      }
+    });
+
+    if (elPersonalNum) elPersonalNum.textContent = personal.length;
+    if (elPersonalDesc) elPersonalDesc.textContent = `${activosCount} funcionarios activos`;
+
+    if (elAltoNivelNum) elAltoNivelNum.textContent = altoNivelCount;
+    if (elAltoNivelDesc) elAltoNivelDesc.textContent = altoNivelCount === 1 ? '1 cargo de Alto Nivel' : `${altoNivelCount} cargos de Alto Nivel`;
+
+    if (elApoyoNum) elApoyoNum.textContent = apoyoCount;
+    if (elApoyoDesc) elApoyoDesc.textContent = `${apoyoCount} funcionarios de apoyo`;
+
+    const pctActivos = personal.length > 0 ? Math.round((activosCount / personal.length) * 100) : 100;
+    if (elCondicionNum) elCondicionNum.textContent = `${pctActivos}%`;
+    if (elCondicionDesc) elCondicionDesc.textContent = `${activosCount} de ${personal.length} en servicio`;
+
+  } else {
+    // === METRICAS PIZARRA ESCOLAR ===
+    const elPersonalNum = document.getElementById('stat-pla-personal-num');
+    const elPersonalDesc = document.getElementById('stat-pla-personal-desc');
+    const elMatriculaNum = document.getElementById('stat-pla-matricula-num');
+    const elMatriculaDesc = document.getElementById('stat-pla-matricula-desc');
+    const elEstatusNum = document.getElementById('stat-pla-estatus-num');
+    const elEstatusDesc = document.getElementById('stat-pla-estatus-desc');
+    const elSeccionesNum = document.getElementById('stat-pla-secciones-num');
+    const elSeccionesDesc = document.getElementById('stat-pla-secciones-desc');
+
+    let docentes = 0;
+    let admin = 0;
+    let obreros = 0;
+
+    personal.forEach(p => {
+      const tipo = (p['tipo-personal'] || p['TIPO PERSONAL'] || '').toString().trim().toUpperCase();
+      if (tipo.includes('DOCENTE')) docentes++;
+      else if (tipo.includes('ADMINISTRATIVO')) admin++;
+      else if (tipo.includes('OBRERO')) obreros++;
+    });
+
+    if (elPersonalNum) elPersonalNum.textContent = personal.length;
+    if (elPersonalDesc) elPersonalDesc.textContent = `${docentes} Docentes | ${admin} Admin | ${obreros} Obr`;
+
+    // Matrícula
+    const mat = dp.matricula || window.currentPlantel?.matricula || {};
+    let totalMat = Number(mat['total-gen'] ?? dp['matricula-total'] ?? window.currentPlantel?.['matricula-total'] ?? document.getElementById('inp-matricula-total')?.value ?? 0);
+
+    let varones = 0;
+    let hembras = 0;
+    function sumarSexos(obj) {
+      if (!obj || typeof obj !== 'object') return;
+      if (obj.mas !== undefined || obj.fem !== undefined) {
+        varones += Number(obj.mas || 0);
+        hembras += Number(obj.fem || 0);
+      }
+      for (const k in obj) {
+        if (typeof obj[k] === 'object' && k !== 'total-gen') sumarSexos(obj[k]);
+      }
+    }
+    sumarSexos(mat);
+    if (totalMat === 0 && (varones + hembras > 0)) totalMat = varones + hembras;
+
+    if (elMatriculaNum) elMatriculaNum.textContent = totalMat;
+    if (elMatriculaDesc) {
+      elMatriculaDesc.textContent = (varones + hembras > 0) ? `♂ ${varones} Varones | ♀ ${hembras} Hembras` : 'Total estudiantes';
+    }
+
+    // Estatus de Matrícula
+    if (elEstatusNum && elEstatusDesc) {
+      if (totalMat > 0) {
+        elEstatusNum.innerHTML = '<span style="color: #16a34a;">Al Día</span>';
+        elEstatusDesc.textContent = 'Jornada 2026 verificada';
+      } else {
+        elEstatusNum.innerHTML = '<span style="color: #dc2626;">Pendiente</span>';
+        elEstatusDesc.textContent = 'Carga requerida en Paso 1';
+      }
+    }
+
+    // Secciones / Aulas
+    let totalSecciones = 0;
+    const sp = dp['secciones-planes'] || window.currentPlantel?.['secciones-planes'] || {};
+    for (const k in sp) {
+      const val = sp[k];
+      if (typeof val === 'number') totalSecciones += val;
+      else if (typeof val === 'object' && val !== null) {
+        for (const subK in val) {
+          const subVal = val[subK];
+          if (typeof subVal === 'number') totalSecciones += subVal;
+          else if (typeof subVal === 'object' && subVal !== null) totalSecciones += Object.keys(subVal).length;
+        }
+      }
+    }
+    if (totalSecciones === 0 && mat) {
+      if (mat.basica) {
+        if (mat.basica["20000"]?.maternal) totalSecciones += Object.keys(mat.basica["20000"].maternal).filter(k => k.length === 1).length;
+        if (mat.basica["20000"]?.preescolar) totalSecciones += Object.keys(mat.basica["20000"].preescolar).filter(k => k.length === 1).length;
+        if (mat.basica["21000"]) {
+          for (let g = 1; g <= 6; g++) {
+            if (mat.basica["21000"][String(g)]) totalSecciones += Object.keys(mat.basica["21000"][String(g)]).filter(k => k.length === 1).length;
+          }
+        }
+      }
+      if (mat.modalidades?.especial?.grupos) totalSecciones += Object.keys(mat.modalidades.especial.grupos).filter(k => k.length === 1).length;
+      if (mat.modalidades?.adulto?.grupos) totalSecciones += Object.keys(mat.modalidades.adulto.grupos).filter(k => k.length === 1).length;
+    }
+
+    if (elSeccionesNum) elSeccionesNum.textContent = totalSecciones;
+    if (elSeccionesDesc) elSeccionesDesc.textContent = totalSecciones === 1 ? '1 aula activa' : `${totalSecciones} aulas activas`;
+  }
+
+  if (typeof window.renderizarSituacionLaboralPersonal === 'function') {
+    window.renderizarSituacionLaboralPersonal();
+  }
+};
+
+window.abrirFichaDesdePizarra = async function() {
+  const dea = window.currentPlantelDEA;
+  if (!dea) return;
+  if (typeof window.abrirFichaAuditoria === 'function') {
+    window.abrirFichaAuditoria(dea);
+  } else {
+    try {
+      const m = await import('./admin.js');
+      if (m && typeof m.abrirFichaAuditoria === 'function') {
+        m.abrirFichaAuditoria(dea);
+      } else {
+        window.cambiarTabUsuario('matricula');
+      }
+    } catch (e) {
+      console.warn("No se pudo cargar modal de ficha:", e);
+      window.cambiarTabUsuario('matricula');
+    }
+  }
+};
+
 async function checkPlantelData(codigoDEA) {
   try {
     const docRef = doc(db, "planteles", codigoDEA);
@@ -2089,6 +2644,10 @@ async function checkPlantelData(codigoDEA) {
               if (inpMatTotal && liveData.matricula && liveData.matricula["total-gen"] !== undefined) {
                   inpMatTotal.value = liveData.matricula["total-gen"];
                   console.log("✅ [onSnapshot] Input de Matrícula Total actualizado a:", liveData.matricula["total-gen"]);
+              }
+              currentPlantel = liveData;
+              if (typeof window.actualizarMetricasPizarraUsuario === 'function') {
+                  window.actualizarMetricasPizarraUsuario();
               }
           }
       });
@@ -2794,6 +3353,10 @@ async function mostrarCandado(codigoDEA, dataParcial) {
         if (secPersonal) secPersonal.style.display = 'none';
     }
 
+    // Configurar y activar Pizarra de Usuario (Escolar o Despacho)
+    configurarPizarraUsuario(codigoDEA, dataParcial || dp, esPlantAdmin);
+    window.cambiarTabUsuario('pizarra');
+
     // Guardar los datos cuando el director llene el form
     const form = document.getElementById('plantel-form');
     if (form) {
@@ -3487,6 +4050,10 @@ async function mostrarCandado(codigoDEA, dataParcial) {
                   }
               } else {
                   showToast("¡Datos de matrícula actualizados con éxito!", "success");
+              }
+
+              if (typeof window.actualizarMetricasPizarraUsuario === 'function') {
+                  window.actualizarMetricasPizarraUsuario();
               }
 
           } catch (error) {
