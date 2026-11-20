@@ -166,10 +166,36 @@ export async function poblarCatalogosGenerales(catalogos = null) {
     }
 }
 
+export function getCargoWizardValue() {
+    const dep = (document.getElementById('wp-dependencia')?.value || '').toUpperCase().trim();
+    if (dep === 'NACIONAL') {
+        return (document.getElementById('wp-cargo')?.value || '').trim();
+    }
+    const valLibre = document.getElementById('wp-cargo-libre')?.value;
+    if (valLibre !== undefined && valLibre !== null && valLibre !== '') {
+        return valLibre.trim().toUpperCase();
+    }
+    return (document.getElementById('wp-cargo')?.value || '').trim();
+}
+
+export function getCodigoCargoWizardValue() {
+    const dep = (document.getElementById('wp-dependencia')?.value || '').toUpperCase().trim();
+    if (dep === 'NACIONAL') {
+        return (document.getElementById('wp-codigo-rac')?.value || '').trim();
+    }
+    const valLibre = document.getElementById('wp-codigo-rac-libre')?.value;
+    if (valLibre !== undefined && valLibre !== null && valLibre !== '') {
+        return valLibre.trim().toUpperCase();
+    }
+    return (document.getElementById('wp-codigo-rac')?.value || '').trim();
+}
+
 /**
- * Inicializa la cascada laboral estricta en el orden solicitado:
+ * Inicializa la cascada laboral institucional:
  * 1. Tipo de personal (DOCENTE - ADMINISTRATIVO - OBRERO)
- * 2. Dependencia (NACIONAL - ESTADAL)
+ * 2. Dependencia (NACIONAL - ESTADAL - MUNICIPAL - AUTONOMA - SUBVENCIONADA - PRIVADA)
+ *    - NACIONAL: Reglamentada por tabulador MPPE / RAC (con Rango para Obrero).
+ *    - NO NACIONALES: A libre albedrío para Docente, Obrero y Administrativo (Texto libre para Cargo y Código).
  */
 export async function initCascadaPersonal() {
     const selTipo = document.getElementById('wp-tipo-personal');
@@ -178,31 +204,57 @@ export async function initCascadaPersonal() {
     const selRango = document.getElementById('wp-subcategoria');
     const selCargo = document.getElementById('wp-cargo');
     const selRac = document.getElementById('wp-codigo-rac');
+    const inputCargoLibre = document.getElementById('wp-cargo-libre');
+    const inputRacLibre = document.getElementById('wp-codigo-rac-libre');
+    const lblRac = document.getElementById('lbl-codigo-rac');
 
     if (!selTipo || !selDep || !selCargo || !selRac) return;
 
     const depActual = selDep.value;
     selDep.innerHTML = '<option value="">Seleccione Dependencia...</option>' +
         '<option value="NACIONAL">NACIONAL</option>' +
-        '<option value="ESTADAL">ESTADAL</option>';
-    if (depActual) selDep.value = depActual;
+        '<option value="ESTADAL">ESTADAL</option>' +
+        '<option value="MUNICIPAL">MUNICIPAL</option>' +
+        '<option value="AUTONOMA">AUTÓNOMA</option>' +
+        '<option value="SUBVENCIONADA">SUBVENCIONADA</option>' +
+        '<option value="PRIVADA">PRIVADA</option>';
+    if (depActual) {
+        let matched = false;
+        const normDep = depActual.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+        for (let i = 0; i < selDep.options.length; i++) {
+            const optNorm = selDep.options[i].value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+            if (optNorm === normDep || (normDep.startsWith('PRIVAD') && optNorm.startsWith('PRIVAD')) || (normDep.startsWith('AUTONOM') && optNorm.startsWith('AUTONOM'))) {
+                selDep.selectedIndex = i;
+                matched = true;
+                break;
+            }
+        }
+        if (!matched) selDep.value = depActual;
+    }
 
     const catalogos = await obtenerCatalogosMaestros();
     const personalData = catalogos.clasificacion_cargos || catalogos.personal || PERSONAL_DATA_MASTER;
 
     function actualizarCascada() {
         const tipo = (selTipo.value || '').toUpperCase();
-        const dep = (selDep.value || '').toUpperCase();
+        let dep = (selDep.value || '').toUpperCase().trim();
+        if (dep.includes('AUTONOM')) dep = 'AUTONOMA';
+        if (dep.includes('PRIVAD')) dep = 'PRIVADA';
 
         if (!tipo) {
             selDep.disabled = true;
             selDep.value = '';
             if (containerRango) containerRango.style.display = 'none';
             if (selRango) { selRango.innerHTML = '<option value="">Seleccione Rango...</option>'; selRango.value = ''; }
+            if (inputCargoLibre) { inputCargoLibre.style.display = 'none'; inputCargoLibre.disabled = true; inputCargoLibre.value = ''; }
+            selCargo.style.display = 'block';
             selCargo.disabled = true;
             selCargo.innerHTML = '<option value="">Seleccione Cargo...</option>';
+            if (inputRacLibre) { inputRacLibre.style.display = 'none'; inputRacLibre.disabled = true; inputRacLibre.value = ''; }
+            selRac.style.display = 'block';
             selRac.disabled = true;
             selRac.innerHTML = '<option value="">Auto / Seleccione...</option>';
+            if (lblRac) lblRac.textContent = 'Código RAC';
             return;
         }
 
@@ -211,45 +263,57 @@ export async function initCascadaPersonal() {
         if (!dep) {
             if (containerRango) containerRango.style.display = 'none';
             if (selRango) { selRango.innerHTML = '<option value="">Seleccione Rango...</option>'; selRango.value = ''; }
+            if (inputCargoLibre) { inputCargoLibre.style.display = 'none'; inputCargoLibre.disabled = true; }
+            selCargo.style.display = 'block';
             selCargo.disabled = true;
             selCargo.innerHTML = '<option value="">— Primero elija Dependencia —</option>';
+            if (inputRacLibre) { inputRacLibre.style.display = 'none'; inputRacLibre.disabled = true; }
+            selRac.style.display = 'block';
             selRac.disabled = true;
             selRac.innerHTML = '<option value="">Auto / Seleccione...</option>';
+            if (lblRac) lblRac.textContent = 'Código RAC';
             return;
         }
 
-        // Caso 1: NACIONAL + OBRERO
-        if (dep === 'NACIONAL' && tipo === 'OBRERO') {
-            if (containerRango) containerRango.style.display = 'block';
-            const obreroMap = (personalData.NACIONAL && personalData.NACIONAL.obrero) || (PERSONAL_DATA_MASTER.NACIONAL && PERSONAL_DATA_MASTER.NACIONAL.obrero) || {};
+        // Caso 1: NACIONAL (Única dependencia reglamentada por MPPE)
+        if (dep === 'NACIONAL') {
+            if (inputCargoLibre) { inputCargoLibre.style.display = 'none'; inputCargoLibre.disabled = true; }
+            selCargo.style.display = 'block';
+            if (inputRacLibre) { inputRacLibre.style.display = 'none'; inputRacLibre.disabled = true; }
+            selRac.style.display = 'block';
+            if (lblRac) lblRac.textContent = 'Código RAC';
 
-            if (selRango) {
-                const rangoValActual = selRango.value;
-                selRango.innerHTML = '<option value="">Seleccione Rango...</option>';
-                Object.keys(obreroMap).forEach(rac => {
-                    const item = obreroMap[rac];
-                    const opt = document.createElement('option');
-                    opt.value = rac;
-                    opt.textContent = item.rango || rac;
-                    if (rac === rangoValActual) opt.selected = true;
-                    selRango.appendChild(opt);
-                });
+            // Subcaso 1A: NACIONAL + OBRERO (Aplica Rango/Grado oficial)
+            if (tipo === 'OBRERO') {
+                if (containerRango) containerRango.style.display = 'block';
+                const obreroMap = (personalData.NACIONAL && personalData.NACIONAL.obrero) || (PERSONAL_DATA_MASTER.NACIONAL && PERSONAL_DATA_MASTER.NACIONAL.obrero) || {};
+
+                if (selRango) {
+                    const rangoValActual = selRango.value;
+                    selRango.innerHTML = '<option value="">Seleccione Rango...</option>';
+                    Object.keys(obreroMap).forEach(rac => {
+                        const item = obreroMap[rac];
+                        const opt = document.createElement('option');
+                        opt.value = rac;
+                        opt.textContent = item.rango || rac;
+                        if (rac === rangoValActual) opt.selected = true;
+                        selRango.appendChild(opt);
+                    });
+                }
+
+                selCargo.disabled = true;
+                selCargo.innerHTML = '<option value="">— Primero seleccione Rango —</option>';
+                selRac.disabled = true;
+                selRac.innerHTML = '<option value="">Auto</option>';
+
+                poblarOficiosObrero();
+                return;
             }
 
-            selCargo.disabled = true;
-            selCargo.innerHTML = '<option value="">— Primero seleccione Rango —</option>';
-            selRac.disabled = true;
-            selRac.innerHTML = '<option value="">Auto</option>';
+            // Subcaso 1B: NACIONAL + DOCENTE / ADMINISTRATIVO (Catálogo de cargos MPPE)
+            if (containerRango) containerRango.style.display = 'none';
+            if (selRango) { selRango.innerHTML = '<option value="">Seleccione Rango...</option>'; selRango.value = ''; }
 
-            poblarOficiosObrero();
-            return;
-        }
-
-        if (containerRango) containerRango.style.display = 'none';
-        if (selRango) { selRango.innerHTML = '<option value="">Seleccione Rango...</option>'; selRango.value = ''; }
-
-        // Caso 2: NACIONAL + DOCENTE / ADMINISTRATIVO
-        if (dep === 'NACIONAL') {
             const subclave = tipo === 'DOCENTE' ? 'docente' : 'administrativo';
             const map = (personalData.NACIONAL && personalData.NACIONAL[subclave]) || (PERSONAL_DATA_MASTER.NACIONAL && PERSONAL_DATA_MASTER.NACIONAL[subclave]) || {};
 
@@ -278,68 +342,28 @@ export async function initCascadaPersonal() {
             return;
         }
 
-        // Caso 3: ESTADAL
-        if (dep === 'ESTADAL') {
-            const subclave = tipo.toLowerCase();
-            const estMap = (personalData.ESTADAL && personalData.ESTADAL[subclave]) || (PERSONAL_DATA_MASTER.ESTADAL && PERSONAL_DATA_MASTER.ESTADAL[subclave]) || {};
+        // Caso 2: DEPENDENCIAS NO NACIONALES (ESTADAL, MUNICIPAL, AUTONOMA, SUBVENCIONADA, PRIVADA)
+        // A LIBRE ALBEDRÍO para Docente, Obrero y Administrativo
+        if (containerRango) containerRango.style.display = 'none';
+        if (selRango) { selRango.innerHTML = '<option value="">Seleccione Rango...</option>'; selRango.value = ''; }
 
-            const keys = Object.keys(estMap);
-            if (keys.length > 0) {
-                selCargo.disabled = false;
-                const cargoActual = selCargo.value;
-                selCargo.innerHTML = '<option value="">Seleccione Cargo...</option>';
-                keys.forEach(rac => {
-                    const cNombre = estMap[rac];
-                    const opt = document.createElement('option');
-                    opt.value = cNombre;
-                    opt.textContent = cNombre;
-                    opt.dataset.rac = rac;
-                    if (cNombre === cargoActual) opt.selected = true;
-                    selCargo.appendChild(opt);
-                });
-
-                poblarRacEstadal(estMap);
-            } else {
-                selCargo.disabled = false;
-                selCargo.innerHTML = '<option value="">Seleccione Cargo...</option>';
-                let opcionesEstadal = [];
-                if (tipo === 'DOCENTE') {
-                    opcionesEstadal = [
-                        { cargo: 'DOCENTE DE AULA', rac: '1161DH' },
-                        { cargo: 'DOCENTE INTEGRAL', rac: '1182DH' },
-                        { cargo: 'DOCENTE UNICO', rac: 'D/U' }
-                    ];
-                } else if (tipo === 'ADMINISTRATIVO') {
-                    opcionesEstadal = [
-                        { cargo: 'ASISTENTE ADMINISTRATIVO', rac: 'EST-ADM' },
-                        { cargo: 'SECRETARIA (O)', rac: '3110N' },
-                        { cargo: 'ANALISTA ADMINISTRATIVO', rac: 'EST-ANA' }
-                    ];
-                } else {
-                    opcionesEstadal = [
-                        { cargo: 'ASEADOR (A)', rac: '8031N' },
-                        { cargo: 'OBRERO DE MANTENIMIENTO', rac: 'EST-OBR' },
-                        { cargo: 'VIGILANTE', rac: '8985N' }
-                    ];
-                }
-
-                opcionesEstadal.forEach(item => {
-                    const opt = document.createElement('option');
-                    opt.value = item.cargo;
-                    opt.textContent = item.cargo;
-                    opt.dataset.rac = item.rac;
-                    selCargo.appendChild(opt);
-                });
-
-                selRac.disabled = false;
-                selRac.innerHTML = '<option value="">Auto / Seleccione...</option>';
-                selCargo.onchange = () => {
-                    const opt = selCargo.options[selCargo.selectedIndex];
-                    const racVal = opt?.dataset?.rac || '';
-                    selRac.innerHTML = racVal ? `<option value="${racVal}" selected>${racVal}</option>` : '<option value="">Auto</option>';
-                };
-            }
+        // Ocultar selectores rígidos y activar inputs de texto libre
+        selCargo.style.display = 'none';
+        selCargo.disabled = true;
+        if (inputCargoLibre) {
+            inputCargoLibre.style.display = 'block';
+            inputCargoLibre.disabled = false;
+            inputCargoLibre.placeholder = `Escriba el cargo institucional (${dep})...`;
         }
+
+        selRac.style.display = 'none';
+        selRac.disabled = true;
+        if (inputRacLibre) {
+            inputRacLibre.style.display = 'block';
+            inputRacLibre.disabled = false;
+            inputRacLibre.placeholder = 'Código de cargo institucional (opcional)...';
+        }
+        if (lblRac) lblRac.textContent = 'Código de Cargo';
     }
 
     function poblarOficiosObrero() {
@@ -855,7 +879,7 @@ export function limpiarFormularioPersonal(scrollBackToTable = false) {
     const ids = [
         'wp-cedula', 'wp-nombres', 'wp-lugar-nacimiento', 'wp-nacimiento', 'wp-edad', 'wp-genero', 'wp-nacionalidad',
         'wp-estado-civil', 'wp-ubicacion-administrativa', 'wp-tipo-personal', 'wp-dependencia', 'wp-subcategoria',
-        'wp-cargo', 'wp-codigo-rac', 'wp-cargo-planta', 'wp-pertenece-estructura-municipal', 'wp-cargo-estructura-municipal', 'wp-titular', 'wp-situacion-laboral', 'wp-descripcion-situacion', 'wp-especialidad-imparte',
+        'wp-cargo', 'wp-cargo-libre', 'wp-codigo-rac', 'wp-codigo-rac-libre', 'wp-cargo-planta', 'wp-pertenece-estructura-municipal', 'wp-cargo-estructura-municipal', 'wp-titular', 'wp-situacion-laboral', 'wp-descripcion-situacion', 'wp-especialidad-imparte',
         'wp-horas-recibo', 'wp-horas-academicas', 'wp-horas-por-programar', 'wp-horas-administrativas',
         'wp-fecha-ingreso', 'wp-antiguedad', 'wp-instruccion', 'wp-titulo', 'wp-turnos-atiende',
         'wp-talla-camisa', 'wp-talla-pantalon', 'wp-talla-zapato', 'wp-actividad-deportiva', 'wp-actividad-cultural',
@@ -942,13 +966,32 @@ export function limpiarFormularioPersonal(scrollBackToTable = false) {
     if (cargoSel) {
         cargoSel.innerHTML = '<option value="">Seleccione Cargo...</option>';
         cargoSel.disabled = true;
+        cargoSel.style.display = 'block';
+    }
+
+    const cargoLibre = document.getElementById('wp-cargo-libre');
+    if (cargoLibre) {
+        cargoLibre.value = '';
+        cargoLibre.style.display = 'none';
+        cargoLibre.disabled = true;
     }
 
     const racSel = document.getElementById('wp-codigo-rac');
     if (racSel) {
         racSel.innerHTML = '<option value="">Auto / Seleccione...</option>';
         racSel.disabled = true;
+        racSel.style.display = 'block';
     }
+
+    const racLibre = document.getElementById('wp-codigo-rac-libre');
+    if (racLibre) {
+        racLibre.value = '';
+        racLibre.style.display = 'none';
+        racLibre.disabled = true;
+    }
+
+    const lblRac = document.getElementById('lbl-codigo-rac');
+    if (lblRac) lblRac.textContent = 'Código RAC';
 }
 
 export function calcularEdadWizard() {
@@ -1163,7 +1206,10 @@ export function cargarEmpleadoEnFormulario(data, docId) {
     }
 
     const tipo = (data['tipo-personal'] || '').toUpperCase();
-    const dep = (data.dependencia || '').toUpperCase();
+    let dep = (data.dependencia || '').toUpperCase().trim();
+    if (dep.includes('AUTONOM')) dep = 'AUTONOMA';
+    if (dep.includes('PRIVAD')) dep = 'PRIVADA';
+
     const selTipo = document.getElementById('wp-tipo-personal');
     const selDep = document.getElementById('wp-dependencia');
 
@@ -1173,7 +1219,19 @@ export function cargarEmpleadoEnFormulario(data, docId) {
     }
 
     if (selDep) {
-        selDep.value = dep;
+        let matched = false;
+        const normDep = dep.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+        for (let i = 0; i < selDep.options.length; i++) {
+            const optNorm = selDep.options[i].value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+            if (optNorm === normDep || (normDep.startsWith('PRIVAD') && optNorm.startsWith('PRIVAD')) || (normDep.startsWith('AUTONOM') && optNorm.startsWith('AUTONOM'))) {
+                selDep.selectedIndex = i;
+                matched = true;
+                break;
+            }
+        }
+        if (!matched && dep) {
+            selDep.value = dep;
+        }
         selDep.dispatchEvent(new Event('change'));
     }
 
@@ -1183,8 +1241,38 @@ export function cargarEmpleadoEnFormulario(data, docId) {
         const racTarget = (data['codigo-rac'] || data['codigo-cargo'] || '').trim();
         const selCargo = document.getElementById('wp-cargo');
         const selRac = document.getElementById('wp-codigo-rac');
+        const inputCargoLibre = document.getElementById('wp-cargo-libre');
+        const inputRacLibre = document.getElementById('wp-codigo-rac-libre');
+        const lblRac = document.getElementById('lbl-codigo-rac');
 
-        if (tipo === 'OBRERO' && dep === 'NACIONAL') {
+        const esNac = (dep === 'NACIONAL');
+
+        // DEPENDENCIAS NO NACIONALES (ESTADAL, MUNICIPAL, AUTONOMA, SUBVENCIONADA, PRIVADA) -> A LIBRE ALBEDRÍO
+        if (!esNac) {
+            if (inputCargoLibre) {
+                inputCargoLibre.value = cargoTarget;
+                inputCargoLibre.style.display = 'block';
+                inputCargoLibre.disabled = false;
+            }
+            if (selCargo) selCargo.style.display = 'none';
+
+            if (inputRacLibre) {
+                inputRacLibre.value = racTarget;
+                inputRacLibre.style.display = 'block';
+                inputRacLibre.disabled = false;
+            }
+            if (selRac) selRac.style.display = 'none';
+
+            if (lblRac) lblRac.textContent = 'Código de Cargo';
+        } else {
+            // CASO NACIONAL:
+            if (inputCargoLibre) { inputCargoLibre.style.display = 'none'; inputCargoLibre.disabled = true; }
+            if (selCargo) selCargo.style.display = 'block';
+            if (inputRacLibre) { inputRacLibre.style.display = 'none'; inputRacLibre.disabled = true; }
+            if (selRac) selRac.style.display = 'block';
+            if (lblRac) lblRac.textContent = 'Código RAC';
+
+            if (tipo === 'OBRERO' && dep === 'NACIONAL') {
             const selRango = document.getElementById('wp-subcategoria');
             if (selRango) {
                 if (racTarget) selRango.value = racTarget;
@@ -1223,7 +1311,7 @@ export function cargarEmpleadoEnFormulario(data, docId) {
                             break;
                         }
                     }
-                    if (!racMatched && racTarget) {
+                    if (!rMatched && racTarget) {
                         const optR = document.createElement('option');
                         optR.value = racTarget;
                         optR.textContent = racTarget;
@@ -1279,8 +1367,10 @@ export function cargarEmpleadoEnFormulario(data, docId) {
                 }
             }, 40);
         }
+    }
 
-        setVal('wp-titular', data.titular || 'Titular');
+    setSelectSmart('wp-titular', data.titular || 'Titular');
+    setVal('wp-titular', data.titular || 'Titular');
 
         // Conversión a formato ISO (YYYY-MM-DD) para que el navegador HTML5 renderice la fecha correctamente
         let fIngreso = String(data['fecha-ingreso'] || '').trim();
@@ -1692,6 +1782,22 @@ export function validarFormularioPersonal() {
 
     // Revisión secuencial de cada campo
     for (const c of campos) {
+        if (c.id === 'wp-cargo') {
+            const valCargo = getCargoWizardValue();
+            const targetEl = (dep === 'NACIONAL') ? document.getElementById('wp-cargo') : document.getElementById('wp-cargo-libre');
+            if (!valCargo) {
+                if (targetEl) {
+                    targetEl.style.borderColor = '#dc2626';
+                    targetEl.focus();
+                    targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                showToast(`Por favor, complete el campo requerido: ${c.nombre}`, "warning");
+                return false;
+            }
+            if (targetEl) targetEl.style.borderColor = '';
+            continue;
+        }
+
         const el = document.getElementById(c.id);
         if (!el) continue;
         const val = (el.value !== undefined && el.value !== null) ? String(el.value).trim() : '';
@@ -1840,13 +1946,15 @@ export async function guardarPersonalInline() {
         dependencia: document.getElementById('wp-dependencia')?.value || '',
         'tipo-personal': document.getElementById('wp-tipo-personal')?.value || '',
         subcategoria: (() => {
+            const depVal = (document.getElementById('wp-dependencia')?.value || '').toUpperCase();
+            if (depVal !== 'NACIONAL') return '';
             const rEl = document.getElementById('wp-subcategoria');
             if (!rEl || !rEl.value) return '';
             return rEl.options[rEl.selectedIndex]?.text || rEl.value;
         })(),
-        cargo: document.getElementById('wp-cargo')?.value || '',
-        'codigo-cargo': document.getElementById('wp-codigo-rac')?.value || '',
-        'codigo-rac': document.getElementById('wp-codigo-rac')?.value || '',
+        cargo: getCargoWizardValue(),
+        'codigo-cargo': getCodigoCargoWizardValue(),
+        'codigo-rac': getCodigoCargoWizardValue(),
         'cargo-planta': document.getElementById('wp-cargo-planta')?.value || '',
         'pertenece-estructura-municipal': (document.getElementById('wp-pertenece-estructura-municipal')?.value || 'NO').toUpperCase() === 'SI' ? 'SI' : 'NO',
         'cargo-estructura-municipal': (document.getElementById('wp-pertenece-estructura-municipal')?.value || 'NO').toUpperCase() === 'SI' ? (document.getElementById('wp-cargo-estructura-municipal')?.value || '') : '',
@@ -3099,6 +3207,8 @@ window.validarFormularioPersonal = validarFormularioPersonal;
 window.guardarPersonalInline = guardarPersonalInline;
 window.poblarCatalogosGenerales = poblarCatalogosGenerales;
 window.initCascadaPersonal = initCascadaPersonal;
+window.getCargoWizardValue = getCargoWizardValue;
+window.getCodigoCargoWizardValue = getCodigoCargoWizardValue;
 window.cargarEmpleadoEnFormulario = cargarEmpleadoEnFormulario;
 window.mostrarModalEliminarPersonal = mostrarModalEliminarPersonal;
 window.abrirModalTraslado = abrirModalTraslado;

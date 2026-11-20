@@ -4,6 +4,23 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.38.11 (20 de Noviembre de 2026)
+
+- **Cargos y Códigos a Libre Albedrío en Dependencias No Nacionales, Menú Completo de 6 Dependencias y Corrección Crítica en Carga de Edición (`personalWizard.js`, `index.html`, `package.json`):**
+  - **Apertura a Texto Libre (Libre Albedrío) para Dependencias No Nacionales:**
+    - Ajuste integral de la cascada laboral institucional en `initCascadaPersonal()` para personal Docente, Obrero y Administrativo en dependencias **ESTADAL**, **MUNICIPAL**, **AUTÓNOMA**, **SUBVENCIONADA** y **PRIVADA**.
+    - Transición dinámica en tiempo real: los menús desplegables cerrados (`wp-cargo` y `wp-codigo-rac`) se ocultan y ceden su lugar a cajas de texto libre habilitadas (`#wp-cargo-libre` y `#wp-codigo-rac-libre`) con mayúsculas automáticas, permitiendo a los directores escribir textualmente la denominación exacta de sus cargos y sus códigos internos de nómina institucional (o dejarlos en blanco) sin exigir tabuladores RAC ministeriales.
+    - Ocultamiento inmediato del selector de Rango/Grado de Obrero para dependencias no nacionales, dado que este solo aplica a la estructura de la nómina nacional.
+  - **Catálogo Permanente de las 6 Dependencias Educativas:**
+    - Estandarización y persistencia de las 6 opciones oficiales en `#wp-dependencia`: NACIONAL, ESTADAL, MUNICIPAL, AUTÓNOMA, SUBVENCIONADA y PRIVADA, con soporte de normalización para variantes con tilde o género.
+  - **Preservación Exclusiva del Catálogo Reglamentado para NACIONAL:**
+    - Mantenimiento estricto del tabulador MPPE para la nómina nacional: oficios y rangos oficiales para personal OBRERO, y lista ministerial de cargos con asignación automática de códigos RAC para personal DOCENTE y ADMINISTRATIVO.
+  - **Corrección Crítica en Carga Completa de Edición (`cargarEmpleadoEnFormulario`):**
+    - Eliminación de la interrupción prematura en el flujo de inicialización que impedía el despliegue de los campos a partir de Titular / Interino en funcionarios de dependencias no nacionales.
+    - Garantía de carga y recuperación al 100% de todos los bloques del formulario: Titular/Interino, Fecha de Ingreso, Turnos, Bloque Pedagógico, Horas de Recibo/Administrativas/Académicas, Situación Laboral, Bienestar Social y Punto y Círculo.
+
+---
+
 ### v2.38.10 (19 de Noviembre de 2026)
 
 - **Pizarras Institucionales para Usuarios de Plantel y Despacho (`plaadmin` / `plantadmin`), Barra de Pestañas Interactivas Global (`user-subnav-tabs`) y Corrección de Centrado (`index.html`, `main.js`, `admin.js`, `personalWizard.js`, `styles.css`, `package.json`):**

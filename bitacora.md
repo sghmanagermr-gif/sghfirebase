@@ -5638,3 +5638,28 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
 
 
 
+
+
+---
+
+### Hito: Cargos y Códigos a Libre Albedrío en Dependencias No Nacionales, Menú Completo de 6 Dependencias y Corrección Crítica en Carga de Edición (v2.38.11)
+- **Fecha:** 2026-11-20 ~15:30 (Hora Local Venezuela).
+- **Módulos:** Formulario Asistente de Personal (`webapp/src/personalWizard.js`, `webapp/index.html`, `webapp/package.json`).
+- **Objetivo:** Resolver el bloqueo que impedía a los directores de planteles estadales, municipales, autónomos, subvencionados y privados ingresar cargos y códigos de libre denominación; estandarizar el selector de dependencias a las 6 opciones del sistema educativo; preservar el catálogo reglamentado ministerial exclusivamente para la nómina nacional; y corregir la interrupción en `cargarEmpleadoEnFormulario` que omitía el despliegue de los campos a partir de Titular / Interino al editar personal no nacional.
+- **Cambios Técnicos (v2.38.11):**
+  * **Casillas Dinámicas a Texto Libre (Libre Albedrío) en `webapp/index.html` y `webapp/src/personalWizard.js`:**
+    - Se incorporaron las entradas de texto libre `#wp-cargo-libre` y `#wp-codigo-rac-libre` en la interfaz, con transformación automática a mayúsculas (`text-transform: uppercase`).
+    - En `initCascadaPersonal()` / `actualizarCascada()`, al seleccionar dependencias no nacionales (ESTADAL, MUNICIPAL, AUTÓNOMA, SUBVENCIONADA o PRIVADA), el selector rígido de cargos y códigos RAC se oculta y deshabilita, activando inmediatamente las casillas de texto libre donde el director puede escribir la denominación exacta del cargo institucional y el código interno de nómina sin restricciones ni bloqueos.
+    - El contenedor `#container-rango-obrero` permanece oculto para dependencias no nacionales, preservando la escala obrera ministerial solo para la nómina nacional.
+  * **Estandarización del Menú de Dependencias (`#wp-dependencia`):**
+    - Se pobló el elemento de forma permanente con las 6 dependencias completas: NACIONAL, ESTADAL, MUNICIPAL, AUTÓNOMA, SUBVENCIONADA y PRIVADA, con soporte de normalización para variaciones de tildes o terminaciones.
+  * **Preservación Exclusiva del Tabulador MPPE para Nómina NACIONAL:**
+    - Para la dependencia NACIONAL se mantiene intacta la regla estricta: desglose por rango y oficio para OBREROS, y lista ministerial de cargos con vinculación automática de código RAC para DOCENTES y ADMINISTRATIVOS.
+  * **Funciones Auxiliares de Extracción y Validación (`getCargoWizardValue`, `getCodigoCargoWizardValue`, `validarFormularioPersonal`, `recolectarDatosWizard`):**
+    - `getCargoWizardValue()` y `getCodigoCargoWizardValue()` extraen reactivamente el valor correcto según la dependencia seleccionada (select oficial o input libre), exportadas e integradas a `window`.
+    - En `validarFormularioPersonal()`, la validación de campo requerido para Cargo evalúa dinámicamente `#wp-cargo` para nacional o `#wp-cargo-libre` para no nacional, resaltando el borde en rojo y enfocando el elemento correspondiente.
+    - En `recolectarDatosWizard()` y `guardarPersonalInline()`, el payload captura fielmente el cargo y código escritos por el usuario.
+  * **Corrección Crítica en Modo Edición (`cargarEmpleadoEnFormulario`):**
+    - Se eliminó la sentencia `return;` que interrumpía prematuramente la ejecución en dependencias no nacionales tras poblar los campos libres.
+    - Se reestructuró el flujo para que, tras configurar la interfaz del cargo según la dependencia, el proceso continúe sin cortes y llene el 100% de los campos del formulario: `#wp-titular` (vía `setSelectSmart` y `setVal`), `#wp-fecha-ingreso`, antigüedad, turnos, bloque pedagógico y horas, situación laboral, bienestar social y punto y círculo.
+  * **Verificación:** Pruebas automatizadas E2E en local mediante Chromium headless validando creación y edición completa en dependencias nacionales y no nacionales; aprobación explícita de satisfacción del usuario ("Sí, Los resultados Son satisfactorios"), incremento SemVer a `v2.38.11`, compilación en Vite, despliegue a Firebase Hosting y sincronización en GitHub.
