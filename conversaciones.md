@@ -10953,3 +10953,47 @@ Creo que solo 2 están en el RAC.xlsx"
 > Se actualizó la bitácora técnica institucional (bitacora.md), el historial cronológico de versiones (versiones.md) y el registro íntegro de conversaciones (conversaciones.md).  
 > Se compiló la versión de producción con Vite y se desplegó exitosamente a Firebase Hosting (https://sgh-merida.web.app).  
 > Se realizó el commit y respaldo automático de la rama main en el repositorio remoto GitHub.
+
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> En la tarjeta id="card-pizarra-pla-matricula" aparece el total de matrícula en: id="stat-pla-matricula-num"; más sin embargo en id="stat-pla-matricula-desc" las Cantidades no corresponden. Por favor verifica y dime que puede estar sucediendo.  
+> [Adjunto: Captura de pantalla de la Pizarra Escolar de la ETA Mucuchachí reflejando 81 en el número central y ♂ 90 Varones | ♀ 72 Hembras en la leyenda inferior]
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Revisé detalladamente lo que estaba ocurriendo y ya quedó identificado y corregido.  
+>   
+> ### ¿Qué estaba sucediendo?  
+> En la tarjeta de matrícula de la Pizarra Escolar:  
+> 1. El número grande central tomaba de forma correcta el total consolidado registrado en la base de datos (81 estudiantes).  
+> 2. Sin embargo, la leyenda inferior (Varones y Hembras) utilizaba una rutina que recorría automáticamente todas las carpetas internas de la matrícula para sumar los géneros.  
+> 3. En las instituciones de Media Técnica (como la ETA Mucuchachí), esa rutina leía primero las secciones año por año, sumando 45 varones y 36 hembras. Pero de inmediato entraba también a la carpeta interna de resumen de media técnica (que guardaba a su vez el consolidado de 45 varones y 36 hembras) y los sumaba una segunda vez.  
+> 4. Por ese motivo, los varones se duplicaban exactamente a 90 (45 + 45) y las hembras a 72 (36 + 36), totalizando 162 en la descripción mientras que el número principal reflejaba los 81 reales.  
+>   
+> ### Ajuste realizado:  
+> 1. Se priorizó la lectura directa de los totales oficiales consolidados de varones y hembras almacenados en el expediente del plantel (45 varones y 36 hembras).  
+> 2. En caso de que se requiera el cálculo por secciones, se configuró la función para que descarte los contenedores de resumen interno y las vacantes, contabilizando cada aula una única vez.  
+> 3. Se verificó en el entorno local con las pruebas automáticas, comprobando que ahora muestra de forma exacta: 81 estudiantes en el número central y ♂ 45 Varones | ♀ 36 Hembras en la descripción.  
+>   
+> Por favor, refresca la página en tu navegador en el entorno local y verifica si se visualiza correctamente para que me confirmes si los resultados son satisfactorios.
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> Sí son satisfactorios
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Confirmación de satisfacción recibida y cierre formal de la versión **v2.38.12**.  
+> Se incrementó la versión física a v2.38.12 en package.json e index.html.  
+> Se actualizó la bitácora técnica institucional (bitacora.md), el historial cronológico de versiones (versiones.md) y el registro íntegro de conversaciones (conversaciones.md).  
+> Se compiló la versión de producción con Vite y se desplegó exitosamente a Firebase Hosting (https://sgh-merida.web.app).  
+> Se realizó el commit y respaldo automático de la rama main en el repositorio remoto GitHub.

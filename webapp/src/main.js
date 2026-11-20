@@ -2514,17 +2514,35 @@ window.actualizarMetricasPizarraUsuario = function() {
 
     let varones = 0;
     let hembras = 0;
-    function sumarSexos(obj) {
-      if (!obj || typeof obj !== 'object') return;
-      if (obj.mas !== undefined || obj.fem !== undefined) {
-        varones += Number(obj.mas || 0);
-        hembras += Number(obj.fem || 0);
+
+    // 1. Prioridad: totales consolidados directos guardados en el registro
+    const directMas = mat['total-gen-mas'] ?? dp['matricula-mas'] ?? dp.masculino ?? window.currentPlantel?.['total-gen-mas'] ?? window.currentPlantel?.['matricula-mas'] ?? window.currentPlantel?.masculino;
+    const directFem = mat['total-gen-fem'] ?? dp['matricula-fem'] ?? dp.femenino ?? window.currentPlantel?.['total-gen-fem'] ?? window.currentPlantel?.['matricula-fem'] ?? window.currentPlantel?.femenino;
+
+    if ((directMas !== undefined && directMas !== null && directFem !== undefined && directFem !== null) && (Number(directMas) + Number(directFem) > 0 || totalMat === 0)) {
+      varones = Number(directMas || 0);
+      hembras = Number(directFem || 0);
+    } else {
+      // 2. Fallback: sumar por secciones hoja ignorando nodos totalizadores y vacantes
+      function sumarSexos(obj) {
+        if (!obj || typeof obj !== 'object') return;
+        if (obj.mas !== undefined || obj.fem !== undefined) {
+          varones += Number(obj.mas || 0);
+          hembras += Number(obj.fem || 0);
+          return;
+        }
+        for (const k in obj) {
+          if (!Object.prototype.hasOwnProperty.call(obj, k)) continue;
+          const kLower = String(k).toLowerCase();
+          if (kLower.includes('total') || kLower.includes('resumen') || kLower.includes('general') || kLower.includes('vacante') || kLower.startsWith('vac_')) continue;
+          if (typeof obj[k] === 'object' && obj[k] !== null) {
+            sumarSexos(obj[k]);
+          }
+        }
       }
-      for (const k in obj) {
-        if (typeof obj[k] === 'object' && k !== 'total-gen') sumarSexos(obj[k]);
-      }
+      sumarSexos(mat);
     }
-    sumarSexos(mat);
+
     if (totalMat === 0 && (varones + hembras > 0)) totalMat = varones + hembras;
 
     if (elMatriculaNum) elMatriculaNum.textContent = totalMat;
@@ -2569,6 +2587,24 @@ window.actualizarMetricasPizarraUsuario = function() {
       }
       if (mat.modalidades?.especial?.grupos) totalSecciones += Object.keys(mat.modalidades.especial.grupos).filter(k => k.length === 1).length;
       if (mat.modalidades?.adulto?.grupos) totalSecciones += Object.keys(mat.modalidades.adulto.grupos).filter(k => k.length === 1).length;
+      if (mat.media) {
+        ['media-general', 'media-tecnica'].forEach(mod => {
+          if (mat.media[mod]) {
+            for (const menc in mat.media[mod]) {
+              if (menc.startsWith('total-')) continue;
+              const mencObj = mat.media[mod][menc];
+              if (typeof mencObj === 'object' && mencObj !== null) {
+                for (const yr in mencObj) {
+                  const yrObj = mencObj[yr];
+                  if (typeof yrObj === 'object' && yrObj !== null) {
+                    totalSecciones += Object.keys(yrObj).filter(k => k.length === 1 && !k.startsWith('total')).length;
+                  }
+                }
+              }
+            }
+          }
+        });
+      }
     }
 
     if (elSeccionesNum) elSeccionesNum.textContent = totalSecciones;

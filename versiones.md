@@ -4,6 +4,21 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.38.12 (20 de Noviembre de 2026)
+
+- **Corrección en Lectura y Conteo Discriminado por Género de la Matrícula Escolar en la Pizarra Institucional (`main.js`, `index.html`, `package.json`):**
+  - **Priorización de Totales Canónicos Consolidados:**
+    - Ajuste de la rutina `actualizarMetricasPizarraUsuario` para extraer directamente los totales oficiales consolidados de varones (`total-gen-mas`) y hembras (`total-gen-fem`) almacenados en el expediente del plantel o en los atributos directos del documento (`matricula-mas`, `matricula-fem`, `masculino`, `femenino`).
+  - **Eliminación del Doble Cómputo por Recorrido Recursivo:**
+    - Se corrigió la función interna `sumarSexos` para evitar la duplicidad de cómputo en planteles con estructura multinivel (especialmente instituciones de Media Técnica o General). La rutina descartaba únicamente la clave `total-gen`, provocando que al recorrer las secciones se sumaran los estudiantes aula por aula y luego se sumaran nuevamente al visitar el objeto contenedor `total-gen-med`, duplicando artificialmente las cifras de varones y hembras en la descripción (`stat-pla-matricula-desc`).
+    - Se programó la exclusión estricta de cualquier contenedor o subclave que incluya términos totalizadores (`total`, `resumen`, `general`, `vacante`, `vac_`), asegurando que solo los nodos hoja de secciones reales sean computados una sola vez.
+  - **Sincronización Total / Género:**
+    - Garantía de consistencia matemática exacta entre el número principal (`stat-pla-matricula-num`) y la sumatoria discriminada de varones y hembras (`stat-pla-matricula-desc`).
+  - **Soporte de Fallback para Conteo de Secciones de Media Técnica:**
+    - Extensión de la lógica de conteo de aulas en caso de ausencia de la estructura `secciones-planes`, integrando el escaneo de menciones y años en `matricula.media` para calcular las secciones activas en instituciones técnicas.
+
+---
+
 ### v2.38.11 (20 de Noviembre de 2026)
 
 - **Cargos y Códigos a Libre Albedrío en Dependencias No Nacionales, Menú Completo de 6 Dependencias y Corrección Crítica en Carga de Edición (`personalWizard.js`, `index.html`, `package.json`):**

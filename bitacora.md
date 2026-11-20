@@ -5663,3 +5663,22 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
     - Se eliminó la sentencia `return;` que interrumpía prematuramente la ejecución en dependencias no nacionales tras poblar los campos libres.
     - Se reestructuró el flujo para que, tras configurar la interfaz del cargo según la dependencia, el proceso continúe sin cortes y llene el 100% de los campos del formulario: `#wp-titular` (vía `setSelectSmart` y `setVal`), `#wp-fecha-ingreso`, antigüedad, turnos, bloque pedagógico y horas, situación laboral, bienestar social y punto y círculo.
   * **Verificación:** Pruebas automatizadas E2E en local mediante Chromium headless validando creación y edición completa en dependencias nacionales y no nacionales; aprobación explícita de satisfacción del usuario ("Sí, Los resultados Son satisfactorios"), incremento SemVer a `v2.38.11`, compilación en Vite, despliegue a Firebase Hosting y sincronización en GitHub.
+
+
+---
+
+### Hito: Corrección en Conteo Discriminado de Matrícula por Género en Pizarra Escolar y Soporte Robusto para Media Técnica (v2.38.12)
+- **Fecha:** 2026-11-20 ~16:35 (Hora Local Venezuela).
+- **Módulos:** Pizarra Institucional y Métricas de Plantel (`webapp/src/main.js`, `webapp/index.html`, `webapp/package.json`).
+- **Objetivo:** Subsanar la discrepancia detectada en la tarjeta de matrícula escolar (`#card-pizarra-pla-matricula`) en instituciones de Media Técnica (caso ETA Mucuchachí, DEA T0714D1405), donde el indicador numérico central reflejaba fielmente el total consolidado (81 estudiantes) pero la leyenda descriptiva inferior duplicaba las cifras mostrando `♂ 90 Varones | ♀ 72 Hembras` (162 estudiantes en total).
+- **Cambios Técnicos (v2.38.12):**
+  * **Prioridad a Totales Canónicos Consolidados (`actualizarMetricasPizarraUsuario` en `webapp/src/main.js`):**
+    - Se configuró la lectura prioritaria directa de los atributos canónicos `total-gen-mas` y `total-gen-fem` desde el objeto `matricula`, o en su defecto `matricula-mas` / `matricula-fem` / `masculino` / `femenino` del expediente del plantel. Al estar previamente consolidados en el guardado de la matrícula, se evita cualquier discrepancia de cálculo dinámico.
+  * **Depuración de la Rutina Recursiva `sumarSexos`:**
+    - Se identificó la causa raíz: la función anterior sólo excluía la clave `total-gen` al descender por el árbol del objeto `matricula`. En escuelas de Media Técnica, la rutina sumaba las aulas reales (`media-tecnica`) y posteriormente descendía al nodo de consolidación `total-gen-med` (que contenía `{ mas: 45, fem: 36, total: 81 }`), sumando nuevamente los valores y duplicando el resultado a 90 y 72.
+    - Se refactorizó la función para filtrar y omitir todo contenedor o subclave que contenga `total`, `resumen`, `general`, `vacante` o prefijos `vac_`, asegurando que una vez detectado un nodo hoja con valores de sexo se contabilicen una sola vez y no se vuelva a descender.
+  * **Fallback para Conteo de Secciones en Media General y Media Técnica:**
+    - Se añadió soporte en la estimación de secciones/aulas para recorrer las menciones y años dentro de `mat.media` en caso de que la estructura `secciones-planes` no esté definida, reflejando fielmente las aulas activas de planteles técnicos.
+  * **Verificación y Pruebas:**
+    - Pruebas automatizadas en navegador headless Chromium comprobando tanto el caso con totales consolidados directos como el caso con recorrido de nodos hoja, arrojando con exactitud 81 estudiantes con 45 varones y 36 hembras.
+    - Confirmación explícita de satisfacción del usuario ("Sí son satisfactorios"). Incremento de versión física a `v2.38.12`, compilación de producción con Vite y despliegue a Firebase Hosting.
