@@ -496,6 +496,7 @@ export function initAdminDashboard(dbInstance, user) {
   const gridPlanteles = document.getElementById('grid-planteles') || document.getElementById('tbody-planteles');
   const tbodyPlanteles = gridPlanteles;
   const inpBuscarPlantel = document.getElementById('inp-buscar-plantel');
+  const btnLimpiarBuscarPlantel = document.getElementById('btn-limpiar-buscar-plantel');
   const selFiltroMunicipio = document.getElementById('filtro-municipio-plantel');
   const selFiltroParroquia = document.getElementById('filtro-parroquia-plantel');
   const modalPlantel = document.getElementById('modal-plantel');
@@ -5230,6 +5231,10 @@ export function initAdminDashboard(dbInstance, user) {
         : `Buscar por DEA o epónimo...`;
     }
 
+    if (btnLimpiarBuscarPlantel && inpBuscarPlantel) {
+      btnLimpiarBuscarPlantel.style.display = inpBuscarPlantel.value ? 'inline-flex' : 'none';
+    }
+
     const term = inpBuscarPlantel ? inpBuscarPlantel.value.toLowerCase().trim() : '';
     let filtered = currentPlanteles;
 
@@ -5419,8 +5424,24 @@ export function initAdminDashboard(dbInstance, user) {
     });
   }
 
-  if(inpBuscarPlantel) {
-    inpBuscarPlantel.addEventListener('input', renderPlantelesList);
+  if (inpBuscarPlantel) {
+    inpBuscarPlantel.addEventListener('input', () => {
+      if (btnLimpiarBuscarPlantel) {
+        btnLimpiarBuscarPlantel.style.display = inpBuscarPlantel.value ? 'inline-flex' : 'none';
+      }
+      renderPlantelesList();
+    });
+  }
+
+  if (btnLimpiarBuscarPlantel) {
+    btnLimpiarBuscarPlantel.addEventListener('click', () => {
+      if (inpBuscarPlantel) {
+        inpBuscarPlantel.value = '';
+        btnLimpiarBuscarPlantel.style.display = 'none';
+        inpBuscarPlantel.focus();
+      }
+      renderPlantelesList();
+    });
   }
 
   if(selFiltroMunicipio) {

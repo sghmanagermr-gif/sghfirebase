@@ -11124,3 +11124,67 @@ Creo que solo 2 están en el RAC.xlsx"
 > Perfecto. resultados satisfactorios  
 > Por favor revisa este otro video  
 > [Adjunto: Video del modal de Expediente de Auditoría Rápida demostrando la falta de respuesta al cambiar de pestaña]
+
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> El despliegue de la versión **v2.38.13** se ha completado con éxito y ya se encuentra disponible en producción en el servidor oficial en línea (https://sgh-merida.web.app), con su correspondiente respaldo automático en GitHub.
+> 
+> ### Resumen de la solución para el caso del video:
+> 
+> * **¿Qué ocurría?**  
+>   En el video se observaba que al abrir el **Expediente de Auditoría Rápida** de una institución (como la Escuela Básica 12 de Octubre) y tocar las pestañas **Matrícula y Secciones** o **Nómina de Personal**, la pestaña se resaltaba pero el contenido inferior no cambiaba, manteniéndose fijo en la Ficha Institucional.
+> 
+> * **¿Por qué sucedía?**  
+>   Había una coincidencia en los nombres internos de los botones entre la barra de navegación del panel y los botones dentro de la ventana de auditoría rápida. El navegador se confundía al buscar los controles y no ejecutaba el cambio de pantalla.
+> 
+> * **¿Cómo quedó resuelto?**  
+>   1. Se asignaron controles únicos e independientes para las pestañas de la ventana de auditoría rápida.  
+>   2. Se les dotó de activación directa instantánea y estilos visuales nítidos.  
+>   3. Ahora, al tocar **Matrícula y Secciones**, se muestra inmediatamente la tabla con el desglose detallado de aulas, varones, hembras y totales; y al tocar **Nómina de Personal**, se despliega de inmediato la lista de funcionarios registrados.
+> 
+> Puedes ingresar al sistema en tu teléfono o computadora (refrescando la página para cargar la versión v2.38.13) y verificar la navegación en el Expediente de Auditoría Rápida.
+> 
+> ¿Los resultados fueron satisfactorios?
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> Perfecto, gracias. pero te falto el botonsito de borrar contenido en id="inp-buscar-plantel"
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Tienes toda la razón, ya ha quedado incorporado el botón para borrar el contenido en la casilla de búsqueda de planteles.
+> 
+> ### ¿Qué se implementó?
+> * **Botón de borrado rápido (✕):** Se añadió el botón circular con la cruz dentro del campo de búsqueda de planteles (por código DEA o epónimo).
+> * **Comportamiento inteligente:** El botón permanece oculto cuando la casilla está vacía. En cuanto comienzas a escribir una letra, número o código DEA, el botón aparece inmediatamente.
+> * **Limpieza en un toque:** Al hacer clic o tocar la cruz (✕), la casilla se vacía por completo, el botón se oculta de nuevo, el cursor vuelve a quedar activo listo para escribir y la lista de planteles se restaura al instante mostrando todas las instituciones correspondientes al filtro municipal.
+> 
+> El cambio ya fue compilado y desplegado al servidor oficial en línea (https://sgh-merida.web.app).
+> 
+> ¿Los resultados fueron satisfactorios?
+
+
+---
+
+* **Emisor:** Usuario (Super Administrador)
+
+> **Mensaje del Usuario:**  
+> Todo satisfactorio
+
+* **Emisor:** Agente (Antigravity)
+
+> **Respuesta del Agente:**  
+> Excelente. Con la confirmación de tu plena satisfacción, procedo a registrar formalmente este hito:
+> 
+> 1. Se ha incrementado la versión oficial del sistema a v2.38.14 (sincronizada en todos los identificadores visuales y de configuración).
+> 2. Se han actualizado la bitácora técnica de desarrollo (bitacora.md) y el historial cronológico de entregas (versiones.md).
+> 3. Se recompiló la aplicación y se desplegó a producción en el servidor oficial en línea (https://sgh-merida.web.app).
+> 4. Se respaldaron todos los cambios en el repositorio de GitHub.
+> 
+> Todo ha quedado asegurado y en perfecto funcionamiento.

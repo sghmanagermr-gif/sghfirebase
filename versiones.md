@@ -4,6 +4,18 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.38.14 (23 de Noviembre de 2026)
+
+- **Botón Dinámico de Borrado Rápido en Buscador de Planteles (`admin.js`, `index.html`, `package.json`):**
+  - **Integración de Botón de Limpieza (✕):**
+    - Se incorporó un botón circular de borrado rápido dentro del campo de búsqueda de planteles (`inp-buscar-plantel`), alineado milimétricamente con el diseño y comportamiento del buscador de usuarios (`btn-limpiar-buscar-usuario`).
+    - El botón permanece oculto cuando el campo está vacío y se despliega automáticamente (`inline-flex`) al escribir cualquier carácter.
+  - **Limpieza Instantánea y Reactividad:**
+    - Al pulsar el botón (✕), se limpia el contenido del campo, se oculta el botón, se devuelve el foco al input y se ejecuta de inmediato la actualización de la lista (`renderPlantelesList()`), restaurando la visualización completa de los planteles según los filtros de municipio y parroquia seleccionados.
+    - Se vinculó la visibilidad del botón dentro del flujo de `renderPlantelesList()` para asegurar sincronización en cualquier escenario de refresco o reseteo programático.
+
+---
+
 ### v2.38.13 (23 de Noviembre de 2026)
 
 - **Corrección y Blindaje de Secciones/Aulas y Matrícula Escolar, y Desacoplamiento de Pestañas en Expediente de Auditoría Rápida (`main.js`, `admin.js`, `index.html`, `styles.css`, `package.json`):**

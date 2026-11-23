@@ -5709,3 +5709,28 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
     - Pruebas automatizadas E2E mediante Playwright headless y servidor HTTP local verificando el cambio reactivo de pestañas (`s1: mat block, s2: per block, s3: inst block`) con alternancia visual de clases activas.
     - Saneamiento transaccional de `planteles/OD01221420` en Firestore regularizando sus 21 aulas y sus 496 estudiantes consolidados.
     - Aprobación explícita de satisfacción del usuario ("Perfecto. resultados satisfactorios"). Incremento de versión física a `v2.38.13`, compilación con Vite y preparación para despliegue.
+
+
+---
+
+### Hito: Botón Dinámico de Borrado Rápido en Buscador de Planteles (v2.38.14)
+- **Fecha:** 2026-11-23 ~15:10 (Hora Local Venezuela).
+- **Módulos:** Panel Administrativo - Pestaña de Planteles (`webapp/src/admin.js`, `webapp/index.html`, `webapp/package.json`).
+- **Objetivo:** 
+  1. Incorporar el botón circular de limpieza rápida (✕) en el campo de búsqueda de planteles (`inp-buscar-plantel`), equiparando su ergonomía y diseño visual con el buscador de usuarios del sistema (`btn-limpiar-buscar-usuario`).
+  2. Ofrecer reactividad instantánea para limpiar el texto de búsqueda, restablecer el foco y repoblar de inmediato el listado de planteles correspondiente a la jurisdicción o filtros seleccionados.
+- **Cambios Técnicos (v2.38.14):**
+  * **Estructura HTML en `webapp/index.html`:**
+    - Se envolvió el campo `inp-buscar-plantel` dentro de un contenedor relativo con dimensiones responsivas (`flex: 1; min-width: 200px; max-width: 280px;`).
+    - Se inyectó el elemento `<button type="button" id="btn-limpiar-buscar-plantel" title="Limpiar búsqueda">✕</button>` posicionado absolutamente a la derecha con estilos circulares idénticos al buscador de usuarios.
+    - Se ajustó el padding derecho del input a 36px para evitar superposición entre el texto ingresado y el glifo de borrado.
+  * **Lógica Reactiva en `webapp/src/admin.js`:**
+    - Se declaró `btnLimpiarBuscarPlantel` en las referencias principales del DOM.
+    - Se enlazó el evento `input` en `inpBuscarPlantel` para alternar la visibilidad del botón (`inline-flex` cuando contiene caracteres, `none` cuando está vacío) y desencadenar `renderPlantelesList()`.
+    - Se configuró el evento `click` en `btnLimpiarBuscarPlantel` para vaciar el input, ocultar el botón, reenfocar el campo (`inpBuscarPlantel.focus()`) y reejecutar `renderPlantelesList()`.
+    - Se sincronizó la comprobación de visibilidad de `btnLimpiarBuscarPlantel` en el propio ciclo interno de `renderPlantelesList()`.
+  * **Verificación y Pruebas:**
+    - Compilación de producción con Vite completada sin errores.
+    - Despliegue a Firebase Hosting verificado en producción (`https://sgh-merida.web.app`).
+    - Aprobación explícita de satisfacción del usuario ("Todo satisfactorio").
+    - Incremento de versión física a `v2.38.14` en `webapp/package.json` y `webapp/index.html`.
