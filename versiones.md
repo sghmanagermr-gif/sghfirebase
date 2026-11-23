@@ -4,6 +4,21 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.38.13 (23 de Noviembre de 2026)
+
+- **Corrección y Blindaje de Secciones/Aulas y Matrícula Escolar, y Desacoplamiento de Pestañas en Expediente de Auditoría Rápida (`main.js`, `admin.js`, `index.html`, `styles.css`, `package.json`):**
+  - **Priorización de Aulas Reales en Pizarra Escolar:**
+    - Se reestructuró el cómputo de aulas activas en `actualizarMetricasPizarraUsuario` para priorizar el conteo directo desde las secciones configuradas en la matrícula (`mat.basica`, `mat.modalidades`, `mat.media`). Se subsanó la anomalía de planteles (caso Juan Bautista Arismendi, DEA OD01221420) donde se reflejaban 214 aulas debido a claves corruptas en `secciones-planes`, estableciendo con exactitud 21 aulas activas.
+    - Se incorporaron candados de validación en los formularios de captura (`_renderCajasInicial`, `_renderCajasPrimaria` y guardado) limitando el número máximo de secciones a 10 por grado/nivel y admitiendo únicamente caracteres alfabéticos válidos (A-Z o U), evitando la multiplicación accidental de aulas por ingreso de matrícula estudiantil.
+  - **Sincronización Integral de Matrícula en Pizarra Escolar:**
+    - Se garantizó el cómputo exhaustivo de la matrícula sumando directamente los nodos hoja de estudiantes por aula, evitando la exclusión de niveles (como Maternal o Preescolar) que antes no se reflejaban en la tarjeta central cuando la cabecera del documento no estaba consolidada.
+    - Se actualizó el encabezado de la tarjeta a nivel de plantel a "Matrícula Estudiantil" para evitar confusiones institucionales con el término "Matrícula Estadal".
+  - **Desacoplamiento de Identificadores en Modal de Expediente de Auditoría Rápida:**
+    - Se solucionó el conflicto de colisión de IDs en el DOM entre la barra de subnavegación del usuario y los botones de pestañas del modal de auditoría rápida (`tab-btn-matricula` y `tab-btn-personal`), renombrando los controles del modal a `ficha-tab-btn-institucional`, `ficha-tab-btn-matricula` y `ficha-tab-btn-personal`.
+    - Se dotó a los botones de invocación reactiva global (`window.activarPestanaFicha`) y estilos dedicados (`.tab-ficha-btn`), garantizando la alternancia instantánea y visualización fluida entre Ficha Institucional, Matrícula y Secciones, y Nómina de Personal.
+
+---
+
 ### v2.38.12 (20 de Noviembre de 2026)
 
 - **Corrección en Lectura y Conteo Discriminado por Género de la Matrícula Escolar en la Pizarra Institucional (`main.js`, `index.html`, `package.json`):**

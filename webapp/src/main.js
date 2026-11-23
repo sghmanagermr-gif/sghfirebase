@@ -1064,12 +1064,16 @@ function _distribuirSecciones(numSec, numGrados) {
 }
 
 function _letraGrupo(s) {
+    if (s < 0) return 'A';
+    if (s >= 26) return String.fromCharCode(65 + (s % 26));
     return String.fromCharCode(65 + s);
 }
 
 function _renderCajasInicial(tipo, numSec) {
     const cont = document.getElementById('cont-dinamico-' + tipo);
     if (!cont) return;
+    
+    numSec = Math.min(Math.max(0, parseInt(numSec) || 0), 10);
     
     // Preservar valores previos ingresados por el usuario
     const valoresPrevios = {};
@@ -1138,20 +1142,20 @@ function _renderCajasPrimaria(config = null) {
 
     if (Array.isArray(config)) {
         for (let i = 0; i < 6; i++) {
-            dist[i] = parseInt(config[i]) || 0;
+            dist[i] = Math.min(Math.max(0, parseInt(config[i]) || 0), 10);
             const inp = document.querySelector(`.sec-pri-grado-input[data-grado="${i + 1}"]`);
             if (inp) inp.value = dist[i] > 0 ? dist[i] : '';
         }
     } else if (typeof config === 'object' && config !== null) {
         for (let i = 0; i < 6; i++) {
-            dist[i] = parseInt(config[String(i + 1)] || config[i + 1]) || 0;
+            dist[i] = Math.min(Math.max(0, parseInt(config[String(i + 1)] || config[i + 1]) || 0), 10);
             const inp = document.querySelector(`.sec-pri-grado-input[data-grado="${i + 1}"]`);
             if (inp) inp.value = dist[i] > 0 ? dist[i] : '';
         }
     } else if (typeof config === 'number') {
-        const d = _distribuirSecciones(config, 6);
+        const d = _distribuirSecciones(Math.min(config, 60), 6);
         for (let i = 0; i < 6; i++) {
-            dist[i] = d[i];
+            dist[i] = Math.min(d[i], 10);
             const inp = document.querySelector(`.sec-pri-grado-input[data-grado="${i + 1}"]`);
             if (inp) inp.value = dist[i] > 0 ? dist[i] : '';
         }
@@ -1159,7 +1163,7 @@ function _renderCajasPrimaria(config = null) {
         // Leer directamente desde los 6 inputs de grado
         for (let i = 0; i < 6; i++) {
             const inp = document.querySelector(`.sec-pri-grado-input[data-grado="${i + 1}"]`);
-            dist[i] = parseInt(inp?.value) || 0;
+            dist[i] = Math.min(Math.max(0, parseInt(inp?.value) || 0), 10);
         }
     }
 
@@ -2160,6 +2164,21 @@ window.verNominaCompleta = function() {
   }
 };
 
+window.activarPestanaFicha = function(tabId) {
+  const tabs = ['institucional', 'matricula', 'personal'];
+  tabs.forEach(t => {
+    const btn = document.getElementById(`ficha-tab-btn-${t}`) || document.getElementById(`tab-btn-${t}`);
+    const content = document.getElementById(`tab-content-${t}`);
+    if (btn) {
+      if (t === tabId) btn.classList.add('active');
+      else btn.classList.remove('active');
+    }
+    if (content) {
+      content.style.display = (t === tabId) ? 'block' : 'none';
+    }
+  });
+};
+
 window.cambiarTabUsuario = function(tabName) {
   const viewPizarra = document.getElementById('view-tab-pizarra');
   const viewPersonal = document.getElementById('view-tab-personal');
@@ -2510,40 +2529,41 @@ window.actualizarMetricasPizarraUsuario = function() {
 
     // Matrícula
     const mat = dp.matricula || window.currentPlantel?.matricula || {};
-    let totalMat = Number(mat['total-gen'] ?? dp['matricula-total'] ?? window.currentPlantel?.['matricula-total'] ?? document.getElementById('inp-matricula-total')?.value ?? 0);
-
     let varones = 0;
     let hembras = 0;
 
-    // 1. Prioridad: totales consolidados directos guardados en el registro
-    const directMas = mat['total-gen-mas'] ?? dp['matricula-mas'] ?? dp.masculino ?? window.currentPlantel?.['total-gen-mas'] ?? window.currentPlantel?.['matricula-mas'] ?? window.currentPlantel?.masculino;
-    const directFem = mat['total-gen-fem'] ?? dp['matricula-fem'] ?? dp.femenino ?? window.currentPlantel?.['total-gen-fem'] ?? window.currentPlantel?.['matricula-fem'] ?? window.currentPlantel?.femenino;
-
-    if ((directMas !== undefined && directMas !== null && directFem !== undefined && directFem !== null) && (Number(directMas) + Number(directFem) > 0 || totalMat === 0)) {
-      varones = Number(directMas || 0);
-      hembras = Number(directFem || 0);
-    } else {
-      // 2. Fallback: sumar por secciones hoja ignorando nodos totalizadores y vacantes
-      function sumarSexos(obj) {
-        if (!obj || typeof obj !== 'object') return;
-        if (obj.mas !== undefined || obj.fem !== undefined) {
-          varones += Number(obj.mas || 0);
-          hembras += Number(obj.fem || 0);
-          return;
-        }
-        for (const k in obj) {
-          if (!Object.prototype.hasOwnProperty.call(obj, k)) continue;
-          const kLower = String(k).toLowerCase();
-          if (kLower.includes('total') || kLower.includes('resumen') || kLower.includes('general') || kLower.includes('vacante') || kLower.startsWith('vac_')) continue;
-          if (typeof obj[k] === 'object' && obj[k] !== null) {
-            sumarSexos(obj[k]);
-          }
+    // 1. Sumar por secciones hoja ignorando nodos totalizadores y vacantes (fuente de verdad en memoria)
+    function sumarSexos(obj) {
+      if (!obj || typeof obj !== 'object') return;
+      if (obj.mas !== undefined || obj.fem !== undefined) {
+        varones += Number(obj.mas || 0);
+        hembras += Number(obj.fem || 0);
+        return;
+      }
+      for (const k in obj) {
+        if (!Object.prototype.hasOwnProperty.call(obj, k)) continue;
+        const kLower = String(k).toLowerCase();
+        if (kLower.includes('total') || kLower.includes('resumen') || kLower.includes('general') || kLower.includes('vacante') || kLower.startsWith('vac_')) continue;
+        if (typeof obj[k] === 'object' && obj[k] !== null) {
+          sumarSexos(obj[k]);
         }
       }
-      sumarSexos(mat);
     }
+    sumarSexos(mat);
 
-    if (totalMat === 0 && (varones + hembras > 0)) totalMat = varones + hembras;
+    let totalMat = varones + hembras;
+
+    // 2. Si no hay secciones hoja desglosadas por sexo, acudir a los totales consolidados
+    if (totalMat === 0) {
+      const directMas = mat['total-gen-mas'] ?? dp['matricula-mas'] ?? dp.masculino ?? window.currentPlantel?.['total-gen-mas'] ?? window.currentPlantel?.['matricula-mas'] ?? window.currentPlantel?.masculino;
+      const directFem = mat['total-gen-fem'] ?? dp['matricula-fem'] ?? dp.femenino ?? window.currentPlantel?.['total-gen-fem'] ?? window.currentPlantel?.['matricula-fem'] ?? window.currentPlantel?.femenino;
+      varones = Number(directMas || 0);
+      hembras = Number(directFem || 0);
+      totalMat = varones + hembras;
+    }
+    if (totalMat === 0) {
+      totalMat = Number(mat['total-gen'] ?? dp['matricula-total'] ?? window.currentPlantel?.['matricula-total'] ?? document.getElementById('inp-matricula-total')?.value ?? 0);
+    }
 
     if (elMatriculaNum) elMatriculaNum.textContent = totalMat;
     if (elMatriculaDesc) {
@@ -2563,30 +2583,34 @@ window.actualizarMetricasPizarraUsuario = function() {
 
     // Secciones / Aulas
     let totalSecciones = 0;
-    const sp = dp['secciones-planes'] || window.currentPlantel?.['secciones-planes'] || {};
-    for (const k in sp) {
-      const val = sp[k];
-      if (typeof val === 'number') totalSecciones += val;
-      else if (typeof val === 'object' && val !== null) {
-        for (const subK in val) {
-          const subVal = val[subK];
-          if (typeof subVal === 'number') totalSecciones += subVal;
-          else if (typeof subVal === 'object' && subVal !== null) totalSecciones += Object.keys(subVal).length;
-        }
-      }
-    }
-    if (totalSecciones === 0 && mat) {
+    // Prioridad 1: Contar secciones reales configuradas en matrícula
+    if (mat) {
       if (mat.basica) {
-        if (mat.basica["20000"]?.maternal) totalSecciones += Object.keys(mat.basica["20000"].maternal).filter(k => k.length === 1).length;
-        if (mat.basica["20000"]?.preescolar) totalSecciones += Object.keys(mat.basica["20000"].preescolar).filter(k => k.length === 1).length;
+        if (mat.basica["20000"]) {
+          const m = mat.basica["20000"];
+          const matObj = m.maternal || m.materna;
+          if (matObj && typeof matObj === 'object') {
+            totalSecciones += Object.keys(matObj).filter(k => k.length === 1 && /^[A-Z]$/i.test(k)).length;
+          }
+          if (m.preescolar && typeof m.preescolar === 'object') {
+            totalSecciones += Object.keys(m.preescolar).filter(k => k.length === 1 && /^[A-Z]$/i.test(k)).length;
+          }
+        }
         if (mat.basica["21000"]) {
           for (let g = 1; g <= 6; g++) {
-            if (mat.basica["21000"][String(g)]) totalSecciones += Object.keys(mat.basica["21000"][String(g)]).filter(k => k.length === 1).length;
+            const gObj = mat.basica["21000"][String(g)];
+            if (gObj && typeof gObj === 'object') {
+              totalSecciones += Object.keys(gObj).filter(k => k.length === 1 && /^[A-Z]$/i.test(k)).length;
+            }
           }
         }
       }
-      if (mat.modalidades?.especial?.grupos) totalSecciones += Object.keys(mat.modalidades.especial.grupos).filter(k => k.length === 1).length;
-      if (mat.modalidades?.adulto?.grupos) totalSecciones += Object.keys(mat.modalidades.adulto.grupos).filter(k => k.length === 1).length;
+      if (mat.modalidades?.especial?.grupos) {
+        totalSecciones += Object.keys(mat.modalidades.especial.grupos).filter(k => k.length === 1 && /^[A-Z]$/i.test(k)).length;
+      }
+      if (mat.modalidades?.adulto?.grupos) {
+        totalSecciones += Object.keys(mat.modalidades.adulto.grupos).filter(k => k.length === 1 && /^[A-Z]$/i.test(k)).length;
+      }
       if (mat.media) {
         ['media-general', 'media-tecnica'].forEach(mod => {
           if (mat.media[mod]) {
@@ -2595,9 +2619,10 @@ window.actualizarMetricasPizarraUsuario = function() {
               const mencObj = mat.media[mod][menc];
               if (typeof mencObj === 'object' && mencObj !== null) {
                 for (const yr in mencObj) {
+                  if (yr.startsWith('total-')) continue;
                   const yrObj = mencObj[yr];
                   if (typeof yrObj === 'object' && yrObj !== null) {
-                    totalSecciones += Object.keys(yrObj).filter(k => k.length === 1 && !k.startsWith('total')).length;
+                    totalSecciones += Object.keys(yrObj).filter(k => k.length === 1 && !k.startsWith('total') && /^[A-Z]$/i.test(k)).length;
                   }
                 }
               }
@@ -2606,6 +2631,26 @@ window.actualizarMetricasPizarraUsuario = function() {
         });
       }
     }
+
+    // Prioridad 2: Si no hubo secciones en matrícula, contar desde secciones-planes con filtros de saneamiento
+    if (totalSecciones === 0) {
+      const sp = dp['secciones-planes'] || window.currentPlantel?.['secciones-planes'] || {};
+      for (const k in sp) {
+        const val = sp[k];
+        if (typeof val === 'number') totalSecciones += Math.min(val, 15);
+        else if (typeof val === 'object' && val !== null) {
+          for (const subK in val) {
+            const subVal = val[subK];
+            if (typeof subVal === 'number') totalSecciones += Math.min(subVal, 15);
+            else if (typeof subVal === 'object' && subVal !== null) {
+              totalSecciones += Object.keys(subVal).filter(sk => /^[A-Z]$/i.test(sk) || sk === 'U').length;
+            }
+          }
+        }
+      }
+    }
+
+
 
     if (elSeccionesNum) elSeccionesNum.textContent = totalSecciones;
     if (elSeccionesDesc) elSeccionesDesc.textContent = totalSecciones === 1 ? '1 aula activa' : `${totalSecciones} aulas activas`;
@@ -3473,6 +3518,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
               document.querySelectorAll('.mat-input.mat-maternal[data-sexo="F"]').forEach(inp => {
                   if (!isVisible(inp)) return;
                   const secLetra = inp.dataset.grupo.split('-')[1];
+                  if (!/^[A-Z]$/.test(secLetra) && secLetra !== 'U') return;
                   if (!seccionesPlanes['20000']) seccionesPlanes['20000'] = {};
                   if (!seccionesPlanes['20000'].maternal) seccionesPlanes['20000'].maternal = {};
                   seccionesPlanes['20000'].maternal[secLetra] = 1;
@@ -3483,6 +3529,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
               document.querySelectorAll('.mat-input.mat-preescolar[data-sexo="F"]').forEach(inp => {
                   if (!isVisible(inp)) return;
                   const secLetra = inp.dataset.grupo.split('-')[1];
+                  if (!/^[A-Z]$/.test(secLetra) && secLetra !== 'U') return;
                   if (!seccionesPlanes['20000']) seccionesPlanes['20000'] = {};
                   if (!seccionesPlanes['20000'].preescolar) seccionesPlanes['20000'].preescolar = {};
                   seccionesPlanes['20000'].preescolar[secLetra] = 1;
@@ -3494,11 +3541,11 @@ async function mostrarCandado(codigoDEA, dataParcial) {
               if (!seccionesPlanes['21000']) seccionesPlanes['21000'] = {};
               for (let g = 1; g <= 6; g++) {
                   const inpG = document.querySelector(`.sec-pri-grado-input[data-grado="${g}"]`);
-                  let val = parseInt(inpG?.value) || 0;
+                  let val = Math.min(Math.max(0, parseInt(inpG?.value) || 0), 10);
                   // Si el input está vacío pero hay casillas visibles, contar las casillas de ese grado
                   if (val === 0) {
                       const boxes = document.querySelectorAll(`.mat-input.mat-primaria[data-grupo^="primaria-${g}"][data-sexo="F"]`);
-                      if (boxes.length > 0) val = boxes.length;
+                      if (boxes.length > 0) val = Math.min(boxes.length, 10);
                   }
                   if (val > 0) {
                       seccionesPlanes['21000'][String(g)] = val;
@@ -3542,6 +3589,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
               document.querySelectorAll('.mat-input.mat-maternal').forEach(inp => {
                   if (!isVisible(inp)) return;
                   const secLetra = inp.dataset.grupo.split('-')[1];
+                  if (!/^[A-Z]$/.test(secLetra) && secLetra !== 'U') return;
                   const val = parseInt(inp.value) || 0;
                   if (!materna[secLetra]) materna[secLetra] = { mas: 0, fem: 0 };
                   if (inp.dataset.sexo === 'F') {
@@ -3591,6 +3639,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
               document.querySelectorAll('.mat-input.mat-preescolar').forEach(inp => {
                   if (!isVisible(inp)) return;
                   const secLetra = inp.dataset.grupo.split('-')[1];
+                  if (!/^[A-Z]$/.test(secLetra) && secLetra !== 'U') return;
                   const val = parseInt(inp.value) || 0;
                   if (!preescolar[secLetra]) preescolar[secLetra] = { mas: 0, fem: 0 };
                   if (inp.dataset.sexo === 'F') {
@@ -3758,6 +3807,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
               document.querySelectorAll('.mat-input.mat-especial').forEach(inp => {
                   if (!isVisible(inp)) return;
                   const secLetra = inp.dataset.grupo.split('-')[1];
+                  if (!/^[A-Z]$/.test(secLetra) && secLetra !== 'U') return;
                   const val = parseInt(inp.value) || 0;
                   if (!espGrupos[secLetra]) espGrupos[secLetra] = { mas: 0, fem: 0 };
                   if (inp.dataset.sexo === 'F') {
@@ -3795,6 +3845,7 @@ async function mostrarCandado(codigoDEA, dataParcial) {
               document.querySelectorAll('.mat-input.mat-adulto').forEach(inp => {
                   if (!isVisible(inp)) return;
                   const secLetra = inp.dataset.grupo.split('-')[1];
+                  if (!/^[A-Z]$/.test(secLetra) && secLetra !== 'U') return;
                   const val = parseInt(inp.value) || 0;
                   if (!aduGrupos[secLetra]) aduGrupos[secLetra] = { mas: 0, fem: 0 };
                   if (inp.dataset.sexo === 'F') {

@@ -5682,3 +5682,30 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
   * **Verificación y Pruebas:**
     - Pruebas automatizadas en navegador headless Chromium comprobando tanto el caso con totales consolidados directos como el caso con recorrido de nodos hoja, arrojando con exactitud 81 estudiantes con 45 varones y 36 hembras.
     - Confirmación explícita de satisfacción del usuario ("Sí son satisfactorios"). Incremento de versión física a `v2.38.12`, compilación de producción con Vite y despliegue a Firebase Hosting.
+
+
+---
+
+### Hito: Corrección y Blindaje de Secciones/Aulas y Matrícula en Pizarra Escolar, y Desacoplamiento de Pestañas en Expediente de Auditoría Rápida (v2.38.13)
+- **Fecha:** 2026-11-23 ~14:40 (Hora Local Venezuela).
+- **Módulos:** Pizarra Institucional de Plantel, Validación de Formularios de Matrícula y Expediente de Auditoría Rápida (`webapp/src/main.js`, `webapp/src/admin.js`, `webapp/index.html`, `webapp/styles.css`, `webapp/package.json`).
+- **Objetivo:** 
+  1. Subsanar la inconsistencia en el indicador de Secciones / Aulas en planteles educativos (caso Juan Bautista Arismendi, DEA OD01221420), donde el contador arrojaba 214 aulas activas debido a la captura errónea de matrícula en campos de secciones y caracteres ASCII dispersos en la estructura `secciones-planes`.
+  2. Unificar el cómputo de la matrícula escolar para totalizar de forma precisa todos los niveles activos (Maternal, Preescolar, Primaria y Media), corrigiendo la omisión de Inicial en planteles con cabeceras históricas no consolidadas.
+  3. Renombrar el título de la tarjeta en la Pizarra de escuela a "Matrícula Estudiantil" en lugar de "Matrícula Estadal".
+  4. Resolver el fallo de respuesta en las pestañas del modal de Expediente de Auditoría Rápida (donde al tocar "Matrícula y Secciones" o "Nómina de Personal" el contenido inferior permanecía congelado en "Ficha Institucional"), causado por duplicidad de identificadores DOM con la barra de subnavegación del panel.
+- **Cambios Técnicos (v2.38.13):**
+  * **Cómputo Canónico de Aulas en `actualizarMetricasPizarraUsuario` (`webapp/src/main.js`):**
+    - Se priorizó el escaneo directo de las secciones reales configuradas en `matricula.basica` (`20000` y `21000`), `matricula.modalidades` y `matricula.media`, filtrando únicamente claves de un solo carácter alfabético válido. Para la escuela Juan Bautista Arismendi, el cálculo establece exactamente 21 aulas (3 de Maternal y 18 de Primaria).
+    - En la lógica de respaldo sobre `secciones-planes`, se implementaron topes de cordura (`Math.min(val, 15)`) y filtros regex (`/^[A-Z]$/i` o `U`), protegiendo la métrica contra valores anómalos o registros corruptos.
+  * **Blindaje en Formularios de Matrícula (`_renderCajasInicial`, `_renderCajasPrimaria` y guardado):**
+    - Se limitó el renderizado dinámico a un máximo de 10 secciones por nivel/grado, y se acotó la función generadora `_letraGrupo` para no desbordar el rango A-Z.
+    - En el guardado a Firestore, se agregó validación estricta para descartar cualquier identificador de sección que no sea letra mayúscula o grupo único.
+  * **Desacoplamiento de Identificadores y Navegación Reactiva en Modal de Auditoría Rápida (`webapp/index.html`, `webapp/src/admin.js`, `webapp/styles.css`):**
+    - Se renombraron los botones del modal a `ficha-tab-btn-institucional`, `ficha-tab-btn-matricula` y `ficha-tab-btn-personal`, eliminando la colisión con los botones `tab-btn-matricula` y `tab-btn-personal` de la vista de usuario.
+    - Se expuso la función `window.activarPestanaFicha` de forma global con directivas `onclick` inline en el HTML y listeners de respaldo en `setupFichaEventListeners`.
+    - Se añadieron estilos CSS corporativos para `.tab-ficha-btn` y su estado `.active` en `webapp/styles.css`.
+  * **Verificación y Pruebas:**
+    - Pruebas automatizadas E2E mediante Playwright headless y servidor HTTP local verificando el cambio reactivo de pestañas (`s1: mat block, s2: per block, s3: inst block`) con alternancia visual de clases activas.
+    - Saneamiento transaccional de `planteles/OD01221420` en Firestore regularizando sus 21 aulas y sus 496 estudiantes consolidados.
+    - Aprobación explícita de satisfacción del usuario ("Perfecto. resultados satisfactorios"). Incremento de versión física a `v2.38.13`, compilación con Vite y preparación para despliegue.

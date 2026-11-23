@@ -7259,7 +7259,7 @@ export function initAdminDashboard(dbInstance, user) {
   function activarPestanaFicha(tabId) {
     const tabs = ['institucional', 'matricula', 'personal'];
     tabs.forEach(t => {
-      const btn = document.getElementById(`tab-btn-${t}`);
+      const btn = document.getElementById(`ficha-tab-btn-${t}`) || document.getElementById(`tab-btn-${t}`);
       const content = document.getElementById(`tab-content-${t}`);
       if (btn) {
         if (t === tabId) btn.classList.add('active');
@@ -7270,6 +7270,7 @@ export function initAdminDashboard(dbInstance, user) {
       }
     });
   }
+  window.activarPestanaFicha = activarPestanaFicha;
 
   function renderFilasMatriculaFicha(p) {
     const tbody = document.getElementById('ficha-tbody-matricula');
@@ -7665,9 +7666,9 @@ export function initAdminDashboard(dbInstance, user) {
 
   // Configurar listeners de la ficha de auditoría
   const setupFichaEventListeners = () => {
-    document.getElementById('tab-btn-institucional')?.addEventListener('click', () => activarPestanaFicha('institucional'));
-    document.getElementById('tab-btn-matricula')?.addEventListener('click', () => activarPestanaFicha('matricula'));
-    document.getElementById('tab-btn-personal')?.addEventListener('click', () => activarPestanaFicha('personal'));
+    (document.getElementById('ficha-tab-btn-institucional') || document.getElementById('tab-btn-institucional'))?.addEventListener('click', () => activarPestanaFicha('institucional'));
+    (document.getElementById('ficha-tab-btn-matricula') || document.getElementById('tab-btn-matricula'))?.addEventListener('click', () => activarPestanaFicha('matricula'));
+    (document.getElementById('ficha-tab-btn-personal') || document.getElementById('tab-btn-personal'))?.addEventListener('click', () => activarPestanaFicha('personal'));
     
     document.getElementById('btn-cerrar-ficha-modal')?.addEventListener('click', () => {
       const modal = document.getElementById('modal-ficha-auditoria');
