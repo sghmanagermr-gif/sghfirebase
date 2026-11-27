@@ -443,7 +443,8 @@ function compilarFichaLocal(planteles, personal) {
   planteles.forEach(p => {
     const dea = String(p.codigos?.plantel || p.codigoDEA || p.id || p._id || '').trim().toUpperCase();
     const nombre = String(p['nombre-plantel']?.['nuevo-eponimo'] || p['nombre-plantel']?.nuevo_eponimo || p.denominacion || p.nombre || dea).trim().toUpperCase();
-    const mun = normalizarMunicipio(p.municipio || '');
+    const esPlanta = Boolean(p.es_planta || p.denominacion === 'SEDE ADMINISTRATIVA' || dea.startsWith('0012'));
+    const mun = esPlanta ? 'PLANTA CENTRAL' : normalizarMunicipio(p.municipio || '');
     const dep = normalizarDep(p.dependencia);
     const matTot = Number(p['matricula-total'] || p.matriculaTotal || p.matricula?.['total-gen'] || 0);
     const matMas = Number(p['matricula-masculino'] || p['total-gen-mas'] || p.masculino || p.matricula?.['total-gen-mas'] || 0);
@@ -455,14 +456,17 @@ function compilarFichaLocal(planteles, personal) {
       nombre,
       municipio: mun,
       dependencia: dep,
+      esPlanta,
       cargado,
       matricula: { total: matTot, masculino: matMas, femenino: matFem }
     });
   });
 
+  const plantelesEducativos = planteles.filter(p => !p.es_planta && p.denominacion !== 'SEDE ADMINISTRATIVA' && !(p.codigos?.plantel || p.codigoDEA || p.id || '').startsWith('0012'));
+
   const global = {
     totalPersonal: personal.length,
-    totalPlanteles: planteles.length,
+    totalPlanteles: plantelesEducativos.length,
     docentes: { total: 0, mas: 0, fem: 0 },
     administrativos: { total: 0, mas: 0, fem: 0 },
     obreros: { total: 0, mas: 0, fem: 0 },
@@ -473,7 +477,7 @@ function compilarFichaLocal(planteles, personal) {
       total: 0,
       masculino: 0,
       femenino: 0,
-      plantelesTotal: planteles.length,
+      plantelesTotal: plantelesEducativos.length,
       cargados: 0,
       pendientes: 0,
       porMunicipio: {}
@@ -517,7 +521,8 @@ function compilarFichaLocal(planteles, personal) {
 
     let dea = String(pers['codigo-plantel'] || pers.codigoDEA || pers.codigoPlantel || pers.DEA || '').trim().toUpperCase();
     const plInfo = plantelesMap.get(dea);
-    const mun = normalizarMunicipio(pers.municipio || plInfo?.municipio || '');
+    const esPlantaPers = Boolean(plInfo?.esPlanta || dea.startsWith('0012') || pers.es_planta || pers.denominacion === 'SEDE ADMINISTRATIVA');
+    const mun = esPlantaPers ? 'PLANTA CENTRAL' : normalizarMunicipio(pers.municipio || plInfo?.municipio || '');
     const dep = normalizarDep(pers.dependencia || plInfo?.dependencia);
 
     if (!porMunicipio[mun]) {
@@ -650,35 +655,39 @@ function compilarFichaLocal(planteles, personal) {
 
     const mMun = porMunicipio[mun];
     mMun.totalPlanteles++;
-    mMun.matricula.plantelesTotal++;
 
     const mat = pl.matricula;
     const cargado = pl.cargado;
 
-    if (cargado) {
-      mMun.matricula.cargados++;
-      mMun.matricula.total += mat.total;
-      mMun.matricula.masculino += mat.masculino;
-      mMun.matricula.femenino += mat.femenino;
+    // Las sedes de Planta Central no matriculan alumnos, no deben figurar como pendientes de matrícula escolar
+    if (!pl.esPlanta) {
+      mMun.matricula.plantelesTotal++;
 
-      global.matricula.cargados++;
-      global.matricula.total += mat.total;
-      global.matricula.masculino += mat.masculino;
-      global.matricula.femenino += mat.femenino;
-    } else {
-      mMun.matricula.pendientes++;
-      global.matricula.pendientes++;
+      if (cargado) {
+        mMun.matricula.cargados++;
+        mMun.matricula.total += mat.total;
+        mMun.matricula.masculino += mat.masculino;
+        mMun.matricula.femenino += mat.femenino;
+
+        global.matricula.cargados++;
+        global.matricula.total += mat.total;
+        global.matricula.masculino += mat.masculino;
+        global.matricula.femenino += mat.femenino;
+      } else {
+        mMun.matricula.pendientes++;
+        global.matricula.pendientes++;
+      }
+
+      mMun.matricula.planteles.push({
+        id: dea,
+        dea,
+        nombre: pl.nombre,
+        total: mat.total,
+        masculino: mat.masculino,
+        femenino: mat.femenino,
+        cargado
+      });
     }
-
-    mMun.matricula.planteles.push({
-      id: dea,
-      dea,
-      nombre: pl.nombre,
-      total: mat.total,
-      masculino: mat.masculino,
-      femenino: mat.femenino,
-      cargado
-    });
 
     const persPlant = personalPorPlantelMap.get(dea);
     if (persPlant) {

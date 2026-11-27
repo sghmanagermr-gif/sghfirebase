@@ -13,6 +13,16 @@ function normTextoAlerta(valor) {
     .trim();
 }
 
+function normalizarDep(raw) {
+  const d = normTextoAlerta(raw);
+  if (d.includes('AUTONOM')) return 'AUTONOMA';
+  if (d.includes('SUBVENCION')) return 'SUBVENCIONADA';
+  if (d.includes('PRIVAD')) return 'PRIVADA';
+  if (d.includes('MUNICIPAL')) return 'MUNICIPAL';
+  if (d.includes('ESTADAL') && !d.includes('NACIONAL')) return 'ESTADAL';
+  return 'NACIONAL';
+}
+
 function clasificarTipoPersonalAlerta(rawTipo) {
   const t = normTextoAlerta(rawTipo);
   if (t.includes('DOCENTE')) return 'DOCENTE';
@@ -226,14 +236,80 @@ export function evaluarAlertasRojasFuncionario(cedula, docs = [], resolverDatosP
   };
 }
 
-// Helper de extracción de datos municipales con soporte multi-alias
+// Helper de identificación inequívoca de sedes administrativas / Planta Central (Zona Educativa)
+export function esPlantaCentralPlantel(p) {
+  if (!p) return false;
+  if (p.es_planta === true || p.es_sede_administrativa === true) return true;
+  if (p.denominacion === 'SEDE ADMINISTRATIVA') return true;
+  const dea = String(p.codigos?.plantel || p.codigoDEA || p.id || p._id || '').trim().toUpperCase();
+  if (dea.startsWith('0012')) return true;
+  return false;
+}
+
+// Helper de extracción de datos municipales con soporte multi-alias y blindaje de Planta Central
 function getDatosMunicipio(resumenData, munInput) {
   if (!resumenData || !resumenData.porMunicipio) return null;
   const clean = (munInput || '').trim().toUpperCase();
   const norm = normalizarMunicipio(clean);
-  return resumenData.porMunicipio[clean]
+  let datos = resumenData.porMunicipio[clean]
       || resumenData.porMunicipio[norm]
       || (munInput ? resumenData.porMunicipio[munInput] : null);
+
+  if (!datos) return null;
+
+  // Blindaje estricto para Libertador: garantizar exclusión de Planta Central / Zona Educativa (0012)
+  if (norm === 'LIBERTADOR' || clean === 'LIBERTADOR') {
+    const tieneSedes = (datos.matricula?.planteles || []).some(p => (p.dea || p.id || '').startsWith('0012') || p.nombre === 'SEDE ADMINISTRATIVA')
+      || (datos.personal_detallado?.planteles || []).some(p => (p.dea || p.id || '').startsWith('0012') || p.nombre === 'SEDE ADMINISTRATIVA');
+
+    if (tieneSedes) {
+      const plantelesMatLimpios = (datos.matricula?.planteles || []).filter(p => !((p.dea || p.id || '').startsWith('0012') || p.nombre === 'SEDE ADMINISTRATIVA'));
+      const cargados = plantelesMatLimpios.filter(p => p.cargado).length;
+      const pendientes = plantelesMatLimpios.filter(p => !p.cargado).length;
+
+      let personalSedes = 0;
+      let docSedes = 0, admSedes = 0, obrSedes = 0;
+      const plantelesPersLimpios = (datos.personal_detallado?.planteles || []).filter(p => {
+        const esSede = (p.dea || p.id || '').startsWith('0012') || p.nombre === 'SEDE ADMINISTRATIVA';
+        if (esSede) {
+          personalSedes += (p.total || 0);
+          docSedes += (p.docentes?.total || p.docentes || 0);
+          admSedes += (p.administrativos?.total || p.administrativos || 0);
+          obrSedes += (p.obreros?.total || p.obreros || 0);
+        }
+        return !esSede;
+      });
+
+      datos = {
+        ...datos,
+        totalPlanteles: plantelesMatLimpios.length,
+        totalPersonal: Math.max(0, (datos.totalPersonal || 0) - personalSedes),
+        docentes: typeof datos.docentes === 'object' && datos.docentes !== null
+          ? { ...datos.docentes, total: Math.max(0, (datos.docentes.total || 0) - docSedes) }
+          : Math.max(0, (datos.docentes || 0) - docSedes),
+        administrativos: typeof datos.administrativos === 'object' && datos.administrativos !== null
+          ? { ...datos.administrativos, total: Math.max(0, (datos.administrativos.total || 0) - admSedes) }
+          : Math.max(0, (datos.administrativos || 0) - admSedes),
+        obreros: typeof datos.obreros === 'object' && datos.obreros !== null
+          ? { ...datos.obreros, total: Math.max(0, (datos.obreros.total || 0) - obrSedes) }
+          : Math.max(0, (datos.obreros || 0) - obrSedes),
+        matricula: {
+          ...datos.matricula,
+          plantelesTotal: plantelesMatLimpios.length,
+          cargados,
+          pendientes,
+          planteles: plantelesMatLimpios
+        },
+        personal_detallado: datos.personal_detallado ? {
+          ...datos.personal_detallado,
+          total: Math.max(0, (datos.personal_detallado.total || 0) - personalSedes),
+          planteles: plantelesPersLimpios
+        } : datos.personal_detallado
+      };
+    }
+  }
+
+  return datos;
 }
 
 let isInitialized = false;
@@ -448,6 +524,9 @@ export function verificarPlantelTieneMatricula(p) {
     if (typeof mat === 'object') {
       const sumarRecursivo = (obj) => {
         for (const k in obj) {
+          const kLower = k.toLowerCase();
+          if (kLower === 'materna' && obj.maternal) continue;
+          if (kLower.includes('vacante') || kLower.startsWith('vac_')) continue;
           const val = obj[k];
           if (typeof val === 'number' && val > 0) {
             if (!k.startsWith('total-') && !k.startsWith('tot-')) suma += val;
@@ -521,7 +600,7 @@ export function initAdminDashboard(dbInstance, user) {
       if (isSuperAdmin || isZonAdmin) {
         containerFiltroPizarra.style.display = 'flex';
         if (selFiltroPizarra.options.length <= 1) {
-          selFiltroPizarra.innerHTML = '<option value="ESTADAL">Todo el Estado Mérida (Consolidado)</option>';
+          selFiltroPizarra.innerHTML = '<option value="ESTADAL">Todo el Estado Mérida (Consolidado)</option><option value="PLANTA CENTRAL">🏛️ Planta Central (Zona Educativa)</option>';
           getMunicipios().forEach(m => {
             const opt = document.createElement('option');
             opt.value = m;
@@ -2135,6 +2214,12 @@ export function initAdminDashboard(dbInstance, user) {
 
     const planteles = Array.isArray(munData.planteles) ? munData.planteles : [];
 
+    // Normalizar dependencias de planteles en memoria y resolver faltantes
+    planteles.forEach(p => {
+      const liveP = (Array.isArray(currentPlanteles) && currentPlanteles.find(x => (x.codigos?.plantel || x.codigoDEA || x.id) === p.dea));
+      p.dependencia = normalizarDep(p.dependencia || liveP?.dependencia || 'NACIONAL');
+    });
+
     if (elTitulo) elTitulo.textContent = `Municipio ${munNorm}`;
     if (elSubtitulo) elSubtitulo.textContent = `${planteles.length} planteles con personal registrado en nómina activa.`;
     if (elTotal) elTotal.textContent = mTot.toLocaleString();
@@ -2164,12 +2249,53 @@ export function initAdminDashboard(dbInstance, user) {
       PRIVADA: { color: '#e11d48', bg: 'rgba(225,29,72,0.06)', border: 'rgba(225,29,72,0.2)', icon: '🏫' }
     };
 
+    // Escudo dinámico: Consolidar totales reales por dependencia sumando todos los planteles del municipio
+    const depTotalesCalculados = {};
+    dependenciasLista.forEach(dk => {
+      depTotalesCalculados[dk] = { total: 0, docentes: { total: 0, mas: 0, fem: 0 }, administrativos: { total: 0, mas: 0, fem: 0 }, obreros: { total: 0, mas: 0, fem: 0 } };
+    });
+
+    planteles.forEach(p => {
+      const dKey = normalizarDep(p.dependencia || 'NACIONAL');
+      if (depTotalesCalculados[dKey]) {
+        const pTot = Number(p.total || 0);
+        const pDoc = Number(p.docentes?.total || 0);
+        const pDocM = Number(p.docentes?.mas ?? p.docentes?.masculino ?? 0);
+        const pDocF = Number(p.docentes?.fem ?? p.docentes?.femenino ?? 0);
+
+        const pAdm = Number(p.administrativos?.total || 0);
+        const pAdmM = Number(p.administrativos?.mas ?? p.administrativos?.masculino ?? 0);
+        const pAdmF = Number(p.administrativos?.fem ?? p.administrativos?.femenino ?? 0);
+
+        const pObr = Number(p.obreros?.total || 0);
+        const pObrM = Number(p.obreros?.mas ?? p.obreros?.masculino ?? 0);
+        const pObrF = Number(p.obreros?.fem ?? p.obreros?.femenino ?? 0);
+
+        depTotalesCalculados[dKey].total += pTot;
+        depTotalesCalculados[dKey].docentes.total += pDoc;
+        depTotalesCalculados[dKey].docentes.mas += pDocM;
+        depTotalesCalculados[dKey].docentes.fem += pDocF;
+
+        depTotalesCalculados[dKey].administrativos.total += pAdm;
+        depTotalesCalculados[dKey].administrativos.mas += pAdmM;
+        depTotalesCalculados[dKey].administrativos.fem += pAdmF;
+
+        depTotalesCalculados[dKey].obreros.total += pObr;
+        depTotalesCalculados[dKey].obreros.mas += pObrM;
+        depTotalesCalculados[dKey].obreros.fem += pObrF;
+      }
+    });
+
     if (gridDepsMun) {
       gridDepsMun.innerHTML = '';
       const depsFuente = munData.porDependencia || {};
 
       dependenciasLista.forEach(depKey => {
-        const dVal = depsFuente[depKey] || { total: 0, docentes: { total: 0, mas: 0, fem: 0 }, administrativos: { total: 0, mas: 0, fem: 0 }, obreros: { total: 0, mas: 0, fem: 0 } };
+        const dCalc = depTotalesCalculados[depKey] || { total: 0, docentes: { total: 0, mas: 0, fem: 0 }, administrativos: { total: 0, mas: 0, fem: 0 }, obreros: { total: 0, mas: 0, fem: 0 } };
+        const dFte = depsFuente[depKey] || { total: 0, docentes: { total: 0, mas: 0, fem: 0 }, administrativos: { total: 0, mas: 0, fem: 0 }, obreros: { total: 0, mas: 0, fem: 0 } };
+
+        // Prioridad al cómputo más completo y actualizado
+        const dVal = (dCalc.total > 0 && dCalc.total >= Number(dFte.total || 0)) ? dCalc : dFte;
         const cfg = depMeta[depKey] || { color: '#64748b', bg: '#f8fafc', border: '#e2e8f0', icon: '📁' };
 
         const dTot = Number(dVal.total || 0);
@@ -2236,7 +2362,7 @@ export function initAdminDashboard(dbInstance, user) {
       }
 
       arr.forEach(p => {
-        const depPlantel = (p.dependencia || 'NACIONAL').toUpperCase();
+        const depPlantel = normalizarDep(p.dependencia || 'NACIONAL');
         const cfg = depMeta[depPlantel] || { color: '#2563eb', bg: '#eff6ff', border: '#bfdbfe' };
 
         const pTot = Number(p.total || 0);
@@ -2532,7 +2658,7 @@ export function initAdminDashboard(dbInstance, user) {
                           || (p.dea && p.dea.toLowerCase().includes(q));
         let matchDep = true;
         if (depSel !== 'TODAS') {
-          matchDep = ((p.dependencia || 'NACIONAL').toUpperCase() === depSel);
+          matchDep = (normalizarDep(p.dependencia || 'NACIONAL') === normalizarDep(depSel));
         }
         return matchQ && matchDep;
       });
@@ -2812,7 +2938,11 @@ export function initAdminDashboard(dbInstance, user) {
         if (esVistaMunicipal && mun) {
           let plantelesMun = forzarSync ? null : obtenerPlantelesMunCache(mun);
           if (!forzarSync && !plantelesMun && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
-            const filt = currentPlanteles.filter(p => normalizarMunicipio(p.municipio || '') === mun);
+            const filt = currentPlanteles.filter(p => {
+              if (normalizarMunicipio(p.municipio || '') !== mun) return false;
+              if (mun === 'LIBERTADOR' && esPlantaCentralPlantel(p)) return false;
+              return true;
+            });
             if (filt.length > 0) {
               plantelesMun = filt;
               guardarPlantelesMunCache(mun, plantelesMun);
@@ -2830,7 +2960,9 @@ export function initAdminDashboard(dbInstance, user) {
               }
               plantelesMun = [];
               snapP.forEach(docSnap => {
-                plantelesMun.push({ id: docSnap.id, ...docSnap.data() });
+                const pData = docSnap.data();
+                if (mun === 'LIBERTADOR' && (docSnap.id.startsWith('0012') || pData.es_planta || pData.denominacion === 'SEDE ADMINISTRATIVA')) return;
+                plantelesMun.push({ id: docSnap.id, ...pData });
               });
               guardarPlantelesMunCache(mun, plantelesMun);
               if (isMunAdmin) currentPlanteles = plantelesMun;
@@ -5029,9 +5161,10 @@ export function initAdminDashboard(dbInstance, user) {
       const valActualMun = selMun.value;
 
       selMun.innerHTML = '<option value="">🏢 Todos los Municipios (23)</option>' +
+        '<option value="PLANTA_CENTRAL">🏛️ Planta Central (Zona Educativa)</option>' +
         municipios.map(m => `<option value="${m}">🏢 ${m}</option>`).join('');
 
-      if (valActualMun && municipios.includes(valActualMun)) {
+      if (valActualMun && (municipios.includes(valActualMun) || valActualMun === 'PLANTA_CENTRAL')) {
         selMun.value = valActualMun;
         actualizarParroquiasFiltro(valActualMun);
       } else {
@@ -5045,6 +5178,12 @@ export function initAdminDashboard(dbInstance, user) {
     const selPar = document.getElementById('filtro-parroquia-plantel');
     if (!selPar) return;
 
+    if (municipioSeleccionado === 'PLANTA_CENTRAL' || municipioSeleccionado === 'PLANTA CENTRAL') {
+      selPar.innerHTML = '<option value="">🏛️ Todas las Sedes / Divisiones Centrales</option>';
+      selPar.value = '';
+      return;
+    }
+
     const munNorm = normalizarMunicipio(municipioSeleccionado || '');
     let parroquias = [];
 
@@ -5053,7 +5192,7 @@ export function initAdminDashboard(dbInstance, user) {
     } else {
       const setPars = new Set();
       currentPlanteles.forEach(p => {
-        if (p.parroquia) setPars.add(p.parroquia.trim().toUpperCase());
+        if (p.parroquia && !esPlantaCentralPlantel(p)) setPars.add(p.parroquia.trim().toUpperCase());
       });
       parroquias = Array.from(setPars).sort((a, b) => a.localeCompare(b, 'es'));
     }
@@ -5093,7 +5232,7 @@ export function initAdminDashboard(dbInstance, user) {
         if (userMunNorm) {
           let plantelesEnCache = obtenerPlantelesMunCache(userMunNorm);
           if (!plantelesEnCache && Array.isArray(currentPlanteles) && currentPlanteles.length > 0) {
-            const filt = currentPlanteles.filter(p => normalizarMunicipio(p.municipio || '') === userMunNorm);
+            const filt = currentPlanteles.filter(p => normalizarMunicipio(p.municipio || '') === userMunNorm && !p.es_planta && p.denominacion !== 'SEDE ADMINISTRATIVA' && !(p.codigos?.plantel || p.codigoDEA || p.id || '').startsWith('0012'));
             if (filt.length > 0) {
               plantelesEnCache = filt;
               guardarPlantelesMunCache(userMunNorm, plantelesEnCache);
@@ -5223,12 +5362,17 @@ export function initAdminDashboard(dbInstance, user) {
 
     const filtroMun = (selMunElem && !selMunElem.disabled ? selMunElem.value : (userMun || '')).trim().toUpperCase();
     const filtroPar = (selParElem ? selParElem.value : '').trim().toUpperCase();
+    const isPlanta = (filtroMun === 'PLANTA_CENTRAL' || filtroMun === 'PLANTA CENTRAL');
 
     if (inpBuscarPlantel) {
-      const munTexto = userMun || filtroMun;
-      inpBuscarPlantel.placeholder = munTexto 
-        ? `Buscar por DEA o epónimo en ${munTexto}...` 
-        : `Buscar por DEA o epónimo...`;
+      if (isPlanta) {
+        inpBuscarPlantel.placeholder = 'Buscar sede, división o código en Planta Central...';
+      } else {
+        const munTexto = userMun || filtroMun;
+        inpBuscarPlantel.placeholder = munTexto 
+          ? `Buscar por DEA o epónimo en ${munTexto}...` 
+          : `Buscar por DEA o epónimo...`;
+      }
     }
 
     if (btnLimpiarBuscarPlantel && inpBuscarPlantel) {
@@ -5238,15 +5382,22 @@ export function initAdminDashboard(dbInstance, user) {
     const term = inpBuscarPlantel ? inpBuscarPlantel.value.toLowerCase().trim() : '';
     let filtered = currentPlanteles;
 
-    // 1. Filtrado por Municipio
-    if (userMun) {
-      filtered = filtered.filter(p => normalizarMunicipio(p.municipio || '') === userMun && !p.es_demo && !p.id?.startsWith('DEMO'));
+    // 1. Filtrado por Municipio / Planta Central
+    if (isPlanta) {
+      filtered = filtered.filter(p => esPlantaCentralPlantel(p));
+    } else if (userMun) {
+      filtered = filtered.filter(p => normalizarMunicipio(p.municipio || '') === userMun && !esPlantaCentralPlantel(p) && !p.es_demo && !p.id?.startsWith('DEMO'));
     } else if (filtroMun) {
-      filtered = filtered.filter(p => normalizarMunicipio(p.municipio || '') === normalizarMunicipio(filtroMun));
+      const fNorm = normalizarMunicipio(filtroMun);
+      filtered = filtered.filter(p => {
+        if (normalizarMunicipio(p.municipio || '') !== fNorm) return false;
+        if (fNorm === 'LIBERTADOR' && esPlantaCentralPlantel(p)) return false;
+        return true;
+      });
     }
 
     // 2. Filtrado en Cascada por Parroquia
-    if (filtroPar) {
+    if (filtroPar && !isPlanta) {
       filtered = filtered.filter(p => (p.parroquia || '').trim().toUpperCase() === filtroPar);
     }
 
@@ -5272,17 +5423,26 @@ export function initAdminDashboard(dbInstance, user) {
     // Actualizar indicador dinámico de conteo
     const elContador = document.getElementById('contador-planteles-badge');
     if (elContador) {
-      const ambitoTexto = userMun || filtroMun;
-      let labelAmbito = ambitoTexto ? `Municipio ${ambitoTexto}` : 'Todo el Estado Mérida';
-      if (filtroPar) labelAmbito += ` (Parroquia ${filtroPar})`;
-      elContador.innerHTML = `🏫 <strong>${filtered.length.toLocaleString()}</strong> planteles encontrados en <em>${labelAmbito}</em>`;
+      if (isPlanta) {
+        elContador.innerHTML = `🏛️ <strong>${filtered.length.toLocaleString()}</strong> sedes y divisiones encontradas en <em>Planta Central (Zona Educativa)</em>`;
+      } else {
+        const ambitoTexto = userMun || filtroMun;
+        let labelAmbito = ambitoTexto ? `Municipio ${ambitoTexto}` : 'Todo el Estado Mérida';
+        if (filtroPar) labelAmbito += ` (Parroquia ${filtroPar})`;
+        elContador.innerHTML = `🏫 <strong>${filtered.length.toLocaleString()}</strong> planteles encontrados en <em>${labelAmbito}</em>`;
+      }
     }
 
     if(filtered.length === 0) {
-      const munTexto = userMun || filtroMun;
-      const msgVacio = munTexto 
-        ? `No se encontraron planteles en el municipio ${munTexto}${filtroPar ? ' (Parroquia ' + filtroPar + ')' : ''}.` 
-        : 'No se encontraron planteles con los criterios seleccionados.';
+      let msgVacio;
+      if (isPlanta) {
+        msgVacio = 'No se encontraron sedes o dependencias en Planta Central con los criterios seleccionados.';
+      } else {
+        const munTexto = userMun || filtroMun;
+        msgVacio = munTexto 
+          ? `No se encontraron planteles en el municipio ${munTexto}${filtroPar ? ' (Parroquia ' + filtroPar + ')' : ''}.` 
+          : 'No se encontraron planteles con los criterios seleccionados.';
+      }
       gridPlanteles.innerHTML = `
         <div style="grid-column: 1 / -1; padding: 40px 20px; text-align: center; color: var(--text-muted);" class="glass-panel">
           <span style="font-size: 2rem; display: block; margin-bottom: 8px;">🔍</span>
@@ -5301,6 +5461,8 @@ export function initAdminDashboard(dbInstance, user) {
        const textoPrincipal = eponimoVal || nominalVal || 'SIN NOMBRE';
        const isDemo = p.es_demo || p.id?.startsWith('DEMO');
        const badgeDemo = isDemo ? `<span style="background: #fdf4ff; color: #a21caf; border: 1px solid #f0abfc; padding: 2px 6px; border-radius: 4px; font-size: 0.72rem; font-weight: bold;">🧪 Demo</span>` : '';
+       const esSedePlanta = esPlantaCentralPlantel(p);
+       const badgePlanta = esSedePlanta ? `<span style="background: #f3e8ff; color: #7e22ce; border: 1px solid #d8b4fe; padding: 2px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 700;">🏛️ PLANTA CENTRAL</span>` : '';
        
        const subtextoNominal = (nominalVal && (!eponimoVal || eponimoVal.toUpperCase() !== nominalVal.toUpperCase()))
          ? `<div style="font-size: 0.78rem; color: #64748b; font-weight: 500; margin-top: 2px; line-height: 1.3;">Nominal: ${nominalVal}</div>`
@@ -5335,6 +5497,7 @@ export function initAdminDashboard(dbInstance, user) {
              </span>
              <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
                ${p.dependencia ? `<span style="background: #f1f5f9; color: #475569; padding: 3px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 600;">${p.dependencia}</span>` : ''}
+               ${badgePlanta}
                ${badgeDemo}
              </div>
            </div>
@@ -5348,10 +5511,10 @@ export function initAdminDashboard(dbInstance, user) {
            <!-- Ubicación Geográfica y Nivel -->
            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(226, 232, 240, 0.8); font-size: 0.82rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 4px;">
              <div style="display: flex; align-items: center; gap: 6px;">
-               <span style="font-size: 0.9rem;">📍</span>
-               <span style="font-weight: 500; color: #334155;">${p.municipio || 'N/A'}</span>
+               <span style="font-size: 0.9rem;">${esSedePlanta ? '🏛️' : '📍'}</span>
+               <span style="font-weight: 500; color: ${esSedePlanta ? '#7e22ce' : '#334155'};">${esSedePlanta ? 'Sede Administrativa Central (Zona Educativa)' : (p.municipio || 'N/A')}</span>
                <span style="color: #cbd5e1;">•</span>
-               <span>Parroquia ${p.parroquia || 'N/A'}</span>
+               <span>${esSedePlanta ? 'Despacho Central' : `Parroquia ${p.parroquia || 'N/A'}`}</span>
              </div>
              ${p.nivel && p.nivel !== 'N/A' ? `
              <div style="display: flex; align-items: center; gap: 6px; color: #64748b;">
@@ -5959,11 +6122,12 @@ export function initAdminDashboard(dbInstance, user) {
         
         const updatedEmp = {
           ...dataP,
-          "codigo-plantel": deaNuevo,
           codigoDEA: deaNuevo,
           "ubicacion-fisica": nombrePlantel || dataP["ubicacion-fisica"] || '',
           ultima_actualizacion: new Date().toISOString()
         };
+        delete updatedEmp["codigo-plantel"];
+        delete updatedEmp.codigoPlantel;
 
         await safeSetDoc(doc(db, "cargos_personal", newDocId), updatedEmp, { merge: true });
         if (docSnap.id !== newDocId) {
@@ -6609,7 +6773,8 @@ export function initAdminDashboard(dbInstance, user) {
 
       const municipios = getMunicipios();
       let opcionesHtml = `
-        <option value="TODOS" style="font-weight: bold; color: #0284c7;">⭐ TODOS LOS MUNICIPIOS (CONSOLIDADO ESTATAL - 1.159 PLANTELES)</option>
+        <option value="TODOS" style="font-weight: bold; color: #0284c7;">⭐ TODOS LOS MUNICIPIOS (CONSOLIDADO ESTATAL)</option>
+        <option value="PLANTA_CENTRAL">🏛️ PLANTA CENTRAL (ZONA EDUCATIVA)</option>
         ${municipios.map(m => `<option value="${m}">🏢 Municipio: ${m}</option>`).join('')}
       `;
 
@@ -6621,7 +6786,7 @@ export function initAdminDashboard(dbInstance, user) {
 
       if (termActual) {
         selAmbitoPlanteles.value = '__BUSQUEDA_ACTUAL__';
-      } else if (valMunActual && municipios.includes(valMunActual)) {
+      } else if (valMunActual && (municipios.includes(valMunActual) || valMunActual === 'PLANTA_CENTRAL')) {
         selAmbitoPlanteles.value = valMunActual;
       } else {
         selAmbitoPlanteles.value = 'TODOS';
@@ -6670,12 +6835,19 @@ export function initAdminDashboard(dbInstance, user) {
         const fPar = (selParElem ? selParElem.value : '').trim().toUpperCase();
 
         let list = currentPlanteles;
-        if (userMun) {
-          list = list.filter(p => normalizarMunicipio(p.municipio || '') === userMun);
+        if (fMun === 'PLANTA_CENTRAL' || fMun === 'PLANTA CENTRAL') {
+          list = list.filter(p => esPlantaCentralPlantel(p));
+        } else if (userMun) {
+          list = list.filter(p => normalizarMunicipio(p.municipio || '') === userMun && !esPlantaCentralPlantel(p));
         } else if (fMun) {
-          list = list.filter(p => normalizarMunicipio(p.municipio || '') === normalizarMunicipio(fMun));
+          const fNorm = normalizarMunicipio(fMun);
+          list = list.filter(p => {
+            if (normalizarMunicipio(p.municipio || '') !== fNorm) return false;
+            if (fNorm === 'LIBERTADOR' && esPlantaCentralPlantel(p)) return false;
+            return true;
+          });
         }
-        if (fPar) {
+        if (fPar && fMun !== 'PLANTA_CENTRAL' && fMun !== 'PLANTA CENTRAL') {
           list = list.filter(p => (p.parroquia || '').trim().toUpperCase() === fPar);
         }
         if (term) {
@@ -6694,21 +6866,28 @@ export function initAdminDashboard(dbInstance, user) {
           const par = opcion.replace('PARROQUIA:', '').trim().toUpperCase();
           plantelesAExportar = currentPlanteles.filter(p => 
             normalizarMunicipio(p.municipio || '') === userMun && 
+            !esPlantaCentralPlantel(p) &&
             (p.parroquia || '').trim().toUpperCase() === par
           );
         } else {
           plantelesAExportar = currentPlanteles.filter(p => 
-            normalizarMunicipio(p.municipio || '') === userMun
+            normalizarMunicipio(p.municipio || '') === userMun &&
+            !esPlantaCentralPlantel(p)
           );
         }
       } else {
         // Superadmin o Zonadmin
         if (opcion === 'TODOS') {
           plantelesAExportar = [...currentPlanteles];
+        } else if (opcion === 'PLANTA_CENTRAL' || opcion === 'PLANTA CENTRAL') {
+          plantelesAExportar = currentPlanteles.filter(p => esPlantaCentralPlantel(p));
         } else {
-          plantelesAExportar = currentPlanteles.filter(p => 
-            normalizarMunicipio(p.municipio || '') === normalizarMunicipio(opcion)
-          );
+          const opNorm = normalizarMunicipio(opcion);
+          plantelesAExportar = currentPlanteles.filter(p => {
+            if (normalizarMunicipio(p.municipio || '') !== opNorm) return false;
+            if (opNorm === 'LIBERTADOR' && esPlantaCentralPlantel(p)) return false;
+            return true;
+          });
         }
       }
 
@@ -6824,6 +7003,8 @@ export function initAdminDashboard(dbInstance, user) {
       let sheetName = 'Planteles';
       if (isMunAdmin) {
         sheetName = `Planteles ${userMun}`;
+      } else if (opcion === 'PLANTA_CENTRAL' || opcion === 'PLANTA CENTRAL') {
+        sheetName = 'Planta Central';
       } else if (opcion && opcion !== 'TODOS' && opcion !== '__BUSQUEDA_ACTUAL__') {
         sheetName = `Planteles ${opcion}`;
       } else {
@@ -6843,6 +7024,8 @@ export function initAdminDashboard(dbInstance, user) {
       } else {
         if (opcion === 'TODOS') {
           nombreArchivo = `SGH_Planteles_Estado_MERIDA_Consolidado_${fechaStr}.xlsx`;
+        } else if (opcion === 'PLANTA_CENTRAL' || opcion === 'PLANTA CENTRAL') {
+          nombreArchivo = `SGH_Planteles_Planta_Central_Zona_Educativa_${fechaStr}.xlsx`;
         } else if (opcion === '__BUSQUEDA_ACTUAL__') {
           nombreArchivo = `SGH_Planteles_Filtrados_${fechaStr}.xlsx`;
         } else {
@@ -6948,6 +7131,7 @@ export function initAdminDashboard(dbInstance, user) {
       selMunNomina.innerHTML = `
         <option value="">-- SELECCIONE MUNICIPIO O CONSOLIDADO --</option>
         <option value="TODOS" style="font-weight: bold; color: #1e3a8a;">\u2B50 TODOS LOS MUNICIPIOS (CONSOLIDADO ESTATAL)</option>
+        <option value="PLANTA_CENTRAL">🏛️ PLANTA CENTRAL (ZONA EDUCATIVA)</option>
         ${MUNICIPIOS_MERIDA.map(m => `<option value="${m}">${m}</option>`).join('')}
       `;
       modalSelMunNomina.style.display = 'flex';
@@ -6994,18 +7178,21 @@ export function initAdminDashboard(dbInstance, user) {
 
     try {
       const isTodosMunicipios = (municipio === 'TODOS');
+      const isPlantaNomina = (municipio === 'PLANTA_CENTRAL' || municipio === 'PLANTA CENTRAL');
 
       if (plantelCod) {
         showToast(`Generando nómina del Plantel ${plantelCod}...`, "info", 4000);
       } else if (isTodosMunicipios) {
         showToast("Generando nómina consolidada de todo el Estado Mérida...", "info", 5000);
+      } else if (isPlantaNomina) {
+        showToast("Generando nómina de Planta Central (Zona Educativa)...", "info", 4000);
       } else {
         showToast(`Generando nómina del Municipio ${municipio}...`, "info", 4000);
       }
 
       // 1. Consultar cargos_personal en Firestore (con Escudo de Memoria)
       window._cacheExportPersonal = window._cacheExportPersonal || {};
-      const cacheKey = isTodosMunicipios ? 'TODOS' : (plantelCod ? `PLANTEL_${plantelCod}` : `MUN_${municipio}`);
+      const cacheKey = isTodosMunicipios ? 'TODOS' : (isPlantaNomina ? 'PLANTA_CENTRAL' : (plantelCod ? `PLANTEL_${plantelCod}` : `MUN_${municipio}`));
       let listaPersonalCache = null;
 
       if (window._cacheExportPersonal[cacheKey]) {
@@ -7015,11 +7202,10 @@ export function initAdminDashboard(dbInstance, user) {
         let snapPersonal;
         if (plantelCod) {
           snapPersonal = await getDocs(query(collection(db, 'cargos_personal'), where('codigoDEA', '==', plantelCod)));
-          if (snapPersonal.empty) {
-            snapPersonal = await getDocs(query(collection(db, 'cargos_personal'), where('codigo-plantel', '==', plantelCod)));
-          }
         } else if (isTodosMunicipios) {
           snapPersonal = await getDocs(collection(db, 'cargos_personal'));
+        } else if (isPlantaNomina) {
+          snapPersonal = await getDocs(query(collection(db, 'cargos_personal'), where('municipio', 'in', ['LIBERTADOR', 'PLANTA CENTRAL', 'ZONA EDUCATIVA'])));
         } else {
           snapPersonal = await getDocs(query(collection(db, 'cargos_personal'), where('municipio', '==', municipio)));
         }
@@ -7068,11 +7254,15 @@ export function initAdminDashboard(dbInstance, user) {
         .filter(emp => {
           const codPl = (emp['codigo-plantel'] || emp.codigoDEA || '').toString().trim().toUpperCase();
           if (codPl.startsWith('DEMO')) return false;
-          // Si es munadmin, excluir estrictamente dependencias de Planta Central / Zona Educativa
-          if (isMunAdmin) {
-            if (codPl.startsWith('0012')) return false;
-            const pInfo = plantelesMap.get(codPl) || {};
-            if (pInfo.es_planta || pInfo.denominacion === 'SEDE ADMINISTRATIVA') return false;
+          const pInfo = plantelesMap.get(codPl) || {};
+          const esPlanta = codPl.startsWith('0012') || pInfo.es_planta || pInfo.denominacion === 'SEDE ADMINISTRATIVA';
+
+          // Si es munadmin o se exporta Libertador, excluir estrictamente dependencias de Planta Central / Zona Educativa
+          if (isMunAdmin || municipio === 'LIBERTADOR') {
+            if (esPlanta) return false;
+          }
+          if (isPlantaNomina) {
+            if (!esPlanta) return false;
           }
           const ced = (emp['cedula-identidad'] || emp.cedula || emp['CEDULA'] || emp['CÉDULA'] || '').toString().trim();
           const nom = (emp['nombre-apellido'] || emp['apellidos-nombres'] || emp.nombre || emp.nombres || emp['NOMBRE'] || emp['NOMBRES'] || emp['APELLIDOS Y NOMBRES'] || emp['NOMBRE Y APELLIDO'] || '').toString().trim();
@@ -7241,7 +7431,7 @@ export function initAdminDashboard(dbInstance, user) {
       ws['!cols'] = colWidths;
 
       const wb = XLSX.utils.book_new();
-      const sheetName = isTodosMunicipios ? "Nómina Estadal" : (plantelCod ? "Nómina Plantel" : `Nómina ${municipio}`);
+      const sheetName = isTodosMunicipios ? "Nómina Estadal" : (isPlantaNomina ? "Planta Central" : (plantelCod ? "Nómina Plantel" : `Nómina ${municipio}`));
       XLSX.utils.book_append_sheet(wb, ws, sheetName.slice(0, 31));
 
       const fechaHoy = new Date().toISOString().slice(0, 10);
@@ -7252,6 +7442,8 @@ export function initAdminDashboard(dbInstance, user) {
         nombreArchivo = `Nomina_Personal_${epLimpio}_${plantelCod}_${fechaHoy}.xlsx`;
       } else if (isTodosMunicipios) {
         nombreArchivo = `Nomina_Personal_Consolidado_Estadal_MERIDA_${fechaHoy}.xlsx`;
+      } else if (isPlantaNomina) {
+        nombreArchivo = `Nomina_Personal_Planta_Central_Zona_Educativa_${fechaHoy}.xlsx`;
       } else {
         const munLimpio = municipio.replace(/[^a-zA-Z0-9_-]/g, '_');
         nombreArchivo = `Nomina_Personal_Municipio_${munLimpio}_${fechaHoy}.xlsx`;
@@ -7496,12 +7688,8 @@ export function initAdminDashboard(dbInstance, user) {
       if (forceRefresh) {
         tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px; color: #64748b;">Cargando nómina desde Firestore...</td></tr>';
         try {
-          let q = query(collection(db, 'cargos_personal'), where('codigoDEA', '==', codigoDEA));
-          let snap = await getDocs(q);
-          if (snap.empty) {
-            q = query(collection(db, 'cargos_personal'), where('codigo-plantel', '==', codigoDEA));
-            snap = await getDocs(q);
-          }
+          const q = query(collection(db, 'cargos_personal'), where('codigoDEA', '==', codigoDEA));
+          const snap = await getDocs(q);
           staffList = [];
           snap.forEach(d => {
             staffList.push({ id: d.id, ...d.data() });

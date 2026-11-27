@@ -573,6 +573,35 @@ export function mostrarFormularioPersonal(autoScroll = true) {
     limpiarFormularioPersonal();
     actualizarVisibilidadCamposPlanta();
 
+    // Auto-preseleccionar la dependencia del plantel institucional para garantizar que todas las dependencias registren correctamente
+    let infoPlantelNuevo = window.currentPlantelInfo || {};
+    if (!infoPlantelNuevo.dependencia) {
+        const stPlantel = localStorage.getItem('plantelSeleccionado');
+        if (stPlantel) {
+            try { infoPlantelNuevo = { ...infoPlantelNuevo, ...JSON.parse(stPlantel) }; } catch (e) { }
+        }
+    }
+    const depPlantelRaw = (infoPlantelNuevo.dependencia || document.getElementById('inp-dependencia-plantel')?.value || '').trim();
+    if (depPlantelRaw) {
+        let depNorm = depPlantelRaw.toUpperCase();
+        if (depNorm.includes('AUTONOM')) depNorm = 'AUTONOMA';
+        else if (depNorm.includes('SUBVENCION')) depNorm = 'SUBVENCIONADA';
+        else if (depNorm.includes('PRIVAD')) depNorm = 'PRIVADA';
+        else if (depNorm.includes('MUNICIPAL')) depNorm = 'MUNICIPAL';
+        else if (depNorm.includes('ESTADAL')) depNorm = 'ESTADAL';
+        else if (depNorm.includes('NACIONAL')) depNorm = 'NACIONAL';
+
+        const selDep = document.getElementById('wp-dependencia');
+        if (selDep) {
+            for (let i = 0; i < selDep.options.length; i++) {
+                if (selDep.options[i].value === depNorm) {
+                    selDep.selectedIndex = i;
+                    break;
+                }
+            }
+        }
+    }
+
     const contenedor = document.getElementById('seccion-registro-personal');
     const contenedorTabla = document.getElementById('seccion-personal-existente');
 
@@ -632,6 +661,35 @@ export function abrirFormularioNuevoPersonal() {
     initCascadaPersonal();
     limpiarFormularioPersonal();
     actualizarVisibilidadCamposPlanta();
+
+    // Auto-preseleccionar la dependencia del plantel institucional para garantizar que todas las dependencias registren correctamente
+    let infoPlantelNuevo = window.currentPlantelInfo || {};
+    if (!infoPlantelNuevo.dependencia) {
+        const stPlantel = localStorage.getItem('plantelSeleccionado');
+        if (stPlantel) {
+            try { infoPlantelNuevo = { ...infoPlantelNuevo, ...JSON.parse(stPlantel) }; } catch (e) { }
+        }
+    }
+    const depPlantelRaw = (infoPlantelNuevo.dependencia || document.getElementById('inp-dependencia-plantel')?.value || '').trim();
+    if (depPlantelRaw) {
+        let depNorm = depPlantelRaw.toUpperCase();
+        if (depNorm.includes('AUTONOM')) depNorm = 'AUTONOMA';
+        else if (depNorm.includes('SUBVENCION')) depNorm = 'SUBVENCIONADA';
+        else if (depNorm.includes('PRIVAD')) depNorm = 'PRIVADA';
+        else if (depNorm.includes('MUNICIPAL')) depNorm = 'MUNICIPAL';
+        else if (depNorm.includes('ESTADAL')) depNorm = 'ESTADAL';
+        else if (depNorm.includes('NACIONAL')) depNorm = 'NACIONAL';
+
+        const selDep = document.getElementById('wp-dependencia');
+        if (selDep) {
+            for (let i = 0; i < selDep.options.length; i++) {
+                if (selDep.options[i].value === depNorm) {
+                    selDep.selectedIndex = i;
+                    break;
+                }
+            }
+        }
+    }
 
     const contenedor = document.getElementById('seccion-registro-personal');
     if (contenedor) {
@@ -1943,7 +2001,22 @@ export async function guardarPersonalInline() {
 
         'ubicacion-administrativa': document.getElementById('wp-ubicacion-administrativa')?.value || '',
         oficina: document.getElementById('wp-oficina')?.value?.trim().toUpperCase() || '',
-        dependencia: document.getElementById('wp-dependencia')?.value || '',
+        dependencia: (() => {
+            const val = document.getElementById('wp-dependencia')?.value || '';
+            if (val) return val;
+            let infoP = window.currentPlantelInfo || {};
+            if (!infoP.dependencia) {
+                const stP = localStorage.getItem('plantelSeleccionado');
+                if (stP) { try { infoP = { ...infoP, ...JSON.parse(stP) }; } catch (e) { } }
+            }
+            const pDep = (infoP.dependencia || document.getElementById('inp-dependencia-plantel')?.value || '').trim().toUpperCase();
+            if (pDep.includes('AUTONOM')) return 'AUTONOMA';
+            if (pDep.includes('SUBVENCION')) return 'SUBVENCIONADA';
+            if (pDep.includes('PRIVAD')) return 'PRIVADA';
+            if (pDep.includes('MUNICIPAL')) return 'MUNICIPAL';
+            if (pDep.includes('ESTADAL')) return 'ESTADAL';
+            return 'NACIONAL';
+        })(),
         'tipo-personal': document.getElementById('wp-tipo-personal')?.value || '',
         subcategoria: (() => {
             const depVal = (document.getElementById('wp-dependencia')?.value || '').toUpperCase();
@@ -2017,10 +2090,11 @@ export async function guardarPersonalInline() {
 
     const payload = {
         ...empleadoActual,
-        'codigo-plantel': dea,
         codigoDEA: dea,
         ultima_actualizacion: new Date().toISOString()
     };
+    delete payload['codigo-plantel'];
+    delete payload.codigoPlantel;
 
     if (escuelaNom) {
         payload.plantel = escuelaNom;
@@ -2233,12 +2307,8 @@ async function cargarPersonalExistente(codigoDEA) {
 
     try {
         const dbInstance = getFirestore();
-        let q = query(collection(dbInstance, 'cargos_personal'), where('codigoDEA', '==', codigoDEA));
-        let querySnapshot = await getDocs(q);
-        if (querySnapshot.empty) {
-            const qFallback = query(collection(dbInstance, 'cargos_personal'), where('codigo-plantel', '==', codigoDEA));
-            querySnapshot = await getDocs(qFallback);
-        }
+        const q = query(collection(dbInstance, 'cargos_personal'), where('codigoDEA', '==', codigoDEA));
+        const querySnapshot = await getDocs(q);
 
         tbody.innerHTML = '';
 

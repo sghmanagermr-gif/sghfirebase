@@ -45,7 +45,8 @@ const plantelesMap = new Map();
 planteles.forEach(p => {
   const dea = String(p.codigos?.plantel || p.codigoDEA || p.id || p._id || '').trim().toUpperCase();
   const nombre = String(p['nombre-plantel']?.['nuevo-eponimo'] || p['nombre-plantel']?.nuevo_eponimo || p.denominacion || p.nombre || dea).trim().toUpperCase();
-  const mun = normalizarMunicipio(p.municipio || '');
+  const esPlanta = Boolean(p.es_planta || p.denominacion === 'SEDE ADMINISTRATIVA' || dea.startsWith('0012'));
+  const mun = esPlanta ? 'PLANTA CENTRAL' : normalizarMunicipio(p.municipio || '');
   const dep = normalizarDep(p.dependencia);
   const matTot = Number(p['matricula-total'] || p.matriculaTotal || p.matricula?.['total-gen'] || 0);
   const matMas = Number(p['matricula-masculino'] || p['total-gen-mas'] || p.masculino || p.matricula?.['total-gen-mas'] || 0);
@@ -57,14 +58,59 @@ planteles.forEach(p => {
     nombre,
     municipio: mun,
     dependencia: dep,
+    esPlanta,
     cargado,
     matricula: { total: matTot, masculino: matMas, femenino: matFem }
   });
 });
 
+// Incorporar funcionarios registrados en planteles.personal_resumen
+const persCedSet = new Set(personal.map(p => String(p.cedula || p._id || '').trim()));
+let agregadosDesdePlantel = 0;
+planteles.forEach(pl => {
+  const dea = String(pl.codigos?.plantel || pl.codigoDEA || pl.id || pl._id || '').trim().toUpperCase();
+  const plInfo = plantelesMap.get(dea);
+  const depPlantel = plInfo?.dependencia || 'NACIONAL';
+  const munPlantel = plInfo?.municipio || '';
+
+  (pl.personal_resumen || []).forEach(r => {
+    const ced = String(r.cedula || '').trim();
+    if (!ced || persCedSet.has(ced)) return;
+    persCedSet.add(ced);
+    agregadosDesdePlantel++;
+
+    const cUpper = String(r.cargo || '').toUpperCase();
+    let tipo = 'DOCENTE';
+    if (cUpper.includes('OBR') || cUpper.includes('ASEAD') || cUpper.includes('VIGIL') || cUpper.includes('PORTER') || cUpper.includes('COCIN') || cUpper.includes('MANTEN') || cUpper.includes('CHOFER') || cUpper.includes('ALBAÑIL') || cUpper.includes('SERVICIOS GENERALES')) {
+      tipo = 'OBRERO';
+    } else if (cUpper.includes('ADM') || cUpper.includes('SEC') || cUpper.includes('ASIST') || cUpper.includes('TSU') || cUpper.includes('BACHILLER') || cUpper.includes('OFICINA') || cUpper.includes('PROFESIONAL')) {
+      tipo = 'ADMINISTRATIVO';
+    }
+
+    personal.push({
+      _id: `${dea}_${ced}`,
+      cedula: ced,
+      nombres: r.nombre || '',
+      'nombre-apellido': r.nombre || '',
+      cargo: r.cargo || '',
+      codigoDEA: dea,
+      'codigo-plantel': dea,
+      municipio: munPlantel,
+      dependencia: depPlantel,
+      'tipo-personal': tipo,
+      genero: 'FEMENINO',
+      situacion_laboral: 'ACTIVO'
+    });
+  });
+});
+
+console.log(`• Total personal base: ${personal.length - agregadosDesdePlantel} + ${agregadosDesdePlantel} nuevos de planteles = ${personal.length}`);
+
+const plantelesEducativos = planteles.filter(p => !p.es_planta && p.denominacion !== 'SEDE ADMINISTRATIVA' && !(p.codigos?.plantel || p.codigoDEA || p.id || '').startsWith('0012'));
+
 const global = {
   totalPersonal: personal.length,
-  totalPlanteles: planteles.length,
+  totalPlanteles: plantelesEducativos.length,
   docentes: { total: 0, mas: 0, fem: 0 },
   administrativos: { total: 0, mas: 0, fem: 0 },
   obreros: { total: 0, mas: 0, fem: 0 },
@@ -75,7 +121,7 @@ const global = {
     total: 0,
     masculino: 0,
     femenino: 0,
-    plantelesTotal: planteles.length,
+    plantelesTotal: plantelesEducativos.length,
     cargados: 0,
     pendientes: 0,
     porMunicipio: {}
@@ -117,8 +163,18 @@ personal.forEach(pers => {
 
   let dea = String(pers['codigo-plantel'] || pers.codigoDEA || pers.codigoPlantel || pers.DEA || '').trim().toUpperCase();
   const plInfo = plantelesMap.get(dea);
-  const mun = normalizarMunicipio(pers.municipio || plInfo?.municipio || '');
-  const dep = normalizarDep(pers.dependencia || plInfo?.dependencia);
+  const esPlantaPers = Boolean(plInfo?.esPlanta || dea.startsWith('0012') || pers.es_planta || pers.denominacion === 'SEDE ADMINISTRATIVA');
+  const mun = esPlantaPers ? 'PLANTA CENTRAL' : normalizarMunicipio(pers.municipio || plInfo?.municipio || '');
+
+  // Clasificación canónica de dependencia institucional
+  let dep = 'NACIONAL';
+  if (plInfo && plInfo.dependencia && plInfo.dependencia !== 'NACIONAL') {
+    dep = plInfo.dependencia;
+  } else if (pers.dependencia) {
+    dep = normalizarDep(pers.dependencia);
+  } else if (plInfo?.dependencia) {
+    dep = normalizarDep(plInfo.dependencia);
+  }
 
   if (!porMunicipio[mun]) {
     porMunicipio[mun] = {
@@ -151,9 +207,9 @@ personal.forEach(pers => {
   mMun.personal_detallado.total++;
 
   let targetGrupo = 'docentes';
-  if (tipo.includes('ADM') || tipo.includes('TSU') || tipo.includes('SEC')) {
+  if (tipo.includes('ADM') || tipo.includes('TSU') || tipo.includes('SEC') || tipo.includes('ASIST') || tipo.includes('OFICINA') || tipo.includes('PROFESIONAL')) {
     targetGrupo = 'administrativos';
-  } else if (tipo.includes('OBR') || tipo.includes('ASEAD') || tipo.includes('VIG')) {
+  } else if (tipo.includes('OBR') || tipo.includes('ASEAD') || tipo.includes('VIGIL') || tipo.includes('PORTER') || tipo.includes('COCIN') || tipo.includes('MANTEN') || tipo.includes('CHOFER') || tipo.includes('ALBAÑIL') || tipo.includes('SERVICIOS GENERALES')) {
     targetGrupo = 'obreros';
   }
 
@@ -240,41 +296,46 @@ plantelesMap.forEach((pl, dea) => {
 
   const mMun = porMunicipio[mun];
   mMun.totalPlanteles++;
-  mMun.matricula.plantelesTotal++;
-  if (pl.cargado) {
-    mMun.matricula.cargados++;
-    global.matricula.cargados++;
-  } else {
-    mMun.matricula.pendientes++;
-    global.matricula.pendientes++;
+
+  if (!pl.esPlanta) {
+    mMun.matricula.plantelesTotal++;
+    if (pl.cargado) {
+      mMun.matricula.cargados++;
+      global.matricula.cargados++;
+    } else {
+      mMun.matricula.pendientes++;
+      global.matricula.pendientes++;
+    }
+
+    const mTot = pl.matricula.total;
+    const mMas = pl.matricula.masculino;
+    const mFem = pl.matricula.femenino;
+
+    mMun.matricula.total += mTot;
+    mMun.matricula.masculino += mMas;
+    mMun.matricula.femenino += mFem;
+
+    global.matricula.total += mTot;
+    global.matricula.masculino += mMas;
+    global.matricula.femenino += mFem;
+
+    mMun.matricula.planteles.push({
+      dea,
+      nombre: pl.nombre,
+      dependencia: pl.dependencia,
+      cargado: pl.cargado,
+      total: mTot,
+      masculino: mMas,
+      femenino: mFem
+    });
   }
 
-  const mTot = pl.matricula.total;
-  const mMas = pl.matricula.masculino;
-  const mFem = pl.matricula.femenino;
-
-  mMun.matricula.total += mTot;
-  mMun.matricula.masculino += mMas;
-  mMun.matricula.femenino += mFem;
-
-  global.matricula.total += mTot;
-  global.matricula.masculino += mMas;
-  global.matricula.femenino += mFem;
-
   const persPlant = personalPorPlantelMap.get(dea) || { total: 0, docentes: { total: 0, mas: 0, fem: 0 }, administrativos: { total: 0, mas: 0, fem: 0 }, obreros: { total: 0, mas: 0, fem: 0 } };
-
-  mMun.matricula.planteles.push({
-    dea,
-    nombre: pl.nombre,
-    cargado: pl.cargado,
-    total: mTot,
-    masculino: mMas,
-    femenino: mFem
-  });
 
   mMun.personal_detallado.planteles.push({
     dea,
     nombre: pl.nombre,
+    dependencia: pl.dependencia,
     total: persPlant.total,
     docentes: persPlant.docentes,
     administrativos: persPlant.administrativos,
@@ -323,15 +384,14 @@ for (const [alias, canonical] of Object.entries(aliases)) {
 
 const resultado = {
   fecha_generacion: new Date().toISOString(),
-  origen: 'Corte Oficial Cloud Firestore (17 de Noviembre 2026)',
-  version: '2.38.7',
+  origen: 'Consolidado Oficial SGH Mérida con Dependencias Homologadas',
+  version: '2.38.15',
   fecha_corte: new Date().toISOString(),
-  descripcion_corte: 'Corte Oficial Cloud Firestore (17 de Noviembre)',
+  descripcion_corte: 'Corte Consolidado SGH Mérida con 6 Dependencias',
   global,
   porMunicipio
 };
 
 fs.writeFileSync(OUTPUT_RESUMEN, JSON.stringify(resultado, null, 2), 'utf8');
 fs.writeFileSync(DIST_RESUMEN, JSON.stringify(resultado, null, 2), 'utf8');
-console.log('✓ resumen_estadisticas.json compilado y sincronizado con estructura 100% idéntica!');
-
+console.log('✓ resumen_estadisticas.json compilado y sincronizado con dependencias 100% canónicas!');

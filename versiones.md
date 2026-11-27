@@ -4,6 +4,20 @@ Este archivo constituye el registro cronológico y estructurado de todas las ver
 
 ---
 
+### v2.38.15 (27 de Noviembre de 2026)
+
+- **Estandarización Universal Canónica `codigoDEA`, Segregación de Planta Central y Limpieza Masiva en Firestore (`personalWizard.js`, `admin.js`, `main.js`, `index.html`, `package.json`):**
+  - **Estandarización Universal del Campo `codigoDEA`:**
+    - Se erradicaron de raíz los esquemas duales y consultas ambiguas en todo el código frontend. Todos los módulos de consulta a Firestore (`cargarPersonalExistente`, `exportarNominaExcel`, `consultarPersonalPlantel`) ahora filtran única y exclusivamente por `where('codigoDEA', '==', codigoDEA)`.
+    - En los formularios de guardado y edición de personal (`personalWizard.js`), se eliminó la inyección de claves obsoletas (`codigoPlantel` y `codigo-plantel`), forzando `codigoDEA` como estándar único y canónico en todo el sistema.
+  - **Segregación Institucional de Planta Central / Zona Educativa:**
+    - Se implementó la segregación estricta de las 9 sedes administrativas (códigos `0012`) de la Pizarra Municipal de Libertador, agrupándolas bajo su propia entidad institucional (`PLANTA_CENTRAL`) y descontándolas de la nómina y escuelas municipales.
+  - **Limpieza Masiva de Firestore (Tanda 1 - 10.000 Documentos):**
+    - Se ejecutó la Tanda 1 de limpieza atómica mediante lotes `commit` REST, eliminando físicamente las etiquetas obsoletas (`codigoPlantel` y `codigo-plantel`) en 10.000 expedientes reales sin tocar ningún dato sensible ni alterar cuotas operativas.
+    - Se saneó quirúrgicamente el expediente de Grisel Vivas en NER 058 (`OD14211418`), habilitando la visualización de ambas fichas para la depuración directiva desde la pantalla escolar.
+
+---
+
 ### v2.38.14 (23 de Noviembre de 2026)
 
 - **Botón Dinámico de Borrado Rápido en Buscador de Planteles (`admin.js`, `index.html`, `package.json`):**

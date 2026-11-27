@@ -2531,38 +2531,47 @@ window.actualizarMetricasPizarraUsuario = function() {
     const mat = dp.matricula || window.currentPlantel?.matricula || {};
     let varones = 0;
     let hembras = 0;
+    let totalMat = 0;
 
-    // 1. Sumar por secciones hoja ignorando nodos totalizadores y vacantes (fuente de verdad en memoria)
-    function sumarSexos(obj) {
-      if (!obj || typeof obj !== 'object') return;
-      if (obj.mas !== undefined || obj.fem !== undefined) {
-        varones += Number(obj.mas || 0);
-        hembras += Number(obj.fem || 0);
-        return;
-      }
-      for (const k in obj) {
-        if (!Object.prototype.hasOwnProperty.call(obj, k)) continue;
-        const kLower = String(k).toLowerCase();
-        if (kLower.includes('total') || kLower.includes('resumen') || kLower.includes('general') || kLower.includes('vacante') || kLower.startsWith('vac_')) continue;
-        if (typeof obj[k] === 'object' && obj[k] !== null) {
-          sumarSexos(obj[k]);
+    // Prioridad 1: Totales oficiales consolidados del objeto matrícula (fuente canónica del plantel)
+    const directTot = parseInt(mat['total-gen'] ?? dp['matricula-total'] ?? window.currentPlantel?.['matricula-total'] ?? 0, 10);
+    const directMas = parseInt(mat['total-gen-mas'] ?? dp['matricula-mas'] ?? dp.masculino ?? window.currentPlantel?.['total-gen-mas'] ?? -1, 10);
+    const directFem = parseInt(mat['total-gen-fem'] ?? dp['matricula-fem'] ?? dp.femenino ?? window.currentPlantel?.['total-gen-fem'] ?? -1, 10);
+
+    if (directTot > 0 && directMas >= 0 && directFem >= 0 && (directMas + directFem === directTot)) {
+      totalMat = directTot;
+      varones = directMas;
+      hembras = directFem;
+    } else {
+      // 1. Sumar por secciones hoja ignorando nodos totalizadores, vacantes y alias duplicados (maternal/materna)
+      function sumarSexos(obj) {
+        if (!obj || typeof obj !== 'object') return;
+        if (obj.mas !== undefined || obj.fem !== undefined) {
+          varones += Number(obj.mas || 0);
+          hembras += Number(obj.fem || 0);
+          return;
+        }
+        for (const k in obj) {
+          if (!Object.prototype.hasOwnProperty.call(obj, k)) continue;
+          const kLower = String(k).toLowerCase();
+          if (kLower.startsWith('total-') || kLower === 'total' || kLower.includes('resumen') || kLower.includes('vacante') || kLower.startsWith('vac_')) continue;
+          // Evitar doble conteo por alias duplicado (maternal y materna guardados simultáneamente)
+          if (kLower === 'materna' && obj.maternal) continue;
+          if (typeof obj[k] === 'object' && obj[k] !== null) {
+            sumarSexos(obj[k]);
+          }
         }
       }
-    }
-    sumarSexos(mat);
+      sumarSexos(mat);
 
-    let totalMat = varones + hembras;
-
-    // 2. Si no hay secciones hoja desglosadas por sexo, acudir a los totales consolidados
-    if (totalMat === 0) {
-      const directMas = mat['total-gen-mas'] ?? dp['matricula-mas'] ?? dp.masculino ?? window.currentPlantel?.['total-gen-mas'] ?? window.currentPlantel?.['matricula-mas'] ?? window.currentPlantel?.masculino;
-      const directFem = mat['total-gen-fem'] ?? dp['matricula-fem'] ?? dp.femenino ?? window.currentPlantel?.['total-gen-fem'] ?? window.currentPlantel?.['matricula-fem'] ?? window.currentPlantel?.femenino;
-      varones = Number(directMas || 0);
-      hembras = Number(directFem || 0);
       totalMat = varones + hembras;
-    }
-    if (totalMat === 0) {
-      totalMat = Number(mat['total-gen'] ?? dp['matricula-total'] ?? window.currentPlantel?.['matricula-total'] ?? document.getElementById('inp-matricula-total')?.value ?? 0);
+
+      // 2. Si no hubo desglose pero hay total consolidado
+      if (totalMat === 0 && directTot > 0) {
+        totalMat = directTot;
+        varones = directMas >= 0 ? directMas : 0;
+        hembras = directFem >= 0 ? directFem : 0;
+      }
     }
 
     if (elMatriculaNum) elMatriculaNum.textContent = totalMat;

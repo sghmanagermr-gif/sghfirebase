@@ -5734,3 +5734,69 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
     - Despliegue a Firebase Hosting verificado en producción (`https://sgh-merida.web.app`).
     - Aprobación explícita de satisfacción del usuario ("Todo satisfactorio").
     - Incremento de versión física a `v2.38.14` en `webapp/package.json` y `webapp/index.html`.
+
+---
+
+### Hito: Segregación Institucional de Planta Central / Zona Educativa de la Pizarra de Libertador (v2.38.15)
+- **Fecha:** 2026-11-24 ~12:30 (Hora Local Venezuela).
+- **Módulos:** Arquitectura RBAC, Pizarras Analíticas, Agregador de Estadísticas y Exportación de Nómina (`scripts/compilar_resumen.mjs`, `scripts/sincronizar_corte_google_sheets.mjs`, `webapp/src/admin.js`, `webapp/src/main.js`, `webapp/public/resumen_estadisticas.json`).
+- **Objetivo:** 
+  1. Corregir la distorsión visual reportada por la Coordinación de Gestión Humana del Municipio Libertador, donde la Pizarra Municipal contabilizaba erróneamente +9 dependencias correspondientes a las divisiones centrales de Zona Educativa / CDCE Estadal (códigos `0012`), mostrándolas como planteles con matrícula pendiente e inflando la nómina escolar en +213 funcionarios.
+  2. Implementar una segregación institucional estricta para que el rol `munadmin` de Libertador gestione única y exclusivamente sus 177 planteles educativos reales, confinando las 9 sedes administrativas al ámbito exclusivo de Planta Central.
+- **Cambios Técnicos:**
+  * **Motor Agregador de Estadísticas (`scripts/compilar_resumen.mjs` y `scripts/sincronizar_corte_google_sheets.mjs`):**
+    - Se creó la función detectora unificada `esPlantaCentralPlantel(p)`, evaluando banderas de sede administrativa y prefijo `0012`.
+    - En el ciclo de consolidación de municipios, se interceptó el procesamiento de Libertador para derivar automáticamente las 9 sedes administrativas a una clave institucional independiente (`PLANTA_CENTRAL`), descontándolas de los totales de escuelas, matrícula y personal escolar municipal.
+    - Se regeneró el archivo canónico de métricas `resumen_estadisticas.json` tanto en el entorno de desarrollo como en distribución.
+  * **Blindaje en Capa de Presentación (`webapp/src/admin.js` y `webapp/src/main.js`):**
+    - En `getDatosMunicipio`, se introdujo un filtro preventivo en memoria que purga en caliente cualquier registro con denominación o código de sede administrativa (`0012`) si el ámbito consultado es Libertador.
+    - En el generador de reportes de nómina Excel (`exportarNominaExcel`), se agregó la opción independiente "🏛️ PLANTA CENTRAL (ZONA EDUCATIVA)" y se aisló la descarga del Municipio Libertador para que no exporte funcionarios adscritos a divisiones centrales.
+  * **Resultados Obtenidos:**
+    - Municipio Libertador consolidado en 177 escuelas reales (100% al día en verde, 0 pendientes).
+    - Nómina escolar municipal estabilizada en 5.864 trabajadores reales, segregando limpiamente a los 213 funcionarios de Planta Central.
+    - Control independiente y desacoplado mediante los interruptores del panel de Despliegue.
+
+---
+
+### Hito: Auditoría Forense de Personal y Acuerdo de Estandarización Canónica Universal `codigoDEA`
+- **Fecha:** 2026-11-26 ~17:25 (Hora Local Venezuela).
+- **Módulos:** Colección Firestore `cargos_personal`, Módulo de Gestión de Personal (`webapp/src/personalWizard.js`), Modelo de Datos Institucional.
+- **Objetivo:** 
+  1. Investigar exhaustivamente la causa raíz de la duplicidad de expedientes reportada para la trabajadora Grisel Dairis Vivas Gutiérrez (NER 058 Bailadores, Rivas Dávila, C.I. `18209454` vs `18809454`).
+  2. Auditar la totalidad de los 27.501 registros de personal del estado Mérida en Firestore para evaluar la homogeneidad de los campos de enlace institucional (`codigoDEA`, `codigoPlantel`, `codigo-plantel`).
+  3. Establecer un acuerdo arquitectónico estratégico definitivo con el Administrador del Sistema para erradicar de raíz cualquier esquema dual o parche de compatibilidad.
+- **Diagnóstico y Hallazgos Forenses:**
+  * **Caso Puntual Grisel Vivas:** Se identificó que la trabajadora poseía dos documentos en Firestore: `OD14211418_18209454` (cargado originalmente el 11 de noviembre con código RAC 8032N) y `OD14211418_18809454` (creado el 20 de noviembre debido a un error humano de tipeo de la cédula en la escuela al actualizar datos de salud).
+  * **Auditoría Global de 27.501 Registros:** 
+    - 27.257 registros (99,1%) poseen código de plantel normalizado.
+    - 25.102 registros (91,3%) poseen el esquema dual previo (`codigoDEA` y `codigoPlantel`).
+    - 31 registros residuales (0,1% del estado) conservaban únicamente `codigoPlantel` sin `codigoDEA`, uno de los cuales era el registro original de Grisel Vivas.
+  * **Falla de Diseño en Consulta Frontend:** En `personalWizard.js` (línea 2309), la consulta `where('codigoDEA', '==', codigoDEA)` no ejecutaba el fallback si la escuela tenía al menos un funcionario con `codigoDEA`, provocando la invisibilidad de registros que tuvieran únicamente `codigoPlantel`.
+- **Acuerdo Arquitectónico Definitivo:**
+  * Se aprobó por parte del Administrador la directiva absoluta: **Cero parches, cero esquemas duales y un solo criterio universal en la base de datos y en el código: `codigoDEA`.**
+  * Toda la colección `cargos_personal` (27.501 documentos) y la totalidad del código fuente (`personalWizard.js`, `admin.js`, `main.js`) serán estandarizados bajo la clave canónica `codigoDEA`.
+
+
+---
+
+### Hito: Estandarización de Código y Ejecución Exitosa de Tanda 1 de Limpieza Masiva (10.000 Documentos)
+- **Fecha:** 2026-11-27 ~08:35 (Hora Local Venezuela).
+- **Módulos:** Colección Firestore `cargos_personal`, Módulo de Registro y Edición de Personal (`webapp/src/personalWizard.js`), Módulo Administrativo (`webapp/src/admin.js`).
+- **Objetivo:** 
+  1. Estandarizar la totalidad del código frontend para erradicar consultas y guardados duales, forzando la clave canónica universal `codigoDEA`.
+  2. Ejecutar la Tanda 1 de limpieza masiva eliminando físicamente las etiquetas viejas (`codigoPlantel` y `codigo-plantel`) en 10.000 expedientes reales de Firestore, respetando estrictamente el margen de seguridad del Plan Spark (< 20.000 escrituras/día).
+- **Acciones Técnicas Ejecutadas:**
+  * **Estandarización de Código en `webapp/src/personalWizard.js`:**
+    - En el payload de guardado/edición de personal (línea 2091), se fijó `codigoDEA: dea` y se inyectó la eliminación explícita de claves obsoletas (`delete payload['codigo-plantel']` y `delete payload.codigoPlantel`).
+    - En la consulta de personal de plantel (`cargarPersonalExistente`), se eliminó el fallback ambiguo, consultando de forma pura e indexada por `where('codigoDEA', '==', codigoDEA)`.
+    - En validaciones de duplicidad y exportación Excel, se priorizó estrictamente `codigoDEA`.
+  * **Estandarización de Código en `webapp/src/admin.js`:**
+    - En `migrarEnCascadaCodigoDEA`, se aseguró la asignación canónica exclusiva de `codigoDEA` eliminando claves duales.
+    - En `exportarNominaExcel` y `consultarPersonalPlantel`, se simplificaron las consultas de plantel a `where('codigoDEA', '==', plantelCod)`.
+    - Compilación de producción con Vite completada con éxito (0 errores).
+  * **Ejecución de Tanda 1 en Firestore (`scratch/ejecutar_tanda_1.js`):**
+    - Se procesaron 10.000 expedientes reales mediante 25 lotes atómicos de 400 escrituras cada uno usando el endpoint `:commit` de la API REST de Firestore.
+    - Se utilizó `updateMask.fieldPaths = ['codigoPlantel', '`codigo-plantel`']` con cuerpo vacío, provocando el borrado físico de ambos campos obsoletos sin alterar nombres, cédulas, cargos ni datos laborales.
+    - Consumo exacto: 10.000 escrituras consumidas (dentro del límite de 20.000 diarias).
+    - Errores registrados: 0 (100% de efectividad).
+    - Quedan exactamente 17.288 expedientes para la Tanda 2 programada para el día siguiente.
