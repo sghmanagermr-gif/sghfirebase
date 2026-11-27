@@ -5800,3 +5800,18 @@ A solicitud del Super Administrador (Lic. Luis Alfonso Pérez), se formaliza y r
     - Consumo exacto: 10.000 escrituras consumidas (dentro del límite de 20.000 diarias).
     - Errores registrados: 0 (100% de efectividad).
     - Quedan exactamente 17.288 expedientes para la Tanda 2 programada para el día siguiente.
+
+
+---
+
+### Hito: Generación del Consolidado Estadal en Hoja de Cálculo Excel (Corte_Oficial_Personal_Estado_Merida.xlsx)
+- **Fecha:** 2026-11-27 ~09:00 (Hora Local Venezuela).
+- **Módulos:** Procesamiento de Datos Locales, Integración Google Workspace / Excel (`scratch/generar_excel_corte.js`, `Corte_Oficial_Personal_Estado_Merida.xlsx`).
+- **Objetivo:** 
+  1. Transformar el archivo local `corte_oficial_firestore_personal.json` (27.501 expedientes de la nómina completa del estado Mérida) en un libro de cálculo profesional Excel (`.xlsx`) accesible y estructurado para consumo directivo y ministerial.
+- **Detalles Técnicos:**
+  * **Estructuración Canónica de 60 Columnas:** Se unificaron las diferentes nomenclaturas históricas de campos (uppercase, camelCase, kebab-case) bajo un esquema único en español organizado por bloques temáticos (Identidad, Contacto y Dirección, Formación Académica, Ubicación Territorial, Plantel y Dependencia, Datos Laborales y Cargo, Carga Horaria y Pedagógica, Situación Laboral y Observaciones, Dotación y Salud, Organización Comunitaria y Electoral).
+  * **Generación del Archivo (`Corte_Oficial_Personal_Estado_Merida.xlsx`):**
+    - Filas totales: 27.502 (1 fila de encabezado + 27.501 filas de personal).
+    - Dimensiones y peso: 65,24 MB con autoajuste de anchos de columnas para legibilidad instantánea en Microsoft Excel.
+  * **Verificación:** Libro validado mediante SheetJS (`Rows: 27502, Columns: 60, Sheet: NÓMINA PERSONAL MÉRIDA`). Aprobación explícita de satisfacción del usuario ("Sí satisfactorios.").
